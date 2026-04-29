@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIRINX.CO | SUPREME ARCHITECTURE</title>
+    <style>
+        body {
+            background-color: #000000; /* OLED Black */
+            color: #50C878; /* Emerald Glow */
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-shadow: 0 0 10px #50C878;
+        }
+        .container {
+            border: 1px solid #50C878;
+            padding: 2rem;
+            box-shadow: 0 0 20px #50C878;
+        }
+        h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .status { margin-top: 2rem; font-size: 1.2rem; }
+        .blink { animation: blinker 1s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SIRINX.CO</h1>
+        <p>SUPREME OMNIBUS KERNEL V.13</p>
+        <div class="status">
+            STATUS: <span class="blink">ONLINE / APEX EXECUTION</span>
+        </div>
+    </div>
+</body>
+</html>

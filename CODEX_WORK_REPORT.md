@@ -93,3 +93,35 @@ Current state: C5 PR-ready branch work, no push.
 ## Next PR
 
 PR-MONO-002: import public website app after quarantine review.
+
+## Next-Phase Addendum: AdaptiveSync / PC Node / Telegram
+
+Branch:
+
+```text
+codex/pr-mono-002-adaptive-sync-telegram
+```
+
+Added:
+
+- `docs/ADAPTIVE_SYNC_PC_NODE.md`
+- `docs/TELEGRAM_CONTROL_PLANE.md`
+- `docs/VIBECODING_READY_MONOREPO.md`
+- `scripts/adaptive-sync-plan.mjs`
+- `scripts/windows-drive-d-handoff.mjs`
+- `scripts/telegram-notify-preview.mjs`
+- `services/telegram-command-bot/src/index.mjs`
+- `infra/windows/drive-d/setup-drive-d.ps1`
+- `exports/drive-d/SIRINX_OS_PC_NODE_HANDOFF/`
+- `exports/adaptive-sync-plan-latest.json`
+- `exports/telegram-preview-latest.json`
+
+Verification:
+
+- `npm run sync:handoff` passed.
+- `npm run sync:plan` passed in dry-run planning mode and reported Windows `D:` target unavailable because it is not mounted on this Mac.
+- `npm run telegram:preview` passed in dry-run mode with no token/chat id configured.
+- `npm run telegram:bot:dry-run` passed.
+- `npm run check` passed.
+
+External writes remain locked. No Telegram send, BotFather action, Drive D write, GitHub push, Cloudflare mutation, deploy, paid API, or production database write was executed.

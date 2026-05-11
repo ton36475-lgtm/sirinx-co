@@ -1,0 +1,13 @@
+{
+  "generatedAt": "2026-05-11T19:56:44.829Z",
+  "mode": "dry-run",
+  "tokenConfigured": false,
+  "chatIdConfigured": false,
+  "confirmConfigured": false,
+  "payload": {
+    "chat_id": "REQUIRED_FOR_REAL_SEND",
+    "text": "SIRINX OS PR-MONO status: local scaffold ready. External writes remain locked.",
+    "disable_web_page_preview": true
+  },
+  "guardrail": "Real Telegram send requires --send, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, and SIRINX_TELEGRAM_CONFIRM=SEND."
+}

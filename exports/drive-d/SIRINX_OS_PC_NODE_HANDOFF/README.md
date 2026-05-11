@@ -1,0 +1,20 @@
+# SIRINX OS PC Node Handoff
+
+Generated: 2026-05-11T19:56:44.823Z
+
+Target Windows folder:
+
+```text
+D:\SIRINX_OS
+```
+
+This handoff does not contain secrets. Use it to prepare the Windows PC worker node before any real AdaptiveSync execution.
+
+## Steps
+
+1. Create `D:\SIRINX_OS` using `setup-drive-d.ps1`.
+2. Share `D:\SIRINX_OS` to the Mac mini on the LAN when ready.
+3. Mount the share on the Mac as `/Volumes/Windows-D`.
+4. Set `SIRINX_WINDOWS_D_MOUNT=/Volumes/Windows-D/SIRINX_OS/sirinx-co`.
+5. Run `npm run sync:plan`.
+6. Review dry-run output before any real copy.

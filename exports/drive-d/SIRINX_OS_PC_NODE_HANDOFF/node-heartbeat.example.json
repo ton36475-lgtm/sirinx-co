@@ -1,0 +1,21 @@
+{
+  "nodeId": "windows-worker-node",
+  "nodeType": "worker",
+  "hostname": "WINDOWS-PC",
+  "status": "healthy",
+  "capabilities": [
+    "gpu-jobs",
+    "media-dry-run",
+    "backup-worker",
+    "mysql-replica-planned"
+  ],
+  "blockedCapabilities": [
+    "cloudflare-write",
+    "production-db-write",
+    "customer-send"
+  ],
+  "currentJobs": [],
+  "queueDepth": 0,
+  "lastCheckedAt": "2026-05-12T00:00:00+07:00",
+  "version": "pr-mono-002-adaptive-sync-telegram"
+}

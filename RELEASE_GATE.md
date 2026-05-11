@@ -34,6 +34,8 @@ Status: PR-MONO-001 baseline.
 | 13 | MCP inspector gate | planned |
 | 14 | Pre-deploy security | planned |
 | 15 | Cloudflare Edge Gate | blocked until approval |
+| 16 | AdaptiveSync Drive D Gate | dry-run only |
+| 17 | Telegram Command Gate | dry-run only |
 
 ## Gate 15: Cloudflare Edge Gate
 
@@ -55,3 +57,19 @@ Status: PR-MONO-001 baseline.
 ## Stop Conditions
 
 Stop immediately before push, deploy, Cloudflare mutation, customer send, paid API, production DB write, or public internal exposure.
+
+## Gate 16: AdaptiveSync Drive D Gate
+
+- Windows `D:` share is mounted on the Mac.
+- `SIRINX_WINDOWS_D_MOUNT` points to the approved target.
+- `npm run sync:plan` has been reviewed.
+- No `.env`, keys, caches, `.git`, or browser data included.
+- Execution requires explicit approval and `SIRINX_SYNC_CONFIRM=EXECUTE`.
+
+## Gate 17: Telegram Command Gate
+
+- Bot token is created outside the repo.
+- Chat id and owner ids are configured outside the repo.
+- `npm run telegram:preview` reviewed.
+- Real send requires action-time approval, `--send`, and `SIRINX_TELEGRAM_CONFIRM=SEND`.
+- BotFather automation is blocked unless the next exact UI action is approved.

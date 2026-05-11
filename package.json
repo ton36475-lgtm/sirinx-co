@@ -1,11 +1,16 @@
 {
   "name": "sirinx-co",
-  "version": "0.1.0-pr-mono-001",
+  "version": "0.2.0-pr-mono-002",
   "private": true,
-  "description": "Canonical SIRINX OS monorepo governance scaffold. PR-MONO-001 is docs and quarantine planning only.",
+  "description": "Canonical SIRINX OS monorepo governance scaffold with AdaptiveSync, PC node, and Telegram dry-run control.",
   "scripts": {
-    "check": "node --check scripts/verify-pr-mono-001.mjs",
-    "verify:mono-001": "node scripts/verify-pr-mono-001.mjs"
+    "check": "node --check scripts/verify-pr-mono-001.mjs && node --check scripts/adaptive-sync-plan.mjs && node --check scripts/telegram-notify-preview.mjs && node --check scripts/windows-drive-d-handoff.mjs && node --check scripts/verify-next-phase.mjs && node --check services/telegram-command-bot/src/index.mjs && node scripts/verify-pr-mono-001.mjs && node scripts/verify-next-phase.mjs",
+    "verify:mono-001": "node scripts/verify-pr-mono-001.mjs",
+    "verify:next-phase": "node scripts/verify-next-phase.mjs",
+    "sync:plan": "node scripts/adaptive-sync-plan.mjs",
+    "sync:handoff": "node scripts/windows-drive-d-handoff.mjs",
+    "telegram:preview": "node scripts/telegram-notify-preview.mjs --dry-run",
+    "telegram:bot:dry-run": "node services/telegram-command-bot/src/index.mjs --dry-run"
   },
   "keywords": [
     "sirinx",

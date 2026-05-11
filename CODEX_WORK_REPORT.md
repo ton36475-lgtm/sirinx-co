@@ -113,8 +113,8 @@ Added:
 - `services/telegram-command-bot/src/index.mjs`
 - `infra/windows/drive-d/setup-drive-d.ps1`
 - `exports/drive-d/SIRINX_OS_PC_NODE_HANDOFF/`
-- `exports/adaptive-sync-plan-latest.json`
-- `exports/telegram-preview-latest.json`
+- ignored local preview output: `exports/adaptive-sync-plan-latest.json`
+- ignored local preview output: `exports/telegram-preview-latest.json`
 
 Verification:
 

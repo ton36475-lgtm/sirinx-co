@@ -1,0 +1,19 @@
+{
+  "name": "sirinx-co",
+  "version": "0.1.0-pr-mono-001",
+  "private": true,
+  "description": "Canonical SIRINX OS monorepo governance scaffold. PR-MONO-001 is docs and quarantine planning only.",
+  "scripts": {
+    "check": "node --check scripts/verify-pr-mono-001.mjs",
+    "verify:mono-001": "node scripts/verify-pr-mono-001.mjs"
+  },
+  "keywords": [
+    "sirinx",
+    "monorepo",
+    "governance",
+    "cloudflare-access",
+    "millerdev"
+  ],
+  "license": "UNLICENSED",
+  "devDependencies": {}
+}

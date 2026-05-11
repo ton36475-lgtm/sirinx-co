@@ -22,3 +22,4 @@ quarantine/raw/
 legacy-cache/
 exports/adaptive-sync-plan-latest.json
 exports/telegram-preview-latest.json
+exports/pipeline-audit-latest.json

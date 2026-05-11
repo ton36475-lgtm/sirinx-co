@@ -1,6 +1,6 @@
 # Cloudflare Edge Plan
 
-Status: preview only. No Cloudflare write has been executed.
+Status: origin certificate ready; DNS/Tunnel/Access mutation remains blocked.
 
 ## Public Site
 
@@ -30,6 +30,15 @@ Planned tunnel name:
 ```text
 office-brain
 ```
+
+Existing tunnels discovered after Cloudflare auth:
+
+```text
+SIRINX_SWARM         fc97085c-b14d-46cb-8a51-c585d1c9c756  no active connection
+sirinx-hybrid-tunnel 98b951b0-2251-4737-abad-684808bf0b35  active Windows connector
+```
+
+Before creating a new tunnel, decide whether to reuse `sirinx-hybrid-tunnel`, revive `SIRINX_SWARM`, or create the planned `office-brain` tunnel.
 
 Planned ingress:
 
@@ -61,12 +70,23 @@ ingress:
 
 Stop for human approval before:
 
-- `cloudflared login`
 - creating a tunnel
 - routing DNS
 - adding Access apps or policies
 - deploying Pages
 - changing WAF, R2, Workers, or DNS records
+
+Completed with action-time approval:
+
+- `cloudflared tunnel login`
+- local origin cert creation at `~/.cloudflared/cert.pem`
+
+Still blocked:
+
+- route DNS
+- tunnel create/delete
+- Access app/policy mutation
+- Pages deploy
 
 ## Rollback Plan
 

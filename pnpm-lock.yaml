@@ -33,6 +33,15 @@ importers:
 
   apps/mission-control:
     dependencies:
+      '@sirinx/ai-access-gateway':
+        specifier: workspace:*
+        version: link:../../packages/ai-access-gateway
+      '@sirinx/openclaw-adapter':
+        specifier: workspace:*
+        version: link:../../packages/openclaw-adapter
+      '@sirinx/openhands-adapter':
+        specifier: workspace:*
+        version: link:../../packages/openhands-adapter
       '@sirinx/thclaws-runtime':
         specifier: workspace:*
         version: link:../../packages/thclaws-runtime

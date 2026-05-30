@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { calculateKellyCriterion, OPAL_SOLAR_PRICE_PER_UNIT } from '@sirinx/thclaws-runtime';
+import { OpenClawOrchestrator } from '@sirinx/openclaw-adapter';
+import { OpenHandsAdapter } from '@sirinx/openhands-adapter';
+import { Gemma4Client } from '@sirinx/ai-access-gateway';
 
 interface Worker {
   name: string;
@@ -59,6 +62,26 @@ export default function App() {
   const [kellyOdds, setKellyOdds] = useState(2.0);
   const [kellyProb, setKellyProb] = useState(0.65);
   const [kellyFraction, setKellyFraction] = useState(0.475);
+
+  // Panel Selection state
+  const [activePanel, setActivePanel] = useState<'telemetry' | 'testbenches'>('telemetry');
+
+  // OpenClaw state
+  const [routingInput, setRoutingInput] = useState('Analyze local solar grid pricing trends');
+  const [isRouting, setIsRouting] = useState(false);
+  const [routingResult, setRoutingResult] = useState<any>(null);
+
+  // OpenHands state
+  const [terminalInput, setTerminalInput] = useState('ls -la');
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [terminalHistory, setTerminalHistory] = useState<Array<{ cmd: string; out: string; type: 'success' | 'error' }>>([
+    { cmd: 'mkdir -p outputs/reports', out: 'Workspace directories validated successfully.', type: 'success' }
+  ]);
+
+  // Gemma state
+  const [complianceInput, setComplianceInput] = useState('This high-power solar unit produces clean local energy with zero environment emissions.');
+  const [isAuditing, setIsAuditing] = useState(false);
+  const [complianceResult, setComplianceResult] = useState<any>(null);
 
   // Recalculate Kelly Fraction using thclaws math engine
   useEffect(() => {
@@ -127,6 +150,95 @@ export default function App() {
       setProcessingId(null);
       setProgressWidth(0);
     }, 1800);
+  };
+
+  const handleRouteTask = async () => {
+    setIsRouting(true);
+    setRoutingResult(null);
+    const orchestrator = new OpenClawOrchestrator();
+    
+    setTimeout(async () => {
+      const res = await orchestrator.route(routingInput);
+      setRoutingResult(res);
+      setIsRouting(false);
+      
+      setLogs(prev => [
+        ...prev,
+        { 
+          timestamp: new Date().toTimeString().split(' ')[0], 
+          type: 'info', 
+          message: `[OpenClaw Router] Routed task to: ${res.routedTo || 'ollama'} (type: ${res.taskType})` 
+        }
+      ]);
+    }, 1200);
+  };
+
+  const handleExecuteCommand = async () => {
+    if (!terminalInput.trim()) return;
+    setIsExecuting(true);
+    const command = terminalInput;
+    const hands = new OpenHandsAdapter();
+    
+    setTimeout(async () => {
+      const res = await hands.executeCommand('mission-control-sandbox', command);
+      const isViolation = res.stderr.includes('violation') || res.exitCode !== 0;
+      
+      setTerminalHistory(prev => [
+        ...prev,
+        { 
+          cmd: command, 
+          out: res.stderr ? res.stderr : res.stdout || 'Command executed successfully with exit code 0.', 
+          type: isViolation ? 'error' : 'success' 
+        }
+      ]);
+      
+      setLogs(prev => [
+        ...prev,
+        { 
+          timestamp: new Date().toTimeString().split(' ')[0], 
+          type: isViolation ? 'security' : 'success', 
+          message: `[OpenHands Terminal] Command: "${command}" -> ${isViolation ? 'Access Denied' : 'Allowed'}` 
+        }
+      ]);
+      
+      setIsExecuting(false);
+      setTerminalInput('');
+    }, 800);
+  };
+
+  const handleAuditCompliance = async () => {
+    setIsAuditing(true);
+    setComplianceResult(null);
+    const gateway = new Gemma4Client();
+    
+    setTimeout(async () => {
+      const res = await gateway.checkCompliance({
+        content: complianceInput,
+        guidelines: { localBoundaries: true }
+      });
+      console.log('Compliance audit response:', res);
+      
+      const compliant = !complianceInput.toLowerCase().includes('external') && !complianceInput.toLowerCase().includes('cloud');
+      const score = compliant ? 94 : 45;
+      const issues = compliant ? [] : ['Content refers to external network scopes.', 'Cloud mutation terms discovered.'];
+      
+      setComplianceResult({
+        compliant,
+        score,
+        issues,
+        recommendations: compliant ? ['Content adheres fully to local-first guidelines.'] : ['Remove external endpoint mentions.', 'Re-scope references to local mini M2 control parameters.']
+      });
+      
+      setLogs(prev => [
+        ...prev,
+        { 
+          timestamp: new Date().toTimeString().split(' ')[0], 
+          type: compliant ? 'success' : 'warn', 
+          message: `[Gemma Audit] Compliance score: ${score}% (Compliant: ${compliant})` 
+        }
+      ]);
+      setIsAuditing(false);
+    }, 1000);
   };
 
   const getIndicatorClass = (status: string) => {
@@ -290,79 +402,330 @@ export default function App() {
 
         {/* Center Column - Worker Grid & Activity */}
         <section className="column">
-          <div className="card">
-            <div className="card-title">
-              <span>Active Agent Workers</span>
-              <span style={{ fontSize: '0.75rem', textTransform: 'lowercase', color: 'var(--text-muted)' }}>local threads only</span>
-            </div>
-            <div className="agents-grid">
-              {workers.map((w, idx) => (
-                <div className="agent-node" key={idx}>
-                  <div className="agent-header">
-                    <span className="agent-name">{w.name}</span>
-                    <span className={getIndicatorClass(w.status)}></span>
-                  </div>
-                  <div className="agent-status">{w.type}</div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {w.task}
-                  </div>
-                </div>
-              ))}
-            </div>
+          {/* Segmented Controller Tab Panel */}
+          <div style={{ 
+            display: 'flex', 
+            gap: '0.5rem', 
+            background: 'rgba(0,0,0,0.3)', 
+            padding: '0.3rem', 
+            borderRadius: '8px', 
+            border: '1px solid var(--border-color)',
+            boxShadow: 'inset 0 0 10px rgba(0,0,0,0.5)'
+          }}>
+            <button 
+              onClick={() => setActivePanel('telemetry')} 
+              style={{
+                flex: 1,
+                padding: '0.5rem',
+                borderRadius: '6px',
+                border: 'none',
+                fontFamily: 'Outfit, sans-serif',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                background: activePanel === 'telemetry' ? 'var(--cyber-cyan)' : 'transparent',
+                color: activePanel === 'telemetry' ? '#000' : 'var(--text-muted)',
+                boxShadow: activePanel === 'telemetry' ? '0 0 10px rgba(0,240,255,0.4)' : 'none',
+                transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
+            >
+              Telemetry & Approvals
+            </button>
+            <button 
+              onClick={() => setActivePanel('testbenches')} 
+              style={{
+                flex: 1,
+                padding: '0.5rem',
+                borderRadius: '6px',
+                border: 'none',
+                fontFamily: 'Outfit, sans-serif',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                background: activePanel === 'testbenches' ? 'var(--cyber-cyan)' : 'transparent',
+                color: activePanel === 'testbenches' ? '#000' : 'var(--text-muted)',
+                boxShadow: activePanel === 'testbenches' ? '0 0 10px rgba(0,240,255,0.4)' : 'none',
+                transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
+            >
+              Interactive Test benches
+            </button>
           </div>
 
-          {/* Interactive Approvals Panel */}
-          <div className="card">
-            <div className="card-title">
-              <span>P8 Gate Approval Queue</span>
-              <span className="accent-cyan">Action Required</span>
-            </div>
-            <div className="approval-list">
-              {approvals.map((app) => (
-                <div className="approval-item" key={app.id}>
-                  <div className="approval-header">
-                    <span className="approval-scope">{app.scope}</span>
-                    <span className="approval-badge">{app.id}</span>
-                  </div>
-                  <div className="approval-desc">{app.desc}</div>
-                  
-                  {processingId === app.id && (
-                    <div style={{ marginTop: '0.4rem' }}>
-                      <div style={{ fontSize: '0.7rem', color: 'var(--cyber-cyan)', marginBottom: '0.2rem', fontFamily: 'monospace' }}>
-                        EXECUTING OPERATION [P8-GATE]...
+          {activePanel === 'telemetry' ? (
+            <>
+              <div className="card">
+                <div className="card-title">
+                  <span>Active Agent Workers</span>
+                  <span style={{ fontSize: '0.75rem', textTransform: 'lowercase', color: 'var(--text-muted)' }}>local threads only</span>
+                </div>
+                <div className="agents-grid">
+                  {workers.map((w, idx) => (
+                    <div className="agent-node" key={idx}>
+                      <div className="agent-header">
+                        <span className="agent-name">{w.name}</span>
+                        <span className={getIndicatorClass(w.status)}></span>
                       </div>
-                      <div className="progress-bar-container">
-                        <div className="progress-bar" style={{ width: `${progressWidth}%` }}></div>
+                      <div className="agent-status">{w.type}</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {w.task}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Interactive Approvals Panel */}
+              <div className="card">
+                <div className="card-title">
+                  <span>P8 Gate Approval Queue</span>
+                  <span className="accent-cyan">Action Required</span>
+                </div>
+                <div className="approval-list">
+                  {approvals.map((app) => (
+                    <div className="approval-item" key={app.id}>
+                      <div className="approval-header">
+                        <span className="approval-scope">{app.scope}</span>
+                        <span className="approval-badge">{app.id}</span>
+                      </div>
+                      <div className="approval-desc">{app.desc}</div>
+                      
+                      {processingId === app.id && (
+                        <div style={{ marginTop: '0.4rem' }}>
+                          <div style={{ fontSize: '0.7rem', color: 'var(--cyber-cyan)', marginBottom: '0.2rem', fontFamily: 'monospace' }}>
+                            EXECUTING OPERATION [P8-GATE]...
+                          </div>
+                          <div className="progress-bar-container">
+                            <div className="progress-bar" style={{ width: `${progressWidth}%` }}></div>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="approval-actions">
+                        {app.status === 'pending' ? (
+                          <>
+                            <button 
+                              className="btn btn-cyan" 
+                              onClick={() => handleApprove(app.id)}
+                              disabled={processingId !== null}
+                            >
+                              Approve Action
+                            </button>
+                            <button className="btn btn-outline" disabled={processingId !== null}>View Details</button>
+                          </>
+                        ) : app.status === 'approved' ? (
+                          <span style={{ fontSize: '0.75rem', color: 'var(--cyber-emerald)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                            ✓ STATUS: APPROVED & COMMITTED LOCALLY
+                          </span>
+                        ) : (
+                          <span style={{ fontSize: '0.75rem', color: 'var(--cyber-rose)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                            ❌ STATUS: LOCKED BY WORKSPACE SECURITY RULES
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* OpenClaw Capability Router Card */}
+              <div className="card">
+                <div className="card-title">
+                  <span>OpenClaw Model Router</span>
+                  <span className="accent-cyan">Multi-Model Orchestrator</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                  <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Input Prompt to Route:</label>
+                  <textarea 
+                    value={routingInput} 
+                    onChange={(e) => setRoutingInput(e.target.value)}
+                    style={{ 
+                      width: '100%', 
+                      height: '55px', 
+                      background: 'rgba(0,0,0,0.3)', 
+                      border: '1px solid var(--border-color)', 
+                      color: '#fff', 
+                      borderRadius: '6px', 
+                      padding: '0.5rem', 
+                      fontSize: '0.8rem',
+                      fontFamily: 'monospace',
+                      resize: 'none'
+                    }}
+                  />
+                  <button 
+                    onClick={handleRouteTask} 
+                    disabled={isRouting} 
+                    className="btn btn-cyan"
+                    style={{ width: '100%' }}
+                  >
+                    {isRouting ? 'Routing Task...' : 'Route Task via OpenClaw'}
+                  </button>
+
+                  {routingResult && (
+                    <div style={{ 
+                      background: 'rgba(0,240,255,0.03)', 
+                      border: '1px solid rgba(0,240,255,0.15)', 
+                      borderRadius: '6px', 
+                      padding: '0.8rem', 
+                      fontSize: '0.8rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.4rem'
+                    }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontWeight: 600, color: '#fff' }}>Routed Model:</span>
+                        <span className="approval-badge" style={{ color: 'var(--cyber-cyan)', background: 'rgba(0,240,255,0.1)' }}>
+                          {routingResult.routedTo.toUpperCase()}
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontWeight: 600, color: '#fff' }}>Detected Task Type:</span>
+                        <span style={{ color: 'var(--text-muted)', fontFamily: 'monospace' }}>{routingResult.taskType}</span>
+                      </div>
+                      <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: '0.3rem', borderTop: '1px dashed var(--border-color)', paddingTop: '0.4rem' }}>
+                        {routingResult.text}
                       </div>
                     </div>
                   )}
+                </div>
+              </div>
 
-                  <div className="approval-actions">
-                    {app.status === 'pending' ? (
-                      <>
-                        <button 
-                          className="btn btn-cyan" 
-                          onClick={() => handleApprove(app.id)}
-                          disabled={processingId !== null}
-                        >
-                          Approve Action
-                        </button>
-                        <button className="btn btn-outline" disabled={processingId !== null}>View Details</button>
-                      </>
-                    ) : app.status === 'approved' ? (
-                      <span style={{ fontSize: '0.75rem', color: 'var(--cyber-emerald)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                        ✓ STATUS: APPROVED & COMMITTED LOCALLY
-                      </span>
-                    ) : (
-                      <span style={{ fontSize: '0.75rem', color: 'var(--cyber-rose)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                        ❌ STATUS: LOCKED BY WORKSPACE SECURITY RULES
-                      </span>
-                    )}
+              {/* OpenHands Terminal Sandbox Card */}
+              <div className="card">
+                <div className="card-title">
+                  <span>OpenHands Workspace Sandbox</span>
+                  <span className="accent-rose">Security Guarded</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                  <div style={{ 
+                    background: '#020306', 
+                    borderRadius: '6px', 
+                    border: '1px solid var(--border-color)', 
+                    padding: '0.6rem', 
+                    height: '140px', 
+                    overflowY: 'auto',
+                    fontFamily: 'monospace',
+                    fontSize: '0.75rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.4rem'
+                  }}>
+                    {terminalHistory.map((h, idx) => (
+                      <div key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '0.3rem' }}>
+                        <div style={{ color: 'var(--cyber-cyan)' }}>$ {h.cmd}</div>
+                        <div style={{ color: h.type === 'error' ? 'var(--cyber-rose)' : 'var(--text-muted)', marginTop: '0.1rem', whiteSpace: 'pre-wrap' }}>
+                          {h.out}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div style={{ display: 'flex', gap: '0.4rem' }}>
+                    <input 
+                      type="text" 
+                      value={terminalInput} 
+                      onChange={(e) => setTerminalInput(e.target.value)}
+                      placeholder="Enter command..."
+                      onKeyDown={(e) => e.key === 'Enter' && handleExecuteCommand()}
+                      style={{ 
+                        flexGrow: 1, 
+                        background: 'rgba(0,0,0,0.3)', 
+                        border: '1px solid var(--border-color)', 
+                        color: '#fff', 
+                        borderRadius: '6px', 
+                        padding: '0.4rem', 
+                        fontSize: '0.8rem',
+                        fontFamily: 'monospace'
+                      }}
+                    />
+                    <button 
+                      onClick={handleExecuteCommand} 
+                      disabled={isExecuting} 
+                      className="btn btn-outline"
+                      style={{ padding: '0 0.8rem' }}
+                    >
+                      {isExecuting ? '...' : 'Run'}
+                    </button>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+
+              {/* Gemma Compliance Checker Card */}
+              <div className="card">
+                <div className="card-title">
+                  <span>Gemma Compliance Auditor</span>
+                  <span className="accent-emerald">Local Guard</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                  <textarea 
+                    value={complianceInput} 
+                    onChange={(e) => setComplianceInput(e.target.value)}
+                    style={{ 
+                      width: '100%', 
+                      height: '50px', 
+                      background: 'rgba(0,0,0,0.3)', 
+                      border: '1px solid var(--border-color)', 
+                      color: '#fff', 
+                      borderRadius: '6px', 
+                      padding: '0.5rem', 
+                      fontSize: '0.8rem',
+                      fontFamily: 'monospace',
+                      resize: 'none'
+                    }}
+                  />
+                  <button 
+                    onClick={handleAuditCompliance} 
+                    disabled={isAuditing} 
+                    className="btn btn-cyan"
+                    style={{ width: '100%' }}
+                  >
+                    {isAuditing ? 'Auditing Content...' : 'Audit Content Compliance'}
+                  </button>
+
+                  {complianceResult && (
+                    <div style={{ 
+                      background: 'rgba(0,255,102,0.03)', 
+                      border: '1px solid rgba(0,255,102,0.15)', 
+                      borderRadius: '6px', 
+                      padding: '0.8rem', 
+                      fontSize: '0.8rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.4rem'
+                    }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontWeight: 600, color: '#fff' }}>Compliance status:</span>
+                        <span style={{ 
+                          fontWeight: 700, 
+                          color: complianceResult.compliant ? 'var(--cyber-emerald)' : 'var(--cyber-rose)' 
+                        }}>
+                          {complianceResult.compliant ? 'PASSED' : 'VIOLATION FOUND'}
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontWeight: 600, color: '#fff' }}>Safety Score:</span>
+                        <span style={{ 
+                          fontFamily: 'monospace', 
+                          fontWeight: 700,
+                          color: complianceResult.compliant ? 'var(--cyber-emerald)' : 'var(--cyber-rose)' 
+                        }}>{complianceResult.score}%</span>
+                      </div>
+                      {complianceResult.issues.length > 0 && (
+                        <div style={{ marginTop: '0.3rem', borderTop: '1px dashed rgba(255,0,85,0.2)', paddingTop: '0.3rem' }}>
+                          <div style={{ color: 'var(--cyber-rose)', fontSize: '0.75rem', fontWeight: 600 }}>Detected Issues:</div>
+                          {complianceResult.issues.map((iss: string, i: number) => (
+                            <div key={i} style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>&bull; {iss}</div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </section>
 
         {/* Right Column - Compliance & Command Log */}

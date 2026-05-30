@@ -12,7 +12,10 @@
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "wouter": "^3.3.5",
-    "@sirinx/thclaws-runtime": "workspace:*"
+    "@sirinx/thclaws-runtime": "workspace:*",
+    "@sirinx/ai-access-gateway": "workspace:*",
+    "@sirinx/openclaw-adapter": "workspace:*",
+    "@sirinx/openhands-adapter": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^19.2.1",

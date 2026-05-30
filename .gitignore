@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+*service-account*.json
+*credentials*.json
+*.p12
+*.p8
+
+# Local reports / outputs
+outputs/
+security-lab/05_reports/
+vault/logs/
+.codex/
+.agents/
+
+# System Files
+.DS_Store
+Thumbs.db

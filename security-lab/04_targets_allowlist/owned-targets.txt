@@ -1,0 +1,6 @@
+sirinx.co
+www.sirinx.co
+dev.sirinx.co
+ghostclaws.local
+localhost
+127.0.0.1

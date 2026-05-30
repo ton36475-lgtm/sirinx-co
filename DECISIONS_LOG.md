@@ -14,3 +14,8 @@
 - **Status**: Approved
 - **Context**: Decided to isolate external agent-worker orchestration boundaries (OpenClaw and OpenHands) from core business logic into dedicated packages.
 - **Decision**: Refactored the quarantined logic into `@sirinx/openclaw-adapter` and `@sirinx/openhands-adapter` with full process execution guards and sandboxed fallback runtimes.
+
+## 2026-05-31: Mission Control Client-Side Package Linkage
+- **Status**: Approved
+- **Context**: Decided to visually and operationally link the front-end dashboard directly to our compiled local workspace packages.
+- **Decision**: Declared dependencies on all extracted adapter clients, adding reactive console panels (routing diagrams, compliance score indexes, and shell sandbox command histories) to verify package functions directly.

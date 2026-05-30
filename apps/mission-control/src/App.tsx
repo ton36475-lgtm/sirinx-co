@@ -3,6 +3,7 @@ import { calculateKellyCriterion, OPAL_SOLAR_PRICE_PER_UNIT } from '@sirinx/thcl
 import { OpenClawOrchestrator } from '@sirinx/openclaw-adapter';
 import { OpenHandsAdapter } from '@sirinx/openhands-adapter';
 import { Gemma4Client } from '@sirinx/ai-access-gateway';
+import { OrchestrationEnvelopeValidator } from '@sirinx/orchestration-envelope';
 
 interface Worker {
   name: string;
@@ -82,6 +83,40 @@ export default function App() {
   const [complianceInput, setComplianceInput] = useState('This high-power solar unit produces clean local energy with zero environment emissions.');
   const [isAuditing, setIsAuditing] = useState(false);
   const [complianceResult, setComplianceResult] = useState<any>(null);
+
+  // Envelope Auditor state
+  const [envelopeInput, setEnvelopeInput] = useState(JSON.stringify({
+    task_id: "task-982-solar-audit",
+    workflow_stage: "validate",
+    source_request: "Perform degradation check on solar fields.",
+    assigned_agent: "Validator",
+    required_context: {
+      brand_facts: true,
+      field_context: true,
+      repo_paths: ["legacy/sirinx-solar-energy/state"],
+      bundle_paths: ["04_deployment_bundle"],
+      telemetry_inputs: ["cpu_usage", "ram_usage"],
+      financial_inputs: ["opal_solar_pricing"]
+    },
+    constraints: {
+      locked_facts_required: true,
+      no_marketing_claims_without_analysis: true,
+      no_global_fact_mutation: true,
+      server_ready_hold_mode: true
+    },
+    input_payload: { fieldId: "zone-alpha-9" },
+    output_payload: { status: "pending" },
+    validation: {
+      schema_ok: true,
+      paths_exist: true,
+      fact_lock_passed: true,
+      handoff_ready: true
+    },
+    next_agent: "Delivery",
+    fallback_queue_reason: null
+  }, null, 2));
+  const [isAuditingEnvelope, setIsAuditingEnvelope] = useState(false);
+  const [envelopeAuditResult, setEnvelopeAuditResult] = useState<any>(null);
 
   // Recalculate Kelly Fraction using thclaws math engine
   useEffect(() => {
@@ -239,6 +274,43 @@ export default function App() {
       ]);
       setIsAuditing(false);
     }, 1000);
+  };
+
+  const handleAuditEnvelope = () => {
+    setIsAuditingEnvelope(true);
+    setEnvelopeAuditResult(null);
+    
+    setTimeout(() => {
+      try {
+        const payload = JSON.parse(envelopeInput);
+        const res = OrchestrationEnvelopeValidator.audit(payload);
+        setEnvelopeAuditResult(res);
+        
+        setLogs(prev => [
+          ...prev,
+          { 
+            timestamp: new Date().toTimeString().split(' ')[0], 
+            type: res.valid ? 'success' : 'security', 
+            message: `[Envelope Auditor] Envelope Audit completed. Valid: ${res.valid}` 
+          }
+        ]);
+      } catch (err: any) {
+        setEnvelopeAuditResult({
+          valid: false,
+          errors: [`JSON Syntax Error: ${err.message}`],
+          remediation: ['Fix the malformed JSON formatting before auditing.']
+        });
+        setLogs(prev => [
+          ...prev,
+          { 
+            timestamp: new Date().toTimeString().split(' ')[0], 
+            type: 'security', 
+            message: `[Envelope Auditor] Audit failed due to invalid JSON syntax.` 
+          }
+        ]);
+      }
+      setIsAuditingEnvelope(false);
+    }, 900);
   };
 
   const getIndicatorClass = (status: string) => {
@@ -717,6 +789,82 @@ export default function App() {
                           <div style={{ color: 'var(--cyber-rose)', fontSize: '0.75rem', fontWeight: 600 }}>Detected Issues:</div>
                           {complianceResult.issues.map((iss: string, i: number) => (
                             <div key={i} style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>&bull; {iss}</div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* SIRINX Orchestration Envelope Auditor Card */}
+              <div className="card">
+                <div className="card-title">
+                  <span>SIRINX Envelope Auditor</span>
+                  <span className="accent-cyan">Multi-Agent Auditor</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                  <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Audit Envelope (JSON):</label>
+                  <textarea 
+                    value={envelopeInput} 
+                    onChange={(e) => setEnvelopeInput(e.target.value)}
+                    style={{ 
+                      width: '100%', 
+                      height: '110px', 
+                      background: 'rgba(0,0,0,0.3)', 
+                      border: '1px solid var(--border-color)', 
+                      color: '#fff', 
+                      borderRadius: '6px', 
+                      padding: '0.5rem', 
+                      fontSize: '0.75rem',
+                      fontFamily: 'monospace',
+                      resize: 'vertical'
+                    }}
+                  />
+                  <button 
+                    onClick={handleAuditEnvelope} 
+                    disabled={isAuditingEnvelope} 
+                    className="btn btn-cyan"
+                    style={{ width: '100%' }}
+                  >
+                    {isAuditingEnvelope ? 'Auditing Envelope...' : 'Audit Handoff Envelope'}
+                  </button>
+
+                  {envelopeAuditResult && (
+                    <div style={{ 
+                      background: envelopeAuditResult.valid ? 'rgba(0,255,102,0.03)' : 'rgba(255,0,85,0.03)', 
+                      border: envelopeAuditResult.valid ? '1px solid rgba(0,255,102,0.15)' : '1px solid rgba(255,0,85,0.15)', 
+                      borderRadius: '6px', 
+                      padding: '0.8rem', 
+                      fontSize: '0.8rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.4rem'
+                    }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontWeight: 600, color: '#fff' }}>Audit Validation:</span>
+                        <span style={{ 
+                          fontWeight: 700, 
+                          color: envelopeAuditResult.valid ? 'var(--cyber-emerald)' : 'var(--cyber-rose)' 
+                        }}>
+                          {envelopeAuditResult.valid ? 'VALID HANDOFF' : 'SAFETY BLOCKED'}
+                        </span>
+                      </div>
+                      
+                      {envelopeAuditResult.errors && envelopeAuditResult.errors.length > 0 && (
+                        <div style={{ marginTop: '0.3rem', borderTop: '1px dashed rgba(255,0,85,0.2)', paddingTop: '0.3rem' }}>
+                          <div style={{ color: 'var(--cyber-rose)', fontSize: '0.75rem', fontWeight: 600 }}>Safety Issues:</div>
+                          {envelopeAuditResult.errors.map((err: string, i: number) => (
+                            <div key={i} style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>&bull; {err}</div>
+                          ))}
+                        </div>
+                      )}
+
+                      {envelopeAuditResult.remediation && envelopeAuditResult.remediation.length > 0 && (
+                        <div style={{ marginTop: '0.3rem', borderTop: '1px dashed rgba(255,187,0,0.2)', paddingTop: '0.3rem' }}>
+                          <div style={{ color: 'var(--cyber-amber)', fontSize: '0.75rem', fontWeight: 600 }}>Remediation Steps:</div>
+                          {envelopeAuditResult.remediation.map((rem: string, i: number) => (
+                            <div key={i} style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>&bull; {rem}</div>
                           ))}
                         </div>
                       )}

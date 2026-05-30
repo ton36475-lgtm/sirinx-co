@@ -42,6 +42,9 @@ importers:
       '@sirinx/openhands-adapter':
         specifier: workspace:*
         version: link:../../packages/openhands-adapter
+      '@sirinx/orchestration-envelope':
+        specifier: workspace:*
+        version: link:../../packages/orchestration-envelope
       '@sirinx/thclaws-runtime':
         specifier: workspace:*
         version: link:../../packages/thclaws-runtime

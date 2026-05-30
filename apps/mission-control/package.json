@@ -15,7 +15,8 @@
     "@sirinx/thclaws-runtime": "workspace:*",
     "@sirinx/ai-access-gateway": "workspace:*",
     "@sirinx/openclaw-adapter": "workspace:*",
-    "@sirinx/openhands-adapter": "workspace:*"
+    "@sirinx/openhands-adapter": "workspace:*",
+    "@sirinx/orchestration-envelope": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^19.2.1",

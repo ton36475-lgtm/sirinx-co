@@ -15,6 +15,7 @@ LOCAL ONLY — WAITING FOR PART 8 APPROVAL
 - **[PART 8 APPROVAL - P8-D] PNPM Workspace activated and core packages/applications successfully bootstrapped and committed (commit 2a37a06). The workspace resolves 5 concurrent workspace projects successfully.**
 - **[PART 8 APPROVAL - P8-D] Interactive premium Mission Control Dashboard React web application constructed and committed successfully (commit 5e830e8). Features local telemetry visual grids, active local worker maps, compliance check summaries, and interactive P8 approval gates.**
 - **[PART 8 APPROVAL - P8-D] Monorepo dependencies successfully resolved by configuring `allowBuilds: { esbuild: true }` in `pnpm-workspace.yaml` (commit e05a064). Vite dev server is serving the dashboard locally at `http://127.0.0.1:3333/` without issues.**
+- **[PART 8 APPROVAL - P8-D] Extracted quarantined `hermes-agent` and integrated it cleanly into the `@sirinx/hermes-core` monorepo package (commit 2869bf8). Resolves 6 workspace packages successfully and compiles perfectly under strict typescript settings.**
 
 ## Blocked (Awaiting Part 8 Approvals)
 - Git push / Git merge / Rebase (P8-E)

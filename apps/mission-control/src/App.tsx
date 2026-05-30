@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { calculateKellyCriterion, OPAL_SOLAR_PRICE_PER_UNIT } from '@sirinx/thclaws-runtime';
 
 interface Worker {
   name: string;
@@ -49,11 +50,25 @@ export default function App() {
     { timestamp: '23:42:36', type: 'success', message: 'P8-D Approval: PNPM Workspace activated and committed (2a37a06).' },
   ]);
 
-  const [activeTab, setActiveTab] = useState<'status' | 'approvals' | 'security'>('status');
   const [cpuUsage, setCpuUsage] = useState(14);
   const [ramUsage, setRamUsage] = useState(62);
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [progressWidth, setProgressWidth] = useState(0);
+
+  // thClaws state
+  const [kellyOdds, setKellyOdds] = useState(2.0);
+  const [kellyProb, setKellyProb] = useState(0.65);
+  const [kellyFraction, setKellyFraction] = useState(0.475);
+
+  // Recalculate Kelly Fraction using thclaws math engine
+  useEffect(() => {
+    try {
+      const fraction = calculateKellyCriterion(kellyOdds, kellyProb);
+      setKellyFraction(fraction);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [kellyOdds, kellyProb]);
 
   // Simulate hardware fluctuation
   useEffect(() => {
@@ -194,6 +209,72 @@ export default function App() {
             <div className="stat-row">
               <span className="stat-label">memory stats</span>
               <span className="stat-value">62 indexed notes</span>
+            </div>
+          </div>
+
+          {/* thClaws Math Integration Card */}
+          <div className="card">
+            <div className="card-title">
+              <span>thClaws Solar Math</span>
+              <span className="accent-cyan">Active Engine</span>
+            </div>
+            <div className="stat-row">
+              <span className="stat-label">Opal Energy Unit Price</span>
+              <span className="stat-value highlight">{OPAL_SOLAR_PRICE_PER_UNIT} THB/Unit</span>
+            </div>
+            <div style={{ marginTop: '0.4rem', borderTop: '1px solid var(--border-color)', paddingTop: '0.8rem' }}>
+              <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#fff', marginBottom: '0.5rem' }}>
+                Kelly Capital Criterion Optimizer
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Net Odds (b):</label>
+                  <input 
+                    type="number" 
+                    value={kellyOdds} 
+                    onChange={(e) => setKellyOdds(Math.max(0.1, parseFloat(e.target.value) || 0.1))} 
+                    step="0.1"
+                    style={{ 
+                      width: '60px', 
+                      background: 'rgba(0,0,0,0.3)', 
+                      border: '1px solid var(--border-color)', 
+                      color: '#fff', 
+                      borderRadius: '4px', 
+                      padding: '0.2rem', 
+                      fontFamily: 'monospace',
+                      textAlign: 'right'
+                    }}
+                  />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Probability (p):</label>
+                  <input 
+                    type="range" 
+                    min="0" 
+                    max="1" 
+                    step="0.01"
+                    value={kellyProb} 
+                    onChange={(e) => setKellyProb(parseFloat(e.target.value))}
+                    style={{ width: '100px', accentColor: 'var(--cyber-cyan)' }}
+                  />
+                  <span style={{ fontSize: '0.75rem', fontFamily: 'monospace' }}>{(kellyProb * 100).toFixed(0)}%</span>
+                </div>
+                <div style={{ 
+                  background: 'rgba(0,240,255,0.05)', 
+                  border: '1px solid rgba(0,240,255,0.15)', 
+                  borderRadius: '6px', 
+                  padding: '0.5rem', 
+                  marginTop: '0.4rem', 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center' 
+                }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--cyber-cyan)' }}>Optimal Kelly Bet:</span>
+                  <span style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--cyber-emerald)', fontFamily: 'monospace' }}>
+                    {(kellyFraction * 100).toFixed(1)}%
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 

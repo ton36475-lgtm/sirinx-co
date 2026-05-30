@@ -33,6 +33,9 @@ importers:
 
   apps/mission-control:
     dependencies:
+      '@sirinx/thclaws-runtime':
+        specifier: workspace:*
+        version: link:../../packages/thclaws-runtime
       react:
         specifier: ^19.2.1
         version: 19.2.6

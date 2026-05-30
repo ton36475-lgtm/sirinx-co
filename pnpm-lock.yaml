@@ -87,6 +87,32 @@ importers:
         specifier: ^5.0.0
         version: 5.9.3
 
+  packages/openclaw-adapter:
+    dependencies:
+      axios:
+        specifier: ^1.6.0
+        version: 1.16.1
+    devDependencies:
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.19.41
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
+
+  packages/openhands-adapter:
+    dependencies:
+      axios:
+        specifier: ^1.6.0
+        version: 1.16.1
+    devDependencies:
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.19.41
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
+
   packages/thclaws-runtime:
     devDependencies:
       '@types/node':

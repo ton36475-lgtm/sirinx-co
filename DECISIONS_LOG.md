@@ -9,3 +9,8 @@
 - **Status**: Approved
 - **Context**: Vetted the legacy `Gemma4Client` Axios client containing story generation APIs and compliance check schemas, quarantined under automated mobile repository logs.
 - **Decision**: Modularized it as a clean local ESM package `@sirinx/ai-access-gateway` to separate AI integrations from core logic, enforcing local-only API endpoints (`http://localhost:8000`).
+
+## 2026-05-31: OpenClaw & OpenHands Adapter Extractions
+- **Status**: Approved
+- **Context**: Decided to isolate external agent-worker orchestration boundaries (OpenClaw and OpenHands) from core business logic into dedicated packages.
+- **Decision**: Refactored the quarantined logic into `@sirinx/openclaw-adapter` and `@sirinx/openhands-adapter` with full process execution guards and sandboxed fallback runtimes.

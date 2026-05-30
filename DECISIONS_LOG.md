@@ -29,3 +29,8 @@
 - **Status**: Approved
 - **Context**: Decided to provide real-time UI controls to let operators audit complex agent transitions directly.
 - **Decision**: Integrated the `@sirinx/orchestration-envelope` validator package into `@sirinx/mission-control`, adding JSON textareas and dynamic HSL safety warnings.
+
+## 2026-05-31: Consolidated Drizzle Schema Package
+- **Status**: Approved
+- **Context**: Decided to unify all legacy database schema models across the quarantined codebases to prevent model drift and maintain a single source of truth.
+- **Decision**: Extracted all legacy MySQL Drizzle models into `@sirinx/database` as a shared ESM package.

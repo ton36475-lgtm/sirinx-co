@@ -17,6 +17,7 @@ LOCAL ONLY — WAITING FOR PART 8 APPROVAL
 - **[PART 8 APPROVAL - P8-D] Monorepo dependencies successfully resolved by configuring `allowBuilds: { esbuild: true }` in `pnpm-workspace.yaml` (commit e05a064). Vite dev server is serving the dashboard locally at `http://127.0.0.1:3333/` without issues.**
 - **[PART 8 APPROVAL - P8-D] Extracted quarantined `hermes-agent` and integrated it cleanly into the `@sirinx/hermes-core` monorepo package (commit 2869bf8). Resolves 6 workspace packages successfully and compiles perfectly under strict typescript settings.**
 - **[PART 8 APPROVAL - P8-D] Extracted quarantined `thclaws-math` and integrated it cleanly into the `@sirinx/thclaws-runtime` monorepo package (commit c6f6c21). Resolves 7 workspace packages successfully and compiles perfectly under strict typescript settings.**
+- **[PART 8 APPROVAL - P8-D] Compiled and index mapped 10 quarantined core agent skills inside the monorepo `SKILL_REGISTRY.md` central database (commit 5208f3b). Enables systematic capabilities auditing for all worker layer AI agents.**
 
 ## Blocked (Awaiting Part 8 Approvals)
 - Git push / Git merge / Rebase (P8-E)

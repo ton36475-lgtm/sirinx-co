@@ -24,3 +24,8 @@
 - **Status**: Approved
 - **Context**: Decided to formalize the multi-agent schema boundary (Hermes, Analyst, Creator, Validator, Delivery) into a single standard type-checking package to prevent task payload mutations.
 - **Decision**: Modularized the legacy schema as `@sirinx/orchestration-envelope` and built a compile-time static type system and runtime envelope auditor.
+
+## 2026-05-31: Mission Control Handoff Envelope Validation Panel
+- **Status**: Approved
+- **Context**: Decided to provide real-time UI controls to let operators audit complex agent transitions directly.
+- **Decision**: Integrated the `@sirinx/orchestration-envelope` validator package into `@sirinx/mission-control`, adding JSON textareas and dynamic HSL safety warnings.

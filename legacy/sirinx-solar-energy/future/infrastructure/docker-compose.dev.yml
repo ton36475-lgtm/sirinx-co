@@ -1,0 +1,43 @@
+version: "3.9"
+
+# Development overrides — use with:
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+
+  # ── API: hot reload via uvicorn --reload ─────────────────────────────────────
+  api:
+    build:
+      context: ..
+      dockerfile: infrastructure/docker/Dockerfile.api
+      target: runtime
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /app
+    volumes:
+      - ../apps/api:/app
+    environment:
+      APP_ENV: development
+      # Override with SQLite for local dev (no postgres needed)
+      DATABASE_URL: sqlite+aiosqlite:///./dev.db
+    ports:
+      - "8000:8000"
+
+  # ── Web: Vite dev server with HMR ────────────────────────────────────────────
+  web:
+    image: node:20-alpine
+    container_name: future-web-dev
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    volumes:
+      - ../apps/web:/app
+      - /app/node_modules
+    environment:
+      VITE_API_URL: http://localhost:8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+
+  # ── Disable postgres in dev (using SQLite) ────────────────────────────────────
+  postgres:
+    profiles:
+      - postgres  # only starts if explicitly requested: --profile postgres

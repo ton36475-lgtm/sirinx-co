@@ -1,0 +1,31 @@
+{
+  "name": "openclaw-pixel-office",
+  "version": "1.0.0",
+  "description": "OpenClaw AI Multi-Agent Pixel Office — Desktop Launcher",
+  "main": "main.js",
+  "scripts": {
+    "start":  "electron .",
+    "dev":    "electron . --dev",
+    "build":  "electron-builder --win --x64",
+    "pack":   "electron-builder --dir"
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0"
+  },
+  "devDependencies": {
+    "electron":         "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId":       "ai.sirinx.openclaw-pixel-office",
+    "productName": "OpenClaw Pixel Office",
+    "win": {
+      "target": "portable",
+      "icon":   "assets/icon.ico"
+    },
+    "portable": {
+      "artifactName": "OpenClaw-PixelOffice-${version}.exe"
+    },
+    "files": ["main.js", "preload.js", "src/**/*", "assets/**/*"]
+  }
+}

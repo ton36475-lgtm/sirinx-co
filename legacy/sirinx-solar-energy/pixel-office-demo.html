@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIRINX 47 Ronin — Pixel Office</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0A1628;
+    --navy2: #0D1E35;
+    --gold: #F5A623;
+    --cyan: #06B6D4;
+    --purple: #A855F7;
+    --green: #10B981;
+    --red: #EF4444;
+    --slate: #64748B;
+  }
+
+  body {
+    background: var(--navy);
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: #0B1A2E;
+    border-bottom: 1px solid rgba(245,166,35,0.2);
+  }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: rgba(245,166,35,0.15);
+    border: 1px solid rgba(245,166,35,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .logo-text { font-size: 14px; font-weight: bold; letter-spacing: 2px; color: var(--gold); }
+  .logo-sub  { font-size: 9px; color: rgba(245,166,35,0.5); letter-spacing: 3px; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .live-badge {
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    border: 1px solid rgba(16,185,129,0.3);
+    background: rgba(16,185,129,0.08);
+    font-size: 9px; color: #10B981;
+  }
+  .live-dot { width: 6px; height: 6px; background: #10B981; animation: blink 1s ease-in-out infinite; }
+  .agent-count { font-size: 11px; color: rgba(255,255,255,0.4); }
+
+  /* ── Office container ── */
+  .office-wrap {
+    padding: 16px;
+    overflow-x: auto;
+  }
+  .office {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto auto;
+    gap: 12px;
+    min-width: 900px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* ── Department rooms ── */
+  .room {
+    border: 2px solid;
+    padding: 12px;
+    position: relative;
+    background-image:
+      repeating-conic-gradient(rgba(255,255,255,0.015) 0% 25%, transparent 0% 50%)
+      0 0 / 16px 16px;
+  }
+  .room-l1 { border-color: rgba(6,182,212,0.35); grid-column: 1 / 3; }
+  .room-l2 { border-color: rgba(168,85,247,0.35); }
+  .room-l3 { border-color: rgba(245,166,35,0.35); grid-column: 1 / 2; }
+  .room-l4 { border-color: rgba(16,185,129,0.35); grid-column: 2 / 3; }
+  .room-l5 { border-color: rgba(239,68,68,0.35); }
+  .room-kai { border-color: rgba(245,166,35,0.6); grid-column: 2 / 4; background: rgba(245,166,35,0.04); }
+
+  .room-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .room-stripe { width: 3px; height: 18px; }
+  .room-name   { font-size: 9px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; }
+  .room-count  { margin-left: auto; font-size: 9px; color: rgba(255,255,255,0.25); }
+  .room-active { font-size: 9px; padding: 2px 6px; border: 1px solid; border-radius: 0; }
+
+  /* ── Desk grid ── */
+  .desks {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 8px;
+  }
+
+  /* ── Individual desk ── */
+  .desk {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 8px 4px 6px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.2s;
+    position: relative;
+    user-select: none;
+  }
+  .desk:hover { transform: scale(1.1); z-index: 10; }
+
+  /* ── Pixel character ── */
+  .char-wrap {
+    width: 20px; height: 26px;
+    position: relative;
+    display: flex; align-items: flex-end;
+  }
+  .char-wrap svg { image-rendering: pixelated; display: block; }
+
+  /* ── Status bubble ── */
+  .bubble {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px; height: 12px;
+    border: 1px solid;
+    font-size: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold;
+    animation: bubble-pop 0.8s ease-in-out infinite;
+  }
+
+  /* ── Desk surface ── */
+  .desk-surface {
+    width: 100%;
+    height: 4px;
+    background: #8B6914;
+    border: 1px solid #A0522D;
+  }
+
+  /* ── Name plate ── */
+  .nameplate {
+    font-size: 8px;
+    text-align: center;
+    letter-spacing: 0.05em;
+    max-width: 64px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.2;
+  }
+
+  /* ── Status indicator dot ── */
+  .status-dot {
+    position: absolute;
+    top: 4px; right: 4px;
+    width: 5px; height: 5px;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.03);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 12px;
+    font-size: 9px;
+  }
+  .legend-title { color: rgba(255,255,255,0.25); letter-spacing: 2px; text-transform: uppercase; margin-right: 4px; }
+  .legend-item  { display: flex; align-items: center; gap: 4px; color: rgba(255,255,255,0.4); }
+  .legend-dot   { width: 8px; height: 8px; }
+
+  /* ── Tooltip ── */
+  .tooltip {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    background: #0D1E35;
+    border: 1px solid rgba(245,166,35,0.4);
+    padding: 10px 14px;
+    max-width: 260px;
+    pointer-events: none;
+  }
+  .tooltip.show { display: block; }
+  .tt-name   { font-size: 12px; font-weight: bold; color: var(--gold); margin-bottom: 4px; }
+  .tt-kanji  { font-size: 10px; color: rgba(255,255,255,0.3); margin-bottom: 6px; }
+  .tt-role   { font-size: 10px; color: rgba(255,255,255,0.6); margin-bottom: 6px; }
+  .tt-mission{ font-size: 9px; color: rgba(255,255,255,0.4); line-height: 1.5; }
+
+  /* ── Pixel Agents CTA panel ── */
+  .cta-panel {
+    margin: 12px 16px;
+    padding: 14px 18px;
+    border: 2px solid rgba(245,166,35,0.4);
+    background: rgba(245,166,35,0.05);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .cta-icon  { font-size: 28px; line-height: 1; }
+  .cta-body  { flex: 1; min-width: 200px; }
+  .cta-title { font-size: 13px; color: var(--gold); font-weight: bold; margin-bottom: 4px; }
+  .cta-text  { font-size: 10px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+  .cta-steps { font-size: 9px; color: rgba(245,166,35,0.6); margin-top: 6px; line-height: 1.8; }
+  .cta-link  { display: inline-block; padding: 6px 14px; border: 1px solid rgba(245,166,35,0.6); color: var(--gold); font-size: 9px; text-decoration: none; letter-spacing: 1px; }
+  .cta-link:hover { background: rgba(245,166,35,0.1); }
+
+  /* ── Animations ── */
+  @keyframes blink        { 0%,100%{opacity:1} 50%{opacity:.2} }
+  @keyframes bubble-pop   { 0%,100%{transform:translateX(-50%) scale(1)} 50%{transform:translateX(-50%) scale(1.2)} }
+  @keyframes char-idle    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-1px)} }
+  @keyframes char-work    { 0%{transform:rotate(-3deg)} 100%{transform:rotate(3deg)} }
+  @keyframes char-read    { 0%,100%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} }
+  @keyframes char-wait    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+  @keyframes char-shake   { 0%{transform:translateX(-2px)} 100%{transform:translateX(2px)} }
+  @keyframes desk-glow    { from{box-shadow:none} to{box-shadow:0 0 10px -3px var(--glow)} }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">⚔</div>
+    <div>
+      <div class="logo-text">SIRINX PIXEL OFFICE</div>
+      <div class="logo-sub">47 RONIN · COMMAND CENTER</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      <span id="liveLabel">SIMULATED</span>
+    </div>
+    <div class="agent-count" id="activeLabel">0 agents active</div>
+  </div>
+</header>
+
+<!-- VS Code CTA Panel -->
+<div class="cta-panel">
+  <div class="cta-icon">🎮</div>
+  <div class="cta-body">
+    <div class="cta-title">⚡ เชื่อม Pixel Agents VS Code Extension</div>
+    <div class="cta-text">
+      เปลี่ยน Claude Code sessions ให้กลายเป็นตัวละคร pixel art ที่เดินไปมาใน SIRINX HQ
+    </div>
+    <div class="cta-steps">
+      1. VS Code Extensions → ค้นหา "Pixel Agents" → Install (ฟรี)&nbsp;&nbsp;
+      2. เปิด Pixel Agents panel → "+ Agent" → เลือก Ronin name&nbsp;&nbsp;
+      3. สั่งงาน Claude Code → ดูตัวละครทำงานจริง!
+    </div>
+  </div>
+  <a class="cta-link" href="vscode:extension/pablodelucca.pixel-agents" target="_blank">
+    INSTALL EXTENSION →
+  </a>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <span class="legend-title">Status:</span>
+  <div class="legend-item"><div class="legend-dot" style="background:#F5A623"></div>working</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#A855F7"></div>analyzing</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#EF4444"></div>waiting</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#10B981"></div>success</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#64748B"></div>offline</div>
+  <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.15)"></div>idle</div>
+  <span style="margin-left:auto;color:rgba(255,255,255,0.15);font-size:9px">Click agent for DNA info</span>
+</div>
+
+<!-- Office -->
+<div class="office-wrap">
+  <div class="office" id="office"></div>
+</div>
+
+<!-- Tooltip -->
+<div class="tooltip" id="tooltip">
+  <div class="tt-name" id="tt-name"></div>
+  <div class="tt-kanji" id="tt-kanji"></div>
+  <div class="tt-role" id="tt-role"></div>
+  <div class="tt-mission" id="tt-mission"></div>
+</div>
+
+<script>
+// ─── Agent DNA ─────────────────────────────────────────────────────────────
+const AGENTS = [
+  // L1
+  { id:'agent-01', n:1,  codename:'Kuranosuke', kanji:'大石内蔵助良雄', layer:'L1', role:'PV Monitor',       mission:'ติดตามการผลิตไฟฟ้า real-time ทุก site' },
+  { id:'agent-02', n:2,  codename:'Chikara',    kanji:'大石主税良金',   layer:'L1', role:'Battery Monitor',  mission:'ติดตาม SOC, SoH ของแบตเตอรี่ทุกก้อน' },
+  { id:'agent-03', n:3,  codename:'Sōemon',     kanji:'吉田沢右衛門兼貞',layer:'L1', role:'Weather',         mission:'ดึง irradiance, temperature ทั่วไทย' },
+  { id:'agent-04', n:4,  codename:'Gengoemon',  kanji:'片岡源五右衛門憲房',layer:'L1',role:'Grid & Tariff',  mission:'ติดตามอัตราค่าไฟ TOU/Non-TOU MEA/PEA' },
+  { id:'agent-05', n:5,  codename:'Yahei',      kanji:'堀部弥兵衛金丸', layer:'L1', role:'Site Survey',      mission:'วิเคราะห์พื้นที่ ทิศทาง เงา usable area' },
+  { id:'agent-06', n:6,  codename:'Yasubei',    kanji:'堀部安兵衛武庸', layer:'L1', role:'Customer Usage',   mission:'อ่านบิลค่าไฟ วิเคราะห์ pattern การใช้ไฟ' },
+  { id:'agent-07', n:7,  codename:'Chūzaemon',  kanji:'吉田忠左衛門兼亮',layer:'L1',role:'Maintenance Hist', mission:'ติดตาม maintenance events ทุก site' },
+  { id:'agent-08', n:8,  codename:'Sawaemon',   kanji:'吉田沢右衛門兼貞',layer:'L1',role:'Contractor Perf',  mission:'ประเมินคะแนน contractor ทุกราย' },
+  { id:'agent-09', n:9,  codename:'Kanroku',    kanji:'近松勘六行重',   layer:'L1', role:'FB Group Scanner', mission:'สแกนกลุ่ม Facebook หาลีดโซลาร์' },
+  { id:'agent-10', n:10, codename:'Kyūdayū',    kanji:'間瀬久太夫正明', layer:'L1', role:'FB Comment',       mission:'สแกนคอมเมนต์ Facebook auto-reply' },
+  { id:'agent-11', n:11, codename:'Magokurō',   kanji:'間瀬孫九郎正辰', layer:'L1', role:'TikTok Scanner',   mission:'สแกน TikTok hashtag solar trends' },
+  { id:'agent-12', n:12, codename:'Genzō',      kanji:'赤埴源蔵重賢',   layer:'L1', role:'Instagram',        mission:'สแกน Instagram Reels premium leads' },
+  { id:'agent-13', n:13, codename:'Matanojō',   kanji:'潮田又之丞高教', layer:'L1', role:'YouTube Comments', mission:'สแกนคอมเมนต์ YouTube solar channels' },
+  { id:'agent-14', n:14, codename:'Sukeemon',   kanji:'富森助右衛門正因',layer:'L1',role:'Property Scanner', mission:'สแกนโรงงาน mall ที่มีหลังคาใหญ่' },
+  { id:'agent-15', n:15, codename:'Kazuemon',   kanji:'不破数右衛門正種',layer:'L1',role:'Google Maps',      mission:'ค้นหาธุรกิจจาก Google Maps' },
+  { id:'agent-16', n:16, codename:"Kin'emon",   kanji:'大久保金右衛門忠道',layer:'L1',role:'Multi-Bot Coord', mission:'ประสานงาน bots ทุกตัว dedup leads' },
+  // L2
+  { id:'agent-17', n:17, codename:'Jūnai',      kanji:'小野寺十内秀和', layer:'L2', role:'Degradation',      mission:'คำนวณ degradation Arrhenius model' },
+  { id:'agent-18', n:18, codename:'Kōemon',     kanji:'小野寺幸右衛門秀富',layer:'L2',role:'Financial',      mission:'คำนวณ NPV, IRR, Payback, LCOE' },
+  { id:'agent-19', n:19, codename:'Okaemon',    kanji:'木村岡右衛門貞行',layer:'L2', role:'Tax Optimizer',   mission:'คำนวณสิทธิ์ลดหย่อนภาษี 150% BOI' },
+  { id:'agent-20', n:20, codename:'Magodayū',   kanji:'奥田孫太夫重延', layer:'L2', role:'Forecasting',      mission:'พยากรณ์การผลิตไฟฟ้า P50/P90 25 ปี' },
+  { id:'agent-21', n:21, codename:'Sadaemon',   kanji:'奥田貞右衛門行高',layer:'L2',role:'Battery Optim',    mission:'หา TOU schedule เพื่อ maximize savings' },
+  { id:'agent-22', n:22, codename:'Tōzaemon',   kanji:'早水藤左衛門満尭',layer:'L2',role:'Low Prod Detect',  mission:'ตรวจจับการผลิตต่ำผิดปกติ' },
+  { id:'agent-23', n:23, codename:'Gorōemon',   kanji:'村松喜兵衛秀直', layer:'L2', role:'Cash Flow',        mission:'วิเคราะห์สุขภาพกระแสเงินสด 24-day' },
+  { id:'agent-24', n:24, codename:'Sezaemon',   kanji:'大石瀬左衛門信清',layer:'L2',role:'Lead Qualify',     mission:'ให้คะแนนลีด 0-100 ด้วย BANT' },
+  { id:'agent-25', n:25, codename:'Jūrōzaemon', kanji:'磯貝十郎左衛門正久',layer:'L2',role:'Competitor Intel',mission:'วิเคราะห์คู่แข่ง ราคา กลยุทธ์' },
+  // L3
+  { id:'agent-26', n:26, codename:'Kihei',       kanji:'村松三太夫高直', layer:'L3', role:'Proposal Gen',    mission:'สร้าง proposal PDF ภาษาไทยใน <30s' },
+  { id:'agent-27', n:27, codename:'Jūjirō',      kanji:'神崎十次郎則安', layer:'L3', role:'Service Rec',     mission:'แนะนำบริการ upsell ที่ margin สูง' },
+  { id:'agent-28', n:28, codename:'Shinrokurō',  kanji:'橋本新六郎正憲', layer:'L3', role:'Job Posting',     mission:'โพสต์งานใน Contractor Marketplace' },
+  { id:'agent-29', n:29, codename:'Kansuke',     kanji:'中村勘助正重',   layer:'L3', role:'Bid Evaluation',  mission:'ประเมินราคาเสนอจากช่าง multi-criteria' },
+  { id:'agent-30', n:30, codename:'Saburobei',   kanji:'千馬三郎兵衛光忠',layer:'L3',role:'Promotions',      mission:'เลือก promo ที่ maximize conversion' },
+  { id:'agent-31', n:31, codename:'Hannojō',     kanji:'菅谷半之丞政利', layer:'L3', role:'Notifications',   mission:'ส่งแจ้งเตือน LINE Email Push SMS' },
+  { id:'agent-32', n:32, codename:'Muramatsu-K', kanji:'村松喜兵衛秀直', layer:'L3', role:'Verification',    mission:'ตรวจสอบเอกสาร ใบอนุญาต กรมธรรม์' },
+  { id:'agent-33', n:33, codename:'Sandayū',     kanji:'不破三太夫正統', layer:'L3', role:'Content Request', mission:'สร้าง copy สำหรับ Facebook LINE TikTok' },
+  { id:'agent-34', n:34, codename:'Densuke',     kanji:'倉橋伝助武幸',   layer:'L3', role:'Email Marketing', mission:'ส่ง nurture email sequences อัตโนมัติ' },
+  { id:'agent-43', n:43, codename:'Yasoemon',    kanji:'岡嶋八十右衛門常樹',layer:'L3',role:'Security',      mission:'Auth, Rate Limit, PDPA, Input sanitize' },
+  // L4
+  { id:'agent-35', n:35, codename:'Gengo',       kanji:'大高源吾忠雄',   layer:'L4', role:'Orchestrator ★',  mission:'หัวใจหลัก กระจายงานสู่ agents ที่เหมาะสม' },
+  { id:'agent-36', n:36, codename:'Emoshichi',   kanji:'矢頭右衛門七兼村',layer:'L4',role:'Customer Portal', mission:'จัดการ data flow ของ Customer App' },
+  { id:'agent-37', n:37, codename:'Shinzaemon',  kanji:'勝田新左衛門武尭',layer:'L4',role:'Core Dashboard',  mission:'รวม KPI ทั้งหมดสำหรับ admin' },
+  { id:'agent-38', n:38, codename:'Tadashichi',  kanji:'岡嶋忠七常行',   layer:'L4', role:'Contractor Portal',mission:'จัดการ Contractor App job queue' },
+  { id:'agent-39', n:39, codename:'Isuke',       kanji:'木村惣右衛門正方',layer:'L4',role:'Growth & Acq',    mission:'ประสานงาน Ads SEO Social maximize leads' },
+  { id:'agent-40', n:40, codename:'Yazaemon',    kanji:'貝賀弥左衛門友信',layer:'L4',role:'Decision Router', mission:'Route requests ไปยัง agent ใน <50ms' },
+  { id:'agent-41', n:41, codename:'Jūheiji',     kanji:'矢田十平次輔武', layer:'L4', role:'State Manager',   mission:'จัดการ session state ทั้งระบบ' },
+  { id:'agent-42', n:42, codename:'Yogorō',      kanji:'神崎与五郎則休', layer:'L4', role:'Learning & Optim', mission:'เรียนรู้จาก outcomes ปรับระบบให้ดีขึ้น' },
+  // L5
+  { id:'agent-44', n:44, codename:'Mimura',      kanji:'三村次郎左衛門包常',layer:'L5',role:'AI Trend Scanner',mission:'สแกน GitHub/HuggingFace/arXiv weekly' },
+  { id:'agent-45', n:45, codename:'Yokogawa',    kanji:'横川勘平宗利',   layer:'L5', role:'Code Evolution',  mission:'ตรวจ dependency vulnerabilities upgrade' },
+  { id:'agent-46', n:46, codename:'Kayano',      kanji:'茅野和助常成',   layer:'L5', role:'Benchmark',       mission:'Lighthouse API latency DB performance' },
+  { id:'agent-47', n:47, codename:'Terasaka',    kanji:'寺坂吉右衛門信行',layer:'L5',role:'Integration Disc', mission:'ค้นหา API/MCP ใหม่ + POC plans' },
+  // Kai
+  { id:'kai',      n:0,  codename:'Kai (甲斐)',   kanji:'甲斐',           layer:'Kai',role:'AI Chatbot ✦',    mission:'แชทกับลูกค้า 5-step CoT ภาษาไทย/อังกฤษ' },
+];
+
+const LAYER_COLORS = {
+  L1:  { main:'#06B6D4', bg:'rgba(6,182,212,0.07)',   border:'rgba(6,182,212,0.35)'  },
+  L2:  { main:'#A855F7', bg:'rgba(168,85,247,0.07)',  border:'rgba(168,85,247,0.35)' },
+  L3:  { main:'#F5A623', bg:'rgba(245,166,35,0.07)',  border:'rgba(245,166,35,0.35)' },
+  L4:  { main:'#10B981', bg:'rgba(16,185,129,0.07)',  border:'rgba(16,185,129,0.35)' },
+  L5:  { main:'#EF4444', bg:'rgba(239,68,68,0.07)',   border:'rgba(239,68,68,0.35)'  },
+  Kai: { main:'#F5A623', bg:'rgba(245,166,35,0.12)',  border:'rgba(245,166,35,0.6)'  },
+};
+
+const LAYER_LABELS = {
+  L1:'L1 · Perception HQ', L2:'L2 · Analysis Lab',
+  L3:'L3 · Decision Chamber', L4:'L4 · Coordination Hub',
+  L5:'L5 · R&D Bunker', Kai:'Kai · Chatbot Suite',
+};
+
+const STATUS_POOL = ['idle','idle','idle','working','analyzing','waiting','success','offline'];
+let statusMap = {};
+
+function randomStatus() {
+  return STATUS_POOL[Math.floor(Math.random() * STATUS_POOL.length)];
+}
+
+function initStatus() {
+  AGENTS.forEach(a => { statusMap[a.id] = 'idle'; });
+}
+
+function tickStatus() {
+  AGENTS.forEach(a => {
+    if (Math.random() < 0.12) statusMap[a.id] = randomStatus();
+    if (statusMap[a.id] === 'success' && Math.random() < 0.6) statusMap[a.id] = 'idle';
+  });
+  updateAllDesks();
+  updateActiveCount();
+}
+
+function updateActiveCount() {
+  const active = Object.values(statusMap).filter(s => ['working','analyzing','waiting'].includes(s)).length;
+  document.getElementById('activeLabel').textContent = active + ' agents active';
+}
+
+// ── Draw pixel sprite SVG ──────────────────────────────────────────────────
+function makeSprite(color, status) {
+  const isOffline = status === 'offline';
+  const c = isOffline ? '#444' : color;
+  const a = isOffline ? '60' : 'FF';
+  const ysway = status === 'working' ? '1' : '0';
+  return `<svg width="20" height="26" viewBox="0 0 20 26" style="image-rendering:pixelated;display:block">
+    <rect x="4" y="0" width="12" height="3" fill="${c}CC"/>
+    <rect x="3" y="2" width="14" height="10" fill="${c}${a}"/>
+    <rect x="6" y="5" width="3" height="3" fill="#00000055"/>
+    <rect x="11" y="5" width="3" height="3" fill="#00000055"/>
+    <rect x="7" y="9" width="6" height="${status==='waiting'?'2':'1'}" fill="${status==='waiting'?'#ff000088':'#00000033'}"/>
+    <rect x="4" y="13" width="12" height="7" fill="${c}CC"/>
+    <rect x="1" y="13" width="3" height="${status==='working'?'5':'6'}" fill="${c}99"/>
+    <rect x="16" y="13" width="3" height="${status==='working'?'5':'6'}" fill="${c}99"/>
+    <rect x="4" y="21" width="5" height="5" fill="${c}88"/>
+    <rect x="11" y="21" width="5" height="5" fill="${c}88"/>
+  </svg>`;
+}
+
+function statusDotColor(s) {
+  return s==='working'?'#F5A623':s==='analyzing'?'#A855F7':s==='waiting'?'#EF4444':s==='error'?'#EF4444':s==='success'?'#10B981':s==='offline'?'#444':'rgba(255,255,255,0.15)';
+}
+function statusBubble(s) {
+  if (s==='working')   return {char:'⌨', color:'#F5A623'};
+  if (s==='analyzing') return {char:'📖',color:'#A855F7'};
+  if (s==='waiting')   return {char:'!', color:'#EF4444'};
+  if (s==='error')     return {char:'✕', color:'#EF4444'};
+  if (s==='success')   return {char:'✓', color:'#10B981'};
+  if (s==='offline')   return {char:'z', color:'#64748B'};
+  return null;
+}
+function statusAnim(s) {
+  if (s==='working')   return 'char-work 0.3s steps(2) infinite';
+  if (s==='analyzing') return 'char-read 1.5s ease-in-out infinite';
+  if (s==='waiting')   return 'char-wait 0.5s ease-in-out infinite';
+  if (s==='error')     return 'char-shake 0.2s steps(2) infinite';
+  if (s==='success')   return 'char-jump 0.5s ease-out 1';
+  return 'char-idle 2s ease-in-out infinite';
+}
+
+// ── Render a single desk ──────────────────────────────────────────────────
+function renderDesk(agent) {
+  const s = statusMap[agent.id] || 'idle';
+  const col = LAYER_COLORS[agent.layer];
+  const bub = statusBubble(s);
+  const isWorking = s !== 'idle' && s !== 'offline';
+
+  const el = document.getElementById('desk-' + agent.id);
+  if (!el) return;
+
+  el.style.background = col.bg;
+  el.style.borderColor = isWorking ? col.main + '70' : col.main + '25';
+  el.style.setProperty('--glow', col.main);
+  if (isWorking) {
+    el.style.animation = 'desk-glow 1s ease-in-out infinite alternate';
+  } else {
+    el.style.animation = '';
+  }
+
+  const charWrap = el.querySelector('.char-wrap');
+  charWrap.innerHTML = makeSprite(col.main, s);
+  charWrap.style.animation = statusAnim(s);
+
+  const bubEl = el.querySelector('.bubble');
+  if (bub) {
+    bubEl.style.display = 'flex';
+    bubEl.textContent = bub.char;
+    bubEl.style.borderColor = bub.color;
+    bubEl.style.color = bub.color;
+    bubEl.style.background = bub.color + '18';
+    if (s === 'waiting') bubEl.style.animation = 'bubble-pop 0.8s ease-in-out infinite';
+    else bubEl.style.animation = '';
+  } else {
+    bubEl.style.display = 'none';
+  }
+
+  const dot = el.querySelector('.status-dot');
+  dot.style.background = statusDotColor(s);
+  dot.style.animation = ['working','waiting'].includes(s) ? 'blink 1s ease-in-out infinite' : '';
+}
+
+function updateAllDesks() {
+  AGENTS.forEach(a => renderDesk(a));
+}
+
+// ── Build office HTML ─────────────────────────────────────────────────────
+function buildOffice() {
+  const layers = ['L1','L2','L3','L4','L5','Kai'];
+  const office = document.getElementById('office');
+
+  // Room CSS classes
+  const roomClass = { L1:'room-l1', L2:'room-l2', L3:'room-l3', L4:'room-l4', L5:'room-l5', Kai:'room-kai' };
+
+  layers.forEach(layer => {
+    const agents = AGENTS.filter(a => a.layer === layer);
+    const col = LAYER_COLORS[layer];
+    const div = document.createElement('div');
+    div.className = `room ${roomClass[layer]}`;
+    div.style.background = col.bg;
+
+    div.innerHTML = `
+      <div class="room-header">
+        <div class="room-stripe" style="background:${col.main}"></div>
+        <div class="room-name" style="color:${col.main}">${LAYER_LABELS[layer]}</div>
+        <div class="room-active" id="active-${layer}" style="display:none;border-color:${col.main}40;color:${col.main};background:${col.main}15">0 active</div>
+        <div class="room-count">${agents.length} agents</div>
+      </div>
+      <div class="desks" id="desks-${layer}"></div>
+    `;
+
+    const desksDiv = div.querySelector(`#desks-${layer}`);
+    agents.forEach(agent => {
+      const desk = document.createElement('div');
+      desk.className = 'desk';
+      desk.id = 'desk-' + agent.id;
+      desk.style.borderColor = col.main + '25';
+      desk.innerHTML = `
+        <div class="char-wrap" style="animation:char-idle 2s ease-in-out infinite">
+          ${makeSprite(col.main, 'idle')}
+        </div>
+        <div class="bubble" style="display:none"></div>
+        <div class="desk-surface"></div>
+        <div class="nameplate" style="color:${col.main}">${agent.codename}</div>
+        <div class="status-dot" style="background:rgba(255,255,255,0.1)"></div>
+      `;
+
+      desk.addEventListener('click', (e) => showTooltip(e, agent));
+      desk.addEventListener('mouseenter', (e) => showTooltip(e, agent));
+      desk.addEventListener('mouseleave', hideTooltip);
+      desksDiv.appendChild(desk);
+    });
+
+    office.appendChild(div);
+  });
+}
+
+// ── Tooltip ───────────────────────────────────────────────────────────────
+function showTooltip(e, agent) {
+  const tt = document.getElementById('tooltip');
+  const s = statusMap[agent.id] || 'idle';
+  document.getElementById('tt-name').textContent = `${agent.codename} #${agent.n === 0 ? 'Kai' : agent.n}`;
+  document.getElementById('tt-kanji').textContent = agent.kanji;
+  document.getElementById('tt-role').textContent = `${LAYER_LABELS[agent.layer]} · ${agent.role} · ${s.toUpperCase()}`;
+  document.getElementById('tt-mission').textContent = agent.mission;
+  tt.classList.add('show');
+
+  const x = Math.min(e.clientX + 14, window.innerWidth - 280);
+  const y = Math.min(e.clientY - 10, window.innerHeight - 140);
+  tt.style.left = x + 'px';
+  tt.style.top  = y + 'px';
+}
+function hideTooltip() {
+  document.getElementById('tooltip').classList.remove('show');
+}
+document.addEventListener('click', hideTooltip);
+
+// ── Init ───────────────────────────────────────────────────────────────────
+initStatus();
+buildOffice();
+updateAllDesks();
+setInterval(tickStatus, 2500);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "future-openclaw-hybrid",
+  "version": "1.0.0",
+  "description": "**บริษัท:** Future Multi Agentic **เวอร์ชัน:** 1.0 **อัพเดต:** 2026-04-02",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "js-yaml": "^4.1.1"
+  }
+}

@@ -1,0 +1,72 @@
+version: 1
+job_id: "YYYY-NNN"
+created_by: planner-agent
+created_at: "YYYY-MM-DDTHH:MM:SS+07:00"
+spec_ref: "docs/specs/active/YYYY-NNN/spec.md"
+
+tasks:
+  # ===== LANE A: Codex Engineering =====
+
+  - task_id: "T01"
+    title: "สร้าง/แก้ไข {component/feature}"
+    description: |
+      {อธิบายงานอย่างละเอียด — developer ต้องอ่านแล้วรู้ว่าต้องทำอะไร}
+    lane: A
+    agent: codex_implementer
+    depends_on: []
+    acceptance_criteria:
+      - "AC: {criteria testable 1}"
+      - "AC: {criteria testable 2}"
+    estimated_complexity: s  # xs|s|m|l|xl
+    affected_files:
+      - "src/components/{Component}.tsx"
+      - "src/styles/{style}.css"
+    verify_task: false
+    notes: "{ข้อมูลเพิ่มเติมสำหรับ Codex}"
+
+  - task_id: "T02"
+    title: "เขียน/อัพเดต Tests"
+    description: |
+      เขียน unit tests สำหรับ T01
+      ทุก acceptance criteria ต้องมี test coverage
+    lane: A
+    agent: codex_test_engineer
+    depends_on: ["T01"]
+    acceptance_criteria:
+      - "Tests pass: 0 failed"
+      - "Coverage ≥ 70% สำหรับ changed files"
+      - "Lint: 0 errors"
+      - "TypeCheck: 0 errors"
+    estimated_complexity: s
+    affected_files:
+      - "tests/components/{Component}.test.tsx"
+    verify_task: false
+
+  # ===== LANE B: Claude Computer (ถ้า UI involved) =====
+
+  - task_id: "T03"
+    title: "ตรวจสอบ UI {feature} บน staging"
+    description: |
+      ทดสอบ {feature} บน staging environment
+      ดู test_scenarios.md สำหรับขั้นตอนละเอียด
+    lane: B
+    agent: claude_operator
+    depends_on: ["T02"]
+    acceptance_criteria:
+      - "ไม่มี critical findings"
+      - "ไม่มี high findings ที่เกี่ยวกับ acceptance criteria"
+      - "Screenshots ครบทุก scenario"
+    estimated_complexity: s
+    verify_task: true
+    staging_url: "http://localhost:3002"
+    scenarios_file: "docs/specs/active/YYYY-NNN/test_scenarios.md"
+
+quality_gate_overrides: {}
+  # ตัวอย่าง: ถ้าต้องการ skip บาง gates
+  # skip_visual_verify: true  # ถ้าไม่มี UI
+
+metadata:
+  total_tasks: 3
+  lane_a_tasks: 2
+  lane_b_tasks: 1
+  estimated_total: m

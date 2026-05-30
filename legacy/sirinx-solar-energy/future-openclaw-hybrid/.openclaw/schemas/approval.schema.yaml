@@ -1,0 +1,131 @@
+version: 1
+schema_name: approval
+description: |
+  Schema สำหรับ approval.yaml — บันทึกการ approve หรือ reject จาก human
+  Approval record เป็น immutable audit trail — ห้ามแก้ไขหลัง sign
+
+type: object
+required:
+  - approval_id
+  - job_id
+  - approver
+  - action
+  - risk_level
+  - timestamp
+  - reason
+
+properties:
+  approval_id:
+    type: string
+    format: "APPR-{job_id}-{NNN}"
+    example: "APPR-2026-001-001"
+
+  job_id:
+    type: string
+
+  approver:
+    type: string
+    description: ชื่อ human approver (ต้องตรงกับ human_approvers list ใน approvals.yaml)
+
+  action:
+    type: string
+    enum:
+      - approved          # อนุมัติ — ดำเนินการต่อได้
+      - approved_with_conditions  # อนุมัติแบบมีเงื่อนไข
+      - rejected          # ปฏิเสธ — ต้องทำใหม่
+      - escalated         # ส่งต่อให้คนอื่น
+      - deferred          # เลื่อนออกไป
+
+  risk_level:
+    type: string
+    enum: [low, medium, high, critical]
+    description: ระดับความเสี่ยงของ action ที่ approve/reject
+
+  approval_tier:
+    type: string
+    enum: [auto_allowed, reviewer_required, human_required]
+    description: Tier ที่ trigger approval นี้
+
+  timestamp:
+    type: string
+    format: datetime
+    description: เวลาที่ approve/reject (UTC+7)
+
+  reason:
+    type: string
+    minLength: 10
+    description: เหตุผลที่ approve หรือ reject — ต้องชัดเจน
+
+  context:
+    type: object
+    description: ข้อมูล context ที่ approver เห็น ณ เวลา approve
+    properties:
+      review_status: {type: string}
+      test_results_summary: {type: string}
+      critical_findings_count: {type: integer}
+      high_findings_count: {type: integer}
+      action_description: {type: string}  # คำอธิบาย action ที่ approve
+
+  conditions:
+    type: array
+    description: เงื่อนไขสำหรับ approved_with_conditions
+    items:
+      type: string
+
+  expires_at:
+    type: string
+    format: datetime
+    nullable: true
+    description: approval หมดอายุเมื่อไร (ถ้ามี)
+
+  supersedes:
+    type: string
+    nullable: true
+    description: approval_id ก่อนหน้าที่ถูก override
+
+  signature:
+    type: string
+    description: |
+      Hash ของ approval record สำหรับ tamper detection
+      format: SHA256({approval_id}:{approver}:{action}:{timestamp})
+
+  ip_address:
+    type: string
+    nullable: true
+    description: IP ที่ approve (สำหรับ audit)
+
+  notification_sent:
+    type: boolean
+    default: false
+    description: ส่ง notification ให้ทีมแล้วหรือยัง
+
+  notification_channel:
+    type: string
+    nullable: true
+    description: ช่องทางที่ส่ง notification (telegram, email, etc.)
+
+immutability:
+  locked_after_creation: true
+  allowed_modifications: [notification_sent]
+  audit_log_on_read: true
+
+retention:
+  retain_for_days: 365
+  archive_after_days: 90
+
+example:
+  approval_id: "APPR-2026-001-001"
+  job_id: "2026-001"
+  approver: "tony"
+  action: approved
+  risk_level: medium
+  approval_tier: human_required
+  timestamp: "2026-04-02T16:00:00+07:00"
+  reason: "ตรวจสอบแล้ว tests ผ่าน visual fix ถูกต้อง อนุมัติ merge ได้"
+  context:
+    review_status: "approved_with_conditions"
+    test_results_summary: "150/150 passed, coverage 85%"
+    critical_findings_count: 0
+    high_findings_count: 0
+    action_description: "Merge branch job/2026-001/fix/dashboard-chart-overflow into main"
+  signature: "sha256:abc123..."

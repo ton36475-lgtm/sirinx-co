@@ -1,0 +1,175 @@
+version: 1
+description: |
+  นโยบาย Approval Gate สำหรับ OpenClaw Hybrid
+  แบ่งเป็น 3 ระดับตาม risk level และ impact
+  ทุก action ที่ไม่ได้ระบุใน auto_allowed จะ default เป็น reviewer_required
+
+tiers:
+
+  auto_allowed:
+    name: "Auto-Allowed (ไม่ต้องรอ approval)"
+    description: |
+      Actions ที่ปลอดภัย reversible และ impact ต่ำ
+      ระบบดำเนินการได้เองโดยไม่ต้องรอคน
+    risk_level: low
+    requires_human: false
+    requires_reviewer: false
+    actions:
+      - category: documentation
+        includes:
+          - แก้ไข .md files (ยกเว้น CHANGELOG.md และ SECURITY.md)
+          - เพิ่ม/แก้ inline comments ใน code
+          - อัพเดต README ที่ไม่ใช่ root
+          - สร้าง docs ใน docs/
+        conditions:
+          - no_code_logic_change: true
+      - category: low_risk_tests
+        includes:
+          - เพิ่ม unit tests ใหม่ (ไม่แก้ existing)
+          - แก้ test fixtures หรือ mocks
+          - เพิ่ม test helpers
+        conditions:
+          - test_files_only: true
+          - no_production_code_change: true
+      - category: local_config_dev
+        includes:
+          - แก้ .env.example (ไม่ใช่ .env จริง)
+          - แก้ dev tooling config (eslint, prettier, tsconfig เฉพาะ dev)
+          - แก้ package.json devDependencies (ไม่ใช่ major version bump)
+      - category: style_minor
+        includes:
+          - แก้ CSS/Tailwind class ที่ไม่กระทบ layout หลัก
+          - แก้ สี, spacing, typography ใน non-critical components
+        conditions:
+          - visual_verifier_approved: true
+    post_action:
+      - log_to_audit: true
+      - notify_telegram: false
+
+  reviewer_required:
+    name: "Reviewer Required (ต้องผ่าน AI Reviewer)"
+    description: |
+      Actions ที่มี impact ระดับกลาง ต้องผ่าน reviewer agent ก่อน
+      อาจใช้ multi-model critique ถ้า confidence ต่ำ
+    risk_level: medium
+    requires_human: false
+    requires_reviewer: true
+    reviewer_agents: [reviewer]
+    fallback_to_human_if: [reviewer_blocked, confidence_low, conflicting_findings]
+    actions:
+      - category: new_feature
+        includes:
+          - สร้าง component ใหม่
+          - เพิ่ม API endpoint ใหม่
+          - สร้าง service/utility ใหม่
+          - เพิ่ม page ใหม่
+        required_artifacts:
+          - spec.md
+          - tasks.yaml
+          - test_results.json (tests must pass)
+          - findings.yaml (if UI involved)
+      - category: refactor
+        includes:
+          - rename functions/variables ขนาดใหญ่
+          - เปลี่ยน data structure
+          - extract/inline functions
+          - reorganize folder structure
+        conditions:
+          - tests_must_pass: true
+          - no_behavior_change: true
+      - category: dependency_update
+        includes:
+          - อัพเดต npm packages (minor/patch)
+          - อัพเดต Python packages (minor/patch)
+        conditions:
+          - security_scan_pass: true
+          - tests_pass: true
+      - category: ui_fix
+        includes:
+          - แก้ layout ที่กระทบ multiple pages
+          - แก้ navigation/routing
+          - แก้ responsive breakpoints
+        required_artifacts:
+          - findings.yaml (claude_operator)
+          - screenshots/ (before/after)
+      - category: ci_config_minor
+        includes:
+          - แก้ GitHub Actions (ไม่ใช่ deployment steps)
+          - แก้ test pipeline config
+    quality_gate_override: false
+    post_action:
+      - log_to_audit: true
+      - notify_telegram: true
+      - create_review_record: true
+
+  human_required:
+    name: "Human Required (ต้องรอ Tony อนุมัติ)"
+    description: |
+      Actions ที่มีความเสี่ยงสูง irreversible หรือมี external impact
+      ห้าม proceed จนกว่า human approver จะ sign off
+    risk_level: high
+    requires_human: true
+    requires_reviewer: true
+    human_approvers: ["tony", "cto", "release_manager"]
+    sla_hours: 24
+    block_on_timeout: true
+    actions:
+      - category: production_config
+        includes:
+          - แก้ .env.production หรือ secrets
+          - แก้ production database config
+          - แก้ API keys หรือ credentials จริง
+          - แก้ cloud infrastructure config (Alibaba, AWS)
+        zero_tolerance: true
+      - category: auth_and_security
+        includes:
+          - แก้ authentication logic
+          - แก้ authorization/RBAC rules
+          - แก้ session management
+          - แก้ JWT/token handling
+          - แก้ password hashing/validation
+          - เพิ่ม/ลด security headers
+      - category: payments_and_financial
+        includes:
+          - แก้ payment gateway integration
+          - แก้ pricing logic
+          - แก้ invoice/billing calculation
+          - แก้ financial reporting
+        requires_audit_trail: true
+      - category: database_migrations
+        includes:
+          - สร้าง migration ใหม่
+          - แก้ existing migration
+          - ลบ columns/tables
+          - เปลี่ยน data types
+        required_artifacts:
+          - rollback_plan.md
+          - test_on_staging: true
+      - category: external_publishing
+        includes:
+          - git push to main/production branch
+          - create/merge pull request to protected branch
+          - publish npm package
+          - deploy to production
+          - send mass communication (email, SMS)
+          - post to social media
+        requires_checklist: merge_checklist.md
+      - category: dependency_major
+        includes:
+          - major version upgrades (e.g. React 18→19, Next.js 14→15)
+          - เปลี่ยน ORM หรือ database driver
+          - เปลี่ยน authentication library
+      - category: infrastructure_change
+        includes:
+          - แก้ Docker/container config
+          - แก้ nginx/reverse proxy
+          - แก้ cloud load balancer
+          - scale down/terminate instances
+    escalation:
+      on_timeout: notify_escalation_channel
+      escalation_channel: "@sirinx_warroom_critical"
+    post_action:
+      - log_to_audit: true
+      - notify_telegram: true
+      - require_approval_record: true
+      - timestamp_signature: true

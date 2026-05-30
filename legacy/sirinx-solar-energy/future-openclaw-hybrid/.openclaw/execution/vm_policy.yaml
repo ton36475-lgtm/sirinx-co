@@ -1,0 +1,119 @@
+version: 1
+description: |
+  นโยบาย VM สำหรับ Claude Computer Operator (Lane B)
+  ทุก Claude Computer session ต้องรันใน VM ที่ตั้งค่าตาม policy นี้
+
+# ===== VM Profile =====
+claude_vm:
+  profile_name: claude-computer-isolated
+  base_image: "ubuntu-22.04-minimal"
+  display: "virtual-framebuffer-1920x1080"
+
+  # ===== Isolation =====
+  isolation:
+    type: container  # Docker หรือ VM (KVM/Hyper-V)
+    isolated: true
+    non_persistent: true
+    # เมื่อ session จบ ทุกอย่างใน VM ถูกลบทิ้ง ไม่มีข้อมูลหลงเหลือ
+    ephemeral_filesystem: true
+    shared_nothing: true
+    # ไม่แชร์ filesystem กับ host ยกเว้น mounts ที่ระบุไว้ชัดเจน
+
+  # ===== Privilege =====
+  privilege:
+    run_as_user: "claude-operator"
+    uid: 9999
+    gid: 9999
+    low_privilege: true
+    no_sudo: true
+    no_root: true
+    capabilities_drop_all: true
+    seccomp_profile: restricted
+    read_only_root_fs: true
+
+  # ===== Clipboard =====
+  clipboard:
+    restricted: true
+    allow_copy_from_vm: false
+    # Claude Computer ห้ามดึงข้อมูลออกทาง clipboard
+    # ข้อมูลออกได้แค่ผ่าน file_mounts ที่กำหนดเท่านั้น
+    allow_paste_into_vm: true
+    # อนุญาตให้ paste text เข้าไปได้ (เช่น URL, test data)
+    max_paste_size_chars: 1000
+
+  # ===== File Mounts =====
+  file_mounts:
+    # Mount แบบ write-only สำหรับ output เท่านั้น
+    screenshots_out:
+      host_path: "state/findings/screenshots/"
+      vm_path: "/output/screenshots/"
+      mode: write_only
+      max_size_mb: 500
+      allowed_extensions: [.png, .jpg, .webp]
+
+    findings_out:
+      host_path: "state/findings/"
+      vm_path: "/output/findings/"
+      mode: write_only
+      max_size_mb: 50
+      allowed_extensions: [.yaml, .json, .txt]
+
+    # Mount แบบ read-only สำหรับ input ที่ต้องการ
+    tasks_in:
+      host_path: "state/jobs/{job_id}/tasks.yaml"
+      vm_path: "/input/tasks.yaml"
+      mode: read_only
+
+    scenarios_in:
+      host_path: "docs/specs/active/{job_id}/test_scenarios.md"
+      vm_path: "/input/test_scenarios.md"
+      mode: read_only
+
+  # ===== Secrets =====
+  secrets_access: blocked
+  # ห้าม inject environment variables ที่มี secrets เข้า VM
+  # ห้าม mount .env files
+  allowed_env_vars:
+    - STAGING_URL      # URL ของ staging เท่านั้น (ไม่ใช่ production)
+    - JOB_ID           # Job identifier
+    - CLAUDE_OPERATOR_VERSION
+
+  # ===== Resources =====
+  resources:
+    cpu_cores: 2
+    memory_gb: 4
+    disk_gb: 10  # ephemeral disk
+    max_session_minutes: 60
+    idle_timeout_minutes: 10
+
+  # ===== Browser Config =====
+  browser:
+    type: chromium
+    version: latest-stable
+    profile: clean_incognito
+    # ใช้ incognito เสมอ — ไม่มี cookies/history จาก session ก่อน
+    extensions: []
+    javascript: enabled
+    webrtc: disabled  # ป้องกัน IP leak
+    geolocation: disabled
+    notifications: disabled
+
+  # ===== Allowed URLs =====
+  # (รายละเอียดใน network_policy.yaml)
+  network_policy_ref: ".openclaw/execution/network_policy.yaml#claude_computer"
+
+  # ===== Audit =====
+  audit:
+    record_session: true
+    session_log_path: "state/audit/vm-sessions/{job_id}.log"
+    log_all_actions: true
+    retain_days: 30
+
+  # ===== Post-Session =====
+  post_session:
+    collect_outputs:
+      - /output/screenshots/
+      - /output/findings/
+    verify_output_schema: true
+    destroy_vm: true
+    wipe_memory: true

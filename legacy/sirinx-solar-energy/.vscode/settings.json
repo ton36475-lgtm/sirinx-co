@@ -1,0 +1,10 @@
+{
+  "pixel-agents.enabled": true,
+  "pixel-agents.officeLayout": ".pixel-agents/sirinx-office-layout.json",
+  "pixel-agents.characterConfig": ".pixel-agents/sirinx-characters.json",
+  "pixel-agents.trackClaude": true,
+  "pixel-agents.jsonlWatchPath": "${env:USERPROFILE}/.claude/projects",
+  "pixel-agents.showAgentNames": true,
+  "pixel-agents.animationSpeed": "normal",
+  "pixel-agents.officeTitle": "SIRINX 47 Ronin HQ"
+}

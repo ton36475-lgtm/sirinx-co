@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SIRINX Retrieval Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["query", "results"],
+  "properties": {
+    "query": { "type": "string", "minLength": 1 },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["chunk_id", "source_path", "score"],
+        "properties": {
+          "chunk_id": { "type": "string", "minLength": 1 },
+          "source_path": { "type": "string", "minLength": 1 },
+          "score": { "type": "number" },
+          "trace_id": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}
+

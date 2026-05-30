@@ -1,0 +1,148 @@
+version: 1
+schema_name: artifact
+description: |
+  Schema สำหรับ Artifact — เอกสารทุกชิ้นที่ผ่านระหว่าง agents
+  Artifacts คือ "สัญญา" ระหว่าง agents — ต้องมี format ที่ตรวจสอบได้
+
+artifact_types:
+
+  spec:
+    name: spec.md
+    format: markdown
+    producer: planner
+    consumers: [codex_implementer, codex_test_engineer, claude_operator, reviewer]
+    path_pattern: "docs/specs/active/{job_id}/spec.md"
+    required_sections:
+      - "## ที่มาและบริบท"
+      - "## ปัญหาที่พบ"
+      - "## แนวทางแก้ไข"
+      - "## Acceptance Criteria"
+      - "## นอกเหนือ Scope"
+      - "## ความเสี่ยง"
+    validation:
+      min_acceptance_criteria: 3
+      max_size_kb: 100
+
+  tasks:
+    name: tasks.yaml
+    format: yaml
+    producer: planner
+    consumers: [orchestrator, codex_implementer, codex_test_engineer, claude_operator]
+    path_pattern: "state/jobs/{job_id}/tasks.yaml"
+    required_fields:
+      - job_id
+      - tasks (array, min 1)
+    task_required_fields:
+      - task_id
+      - description
+      - lane
+      - agent
+      - acceptance_criteria (array, min 1)
+    validation:
+      max_tasks: 20
+      must_have_at_least_one_test_task: true
+
+  repo_map:
+    name: repo_map.yaml
+    format: yaml
+    producer: repo_cartographer
+    consumers: [codex_implementer, planner]
+    path_pattern: "state/jobs/{job_id}/repo_map.yaml"
+    required_fields:
+      - affected_files
+      - related_files
+      - impact_zones
+    validation:
+      must_not_be_empty: true
+
+  change_summary:
+    name: change_summary.md
+    format: markdown
+    producer: codex_implementer
+    consumers: [reviewer, release_manager]
+    path_pattern: "state/jobs/{job_id}/change_summary.md"
+    required_sections:
+      - "## ไฟล์ที่เปลี่ยนแปลง"
+      - "## สิ่งที่ทำ"
+      - "## เหตุผล"
+      - "## ผลข้างเคียงที่รู้"
+      - "## Issues ที่พบ"
+
+  test_results:
+    name: test_results.json
+    format: json
+    producer: codex_test_engineer
+    consumers: [reviewer, orchestrator, release_manager]
+    path_pattern: "state/jobs/{job_id}/test_results.json"
+    required_fields:
+      - suite
+      - total
+      - passed
+      - failed
+      - skipped
+      - coverage_percent
+      - timestamp
+    validation:
+      failed_must_be_zero_to_proceed: true
+
+  findings:
+    name: findings.yaml
+    format: yaml
+    producer: claude_operator
+    consumers: [visual_verifier, reviewer, release_manager]
+    path_pattern: "state/findings/{job_id}/findings.yaml"
+    schema_ref: findings.schema.yaml
+    validation:
+      must_reference_screenshots: true
+
+  review:
+    name: review.yaml
+    format: yaml
+    producer: reviewer
+    consumers: [orchestrator, release_manager]
+    path_pattern: "state/reviews/{job_id}/review.yaml"
+    schema_ref: review.schema.yaml
+    validation:
+      must_have_verdict: true
+      must_address_all_findings: true
+
+  approval:
+    name: approval.yaml
+    format: yaml
+    producer: human_approver
+    consumers: [orchestrator, release_manager]
+    path_pattern: "state/approvals/{job_id}/approval.yaml"
+    schema_ref: approval.schema.yaml
+    validation:
+      must_have_signature: true
+      must_have_timestamp: true
+
+  handoff:
+    name: handoff.md
+    format: markdown
+    producer: release_manager
+    consumers: [human_approver]
+    path_pattern: "state/jobs/{job_id}/handoff.md"
+    required_sections:
+      - "## สรุป Job"
+      - "## การเปลี่ยนแปลง"
+      - "## ผลการทดสอบ"
+      - "## สรุป Visual Findings"
+      - "## ความเสี่ยงและมาตรการ"
+      - "## วิธี Merge"
+      - "## แผน Rollback"
+      - "## การตรวจสอบหลัง Merge"
+
+validation_rules:
+  - rule: artifact_immutable_once_consumed
+    description: Artifact ที่ถูก consumer อ่านไปแล้วห้ามแก้ไข
+    exception: producer_can_revise_before_first_consumer
+
+  - rule: artifact_must_exist_before_step_start
+    description: ทุก input artifact ต้องมีอยู่จริงก่อน agent เริ่มทำงาน
+
+  - rule: artifact_path_must_match_pattern
+    description: Path ของ artifact ต้องตรงกับ pattern ที่กำหนด
+
+  - rule: schema_validation_on_write
+    description: ทุก artifact ต้องผ่าน schema validation ก่อน save

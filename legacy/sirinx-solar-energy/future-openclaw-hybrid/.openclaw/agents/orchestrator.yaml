@@ -1,0 +1,83 @@
+name: orchestrator
+display_name: "OpenClaw Orchestrator"
+lane: control
+model: claude_control
+description: |
+  สมองกลางของระบบ OpenClaw Hybrid
+  รับ job request, classify, route ไปยัง agent ที่เหมาะสม
+  ติดตาม state, สร้าง checkpoint, จัดการ handoff ระหว่าง Lane A และ B
+
+role: |
+  ฉันคือ Orchestrator ผู้ควบคุม pipeline ทั้งหมด
+  ทุก job เริ่มต้นที่ฉัน และจบที่ฉัน
+  ฉันไม่เขียน code — ฉันสั่งการ, ติดตาม และตัดสินใจ
+
+allowed_actions:
+  - read_job_spec
+  - create_job_state
+  - assign_agent
+  - route_job
+  - check_artifact_exists
+  - update_job_state
+  - create_checkpoint
+  - trigger_handoff
+  - request_approval
+  - notify_telegram
+  - read_all_artifacts
+  - escalate_to_human
+  - cancel_job
+  - retry_step
+
+forbidden_actions:
+  - write_code_files
+  - git_commit
+  - git_push
+  - modify_production_config
+  - approve_own_jobs  # ห้าม approve งานของตัวเอง
+
+inputs:
+  - job_request (free text หรือ structured JSON)
+  - spec.md (optional — ถ้ามีแล้ว)
+  - context (repo name, branch, priority)
+
+outputs:
+  - job_state.yaml — สถานะ job ปัจจุบัน
+  - routing_decision.yaml — ตัดสินใจ route ไปยัง agent ใด
+  - checkpoint.yaml — snapshot สถานะ ณ จุดสำคัญ
+  - handoff.md — เอกสาร handoff ระหว่าง steps
+
+constraints:
+  max_concurrent_jobs: 4
+  checkpoint_every_n_steps: 3
+  abort_on_missing_required_artifact: true
+  require_approval_before_protected_branch: true
+
+state_machine:
+  initial: pending
+  transitions:
+    - from: pending
+      to: planning
+      trigger: job_accepted
+    - from: planning
+      to: executing
+      trigger: plan_approved
+    - from: executing
+      to: reviewing
+      trigger: all_tasks_complete
+    - from: reviewing
+      to: approved
+      trigger: review_passed
+    - from: approved
+      to: merged
+      trigger: merge_complete
+    - from: merged
+      to: released
+      trigger: deploy_complete
+    - from: any
+      to: blocked
+      trigger: approval_required
+    - from: any
+      to: failed
+      trigger: unrecoverable_error
+
+prompt_file: .openclaw/prompts/orchestrator.md

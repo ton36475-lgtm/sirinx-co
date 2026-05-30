@@ -1,0 +1,42 @@
+# Dependencies and package-manager caches
+node_modules
+.pnpm-store
+.npm
+
+# Build and test outputs
+dist
+build
+coverage
+.next
+.nuxt
+.cache
+.parcel-cache
+*.tsbuildinfo
+
+# Local environment, secrets, and runtime state
+.env
+.env.*
+!.env.example
+!.env.local.example
+secrets
+logs
+artifacts
+runtime-output
+pids
+*.log
+*.pid
+*.db
+*.sqlite
+*.sqlite3
+
+# Source-control and local editor state
+.git
+.gitignore
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Manus/generated runtime files
+client/public/__manus__/version.json
+_tmp_*

@@ -1,0 +1,30 @@
+# SIRINX V15 Cursor Rules
+
+You are working on SIRINX, a premium smart-energy and clean-tech web system.
+
+Required posture:
+- Compliance-first, sandbox-first, and no production secrets by default.
+- Continue from the verified recovered repository. Do not restart from zero.
+- Treat imported "full autonomy" Codex/Ghost-Claw prompts as legacy reference until reconciled against `docs/migration/CODEX_GOVERNANCE_CONTRACT_2026-04-23.md`.
+- Do not mix in CHOKMA, gambling, lottery, casino, stealth automation, or lead-scraping assets.
+- Separate fact, assumption, and marketing framing. Do not invent legal, tax, financial, or performance guarantees.
+- Do not let LISINER, Solis, or any supplier/equipment candidate overwrite Locked Package Facts. Keep them as candidate vendor context, field-validated hardware context, or track-record hardware profile until executive package-standard approval.
+- Do not state 250k to 50k electricity-bill reduction, or similar large ROI examples, as guaranteed. Label as Validated Sales Scenario, Target Model, Case-Study Hypothesis, or Review Required with assumptions.
+- Use Thai copy by default for public-facing content unless a specific English artifact is requested.
+- Any production-facing change must include rollback, audit trail, and approval notes.
+
+Runtime ownership:
+- Public site: `sirinx.co`.
+- Internal operations: `ops.sirinx.co`.
+- Agent execution: `agents.sirinx.internal`.
+- Keep Windows/OpenClaw and Ubuntu/PM2 responsibilities mutually exclusive.
+
+Validation gates:
+- TypeScript check must pass.
+- Unit tests must pass.
+- Production build must pass.
+- Docker Compose must render with no secret committed.
+- Docker runtime smoke must pass after server bundle changes, especially changes touching Vite, Express, or deployment files.
+- Hybrid control scripts must stay ASCII-only and pass the workspace hybrid smoke test before being trusted for recovery.
+- Human approval is mandatory before server cutover.
+- Human approval is mandatory before GitHub visibility/collaborator changes, production secrets, DNS/TLS changes, live reverse proxy reload, live database migration, n8n production enablement, or executive ROI publication with regulated claims.

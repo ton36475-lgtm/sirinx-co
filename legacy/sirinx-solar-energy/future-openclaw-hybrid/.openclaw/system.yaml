@@ -1,0 +1,68 @@
+version: 1
+system_name: openclaw-hybrid
+company: Future Multi Agentic
+default_language: th
+description: |
+  OpenClaw Hybrid — ระบบ Control Plane สำหรับ Dual-Lane Multi-Agent Architecture
+  Lane A: Codex Engineering (code/repo/test)
+  Lane B: Claude Computer Operations (desktop/browser/app verification in VM)
+  OpenClaw = Orchestrator, Policy Engine, Memory, Approval Gate, Audit Log
+
+modes:
+  - spec_plan        # วางแผน spec และ task breakdown
+  - codex_build      # Codex สร้าง/แก้ code ใน worktree
+  - claude_verify    # Claude Computer ตรวจสอบ UI/UX ใน VM
+  - critique_loop    # Multi-model critique วนรอบ
+  - cowork_parallel  # ทั้งสอง Lane ทำงานพร้อมกัน
+  - handoff_merge    # รวม findings และ merge branch
+
+defaults:
+  artifact_root: docs/specs/active
+  state_root: state/jobs
+  require_artifacts: true
+  single_writer_rule: true
+  worktree_per_job: true
+  vm_per_claude_job: true
+  default_branch_prefix: "job/"
+  checkpoint_interval_minutes: 15
+  max_parallel_jobs: 4
+  audit_log: state/audit.jsonl
+
+quality_gates:
+  lint: required
+  typecheck: required
+  unit_tests: required
+  review_pass: required
+  findings_resolved_or_waived: required
+  security_scan: recommended
+  performance_baseline: recommended
+
+approval_policy_file: .openclaw/approvals.yaml
+routing_policy_file: .openclaw/routing.yaml
+models_file: .openclaw/models.yaml
+
+integrations:
+  git:
+    default_remote: origin
+    protected_branches: [main, master, production, release/*]
+    require_pr_for_protected: true
+  ci:
+    provider: github_actions
+    required_checks: [lint, typecheck, test, build]
+  notifications:
+    telegram:
+      enabled: true
+      channel: "@sirinx_warroom"
+      events: [job_started, job_completed, approval_required, merge_ready, error]
+
+memory:
+  backend: file
+  path: state/memory
+  retention_days: 90
+  index_on: [job_id, agent, timestamp, artifact_type]
+
+audit:
+  enabled: true
+  log_path: state/audit.jsonl
+  log_fields: [timestamp, job_id, agent, action, artifact, result, approver]
+  immutable: true

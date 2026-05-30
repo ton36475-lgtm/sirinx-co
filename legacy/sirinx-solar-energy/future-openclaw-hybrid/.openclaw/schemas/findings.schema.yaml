@@ -1,0 +1,172 @@
+version: 1
+schema_name: findings
+description: |
+  Schema สำหรับ findings.yaml ที่ Claude Computer Operator สร้าง
+  ทุก finding ต้องมี severity, category, evidence และ suggested_fix
+
+type: object
+required:
+  - job_id
+  - operator_session_id
+  - timestamp
+  - scenarios_run
+  - findings
+
+properties:
+  job_id:
+    type: string
+
+  operator_session_id:
+    type: string
+    description: UUID ของ VM session
+
+  timestamp:
+    type: string
+    format: datetime
+
+  staging_url:
+    type: string
+    description: URL ที่ทดสอบ
+
+  scenarios_run:
+    type: integer
+    description: จำนวน test scenarios ที่รัน
+
+  scenarios_passed:
+    type: integer
+
+  scenarios_failed:
+    type: integer
+
+  total_findings:
+    type: integer
+
+  findings:
+    type: array
+    items:
+      type: object
+      required:
+        - finding_id
+        - severity
+        - category
+        - description
+        - screenshot_ref
+      properties:
+        finding_id:
+          type: string
+          format: "F-{job_id}-{NNN}"
+          example: "F-2026-001-001"
+
+        severity:
+          type: string
+          enum: [critical, high, medium, low, info]
+          description: |
+            critical: บล็อก release เด็ดขาด (crash, data loss, auth bypass)
+            high: ต้องแก้ก่อน merge (form fails, navigation broken)
+            medium: ควรแก้ แต่ไม่บล็อก (visual misalignment)
+            low: cosmetic issue
+            info: สังเกตการณ์ ไม่จำเป็นต้องแก้
+
+        category:
+          type: string
+          enum:
+            - functional_error     # feature ไม่ทำงาน
+            - visual_defect        # UI ดูผิดปกติ
+            - performance          # ช้าผิดปกติ
+            - console_error        # JS error ใน console
+            - network_error        # API call ล้มเหลว
+            - accessibility        # ปัญหา a11y
+            - content_error        # ข้อความ/ข้อมูลผิด
+            - navigation_error     # routing/link เสีย
+            - form_error           # form submit ผิด
+            - auth_issue           # login/permission ปัญหา
+            - other
+
+        scenario_id:
+          type: string
+          description: test scenario ที่พบ finding นี้
+
+        step:
+          type: string
+          description: 'step ใน scenario ที่พบปัญหา (เช่น "step_3: กด Submit")'
+
+        description:
+          type: string
+          minLength: 20
+          description: อธิบาย finding ด้วยภาษาไทย ให้ developer เข้าใจได้ทันที
+
+        expected_behavior:
+          type: string
+          description: ควรจะเป็นอย่างไร
+
+        actual_behavior:
+          type: string
+          description: เป็นอย่างไรจริงๆ
+
+        screenshot_ref:
+          type: string
+          description: ชื่อไฟล์ screenshot ที่เป็น evidence
+          example: "S003_step3_failure.png"
+
+        screenshot_before:
+          type: string
+          nullable: true
+          description: screenshot ก่อนเกิดปัญหา (สำหรับ visual diff)
+
+        console_error_ref:
+          type: string
+          nullable: true
+          description: error จาก console_errors.json ที่เกี่ยวข้อง
+
+        suggested_fix:
+          type: string
+          description: |
+            ข้อเสนอแนะการแก้ไข (ไม่จำเป็นต้องถูกต้อง 100% — เป็นแนวทาง)
+
+        waived:
+          type: boolean
+          default: false
+          description: true = ผู้ review ตัดสินใจรับความเสี่ยงนี้ได้ ไม่ต้องแก้
+
+        waived_by:
+          type: string
+          nullable: true
+
+        waived_reason:
+          type: string
+          nullable: true
+
+  console_errors_summary:
+    type: object
+    properties:
+      total_errors: {type: integer}
+      unique_messages: {type: array, items: {type: string}}
+      critical_errors: {type: array, items: {type: string}}
+
+  network_errors_summary:
+    type: object
+    properties:
+      failed_requests: {type: integer}
+      endpoints: {type: array, items: {type: string}}
+
+example:
+  job_id: "2026-001"
+  operator_session_id: "sess-abc123"
+  timestamp: "2026-04-02T14:30:00+07:00"
+  staging_url: "http://localhost:3002"
+  scenarios_run: 5
+  scenarios_passed: 4
+  scenarios_failed: 1
+  total_findings: 2
+  findings:
+    - finding_id: "F-2026-001-001"
+      severity: high
+      category: visual_defect
+      scenario_id: "S003"
+      step: "step_2: ดู Dashboard"
+      description: "กราฟแสดงข้อมูลล้นออกนอก container บน mobile width 375px"
+      expected_behavior: "กราฟต้องอยู่ภายใน card container"
+      actual_behavior: "กราฟ overflow ออกด้านขวา 40px"
+      screenshot_ref: "S003_step2_chart_overflow.png"
+      suggested_fix: "เพิ่ม overflow: hidden ที่ chart wrapper หรือตั้ง max-width"
+      waived: false

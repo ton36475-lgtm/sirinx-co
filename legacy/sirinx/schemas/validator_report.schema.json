@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SIRINX Validator Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["task_id", "schema_ok", "paths_exist", "fact_lock_passed", "handoff_ready", "failures"],
+  "properties": {
+    "task_id": { "type": "string", "minLength": 1 },
+    "schema_ok": { "type": "boolean" },
+    "paths_exist": { "type": "boolean" },
+    "fact_lock_passed": { "type": "boolean" },
+    "handoff_ready": { "type": "boolean" },
+    "failures": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  }
+}
+

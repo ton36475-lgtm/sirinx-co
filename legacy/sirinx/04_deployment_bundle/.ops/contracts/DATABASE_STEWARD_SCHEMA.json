@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SIRINX Database Steward Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "specialist_lane",
+    "task_type",
+    "database_scope",
+    "approved_change_window",
+    "validator_gate_required",
+    "rollback_note",
+    "audit_trail_note"
+  ],
+  "properties": {
+    "specialist_lane": {
+      "const": "DatabaseSteward"
+    },
+    "task_type": {
+      "type": "string",
+      "enum": [
+        "bootstrap",
+        "preflight",
+        "migration-review",
+        "backup-review",
+        "restore-drill"
+      ]
+    },
+    "database_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "engine",
+        "target_service",
+        "profile",
+        "pgvector_expected"
+      ],
+      "properties": {
+        "engine": {
+          "type": "string",
+          "enum": [
+            "postgresql"
+          ]
+        },
+        "target_service": {
+          "type": "string",
+          "minLength": 1
+        },
+        "profile": {
+          "type": "string",
+          "enum": [
+            "postgres-target",
+            "automation",
+            "ops-dashboard"
+          ]
+        },
+        "pgvector_expected": {
+          "type": "boolean"
+        }
+      }
+    },
+    "approved_change_window": {
+      "type": "string",
+      "minLength": 1
+    },
+    "validator_gate_required": {
+      "type": "boolean"
+    },
+    "actions_allowed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "actions_forbidden": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rollback_note": {
+      "type": "string",
+      "minLength": 1
+    },
+    "audit_trail_note": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

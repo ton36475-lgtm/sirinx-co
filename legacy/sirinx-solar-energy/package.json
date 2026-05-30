@@ -1,0 +1,28 @@
+{
+  "name": "sirinx-ai-warroom",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "bot": "node scripts/sirinx-bot.js",
+    "notify": "node scripts/telegram-notify.js",
+    "report": "node scripts/send-system-report.js",
+    "daily-report": "node scripts/daily-report.js",
+    "ollama:start": "scripts\\ollama-service.bat",
+    "ollama:status": "ollama list",
+    "ollama:test": "node -e \"fetch('http://localhost:11434/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'llama3.1:latest',prompt:'สวัสดีครับ ทดสอบภาษาไทย solar cell energy',stream:false})}).then(r=>r.json()).then(d=>console.log('[OK]',d.response?.slice(0,200))).catch(e=>console.error('[FAIL]',e.message))\"",
+    "deploy:cf": "scripts\\deploy-cloudflare.bat",
+    "deploy:cf:staging": "scripts\\deploy-cloudflare.bat staging",
+    "deploy:pages": "scripts\\deploy-pages.bat",
+    "deploy:pages:preview": "scripts\\deploy-pages.bat preview",
+    "cf:login": "wrangler login",
+    "cf:whoami": "wrangler whoami",
+    "cf:tail:api": "wrangler tail sirinx-api-proxy",
+    "cf:tail:seo": "wrangler tail sirinx-seo-pages",
+    "cf:tail:img": "wrangler tail sirinx-image-optimizer",
+    "cf:kv:create": "wrangler kv:namespace create SEO_CACHE"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "node-telegram-bot-api": "^0.66.0"
+  }
+}

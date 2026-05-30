@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SIRINX Audit Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_id", "timestamp", "service", "level", "event", "correlation_id"],
+  "properties": {
+    "event_id": { "type": "string", "minLength": 1 },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "service": { "type": "string", "minLength": 1 },
+    "level": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+    "event": { "type": "string", "minLength": 1 },
+    "correlation_id": { "type": "string", "minLength": 1 },
+    "safe_context": { "type": "object" },
+    "trace_id": { "type": ["string", "null"] }
+  }
+}

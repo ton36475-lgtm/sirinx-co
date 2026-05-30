@@ -1,0 +1,157 @@
+version: 1
+description: |
+  กฎการ routing งานไปยัง Lane ที่เหมาะสม
+  OpenClaw อ่าน job_type และ conditions แล้วตัดสินใจว่าจะใช้ Lane A, Lane B หรือทั้งคู่
+
+default_route: lane_a_only
+
+routes:
+
+  backend_feature:
+    name: "Backend Feature / API / Logic"
+    description: งานที่เกี่ยวกับ backend logic, API, database, business rules
+    when:
+      job_type: [feature, bugfix, refactor]
+      affected_layers: [api, service, model, database, utility]
+      visual_risk: false
+      ui_affected: false
+    route:
+      primary: codex_local
+      secondary: null
+      mode: codex_build
+      verify: false
+    rationale: |
+      งาน backend ไม่มี visual component — Codex เพียงพอ
+      ไม่ต้องใช้ Claude Computer เพราะไม่มี UI ให้ตรวจสอบ
+
+  frontend_bug_with_visual_risk:
+    name: "Frontend Bug / Visual Risk"
+    description: งานที่แก้ UI, CSS, layout หรือมีความเสี่ยง visual regression
+    when:
+      job_type: [bugfix, ui_fix, style_fix]
+      affected_layers: [component, page, layout, css, theme]
+      visual_risk: true
+    route:
+      primary: codex_local
+      secondary: claude_computer
+      mode: cowork_parallel
+      verify: true
+      verify_after: codex_build
+    flow:
+      - step: codex_builds_fix
+        agent: codex_implementer
+        produces: diff
+      - step: deploy_to_staging
+        action: auto_deploy_staging
+      - step: claude_verifies_ui
+        agent: claude_operator
+        produces: findings.yaml + screenshots
+      - step: visual_verifier_reviews
+        agent: visual_verifier
+        produces: review.yaml
+      - step: merge_if_clean
+        condition: findings.critical_count == 0
+    rationale: |
+      UI bugs ต้องเห็น rendering จริง — Claude Computer ตรวจสอบหลัง Codex แก้
+
+  cms_or_dashboard_flow:
+    name: "CMS / Dashboard / Multi-step Flow"
+    description: งานที่ต้องการตรวจสอบ user journey, form flows, CMS workflows
+    when:
+      job_type: [feature, qa, regression_test]
+      affected_layers: [page, dashboard, cms, form, auth_flow]
+      requires_e2e: true
+    route:
+      primary: codex_local
+      secondary: claude_computer
+      mode: handoff_merge
+      verify: true
+    flow:
+      - step: planner_creates_scenarios
+        agent: planner
+        produces: test_scenarios.md
+      - step: codex_implements
+        agent: codex_implementer
+        produces: diff
+      - step: codex_tests
+        agent: codex_test_engineer
+        produces: test_results.json
+      - step: deploy_staging
+        action: auto_deploy_staging
+      - step: claude_runs_scenarios
+        agent: claude_operator
+        produces: findings.yaml + screenshots
+      - step: reviewer_approves
+        agent: reviewer
+        requires: [findings.yaml, test_results.json, diff]
+    rationale: |
+      Dashboard/CMS flows ซับซ้อน ต้องทดสอบทั้ง unit tests และ UI journey จริง
+
+  hybrid_parallel:
+    name: "Hybrid Parallel — Large Feature"
+    description: งานใหญ่ที่ทั้ง backend และ frontend เปลี่ยนพร้อมกัน
+    when:
+      job_type: [feature, epic]
+      affected_layers: [api, component, page, service]
+      estimated_files_changed: ">= 10"
+    route:
+      primary: codex_local
+      secondary: claude_computer
+      mode: cowork_parallel
+      verify: true
+      require_human_approval: true
+    flow:
+      - step: orchestrator_creates_subplan
+        agent: orchestrator
+        produces: sub_tasks.yaml (split by lane)
+      - step: codex_builds_parallel
+        agent: codex_implementer
+        note: แต่ละ sub-task มี worktree แยก
+      - step: codex_tests_parallel
+        agent: codex_test_engineer
+      - step: claude_verifies_parallel
+        agent: claude_operator
+      - step: reviewer_consolidates
+        agent: reviewer
+        produces: consolidated_review.yaml
+      - step: human_approves
+        action: require_human_sign_off
+      - step: release_manager_merges
+        agent: release_manager
+    rationale: |
+      งานใหญ่ต้องการ human sign-off ก่อน merge — ความเสี่ยงสูงเกินไปสำหรับ auto-merge
+
+  docs_only:
+    name: "Documentation Update"
+    description: แก้ docs, comments, README เท่านั้น — ไม่มี logic เปลี่ยน
+    when:
+      job_type: [docs, comment, readme]
+      affected_layers: [docs]
+      code_changed: false
+    route:
+      primary: codex_local
+      secondary: null
+      mode: codex_build
+      verify: false
+      skip_quality_gates: [unit_tests, lint]
+    rationale: Docs-only ไม่ต้องรัน tests หรือ lint ทั้งหมด
+
+  hotfix:
+    name: "Production Hotfix"
+    description: แก้ไขด่วนบน production branch
+    when:
+      job_type: [hotfix]
+      target_branch: [main, production, release/*]
+    route:
+      primary: codex_local
+      secondary: claude_computer
+      mode: handoff_merge
+      verify: true
+      require_human_approval: true
+      fast_track: true
+    constraints:
+      max_files_changed: 5
+      must_have_tests: true
+      require_rollback_plan: true
+    rationale: |
+      Hotfix ต้องเร็ว แต่ยังต้องมี human approval และ rollback plan เสมอ

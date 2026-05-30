@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SIRINX Sovereign Creator Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "assigned_agent",
+    "workflow_stage",
+    "narrative_type",
+    "approved_inputs",
+    "output_surfaces",
+    "copy_blocks",
+    "recommended_next_agent"
+  ],
+  "properties": {
+    "assigned_agent": {
+      "const": "Creator"
+    },
+    "workflow_stage": {
+      "const": "create"
+    },
+    "narrative_type": {
+      "type": "string",
+      "enum": [
+        "executive_summary",
+        "handoff_summary",
+        "track_record_copy",
+        "internal_ops_copy"
+      ]
+    },
+    "approved_inputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "output_surfaces": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "copy_blocks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "recommended_next_agent": {
+      "type": "string",
+      "enum": [
+        "Validator"
+      ]
+    }
+  }
+}

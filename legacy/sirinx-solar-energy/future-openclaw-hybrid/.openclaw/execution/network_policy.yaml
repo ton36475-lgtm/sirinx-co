@@ -1,0 +1,161 @@
+version: 1
+description: |
+  นโยบาย Network Access สำหรับแต่ละ execution environment
+  default ของทุก environment คือ DENY ALL — ต้องระบุ allowlist ชัดเจน
+
+default_policy: deny_all
+
+# ===================================================
+# CODEX LOCAL — VS Code / CLI environment
+# ===================================================
+codex_local:
+  name: "Codex Local Network Policy"
+  default: deny_all
+  internet_access: restricted
+  description: |
+    Codex Local ต้องการ internet สำหรับ npm/pip/git operations
+    แต่ห้าม call external APIs โดยตรงระหว่าง code generation
+
+  allowlist:
+    - rule: npm_registry
+      hosts: ["registry.npmjs.org", "registry.yarnpkg.com"]
+      ports: [443]
+      reason: install npm packages
+
+    - rule: pypi
+      hosts: ["pypi.org", "files.pythonhosted.org"]
+      ports: [443]
+      reason: install python packages
+
+    - rule: github
+      hosts: ["github.com", "api.github.com", "raw.githubusercontent.com"]
+      ports: [443, 22]
+      reason: git operations, clone, fetch
+
+    - rule: local_dev_server
+      hosts: ["localhost", "127.0.0.1"]
+      ports: [3000, 3001, 3002, 3003, 4000, 5173, 8080]
+      reason: local dev/test servers
+
+    - rule: supabase_local
+      hosts: ["localhost"]
+      ports: [54321, 54322, 54323]
+      reason: local Supabase instance
+
+  denylist:
+    - rule: production_db
+      hosts: ["*.supabase.co"]
+      comment: "ห้าม Codex เข้า production database โดยตรง"
+    - rule: payment_gateways
+      hosts: ["api.stripe.com", "api.omise.co", "api.gbprimepay.com"]
+      comment: "ห้าม Codex call payment APIs"
+    - rule: social_media
+      hosts: ["api.twitter.com", "graph.facebook.com", "api.instagram.com"]
+      comment: "ห้าม Codex post ไปยัง social"
+
+# ===================================================
+# CODEX CLOUD — Cloud Sandbox environment
+# ===================================================
+codex_cloud:
+  name: "Codex Cloud Network Policy"
+  default: deny_all
+  internet_access: off_by_default
+  description: |
+    Cloud sandbox ถูก isolated อย่างเข้มงวด
+    internet เปิดได้เฉพาะเมื่อ job ต้องการ dependencies จริงๆ
+    และต้องระบุใน job spec ก่อน
+
+  allowlist:
+    - rule: npm_registry
+      hosts: ["registry.npmjs.org"]
+      ports: [443]
+      require_job_flag: needs_npm_install
+
+    - rule: pypi
+      hosts: ["pypi.org", "files.pythonhosted.org"]
+      ports: [443]
+      require_job_flag: needs_pip_install
+
+    - rule: github_readonly
+      hosts: ["raw.githubusercontent.com"]
+      ports: [443]
+      require_job_flag: needs_github_fetch
+
+  denylist:
+    - rule: all_cloud_providers
+      hosts: ["*.amazonaws.com", "*.googleapis.com", "*.azure.com", "*.aliyuncs.com"]
+      comment: "ห้าม Codex Cloud access cloud APIs โดยตรง"
+    - rule: all_databases
+      hosts: ["*.supabase.co", "*.mongo.com", "*.planetscale.com"]
+      comment: "ห้าม access databases จาก sandbox"
+
+  on_deny:
+    action: log_and_block
+    alert: true
+    log_to: state/audit/network-violations.jsonl
+
+# ===================================================
+# CLAUDE COMPUTER — VM environment (Lane B)
+# ===================================================
+claude_computer:
+  name: "Claude Computer Network Policy"
+  default: deny_all
+  internet_access: allowlist_only
+  description: |
+    Claude Computer VM เข้า internet ได้เฉพาะ URLs ใน allowlist
+    ไม่อนุญาตให้ browse internet ทั่วไป หรือ call external APIs
+    ทุก URL ต้องเป็น local dev หรือ staging environment เท่านั้น
+
+  allowlist:
+    - rule: local_dev
+      hosts: ["localhost", "127.0.0.1"]
+      ports: [3000, 3001, 3002, 3003, 4000, 5173, 8080, 8443]
+      reason: local dev servers สำหรับ UI verification
+
+    - rule: staging_environment
+      hosts: ["staging.sirinx.com", "staging-app.sirinx.com", "*.staging.local"]
+      ports: [443, 80]
+      reason: staging environment สำหรับ E2E testing
+
+    - rule: local_supabase
+      hosts: ["localhost"]
+      ports: [54321]
+      reason: Supabase Studio local
+
+    - rule: cms_staging
+      hosts: ["cms.staging.sirinx.com"]
+      ports: [443]
+      reason: CMS staging สำหรับ content verification
+
+  explicit_deny:
+    - rule: production
+      hosts:
+        - "sirinx.com"
+        - "app.sirinx.com"
+        - "api.sirinx.com"
+        - "*.production.sirinx.com"
+      comment: "ห้าม Claude Computer แตะ production เด็ดขาด"
+
+    - rule: external_internet
+      pattern: "!localhost && !127.0.0.1 && !*.staging.* && !*.local"
+      comment: "ห้าม browse internet ทั่วไป"
+
+    - rule: cloud_metadata
+      hosts: ["169.254.169.254", "metadata.google.internal"]
+      comment: "ป้องกัน SSRF ไปยัง cloud metadata service"
+
+    - rule: internal_network
+      cidr: ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
+      exceptions: ["192.168.1.100"]  # staging server IP ถ้ามี
+      comment: "ห้าม scan internal network"
+
+  on_deny:
+    action: block_and_terminate_session
+    alert: true
+    severity: high
+    log_to: state/audit/network-violations.jsonl
+    notify: human_required
+
+  dns:
+    resolver: "8.8.8.8"  # Google DNS — ไม่ใช้ internal DNS เพื่อป้องกัน DNS rebinding
+    dnssec: required

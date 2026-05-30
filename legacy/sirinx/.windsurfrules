@@ -1,0 +1,19 @@
+# SIRINX V15 Engineering Rules
+
+- Read `packages/policies/*.md` from the workspace root before production-facing changes.
+- Use `docs/migration/CODEX_GOVERNANCE_CONTRACT_2026-04-23.md` before running Codex in autonomous continuation mode.
+- Keep SIRINX separated from unrelated gambling/CHOKMA assets, services, copy, Docker stacks, and data.
+- Treat `sirinx.co` as the public revenue plane, `ops.sirinx.co` as the internal control plane, and `agents.sirinx.internal` as the agent execution plane.
+- Do not use production secrets in local or generated files. Use SOPS, Docker secrets, or server-managed secret stores only.
+- Preserve the current recovered SIRINX site until a reviewed server deployment is approved.
+- Do not cut over DNS, reverse proxy routing, or production traffic without a rollback note, audit trail note, and approval packet.
+- Do not allow autonomous Codex prompts to change GitHub visibility, collaborators, production secrets, TLS, DNS, live database, or live automation profiles.
+- Keep executive ROI updates content/config driven unless a direct technical requirement is documented and validated.
+- Keep LISINER, Solis, and other supplier/equipment names out of Locked Package Facts unless promoted through field evidence, executive package-standard approval, and an approval packet.
+- Treat large ROI examples such as 250k to 50k electricity-bill reduction as validated sales scenarios, target models, or case-study hypotheses, never guaranteed claims.
+- Do not implement proxy rotation, stealth/fingerprint spoofing, multi-account evasion, or unofficial scraping/publish flows.
+- Keep diffs small and reviewable. Add tests or documented validation for any runtime behavior change.
+- Prefer local deterministic checks before deployment: `pnpm run check`, `pnpm run test`, `pnpm run build`, and `docker compose config`.
+- Production server bundles must not include dev-only Vite config or plugins. Keep Vite/config imports behind dynamic variables inside development-only paths and smoke test the Docker runtime.
+- If hybrid Windows + Ubuntu control is involved, keep one owner per runtime role and use `scripts/hybrid_website_control.ps1 -Mode continue-safe` from the workspace root.
+- Keep the workspace hybrid control script ASCII-only. It must parse under Windows PowerShell 5.1 even when the current terminal uses a different Unicode code page.

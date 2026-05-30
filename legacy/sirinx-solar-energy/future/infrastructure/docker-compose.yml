@@ -1,0 +1,84 @@
+version: "3.9"
+
+# ─── Networks ─────────────────────────────────────────────────────────────────
+networks:
+  future-net:
+    driver: bridge
+
+# ─── Volumes ──────────────────────────────────────────────────────────────────
+volumes:
+  postgres-data:
+    driver: local
+
+# ─── Services ─────────────────────────────────────────────────────────────────
+services:
+
+  # ── PostgreSQL ──────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: future-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-future}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-future_secret}
+      POSTGRES_DB: ${POSTGRES_DB:-future_db}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-future}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - future-net
+    ports:
+      - "5432:5432"
+
+  # ── API (FastAPI) ────────────────────────────────────────────────────────────
+  api:
+    build:
+      context: ..
+      dockerfile: infrastructure/docker/Dockerfile.api
+    container_name: future-api
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-future}:${POSTGRES_PASSWORD:-future_secret}@postgres:5432/${POSTGRES_DB:-future_db}
+      APP_ENV: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      start_period: 20s
+      retries: 3
+    networks:
+      - future-net
+    ports:
+      - "8000:8000"
+
+  # ── Web (React + nginx) ──────────────────────────────────────────────────────
+  web:
+    build:
+      context: ..
+      dockerfile: infrastructure/docker/Dockerfile.web
+      args:
+        VITE_API_URL: /api
+    container_name: future-web
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 10s
+      retries: 3
+    networks:
+      - future-net
+    ports:
+      - "80:80"

@@ -1,0 +1,190 @@
+version: 1
+description: |
+  คำจำกัดความของ model ทั้งหมดที่ใช้ในระบบ OpenClaw Hybrid
+  แต่ละ model มี role, strengths, allowed_actions และ constraints ชัดเจน
+
+models:
+
+  codex_local:
+    id: codex_local
+    display_name: "Codex Local (VS Code / CLI)"
+    provider: openai
+    model_id: codex-1
+    interface: vscode_extension  # ทำงานผ่าน VS Code Copilot / CLI
+    lane: A
+    role: |
+      นักพัฒนา Software อัจฉริยะที่ทำงานใน local development environment
+      รับผิดชอบการแก้ไข code, สร้าง tests, และ implement features ใน worktree ที่กำหนด
+    strengths:
+      - เข้าใจ codebase context แบบ deep (อ่านไฟล์, navigate, search)
+      - เขียนและแก้ไข code ได้แม่นยำ
+      - รัน terminal commands, tests, lint
+      - สร้าง diff และ change summary ที่มีคุณภาพ
+      - ทำงานกับ git worktrees
+    allowed_actions:
+      - read_files
+      - write_files
+      - run_terminal_commands
+      - run_tests
+      - run_lint
+      - run_typecheck
+      - git_commit
+      - git_branch_create
+      - git_worktree_create
+      - search_codebase
+      - install_dependencies
+    forbidden_actions:
+      - git_push_to_protected_branch
+      - modify_production_config
+      - access_external_network_without_policy
+      - create_pull_request_without_review
+      - delete_branch
+      - run_database_migrations
+    constraints:
+      worktree_isolation: true
+      single_writer: true
+      max_files_per_commit: 50
+      require_tests_pass_before_commit: true
+    inputs:
+      - artifact: spec.md
+      - artifact: tasks.yaml
+      - artifact: repo_map.yaml
+    outputs:
+      - artifact: diff (git patch)
+      - artifact: change_summary.md
+      - artifact: test_results.json
+
+  codex_cloud:
+    id: codex_cloud
+    display_name: "Codex Cloud (Cloud Sandbox)"
+    provider: openai
+    model_id: codex-1
+    interface: cloud_api  # ทำงานผ่าน API บน cloud sandbox
+    lane: A
+    role: |
+      Codex ที่ทำงานบน cloud sandbox สำหรับงานที่ต้องการ isolation สูงหรือ resource มาก
+      เหมาะสำหรับ large refactors, dependency upgrades, security scans
+    strengths:
+      - รัน code ใน isolated environment
+      - ทดสอบ side effects โดยไม่กระทบ local
+      - ประมวลผล parallel tasks หลายชิ้น
+      - สร้าง artifacts ขนาดใหญ่
+    allowed_actions:
+      - read_files
+      - write_files
+      - run_terminal_commands
+      - run_tests
+      - run_lint
+      - run_typecheck
+      - run_security_scan
+      - install_dependencies
+      - search_codebase
+    forbidden_actions:
+      - git_push
+      - access_production_systems
+      - modify_ci_config
+      - access_secrets
+      - network_access_outside_allowlist
+    constraints:
+      network_policy: codex_cloud_network
+      ephemeral: true
+      max_session_minutes: 120
+      no_persistent_state: true
+    inputs:
+      - artifact: spec.md
+      - artifact: tasks.yaml
+      - artifact: repo_snapshot (zip)
+    outputs:
+      - artifact: diff (git patch)
+      - artifact: change_summary.md
+      - artifact: test_results.json
+      - artifact: security_report.json
+
+  claude_control:
+    id: claude_control
+    display_name: "Claude Control Plane (Orchestrator/Planner/Reviewer)"
+    provider: anthropic
+    model_id: claude-opus-4-6
+    interface: api
+    lane: control
+    role: |
+      Control-plane agent สำหรับ Orchestrator, Planner, Reviewer, Visual Verifier และ Release Manager
+      ทำงานผ่าน Anthropic API โดยตรง — ไม่ใช้ Computer Use API
+    strengths:
+      - วิเคราะห์และวางแผน
+      - ตรวจสอบ artifacts และตัดสินใจ
+      - ประสานงาน agents หลาย lane
+      - อ่านและเขียน review/approval documents
+    allowed_actions:
+      - read_artifacts
+      - write_artifacts
+      - route_jobs
+      - request_approval
+      - notify_telegram
+      - escalate_to_human
+    forbidden_actions:
+      - write_code_files
+      - git_commit
+      - git_push
+      - access_production_config
+      - approve_own_jobs
+    constraints:
+      max_context_tokens: 200000
+      rate_limit_rpm: 60
+
+  claude_computer:
+    id: claude_computer
+    display_name: "Claude Computer Operator (Desktop VM)"
+    provider: anthropic
+    model_id: claude-opus-4-6
+    interface: computer_use  # ทำงานผ่าน Computer Use API ใน VM
+    lane: B
+    role: |
+      ผู้ตรวจสอบ UI/UX และ application flow ที่ทำงานในสภาพแวดล้อม VM ที่แยกออก
+      รับผิดชอบการเปิด browser, คลิก UI, กรอกฟอร์ม, จับ screenshots และรายงาน findings
+      ไม่มีสิทธิ์แก้ไข code หรือ push git — ทำได้แค่ตรวจสอบและรายงาน
+    strengths:
+      - เห็น UI จริงที่ user จะเห็น
+      - ตรวจสอบ visual regression, layout breaks
+      - ทดสอบ multi-step user flows
+      - จับ screenshot เป็น evidence
+      - ตรวจสอบ console errors, network failures
+    allowed_actions:
+      - open_browser
+      - navigate_url
+      - click_element
+      - fill_form
+      - take_screenshot
+      - read_console_logs
+      - read_network_requests
+      - write_findings_yaml
+      - write_screenshots
+    forbidden_actions:
+      - write_code_files
+      - git_commit
+      - git_push
+      - access_production_database
+      - access_secrets_vault
+      - install_software
+      - modify_system_settings
+      - access_clipboard_without_policy
+      - network_access_outside_allowlist
+    constraints:
+      vm_policy: claude_vm
+      network_policy: claude_computer_network
+      low_privilege: true
+      non_persistent: true
+      clipboard_restricted: true
+      file_mounts:
+        screenshots_out: state/findings/screenshots/
+        findings_out: state/findings/
+      secrets_access: blocked
+      max_session_minutes: 60
+    inputs:
+      - artifact: tasks.yaml (verify_tasks section)
+      - artifact: staging_url
+      - artifact: test_scenarios.md
+    outputs:
+      - artifact: findings.yaml
+      - artifact: screenshots/ (directory)
+      - artifact: console_errors.json

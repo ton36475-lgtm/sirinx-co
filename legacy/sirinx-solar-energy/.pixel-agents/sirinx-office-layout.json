@@ -1,0 +1,117 @@
+{
+  "version": "1.0",
+  "officeName": "SIRINX 47 Ronin HQ",
+  "theme": "dark",
+  "tileSize": 32,
+  "width": 96,
+  "height": 72,
+  "backgroundColor": "#0A1628",
+  "floorPattern": "checkerboard",
+  "floorColors": ["#0A1628", "#0B1E32"],
+  "departments": [
+    {
+      "id": "L1-Perception",
+      "name": "L1 · Perception HQ",
+      "color": "#06B6D4",
+      "x": 1, "y": 1, "w": 52, "h": 28,
+      "desks": [
+        { "id": "l1-01", "x": 3,  "y": 4,  "character": "kuranosuke",  "nameplate": "Kuranosuke"  },
+        { "id": "l1-02", "x": 10, "y": 4,  "character": "chikara",     "nameplate": "Chikara"     },
+        { "id": "l1-03", "x": 17, "y": 4,  "character": "soemon",      "nameplate": "Sōemon"     },
+        { "id": "l1-04", "x": 24, "y": 4,  "character": "gengoemon",   "nameplate": "Gengoemon"   },
+        { "id": "l1-05", "x": 31, "y": 4,  "character": "yahei",       "nameplate": "Yahei"       },
+        { "id": "l1-06", "x": 38, "y": 4,  "character": "yasubei",     "nameplate": "Yasubei"     },
+        { "id": "l1-07", "x": 45, "y": 4,  "character": "chuzaemon",   "nameplate": "Chūzaemon"  },
+        { "id": "l1-08", "x": 3,  "y": 16, "character": "sawaemon",    "nameplate": "Sawaemon"    },
+        { "id": "l1-09", "x": 10, "y": 16, "character": "kanroku",     "nameplate": "Kanroku"     },
+        { "id": "l1-10", "x": 17, "y": 16, "character": "kyudayu",     "nameplate": "Kyūdayū"    },
+        { "id": "l1-11", "x": 24, "y": 16, "character": "magokuro",    "nameplate": "Magokurō"   },
+        { "id": "l1-12", "x": 31, "y": 16, "character": "genzo",       "nameplate": "Genzō"      },
+        { "id": "l1-13", "x": 38, "y": 16, "character": "matanojo",    "nameplate": "Matanojō"   },
+        { "id": "l1-14", "x": 45, "y": 16, "character": "sukeemon",    "nameplate": "Sukeemon"    },
+        { "id": "l1-15", "x": 24, "y": 22, "character": "kazuemon",    "nameplate": "Kazuemon"    },
+        { "id": "l1-16", "x": 31, "y": 22, "character": "kinemon",     "nameplate": "Kin'emon"    }
+      ]
+    },
+    {
+      "id": "L2-Analysis",
+      "name": "L2 · Analysis Lab",
+      "color": "#A855F7",
+      "x": 55, "y": 1, "w": 40, "h": 28,
+      "desks": [
+        { "id": "l2-01", "x": 57, "y": 4,  "character": "junai",     "nameplate": "Jūnai"      },
+        { "id": "l2-02", "x": 64, "y": 4,  "character": "koemon",    "nameplate": "Kōemon"     },
+        { "id": "l2-03", "x": 71, "y": 4,  "character": "okaemon",   "nameplate": "Okaemon"     },
+        { "id": "l2-04", "x": 78, "y": 4,  "character": "magodayu",  "nameplate": "Magodayū"   },
+        { "id": "l2-05", "x": 85, "y": 4,  "character": "sadaemon",  "nameplate": "Sadaemon"    },
+        { "id": "l2-06", "x": 57, "y": 16, "character": "tozaemon",  "nameplate": "Tōzaemon"   },
+        { "id": "l2-07", "x": 64, "y": 16, "character": "goroemon",  "nameplate": "Gorōemon"   },
+        { "id": "l2-08", "x": 71, "y": 16, "character": "sezaemon",  "nameplate": "Sezaemon"    },
+        { "id": "l2-09", "x": 78, "y": 16, "character": "jurozaemon","nameplate": "Jūrōzaemon" }
+      ]
+    },
+    {
+      "id": "L3-Decision",
+      "name": "L3 · Decision Chamber",
+      "color": "#F5A623",
+      "x": 1, "y": 31, "w": 52, "h": 28,
+      "desks": [
+        { "id": "l3-01", "x": 3,  "y": 34, "character": "kihei",      "nameplate": "Kihei"      },
+        { "id": "l3-02", "x": 10, "y": 34, "character": "jujiro",     "nameplate": "Jūjirō"    },
+        { "id": "l3-03", "x": 17, "y": 34, "character": "shinrokuro", "nameplate": "Shinrokurō"},
+        { "id": "l3-04", "x": 24, "y": 34, "character": "kansuke",    "nameplate": "Kansuke"    },
+        { "id": "l3-05", "x": 31, "y": 34, "character": "saburobei",  "nameplate": "Saburobei"  },
+        { "id": "l3-06", "x": 3,  "y": 46, "character": "hannojo",    "nameplate": "Hannojō"   },
+        { "id": "l3-07", "x": 10, "y": 46, "character": "muramatsu",  "nameplate": "Muramatsu"  },
+        { "id": "l3-08", "x": 17, "y": 46, "character": "sandayu",    "nameplate": "Sandayū"   },
+        { "id": "l3-09", "x": 24, "y": 46, "character": "densuke",    "nameplate": "Densuke"    },
+        { "id": "l3-10", "x": 31, "y": 46, "character": "yasoemon",   "nameplate": "Yasoemon"   }
+      ]
+    },
+    {
+      "id": "L4-Coordination",
+      "name": "L4 · Coordination Hub",
+      "color": "#10B981",
+      "x": 55, "y": 31, "w": 40, "h": 28,
+      "desks": [
+        { "id": "l4-01", "x": 57, "y": 34, "character": "gengo",      "nameplate": "Gengo ★"   },
+        { "id": "l4-02", "x": 64, "y": 34, "character": "emoshichi",  "nameplate": "Emoshichi"  },
+        { "id": "l4-03", "x": 71, "y": 34, "character": "shinzaemon", "nameplate": "Shinzaemon" },
+        { "id": "l4-04", "x": 78, "y": 34, "character": "tadashichi", "nameplate": "Tadashichi" },
+        { "id": "l4-05", "x": 57, "y": 46, "character": "isuke",      "nameplate": "Isuke"      },
+        { "id": "l4-06", "x": 64, "y": 46, "character": "yazaemon",   "nameplate": "Yazaemon"   },
+        { "id": "l4-07", "x": 71, "y": 46, "character": "juheiji",    "nameplate": "Jūheiji"   },
+        { "id": "l4-08", "x": 78, "y": 46, "character": "yogoro",     "nameplate": "Yogorō"    }
+      ]
+    },
+    {
+      "id": "L5-Research",
+      "name": "L5 · R&D Bunker",
+      "color": "#EF4444",
+      "x": 1, "y": 61, "w": 40, "h": 10,
+      "desks": [
+        { "id": "l5-01", "x": 3,  "y": 64, "character": "mimura",   "nameplate": "Mimura"   },
+        { "id": "l5-02", "x": 12, "y": 64, "character": "yokogawa", "nameplate": "Yokogawa" },
+        { "id": "l5-03", "x": 21, "y": 64, "character": "kayano",   "nameplate": "Kayano"   },
+        { "id": "l5-04", "x": 30, "y": 64, "character": "terasaka", "nameplate": "Terasaka" }
+      ]
+    },
+    {
+      "id": "Kai-Room",
+      "name": "Kai · Chatbot Suite",
+      "color": "#F5A623",
+      "x": 43, "y": 61, "w": 52, "h": 10,
+      "desks": [
+        { "id": "kai-01", "x": 69, "y": 64, "character": "kai", "nameplate": "Kai 甲斐 ✦", "isSpecial": true }
+      ]
+    }
+  ],
+  "furniture": [
+    { "type": "plant", "x": 50, "y": 2 },
+    { "type": "plant", "x": 50, "y": 29 },
+    { "type": "watercooler", "x": 53, "y": 15 },
+    { "type": "whiteboard", "x": 53, "y": 40 },
+    { "type": "plant", "x": 93, "y": 2 },
+    { "type": "plant", "x": 93, "y": 29 }
+  ]
+}

@@ -1,0 +1,31 @@
+# SIRINX Solar Energy — Image Optimizer Worker
+# wrangler deploy --config cloudflare/worker-image-optimizer/wrangler.toml
+#
+# NOTE: Cloudflare Image Resizing requires Pro plan or higher.
+# Without it, the worker falls back to proxying the original image.
+
+name = "sirinx-image-optimizer"
+main = "index.js"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+workers_dev = true
+
+[[routes]]
+pattern = "cdn.sirinx.com/img*"
+zone_name = "sirinx.com"
+
+[[routes]]
+pattern = "sirinx.com/img*"
+zone_name = "sirinx.com"
+
+[vars]
+WORKER_ENV = "production"
+
+# Staging
+[env.staging]
+name = "sirinx-image-optimizer-staging"
+vars = { WORKER_ENV = "staging" }
+
+[observability]
+enabled = true

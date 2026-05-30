@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SIRINX Analyst Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["task_id", "analysis_scope", "assumptions", "findings", "risk_notes", "claim_boundary"],
+  "properties": {
+    "task_id": { "type": "string", "minLength": 1 },
+    "analysis_scope": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "assumptions": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "findings": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "risk_notes": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "claim_boundary": { "type": "string", "minLength": 1 },
+    "telemetry_freshness_minutes": { "type": ["number", "null"] }
+  }
+}
+

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SIRINX Delivery Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["bundle_path", "manifest_path", "checksums_path", "tracked_files", "handoff_ready"],
+  "properties": {
+    "bundle_path": { "type": "string", "minLength": 1 },
+    "manifest_path": { "type": "string", "minLength": 1 },
+    "checksums_path": { "type": "string", "minLength": 1 },
+    "tracked_files": { "type": "integer", "minimum": 1 },
+    "handoff_ready": { "type": "boolean" },
+    "notes": { "type": "array", "items": { "type": "string" } }
+  }
+}
+

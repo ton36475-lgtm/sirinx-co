@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+:root {
+  --deep-navy: #0A2342;
+  --solar-gold: #F5A623;
+  --emerald-green: #10B981;
+  --glass-white: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.12);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  background: var(--deep-navy);
+  color: white;
+  font-family: 'Sarabun', sans-serif;
+  overscroll-behavior: none;
+}
+
+/* Safe area for bottom nav */
+.pb-safe {
+  padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* Scrollable content area */
+.scroll-area {
+  height: 100dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Glass card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+}

@@ -1,0 +1,44 @@
+# SIRINX Solar Energy — SEO Pages Worker
+# wrangler deploy --config cloudflare/worker-seo-pages/wrangler.toml
+
+name = "sirinx-seo-pages"
+main = "index.js"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+workers_dev = true
+
+# Routes: serve province pages and sitemap
+[[routes]]
+pattern = "sirinx.com/solar/*"
+zone_name = "sirinx.com"
+
+[[routes]]
+pattern = "www.sirinx.com/solar/*"
+zone_name = "sirinx.com"
+
+[[routes]]
+pattern = "sirinx.com/sitemap.xml"
+zone_name = "sirinx.com"
+
+# KV namespace for caching rendered HTML (1 hour TTL)
+# Create with: wrangler kv:namespace create SEO_CACHE
+# Then replace <KV_NAMESPACE_ID> below with the returned ID
+[[kv_namespaces]]
+binding = "SEO_CACHE"
+id = "<KV_NAMESPACE_ID>"
+preview_id = "<KV_PREVIEW_NAMESPACE_ID>"
+
+[vars]
+WORKER_ENV = "production"
+
+# Staging
+[env.staging]
+name = "sirinx-seo-pages-staging"
+vars = { WORKER_ENV = "staging" }
+[[env.staging.kv_namespaces]]
+binding = "SEO_CACHE"
+id = "<KV_PREVIEW_NAMESPACE_ID>"
+
+[observability]
+enabled = true

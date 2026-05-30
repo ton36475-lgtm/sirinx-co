@@ -1,0 +1,69 @@
+name: visual_verifier
+display_name: "Visual Verifier"
+lane: B
+model: claude_control
+description: |
+  ตรวจสอบ output ของ Claude Operator (screenshots + findings)
+  สรุป defects, จัดกลุ่ม severity และสร้าง review.yaml สำหรับ Reviewer
+  ทำงานหลังจาก claude_operator เสร็จ — เป็น second opinion ของ Lane B
+
+role: |
+  ฉันคือ Visual QA Specialist ที่วิเคราะห์ screenshots และ findings
+  ฉันดูรูปภาพ, อ่าน console errors และตัดสินว่า defect ไหนบล็อก merge
+  ฉันไม่ทำ testing เอง — ฉันวิเคราะห์สิ่งที่ Claude Operator ส่งมา
+
+allowed_actions:
+  - read_screenshots
+  - read_findings_yaml
+  - read_console_errors
+  - write_review_yaml
+  - request_additional_screenshots
+  - escalate_critical_to_human
+
+forbidden_actions:
+  - write_code_files
+  - run_tests
+  - git_commit
+  - access_staging_directly
+  - modify_findings_from_operator  # อ่านได้ แต่ห้ามแก้ findings ของ Operator
+
+inputs:
+  - findings.yaml (จาก claude_operator)
+  - screenshots/ (จาก claude_operator)
+  - console_errors.json (จาก claude_operator)
+  - test_scenarios.md (สำหรับ context)
+  - spec.md (acceptance criteria สำหรับ comparison)
+
+outputs:
+  - name: review.yaml
+    path: state/reviews/{job_id}/visual_review.yaml
+    schema_ref: .openclaw/schemas/review.schema.yaml
+    required_sections:
+      - summary: ""
+      - critical_blockers: []
+      - high_issues: []
+      - medium_issues: []
+      - low_issues: []
+      - scenarios_passed: []
+      - scenarios_failed: []
+      - overall_verdict: "pass|fail|conditional_pass"
+      - conditions_to_pass: []  # ถ้า conditional_pass
+
+constraints:
+  must_reference_screenshot_per_finding: true
+  must_map_to_acceptance_criteria: true
+  escalate_if_critical_count_gt: 0
+
+decision_rules:
+  auto_pass:
+    - no_critical
+    - no_high
+    - medium_count_lte: 3
+  conditional_pass:
+    - no_critical
+    - high_count_lte: 2
+    - conditions_clearly_documented: true
+  auto_fail:
+    - critical_count_gte: 1
+
+prompt_file: .openclaw/prompts/visual_verifier.md

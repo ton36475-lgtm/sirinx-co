@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1775953584876,
+      "tag": "0000_lovely_reaper",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1775954237689,
+      "tag": "0001_bent_marvel_zombies",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1775956057383,
+      "tag": "0002_mean_dreaming_celestial",
+      "breakpoints": true
+    }
+  ]
+}

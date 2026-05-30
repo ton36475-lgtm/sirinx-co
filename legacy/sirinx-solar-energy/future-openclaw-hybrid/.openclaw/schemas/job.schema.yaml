@@ -1,0 +1,165 @@
+version: 1
+schema_name: job
+description: |
+  Schema สำหรับ Job State — state machine หลักของ OpenClaw
+  ทุก job มี lifecycle จาก pending → released (หรือ failed/cancelled)
+
+type: object
+required:
+  - job_id
+  - title
+  - status
+  - created_at
+  - created_by
+  - job_type
+  - lane
+
+properties:
+  job_id:
+    type: string
+    format: "YYYY-NNN"  # เช่น 2026-001
+    description: Unique identifier — ใช้ timestamp + sequence number
+
+  title:
+    type: string
+    maxLength: 100
+    description: ชื่อ job ภาษาไทยหรืออังกฤษ ให้เข้าใจง่าย
+
+  description:
+    type: string
+    description: รายละเอียด job ย่อๆ
+
+  status:
+    type: string
+    enum:
+      - pending       # รอดำเนินการ
+      - planning      # Planner กำลังสร้าง spec
+      - executing     # Lane A/B กำลังทำงาน
+      - reviewing     # Reviewer กำลัง review
+      - blocked       # รอ approval หรือมีปัญหา
+      - approved      # ผ่าน review แล้ว รอ merge
+      - merged        # merge แล้ว รอ deploy
+      - released      # deploy แล้ว สำเร็จ
+      - failed        # ล้มเหลว
+      - cancelled     # ยกเลิก
+    description: สถานะปัจจุบันของ job
+
+  job_type:
+    type: string
+    enum: [feature, bugfix, hotfix, refactor, docs, test, chore, epic, qa]
+
+  lane:
+    type: string
+    enum: [A, B, both, control]
+    description: Lane ที่ job นี้ใช้
+
+  priority:
+    type: string
+    enum: [critical, high, medium, low]
+    default: medium
+
+  created_at:
+    type: string
+    format: datetime
+
+  created_by:
+    type: string
+    description: ชื่อ user หรือ agent ที่สร้าง job
+
+  assigned_agents:
+    type: array
+    items:
+      type: string
+    description: รายชื่อ agents ที่รับผิดชอบ job นี้
+
+  branch:
+    type: string
+    pattern: "^job/[0-9]{4}-[0-9]{3}/.+$"
+    description: Git branch ที่ใช้สำหรับ job นี้
+
+  worktree_path:
+    type: string
+    description: Path ของ git worktree
+
+  artifacts:
+    type: object
+    description: Map ของ artifact type → path
+    properties:
+      spec: {type: string}
+      tasks: {type: string}
+      repo_map: {type: string}
+      change_summary: {type: string}
+      test_results: {type: string}
+      findings: {type: string}
+      review: {type: string}
+      approval: {type: string}
+      handoff: {type: string}
+      merge_checklist: {type: string}
+
+  quality_gates:
+    type: object
+    properties:
+      lint: {type: string, enum: [pending, passed, failed, skipped]}
+      typecheck: {type: string, enum: [pending, passed, failed, skipped]}
+      unit_tests: {type: string, enum: [pending, passed, failed, skipped]}
+      review_pass: {type: string, enum: [pending, passed, failed, skipped]}
+      findings_resolved: {type: string, enum: [pending, passed, failed, skipped, na]}
+
+  checkpoints:
+    type: array
+    items:
+      type: object
+      properties:
+        checkpoint_id: {type: string}
+        step: {type: string}
+        timestamp: {type: string}
+        status: {type: string}
+        notes: {type: string}
+
+  history:
+    type: array
+    items:
+      type: object
+      properties:
+        timestamp: {type: string}
+        from_status: {type: string}
+        to_status: {type: string}
+        triggered_by: {type: string}
+        reason: {type: string}
+
+  updated_at:
+    type: string
+    format: datetime
+
+  completed_at:
+    type: string
+    format: datetime
+    nullable: true
+
+  error:
+    type: object
+    nullable: true
+    properties:
+      code: {type: string}
+      message: {type: string}
+      agent: {type: string}
+      timestamp: {type: string}
+      recoverable: {type: boolean}
+
+example:
+  job_id: "2026-001"
+  title: "แก้ไข chart overflow ใน Dashboard"
+  status: executing
+  job_type: bugfix
+  lane: both
+  priority: high
+  created_at: "2026-04-02T10:00:00+07:00"
+  created_by: tony
+  branch: "job/2026-001/fix/dashboard-chart-overflow"
+  worktree_path: ".worktrees/job-2026-001"
+  quality_gates:
+    lint: pending
+    typecheck: pending
+    unit_tests: pending
+    review_pass: pending
+    findings_resolved: pending

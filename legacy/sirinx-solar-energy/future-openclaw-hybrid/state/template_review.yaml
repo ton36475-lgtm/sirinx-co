@@ -1,0 +1,76 @@
+version: 1
+# Template: review.yaml
+# ใช้สำหรับ reviewer agent และ visual_verifier
+
+review_id: "REV-YYYY-NNN-001"
+job_id: "YYYY-NNN"
+reviewer: "reviewer-agent"  # หรือ "visual-verifier" หรือ ชื่อ human
+review_type: "combined_review"  # code_review | visual_review | combined_review | security_review
+timestamp: "YYYY-MM-DDTHH:MM:SS+07:00"
+
+# ===== VERDICT =====
+status: "approved"
+# approved | approved_with_conditions | changes_requested | blocked
+
+summary: |
+  {สรุปผล review ภาษาไทย 3-5 ประโยค
+  ระบุว่าตรวจสอบอะไรบ้าง พบอะไรบ้าง และตัดสินอย่างไร}
+
+# ===== CHECKLIST =====
+checklist:
+  code_quality:
+    no_obvious_bugs: pass        # pass|fail|na
+    follows_conventions: pass
+    no_dead_code: pass
+    error_handling_adequate: pass
+
+  test_coverage:
+    all_acceptance_criteria_tested: pass
+    coverage_percent: 85.0
+    regression_tests_present: pass
+
+  security:
+    no_hardcoded_secrets: pass
+    no_sql_injection: pass
+    no_xss_risk: pass
+    auth_not_bypassed: pass
+
+  visual:  # na ถ้าไม่ใช่ UI job
+    no_critical_visual_defects: pass
+    responsive_ok: pass
+
+  completeness:
+    all_tasks_addressed: pass
+    no_scope_creep: pass
+
+# ===== COMMENTS =====
+comments:
+  - file: null  # หรือ "src/components/Chart.tsx"
+    line: null  # หรือ 42
+    severity: suggestion  # blocking | suggestion | nitpick | info
+    comment: "{ความเห็น}"
+    finding_ref: null  # หรือ "F-2026-001-001"
+
+# ===== RISKS =====
+risks:
+  - risk_id: "R01"
+    description: "{ความเสี่ยงที่พบ}"
+    severity: low  # critical|high|medium|low
+    mitigation: "{วิธีลดความเสี่ยง}"
+    accepted: true
+
+# ===== REQUIRED CHANGES (ถ้า changes_requested) =====
+required_changes: []
+  # - change_id: "C01"
+  #   description: "{สิ่งที่ต้องแก้}"
+  #   blocking: true
+
+# ===== CONDITIONS (ถ้า approved_with_conditions) =====
+conditions_to_approve: []
+  # - "{เงื่อนไขที่ต้องทำก่อน merge}"
+
+# ===== ARTIFACTS REVIEWED =====
+artifacts_reviewed:
+  diff_hash: ""           # SHA256 ของ diff ที่ review
+  test_results_timestamp: ""
+  findings_timestamp: ""  # ถ้ามี

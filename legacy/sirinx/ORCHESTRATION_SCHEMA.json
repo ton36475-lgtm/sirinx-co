@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SIRINX Orchestration Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_id",
+    "workflow_stage",
+    "source_request",
+    "assigned_agent",
+    "required_context",
+    "constraints",
+    "input_payload",
+    "output_payload",
+    "validation",
+    "next_agent",
+    "fallback_queue_reason"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workflow_stage": {
+      "type": "string",
+      "enum": [
+        "route",
+        "analyze",
+        "create",
+        "validate",
+        "deliver"
+      ]
+    },
+    "source_request": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assigned_agent": {
+      "type": "string",
+      "enum": [
+        "Hermes",
+        "Analyst",
+        "Creator",
+        "Validator",
+        "Delivery"
+      ]
+    },
+    "required_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "brand_facts",
+        "field_context",
+        "repo_paths",
+        "bundle_paths",
+        "telemetry_inputs",
+        "financial_inputs"
+      ],
+      "properties": {
+        "brand_facts": {
+          "type": "boolean"
+        },
+        "field_context": {
+          "type": "boolean"
+        },
+        "repo_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bundle_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "telemetry_inputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "financial_inputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "database_inputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "brain_skill_inputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "approval_packet_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "training_packet_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "locked_facts_required",
+        "no_marketing_claims_without_analysis",
+        "no_global_fact_mutation",
+        "server_ready_hold_mode"
+      ],
+      "properties": {
+        "locked_facts_required": {
+          "type": "boolean"
+        },
+        "no_marketing_claims_without_analysis": {
+          "type": "boolean"
+        },
+        "no_global_fact_mutation": {
+          "type": "boolean"
+        },
+        "server_ready_hold_mode": {
+          "type": "boolean"
+        },
+        "production_db_change_requires_approval": {
+          "type": "boolean"
+        },
+        "mentor_packet_required_for_apprentice": {
+          "type": "boolean"
+        },
+        "server_bootstrap_requires_validators": {
+          "type": "boolean"
+        }
+      }
+    },
+    "execution_mode": {
+      "type": "string",
+      "enum": [
+        "standard",
+        "specialist-lane"
+      ]
+    },
+    "specialist_lane": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "DatabaseSteward",
+        "Mentor",
+        "Apprentice",
+        null
+      ]
+    },
+    "input_payload": {
+      "type": "object"
+    },
+    "output_payload": {
+      "type": "object"
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_ok",
+        "paths_exist",
+        "fact_lock_passed",
+        "handoff_ready"
+      ],
+      "properties": {
+        "schema_ok": {
+          "type": "boolean"
+        },
+        "paths_exist": {
+          "type": "boolean"
+        },
+        "fact_lock_passed": {
+          "type": "boolean"
+        },
+        "handoff_ready": {
+          "type": "boolean"
+        }
+      }
+    },
+    "next_agent": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "Hermes",
+        "Analyst",
+        "Creator",
+        "Validator",
+        "Delivery",
+        null
+      ]
+    },
+    "fallback_queue_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

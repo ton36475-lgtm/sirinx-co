@@ -1,0 +1,39 @@
+# SIRINX Solar Energy — API Proxy Worker
+# wrangler deploy --config cloudflare/worker-api-proxy/wrangler.toml
+
+name = "sirinx-api-proxy"
+main = "index.js"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# Worker runs on Free tier (100k req/day) — upgrade to Paid for higher limits
+workers_dev = true
+
+# Route: proxy all /api/* requests to this worker
+# Replace sirinx.com with your actual domain after adding to Cloudflare
+[[routes]]
+pattern = "sirinx.com/api/*"
+zone_name = "sirinx.com"
+
+[[routes]]
+pattern = "www.sirinx.com/api/*"
+zone_name = "sirinx.com"
+
+# Environment variables
+# Sensitive values (API keys) should be set as secrets:
+#   wrangler secret put BACKEND_URL --config cloudflare/worker-api-proxy/wrangler.toml
+[vars]
+BACKEND_URL = "https://app.sirinx.com"
+WORKER_ENV = "production"
+
+# Staging environment
+[env.staging]
+name = "sirinx-api-proxy-staging"
+vars = { BACKEND_URL = "http://localhost:3002", WORKER_ENV = "staging" }
+[[env.staging.routes]]
+pattern = "staging.sirinx.com/api/*"
+zone_name = "sirinx.com"
+
+# Observability (Wrangler tail logs)
+[observability]
+enabled = true

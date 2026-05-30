@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1774160716757,
+      "tag": "0000_chief_blizzard",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1774160967097,
+      "tag": "0001_true_pandemic",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1774162971201,
+      "tag": "0002_solid_vanisher",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1774179393251,
+      "tag": "0003_sturdy_harrier",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1774180301703,
+      "tag": "0004_fresh_darkhawk",
+      "breakpoints": true
+    }
+  ]
+}

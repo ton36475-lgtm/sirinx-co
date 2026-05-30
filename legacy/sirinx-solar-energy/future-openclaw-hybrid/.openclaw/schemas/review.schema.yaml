@@ -1,0 +1,142 @@
+version: 1
+schema_name: review
+description: |
+  Schema สำหรับ review.yaml ที่ Reviewer หรือ Visual Verifier สร้าง
+  เป็น verdict สุดท้ายก่อนส่งให้ Release Manager
+
+type: object
+required:
+  - review_id
+  - job_id
+  - reviewer
+  - timestamp
+  - status
+  - summary
+  - checklist
+
+properties:
+  review_id:
+    type: string
+    format: "REV-{job_id}-{NNN}"
+    example: "REV-2026-001-001"
+
+  job_id:
+    type: string
+
+  reviewer:
+    type: string
+    description: ชื่อ agent หรือ human ที่ review
+
+  review_type:
+    type: string
+    enum: [code_review, visual_review, combined_review, security_review]
+
+  timestamp:
+    type: string
+    format: datetime
+
+  status:
+    type: string
+    enum:
+      - approved              # ผ่านทั้งหมด — พร้อม merge
+      - approved_with_conditions  # ผ่านแบบมีเงื่อนไข — ต้องทำ X ก่อน merge
+      - changes_requested     # ต้องแก้ไขก่อน review ใหม่
+      - blocked               # บล็อก — ต้องการ human decision
+    description: ผลการ review
+
+  summary:
+    type: string
+    description: สรุปผลการ review ภาษาไทย (3-5 ประโยค)
+
+  checklist:
+    type: object
+    description: ผลการตรวจ checklist ทีละข้อ
+    properties:
+      code_quality:
+        type: object
+        properties:
+          no_obvious_bugs: {type: string, enum: [pass, fail, na]}
+          follows_conventions: {type: string, enum: [pass, fail, na]}
+          no_dead_code: {type: string, enum: [pass, fail, na]}
+          error_handling_adequate: {type: string, enum: [pass, fail, na]}
+      test_coverage:
+        type: object
+        properties:
+          all_acceptance_criteria_tested: {type: string, enum: [pass, fail, na]}
+          coverage_percent: {type: number}
+          regression_tests_present: {type: string, enum: [pass, fail, na]}
+      security:
+        type: object
+        properties:
+          no_hardcoded_secrets: {type: string, enum: [pass, fail, na]}
+          no_sql_injection: {type: string, enum: [pass, fail, na]}
+          no_xss_risk: {type: string, enum: [pass, fail, na]}
+          auth_not_bypassed: {type: string, enum: [pass, fail, na]}
+      visual:
+        type: object
+        nullable: true
+        properties:
+          no_critical_visual_defects: {type: string, enum: [pass, fail, na]}
+          responsive_ok: {type: string, enum: [pass, fail, na]}
+      completeness:
+        type: object
+        properties:
+          all_tasks_addressed: {type: string, enum: [pass, fail, na]}
+          no_scope_creep: {type: string, enum: [pass, fail, na]}
+
+  comments:
+    type: array
+    items:
+      type: object
+      properties:
+        file: {type: string, nullable: true}
+        line: {type: integer, nullable: true}
+        severity: {type: string, enum: [blocking, suggestion, nitpick, info]}
+        comment: {type: string}
+        finding_ref: {type: string, nullable: true}
+
+  risks:
+    type: array
+    items:
+      type: object
+      properties:
+        risk_id: {type: string}
+        description: {type: string}
+        severity: {type: string, enum: [critical, high, medium, low]}
+        mitigation: {type: string}
+        accepted: {type: boolean}
+
+  required_changes:
+    type: array
+    description: รายการที่ต้องแก้ก่อน approve (ถ้า status = changes_requested)
+    items:
+      type: object
+      properties:
+        change_id: {type: string}
+        description: {type: string}
+        blocking: {type: boolean}
+
+  conditions_to_approve:
+    type: array
+    description: เงื่อนไขที่ต้องทำก่อน merge (ถ้า status = approved_with_conditions)
+    items:
+      type: string
+
+  artifacts_reviewed:
+    type: object
+    description: รายการ artifacts ที่ใช้ใน review นี้
+    properties:
+      diff_hash: {type: string}
+      test_results_timestamp: {type: string}
+      findings_timestamp: {type: string}
+
+example:
+  review_id: "REV-2026-001-001"
+  job_id: "2026-001"
+  reviewer: "reviewer-agent"
+  review_type: combined_review
+  timestamp: "2026-04-02T15:00:00+07:00"
+  status: approved_with_conditions
+  summary: "Code quality ดี tests ผ่านทั้งหมด แต่พบ visual defect บน mobile ที่ต้องแก้ก่อน merge"
+  conditions_to_approve:
+    - "แก้ chart overflow บน mobile width 375px (F-2026-001-001)"

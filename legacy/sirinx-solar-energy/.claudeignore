@@ -1,0 +1,47 @@
+# SIRINX AI-WarRoom — Claude Ignore Rules
+# Files/directories Claude should not index or read by default
+
+# Node.js
+sirinx-app/node_modules/
+apps/sirinx-desktop/node_modules/
+**/node_modules/
+
+# Build outputs
+sirinx-app/.next/
+sirinx-app/tsconfig.tsbuildinfo
+apps/sirinx-desktop/dist/
+apps/sirinx-desktop/build/
+**/dist/
+**/.next/
+
+# Electron build artifacts
+*.exe
+*.dmg
+*.AppImage
+
+# Environment files (contains secrets)
+**/.env
+**/.env.local
+**/.env.production
+**/.env.*.local
+
+# Logs
+**/*.log
+**/logs/
+
+# Package lock files (large, not useful for AI)
+sirinx-app/package-lock.json
+apps/sirinx-desktop/package-lock.json
+**/package-lock.json
+**/yarn.lock
+**/pnpm-lock.yaml
+
+# Test coverage
+**/coverage/
+**/.nyc_output/
+
+# Misc
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp

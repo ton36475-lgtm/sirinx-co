@@ -1,0 +1,33 @@
+# Dependencies / build
+node_modules/
+.next/
+out/
+dist/
+build/
+.venv/
+venv/
+__pycache__/
+*.tsbuildinfo
+.DS_Store
+*.log
+
+# Secrets & credentials — never commit
+.env
+.env.*
+!.env.example
+*.env
+*secret*
+*.key
+*.pem
+*.p12
+services/*/.env
+services/*/.env.*
+apps/*/.env
+apps/*/.env.*
+
+# Private / exported snapshots
+docs/private/
+*.html
+
+# Binaries / installers
+ozwarp-mac-arm64

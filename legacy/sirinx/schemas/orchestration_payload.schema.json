@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SIRINX Orchestration Payload",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_id",
+    "workflow_stage",
+    "source_request",
+    "assigned_agent",
+    "required_context",
+    "constraints",
+    "input_payload",
+    "output_payload",
+    "validation",
+    "next_agent",
+    "fallback_queue_reason"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workflow_stage": {
+      "type": "string",
+      "enum": ["route", "analyze", "design", "create", "validate", "deliver"]
+    },
+    "source_request": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assigned_agent": {
+      "type": "string",
+      "enum": ["Hermes", "Analyst", "DesignPrototyper", "Creator", "Validator", "Delivery"]
+    },
+    "required_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "brand_facts": { "type": "boolean" },
+        "field_context": { "type": "boolean" },
+        "repo_paths": { "type": "array", "items": { "type": "string" } },
+        "bundle_paths": { "type": "array", "items": { "type": "string" } },
+        "telemetry_inputs": { "type": "array", "items": { "type": "string" } },
+        "financial_inputs": { "type": "array", "items": { "type": "string" } },
+        "design_inputs": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": [
+        "brand_facts",
+        "field_context",
+        "repo_paths",
+        "bundle_paths",
+        "telemetry_inputs",
+        "financial_inputs",
+        "design_inputs"
+      ]
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "locked_facts_required": { "type": "boolean" },
+        "no_marketing_claims_without_analysis": { "type": "boolean" },
+        "no_global_fact_mutation": { "type": "boolean" },
+        "server_ready_hold_mode": { "type": "boolean" }
+      },
+      "required": [
+        "locked_facts_required",
+        "no_marketing_claims_without_analysis",
+        "no_global_fact_mutation",
+        "server_ready_hold_mode"
+      ]
+    },
+    "input_payload": { "type": "object" },
+    "output_payload": { "type": "object" },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_ok": { "type": "boolean" },
+        "paths_exist": { "type": "boolean" },
+        "fact_lock_passed": { "type": "boolean" },
+        "handoff_ready": { "type": "boolean" }
+      },
+      "required": ["schema_ok", "paths_exist", "fact_lock_passed", "handoff_ready"]
+    },
+    "next_agent": {
+      "type": ["string", "null"],
+      "enum": ["Hermes", "Analyst", "DesignPrototyper", "Creator", "Validator", "Delivery", null]
+    },
+    "fallback_queue_reason": {
+      "type": ["string", "null"]
+    }
+  }
+}
+

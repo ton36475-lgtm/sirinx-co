@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenClaw Pixel Office</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg:    #0A1628;
+    --gold:  #F5A623;
+    --cyan:  #06B6D4;
+    --green: #10B981;
+    --red:   #EF4444;
+    --glass: rgba(255,255,255,0.05);
+  }
+  body {
+    background: var(--bg);
+    color: #E2E8F0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  /* Pixel grid background */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(245,166,35,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,166,35,0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+  }
+
+  /* Title bar drag area */
+  .titlebar {
+    height: 36px; min-height: 36px;
+    display: flex; align-items: center;
+    padding: 0 16px;
+    -webkit-app-region: drag;
+    background: rgba(10,22,40,0.9);
+    border-bottom: 1px solid rgba(245,166,35,0.1);
+    flex-shrink: 0;
+  }
+  .titlebar-title {
+    font-size: 12px; font-weight: 600;
+    color: rgba(245,166,35,0.7);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .titlebar-actions {
+    margin-left: auto;
+    display: flex; gap: 6px;
+    -webkit-app-region: no-drag;
+  }
+  .titlebar-btn {
+    width: 28px; height: 22px;
+    border: none; border-radius: 4px;
+    cursor: pointer; font-size: 11px;
+    background: rgba(255,255,255,0.06);
+    color: #94A3B8;
+    transition: all 0.15s;
+  }
+  .titlebar-btn:hover { background: rgba(255,255,255,0.12); color: #F1F5F9; }
+  .titlebar-btn.quit:hover { background: rgba(239,68,68,0.3); color: #FCA5A5; }
+
+  /* Main content */
+  .main { flex: 1; display: flex; overflow: hidden; }
+
+  /* Left sidebar — controls */
+  .sidebar {
+    width: 260px; min-width: 260px;
+    background: rgba(255,255,255,0.02);
+    border-right: 1px solid rgba(255,255,255,0.06);
+    display: flex; flex-direction: column;
+    padding: 20px 16px;
+    overflow-y: auto;
+  }
+
+  .logo {
+    text-align: center; margin-bottom: 24px;
+  }
+  .logo-icon { font-size: 40px; line-height: 1; margin-bottom: 6px; }
+  .logo-title {
+    font-size: 15px; font-weight: 800;
+    color: var(--gold); letter-spacing: -0.3px;
+  }
+  .logo-sub {
+    font-size: 9px; color: #475569;
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  /* Status cards */
+  .status-section { margin-bottom: 20px; }
+  .section-label {
+    font-size: 9px; font-weight: 700;
+    color: #334155; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  .status-card {
+    display: flex; align-items: center; gap: 10;
+    padding: 10px 12px; border-radius: 8px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 6px; transition: all 0.2s;
+  }
+  .status-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    flex-shrink: 0;
+    transition: background 0.3s;
+  }
+  .status-dot.running  { background: var(--green); animation: pulse 2s infinite; }
+  .status-dot.starting { background: var(--gold);  animation: pulse 0.5s infinite; }
+  .status-dot.stopped  { background: #334155; }
+  .status-dot.error    { background: var(--red); }
+  @keyframes pulse {
+    0%,100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+  .status-info { flex: 1; }
+  .status-name { font-size: 12px; font-weight: 600; color: #CBD5E1; }
+  .status-detail { font-size: 9px; color: #475569; margin-top: 1px; font-family: monospace; }
+
+  /* Nav buttons */
+  .nav-btn {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; padding: 11px 12px; border-radius: 8px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    color: #94A3B8; font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s; margin-bottom: 5px;
+    text-align: left;
+  }
+  .nav-btn:hover {
+    background: rgba(245,166,35,0.08);
+    border-color: rgba(245,166,35,0.25);
+    color: var(--gold);
+  }
+  .nav-btn.primary {
+    background: rgba(245,166,35,0.12);
+    border-color: rgba(245,166,35,0.3);
+    color: var(--gold);
+  }
+  .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Control buttons */
+  .control-row { display: flex; gap: 6px; margin-bottom: 5px; }
+  .ctrl-btn {
+    flex: 1; padding: 8px; border-radius: 7px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    border: none; cursor: pointer; transition: all 0.15s;
+  }
+  .ctrl-btn.start {
+    background: rgba(16,185,129,0.15); color: var(--green);
+    border: 1px solid rgba(16,185,129,0.25);
+  }
+  .ctrl-btn.stop {
+    background: rgba(239,68,68,0.1); color: var(--red);
+    border: 1px solid rgba(239,68,68,0.2);
+  }
+  .ctrl-btn:hover { filter: brightness(1.2); }
+
+  /* Auto-start toggle */
+  .toggle-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px; border-radius: 8px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 6px;
+  }
+  .toggle-label { font-size: 11px; color: #64748B; }
+  .toggle {
+    position: relative; width: 32px; height: 17px;
+    cursor: pointer;
+  }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-track {
+    position: absolute; inset: 0;
+    background: #1E293B; border-radius: 20px;
+    transition: background 0.2s;
+  }
+  .toggle input:checked + .toggle-track { background: rgba(16,185,129,0.6); }
+  .toggle-thumb {
+    position: absolute; top: 2px; left: 2px;
+    width: 13px; height: 13px;
+    background: #64748B; border-radius: 50%;
+    transition: all 0.2s;
+  }
+  .toggle input:checked ~ .toggle-thumb {
+    transform: translateX(15px);
+    background: var(--green);
+  }
+
+  /* Right: content area */
+  .content {
+    flex: 1; display: flex; flex-direction: column;
+    overflow: hidden; background: var(--bg);
+  }
+
+  .content-webview {
+    flex: 1; border: none;
+    display: none;
+  }
+  .content-webview.visible { display: block; }
+
+  /* Startup panel */
+  .startup-panel {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px;
+    gap: 24px;
+  }
+  .startup-panel.hidden { display: none; }
+
+  .startup-logo { font-size: 64px; line-height: 1; }
+  .startup-title {
+    font-size: 28px; font-weight: 800;
+    color: #F1F5F9; text-align: center;
+    line-height: 1.2;
+  }
+  .startup-title span { color: var(--gold); }
+  .startup-sub { font-size: 13px; color: #64748B; text-align: center; }
+
+  .startup-steps {
+    display: flex; flex-direction: column; gap: 8px;
+    width: 100%; max-width: 460px;
+  }
+  .step {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; border-radius: 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: all 0.3s;
+  }
+  .step.active {
+    background: rgba(245,166,35,0.08);
+    border-color: rgba(245,166,35,0.25);
+  }
+  .step.done {
+    background: rgba(16,185,129,0.06);
+    border-color: rgba(16,185,129,0.2);
+  }
+  .step.error-step {
+    background: rgba(239,68,68,0.06);
+    border-color: rgba(239,68,68,0.2);
+  }
+  .step-icon { font-size: 18px; width: 24px; text-align: center; }
+  .step-text { flex: 1; font-size: 12px; color: #94A3B8; font-weight: 500; }
+  .step.active .step-text { color: var(--gold); }
+  .step.done .step-text { color: var(--green); }
+  .step-status { font-size: 10px; font-family: monospace; }
+  .step.done .step-status::after { content: '✓'; color: var(--green); }
+  .step.active .step-status::after { content: '...'; color: var(--gold); }
+  .step.error-step .step-status::after { content: '✕'; color: var(--red); }
+
+  /* Log console */
+  .log-console {
+    height: 90px; background: #050D1A;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    padding: 8px 12px; overflow-y: auto;
+    font-family: monospace; font-size: 9px; color: #334155;
+  }
+  .log-entry { line-height: 1.6; }
+  .log-entry.ok { color: #10B981; }
+  .log-entry.err { color: #EF4444; }
+
+  /* Project badge */
+  .project-badge {
+    padding: 6px 10px; border-radius: 6px;
+    background: rgba(6,182,212,0.08);
+    border: 1px solid rgba(6,182,212,0.2);
+    font-size: 10px; color: var(--cyan);
+    font-family: monospace;
+    display: flex; align-items: center; gap: 6px;
+  }
+</style>
+</head>
+<body>
+<!-- Title bar -->
+<div class="titlebar">
+  <span class="titlebar-title">⚔ OpenClaw Pixel Office</span>
+  <div class="titlebar-actions">
+    <button class="titlebar-btn" onclick="window.electronAPI?.minimize()">─</button>
+    <button class="titlebar-btn quit" onclick="window.electronAPI?.quit()">✕</button>
+  </div>
+</div>
+
+<div class="main">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">🏯</div>
+      <div class="logo-title">OpenClaw</div>
+      <div class="logo-sub">AI Pixel Office</div>
+    </div>
+
+    <!-- Services status -->
+    <div class="status-section">
+      <div class="section-label">Services</div>
+      <div class="status-card">
+        <div class="status-dot" id="dot-gateway"></div>
+        <div class="status-info">
+          <div class="status-name">🦞 Gateway</div>
+          <div class="status-detail" id="txt-gateway">ws://127.0.0.1:18789</div>
+        </div>
+      </div>
+      <div class="status-card">
+        <div class="status-dot" id="dot-web"></div>
+        <div class="status-info">
+          <div class="status-name">🌐 Web App</div>
+          <div class="status-detail" id="txt-web">localhost:3002</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detected project -->
+    <div class="status-section" id="project-section" style="display:none">
+      <div class="section-label">Last Project</div>
+      <div class="project-badge">
+        <span>📁</span>
+        <span id="project-name">—</span>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="status-section">
+      <div class="section-label">Navigate</div>
+      <button class="nav-btn primary" id="btn-pixel-office" onclick="openPage('agents')">
+        🏯 Pixel Office
+      </button>
+      <button class="nav-btn" id="btn-commander" onclick="openPage('openclaw')">
+        🦞 OpenClaw Commander
+      </button>
+      <button class="nav-btn" onclick="openPage('')">
+        🏠 Dashboard
+      </button>
+    </div>
+
+    <!-- Controls -->
+    <div class="status-section">
+      <div class="section-label">Controls</div>
+      <div class="control-row">
+        <button class="ctrl-btn start" onclick="startAll()">▶ Start All</button>
+        <button class="ctrl-btn stop" onclick="stopAll()">⏹ Stop All</button>
+      </div>
+      <div class="control-row">
+        <button class="ctrl-btn start" onclick="startGateway()">Gateway ▶</button>
+        <button class="ctrl-btn start" onclick="startWeb()">Web ▶</button>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <div class="status-section">
+      <div class="section-label">Settings</div>
+      <div class="toggle-row">
+        <span class="toggle-label">Auto-start on login</span>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-autostart" onchange="toggleAutostart(this.checked)">
+          <span class="toggle-track"></span>
+          <span class="toggle-thumb"></span>
+        </label>
+      </div>
+    </div>
+
+    <div style="margin-top:auto;padding-top:12px;border-top:1px solid rgba(255,255,255,0.04)">
+      <div style="font-size:9px;color:#1E293B;font-family:monospace;text-align:center">
+        SIRINX 47 Ronin · v1.0.0
+      </div>
+    </div>
+  </div>
+
+  <!-- Content area -->
+  <div class="content">
+    <!-- Startup panel -->
+    <div class="startup-panel" id="startup-panel">
+      <div class="startup-logo">🏯</div>
+      <div class="startup-title">OpenClaw<br><span>Pixel Office</span></div>
+      <div class="startup-sub">กำลังเริ่มต้นระบบ AI Multi-Agent...</div>
+
+      <div class="startup-steps">
+        <div class="step" id="step-openclaw">
+          <span class="step-icon">🦞</span>
+          <span class="step-text">ตรวจสอบ OpenClaw installation</span>
+          <span class="step-status"></span>
+        </div>
+        <div class="step" id="step-project">
+          <span class="step-icon">📁</span>
+          <span class="step-text">โหลด last project อัตโนมัติ</span>
+          <span class="step-status"></span>
+        </div>
+        <div class="step" id="step-gateway">
+          <span class="step-icon">⚡</span>
+          <span class="step-text">เปิด Gateway (ws://127.0.0.1:18789)</span>
+          <span class="step-status"></span>
+        </div>
+        <div class="step" id="step-web">
+          <span class="step-icon">🌐</span>
+          <span class="step-text">เปิด Web App (localhost:3002)</span>
+          <span class="step-status"></span>
+        </div>
+        <div class="step" id="step-office">
+          <span class="step-icon">🏯</span>
+          <span class="step-text">เปิด Pixel Office...</span>
+          <span class="step-status"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- WebView for loaded pages -->
+    <webview
+      id="webview"
+      class="content-webview"
+      allowpopups="false"
+      style="flex:1;border:none;"
+    ></webview>
+
+    <!-- Log console -->
+    <div class="log-console" id="log-console"></div>
+  </div>
+</div>
+
+<script>
+const api = window.electronAPI
+
+let currentStatus = { gateway: 'stopped', webServer: 'stopped' }
+const webview = document.getElementById('webview')
+
+// ─── Boot Sequence ────────────────────────────────────────────────────────────
+async function boot() {
+  if (!api) {
+    addLog('Running outside Electron — dev mode', 'ok')
+    return
+  }
+
+  // Step 1: detect OpenClaw
+  setStep('step-openclaw', 'active')
+  const state = await api.getOpenClawState()
+  addLog(`OpenClaw: ${state.exists ? 'found ✓' : 'not found ✗'}`)
+
+  if (state.exists) {
+    setStep('step-openclaw', 'done')
+  } else {
+    setStep('step-openclaw', 'error-step')
+    addLog('OpenClaw not found — install via: npm i -g openclaw', 'err')
+  }
+
+  // Step 2: load last project
+  setStep('step-project', 'active')
+  if (state.lastProject) {
+    document.getElementById('project-name').textContent = state.lastProject
+    document.getElementById('project-section').style.display = 'block'
+    addLog(`Last project: ${state.lastProject}`, 'ok')
+  }
+  if (state.lastSession) {
+    addLog(`Last Claude session: ${state.lastSession.project}`, 'ok')
+  }
+  setStep('step-project', 'done')
+
+  // Step 3: load settings
+  const settings = await api.getSettings()
+  document.getElementById('toggle-autostart').checked = settings.autostart
+
+  // Listen for status updates
+  api.onStatusUpdate(updateStatus)
+  api.onLog(msg => addLog(msg))
+
+  // Status is updated by main process automatically
+  updateStatus(state)
+}
+
+// ─── Status ───────────────────────────────────────────────────────────────────
+function updateStatus(s) {
+  currentStatus = s
+
+  // Gateway dot
+  setDot('dot-gateway', s.gateway)
+  document.getElementById('txt-gateway').textContent =
+    s.gateway === 'running' ? 'ws://127.0.0.1:18789 · ONLINE' :
+    s.gateway === 'starting' ? 'กำลังเปิด...' :
+    s.gateway === 'error' ? 'ERROR' : 'OFFLINE'
+
+  // Web dot
+  setDot('dot-web', s.webServer)
+  document.getElementById('txt-web').textContent =
+    s.webServer === 'running' ? 'localhost:3002 · ONLINE' :
+    s.webServer === 'starting' ? 'กำลังเปิด...' :
+    s.webServer === 'error' ? 'ERROR' : 'OFFLINE'
+
+  // Update startup steps
+  if (s.gateway === 'running')    setStep('step-gateway', 'done')
+  else if (s.gateway === 'starting') setStep('step-gateway', 'active')
+  else if (s.gateway === 'error') setStep('step-gateway', 'error-step')
+
+  if (s.webServer === 'running') {
+    setStep('step-web', 'done')
+    setStep('step-office', 'active')
+    // Auto-load pixel office
+    setTimeout(() => loadPixelOffice(), 1500)
+  } else if (s.webServer === 'starting') {
+    setStep('step-web', 'active')
+  } else if (s.webServer === 'error') {
+    setStep('step-web', 'error-step')
+  }
+}
+
+function setDot(id, status) {
+  const el = document.getElementById(id)
+  if (!el) return
+  el.className = `status-dot ${
+    status === 'running' ? 'running' :
+    status === 'starting' ? 'starting' :
+    status === 'error' ? 'error' : 'stopped'
+  }`
+}
+
+function setStep(id, cls) {
+  const el = document.getElementById(id)
+  if (!el) return
+  el.className = `step ${cls}`
+}
+
+// ─── Page Loading ─────────────────────────────────────────────────────────────
+function loadPixelOffice() {
+  if (currentStatus.webServer !== 'running') return
+  setStep('step-office', 'done')
+  document.getElementById('startup-panel').classList.add('hidden')
+  webview.src = 'http://localhost:3002/agents'
+  webview.classList.add('visible')
+}
+
+function openPage(page) {
+  if (currentStatus.webServer !== 'running') {
+    addLog('Web server not running — click "Start All"', 'err')
+    return
+  }
+  document.getElementById('startup-panel').classList.add('hidden')
+  webview.src = `http://localhost:3002/${page}`
+  webview.classList.add('visible')
+}
+
+// ─── Controls ─────────────────────────────────────────────────────────────────
+async function startAll() {
+  addLog('Starting all services...')
+  if (api) {
+    await api.startGateway()
+    await api.startWebServer()
+  }
+}
+async function stopAll() {
+  if (api) {
+    await api.stopGateway()
+    await api.stopWebServer()
+  }
+  webview.classList.remove('visible')
+  document.getElementById('startup-panel').classList.remove('hidden')
+}
+async function startGateway() {
+  if (api) await api.startGateway()
+}
+async function startWeb() {
+  if (api) await api.startWebServer()
+}
+
+function toggleAutostart(val) {
+  if (api) api.saveSettings({ autostart: val })
+}
+
+// ─── Log ──────────────────────────────────────────────────────────────────────
+function addLog(msg, type = '') {
+  const el = document.getElementById('log-console')
+  const div = document.createElement('div')
+  div.className = `log-entry ${type}`
+  div.textContent = msg
+  el.appendChild(div)
+  el.scrollTop = el.scrollHeight
+}
+
+// Boot
+boot()
+</script>
+</body>
+</html>

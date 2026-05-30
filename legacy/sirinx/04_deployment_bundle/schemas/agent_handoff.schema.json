@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SIRINX Agent Handoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["from_agent", "to_agent", "packet_path", "schema_path", "handoff_reason"],
+  "properties": {
+    "from_agent": { "type": "string", "minLength": 1 },
+    "to_agent": { "type": "string", "minLength": 1 },
+    "packet_path": { "type": "string", "minLength": 1 },
+    "schema_path": { "type": "string", "minLength": 1 },
+    "handoff_reason": { "type": "string", "minLength": 1 },
+    "blocking_issue": { "type": ["string", "null"] },
+    "validator_required": { "type": "boolean" }
+  }
+}
+

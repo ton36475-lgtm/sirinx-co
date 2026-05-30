@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SIRINX Cyber-Physical Analyst Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "assigned_agent",
+    "workflow_stage",
+    "analysis_scope",
+    "assumptions",
+    "evidence_refs",
+    "claim_boundary",
+    "recommended_next_agent"
+  ],
+  "properties": {
+    "assigned_agent": {
+      "const": "Analyst"
+    },
+    "workflow_stage": {
+      "const": "analyze"
+    },
+    "analysis_scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "claim_boundary": {
+      "type": "string",
+      "enum": [
+        "internal_reference",
+        "validated_sales_scenario",
+        "target_model",
+        "case_study_hypothesis",
+        "review_required"
+      ]
+    },
+    "recommended_next_agent": {
+      "type": "string",
+      "enum": [
+        "Creator",
+        "Validator"
+      ]
+    }
+  }
+}

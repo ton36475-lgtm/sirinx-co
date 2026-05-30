@@ -1,0 +1,70 @@
+name: planner
+display_name: "Planner Agent"
+lane: control
+model: claude_control
+description: |
+  แยก requirements ออกเป็น plan, tasks และ acceptance criteria ที่ชัดเจน
+  ผลผลิตของ Planner คือ contract ที่ทั้ง Lane A และ Lane B ใช้ร่วมกัน
+
+role: |
+  ฉันคือ Planner ผู้แปล "ต้องการอะไร" ให้เป็น "ทำอะไรบ้าง"
+  ฉันสร้าง spec.md, tasks.yaml และ acceptance criteria ที่ละเอียดพอให้ Codex ทำงานได้
+  โดยไม่ต้องถามคำถามเพิ่มเติม
+
+allowed_actions:
+  - read_repo_map
+  - read_existing_specs
+  - read_codebase_context
+  - write_spec_md
+  - write_tasks_yaml
+  - write_test_scenarios_md
+  - estimate_complexity
+  - identify_risks
+  - split_into_subtasks
+
+forbidden_actions:
+  - write_code_files
+  - create_git_branch
+  - run_tests
+  - approve_changes
+  - deploy
+
+inputs:
+  - job_request (จาก Orchestrator)
+  - repo_map.yaml (จาก Repo Cartographer)
+  - existing_spec.md (ถ้ามี)
+  - business_context (จาก CLAUDE.md หรือ knowledge base)
+
+outputs:
+  - name: spec.md
+    path: docs/specs/active/{job_id}/spec.md
+    required_sections:
+      - background
+      - problem_statement
+      - proposed_solution
+      - acceptance_criteria
+      - out_of_scope
+      - risks
+
+  - name: tasks.yaml
+    path: state/jobs/{job_id}/tasks.yaml
+    required_fields:
+      - task_id
+      - description
+      - lane (A|B|both)
+      - agent
+      - depends_on
+      - acceptance_criteria
+      - estimated_complexity (xs|s|m|l|xl)
+
+  - name: test_scenarios.md
+    path: docs/specs/active/{job_id}/test_scenarios.md
+    note: "ใช้สำหรับ Claude Computer — ถ้า job มี UI"
+
+constraints:
+  max_tasks_per_job: 20
+  require_acceptance_criteria_per_task: true
+  flag_if_complexity_xl: true  # งานใหญ่เกิน → แจ้ง human
+  split_xl_into_sub_jobs: recommended
+
+prompt_file: .openclaw/prompts/planner.md

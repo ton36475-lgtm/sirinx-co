@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SIRINX RAG Chunk",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["chunk_id", "source_path", "content_type", "text", "governance_scope"],
+  "properties": {
+    "chunk_id": { "type": "string", "minLength": 1 },
+    "source_path": { "type": "string", "minLength": 1 },
+    "content_type": { "type": "string", "enum": ["governance", "knowledge", "migration", "design", "audit"] },
+    "text": { "type": "string", "minLength": 1 },
+    "governance_scope": { "type": "string", "minLength": 1 },
+    "embedding_profile": { "type": ["string", "null"] }
+  }
+}
+

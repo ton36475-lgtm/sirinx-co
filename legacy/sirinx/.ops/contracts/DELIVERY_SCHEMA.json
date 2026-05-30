@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SIRINX Delivery Agent Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "assigned_agent",
+    "workflow_stage",
+    "bundle_path",
+    "manifest_path",
+    "checksum_path",
+    "delivered_files",
+    "handoff_ready"
+  ],
+  "properties": {
+    "assigned_agent": {
+      "const": "Delivery"
+    },
+    "workflow_stage": {
+      "const": "deliver"
+    },
+    "bundle_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "manifest_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "checksum_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "delivered_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "handoff_ready": {
+      "type": "boolean"
+    }
+  }
+}

@@ -1,0 +1,60 @@
+version: 1
+# Template: findings.yaml
+# สร้างโดย Claude Computer Operator หลัง UI testing session
+
+job_id: "YYYY-NNN"
+operator_session_id: "sess-{uuid}"
+timestamp: "YYYY-MM-DDTHH:MM:SS+07:00"
+staging_url: "http://localhost:3002"
+
+# ===== SUMMARY =====
+scenarios_run: 0
+scenarios_passed: 0
+scenarios_failed: 0
+total_findings: 0
+
+# ===== FINDINGS =====
+findings:
+  - finding_id: "F-YYYY-NNN-001"
+    severity: "high"  # critical | high | medium | low | info
+    category: "visual_defect"
+    # functional_error | visual_defect | performance | console_error
+    # network_error | accessibility | content_error | navigation_error
+    # form_error | auth_issue | other
+
+    scenario_id: "S001"
+    step: "step_2: {action ที่ทำ}"
+
+    description: |
+      {อธิบาย finding ด้วยภาษาไทย ให้ developer เข้าใจได้ทันที
+      ระบุว่าเห็นอะไร บน viewport ไหน ที่ URL ใด}
+
+    expected_behavior: "{ควรจะเป็นอย่างไร}"
+    actual_behavior: "{เป็นอย่างไรจริงๆ}"
+
+    screenshot_ref: "S001_step2_failure.png"
+    screenshot_before: null  # หรือ "S001_step1_before.png"
+
+    console_error_ref: null  # หรือ error message จาก console_errors.json
+
+    suggested_fix: |
+      {ข้อเสนอแนะการแก้ไข — ไม่จำเป็นต้องถูกต้อง 100% แต่เป็นแนวทาง}
+
+    waived: false
+    waived_by: null
+    waived_reason: null
+
+# ===== CONSOLE ERRORS =====
+console_errors_summary:
+  total_errors: 0
+  unique_messages: []
+  critical_errors: []
+
+# ===== NETWORK ERRORS =====
+network_errors_summary:
+  failed_requests: 0
+  endpoints: []
+
+# ===== NOTES =====
+operator_notes: |
+  {บันทึกเพิ่มเติมจาก Operator — สิ่งที่สังเกตเห็นแต่ไม่ใช่ finding}

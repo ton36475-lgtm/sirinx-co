@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SIRINX Design Prototyper Payload",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["task_id", "surface", "design_goals", "media_rules", "motion_rules", "mobile_checks"],
+  "properties": {
+    "task_id": { "type": "string", "minLength": 1 },
+    "surface": { "type": "string", "enum": ["public-site", "ops-dashboard", "track-record", "handoff-docs"] },
+    "design_goals": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "media_rules": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "motion_rules": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "mobile_checks": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "export_targets": { "type": "array", "items": { "type": "string" } }
+  }
+}
+

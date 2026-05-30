@@ -1,0 +1,63 @@
+# ===== Secrets & Environment =====
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+secrets/
+credentials.json
+
+# ===== Worktrees (ไม่ track ใน git) =====
+.worktrees/
+
+# ===== Logs =====
+state/logs/
+*.log
+
+# ===== VM Session Data =====
+state/audit/vm-sessions/
+
+# ===== Screenshots (track เฉพาะ template, ไม่ track actual) =====
+state/findings/*/screenshots/*.png
+state/findings/*/screenshots/*.jpg
+state/findings/*/screenshots/*.webp
+
+# ===== Node =====
+node_modules/
+.next/
+dist/
+build/
+out/
+
+# ===== Python =====
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ===== Docker =====
+.docker/
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== IDE =====
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# ===== Test Coverage =====
+coverage/
+.nyc_output/
+
+# ===== Temp =====
+tmp/
+temp/
+*.tmp
+
+# ===== Archive (เก็บไว้แต่ไม่ใช้บ่อย) =====
+# state/jobs/archive/ — อาจ track ถ้าต้องการ audit trail ใน git

@@ -1,0 +1,97 @@
+version: 1
+description: |
+  นโยบายการจัดการ Git Worktree สำหรับ Lane A (Codex Engineering)
+  กฎเหล่านี้บังคับใช้กับทุก job ที่ Codex ทำงาน
+
+# ===== กฎหลัก =====
+single_writer_per_worktree: true
+# หมายความว่า: worktree หนึ่งชิ้น มี agent เขียนได้ครั้งละ 1 ตัวเท่านั้น
+# ถ้า job_2 ต้องการ worktree ที่ job_1 กำลังใช้อยู่ → ต้องรอหรือสร้าง worktree ใหม่
+
+one_job_one_branch: true
+# หมายความว่า: 1 job = 1 branch เท่านั้น
+# ชื่อ branch format: job/{job_id}/{short_description}
+# ตัวอย่าง: job/2024-001/fix-dashboard-chart
+
+one_job_one_worktree: true
+# หมายความว่า: 1 job = 1 worktree เท่านั้น
+# ห้ามใช้ working directory หลัก (main checkout) เป็น worktree สำหรับ agent
+# path format: .worktrees/job-{job_id}/
+
+allow_parallel_readers: true
+# หมายความว่า: หลาย agent อ่านไฟล์ใน worktree ได้พร้อมกัน
+# แต่ห้าม write พร้อมกัน
+
+merge_requires_review: true
+# ต้องผ่าน reviewer agent ก่อน merge เสมอ
+
+merge_requires_green_checks: true
+# CI checks ทั้งหมดต้อง pass ก่อน merge
+
+# ===== Worktree Lifecycle =====
+lifecycle:
+  create:
+    trigger: job_start
+    command: "git worktree add .worktrees/job-{job_id} -b job/{job_id}/{slug}"
+    validate:
+      - branch_does_not_exist: true
+      - worktree_path_clean: true
+    on_conflict: abort_and_report
+
+  lock:
+    trigger: agent_start_write
+    mechanism: lockfile  # .worktrees/job-{job_id}/.openclaw.lock
+    lock_content:
+      agent: "{agent_id}"
+      job_id: "{job_id}"
+      locked_at: "{timestamp}"
+    timeout_minutes: 30
+    on_timeout: alert_and_release
+
+  unlock:
+    trigger: agent_finish_write
+    validate:
+      - tests_pass: true
+      - no_uncommitted_changes: true
+
+  cleanup:
+    trigger: job_merged_or_cancelled
+    command: "git worktree remove .worktrees/job-{job_id} --force"
+    retain_branch_for_days: 7
+
+# ===== Branch Naming =====
+branch_naming:
+  pattern: "job/{job_id}/{type}/{slug}"
+  examples:
+    - "job/2024-001/fix/dashboard-chart-overflow"
+    - "job/2024-002/feat/solar-roi-v2"
+    - "job/2024-003/hotfix/auth-token-expiry"
+  types: [feat, fix, hotfix, refactor, docs, test, chore]
+  max_slug_length: 40
+  slug_format: kebab-case
+
+# ===== Commit Rules =====
+commit_rules:
+  require_conventional_commits: true
+  format: "{type}({scope}): {description}"
+  types: [feat, fix, hotfix, refactor, docs, test, chore, ci]
+  max_subject_length: 72
+  require_body_for_breaking_changes: true
+  sign_commits: false
+  verified_by: "openclaw-hybrid v{version}"
+
+# ===== Conflict Resolution =====
+conflict_resolution:
+  strategy: abort_and_report
+  # ห้าม auto-resolve conflicts — ต้องให้ human หรือ reviewer ตัดสินใจ
+  on_conflict:
+    - abort_current_operation: true
+    - create_conflict_report: state/findings/conflict-{job_id}.yaml
+    - notify: human_required
+
+# ===== Stale Worktree Cleanup =====
+stale_cleanup:
+  enabled: true
+  stale_after_hours: 48
+  action: alert_owner
+  force_remove_after_hours: 168  # 7 วัน

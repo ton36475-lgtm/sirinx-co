@@ -19,3 +19,8 @@
 - **Status**: Approved
 - **Context**: Decided to visually and operationally link the front-end dashboard directly to our compiled local workspace packages.
 - **Decision**: Declared dependencies on all extracted adapter clients, adding reactive console panels (routing diagrams, compliance score indexes, and shell sandbox command histories) to verify package functions directly.
+
+## 2026-05-31: SIRINX Multi-Agent Orchestration Envelope
+- **Status**: Approved
+- **Context**: Decided to formalize the multi-agent schema boundary (Hermes, Analyst, Creator, Validator, Delivery) into a single standard type-checking package to prevent task payload mutations.
+- **Decision**: Modularized the legacy schema as `@sirinx/orchestration-envelope` and built a compile-time static type system and runtime envelope auditor.

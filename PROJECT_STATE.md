@@ -14,6 +14,7 @@ LOCAL ONLY — WAITING FOR PART 8 APPROVAL
 - **[AUTO APPROVAL GATE] Quarantine import of all 9 legacy source repositories from `/Users/sirinx/restore-sources/github-audit/` into the `legacy/` monorepo directory completed and committed successfully (commit 7f7f2cc). Zero keys, environment files, or credential files were imported.**
 - **[PART 8 APPROVAL - P8-D] PNPM Workspace activated and core packages/applications successfully bootstrapped and committed (commit 2a37a06). The workspace resolves 5 concurrent workspace projects successfully.**
 - **[PART 8 APPROVAL - P8-D] Interactive premium Mission Control Dashboard React web application constructed and committed successfully (commit 5e830e8). Features local telemetry visual grids, active local worker maps, compliance check summaries, and interactive P8 approval gates.**
+- **[PART 8 APPROVAL - P8-D] Monorepo dependencies successfully resolved by configuring `allowBuilds: { esbuild: true }` in `pnpm-workspace.yaml` (commit e05a064). Vite dev server is serving the dashboard locally at `http://127.0.0.1:3333/` without issues.**
 
 ## Blocked (Awaiting Part 8 Approvals)
 - Git push / Git merge / Rebase (P8-E)

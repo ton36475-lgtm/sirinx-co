@@ -1,10 +1,4 @@
 import axios, { AxiosInstance } from 'axios';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-import * as fs from 'fs';
-import * as path from 'path';
-
-const execAsync = promisify(exec);
 
 export interface HandsConfig {
   workspaceDir: string;
@@ -52,6 +46,9 @@ export class OpenHandsAdapter {
    */
   async createWorkspace(workspaceId: string): Promise<WorkspaceState> {
     try {
+      const fs = await import('fs');
+      const path = await import('path');
+      
       const mountedPath = path.join(this.config.workspaceDir, workspaceId);
       if (!fs.existsSync(mountedPath)) {
         fs.mkdirSync(mountedPath, { recursive: true });
@@ -79,25 +76,30 @@ export class OpenHandsAdapter {
    * Safely executes standard sandboxed terminal commands matching M2 control rules
    */
   async executeCommand(workspaceId: string, command: string): Promise<ExecutionResult> {
-    const mountedPath = path.join(this.config.workspaceDir, workspaceId);
-    
-    // Command vetting - Strict security locks
-    const forbidden = ['rm -rf /', 'curl ', 'wget ', 'nc ', 'bash -i'];
-    if (forbidden.some(f => command.includes(f))) {
-      return {
-        success: false,
-        stdout: '',
-        stderr: 'Security Guardrail violation: Command is forbidden under M2 Node control rules.',
-        exitCode: 1,
-      };
-    }
-
     try {
+      const path = await import('path');
+      const mountedPath = path.join(this.config.workspaceDir, workspaceId);
+      
+      // Command vetting - Strict security locks
+      const forbidden = ['rm -rf /', 'curl ', 'wget ', 'nc ', 'bash -i'];
+      if (forbidden.some(f => command.includes(f))) {
+        return {
+          success: false,
+          stdout: '',
+          stderr: 'Security Guardrail violation: Command is forbidden under M2 Node control rules.',
+          exitCode: 1,
+        };
+      }
+
       if (this.config.sandboxMode === 'isolated_container') {
-        // Mock containerized isolation for local testing
         const response = await this.client.post('/api/workspace/execute', { workspaceId, command });
         return response.data;
       }
+
+      // Load native node executors dynamically
+      const { exec } = await import('child_process');
+      const { promisify } = await import('util');
+      const execAsync = promisify(exec);
 
       // Execute locally inside the dedicated workspace folder
       const { stdout, stderr } = await execAsync(command, { cwd: mountedPath });

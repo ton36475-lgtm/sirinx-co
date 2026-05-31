@@ -12,8 +12,9 @@
     "test": "vitest run || echo 'Test passed'"
   },
   "devDependencies": {
-    "typescript": "^5.0.0",
     "prettier": "^3.0.0",
-    "turbo": "^1.10.0"
+    "turbo": "^1.10.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.6.0"
   }
 }

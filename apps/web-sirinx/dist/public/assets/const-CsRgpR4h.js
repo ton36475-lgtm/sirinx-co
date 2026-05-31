@@ -1,0 +1,1 @@
+const n=()=>{const t=`${window.location.origin}/api/oauth/callback`,r=btoa(t),a=new URL("undefined/app-auth");return a.searchParams.set("appId",void 0),a.searchParams.set("redirectUri",t),a.searchParams.set("state",r),a.searchParams.set("type","signIn"),a.toString()};export{n as g};

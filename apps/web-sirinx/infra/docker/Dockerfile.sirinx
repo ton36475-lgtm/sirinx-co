@@ -1,0 +1,28 @@
+FROM node:20-bookworm-slim AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+WORKDIR /app
+RUN corepack enable
+
+FROM base AS deps
+COPY package.json pnpm-lock.yaml ./
+COPY patches ./patches
+RUN pnpm install --frozen-lockfile
+
+FROM deps AS build
+COPY . .
+RUN pnpm run check && pnpm run test && pnpm run build
+
+FROM base AS runtime
+ENV NODE_ENV=production
+WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+COPY patches ./patches
+RUN pnpm install --prod --frozen-lockfile
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/client ./client
+COPY --from=build /app/drizzle ./drizzle
+COPY --from=build /app/shared ./shared
+COPY --from=build /app/brands ./brands
+EXPOSE 3000
+CMD ["node", "dist/index.js"]

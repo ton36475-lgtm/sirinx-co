@@ -6,6 +6,7 @@ export default defineConfig({
       '**/node_modules/**',
       '**/dist/**',
       'legacy/**',
+      'apps/web-sirinx/**',
       '**/.{idea,git,cache,output,temp}/**',
     ],
   },

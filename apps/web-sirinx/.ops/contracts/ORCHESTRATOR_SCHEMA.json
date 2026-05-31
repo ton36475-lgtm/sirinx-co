@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SIRINX Hermes Orchestrator Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "assigned_agent",
+    "workflow_stage",
+    "routing_reason",
+    "selected_context",
+    "handoff_summary",
+    "next_agent"
+  ],
+  "properties": {
+    "assigned_agent": {
+      "const": "Hermes"
+    },
+    "workflow_stage": {
+      "const": "route"
+    },
+    "routing_reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "selected_context": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "handoff_summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "next_agent": {
+      "type": "string",
+      "enum": [
+        "Analyst",
+        "Creator",
+        "Validator",
+        "Delivery"
+      ]
+    },
+    "execution_mode": {
+      "type": "string",
+      "enum": [
+        "standard",
+        "specialist-lane"
+      ]
+    },
+    "specialist_lane": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "DatabaseSteward",
+        "Mentor",
+        "Apprentice",
+        null
+      ]
+    }
+  }
+}

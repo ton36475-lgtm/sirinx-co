@@ -1,0 +1,20 @@
+{
+  "name": "SIRINX Solar Carport",
+  "short_name": "SIRINX",
+  "description": "Solar Carport, BESS, EV Charger, and AI Energy Management for Thai businesses.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#050914",
+  "theme_color": "#0a1628",
+  "lang": "th",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

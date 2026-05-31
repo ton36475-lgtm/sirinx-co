@@ -1,0 +1,1 @@
+import{k as u}from"./vendor-react-CWgp38VJ.js";import{o as c}from"./index-Mkk5ymst.js";const o={};function f(n,t){o[n]=t}function p(n){const{lang:t,setLang:e,t:s}=c(),i=u.useCallback(a=>{const r=o[n];return r&&r[a]?r[a][t]||r[a].th||a:s(a)},[n,t,s]);return{lang:t,setLang:e,t:i}}export{f as r,p as u};

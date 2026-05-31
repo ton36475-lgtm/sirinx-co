@@ -1,0 +1,215 @@
+{
+  "bundleName": "SIRINX Server Handoff Bundle",
+  "status": "SERVER_READY_HOLD",
+  "requiredFiles": [
+    ".env.example",
+    "AGENTS.md",
+    "ORCHESTRATION_SCHEMA.json",
+    "MULTI_AGENT_SYSTEM_PROMPTS.md",
+    "docker-compose.yml",
+    "package.json",
+    "pnpm-lock.yaml",
+    "apps/web/AGENTS.md",
+    "client/AGENTS.md",
+    "server/AGENTS.md",
+    "infra/AGENTS.md",
+    "governance/AGENTS.md",
+    "knowledge/AGENTS.md",
+    "docs/AGENTS.md",
+    "docs/design/AGENTS.md",
+    "schemas/AGENTS.md",
+    "tests/AGENTS.md",
+    ".ops/AGENTS.md",
+    "shared/_core/agentContracts.ts",
+    "governance/LOCKED_BUSINESS_FACTS.md",
+    "governance/OMNISCIENT_DASHBOARD_ARCHITECTURE.md",
+    "governance/SIRINX_FINAL_ARCHITECTURE_BLUEPRINT.md",
+    "governance/REPO_CONSOLIDATION_MATRIX.md",
+    "governance/RBAC_AND_APPROVAL_MATRIX.md",
+    "governance/DATA_CONTRACTS.md",
+    "governance/DESIGN.md",
+    "governance/OBSERVABILITY_CONTRACT.md",
+    "governance/CUSTOM_AI_FRAMEWORK_ARCHITECTURE.md",
+    "governance/DEPLOYMENT_AND_SECRETS_POLICY.md",
+    "governance/AGENT_SWARM_DATABASE_OPERATIONS_POLICY.md",
+    "governance/FIELD_VALIDATED_HARDWARE_CONTEXT.md",
+    "governance/CANONICAL_OPERATING_SYSTEM.md",
+    "governance/CODE_OVERLAP_AUDIT_2026-04-23.md",
+    "docs/migration/PRODUCTION_READINESS_CHECKLIST.md",
+    "docs/migration/IT_SERVER_REQUIREMENT_REMOTE_DEPLOYMENT.md",
+    "docs/migration/HERMES_AGENT_SERVER_CONTINUATION_PACKET.md",
+    "docs/migration/HERMES_DATABASE_BRAIN_SETUP_RUNBOOK.md",
+    "docs/migration/MOBILE_ACCESS_CONTROL_POLICY.md",
+    "docs/migration/DATACENTER_UPLOAD_OPERATIONS.md",
+    "docs/migration/DATACENTER_UPLOAD_OPERATIONS_MANUAL.md",
+    "docs/migration/PRE_SERVER_SYSTEM_REVIEW.md",
+    "docs/migration/PRE_SERVER_SYSTEM_REVIEW_2026-04-24.md",
+    "docs/migration/SERVER_RECEIVER_BOOTSTRAP_GUIDE.md",
+    "docs/migration/TRACK_RECORD_MEDIA_POLICY.md",
+    "docs/migration/SERVER_HANDOFF_FINAL.md",
+    "docs/migration/WORKSPACE_PROJECT_CONSOLIDATION_MAP.md",
+    "docs/migration/CONSOLIDATION_COMPLETION_2026-04-23.md",
+    "docs/migration/DEPLOYMENT_VALIDATION_2026-04-23.md",
+    "docs/migration/PENDING_WORK_EXECUTION_2026-04-23.md",
+    "infra/backup/PG_DURABILITY_POLICY.md",
+    "infra/docker/Dockerfile.sirinx",
+    "infra/nginx/public-site.conf.template",
+    "infra/nginx/sirinx.co.conf.example",
+    "infra/postgres/init/001-enable-pgvector.sql",
+    "infra/scripts/build-handoff-bundle.ps1",
+    "infra/scripts/build-source-snapshot.ps1",
+    "infra/scripts/db-ops-preflight.sh",
+    "infra/scripts/deploy-handshake.sh",
+    "infra/scripts/full-system-review.ps1",
+    "infra/scripts/hermes-brain-bootstrap.sh",
+    "infra/scripts/overlap-audit.ps1",
+    "infra/scripts/render-public-site-config.sh",
+    "infra/scripts/server-receiver-install.sh",
+    "infra/scripts/server-cutover-smoke.sh",
+    "infra/scripts/server-preflight.sh",
+    "infra/scripts/server-source-sync.sh",
+    "infra/scripts/spend-breaker.py",
+    "infra/scripts/ultimate-validator.sh",
+    "infra/scripts/validate-agent-contracts.py",
+    "infra/scripts/validate-real-files.sh",
+    "infra/scripts/validate-json-schemas.sh",
+    "infra/scripts/validate-handoff-bundle.sh",
+    "infra/scripts/validate-sirinx-facts.sh",
+    "infra/scripts/pre-deploy-check.sh",
+    "infra/scripts/smoke-test.sh",
+    "infra/scripts/post-deploy-check.sh",
+    "infra/scripts/deploy-gate.sh",
+    "knowledge/standard-vault/BRAND_TRUTH.md",
+    "knowledge/shadow-vault/BRAIN_SKILL_BOOTSTRAP_PROTOCOL.md",
+    "knowledge/shadow-vault/SHADOW_PROTOCOLS.md",
+    "knowledge/shadow-vault/HARDWARE_TELEMETRY_PROTOCOL.md",
+    ".ops/audit/CONTINUATION_AUDIT.md",
+    ".ops/audit/LOCAL_REPO_NORMALIZATION_REPORT.md",
+    ".ops/audit/FINAL_SYSTEM_REVIEW.md",
+    ".ops/contracts/ORCHESTRATOR_SCHEMA.json",
+    ".ops/contracts/ANALYST_SCHEMA.json",
+    ".ops/contracts/CREATOR_SCHEMA.json",
+    ".ops/contracts/DATABASE_STEWARD_SCHEMA.json",
+    ".ops/contracts/VALIDATOR_SCHEMA.json",
+    ".ops/contracts/DELIVERY_SCHEMA.json",
+    ".ops/contracts/MENTOR_BOOTSTRAP_SCHEMA.json",
+    ".ops/contracts/HANDOFF_BUNDLE_MANIFEST.json"
+  ],
+  "requiredDirectories": [
+    {
+      "path": "skills",
+      "include": [
+        "*.md"
+      ],
+      "exclude": []
+    },
+    {
+      "path": "agents/system_prompts",
+      "include": [
+        "*.md"
+      ],
+      "exclude": []
+    },
+    {
+      "path": "docs/design",
+      "include": [
+        "*.md"
+      ],
+      "exclude": []
+    },
+    {
+      "path": "schemas",
+      "include": [
+        "*.json",
+        "*.md"
+      ],
+      "exclude": []
+    },
+    {
+      "path": "tests/e2e",
+      "include": [
+        "*.ts"
+      ],
+      "exclude": []
+    },
+    {
+      "path": "governance",
+      "include": [
+        "*.md"
+      ],
+      "exclude": [
+        "SIRINX_V15_ARCHITECTURE_BLUEPRINT.md"
+      ]
+    },
+    {
+      "path": "docs/migration",
+      "include": [
+        "*.md"
+      ],
+      "exclude": []
+    },
+    {
+      "path": "knowledge",
+      "include": [
+        "*.md"
+      ],
+      "exclude": []
+    },
+    {
+      "path": ".ops/audit",
+      "include": [
+        "*.md"
+      ],
+      "exclude": []
+    },
+    {
+      "path": ".ops/contracts",
+      "include": [
+        "*.json"
+      ],
+      "exclude": []
+    },
+    {
+      "path": "governance/records",
+      "include": [
+        "*.md"
+      ],
+      "exclude": []
+    },
+    {
+      "path": "infra/postgres",
+      "include": [
+        "*.sql",
+        "*.md"
+      ],
+      "exclude": []
+    }
+  ],
+  "bundleExcludes": [
+    "[\\\\/]node_modules[\\\\/]",
+    "[\\\\/]dist[\\\\/]",
+    "[\\\\/]\\.git[\\\\/]",
+    "[\\\\/]artifacts[\\\\/]",
+    "[\\\\/]secrets[\\\\/]",
+    "[\\\\/]\\.cache[\\\\/]",
+    "[\\\\/]__pycache__[\\\\/]",
+    "\\.env$",
+    "\\.pem$",
+    "\\.key$",
+    "\\.p12$",
+    "\\.pfx$"
+  ],
+  "validationGates": [
+    "contracts-validated",
+    "real-files-validated",
+    "json-schemas-validated",
+    "sirinx-facts-validated",
+    "pnpm-check",
+    "pnpm-test",
+    "pnpm-build",
+    "docker-compose-config",
+    "handoff-bundle-built",
+    "handoff-bundle-validated",
+    "ultimate-validator"
+  ]
+}

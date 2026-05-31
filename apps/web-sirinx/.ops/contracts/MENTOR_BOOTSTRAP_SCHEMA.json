@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SIRINX Mentor Bootstrap Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "specialist_lane",
+    "training_mode",
+    "senior_agent",
+    "apprentice_scope",
+    "starter_packet_refs",
+    "validator_gate_required",
+    "escalation_rule"
+  ],
+  "properties": {
+    "specialist_lane": {
+      "const": "Mentor"
+    },
+    "training_mode": {
+      "type": "string",
+      "enum": [
+        "shadow",
+        "guided-handoff",
+        "apprentice-exec"
+      ]
+    },
+    "senior_agent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "apprentice_scope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "starter_packet_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "validator_gate_required": {
+      "type": "boolean"
+    },
+    "escalation_rule": {
+      "type": "string",
+      "minLength": 1
+    },
+    "allowed_actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "forbidden_actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rollback_note": {
+      "type": "string"
+    },
+    "audit_trail_note": {
+      "type": "string"
+    }
+  }
+}

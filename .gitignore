@@ -6,6 +6,7 @@ node_modules/
 packages/content-factory/dist/
 packages/config/dist/
 packages/types/dist/
+apps/dev-command-center/dist/
 
 # Secrets
 .env
@@ -25,6 +26,11 @@ security-lab/05_reports/
 vault/logs/
 .codex/
 .agents/
+
+# Local heavy tool/vendor checkouts
+vendor/mercury-agent-skills/
+tools/cli-anything-hub-lab/
+tools/cli-anything-lab/
 
 # System Files
 .DS_Store

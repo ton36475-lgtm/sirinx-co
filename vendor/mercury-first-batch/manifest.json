@@ -1,0 +1,44 @@
+{
+  "name": "mercury-first-batch",
+  "date": "2026-06-07",
+  "source": "tools/repo-intake/2026-06-06/mercury-agent-skills",
+  "import_mode": "repo-local-vendor-snapshot",
+  "bulk_import": false,
+  "live_hermes_import": false,
+  "provider_call": false,
+  "skills": [
+    {
+      "id": "development/refactoring-patterns",
+      "source": "tools/repo-intake/2026-06-06/mercury-agent-skills/categories/development/refactoring-patterns/SKILL.md",
+      "destination": "vendor/mercury-first-batch/development/refactoring-patterns/SKILL.md"
+    },
+    {
+      "id": "frontend/frontend-testing",
+      "source": "tools/repo-intake/2026-06-06/mercury-agent-skills/categories/frontend/frontend-testing/SKILL.md",
+      "destination": "vendor/mercury-first-batch/frontend/frontend-testing/SKILL.md"
+    },
+    {
+      "id": "frontend/responsive-design",
+      "source": "tools/repo-intake/2026-06-06/mercury-agent-skills/categories/frontend/responsive-design/SKILL.md",
+      "destination": "vendor/mercury-first-batch/frontend/responsive-design/SKILL.md"
+    },
+    {
+      "id": "testing-qa/performance-testing",
+      "source": "tools/repo-intake/2026-06-06/mercury-agent-skills/categories/testing-qa/performance-testing/SKILL.md",
+      "destination": "vendor/mercury-first-batch/testing-qa/performance-testing/SKILL.md"
+    },
+    {
+      "id": "product/user-research",
+      "source": "tools/repo-intake/2026-06-06/mercury-agent-skills/categories/product/user-research/SKILL.md",
+      "destination": "vendor/mercury-first-batch/product/user-research/SKILL.md"
+    }
+  ],
+  "blocked": [
+    "mercury-agent-global-install",
+    "mercury-skills-bulk-import",
+    "copy-to-hermes-live-skill-directories",
+    "provider-call",
+    "deploy",
+    "push"
+  ]
+}

@@ -10,6 +10,8 @@ packages/types/dist/
 # Secrets
 .env
 .env.*
+.mcp.local/
+.mcp.json
 *.pem
 *.key
 *service-account*.json

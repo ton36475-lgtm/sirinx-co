@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { calculateKellyCriterion, OPAL_SOLAR_PRICE_PER_UNIT } from '@sirinx/thclaws-runtime';
 import { OpenClawOrchestrator } from '@sirinx/openclaw-adapter';
-import { OpenHandsAdapter } from '@sirinx/openhands-adapter';
 import { Gemma4Client } from '@sirinx/ai-access-gateway';
 import { OrchestrationEnvelopeValidator } from '@sirinx/orchestration-envelope';
 
@@ -212,32 +211,28 @@ export default function App() {
     if (!terminalInput.trim()) return;
     setIsExecuting(true);
     const command = terminalInput;
-    const hands = new OpenHandsAdapter();
-    
-    setTimeout(async () => {
-      const res = await hands.executeCommand('mission-control-sandbox', command);
-      const isViolation = res.stderr.includes('violation') || res.exitCode !== 0;
-      
+
+    setTimeout(() => {
       setTerminalHistory(prev => [
         ...prev,
-        { 
-          cmd: command, 
-          out: res.stderr ? res.stderr : res.stdout || 'Command executed successfully with exit code 0.', 
-          type: isViolation ? 'error' : 'success' 
+        {
+          cmd: command,
+          out: 'Blocked in browser guard. Mission Control will not execute local shell commands from the browser bundle. Route this through an approved localhost command bridge with audit logging before enabling execution.',
+          type: 'error'
         }
       ]);
-      
+
       setLogs(prev => [
         ...prev,
-        { 
-          timestamp: new Date().toTimeString().split(' ')[0], 
-          type: isViolation ? 'security' : 'success', 
-          message: `[OpenHands Terminal] Command: "${command}" -> ${isViolation ? 'Access Denied' : 'Allowed'}` 
+        {
+          timestamp: new Date().toTimeString().split(' ')[0],
+          type: 'security',
+          message: `[OpenHands Terminal Guard] Browser execution blocked for: "${command}"`
         }
       ]);
-      
+
       setIsExecuting(false);
-      setTerminalInput('');
+      setTerminalInput("");
     }, 800);
   };
 

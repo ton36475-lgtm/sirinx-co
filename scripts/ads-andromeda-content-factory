@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+cd "$ROOT_DIR"
+pnpm --filter @sirinx/content-factory build >/dev/null
+if [[ "${1:-}" == "--" ]]; then
+  shift
+fi
+node packages/content-factory/dist/cli.js --repo-root "$ROOT_DIR" "$@"

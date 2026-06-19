@@ -9,7 +9,9 @@
     "lint": "eslint . --ext .ts,.tsx || echo 'Lint passed'",
     "typecheck": "pnpm -r --filter '*' exec tsc --noEmit || echo 'Typecheck passed'",
     "build": "pnpm -r exec echo 'Build success'",
-    "test": "vitest run || echo 'Test passed'"
+    "test": "vitest run || echo 'Test passed'",
+    "ads:content-factory": "scripts/ads-andromeda-content-factory",
+    "ads:automation-pipeline": "scripts/ads-andromeda-content-factory"
   },
   "devDependencies": {
     "prettier": "^3.0.0",

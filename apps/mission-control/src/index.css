@@ -5,13 +5,13 @@
   --border-color: rgba(255, 255, 255, 0.08);
   --text-primary: #f1f5f9;
   --text-muted: #94a3b8;
-  
+
   --cyber-cyan: #00f0ff;
   --cyber-purple: #bd00ff;
   --cyber-emerald: #00ff66;
   --cyber-amber: #ffbb00;
   --cyber-rose: #ff0055;
-  
+
   --shadow-cyan: 0 0 15px rgba(0, 240, 255, 0.3);
   --shadow-purple: 0 0 15px rgba(189, 0, 255, 0.3);
   --shadow-emerald: 0 0 15px rgba(0, 255, 102, 0.3);
@@ -24,12 +24,16 @@
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
-  background-image: 
+  background-image:
     linear-gradient(rgba(189, 0, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
   background-size: 40px 40px;
@@ -52,8 +56,11 @@ body {
   background: var(--cyber-cyan);
 }
 
-h1, h2, h3, h4 {
-  font-family: 'Outfit', sans-serif;
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Outfit", sans-serif;
   letter-spacing: -0.02em;
 }
 
@@ -83,13 +90,18 @@ h1, h2, h3, h4 {
 }
 
 .header::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, var(--cyber-cyan), var(--cyber-purple), var(--cyber-emerald));
+  background: linear-gradient(
+    90deg,
+    var(--cyber-cyan),
+    var(--cyber-purple),
+    var(--cyber-emerald)
+  );
 }
 
 .header-title-section h1 {
@@ -207,6 +219,10 @@ h1, h2, h3, h4 {
   color: var(--cyber-purple);
 }
 
+.card-title span.accent-emerald {
+  color: var(--cyber-emerald);
+}
+
 /* System Stats lists */
 .stat-row {
   display: flex;
@@ -294,7 +310,7 @@ h1, h2, h3, h4 {
 }
 
 .agent-name {
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   font-size: 0.85rem;
   font-weight: 600;
   color: #fff;
@@ -366,7 +382,7 @@ h1, h2, h3, h4 {
 .btn {
   padding: 0.5rem 1rem;
   border-radius: 6px;
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -415,7 +431,8 @@ h1, h2, h3, h4 {
 
 /* Animations */
 @keyframes pulse-blink {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
@@ -440,18 +457,22 @@ h1, h2, h3, h4 {
 }
 
 .hologram-gate::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, rgba(255,0,85,0.05) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 0, 85, 0.05) 0%,
+    transparent 70%
+  );
   pointer-events: none;
 }
 
 .lock-title {
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   font-size: 1.2rem;
   font-weight: 800;
   color: var(--cyber-rose);
@@ -463,8 +484,414 @@ h1, h2, h3, h4 {
   font-family: monospace;
   font-size: 0.75rem;
   color: var(--text-muted);
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   padding: 0.3rem 0.6rem;
   border-radius: 4px;
-  border: 1px dashed rgba(255,0,85,0.2);
+  border: 1px dashed rgba(255, 0, 85, 0.2);
+}
+
+/* Mission Control panel tabs */
+.panel-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.3rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.panel-tab {
+  min-height: 38px;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: none;
+  font-family: "Outfit", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-muted);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.panel-tab.active {
+  background: var(--cyber-cyan);
+  color: #000;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+}
+
+/* Git Evidence Review Panel */
+.git-evidence-card {
+  gap: 1.1rem;
+}
+
+.git-evidence-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.git-kpi {
+  min-width: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.git-kpi span {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.git-kpi strong {
+  color: #fff;
+  font-family: monospace;
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.git-fixture-notice {
+  border: 1px dashed rgba(255, 187, 0, 0.26);
+  border-radius: 7px;
+  background: rgba(255, 187, 0, 0.06);
+  color: var(--cyber-amber);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  padding: 0.65rem 0.75rem;
+}
+
+.git-evidence-grid {
+  display: grid;
+  grid-template-columns: minmax(210px, 0.85fr) minmax(0, 1.45fr);
+  gap: 0.9rem;
+  align-items: stretch;
+}
+
+.git-file-list,
+.diff-viewer,
+.evidence-checklist,
+.version-history {
+  min-width: 0;
+}
+
+.git-file-list {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.18);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.git-section-title,
+.diff-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.git-section-title {
+  align-items: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.git-file-row {
+  width: 100%;
+  min-height: 72px;
+  text-align: left;
+  border: 1px solid var(--border-color);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.015);
+  color: var(--text-primary);
+  padding: 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.git-file-row:hover,
+.git-file-row.selected {
+  background: rgba(0, 240, 255, 0.06);
+  border-color: rgba(0, 240, 255, 0.35);
+}
+
+.git-file-path {
+  font-family: monospace;
+  font-size: 0.74rem;
+  color: #fff;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+}
+
+.git-file-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.git-status,
+.risk-pill,
+.proof-pill,
+.packet-status,
+.history-state,
+.blocked-action {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  border-radius: 4px;
+  padding: 0.22rem 0.42rem;
+  font-family: monospace;
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.status-modified {
+  color: var(--cyber-amber);
+  background: rgba(255, 187, 0, 0.1);
+}
+
+.status-added {
+  color: var(--cyber-emerald);
+  background: rgba(0, 255, 102, 0.1);
+}
+
+.status-untracked,
+.status-deleted {
+  color: var(--cyber-rose);
+  background: rgba(255, 0, 85, 0.1);
+}
+
+.risk-low {
+  color: var(--cyber-emerald);
+  background: rgba(0, 255, 102, 0.08);
+}
+
+.risk-medium {
+  color: var(--cyber-amber);
+  background: rgba(255, 187, 0, 0.08);
+}
+
+.risk-high {
+  color: var(--cyber-rose);
+  background: rgba(255, 0, 85, 0.08);
+}
+
+.proof-pill {
+  color: var(--cyber-cyan);
+  background: rgba(0, 240, 255, 0.08);
+}
+
+.diff-viewer {
+  border: 1px solid rgba(0, 240, 255, 0.16);
+  border-radius: 8px;
+  background: #020306;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.diff-title {
+  display: block;
+  color: #fff;
+  font-family: monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.diff-header p {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  line-height: 1.35;
+  margin-top: 0.25rem;
+}
+
+.diff-lines {
+  min-height: 210px;
+  max-height: 290px;
+  overflow: auto;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.diff-line {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 0.55rem;
+  padding: 0.38rem 0.55rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.025);
+  font-family: monospace;
+  font-size: 0.76rem;
+}
+
+.diff-line:last-child {
+  border-bottom: none;
+}
+
+.diff-line-number {
+  color: rgba(148, 163, 184, 0.62);
+  text-align: right;
+}
+
+.diff-line code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--text-muted);
+}
+
+.diff-add {
+  background: rgba(0, 255, 102, 0.055);
+}
+
+.diff-add code {
+  color: var(--cyber-emerald);
+}
+
+.diff-remove {
+  background: rgba(255, 0, 85, 0.055);
+}
+
+.diff-remove code {
+  color: var(--cyber-rose);
+}
+
+.git-evidence-lower-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.evidence-checklist,
+.version-history {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.evidence-check-row,
+.version-history-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.7rem;
+  align-items: start;
+  padding: 0.7rem 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+}
+
+.evidence-check-row:last-child,
+.version-history-row:last-child {
+  border-bottom: none;
+}
+
+.evidence-check-row strong,
+.version-history-row strong {
+  display: block;
+  color: #fff;
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+}
+
+.evidence-check-row p,
+.version-history-row p {
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+
+.version-history-row code {
+  display: inline-block;
+  margin-top: 0.25rem;
+  color: var(--cyber-cyan);
+  font-size: 0.68rem;
+  overflow-wrap: anywhere;
+}
+
+.packet-ready,
+.history-local {
+  color: var(--cyber-emerald);
+  background: rgba(0, 255, 102, 0.1);
+}
+
+.packet-needed,
+.history-needed {
+  color: var(--cyber-amber);
+  background: rgba(255, 187, 0, 0.1);
+}
+
+.packet-blocked,
+.history-blocked {
+  color: var(--cyber-rose);
+  background: rgba(255, 0, 85, 0.1);
+}
+
+.approval-state-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.approval-state-grid div {
+  min-width: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.approval-state-grid span {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.3rem;
+}
+
+.approval-state-grid strong {
+  display: block;
+  color: #fff;
+  font-family: monospace;
+  font-size: 0.78rem;
+  overflow-wrap: anywhere;
+}
+
+.blocked-action-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.blocked-action {
+  color: var(--cyber-rose);
+  border: 1px solid rgba(255, 0, 85, 0.22);
+  background: rgba(255, 0, 85, 0.06);
+}
+
+@media (max-width: 780px) {
+  .panel-tabs,
+  .git-evidence-summary,
+  .git-evidence-grid,
+  .git-evidence-lower-grid,
+  .approval-state-grid {
+    grid-template-columns: 1fr;
+  }
 }

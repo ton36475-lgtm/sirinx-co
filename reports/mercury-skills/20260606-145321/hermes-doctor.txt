@@ -1,0 +1,137 @@
+
+┌─────────────────────────────────────────────────────────┐
+│                 🩺 Hermes Doctor                        │
+└─────────────────────────────────────────────────────────┘
+
+◆ Security Advisories
+  ✓ No active security advisories
+
+◆ Python Environment
+  ✓ Python 3.11.15
+  ✓ Virtual environment active
+  ✓ Version files consistent (0.16.0)
+
+◆ Required Packages
+  ✓ OpenAI SDK
+  ✓ Rich (terminal UI)
+  ✓ python-dotenv
+  ✓ PyYAML
+  ✓ HTTPX
+  ✓ Croniter (cron expressions) (optional)
+  ✓ python-telegram-bot (optional)
+  ✓ discord.py (optional)
+
+◆ Configuration Files
+  ✓ ~/.hermes/profiles/shogun/.env file exists
+  ✓ API key or custom endpoint configured
+  ✓ ~/.hermes/profiles/shogun/config.yaml exists
+  ⚠ Config version outdated (v25 → v27) (new settings available)
+
+◆ xAI Model Retirement (May 15, 2026)
+  ✓ No retired xAI models in config
+
+◆ Auth Providers
+  ⚠ Nous Portal auth (not logged in)
+  ⚠ OpenAI Codex auth (not logged in)
+    → No Codex credentials stored. Run `hermes auth` to authenticate.
+  ⚠ Google Gemini OAuth (not logged in)
+  ⚠ MiniMax OAuth (not logged in)
+  ⚠ xAI OAuth (not logged in)
+    → No xAI OAuth credentials stored. Select xAI Grok OAuth (SuperGrok / Premium+) in `hermes model`.
+
+◆ Directory Structure
+  ✓ ~/.hermes/profiles/shogun directory exists
+  ✓ ~/.hermes/profiles/shogun/cron/ exists
+  ✓ ~/.hermes/profiles/shogun/sessions/ exists
+  ✓ ~/.hermes/profiles/shogun/logs/ exists
+  ✓ ~/.hermes/profiles/shogun/skills/ exists
+  ✓ ~/.hermes/profiles/shogun/memories/ exists
+  ✓ ~/.hermes/profiles/shogun/SOUL.md exists (persona configured)
+  ✓ ~/.hermes/profiles/shogun/memories/ directory exists
+    → MEMORY.md not created yet (will be created when the agent first writes a memory)
+    → USER.md not created yet (will be created when the agent first writes a memory)
+  ✓ ~/.hermes/profiles/shogun/state.db exists (0 sessions)
+
+◆ Command Installation
+  ✓ Venv entry point exists (venv/bin/hermes)
+  ✓ ~/.local/bin/hermes → correct target
+
+◆ External Tools
+  ✓ git
+  ✓ ripgrep (rg) (faster file search)
+  ✓ docker (optional)
+  ✓ Node.js
+  ✓ agent-browser (Node.js) (browser automation)
+  ✓ Playwright Chromium (browser engine)
+  ✓ Browser tools (agent-browser) deps (no known vulnerabilities)
+  ✓ WhatsApp bridge deps (4 moderate vulnerabilities)
+
+◆ API Connectivity
+  Running 26 connectivity checks in parallel…                                                                        ✓ OpenRouter API
+  ✗ Anthropic API (invalid API key)
+  ✓ Hugging Face
+  ✓ gemini
+
+◆ Tool Availability
+  ✓ browser
+  ✓ clarify
+  ✓ code_execution
+  ✓ computer_use
+  ✓ cronjob
+  ✓ terminal
+  ✓ delegation
+  ✓ feishu_doc
+  ✓ feishu_drive
+  ✓ file
+  ✓ memory
+  ✓ moa
+  ✓ messaging
+  ✓ session_search
+  ✓ skills
+  ✓ todo
+  ✓ tts
+  ✓ vision
+  ✓ video
+  ✓ kanban (runtime-gated; loaded only for dispatcher-spawned workers)
+  ⚠ browser-cdp (system dependency not met)
+  ⚠ discord (missing DISCORD_BOT_TOKEN)
+  ⚠ discord_admin (missing DISCORD_BOT_TOKEN)
+  ⚠ homeassistant (system dependency not met)
+  ⚠ image_gen (system dependency not met)
+  ⚠ video_gen (system dependency not met)
+  ⚠ web (missing EXA_API_KEY, PARALLEL_API_KEY, TAVILY_API_KEY, FIRECRAWL_API_KEY, FIRECRAWL_API_URL, FIRECRAWL_GATEWAY_URL, TOOL_GATEWAY_DOMAIN, TOOL_GATEWAY_SCHEME, TOOL_GATEWAY_USER_TOKEN)
+  ⚠ x_search (missing XAI_API_KEY)
+  ⚠ hermes-yuanbao (system dependency not met)
+  ⚠ google_meet (system dependency not met)
+  ⚠ spotify (system dependency not met)
+
+◆ Skills Hub
+  ✓ Skills Hub directory exists
+  ✓ Lock file OK (11 hub-installed skill(s))
+  ⚠ No GITHUB_TOKEN (60 req/hr rate limit — set in ~/.hermes/profiles/shogun/.env for better rates)
+
+◆ Memory Provider
+  ✓ Built-in memory active (no external provider configured — this is fine)
+
+◆ Profiles
+  ✓ 12 profile(s) found
+  ✓   backend: llama3.2:3b
+  ✓   data: llama3.2:3b
+  ✓   design: gpt-5.5
+  ✓   devops: llama3.2:3b
+  ✓   frontend: gpt-5.5
+  ✓   growth: gpt-5.5
+  ✓   planner: llama3.2:3b
+  ✓   qa: llama3.2:3b
+  ✓   sales: llama3.2:3b
+  ✓   scribe: llama3.2:3b
+  ✓   shogun: gateway running, gpt-5.5
+  ✓   solis: gateway running, kimi 2.6
+
+────────────────────────────────────────────────────────────
+  Found 2 issue(s) to address:
+
+  1. Run 'hermes doctor --fix' or 'hermes setup' to migrate config
+  2. Run 'hermes setup' to configure missing API keys for full tool access
+
+  Tip: run 'hermes doctor --fix' to auto-fix what's possible.

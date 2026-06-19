@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/timeline-event.schema.json",
+  "title": "SIRINX Timeline Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "title",
+    "occurred_at",
+    "recorded_at",
+    "proof_status",
+    "claims",
+    "evidence_refs"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "pattern": "^te-[0-9]{8}-[a-z0-9-]+$"
+    },
+    "title": { "type": "string" },
+    "summary": { "type": "string" },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "proof_status": {
+      "$ref": "proof-status.schema.json"
+    },
+    "claims": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^ev-[0-9]{8}-[a-z0-9-]+$"
+      },
+      "minItems": 1
+    },
+    "git": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "commit_sha": { "type": "string" },
+        "note_ref": { "type": "string" },
+        "tag": { "type": "string" }
+      }
+    },
+    "external": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "provider": { "type": "string" },
+        "record_id": { "type": "string" },
+        "verified_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

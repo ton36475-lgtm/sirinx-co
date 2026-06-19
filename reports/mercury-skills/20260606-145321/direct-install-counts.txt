@@ -1,0 +1,4 @@
+direct_installed=62
+hermes_skills_list_local_after_exit=0
+hermes_skills_list_after_exit=0
+hermes_skills_audit_after_exit=0

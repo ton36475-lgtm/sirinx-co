@@ -1,0 +1,879 @@
+
+Auditing 11 skill(s)...
+
+Scan: outlines (official/mlops/inference/outlines/community)  Verdict: SAFE
+  MEDIUM   supply_chain   SKILL.md:33                    "pip install outlines"
+  MEDIUM   supply_chain   SKILL.md:36                    "pip install outlines
+transformers  # Hugging Face models"
+  MEDIUM   supply_chain   SKILL.md:37                    "pip install outlines
+llama-cpp-python  # llama.cpp"
+  MEDIUM   supply_chain   SKILL.md:38                    "pip install outlines
+vllm  # vLLM for high-throughput"
+  MEDIUM   supply_chain   references/backends.md:558     "RUN pip install
+outlines"
+
+Decision: ALLOWED — Allowed (community source, safe verdict)
+
+Scan: axolotl (official/mlops/training/axolotl/community)  Verdict: DANGEROUS
+  CRITICAL supply_chain   references/other.md:310        "curl -LsSf
+https://astral.sh/uv/install.sh | sh"
+  MEDIUM   supply_chain   references/other.md:110        "A: Try upgrading
+deepspeed w: pip install -U deepspeed"
+  MEDIUM   supply_chain   references/other.md:323        "uv pip install
+packaging setuptools wheel"
+  MEDIUM   supply_chain   references/other.md:325        "uv pip install awscli
+pydantic"
+  MEDIUM   supply_chain   references/other.md:648        "Make sure you’ve
+installed the correct version of vLLM by in"
+
+Decision: BLOCKED — Blocked (community source + dangerous verdict, 5 findings).
+--force does not override a dangerous verdict.
+
+Scan: trl-fine-tuning (official/mlops/training/trl-fine-tuning/community)
+Verdict: SAFE
+  MEDIUM   supply_chain   SKILL.md:23                    "pip install trl
+transformers datasets peft accelerate"
+
+Decision: ALLOWED — Allowed (community source, safe verdict)
+
+Scan: unsloth (official/mlops/training/unsloth/community)  Verdict: DANGEROUS
+  CRITICAL supply_chain   references/llms-txt.md:188     "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-txt.md:1263    "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-txt.md:3543    "curl -LsSf
+https://astral.sh/uv/install.sh | sh && source $H"
+  CRITICAL supply_chain   references/llms-txt.md:3754    "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-txt.md:3975    "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-txt.md:4475    "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-txt.md:4594    "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-txt.md:5291    "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-txt.md:5927    "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-txt.md:7141    "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-txt.md:7814    "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-txt.md:11481   "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-full.md:7590   "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-full.md:7843   "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-full.md:8062   "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-full.md:8385   "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-full.md:8708   "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-full.md:8929   "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-full.md:9277   "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-full.md:9557   "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-full.md:9625   "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-full.md:10012  "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-full.md:10312  "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-full.md:12256  "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-full.md:13658  "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-full.md:14275  "curl -fsSL
+https://ollama.com/install.sh | sh"
+  CRITICAL supply_chain   references/llms-full.md:15729  "curl -LsSf
+https://astral.sh/uv/install.sh | sh && source $H"
+  HIGH     structural     (directory):0                  "1860KB total"
+  HIGH     exfiltration   references/llms-txt.md:1331    "-e "SSH_KEY=$(cat
+~/.ssh/container_key.pub)""
+  HIGH     exfiltration   references/llms-txt.md:1352    "ssh-keygen -t rsa -b
+4096 -f ~/.ssh/container_key"
+  HIGH     exfiltration   references/llms-txt.md:4127    "ssh -i
+~/.ssh/container_key -p 2222 unsloth@localhost"
+  HIGH     exfiltration   references/llms-txt.md:4135    "-e "SSH_KEY=$(cat
+~/.ssh/container_key.pub)" \"
+  HIGH     exfiltration   references/llms-txt.md:4708    "-e "SSH_KEY=$(cat
+~/.ssh/container_key.pub)" \"
+  HIGH     exfiltration   references/llms-txt.md:9868    "ssh -i
+~/.ssh/container_key -p 2222 unsloth@localhost"
+  HIGH     exfiltration   references/llms-txt.md:9876    "-e "SSH_KEY=$(cat
+~/.ssh/container_key.pub)" \"
+  HIGH     exfiltration   references/llms-txt.md:11793   "-e "SSH_KEY=$(cat
+~/.ssh/container_key.pub)" \"
+  HIGH     exfiltration   references/llms-txt.md:11960   "ssh-keygen -t rsa -b
+4096 -f ~/.ssh/container_key"
+  HIGH     exfiltration   references/llms-txt.md:12
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-txt.md:1882
+"os.environ["UNSLOTH_VLLM_STANDBY"] = "1""
+  HIGH     exfiltration   references/llms-txt.md:1899
+"os.environ["UNSLOTH_VLLM_STANDBY"] = "1""
+  HIGH     exfiltration   references/llms-txt.md:3427
+"os.environ['UNSLOTH_VLLM_STANDBY'] = '1' # To enable memory "
+  HIGH     exfiltration   references/llms-txt.md:3510    "<table><thead><tr><th
+width="397.4666748046875">Environment "
+  HIGH     exfiltration   references/llms-txt.md:3873
+"os.environ["CUDA_VISIBLE_DEVICES"] = "0" # Optional set GPU "
+  HIGH     exfiltration   references/llms-txt.md:5696    "##
+os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-txt.md:5698    "**URL:**
+llms-txt#os.environ["hf_hub_enable_hf_transfer"]-=-"
+  HIGH     exfiltration   references/llms-txt.md:5965
+"os.environ["WANDB_PROJECT"] = "<name>""
+  HIGH     exfiltration   references/llms-txt.md:5966
+"os.environ["WANDB_LOG_MODEL"] = "checkpoint""
+  HIGH     exfiltration   references/llms-txt.md:7935
+"os.environ["UNSLOTH_STABLE_DOWNLOADS"] = "1""
+  HIGH     exfiltration   references/llms-txt.md:7940
+"os.environ["UNSLOTH_COMPILE_DISABLE"] = "1""
+  HIGH     exfiltration   references/llms-txt.md:7941
+"os.environ["UNSLOTH_DISABLE_FAST_GENERATION"] = "1""
+  HIGH     exfiltration   references/llms-txt.md:10634
+"os.environ["UNSLOTH_WARN_UNINITIALIZED"] = '0'"
+  HIGH     privilege_escalation references/llms-txt.md:761     "</strong>sudo
+apt-get update &#x26;&#x26; sudo apt-get insta"
+  HIGH     privilege_escalation references/llms-txt.md:4146    "* Use
+`USER_PASSWORD` for sudo operations inside container"
+  HIGH     privilege_escalation references/llms-txt.md:4160    "|
+`USER_PASSWORD`    | Password for `unsloth` user (sudo) | "
+  HIGH     privilege_escalation references/llms-txt.md:4647    "</strong>sudo
+apt-get update &#x26;&#x26; sudo apt-get insta"
+  HIGH     privilege_escalation references/llms-txt.md:8109    "sudo apt update
+&& sudo apt install -y wget"
+  HIGH     privilege_escalation references/llms-txt.md:9887    "* Use
+`USER_PASSWORD` for sudo operations inside container"
+  HIGH     privilege_escalation references/llms-txt.md:9899    "|
+`USER_PASSWORD`    | Password for `unsloth` user (sudo) | "
+  HIGH     privilege_escalation references/llms-txt.md:11732   "</strong>sudo
+apt-get update &#x26;&#x26; sudo apt-get insta"
+  HIGH     injection      references/llms-txt.md:400     "U+200B (zero-width
+space)"
+  HIGH     injection      references/llms-txt.md:9050    "U+200B (zero-width
+space)"
+  HIGH     exfiltration   references/llms-full.md:1141   "-e "SSH_KEY=$(cat
+~/.ssh/container_key.pub)" \"
+  HIGH     exfiltration   references/llms-full.md:1155   "ssh-keygen -t rsa -b
+4096 -f ~/.ssh/container_key"
+  HIGH     exfiltration   references/llms-full.md:1158   "-e "SSH_KEY=$(cat
+~/.ssh/container_key.pub)""
+  HIGH     exfiltration   references/llms-full.md:1161   "ssh -i
+~/.ssh/container_key -p 2222 unsloth@localhost"
+  HIGH     exfiltration   references/llms-full.md:1175   "ssh-keygen -t rsa -b
+4096 -f ~/.ssh/container_key"
+  HIGH     exfiltration   references/llms-full.md:1178   "ssh -i
+~/.ssh/container_key -p 2222 unsloth@localhost"
+  HIGH     exfiltration   references/llms-full.md:1206   "-e "SSH_KEY=$(cat
+~/.ssh/container_key.pub)" \"
+  HIGH     exfiltration   references/llms-full.md:4867   "-e "SSH_KEY=$(cat
+~/.ssh/container_key.pub)" \"
+  HIGH     exfiltration   references/llms-full.md:4881   "ssh-keygen -t rsa -b
+4096 -f ~/.ssh/container_key"
+  HIGH     exfiltration   references/llms-full.md:4884   "-e "SSH_KEY=$(cat
+~/.ssh/container_key.pub)""
+  HIGH     exfiltration   references/llms-full.md:4887   "ssh -i
+~/.ssh/container_key -p 2222 unsloth@localhost"
+  HIGH     exfiltration   references/llms-full.md:4917   "-e "SSH_KEY=$(cat
+~/.ssh/container_key.pub)" \"
+  HIGH     exfiltration   references/llms-full.md:4111
+"os.environ["UNSLOTH_VLLM_STANDBY"] = "1""
+  HIGH     exfiltration   references/llms-full.md:4186
+"os.environ["UNSLOTH_VLLM_STANDBY"] = "1""
+  HIGH     exfiltration   references/llms-full.md:4471
+"os.environ["CUDA_VISIBLE_DEVICES"] = "0" # Optional set GPU "
+  HIGH     exfiltration   references/llms-full.md:4632
+"os.environ["UNSLOTH_WARN_UNINITIALIZED"] = '0'"
+  HIGH     exfiltration   references/llms-full.md:4953
+"os.environ['UNSLOTH_VLLM_STANDBY'] = '1' # To enable memory "
+  HIGH     exfiltration   references/llms-full.md:6100
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:6154
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:6450
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:6515
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0" # Can sometime"
+  HIGH     exfiltration   references/llms-full.md:7679
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0" # Can sometime"
+  HIGH     exfiltration   references/llms-full.md:7878
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:8156
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0" # Can sometime"
+  HIGH     exfiltration   references/llms-full.md:8421
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:8485
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0" # Can sometime"
+  HIGH     exfiltration   references/llms-full.md:8743
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:8967
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:9315
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:9359
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:9593
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:9661
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:9730
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0" # Can sometime"
+  HIGH     exfiltration   references/llms-full.md:9824
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0" # Can sometime"
+  HIGH     exfiltration   references/llms-full.md:10120
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0" # Can sometime"
+  HIGH     exfiltration   references/llms-full.md:10359
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:11671
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:11718
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:11905
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0" # Can sometime"
+  HIGH     exfiltration   references/llms-full.md:12118
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0" # Can sometime"
+  HIGH     exfiltration   references/llms-full.md:12292
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:12438
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:13325  "#
+os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:13686
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:14307
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:15300
+"os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1""
+  HIGH     exfiltration   references/llms-full.md:15965
+"os.environ["WANDB_PROJECT"] = "<name>""
+  HIGH     exfiltration   references/llms-full.md:15966
+"os.environ["WANDB_LOG_MODEL"] = "checkpoint""
+  HIGH     exfiltration   references/llms-full.md:16225
+"os.environ["UNSLOTH_STABLE_DOWNLOADS"] = "1""
+  HIGH     exfiltration   references/llms-full.md:16236
+"os.environ["UNSLOTH_COMPILE_DISABLE"] = "1""
+  HIGH     exfiltration   references/llms-full.md:16237
+"os.environ["UNSLOTH_DISABLE_FAST_GENERATION"] = "1""
+  HIGH     exfiltration   references/llms-full.md:16683  "<table><thead><tr><th
+width="397.4666748046875">Environment "
+  HIGH     privilege_escalation references/llms-full.md:1078   "</strong>sudo
+apt-get update &#x26;&#x26; sudo apt-get insta"
+  HIGH     privilege_escalation references/llms-full.md:1186   "|
+`USER_PASSWORD`    | Password for `unsloth` user (sudo) | "
+  HIGH     privilege_escalation references/llms-full.md:1217   "* Use
+`USER_PASSWORD` for sudo operations inside container"
+  HIGH     privilege_escalation references/llms-full.md:1241   "</strong>sudo
+apt-get update &#x26;&#x26; sudo apt-get insta"
+  HIGH     privilege_escalation references/llms-full.md:1471   "sudo apt update
+&& sudo apt upgrade -y"
+  HIGH     privilege_escalation references/llms-full.md:1477   "sudo apt install
+python3-pip"
+  HIGH     privilege_escalation references/llms-full.md:4804   "</strong>sudo
+apt-get update &#x26;&#x26; sudo apt-get insta"
+  HIGH     privilege_escalation references/llms-full.md:4897   "|
+`USER_PASSWORD`    | Password for `unsloth` user (sudo) | "
+  HIGH     privilege_escalation references/llms-full.md:4928   "* Use
+`USER_PASSWORD` for sudo operations inside container"
+  HIGH     privilege_escalation references/llms-full.md:15549  "sudo apt update
+&& sudo apt install -y wget"
+  HIGH     injection      references/llms-full.md:556    "U+200B (zero-width
+space)"
+  HIGH     injection      references/llms-full.md:1752   "U+200B (zero-width
+space)"
+  MEDIUM   structural     references/llms-txt.md:0       "794KB"
+  MEDIUM   structural     references/llms-full.md:0      "1051KB"
+  MEDIUM   persistence    references/llms-txt.md:1352    "ssh-keygen -t rsa -b
+4096 -f ~/.ssh/container_key"
+  MEDIUM   persistence    references/llms-txt.md:11960   "ssh-keygen -t rsa -b
+4096 -f ~/.ssh/container_key"
+  MEDIUM   traversal      references/llms-txt.md:9373    "{% content-ref
+url="../../get-started/fine-tuning-llms-guide"
+  MEDIUM   supply_chain   references/llms-txt.md:7       "## !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-txt.md:151     "3. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-txt.md:745     "For Windows, `pip
+install unsloth` now works, however you mu"
+  MEDIUM   supply_chain   references/llms-txt.md:857     "1. Install `torch` and
+`triton`. Go to <https://pytorch.org>"
+  MEDIUM   supply_chain   references/llms-txt.md:958     "pip install "unsloth @
+git+https://github.com/unslo"
+  MEDIUM   supply_chain   references/llms-txt.md:1047    "2. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-txt.md:1244    "3. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-txt.md:1593    "uv pip install -U vllm
+--pre --extra-index-url https://wheel"
+  MEDIUM   supply_chain   references/llms-txt.md:2188    "pip install --no-deps
+unsloth unsloth-zoo"
+  MEDIUM   supply_chain   references/llms-txt.md:2189    "pip install --no-deps
+git+https://github.com/unslothai/unslo"
+  MEDIUM   supply_chain   references/llms-txt.md:2190    "pip install "unsloth @
+git+https://github.com/unslothai"
+  MEDIUM   supply_chain   references/llms-txt.md:3106    "3. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-txt.md:3353    "pip install unsloth"
+  MEDIUM   supply_chain   references/llms-txt.md:3454    "<pre
+class="language-bash"><code class="lang-bash">pip insta"
+  MEDIUM   supply_chain   references/llms-txt.md:3455    "<strong>pip install
+--upgrade --force-reinstall --no-cache-d"
+  MEDIUM   supply_chain   references/llms-txt.md:3466    "pip install --upgrade
+unsloth unsloth_zoo"
+  MEDIUM   supply_chain   references/llms-txt.md:3536    "pip install ninja"
+  MEDIUM   supply_chain   references/llms-txt.md:3541    "uv pip install
+unsloth"
+  MEDIUM   supply_chain   references/llms-txt.md:3549    "uv pip install -U vllm
+--torch-backend=cu128"
+  MEDIUM   supply_chain   references/llms-txt.md:3551    "uv pip install unsloth
+unsloth_zoo bitsandbytes"
+  MEDIUM   supply_chain   references/llms-txt.md:3553    "uv pip install -qqq \"
+  MEDIUM   supply_chain   references/llms-txt.md:3561    "pip install ninja"
+  MEDIUM   supply_chain   references/llms-txt.md:3566    "uv pip install -U
+transformers"
+  MEDIUM   supply_chain   references/llms-txt.md:3576    "pip install -U vllm
+--extra-index-url https://download.pytor"
+  MEDIUM   supply_chain   references/llms-txt.md:3578    "pip install unsloth
+unsloth_zoo bitsandbytes"
+  MEDIUM   supply_chain   references/llms-txt.md:3584    "pip install ninja"
+  MEDIUM   supply_chain   references/llms-txt.md:3589    "pip install -U
+triton>=3.3.1"
+  MEDIUM   supply_chain   references/llms-txt.md:3591    "uv pip install -U
+transformers"
+  MEDIUM   supply_chain   references/llms-txt.md:3609    "pip install -v
+--no-build-isolation -U git+https://github.co"
+  MEDIUM   supply_chain   references/llms-txt.md:3728    "3. **OR** download the
+model via (after installing `pip inst"
+  MEDIUM   supply_chain   references/llms-txt.md:3821    "!pip install --upgrade
+-qqq uv"
+  MEDIUM   supply_chain   references/llms-txt.md:3824    "!uv pip install -qqq
+\"
+  MEDIUM   supply_chain   references/llms-txt.md:3955    "3. **OR** download the
+model via (after installing `pip inst"
+  MEDIUM   supply_chain   references/llms-txt.md:4005    "pip install . && \"
+  MEDIUM   supply_chain   references/llms-txt.md:4280    "`pip install --upgrade
+--force-reinstall --no-cache-dir --no"
+  MEDIUM   supply_chain   references/llms-txt.md:4455    "3. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-txt.md:4586    "Download the model via
+(after installing `pip install huggin"
+  MEDIUM   supply_chain   references/llms-txt.md:5087    "* If you have
+different versions of torch, transformers etc."
+  MEDIUM   supply_chain   references/llms-txt.md:5262    "2. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-txt.md:5415    "12. You can also
+download the model via (after installing `p"
+  MEDIUM   supply_chain   references/llms-txt.md:5912    "3. **OR** download the
+model via (after installing `pip inst"
+  MEDIUM   supply_chain   references/llms-txt.md:6707    "3. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-txt.md:6897    "3. **OR** download the
+model via (after installing `pip inst"
+  MEDIUM   supply_chain   references/llms-txt.md:7123    "2. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-txt.md:7598    "!pip install --upgrade
+-qqq uv"
+  MEDIUM   supply_chain   references/llms-txt.md:7601    "!uv pip install -qqq
+\"
+  MEDIUM   supply_chain   references/llms-txt.md:7801    "Download the model via
+(after installing `pip install huggin"
+  MEDIUM   supply_chain   references/llms-txt.md:8341    "Note that `pip install
+unsloth` will not work for this setup"
+  MEDIUM   supply_chain   references/llms-txt.md:9137    "We would recommend
+beginners to utilise our pre-made [notebo"
+  MEDIUM   supply_chain   references/llms-txt.md:9933    "pip install --upgrade
+--no-cache-dir --force-reinstall unslo"
+  MEDIUM   supply_chain   references/llms-txt.md:9999    "If installing locally,
+ensure you have the correct [requirem"
+  MEDIUM   supply_chain   references/llms-txt.md:10138   "2. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-txt.md:10419   "Download the model via
+(after installing `pip install huggin"
+  MEDIUM   supply_chain   references/llms-txt.md:10452   "## pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-txt.md:10513   "pip install --upgrade
+pip"
+  MEDIUM   supply_chain   references/llms-txt.md:10514   "pip install uv"
+  MEDIUM   supply_chain   references/llms-txt.md:10515   "uv pip install
+"sglang" --prerelease=allow"
+  MEDIUM   supply_chain   references/llms-txt.md:10581   "2. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-txt.md:10751   "1. Obtain the latest
+`unsloth` via `pip install --upgrade un"
+  MEDIUM   supply_chain   references/llms-txt.md:10994   "pip install unsloth"
+  MEDIUM   supply_chain   references/llms-txt.md:11001   "pip install unsloth"
+  MEDIUM   supply_chain   references/llms-txt.md:11462   "3. **OR** download the
+model via (after installing `pip inst"
+  MEDIUM   supply_chain   references/llms-txt.md:11606   "pip install unsloth"
+  MEDIUM   supply_chain   references/llms-txt.md:11692   "!pip install wandb
+--upgrade"
+  MEDIUM   supply_chain   references/llms-txt.md:11886   "pip install unsloth"
+  MEDIUM   supply_chain   references/llms-txt.md:12024   "pip install unsloth"
+  MEDIUM   supply_chain   references/llms-txt.md:12029   "pip uninstall unsloth
+unsloth_zoo -y && pip install --no-dep"
+  MEDIUM   supply_chain   references/llms-txt.md:12034   "pip install --upgrade
+--force-reinstall --no-cache-dir --no-"
+  MEDIUM   supply_chain   references/llms-txt.md:12035   "pip install --upgrade
+--force-reinstall --no-cache-dir --no-"
+  MEDIUM   supply_chain   references/llms-txt.md:12040   "pip install --upgrade
+pip"
+  MEDIUM   supply_chain   references/llms-txt.md:12041   "pip install "unsloth @
+git+https://github.co"
+  MEDIUM   supply_chain   references/llms-txt.md:1057    "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-txt.md:1275    "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-txt.md:1718    "git clone
+https://github.com/ggerganov/llama.cpp"
+  MEDIUM   supply_chain   references/llms-txt.md:3538    "git clone --depth=1
+https://github.com/facebookresearch/xfor"
+  MEDIUM   supply_chain   references/llms-txt.md:3563    "git clone --depth=1
+https://github.com/facebookresearch/xfor"
+  MEDIUM   supply_chain   references/llms-txt.md:3586    "git clone --depth=1
+https://github.com/facebookresearch/xfor"
+  MEDIUM   supply_chain   references/llms-txt.md:3806    "RUN git clone
+--depth=1 https://github.com/facebookresearch/"
+  MEDIUM   supply_chain   references/llms-txt.md:3988    "git clone
+https://github.com/ggerganov/llama.cpp"
+  MEDIUM   supply_chain   references/llms-txt.md:4001    "RUN git clone
+https://github.com/triton-lang/triton.git && \"
+  MEDIUM   supply_chain   references/llms-txt.md:4322    "git clone
+https://github.com/ggerganov/llama.cpp"
+  MEDIUM   supply_chain   references/llms-txt.md:5456    "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-txt.md:5939    "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-txt.md:6984    "git clone
+https://github.com/ggerganov/llama.cpp"
+  MEDIUM   supply_chain   references/llms-txt.md:6996    "git clone
+https://github.com/ggerganov/llama.cpp"
+  MEDIUM   supply_chain   references/llms-txt.md:8927    "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-txt.md:9619    "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-txt.md:10427   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-txt.md:10609   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-txt.md:11493   "git clone
+https://github.com/ggerganov/llama.cpp"
+  MEDIUM   persistence    references/llms-full.md:1155   "ssh-keygen -t rsa -b
+4096 -f ~/.ssh/container_key"
+  MEDIUM   persistence    references/llms-full.md:1175   "ssh-keygen -t rsa -b
+4096 -f ~/.ssh/container_key"
+  MEDIUM   persistence    references/llms-full.md:4881   "ssh-keygen -t rsa -b
+4096 -f ~/.ssh/container_key"
+  MEDIUM   network        references/llms-full.md:7743   "base_url =
+"http://127.0.0.1:8001/v1","
+  MEDIUM   network        references/llms-full.md:8233   "base_url =
+"http://127.0.0.1:8001/v1","
+  MEDIUM   traversal      references/llms-full.md:14498  "{% content-ref
+url="../../get-started/fine-tuning-llms-guide"
+  MEDIUM   supply_chain   references/llms-full.md:62     "pip install unsloth"
+  MEDIUM   supply_chain   references/llms-full.md:126    "* If you have
+different versions of torch, transformers etc."
+  MEDIUM   supply_chain   references/llms-full.md:921    "pip install unsloth"
+  MEDIUM   supply_chain   references/llms-full.md:934    "pip install --upgrade
+unsloth unsloth_zoo"
+  MEDIUM   supply_chain   references/llms-full.md:939    "<pre
+class="language-bash"><code class="lang-bash">pip insta"
+  MEDIUM   supply_chain   references/llms-full.md:940    "<strong>pip install
+--upgrade --force-reinstall --no-cache-d"
+  MEDIUM   supply_chain   references/llms-full.md:961    "pip install unsloth"
+  MEDIUM   supply_chain   references/llms-full.md:967    "pip uninstall unsloth
+unsloth_zoo -y && pip install --no-dep"
+  MEDIUM   supply_chain   references/llms-full.md:981    "pip install --upgrade
+--force-reinstall --no-cache-dir --no-"
+  MEDIUM   supply_chain   references/llms-full.md:982    "pip install --upgrade
+--force-reinstall --no-cache-dir --no-"
+  MEDIUM   supply_chain   references/llms-full.md:1000   "pip install --upgrade
+pip"
+  MEDIUM   supply_chain   references/llms-full.md:1001   "pip install "unsloth @
+git+https://github.co"
+  MEDIUM   supply_chain   references/llms-full.md:1007   "pip install --upgrade
+pip"
+  MEDIUM   supply_chain   references/llms-full.md:1008   "pip install "unsloth @
+git+https://github.co"
+  MEDIUM   supply_chain   references/llms-full.md:1014   "pip install "unsloth @
+git+https://gi"
+  MEDIUM   supply_chain   references/llms-full.md:1015   "pip install "unsloth @
+git+https://gi"
+  MEDIUM   supply_chain   references/llms-full.md:1016   "pip install "unsloth @
+git+https://github.co"
+  MEDIUM   supply_chain   references/llms-full.md:1017   "pip install "unsloth @
+git+https://github.co"
+  MEDIUM   supply_chain   references/llms-full.md:1019   "pip install "unsloth @
+git+https://github.co"
+  MEDIUM   supply_chain   references/llms-full.md:1020   "pip install "unsloth @
+git+https://gi"
+  MEDIUM   supply_chain   references/llms-full.md:1022   "pip install "unsloth @
+git+https://github.co"
+  MEDIUM   supply_chain   references/llms-full.md:1023   "pip install "unsloth @
+git+https://gi"
+  MEDIUM   supply_chain   references/llms-full.md:1036   "except: raise
+ImportError('Install torch via `pip install to"
+  MEDIUM   supply_chain   references/llms-full.md:1051   "print(f'pip install
+--upgrade pip && pip install "unsloth[{x"
+  MEDIUM   supply_chain   references/llms-full.md:1225   "For Windows, `pip
+install unsloth` now works, however you mu"
+  MEDIUM   supply_chain   references/llms-full.md:1361   "pip install "unsloth @
+git+https://github.com/unslo"
+  MEDIUM   supply_chain   references/llms-full.md:1389   "1. Install `torch` and
+`triton`. Go to <https://pytorch.org>"
+  MEDIUM   supply_chain   references/llms-full.md:1483   "pip install unsloth"
+  MEDIUM   supply_chain   references/llms-full.md:1546   "pip install --no-deps
+unsloth unsloth-zoo"
+  MEDIUM   supply_chain   references/llms-full.md:1547   "pip install --no-deps
+git+https://github.com/unslothai/unslo"
+  MEDIUM   supply_chain   references/llms-full.md:1548   "pip install "unsloth @
+git+https://github.com/unslothai"
+  MEDIUM   supply_chain   references/llms-full.md:1639   "pip install unsloth"
+  MEDIUM   supply_chain   references/llms-full.md:1841   "We would recommend
+beginners to utilise our pre-made [notebo"
+  MEDIUM   supply_chain   references/llms-full.md:3444   "* If you're using GRPO
+with Unsloth locally, please "pip ins"
+  MEDIUM   supply_chain   references/llms-full.md:3546   "pip install unsloth
+vllm"
+  MEDIUM   supply_chain   references/llms-full.md:3612   "If installing locally,
+ensure you have the correct [requirem"
+  MEDIUM   supply_chain   references/llms-full.md:4563   "uv pip install -U vllm
+--pre --extra-index-url https://wheel"
+  MEDIUM   supply_chain   references/llms-full.md:4622   "1. Obtain the latest
+`unsloth` via `pip install --upgrade un"
+  MEDIUM   supply_chain   references/llms-full.md:5308   "!pip install --upgrade
+-qqq uv"
+  MEDIUM   supply_chain   references/llms-full.md:5311   "!uv pip install -qqq
+\"
+  MEDIUM   supply_chain   references/llms-full.md:6095   "12. You can also
+download the model via (after installing `p"
+  MEDIUM   supply_chain   references/llms-full.md:6098   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:6149   "2. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-full.md:6152   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:6445   "3. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-full.md:6448   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:6510   "3. Or, download the
+model via (after installing `pip install"
+  MEDIUM   supply_chain   references/llms-full.md:6513   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:6581   "pip install --upgrade
+--force-reinstall --no-cache-dir unslo"
+  MEDIUM   supply_chain   references/llms-full.md:6856   "Note that `pip install
+unsloth` will not work for this setup"
+  MEDIUM   supply_chain   references/llms-full.md:6860   "!pip install --upgrade
+-qqq uv"
+  MEDIUM   supply_chain   references/llms-full.md:6863   "!uv pip install -qqq
+\"
+  MEDIUM   supply_chain   references/llms-full.md:7674   "Download the model via
+(after installing `pip install huggin"
+  MEDIUM   supply_chain   references/llms-full.md:7677   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:7737   "Then use OpenAI's
+Python library after `pip install openai` "
+  MEDIUM   supply_chain   references/llms-full.md:7873   "3. **OR** download the
+model via (after installing `pip inst"
+  MEDIUM   supply_chain   references/llms-full.md:7876   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:7929   "!pip install --upgrade
+unsloth"
+  MEDIUM   supply_chain   references/llms-full.md:7945   "pip install --upgrade
+--force-reinstall --no-cache-dir unslo"
+  MEDIUM   supply_chain   references/llms-full.md:8151   "Download the model via
+(after installing `pip install huggin"
+  MEDIUM   supply_chain   references/llms-full.md:8154   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:8227   "Then use OpenAI's
+Python library after `pip install openai` "
+  MEDIUM   supply_chain   references/llms-full.md:8416   "3. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-full.md:8419   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:8480   "3. Or, download the
+model via (after installing `pip install"
+  MEDIUM   supply_chain   references/llms-full.md:8483   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:8738   "3. **OR** download the
+model via (after installing `pip inst"
+  MEDIUM   supply_chain   references/llms-full.md:8741   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:8962   "3. **OR** download the
+model via (after installing `pip inst"
+  MEDIUM   supply_chain   references/llms-full.md:8965   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:9310   "2. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-full.md:9313   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:9354   "2. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-full.md:9357   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:9412   "pip install --upgrade
+--force-reinstall --no-cache-dir unslo"
+  MEDIUM   supply_chain   references/llms-full.md:9588   "3. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-full.md:9591   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:9656   "3. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-full.md:9659   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:9725   "3. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-full.md:9728   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:9819   "3. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-full.md:9822   "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:9893   "pip install --upgrade
+--force-reinstall --no-cache-dir unslo"
+  MEDIUM   supply_chain   references/llms-full.md:10113  "3. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-full.md:10118  "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:10354  "3. **OR** download the
+model via (after installing `pip inst"
+  MEDIUM   supply_chain   references/llms-full.md:10357  "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:11545  "!pip install --upgrade
+unsloth"
+  MEDIUM   supply_chain   references/llms-full.md:11562  "pip install --upgrade
+--force-reinstall --no-cache-dir unslo"
+  MEDIUM   supply_chain   references/llms-full.md:11666  "2. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-full.md:11669  "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:11716  "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:11898  "3. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-full.md:11903  "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:12113  "Download the model via
+(after installing `pip install huggin"
+  MEDIUM   supply_chain   references/llms-full.md:12116  "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:12287  "3. **OR** download the
+model via (after installing `pip inst"
+  MEDIUM   supply_chain   references/llms-full.md:12290  "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:12376  "pip install --upgrade
+--force-reinstall --no-cache-dir unslo"
+  MEDIUM   supply_chain   references/llms-full.md:12431  "2. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-full.md:12436  "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:13323  "# pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:13681  "2. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-full.md:13684  "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:14302  "2. Download the model
+via (after installing `pip install hug"
+  MEDIUM   supply_chain   references/llms-full.md:14305  "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:14607  "pip install --upgrade
+pip"
+  MEDIUM   supply_chain   references/llms-full.md:14608  "pip install uv"
+  MEDIUM   supply_chain   references/llms-full.md:14609  "uv pip install -U vllm
+--torch-backend=auto"
+  MEDIUM   supply_chain   references/llms-full.md:14617  "pip install --upgrade
+pip"
+  MEDIUM   supply_chain   references/llms-full.md:14618  "pip install uv"
+  MEDIUM   supply_chain   references/llms-full.md:14619  "uv pip install -U
+vllm"
+  MEDIUM   supply_chain   references/llms-full.md:14669  "pip install --upgrade
+pip"
+  MEDIUM   supply_chain   references/llms-full.md:14670  "pip install uv"
+  MEDIUM   supply_chain   references/llms-full.md:14671  "uv pip install
+"sglang" --prerelease=allow"
+  MEDIUM   supply_chain   references/llms-full.md:15298  "# !pip install
+huggingface_hub hf_transfer"
+  MEDIUM   supply_chain   references/llms-full.md:15581  "pip install . && \"
+  MEDIUM   supply_chain   references/llms-full.md:15678  "pip install unsloth"
+  MEDIUM   supply_chain   references/llms-full.md:15686  "pip install unsloth"
+  MEDIUM   supply_chain   references/llms-full.md:15700  "pip install ninja"
+  MEDIUM   supply_chain   references/llms-full.md:15717  "uv pip install
+unsloth"
+  MEDIUM   supply_chain   references/llms-full.md:15742  "uv pip install -U vllm
+--torch-backend=cu128"
+  MEDIUM   supply_chain   references/llms-full.md:15749  "uv pip install unsloth
+unsloth_zoo bitsandbytes"
+  MEDIUM   supply_chain   references/llms-full.md:15755  "uv pip install -qqq \"
+  MEDIUM   supply_chain   references/llms-full.md:15768  "pip install ninja"
+  MEDIUM   supply_chain   references/llms-full.md:15778  "uv pip install -U
+transformers"
+  MEDIUM   supply_chain   references/llms-full.md:15811  "pip install -U vllm
+--extra-index-url https://download.pytor"
+  MEDIUM   supply_chain   references/llms-full.md:15820  "pip install unsloth
+unsloth_zoo bitsandbytes"
+  MEDIUM   supply_chain   references/llms-full.md:15833  "pip install ninja"
+  MEDIUM   supply_chain   references/llms-full.md:15845  "pip install -U
+triton>=3.3.1"
+  MEDIUM   supply_chain   references/llms-full.md:15852  "uv pip install -U
+transformers"
+  MEDIUM   supply_chain   references/llms-full.md:15887  "pip install -v
+--no-build-isolation -U git+https://github.co"
+  MEDIUM   supply_chain   references/llms-full.md:15958  "!pip install wandb
+--upgrade"
+  MEDIUM   supply_chain   references/llms-full.md:16044  "`pip install --upgrade
+--force-reinstall --no-cache-dir --no"
+  MEDIUM   supply_chain   references/llms-full.md:16270  "`pip install --upgrade
+--force-reinstall --no-cache-dir --no"
+  MEDIUM   supply_chain   references/llms-full.md:16274  "`pip install --upgrade
+--force-reinstall --no-cache-dir --no"
+  MEDIUM   supply_chain   references/llms-full.md:16668  "pip install --upgrade
+--no-cache-dir --force-reinstall unslo"
+  MEDIUM   supply_chain   references/llms-full.md:5879   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:6009   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:6430   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:6484   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:6817   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:7096   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:7341   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:7369   "git clone
+https://github.com/sgl-project/sglang"
+  MEDIUM   supply_chain   references/llms-full.md:7376   "git clone
+https://github.com/triton-lang/triton"
+  MEDIUM   supply_chain   references/llms-full.md:7633   "git clone
+https://github.com/ggerganov/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:7859   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:8109   "git clone
+https://github.com/ggerganov/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:8401   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:8453   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:8724   "git clone
+https://github.com/ggerganov/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:8949   "git clone
+https://github.com/ggerganov/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:9303   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:9573   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:9641   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:9702   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:9796   "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:10056  "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:10076  "git clone
+https://github.com/ggerganov/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:10333  "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:11659  "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:11863  "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:12071  "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:12274  "git clone
+https://github.com/ggerganov/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:12424  "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:13312  "git clone
+https://github.com/ggerganov/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:13674  "git clone
+https://github.com/ggerganov/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:14295  "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:14419  "git clone
+https://github.com/ggerganov/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:14466  "git clone
+https://github.com/ggerganov/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:15288  "git clone
+https://github.com/ggml-org/llama.cpp"
+  MEDIUM   supply_chain   references/llms-full.md:15577  "RUN git clone
+https://github.com/triton-lang/triton.git && \"
+  MEDIUM   supply_chain   references/llms-full.md:15585  "RUN git clone
+--depth=1 https://github.com/facebookresearch/"
+  MEDIUM   supply_chain   references/llms-full.md:15702  "git clone --depth=1
+https://github.com/facebookresearch/xfor"
+  MEDIUM   supply_chain   references/llms-full.md:15770  "git clone --depth=1
+https://github.com/facebookresearch/xfor"
+  MEDIUM   supply_chain   references/llms-full.md:15835  "git clone --depth=1
+https://github.com/facebookresearch/xfor"
+  MEDIUM   supply_chain   references/llms-full.md:16080  "git clone
+https://github.com/ggerganov/llama.cpp"
+
+Decision: BLOCKED — Blocked (community source + dangerous verdict, 405
+findings). --force does not override a dangerous verdict.
+
+Scan: baoyu-article-illustrator
+(official/creative/baoyu-article-illustrator/community)  Verdict: SAFE
+Decision: ALLOWED — Allowed (community source, safe verdict)
+
+Scan: baoyu-comic (official/creative/baoyu-comic/community)  Verdict: SAFE
+Decision: ALLOWED — Allowed (community source, safe verdict)
+
+Scan: creative-ideation (official/creative/creative-ideation/community)
+Verdict: SAFE
+Decision: ALLOWED — Allowed (community source, safe verdict)
+
+Scan: pixel-art (official/creative/pixel-art/community)  Verdict: SAFE
+  MEDIUM   execution      ATTRIBUTION.md:31              "- `ffmpeg` invocation
+switched from `os.system` to `subproce"
+  MEDIUM   supply_chain   SKILL.md:191                   "- Pillow (`pip install
+Pillow`)"
+  MEDIUM   execution      scripts/pixel_art_video.py:297 "subprocess.run("
+  MEDIUM   execution      scripts/pixel_art_video.py:309 "subprocess.run("
+
+Decision: ALLOWED — Allowed (community source, safe verdict)
+
+Scan: minecraft-modpack-server
+(official/gaming/minecraft-modpack-server/community)  Verdict: CAUTION
+  HIGH     privilege_escalation SKILL.md:45                    "- Minecraft
+1.21+ → Java 21: `sudo apt install openjdk-21-jr"
+  HIGH     privilege_escalation SKILL.md:46                    "- Minecraft
+1.18-1.20 → Java 17: `sudo apt install openjdk-1"
+  HIGH     privilege_escalation SKILL.md:47                    "- Minecraft 1.16
+and below → Java 8: `sudo apt install openj"
+  HIGH     privilege_escalation SKILL.md:125                   "sudo ufw allow
+25565/tcp comment "Minecraft Server""
+  HIGH     privilege_escalation SKILL.md:127                   "Check with:
+`sudo ufw status | grep 25565`"
+  MEDIUM   persistence    SKILL.md:170                   "(crontab -l
+2>/dev/null | grep -v "minecraft/backup.sh"; ech"
+  MEDIUM   obfuscation    SKILL.md:68
+"motd=\u00a7b\u00a7lServer Name \u00a7r\u00a78| \u00a7aModpac"
+
+Decision: BLOCKED — Blocked (community source + caution verdict, 7 findings).
+Use --force to override.
+
+Scan: pokemon-player (official/gaming/pokemon-player/community)  Verdict: SAFE
+Decision: ALLOWED — Allowed (community source, safe verdict)
+
+Scan: dspy (official/mlops/research/dspy/community)  Verdict: SAFE
+  MEDIUM   supply_chain   SKILL.md:33                    "pip install dspy"
+  MEDIUM   supply_chain   SKILL.md:36                    "pip install
+git+https://github.com/stanfordnlp/dspy.git"
+  MEDIUM   supply_chain   SKILL.md:39                    "pip install dspy
+# OpenAI"
+  MEDIUM   supply_chain   SKILL.md:40                    "pip install dspy     #
+Anthropic Claude"
+  MEDIUM   supply_chain   SKILL.md:41                    "pip install dspy
+# All providers"
+
+Decision: ALLOWED — Allowed (community source, safe verdict)

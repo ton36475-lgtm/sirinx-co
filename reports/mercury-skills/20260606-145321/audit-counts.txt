@@ -1,0 +1,5 @@
+all=130
+whitelist_candidates=62
+path_approved=62
+content_risk_blocked=32
+approved_clean=30

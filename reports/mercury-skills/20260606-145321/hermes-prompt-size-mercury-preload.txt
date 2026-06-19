@@ -1,0 +1,15 @@
+Prompt-size breakdown (platform=cli, model=gpt-5.5)
+
+  System prompt total :   29,215 B  (28.5 KB, 29,081 chars)
+
+  Major blocks:
+    skills index       :   15,989 B  (15.6 KB)
+    memory             :        0 B  (0.0 KB)
+    user profile       :        0 B  (0.0 KB)
+
+  Prompt tiers:
+    stable (identity/guidance/skills)   :   29,153 B  (28.5 KB)
+    context (AGENTS.md/cwd files)       :        0 B  (0.0 KB)
+    volatile (memory/profile/timestamp) :       60 B  (0.1 KB)
+
+  Tool schemas         :   56,096 B  (54.8 KB, 36 tools)

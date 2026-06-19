@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/proof-status.schema.json",
+  "title": "SIRINX Proof Status",
+  "type": "string",
+  "enum": [
+    "UNVERIFIED",
+    "LOCAL",
+    "EVIDENCED",
+    "COMMITTED",
+    "EXTERNAL",
+    "PROVEN"
+  ]
+}

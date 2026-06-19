@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/evidence.schema.json",
+  "title": "SIRINX Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evidence_id",
+    "kind",
+    "source",
+    "captured_at",
+    "proof_status",
+    "hashes"
+  ],
+  "properties": {
+    "evidence_id": {
+      "type": "string",
+      "pattern": "^ev-[0-9]{8}-[a-z0-9-]+$"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "screenshot",
+        "prompt",
+        "transcript",
+        "export",
+        "git-proof",
+        "note"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "origin"],
+      "properties": {
+        "path": { "type": "string" },
+        "origin": {
+          "type": "string",
+          "enum": ["local", "generated", "imported", "external-reference"]
+        },
+        "mime_type": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "captured_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "proof_status": {
+      "$ref": "proof-status.schema.json"
+    },
+    "hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha256"],
+      "properties": {
+        "sha256": {
+          "type": "string",
+          "pattern": "^[A-Fa-f0-9]{64}$"
+        },
+        "git_object_id": { "type": "string" }
+      }
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["rel", "target"],
+        "properties": {
+          "rel": { "type": "string" },
+          "target": { "type": "string" }
+        }
+      }
+    },
+    "notes": { "type": "string" }
+  }
+}

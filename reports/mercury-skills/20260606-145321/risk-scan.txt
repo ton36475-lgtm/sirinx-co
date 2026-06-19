@@ -1,0 +1,419 @@
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/agent-audit-logging/SKILL.md -----
+51:| **Token Usage** | Prompt/completion counts | High |
+78:    TOKEN_USAGE = "agent.token_usage"
+108:    token_count: int = 0
+408:            "token_budget_compliance": self._check_budget_compliance(events),
+512:        elif event_type in ("agent.invocation", "agent.tool_call", "agent.token_usage"):
+571:- ⚠️ Token budget at 87% — review recommended
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/agent-handoff-protocols/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/agent-health-monitoring/SKILL.md -----
+36:| **Token Consumption** | Tokens used per agent run | Budget anomalies indicate runaway agents |
+69:        token_usage = 0
+224:    condition: token_usage > daily_budget * 0.5
+227:    message: "Agent {name} used {usage} tokens in last hour (50% of daily budget)"
+239:| **Token Burn Rate** | Tokens/min per agent | Line chart with budget line |
+279:### Incident: Token Budget Spike
+295:| No alert deduplication | Alert fatigue leads to ignored alerts | Group by fingerprint, rate-limit |
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/agent-task-delegation/SKILL.md -----
+195:    """Token-bucket rate limiter for agent invocations."""
+198:        self.rate = rate  # tokens per second
+200:        self.tokens = burst
+204:        """Block until a token is available."""
+207:            if self.tokens >= 1:
+208:                self.tokens -= 1
+215:        self.tokens = min(self.burst, self.tokens + elapsed * self.rate)
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/ai-agent-design/SKILL.md -----
+172:- **Capacity**: Limited by context window (8K-200K tokens)
+179:    def __init__(self, max_tokens: int = 8000):
+181:        self.max_tokens = max_tokens
+190:        while total > self.max_tokens and len(self.messages) > 1:
+274:| **Sliding Window** | Keep most recent tokens up to a limit | General purpose |
+275:| **Summarization** | Summarize older context to save tokens | Long conversations |
+586:5. **Have a kill switch** — an escalation path that bypasses the agent entirely
+600:**Fix**: Implement summarization or sliding windows. Monitor token usage per session.
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/error-recovery-retry/SKILL.md -----
+35:| **Context Overflow** | Token limit exceeded | Rare | ✅ Yes — compress and retry |
+549:| Infinite retries | Never gives up, burns tokens | Always set max retries |
+551:| Retrying permanent errors | Wastes time and tokens | Classify errors: retryable vs not |
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/gbrain-lite/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/memory-management/SKILL.md -----
+22:Long-running agents face a fundamental problem: they can't remember everything, but forgetting the wrong thing breaks their usefulness. This skill covers memory architectures that balance context retention, token budget, and retrieval accuracy for agents that run for hours, days, or continuously.
+33:| **Token Bloat** | Every message keeps growing | 10x+ cost increase per task |
+42:| **L1 — Working** | In-context (LLM window) | 8K-200K tokens | Instant | $$$ | Current task, immediate context |
+66:    token_count: int = 0
+75:    def __init__(self, llm, vector_store, max_context_tokens: int = 8000):
+78:        self.max_context_tokens = max_context_tokens
+82:        self.current_tokens = 0
+101:            token_count=self._count_tokens(content)
+106:        self.current_tokens += entry.token_count
+124:                 summarizer, max_tokens: int = 8000):
+127:        self.max_tokens = max_tokens
+128:        self.reserved_tokens = 2000  # Reserve for new input/output
+133:        available_tokens = self.max_tokens - self.reserved_tokens
+137:        tokens_used = 0
+146:            if tokens_used + entry.token_count > available_tokens:
+149:            tokens_used += entry.token_count
+154:            if tokens_used + mem.token_count > available_tokens:
+157:            tokens_used += mem.token_count
+177:        while self.memory.current_tokens > self.max_tokens * 0.8:
+183:            self.memory.current_tokens -= removed.token_count
+230:                                          max_tokens: int = 500) -> str:
+290:            # Use first 100 chars as fingerprint
+291:            fingerprint = entry.content[:100]
+292:            if fingerprint not in seen:
+293:                seen.add(fingerprint)
+395:| Component | Tokens/Month (100K tasks) | Cost (GPT-4 @ $0.03/K) |
+397:| Context window (avg 4K tokens) | 400M tokens | $12,000 |
+399:| Summarization overhead | 20M tokens | $600 |
+424:| "Check memory usage" | Show token consumption by tier |
+437:| Ignoring token budgets | Cost surprises, silent truncation | Track and alert on token usage |
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/prompt-engineering/SKILL.md -----
+63:LLMs are autoregressive — they predict the next token based on previous tokens. By generating intermediate reasoning steps, the model builds a logical scaffold that leads to more accurate conclusions.
+184:- **Add credentials**: "You have 15 years of experience" adds weight
+322:- **For creative tasks, raise temperature but set a max token limit** to prevent rambling
+405:**Defense**: Never put secrets, API keys, or sensitive instructions in prompts meant for external-facing use. Consider prompt obfuscation for production.
+417:### 6. Ignoring Token Waste
+418:**The mistake**: Verbose prompts that waste tokens on unnecessary boilerplate.
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/prompt-version-management/SKILL.md -----
+169:        token_efficiency: float  # Tokens used per task
+183:            token_efficiency=statistics.mean(r["tokens"] for r in results),
+294:| **Token Cost** | Cost per completed task |
+335:| Ignoring prompt latency | More instructions = slower responses | Measure and optimize token count |
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/token-budget-tracking/SKILL.md -----
+2:name: token-budget-tracking
+3:description: 'Track, optimize, and control token consumption across multi-agent systems. Covers budget allocation, real-time monitoring, cost attribution, per-agent limits, and proactive cost optimization for production LLM deployments.'
+9:    - token-budget
+11:    - token-tracking
+17:# Token Budget Tracking & Optimization
+21:In production multi-agent systems, token costs are the new infrastructure bill — and they can spiral fast. An agent in a loop can burn through hundreds of dollars in minutes. This skill covers how to set budgets, track consumption in real time, attribute costs to specific agents and tasks, and optimize token usage without sacrificing quality.
+27:### Token Cost Economics
+29:| Model | Input ($/1M tokens) | Output ($/1M tokens) | Cost per 100K tasks (4K avg) |
+36:**A single runaway agent** consuming 50K tokens per loop for 100 iterations = **$50-$150** in minutes.
+42:| **Per Agent** | Tokens consumed by each agent | Identify expensive agents |
+47:| **Per Step** | Tokens per reasoning step | Detect inefficient reasoning |
+53:### Step 1: Build a Token Counter
+62:class TokenUsage:
+63:    prompt_tokens: int = 0
+64:    completion_tokens: int = 0
+65:    total_tokens: int = 0
+67:    def __add__(self, other: "TokenUsage"):
+68:        return TokenUsage(
+69:            prompt_tokens=self.prompt_tokens + other.prompt_tokens,
+70:            completion_tokens=self.completion_tokens + other.completion_tokens,
+71:            total_tokens=self.total_tokens + other.total_tokens
+74:class TokenCounter:
+75:    """Tracks token usage across all agents with attribution."""
+78:        self.usage: dict[str, dict[str, TokenUsage]] = defaultdict(
+79:            lambda: defaultdict(TokenUsage)
+84:               prompt_tokens: int, completion_tokens: int):
+85:        """Record token usage for an agent-task pair."""
+87:            usage = TokenUsage(
+88:                prompt_tokens=prompt_tokens,
+89:                completion_tokens=completion_tokens,
+90:                total_tokens=prompt_tokens + completion_tokens
+94:    def agent_total(self, agent_name: str) -> TokenUsage:
+95:        """Get total tokens for an agent."""
+97:            total = TokenUsage()
+109:            usage.prompt_tokens * input_rate / 1_000_000 +
+110:            usage.completion_tokens * output_rate / 1_000_000
+113:    def top_agents(self, n: int = 10) -> list[tuple[str, TokenUsage]]:
+120:            totals.sort(key=lambda x: x[1].total_tokens, reverse=True)
+127:class TokenBudget:
+128:    """Enforce per-agent and global token budgets."""
+130:    def __init__(self, counter: TokenCounter):
+132:        self.agent_limits: dict[str, int] = {}  # agent -> max tokens
+133:        self.period_limits: dict[str, int] = {}  # period -> max tokens
+139:    def set_agent_limit(self, agent_name: str, max_tokens: int):
+140:        """Set a per-agent token budget."""
+141:        self.agent_limits[agent_name] = max_tokens
+143:    def set_period_limit(self, period_name: str, max_tokens: int):
+145:        self.period_limits[period_name] = max_tokens
+148:                                       estimated_tokens: int) -> bool:
+154:            current = self.counter.agent_total(agent_name).total_tokens
+155:            if current + estimated_tokens > agent_limit:
+161:            if self.period_usage[period] + estimated_tokens > limit:
+164:        # 3. Reserve tokens
+165:        self.period_usage[current_period] += estimated_tokens
+179:### Step 3: Token Optimization Strategies
+182:class TokenOptimizer:
+183:    """Apply optimization strategies to reduce token consumption."""
+189:                                max_tokens: int) -> list[dict]:
+190:        """Compress conversation history to fit within token budget."""
+191:        total = self._count_tokens(messages)
+193:        if total <= max_tokens:
+200:        if self._count_tokens(messages) > max_tokens:
+204:        if self._count_tokens(messages) > max_tokens:
+205:            messages = self._truncate_longest(messages, max_tokens)
+234:            max_tokens=200
+242:                           max_tokens: int) -> list[dict]:
+244:        while self._count_tokens(messages) > max_tokens:
+255:    def _count_tokens(self, messages: list[dict]) -> int:
+256:        """Rough token estimation (4 chars ≈ 1 token)."""
+265:    """Real-time token budget monitoring."""
+267:    def __init__(self, counter: TokenCounter, budgets: TokenBudget):
+278:                "total_tokens": usage.total_tokens,
+279:                "prompt_tokens": usage.prompt_tokens,
+280:                "completion_tokens": usage.completion_tokens,
+282:                "percent_used": (usage.total_tokens / limit * 100) if limit != float('inf') else 0,
+289:                "total_tokens": sum(a["total_tokens"] for a in agents.values()),
+295:    def _estimate_cost(self, usage: TokenUsage) -> float:
+296:        """Estimate cost at blended rate ($0.003/1K tokens)."""
+297:        return usage.total_tokens * 0.003 / 1000
+306:                    f"({info['total_tokens']:,} tokens)"
+317:    def __init__(self, optimizer: TokenOptimizer, budgets: TokenBudget):
+329:        usage_ratio = agent_usage.total_tokens / agent_limit if agent_limit else 0
+334:                messages, max_tokens=2000
+339:                messages, max_tokens=4000
+368:    condition: daily_tokens > daily_limit
+371:    message: "Daily token budget exceeded: {used}/{limit}"
+374:    condition: agent_hourly_tokens > agent_hourly_limit * 2
+377:    message: "Agent {name} token usage spiked: {hourly_used}/hr"
+380:    condition: agent_tokens_per_task > task_limit * 3
+383:    message: "Agent {name} may be looping: {tokens_per_task} tokens/task"
+386:    condition: projected_daily_tokens > daily_limit * 0.9
+394:## Token Budget Planning
+400:| Customer Support | 500K tokens | ~$150 |
+401:| Research Agent | 2M tokens | ~$600 |
+402:| Code Generation | 3M tokens | ~$900 |
+403:| Data Analysis | 1M tokens | ~$300 |
+404:| Internal Tooling | 200K tokens | ~$60 |
+423:| "Show token usage" | Display current consumption by agent |
+425:| "Set budget for agent X" | Configure per-agent token limit |
+427:| "Optimize this request" | Compress context to reduce tokens |
+441:| Ignoring output tokens | Output costs more than input (2-4x) | Track input/output separately |
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/backend/api-design/SKILL.md -----
+94:| 401 | Unauthorized | Missing/invalid auth token |
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/backend/authentication-authorization/SKILL.md -----
+19:| Session/Cookie | Server-rendered apps | High (HTTP-only, secure flags) |
+27:- Store refresh tokens in HTTP-only cookies (not localStorage)
+59:- Remember device with a trust token (30 days max)
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/backend/caching-strategies/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/backend/database-design/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/backend/message-queues/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/backend/microservices/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/backend/nodejs-patterns/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/backend/python-patterns/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/backend/serverless-patterns/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/design/accessibility/SKILL.md -----
+95:- **2.4.1 Bypass Blocks (Level A)**: Provide a mechanism to skip repetitive content (skip links)
+346:Allow keyboard users to bypass repetitive navigation:
+420:| Color Contrast | Not checked | Manual checks some text | Verified all text + UI components | Token-based contrast enforcement |
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/design/ui-design-system/SKILL.md -----
+3:description: Master the creation, maintenance, and governance of design systems — from design tokens and component architecture to documentation, versioning, and accessibility.
+11:    - design-tokens
+26:A design system's primary value is consistency. Every component, token, and pattern must behave predictably across the entire product surface. Creativity belongs at the product level — the design system provides the reliable foundation.
+32:Accessibility must be baked into every component from day one, not bolted on later. Every component in the system should meet at minimum WCAG 2.1 Level AA. Design tokens for color must account for contrast ratios from the start.
+46:A shared component library exists, typically in a single repository. Teams can browse and install components. Basic design tokens may exist. Documentation is sparse or auto-generated. Adoption is voluntary and inconsistent.
+49:Design tokens are formally defined and used across all products. Components are reviewed for consistency. Documentation is maintained in Storybook. A basic contribution process exists. Most teams participate.
+57:## Design Tokens
+59:Design tokens are the atoms of your design system — named values that store design decisions. They bridge design and development by providing a single source of truth.
+61:### Token Structure
+63:Tokens should follow a hierarchical naming convention that maps to how designers and developers think:
+66:token-category_property_variant_state
+76:### Color Tokens
+81:- **Semantic tokens**: What the color means (color_text_primary, color_background_error, color_border_focus)
+82:- **Contextual tokens**: What it's used for (button_background_primary_default, input_border_focus)
+101:### Typography Tokens
+130:### Spacing Tokens
+147:### Shadow Tokens
+160:### Animation Tokens
+162:Duration and easing should be tokenized to ensure consistent motion:
+175:### Token Delivery
+177:Tokens should be distributed as platform-agnostic formats:
+306:- Updated color tokens to match rebrand
+318:@company/design-tokens    — token definitions
+347:- **Token adoption**: Use of design tokens vs. hardcoded values in codebase
+356:Design tokens should have light and dark variants:
+370:Components should use only semantic tokens, never raw colors, so they automatically adapt to theme changes without modification.
+374:For multi-brand systems, define a brand layer between tokens and components:
+377:Brand A:       Tokens → Brand A Aliases → Components
+378:Brand B:       Tokens → Brand B Aliases → Components
+381:Each brand alias file maps shared tokens to brand-specific values, keeping the component layer brand-agnostic.
+387:| Design Tokens | Hardcoded values throughout | Some CSS variables | Full token system, semantic naming | Multi-platform token pipeline |
+393:| Theme Support | Single theme | Manual dark mode | Token-based theming | White-label + multi-brand |
+412:### 6. No Token Adoption Enforcement
+413:Defining tokens is useless if teams still use hardcoded values. Use lint rules (e.g., stylelint, ESLint) to prevent raw colors and hardcoded spacing. Automated enforcement beats manual code review every time.
+422:If design tokens live in Figma and components use different names, things drift. Keep design and code in sync — tools like Supernova, Specify, or Amazon Style Dictionary help bridge this gap.
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/api-documentation/SKILL.md -----
+382:      - Use environment variables or a secrets manager
+394:        tokenUrl: https://auth.example.com/oauth/token
+395:        refreshUrl: https://auth.example.com/oauth/token
+400:      clientCredentials:
+401:        tokenUrl: https://auth.example.com/oauth/token
+412:All API requests require authentication via Bearer token in the
+673:        "key": "token",
+854:        Source:       &stripe.SourceParams{Token: stripe.String("tok_visa")},
+951:4. Authentication via Bearer token (was Basic Auth)
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/architecture-decision-records/SKILL.md -----
+438:| 2024-03-01 | Updated token expiry from 1h to 24h based on UX feedback | Alice |
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/clean-code/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/code-review/SKILL.md -----
+69:- [ ] Are secrets hardcoded? (API keys, passwords, tokens)
+248:      "name": "hardcoded-secret",
+249:      "pattern": "(?:api[_-]?key|secret|password|token)\\s*[:=]\\s*['\"][A-Za-z0-9]{16,}",
+250:      "message": "🔑 Possible hardcoded secret detected",
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/debugging-mastery/SKILL.md -----
+507:            "token": "tok_test_12345"
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/dependency-management/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/documentation-generation/SKILL.md -----
+153:    All requests require a Bearer token in the Authorization header.
+383:          github_token: ${{ secrets.GITHUB_TOKEN }}
+463:- AWS CLI configured with admin credentials
+585:npx release-please --release-as minor --token $GITHUB_TOKEN
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/git-workflow/SKILL.md -----
+105:"fix(auth): handle expired session tokens"
+187:1. **Committing secrets**: Never commit API keys, passwords, or tokens. Use `.env` files and secret managers.
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/hyperframes-cli/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/hyperframes-media/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/hyperframes/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/knowledge-base/SKILL.md -----
+449:> password recovery, credential reset, and account access
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/markdown-mastery/SKILL.md -----
+784:  <p>Never commit API keys or secrets. Use environment variables
+785:  or a secrets manager instead.</p>
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/refactoring-patterns/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/technical-writing/SKILL.md -----
+528:3. **Assuming prior knowledge**: "Just set up the reverse proxy" is meaningless to someone who's never configured nginx. Define or link to prerequisites.
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/testing-strategies/SKILL.md -----
+27:Coverage numbers are a proxy metric. A codebase with 80% coverage and excellent tests is better than one with 100% coverage and shallow tests. Test the things that scare you.
+605:4. **Chasing 100% coverage without quality**: Coverage is a proxy. A 100% covered codebase can still have buggy behavior. Focus on testing logic, not lines.
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/devops/ci-cd-pipeline/SKILL.md -----
+22:CI/CD pipelines are the backbone of modern software delivery — the automated assembly line that transforms source code into running software. A well-designed pipeline catches bugs early, enforces quality gates, deploys with confidence, and gives developers fast feedback. This skill covers the full spectrum from GitHub Actions workflow authoring and matrix build strategies to multi-environment deployment patterns, secret management, and pipeline security.
+31:4. **Security by Design** — Secrets must never appear in logs, artifacts, or output. Use short-lived credentials, OIDC, and minimal IAM permissions.
+42:- Hardcoded secrets stored in workflow YAML or plaintext
+70:- OIDC-based cloud authentication (no long-lived secrets)
+167:    secrets:
+177:      - uses: aws-actions/configure-aws-credentials@v4
+179:          role-to-assume: ${{ secrets.cloud-role-arn }}
+196:    secrets:
+197:      cloud-role-arn: ${{ secrets.STAGING_ROLE_ARN }}
+396:**Environment-Specific Secrets:**
+405:          API_KEY: ${{ secrets.PRODUCTION_API_KEY }}
+408:### 6. Secret Management
+410:**Bad — Secrets in plaintext:**
+412:- run: curl -H "Authorization: Bearer supersecret123"
+415:**Good — GitHub Secrets:**
+419:    API_KEY: ${{ secrets.API_KEY }}
+422:**Best — OIDC Authentication (no static secrets):**
+424:- uses: aws-actions/configure-aws-credentials@v4
+430:**Secret Detection in CI:**
+492:3. **Hardcoding secrets** — Secrets in workflow files, scripts, or logs are a security incident waiting to happen. Use GitHub Actions secrets, OIDC, or external secret stores (Vault, AWS Secrets Manager).
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/devops/cloud-architecture/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/devops/docker-patterns/SKILL.md -----
+222:      rm -rf /var/lib/apt/lists/*
+265:      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+266:    secrets:
+285:secrets:
+287:    file: ./secrets/db_password.txt
+376:2. **Copying entire context** — `COPY . /app` sends the entire directory including `node_modules`, `.git`, and secrets. Use `.dockerignore` and specific COPY paths.
+382:5. **Storing secrets in images** — Secrets in Dockerfile layers persist even if the layer is removed. Use Docker secrets, BuildKit secrets, or external secret stores.
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/devops/kubernetes-patterns/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/devops/monitoring-observability/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/devops/sre-practices/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/devops/terraform-iac/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/frontend/component-design-systems/SKILL.md -----
+3:description: 'Building and maintaining scalable component libraries, design tokens, accessibility, and cross-team collaboration patterns'
+8:  tags: [design-systems, components, react, accessibility, design-tokens, storybook]
+19:├── tokens/              # Design tokens
+55:1. **No design tokens**: Hardcoded values everywhere. Use tokens for colors, spacing, typography.
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/frontend/frontend-testing/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/frontend/nextjs-patterns/SKILL.md -----
+253:  const token = request.cookies.get('session');
+257:  if (pathname.startsWith('/dashboard') && !token) {
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/frontend/react-patterns/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/frontend/responsive-design/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/frontend/state-management/SKILL.md -----
+23:| **Persisted** | State that survives refresh | Theme preference, auth token | localStorage, AsyncStorage |
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/frontend/tailwind-css/SKILL.md -----
+36:| **Config** | Uses default theme | Extends theme with brand tokens | Creates plugins for custom utilities |
+161:#### Design Tokens → Tailwind Config
+162:Map your design tokens directly to Tailwind values:
+164:| Token | Tailwind Config |
+231:6. **Not using design tokens**: Hardcoding colors instead of extending the config creates inconsistency.
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/frontend/web-performance/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/product/product-strategy/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/product/user-research/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/security/secure-coding/SKILL.md -----
+3:description: Comprehensive secure coding practices covering input validation, authentication, authorization, cryptography, secrets management, and error handling. Provides actionable code examples and checklists for building security into every stage of development.
+15:    - secrets-management
+24:Writing code that is resistant to attack requires intentional practices at every layer. This skill covers the fundamental security patterns every developer should implement: input validation, authentication, authorization, cryptography, secrets management, and error handling.
+37:No single control is sufficient. If input validation fails, parameterized queries should prevent injection. If authentication is bypassed, authorization should block access. Layer your defenses.
+49:Error messages, stack traces, debug endpoints, and internal IPs should never reach the client. What the user doesn't know, they can't exploit.
+60:- [ ] No secrets in source code (API keys, passwords, tokens)
+61:- [ ] Authentication tokens are not logged
+70:- [ ] Session tokens are cryptographically random and HTTP-only
+73:- [ ] JWTs signed with RS256/ES256 (not `none` algorithm, not HS256 with weak secret)
+86:- [ ] Keys stored in a secrets manager, not in code or config files
+109:| **Denylist** | Block known-bad input | Block `'`, `"`, `;`, `--` | ❌ Easy to bypass |
+226:password = b"super_secret_password123"
+258:### JWT (JSON Web Tokens)
+264:SECRET_KEY = os.environ.get("JWT_SECRET")  # Never hardcode!
+266:def create_token(user_id, role):
+272:        "jti": os.urandom(16).hex()  # Unique token ID for revocation
+274:    return jwt.encode(payload, SECRET_KEY, algorithm="RS256")
+276:def verify_token(token):
+279:            token,
+286:        raise AuthError("Token expired")
+287:    except jwt.InvalidTokenError:
+288:        raise AuthError("Invalid token")
+292:- ✅ Use RS256 or ES256 (asymmetric). Avoid HS256 — if the secret leaks, all tokens are forgeable.
+293:- ✅ Set short expiration (15-60 minutes). Use refresh tokens for long sessions.
+312:# Step 2: Exchange authorization code for tokens
+313:def exchange_code_for_token(code):
+315:        "https://provider.com/oauth2/token",
+321:            "client_secret": CLIENT_SECRET,
+324:    return response.json()  # Contains access_token, refresh_token, id_token
+326:# Step 3: Use access token
+327:headers = {"Authorization": f"Bearer {access_token}"}
+335:- ✅ Validate `aud` (audience) and `iss` (issuer) in the ID token.
+336:- ✅ Rotate refresh tokens.
+341:import secrets
+349:        session_id = secrets.token_urlsafe(32)  # Cryptographically random
+378:- ✅ Generate session IDs with `secrets.token_urlsafe()` (at least 32 bytes).
+379:- ✅ Set `HttpOnly`, `Secure`, `SameSite=Lax` (or `Strict`) on cookies.
+604:# ✅ Better: Secrets manager (AWS Secrets Manager, HashiCorp Vault)
+608:    client = boto3.client("secretsmanager")
+609:    response = client.get_secret_value(SecretId="prod/db/password")
+610:    return response["SecretString"]
+623:## Secrets Management
+625:### Rules for Secrets
+627:1. **Never hardcode** — No API keys, passwords, tokens, or certificates in source code.
+630:4. **Use a secrets manager** — For production (Vault, AWS Secrets Manager, Azure Key Vault, GCP Secret Manager).
+632:6. **Audit access** — Log every time a secret is accessed.
+642:credentials.json
+659:    SECRET_KEY = os.environ.get("SECRET_KEY")
+668:    # All secrets MUST come from environment or secrets manager
+669:    assert Config.SECRET_KEY is not None, "SECRET_KEY must be set in production"
+724:    return {"token": create_session(user)}
+737:LOGIN_FAILURE_RESPONSE = ({"error": "Invalid credentials"}, 401)
+757:Passwords, credit card numbers, API keys, and session tokens should never appear in logs. Use structured logging with sensitive field redaction.
+763:An attacker can upload `../../../etc/passwd` or `malware.exe` as the filename. Never use the user-supplied filename without sanitization. Generate your own filenames serverside.
+774:### 11. **Hardcoded Secrets in CI/CD**
+775:CI/CD pipelines often contain tokens, API keys, or service account credentials. Store these in CI/CD secrets (GitHub Actions secrets, Jenkins credentials) — never in the `.yml` file.
+778:Two concurrent requests can bypass a single check. Use database transactions, atomic operations, or distributed locks. Check-then-act patterns are vulnerable to TOCTOU (Time of Check, Time of Use).
+784:If your API uses cookie-based authentication, you need CSRF tokens or SameSite cookies. A user visiting `evil.com` should not be able to make requests to your API with the user's credentials.
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/security/security-audit/SKILL.md -----
+71:- **Testing:** Manually modify user IDs, role parameters, or privilege tokens in requests.
+74:- **What to check:** Weak TLS versions, missing HSTS headers, hardcoded keys, weak password hashing (MD5, SHA1), exposed secrets in source code.
+86:- **What to check:** Default credentials, unnecessary open ports, verbose error messages, missing security headers (CSP, X-Frame-Options), directory listing enabled.
+94:- **What to check:** Weak password policies, no MFA, session fixation, credential stuffing vulnerability, no account lockout.
+95:- **Testing:** Attempt brute force, check session token entropy, inspect JWT implementations.
+134:- **Passive recon:** DNS records, subdomain enumeration (Amass, Subfinder), HTTP headers, technology fingerprinting (Wappalyzer, whatweb).
+136:- **Code review:** SAST scanning, hardcoded secrets detection (truffleHog, Gitleaks).
+150:# Secret scanning (git repo)
+159:- **Manual:** Business logic flaws, privilege escalation, IDOR, race conditions, authentication bypass.
+221:docker run -v $(pwd):/zap/wrk/ -t ghcr.io/zaproxy/zaproxy \
+270:| **E**levation of Privilege | Gaining unauthorized access | Zero-day exploit chain | Patch management, least privilege |
+279:| **D**amage Potential | How much damage if exploited? |
+280:| **R**eproducibility | How reliable is the exploit? |
+281:| **E**xploitability | How easy is it to exploit? |
+361:| AV (Attack Vector) | N | Network (remotely exploitable) |
+380:# Low:       Hard to exploit, limited impact → fix within next release
+388:Automated tools miss business logic flaws, race conditions, authorization bypasses, and complex injection chains. Always pair automated scanning with manual testing.
+418:Don't assume authentication works. Test for session fixation, missing logout, JWT none-algorithm attacks, and token leakage in URLs/referrers.
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/testing-qa/accessibility-testing/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/testing-qa/api-testing/SKILL.md -----
+21:| Auth | Access control | No token → 401 |
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/testing-qa/e2e-testing/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/testing-qa/performance-testing/SKILL.md -----
+----- /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/testing-qa/test-strategy/SKILL.md -----

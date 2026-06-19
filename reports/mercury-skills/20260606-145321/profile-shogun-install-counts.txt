@@ -1,0 +1,4 @@
+profile_shogun_installed=62
+hermes_skills_list_local_profile_after_exit=0
+hermes_skills_list_profile_after_exit=0
+hermes_skills_audit_profile_after_exit=0

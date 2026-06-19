@@ -1,0 +1,64 @@
+      784:  <p>Never commit API keys or secrets. Use environment variables
+      528:3. **Assuming prior knowledge**: "Just set up the reverse proxy" is meaningless to someone who's never configured nginx. Define or link to prerequisites.
+      507:            "token": "tok_test_12345"
+      449:> password recovery, credential reset, and account access
+      438:| 2024-03-01 | Updated token expiry from 1h to 24h based on UX feedback | Alice |
+      382:      - Use environment variables or a secrets manager
+      253:  const token = request.cookies.get('session');
+      222:      rm -rf /var/lib/apt/lists/*
+      195:    """Token-bucket rate limiter for agent invocations."""
+      172:- **Capacity**: Limited by context window (8K-200K tokens)
+      169:        token_efficiency: float  # Tokens used per task
+      153:    All requests require a Bearer token in the Authorization header.
+      105:"fix(auth): handle expired session tokens"
+ 101  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/token-budget-tracking/SKILL.md
+      95:- **2.4.1 Bypass Blocks (Level A)**: Provide a mechanism to skip repetitive content (skip links)
+      94:| 401 | Unauthorized | Missing/invalid auth token |
+      71:- **Testing:** Manually modify user IDs, role parameters, or privilege tokens in requests.
+      69:- [ ] Are secrets hardcoded? (API keys, passwords, tokens)
+      63:LLMs are autoregressive — they predict the next token based on previous tokens. By generating intermediate reasoning steps, the model builds a logical scaffold that leads to more accurate conclusions.
+  58  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/security/secure-coding/SKILL.md
+      51:| **Token Usage** | Prompt/completion counts | High |
+      36:| **Token Consumption** | Tokens used per agent run | Budget anomalies indicate runaway agents |
+      36:| **Config** | Uses default theme | Extends theme with brand tokens | Creates plugins for custom utilities |
+  35  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/design/ui-design-system/SKILL.md
+      35:| **Context Overflow** | Token limit exceeded | Rare | ✅ Yes — compress and retry |
+  30  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/memory-management/SKILL.md
+      27:Coverage numbers are a proxy metric. A codebase with 80% coverage and excellent tests is better than one with 100% coverage and shallow tests. Test the things that scare you.
+      23:| **Persisted** | State that survives refresh | Theme preference, auth token | localStorage, AsyncStorage |
+      22:Long-running agents face a fundamental problem: they can't remember everything, but forgetting the wrong thing breaks their usefulness. This skill covers memory architectures that balance context retention, token budget, and retrieval accuracy for agents that run for hours, days, or continuously.
+      22:CI/CD pipelines are the backbone of modern software delivery — the automated assembly line that transforms source code into running software. A well-designed pipeline catches bugs early, enforces quality gates, deploys with confidence, and gives developers fast feedback. This skill covers the full spectrum from GitHub Actions workflow authoring and matrix build strategies to multi-environment deployment patterns, secret management, and pipeline security.
+      21:| Auth | Access control | No token → 401 |
+  20  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/devops/ci-cd-pipeline/SKILL.md
+      19:| Session/Cookie | Server-rendered apps | High (HTTP-only, secure flags) |
+  18  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/security/security-audit/SKILL.md
+   9  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/api-documentation/SKILL.md
+   8  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/ai-agent-design/SKILL.md
+   7  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/devops/docker-patterns/SKILL.md
+   7  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/agent-task-delegation/SKILL.md
+   7  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/agent-health-monitoring/SKILL.md
+   6  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/prompt-engineering/SKILL.md
+   6  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/agent-audit-logging/SKILL.md
+   5  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/frontend/tailwind-css/SKILL.md
+   4  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/frontend/component-design-systems/SKILL.md
+   4  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/documentation-generation/SKILL.md
+   4  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/code-review/SKILL.md
+   4  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/prompt-version-management/SKILL.md
+   3  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/design/accessibility/SKILL.md
+   3  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/backend/authentication-authorization/SKILL.md
+   3  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/ai-ml/error-recovery-retry/SKILL.md
+      3:description: Master the creation, maintenance, and governance of design systems — from design tokens and component architecture to documentation, versioning, and accessibility.
+      3:description: Comprehensive secure coding practices covering input validation, authentication, authorization, cryptography, secrets management, and error handling. Provides actionable code examples and checklists for building security into every stage of development.
+      3:description: 'Building and maintaining scalable component libraries, design tokens, accessibility, and cross-team collaboration patterns'
+   2  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/frontend/nextjs-patterns/SKILL.md
+   2  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/testing-strategies/SKILL.md
+   2  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/markdown-mastery/SKILL.md
+   2  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/git-workflow/SKILL.md
+      2:name: token-budget-tracking
+   1  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/testing-qa/api-testing/SKILL.md
+   1  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/frontend/state-management/SKILL.md
+   1  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/technical-writing/SKILL.md
+   1  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/knowledge-base/SKILL.md
+   1  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/debugging-mastery/SKILL.md
+   1  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/development/architecture-decision-records/SKILL.md
+   1  /Users/sirinx/SIRINXDev/sirinx-agent-native-os/vendor/mercury-agent-skills/categories/backend/api-design/SKILL.md

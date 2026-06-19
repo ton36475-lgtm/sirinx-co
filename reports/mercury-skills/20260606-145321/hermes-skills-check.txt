@@ -1,0 +1,17 @@
+                       Skill Updates
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┓
+┃ Name                      ┃ Source   ┃ Status           ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━┩
+│ outlines                  │ official │ up_to_date       │
+│ axolotl                   │ official │ up_to_date       │
+│ trl-fine-tuning           │ official │ up_to_date       │
+│ unsloth                   │ official │ up_to_date       │
+│ baoyu-article-illustrator │ official │ update_available │
+│ baoyu-comic               │ official │ up_to_date       │
+│ creative-ideation         │ official │ up_to_date       │
+│ pixel-art                 │ official │ up_to_date       │
+│ minecraft-modpack-server  │ official │ up_to_date       │
+│ pokemon-player            │ official │ up_to_date       │
+│ dspy                      │ official │ up_to_date       │
+└───────────────────────────┴──────────┴──────────────────┘
+1 update(s) available across 11 checked skill(s)

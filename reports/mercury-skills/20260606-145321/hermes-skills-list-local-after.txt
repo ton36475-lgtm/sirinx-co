@@ -1,0 +1,17 @@
+                                Installed Skills
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━━━┓
+┃ Name                       ┃ Category             ┃ Source ┃ Trust ┃ Status  ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━━━┩
+│ kanban-codex-lane          │ autonomous-ai-agents │ local  │ local │ enabled │
+│ ideation                   │ creative             │ local  │ local │ enabled │
+│ webhook-subscriptions      │ devops               │ local  │ local │ enabled │
+│ native-mcp                 │ mcp                  │ local  │ local │ enabled │
+│ spotify                    │ media                │ local  │ local │ enabled │
+│ fine-tuning-with-trl       │ mlops                │ local  │ local │ enabled │
+│ linear                     │ productivity         │ local  │ local │ enabled │
+│ debugging-hermes-tui-comm… │ software-development │ local  │ local │ enabled │
+│ hermes-s6-container-super… │ software-development │ local  │ local │ enabled │
+│ subagent-driven-developme… │ software-development │ local  │ local │ enabled │
+│ writing-plans              │ software-development │ local  │ local │ enabled │
+└────────────────────────────┴──────────────────────┴────────┴───────┴─────────┘
+0 hub-installed, 0 builtin, 11 local — 11 enabled, 0 disabled

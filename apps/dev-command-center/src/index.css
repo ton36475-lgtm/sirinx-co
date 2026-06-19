@@ -1,0 +1,168 @@
+:root {
+  color: #17211f;
+  background: #f5f7f2;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  line-height: 1.5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+.shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0;
+}
+
+.topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #d5ddd1;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #68736d;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 0.95;
+}
+
+h2 {
+  margin-bottom: 0;
+  font-size: 1rem;
+}
+
+.gate,
+.status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.gate {
+  background: #17211f;
+  color: #ffffff;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.lane {
+  min-height: 176px;
+  padding: 20px;
+  border: 1px solid #d5ddd1;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.laneHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.lane p {
+  color: #2f3a36;
+}
+
+.lane small {
+  color: #68736d;
+  font-weight: 700;
+}
+
+.status.ready {
+  background: #d8f0e0;
+  color: #126233;
+}
+
+.status.guarded {
+  background: #f4dfbb;
+  color: #705015;
+}
+
+.status.needs_env {
+  background: #dce7f7;
+  color: #194f86;
+}
+
+.checks {
+  margin-top: 16px;
+  padding: 20px;
+  border: 1px solid #d5ddd1;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.commandList {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+code {
+  display: block;
+  overflow-x: auto;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: #eef2ec;
+  color: #17211f;
+  font-size: 0.88rem;
+}
+
+@media (max-width: 760px) {
+  .shell {
+    width: min(100% - 20px, 1180px);
+    padding: 20px 0;
+  }
+
+  .topbar,
+  .laneHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gate,
+  .status {
+    white-space: normal;
+  }
+}

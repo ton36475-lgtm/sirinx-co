@@ -4,6 +4,8 @@ node_modules/
 
 # Build artifacts
 packages/content-factory/dist/
+packages/config/dist/
+packages/types/dist/
 
 # Secrets
 .env

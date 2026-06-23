@@ -1,0 +1,49 @@
+real_money_gambling_boundary:
+  mode: hard_block_live_real_money
+  purpose: prevent unsafe or unlicensed real-money gambling/payment execution
+
+hard_blocked:
+  - live_gambling_platform
+  - real_betting_or_wagering
+  - live_payment_provider_credentials
+  - real_deposit_processing
+  - real_withdrawal_processing
+  - real_crypto_transaction_signing
+  - public_player_endpoint
+  - kyc_aml_geofence_bypass
+  - provider_rule_evasion
+  - transaction_purpose_disguise
+  - real_player_data_in_practice_artifacts
+  - secret_printing
+
+allowed_sandbox:
+  - fake_money_ledger
+  - provider_sandbox_contract
+  - fake_webhook_payload
+  - idempotency_test
+  - duplicate_replay_test
+  - local_reconciliation_report
+  - audit_log_design
+  - risk_control_design
+  - compliance_readiness_checklist
+
+required_before_live:
+  - license_review
+  - legal_entity_review
+  - kyc_kyb_aml_program
+  - age_verification
+  - geofence_policy
+  - responsible_gambling_controls
+  - payment_provider_contract_allows_use_case
+  - fraud_risk_policy
+  - privacy_policy
+  - tax_reporting_accounting_policy
+  - security_review
+  - penetration_test
+  - incident_response_plan
+  - production_change_management
+  - independent_reconciliation_process
+
+safe_default_response:
+  action: offer_sandbox_readiness_instead
+  message: live real-money gambling/payment actions are blocked; use sandbox provider and fake-money ledger for engineering practice

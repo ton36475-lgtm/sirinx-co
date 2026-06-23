@@ -1,0 +1,53 @@
+igaming_practice_lab:
+  mode: local_training_only
+  purpose: prepare for senior_lead_fullstack_interview_and_skill_test
+  source_context: prior_hiring_poster_image
+
+allowed:
+  - local_architecture_practice
+  - toy_double_entry_ledger
+  - simulated_payment_webhook
+  - idempotency_tests
+  - concurrency_drills
+  - realtime_event_design
+  - defensive_security_planning
+  - observability_drills
+  - local_markdown_csv_json_artifacts
+
+blocked:
+  - real_gambling_operations
+  - real_betting_engine
+  - odds_manipulation
+  - real_payment_provider_integration
+  - real_crypto_transfer
+  - production_deploy
+  - public_endpoint
+  - customer_or_player_data
+  - compliance_bypass
+  - kyc_aml_geofence_bypass
+  - captcha_or_quota_bypass
+  - secret_printing
+
+practice_modules:
+  architecture:
+    output: one_page_system_design
+  ledger:
+    output: balanced_transaction_tests
+  webhook:
+    output: idempotency_and_replay_tests
+  concurrency:
+    output: double_spend_prevention_test
+  realtime:
+    output: event_stream_design
+  security:
+    output: origin_protection_and_secret_handling_runbook
+  observability:
+    output: metrics_and_incident_drills
+
+recommended_language_routing:
+  toy_service: typescript
+  local_generator: python
+  deterministic_cli: rust
+  schema: sql
+  policy: yaml
+  runbook: markdown

@@ -1,0 +1,92 @@
+{
+  "updatedAt": "2026-06-24T02:55:08+07:00",
+  "mode": "SANDBOX_ONLY",
+  "practicePackPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/igaming_practice/senior-lead-fullstack-igaming-practice",
+  "ledgerTests": {
+    "status": "passing",
+    "total": 6,
+    "command": "pnpm --filter @sirinx/ledger-kata test"
+  },
+  "artifacts": [
+    {
+      "label": "Practice Pack",
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/igaming_practice/senior-lead-fullstack-igaming-practice",
+      "status": "ready",
+      "detail": "CSV quizzes, kata prompts, and local interview artifacts."
+    },
+    {
+      "label": "Ledger Kata Package",
+      "path": "packages/ledger-kata",
+      "status": "passing",
+      "detail": "Local TypeScript kata for double-entry ledger and sandbox webhook behavior."
+    },
+    {
+      "label": "Sandbox SQL Schema",
+      "path": "supabase/migrations/20260624024900_igaming_ledger_sandbox.sql",
+      "status": "ready",
+      "detail": "Supabase schema draft for TEST-currency ledger tables; not applied to production."
+    },
+    {
+      "label": "Real-Money Boundary",
+      "path": "docs/igaming_practice/REAL_MONEY_GAMBLING_BOUNDARY.md",
+      "status": "blocked",
+      "detail": "Live gambling, provider settlement, and public endpoints remain blocked."
+    }
+  ],
+  "checks": [
+    {
+      "label": "Balanced transaction",
+      "status": "passing",
+      "detail": "Debit and credit totals must match before posting."
+    },
+    {
+      "label": "Idempotent deposit webhook",
+      "status": "passing",
+      "detail": "Duplicate sandbox webhook credits exactly once."
+    },
+    {
+      "label": "Invalid signature guard",
+      "status": "passing",
+      "detail": "Invalid sandbox webhook signatures are rejected before ledger posting."
+    },
+    {
+      "label": "Stale timestamp guard",
+      "status": "passing",
+      "detail": "Old sandbox webhook timestamps are rejected before ledger posting."
+    },
+    {
+      "label": "Withdrawal concurrency guard",
+      "status": "passing",
+      "detail": "Double settlement on the same request is blocked."
+    }
+  ],
+  "mockInterviewRows": [
+    {
+      "topic": "ledger",
+      "question": "Why should wallet balance not be directly edited without ledger entries?",
+      "expectedSignal": "Auditability, reconciliation, append-only history, and reversals."
+    },
+    {
+      "topic": "idempotency",
+      "question": "How do you handle the same payment webhook arriving twice?",
+      "expectedSignal": "Idempotency key, duplicate-safe response, and credit exactly once."
+    },
+    {
+      "topic": "concurrency",
+      "question": "Two withdrawals arrive at the same time. How do you prevent double spend?",
+      "expectedSignal": "Transaction isolation, row/advisory locks, reserved balance, or queueing."
+    },
+    {
+      "topic": "security",
+      "question": "Where should service-role keys live?",
+      "expectedSignal": "Backend/server only, never frontend/logs, rotate and scope secrets."
+    }
+  ],
+  "boundaryBlocks": [
+    "real-money gambling flow",
+    "live payment provider settlement",
+    "service-role key display",
+    "public endpoint exposure",
+    "player/customer data import"
+  ]
+}

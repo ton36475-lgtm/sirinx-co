@@ -493,7 +493,7 @@ h4 {
 /* Mission Control panel tabs */
 .panel-tabs {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.5rem;
   background: rgba(0, 0, 0, 0.3);
   padding: 0.3rem;
@@ -520,6 +520,161 @@ h4 {
   background: var(--cyber-cyan);
   color: #000;
   box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+}
+
+/* iGaming Practice Lab */
+.practice-card {
+  gap: 1.1rem;
+}
+
+.practice-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.practice-kpi {
+  min-width: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.practice-kpi span {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.practice-kpi strong {
+  color: #fff;
+  font-family: monospace;
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.practice-manifest-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+  border: 1px dashed rgba(0, 240, 255, 0.18);
+  border-radius: 7px;
+  background: rgba(0, 240, 255, 0.035);
+  padding: 0.65rem 0.75rem;
+}
+
+.practice-manifest-line span {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.practice-manifest-line code {
+  color: var(--cyber-cyan);
+  font-size: 0.68rem;
+  overflow-wrap: anywhere;
+}
+
+.practice-grid,
+.practice-lower-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.practice-lower-grid {
+  gap: 1.5rem;
+}
+
+.practice-artifacts,
+.mock-interview-list {
+  min-width: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.18);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.practice-artifact-row,
+.mock-interview-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.7rem;
+  align-items: start;
+  padding: 0.7rem 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+}
+
+.practice-artifact-row:last-child,
+.mock-interview-row:last-child {
+  border-bottom: none;
+}
+
+.practice-artifact-row strong,
+.mock-interview-row strong {
+  display: block;
+  color: #fff;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  margin-bottom: 0.2rem;
+}
+
+.practice-artifact-row p,
+.mock-interview-row p {
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+
+.practice-artifact-row code {
+  display: inline-block;
+  margin-top: 0.25rem;
+  color: var(--cyber-cyan);
+  font-size: 0.68rem;
+  overflow-wrap: anywhere;
+}
+
+.practice-status {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  border-radius: 4px;
+  padding: 0.22rem 0.42rem;
+  font-family: monospace;
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.practice-passing {
+  color: var(--cyber-emerald);
+  background: rgba(0, 255, 102, 0.1);
+}
+
+.practice-ready {
+  color: var(--cyber-cyan);
+  background: rgba(0, 240, 255, 0.08);
+}
+
+.practice-blocked {
+  color: var(--cyber-rose);
+  background: rgba(255, 0, 85, 0.1);
+}
+
+.practice-boundary-grid {
+  margin-top: 0.9rem;
 }
 
 /* Git Evidence Review Panel */
@@ -888,6 +1043,9 @@ h4 {
 
 @media (max-width: 780px) {
   .panel-tabs,
+  .practice-summary-grid,
+  .practice-grid,
+  .practice-lower-grid,
   .git-evidence-summary,
   .git-evidence-grid,
   .git-evidence-lower-grid,

@@ -6,6 +6,7 @@ import {
 import { OpenClawOrchestrator } from "@sirinx/openclaw-adapter";
 import { Gemma4Client } from "@sirinx/ai-access-gateway";
 import { OrchestrationEnvelopeValidator } from "@sirinx/orchestration-envelope";
+import igamingPracticeStatusFixture from "./fixtures/igamingPracticeStatus.json";
 
 interface Worker {
   name: string;
@@ -28,10 +29,16 @@ interface LogEntry {
   message: string;
 }
 
-type PanelKey = "telemetry" | "testbenches" | "gitEvidence";
+type PanelKey =
+  | "telemetry"
+  | "testbenches"
+  | "igamingPractice"
+  | "gitEvidence";
 type GitFileStatus = "modified" | "added" | "untracked" | "deleted";
 type ProofStatus = "LOCAL" | "EVIDENCED" | "COMMITTED";
 type RiskLevel = "low" | "medium" | "high";
+
+type PracticeStatus = "passing" | "ready" | "blocked";
 
 const GIT_EVIDENCE_FIXTURE_NOTICE =
   "Static local review fixture. This panel does not read live git status yet; wire a generated manifest before using it for operator decisions.";
@@ -64,6 +71,46 @@ interface VersionHistoryItem {
   proofStatus: "LOCAL" | "NEEDED" | "BLOCKED";
   detail: string;
 }
+
+interface PracticeArtifact {
+  label: string;
+  path: string;
+  status: PracticeStatus;
+  detail: string;
+}
+
+interface LedgerCheck {
+  label: string;
+  status: PracticeStatus;
+  detail: string;
+}
+
+interface MockInterviewRow {
+  topic: string;
+  question: string;
+  expectedSignal: string;
+}
+
+type IgamingPracticeStatusFixture = {
+  updatedAt: string;
+  mode: string;
+  ledgerTests: {
+    status: PracticeStatus;
+    total: number;
+    command: string;
+  };
+  artifacts: PracticeArtifact[];
+  checks: LedgerCheck[];
+  mockInterviewRows: MockInterviewRow[];
+  boundaryBlocks: string[];
+};
+
+const igamingPracticeStatus =
+  igamingPracticeStatusFixture as IgamingPracticeStatusFixture;
+const igamingPracticeArtifacts = igamingPracticeStatus.artifacts;
+const ledgerTestChecks = igamingPracticeStatus.checks;
+const mockInterviewRows = igamingPracticeStatus.mockInterviewRows;
+const igamingBoundaryBlocks = igamingPracticeStatus.boundaryBlocks;
 
 const gitEvidenceFiles: GitEvidenceFile[] = [
   {
@@ -686,6 +733,19 @@ export default function App() {
     }
   };
 
+  const getPracticeStatusClass = (status: PracticeStatus) => {
+    switch (status) {
+      case "passing":
+        return "practice-passing";
+      case "ready":
+        return "practice-ready";
+      case "blocked":
+        return "practice-blocked";
+      default:
+        return "practice-ready";
+    }
+  };
+
   return (
     <div className="dashboard-container">
       {/* Header */}
@@ -934,6 +994,14 @@ export default function App() {
               Test Benches
             </button>
             <button
+              className={`panel-tab ${activePanel === "igamingPractice" ? "active" : ""}`}
+              onClick={() => setActivePanel("igamingPractice")}
+              role="tab"
+              aria-selected={activePanel === "igamingPractice"}
+            >
+              iGaming Lab
+            </button>
+            <button
               className={`panel-tab ${activePanel === "gitEvidence" ? "active" : ""}`}
               onClick={() => setActivePanel("gitEvidence")}
               role="tab"
@@ -1066,6 +1134,143 @@ export default function App() {
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            </>
+          ) : activePanel === "igamingPractice" ? (
+            <>
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>iGaming Toy Ledger Kata</span>
+                  <span className="accent-cyan">Sandbox Only</span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Practice Pack</span>
+                    <strong>READY</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Ledger Tests</span>
+                    <strong>
+                      {igamingPracticeStatus.ledgerTests.total}{" "}
+                      {igamingPracticeStatus.ledgerTests.status.toUpperCase()}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>SQL Schema</span>
+                    <strong>SANDBOX</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Live Money</span>
+                    <strong>BLOCKED</strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Fixture</span>
+                  <code>{igamingPracticeStatus.mode}</code>
+                  <span>Updated</span>
+                  <code>{igamingPracticeStatus.updatedAt}</code>
+                  <span>Command</span>
+                  <code>{igamingPracticeStatus.ledgerTests.command}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  This panel is a local interview/practice surface. It does not
+                  connect to live payments, gambling providers, service-role
+                  keys, or public endpoints.
+                </div>
+
+                <div className="practice-grid">
+                  <section className="practice-artifacts">
+                    <div className="git-section-title">
+                      <span>Practice Artifacts</span>
+                      <span className="approval-badge">local-files</span>
+                    </div>
+                    {igamingPracticeArtifacts.map((artifact) => (
+                      <div className="practice-artifact-row" key={artifact.path}>
+                        <span
+                          className={`practice-status ${getPracticeStatusClass(artifact.status)}`}
+                        >
+                          {artifact.status}
+                        </span>
+                        <div>
+                          <strong>{artifact.label}</strong>
+                          <p>{artifact.detail}</p>
+                          <code>{artifact.path}</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section className="practice-artifacts">
+                    <div className="git-section-title">
+                      <span>Ledger Test Status</span>
+                      <span className="approval-badge">vitest</span>
+                    </div>
+                    {ledgerTestChecks.map((check) => (
+                      <div className="practice-artifact-row" key={check.label}>
+                        <span
+                          className={`practice-status ${getPracticeStatusClass(check.status)}`}
+                        >
+                          {check.status}
+                        </span>
+                        <div>
+                          <strong>{check.label}</strong>
+                          <p>{check.detail}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+                </div>
+              </div>
+
+              <div className="practice-lower-grid">
+                <div className="card">
+                  <div className="card-title">
+                    <span>Mock Interview Pack</span>
+                    <span className="accent-purple">interview_quiz.csv</span>
+                  </div>
+                  <div className="mock-interview-list">
+                    {mockInterviewRows.map((row) => (
+                      <div className="mock-interview-row" key={row.topic}>
+                        <span className="approval-badge">{row.topic}</span>
+                        <div>
+                          <strong>{row.question}</strong>
+                          <p>{row.expectedSignal}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Hard Boundary</span>
+                    <span className="accent-emerald">Practice Safe</span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {igamingBoundaryBlocks.map((action) => (
+                      <span className="blocked-action" key={action}>
+                        {action}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="approval-state-grid practice-boundary-grid">
+                    <div>
+                      <span>Currency</span>
+                      <strong>TEST ONLY</strong>
+                    </div>
+                    <div>
+                      <span>Data</span>
+                      <strong>SYNTHETIC</strong>
+                    </div>
+                    <div>
+                      <span>Provider</span>
+                      <strong>NONE</strong>
+                    </div>
+                  </div>
                 </div>
               </div>
             </>

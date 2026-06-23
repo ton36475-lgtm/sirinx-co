@@ -6,7 +6,10 @@ node_modules/
 packages/content-factory/dist/
 packages/config/dist/
 packages/types/dist/
+packages/ledger-kata/dist/
 apps/dev-command-center/dist/
+__pycache__/
+*.py[cod]
 
 # Secrets
 .env

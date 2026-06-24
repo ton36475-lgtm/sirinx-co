@@ -1,0 +1,244 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/deep-research-job-packet.schema.json",
+  "title": "Sovereign Deep Research Job Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "job_id",
+    "project",
+    "requested_by",
+    "created_at",
+    "mode",
+    "confidentiality",
+    "research_goal",
+    "inputs",
+    "scope",
+    "source_policy",
+    "evidence_requirements",
+    "output_requirements",
+    "verification_gates",
+    "hard_stops"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "job_id": {
+      "type": "string",
+      "pattern": "^DR-[0-9]{8}-[0-9]{3}$"
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requested_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["local_first", "offline_only", "web_allowed_after_policy"]
+    },
+    "confidentiality": {
+      "type": "string",
+      "enum": ["public", "internal", "confidential", "restricted"]
+    },
+    "research_goal": {
+      "type": "string",
+      "minLength": 20
+    },
+    "decision_context": {
+      "type": "string"
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["videos", "transcripts", "pdfs", "screenshots", "urls", "tables", "notes"],
+      "properties": {
+        "videos": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/input_item" }
+        },
+        "transcripts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/input_item" }
+        },
+        "pdfs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/input_item" }
+        },
+        "screenshots": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/input_item" }
+        },
+        "urls": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/input_item" }
+        },
+        "tables": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/input_item" }
+        },
+        "notes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/input_item" }
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim_types", "geography", "time_window", "source_budget"],
+      "properties": {
+        "claim_types": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/claim_type" },
+          "uniqueItems": true
+        },
+        "geography": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "time_window": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["preferred_recency_years"],
+          "properties": {
+            "preferred_recency_years": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 30
+            },
+            "earliest_allowed_year": {
+              "type": "integer",
+              "minimum": 1900
+            }
+          }
+        },
+        "source_budget": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "max_sources_total",
+            "min_sources_per_material_claim",
+            "max_search_loops_per_claim"
+          ],
+          "properties": {
+            "max_sources_total": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500
+            },
+            "min_sources_per_material_claim": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            },
+            "max_search_loops_per_claim": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            }
+          }
+        }
+      }
+    },
+    "source_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["preferred", "use_with_caution", "blocked"],
+      "properties": {
+        "preferred": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "use_with_caution": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "blocked": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "evidence_requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "output_requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "verification_gates": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "hard_stops": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "blocked_actions": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "input_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "source_type", "uri", "confidentiality"],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "pattern": "^src_[a-z0-9_\\-]+$"
+        },
+        "source_type": {
+          "type": "string",
+          "enum": ["video", "transcript", "pdf", "screenshot", "url", "table", "note"]
+        },
+        "uri": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string"
+        },
+        "confidentiality": {
+          "type": "string",
+          "enum": ["public", "internal", "confidential", "restricted"]
+        },
+        "hash": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "claim_type": {
+      "type": "string",
+      "enum": [
+        "technical",
+        "financial",
+        "market",
+        "regulatory",
+        "operational",
+        "strategic",
+        "speculative"
+      ]
+    }
+  }
+}

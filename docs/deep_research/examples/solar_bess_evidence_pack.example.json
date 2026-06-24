@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "job_id": "DR-20260624-001",
+  "generated_at": "2026-06-24T04:00:00+07:00",
+  "evidence_units": [
+    {
+      "evidence_id": "ev_video_claim_payback_001",
+      "job_id": "DR-20260624-001",
+      "source_id": "src_operator_transcript",
+      "source_type": "transcript",
+      "source_uri": "local://pending-transcript.srt",
+      "source_hash": "sha256:pending",
+      "capture_time": "2026-06-24T04:00:00+07:00",
+      "timestamp_start": "00:02:14",
+      "timestamp_end": "00:02:31",
+      "page_number": null,
+      "bbox": null,
+      "modality": ["speech"],
+      "raw_text": "The system pays back in 3 years.",
+      "normalized_claim": "Solar plus BESS payback is 3 years.",
+      "claim_type": "financial",
+      "visual_context": "No verified visual context yet.",
+      "confidence": 0.5,
+      "extraction_method": "manual_placeholder",
+      "review_state": "needs_verification"
+    }
+  ],
+  "source_quality_records": [
+    {
+      "source_id": "src_operator_transcript",
+      "title": "Operator-provided transcript placeholder",
+      "url": "local://pending-transcript.srt",
+      "publisher": "operator",
+      "published_at": null,
+      "source_class": "internal_note",
+      "authority_score": 0.4,
+      "recency_score": 0.8,
+      "directness_score": 0.7,
+      "transparency_score": 0.4,
+      "bias_penalty": 0.3,
+      "notes": "Seed evidence only. Requires independent verification before use in a report."
+    }
+  ],
+  "claim_verification_records": [
+    {
+      "claim_id": "claim_solar_bess_payback_001",
+      "claim_text": "Solar plus BESS payback is 3 years in Thailand.",
+      "claim_type": "financial",
+      "source_evidence_ids": ["ev_video_claim_payback_001"],
+      "external_evidence_ids": [],
+      "status": "unverified",
+      "confidence": "unverified",
+      "base_case": "Not modeled yet.",
+      "aggressive_case": "Not modeled yet.",
+      "worst_case": "Not modeled yet.",
+      "assumptions": [
+        "project load profile is unknown",
+        "tariff scenario is unknown",
+        "CAPEX is unknown",
+        "battery cycling and degradation assumptions are unknown"
+      ],
+      "conflicts": [],
+      "recommendation": "Do not use the 3-year payback claim until external evidence and project-specific modeling are completed."
+    }
+  ]
+}

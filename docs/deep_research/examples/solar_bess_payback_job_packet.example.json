@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "job_id": "DR-20260624-001",
+  "project": "SIRINX Solar",
+  "requested_by": "operator",
+  "created_at": "2026-06-24T04:00:00+07:00",
+  "mode": "local_first",
+  "confidentiality": "internal",
+  "research_goal": "Verify whether a Solar plus BESS system can reach 3-year payback in Thailand commercial-building scenarios, and identify assumptions where the claim is true or false.",
+  "decision_context": "Use the result to decide whether this claim can be used in SIRINX sales material or must be softened with scenario assumptions.",
+  "inputs": {
+    "videos": [],
+    "transcripts": [
+      {
+        "source_id": "src_operator_transcript",
+        "source_type": "transcript",
+        "uri": "local://pending-transcript.srt",
+        "title": "Operator-provided transcript placeholder",
+        "confidentiality": "internal",
+        "notes": "Placeholder only. Do not cite until real transcript exists."
+      }
+    ],
+    "pdfs": [],
+    "screenshots": [],
+    "urls": [],
+    "tables": [],
+    "notes": [
+      {
+        "source_id": "src_research_note",
+        "source_type": "note",
+        "uri": "local://research-note.md",
+        "title": "Research seed note",
+        "confidentiality": "internal",
+        "notes": "Seed note for local planning only."
+      }
+    ]
+  },
+  "scope": {
+    "claim_types": ["financial", "technical", "regulatory", "market"],
+    "geography": ["Thailand"],
+    "time_window": {
+      "preferred_recency_years": 3,
+      "earliest_allowed_year": 2020
+    },
+    "source_budget": {
+      "max_sources_total": 60,
+      "min_sources_per_material_claim": 2,
+      "max_search_loops_per_claim": 3
+    }
+  },
+  "source_policy": {
+    "preferred": [
+      "government tariff documents",
+      "utility rate schedules",
+      "technical datasheets",
+      "peer-reviewed or technical studies",
+      "project-specific load data"
+    ],
+    "use_with_caution": [
+      "vendor marketing pages",
+      "sponsored case studies",
+      "social posts",
+      "old statistics"
+    ],
+    "blocked": [
+      "private browser sessions",
+      "service-role keys",
+      "paid portals without policy allow",
+      "captcha or login bypass"
+    ]
+  },
+  "evidence_requirements": [
+    "material claims require citations or unverified status",
+    "video-derived claims require timestamps",
+    "financial claims require assumptions and scenario ranges",
+    "conflicts must be logged"
+  ],
+  "output_requirements": [
+    "claims.json",
+    "evidence_units.json",
+    "claim_evidence_matrix.csv",
+    "contradiction_log.md",
+    "source_quality_table.csv",
+    "scenario_model.json",
+    "research_report.md",
+    "executive_summary.md",
+    "action_roadmap.md"
+  ],
+  "verification_gates": [
+    "each material claim has evidence or is marked unverified",
+    "sponsored or marketing sources are labeled",
+    "observations, inferences, assumptions, and recommendations are separated",
+    "financial claims include base, aggressive, and worst cases"
+  ],
+  "hard_stops": [
+    "secret extraction request",
+    "confidential raw files leaving local storage without redaction policy",
+    "login/captcha/quota bypass",
+    "legal/financial/safety recommendation without confidence labels",
+    "public publishing or external mutation request"
+  ],
+  "blocked_actions": [
+    "provider_call_without_budget_policy",
+    "public_endpoint",
+    "publish_report",
+    "upload_confidential_raw_video",
+    "secret_read"
+  ]
+}

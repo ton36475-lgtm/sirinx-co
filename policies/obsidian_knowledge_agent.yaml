@@ -1,0 +1,97 @@
+mode:
+  name: OBSIDIAN_KNOWLEDGE_AGENT_LOCAL_SPEC
+  default: draft_only
+  direct_vault_write: blocked
+  cloud_sync: blocked
+  publish: blocked
+  live_vault_write_enabled: false
+  require_git_diff_review: true
+
+runtime:
+  root: "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/obsidian_knowledge_agent"
+  draft_root: "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/obsidian_knowledge_agent/drafts"
+  review_root: "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/obsidian_knowledge_agent/review"
+  rule_candidate_root: "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/obsidian_knowledge_agent/rules"
+  write_manifest: true
+  keep_edit_diffs: true
+
+vault:
+  default_root: "/Users/sirinx/Documents/Obsidian Vault/SIRINX"
+  digest_note: "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md"
+  live_write_default: false
+  review_queue_path: "00_INBOX/AI_REVIEW_QUEUE"
+  rules_path: "00_SYSTEM/Knowledge Agent Rules"
+
+allowed_outputs:
+  - draft_note
+  - source_summary
+  - concept_graph
+  - canvas_spec
+  - link_suggestions
+  - tag_suggestions
+  - rule_candidates
+  - review_packet
+
+operations:
+  capture_input: auto_allow
+  classify_note_intent: auto_allow
+  create_runtime_draft_note: auto_allow
+  create_runtime_concept_graph: auto_allow
+  create_runtime_canvas_spec: auto_allow
+  create_rule_candidate: auto_allow
+  propose_vault_path: auto_allow_with_collision_check
+  append_digest_note: policy_gate
+  write_live_vault_note: blocked
+  rename_or_move_note: blocked_until_backup_policy
+  delete_note: hard_block
+  publish_or_sync_note: hard_block
+
+blocked_reads:
+  - ".env"
+  - "ssh_keys"
+  - "browser_profiles"
+  - "password_stores"
+  - "cloud_credentials"
+  - "private_keys"
+  - "unrelated_personal_folders"
+
+blocked_writes:
+  - "final_vault_folder"
+  - "delete_existing_note"
+  - "move_existing_note"
+  - "publish_note"
+  - "third_party_connector_mutation"
+
+blocked_patterns:
+  - ".env"
+  - ".env.*"
+  - "id_rsa"
+  - "id_ed25519"
+  - "*.pem"
+  - "*.key"
+  - "credentials.json"
+  - "token.json"
+  - "cookies.sqlite"
+
+rule_learning:
+  enabled: true
+  source_required: "user_edit_diff"
+  storage: "markdown_rulebook"
+  auto_activate: false
+  conflict_state: "needs_review"
+  allowed_rule_types:
+    - style
+    - folder_routing
+    - tagging
+    - linking
+    - canvas_layout
+    - confidence_language
+    - template_selection
+
+review:
+  require_manifest: true
+  require_collision_check: true
+  require_source_links: true
+  require_blocked_action_list: true
+  require_operator_visible_diff: true
+  require_contract_reference: "docs/obsidian_knowledge_agent/VAULT_OPERATION_CONTRACT.md"

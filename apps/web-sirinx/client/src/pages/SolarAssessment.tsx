@@ -32,8 +32,8 @@ const fadeUp = {
 
 const slideIn = {
   hidden: { opacity: 0, x: 30 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.4 } },
-  exit: { opacity: 0, x: -30, transition: { duration: 0.3 } },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.16 } },
+  exit: { opacity: 0, x: -30, transition: { duration: 0.12 } },
 };
 
 // ── Thailand Solar Engineering Constants ──────────────────────────
@@ -813,6 +813,7 @@ export default function SolarAssessment() {
                   const StepIcon = s.icon;
                   return (
 	                    <button
+	                      type="button"
 	                      key={i}
 	                      onClick={() => i < step && setStep(i)}
 	                      aria-label={`ขั้นตอนที่ ${i + 1}: ${s.label}`}
@@ -837,7 +838,7 @@ export default function SolarAssessment() {
 
             {/* Step Content */}
             <div className="p-6 lg:p-8 rounded-2xl border border-border-subtle bg-surface-elevated shadow-sm">
-              <AnimatePresence mode="wait">
+              <AnimatePresence initial={false} mode="sync">
                 {/* ── Step 0: Business Type ── */}
                 {step === 0 && (
                   <motion.div key="step0" variants={slideIn} initial="hidden" animate="visible" exit="exit">
@@ -845,7 +846,7 @@ export default function SolarAssessment() {
                     <p className="text-sm text-text-muted mb-6">{t("sa.s0.desc")}</p>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                       {Object.entries(BUSINESS_TYPES).map(([key, biz]) => (
-                        <button key={key} onClick={() => updateInput("businessType", key)}
+                        <button type="button" key={key} onClick={() => updateInput("businessType", key)}
                           className={`p-4 rounded-xl border text-left transition-all group ${
                             input.businessType === key
                               ? "border-accent-primary bg-accent-glow ring-1 ring-accent-primary/30"
@@ -890,11 +891,11 @@ export default function SolarAssessment() {
 
                     {/* Input mode toggle */}
                     <div className="flex gap-2 mb-6">
-                      <button onClick={() => updateInput("inputMode", "bill")}
+                      <button type="button" onClick={() => updateInput("inputMode", "bill")}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${input.inputMode === "bill" ? "bg-accent-primary text-text-inverse" : "bg-surface-overlay text-text-muted border border-border-subtle"}`}>
                         กรอกค่าไฟ (บาท)
                       </button>
-                      <button onClick={() => updateInput("inputMode", "kwh")}
+                      <button type="button" onClick={() => updateInput("inputMode", "kwh")}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${input.inputMode === "kwh" ? "bg-accent-primary text-text-inverse" : "bg-surface-overlay text-text-muted border border-border-subtle"}`}>
                         กรอก kWh โดยตรง
                       </button>
@@ -945,7 +946,7 @@ export default function SolarAssessment() {
                             })()}
                           </div>
                           {/* Hourly profile preview */}
-                          <button onClick={() => setShowHourly(!showHourly)}
+                          <button type="button" onClick={() => setShowHourly(!showHourly)}
                             className="flex items-center gap-1 text-xs text-accent-primary hover:underline mb-2">
                             <Eye className="w-3 h-3" /> {showHourly ? "ซ่อน" : "ดู"} Load Profile รายชั่วโมง
                           </button>
@@ -979,7 +980,7 @@ export default function SolarAssessment() {
                         <label className="block text-sm font-medium text-foreground mb-2">{t("sa.s2.region")}</label>
                         <div className="grid sm:grid-cols-2 gap-2">
                           {Object.entries(REGIONS).map(([key, r]) => (
-                            <button key={key} onClick={() => updateInput("region", key)}
+                            <button type="button" key={key} onClick={() => updateInput("region", key)}
                               className={`p-3 rounded-lg border text-left text-sm transition-all ${
                                 input.region === key ? "border-accent-primary bg-accent-glow" : "border-border-subtle hover:border-border-accent"
                               }`}>
@@ -998,7 +999,7 @@ export default function SolarAssessment() {
                         <label className="block text-sm font-medium text-foreground mb-2">{t("sa.s2.roofType")}</label>
                         <div className="grid sm:grid-cols-2 gap-2">
                           {Object.entries(ROOF_TYPES).map(([key, r]) => (
-                            <button key={key} onClick={() => updateInput("roofType", key)}
+                            <button type="button" key={key} onClick={() => updateInput("roofType", key)}
                               className={`p-3 rounded-lg border text-left text-sm transition-all ${
                                 input.roofType === key ? "border-accent-primary bg-accent-glow" : "border-border-subtle hover:border-border-accent"
                               }`}>
@@ -1015,7 +1016,7 @@ export default function SolarAssessment() {
                         <label className="block text-sm font-medium text-foreground mb-2">{t("sa.s2.orientation")}</label>
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
                           {Object.entries(ORIENTATIONS).map(([key, o]) => (
-                            <button key={key} onClick={() => updateInput("orientation", key)}
+                            <button type="button" key={key} onClick={() => updateInput("orientation", key)}
                               className={`p-3 rounded-lg border text-left text-xs transition-all ${
                                 input.orientation === key ? "border-accent-primary bg-accent-glow" : "border-border-subtle hover:border-border-accent"
                               }`}>
@@ -1829,13 +1830,13 @@ export default function SolarAssessment() {
               {/* Navigation Buttons */}
               {step < 5 && (
                 <div className="flex justify-between mt-8 pt-4 border-t border-border-subtle">
-                  <button onClick={prevStep} disabled={step === 0}
+                  <button type="button" onClick={prevStep} disabled={step === 0}
                     className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
                       step === 0 ? "opacity-30 cursor-not-allowed text-text-muted" : "text-text-secondary hover:text-foreground hover:bg-surface-overlay"
                     }`}>
                     <ArrowLeft className="w-4 h-4" /> ย้อนกลับ
                   </button>
-                  <button onClick={nextStep} disabled={!canProceed}
+                  <button type="button" onClick={nextStep} disabled={!canProceed}
                     className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${
                       canProceed ? "btn-accent" : "opacity-30 cursor-not-allowed bg-surface-elevated text-text-muted"
                     }`}>

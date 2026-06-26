@@ -11,6 +11,20 @@ function getBaseUrl(req: express.Request): string {
   return `${proto}://${host}`;
 }
 
+function resolveStaticDistPath(): string {
+  const candidates = [
+    path.resolve(import.meta.dirname, "../..", "dist", "public"),
+    path.resolve(import.meta.dirname, "public"),
+    path.resolve(process.cwd(), "dist", "public"),
+    path.resolve(process.cwd(), "apps", "web-sirinx", "dist", "public"),
+  ];
+
+  return (
+    candidates.find((candidate) => fs.existsSync(path.join(candidate, "index.html"))) ??
+    candidates[0]
+  );
+}
+
 export async function setupVite(app: Express, server: Server) {
   const viteModuleName = "vite";
   const viteConfigModule = "../../vite.config";
@@ -63,11 +77,8 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  const distPath =
-    process.env.NODE_ENV === "development"
-      ? path.resolve(import.meta.dirname, "../..", "dist", "public")
-      : path.resolve(import.meta.dirname, "public");
-  if (!fs.existsSync(distPath)) {
+  const distPath = resolveStaticDistPath();
+  if (!fs.existsSync(path.join(distPath, "index.html"))) {
     console.error(
       `Could not find the build directory: ${distPath}, make sure to build the client first`
     );
@@ -79,6 +90,10 @@ export function serveStatic(app: Express) {
   // Also inject OG tags for production mode
   app.use("*", (req, res) => {
     const indexPath = path.resolve(distPath, "index.html");
+    if (!fs.existsSync(indexPath)) {
+      res.status(500).send("Build output is missing. Run the client build before starting production.");
+      return;
+    }
     let html = fs.readFileSync(indexPath, "utf-8");
     const baseUrl = getBaseUrl(req);
     html = injectOgTags(html, req.originalUrl, baseUrl);

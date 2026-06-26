@@ -314,45 +314,45 @@ function ContactInner() {
                 <h2 className="font-display text-xl font-bold text-foreground mb-1">{t("formTitle")}</h2>
                 <p className="text-sm text-text-muted mb-6">{t("formDesc")}</p>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form method="post" onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-1.5">{t("labelName")}</label>
-	                      <input type="text" required value={formData.name} onChange={(e) => update("name", e.target.value)} className={inputCls} placeholder={t("phName")} aria-label={t("labelName")} />
+                      <label htmlFor="contact-name" className="block text-sm font-medium text-foreground mb-1.5">{t("labelName")}</label>
+		                      <input id="contact-name" name="name" autoComplete="name" type="text" required value={formData.name} onChange={(e) => update("name", e.target.value)} className={inputCls} placeholder={t("phName")} aria-label={t("labelName")} />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-1.5">{t("labelCompany")}</label>
-	                      <input type="text" value={formData.company} onChange={(e) => update("company", e.target.value)} className={inputCls} placeholder={t("phCompany")} aria-label={t("labelCompany")} />
+                      <label htmlFor="contact-company" className="block text-sm font-medium text-foreground mb-1.5">{t("labelCompany")}</label>
+		                      <input id="contact-company" name="company" autoComplete="organization" type="text" value={formData.company} onChange={(e) => update("company", e.target.value)} className={inputCls} placeholder={t("phCompany")} aria-label={t("labelCompany")} />
                     </div>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-1.5">{t("labelEmail")}</label>
-	                      <input type="email" value={formData.email} onChange={(e) => update("email", e.target.value)} className={inputCls} placeholder="email@company.com" aria-label={t("labelEmail")} />
+                      <label htmlFor="contact-email" className="block text-sm font-medium text-foreground mb-1.5">{t("labelEmail")}</label>
+		                      <input id="contact-email" name="email" autoComplete="email" type="email" value={formData.email} onChange={(e) => update("email", e.target.value)} className={inputCls} placeholder="email@company.com" aria-label={t("labelEmail")} />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-1.5">{t("labelPhone")}</label>
-	                      <input type="tel" required value={formData.phone} onChange={(e) => update("phone", e.target.value)} className={inputCls} placeholder="08X-XXX-XXXX" aria-label={t("labelPhone")} />
+                      <label htmlFor="contact-phone" className="block text-sm font-medium text-foreground mb-1.5">{t("labelPhone")}</label>
+		                      <input id="contact-phone" name="phone" autoComplete="tel" type="tel" required value={formData.phone} onChange={(e) => update("phone", e.target.value)} className={inputCls} placeholder="08X-XXX-XXXX" aria-label={t("labelPhone")} />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-1.5">{t("labelInterest")}</label>
-	                    <select required value={formData.interest} onChange={(e) => update("interest", e.target.value)} className={inputCls} aria-label={t("labelInterest")}>
+                    <label htmlFor="contact-interest" className="block text-sm font-medium text-foreground mb-1.5">{t("labelInterest")}</label>
+		                    <select id="contact-interest" name="interest" required value={formData.interest} onChange={(e) => update("interest", e.target.value)} className={inputCls} aria-label={t("labelInterest")}>
                       <option value="">{t("selectSolution")}</option>
                       {interestOptions.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
                     </select>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-1.5">{t("labelBudget")}</label>
-	                        <select value={formData.budget} onChange={(e) => update("budget", e.target.value)} className={inputCls} aria-label={t("labelBudget")}>
+                      <label htmlFor="contact-budget" className="block text-sm font-medium text-foreground mb-1.5">{t("labelBudget")}</label>
+		                        <select id="contact-budget" name="budget" value={formData.budget} onChange={(e) => update("budget", e.target.value)} className={inputCls} aria-label={t("labelBudget")}>
                         <option value="">{t("selectBudget")}</option>
                         {budgetRanges.map((r) => <option key={r} value={r}>{r}</option>)}
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-1.5">{t("labelTimeline")}</label>
-	                      <select value={formData.timeline} onChange={(e) => update("timeline", e.target.value)} className={inputCls} aria-label={t("labelTimeline")}>
+                      <label htmlFor="contact-timeline" className="block text-sm font-medium text-foreground mb-1.5">{t("labelTimeline")}</label>
+		                      <select id="contact-timeline" name="timeline" value={formData.timeline} onChange={(e) => update("timeline", e.target.value)} className={inputCls} aria-label={t("labelTimeline")}>
                         <option value="">{t("selectTimeline")}</option>
                         {timelineOptions.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
                       </select>
@@ -360,17 +360,17 @@ function ContactInner() {
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-1.5">{t("labelBill")}</label>
-	                      <input type="number" min="0" value={formData.monthlyBill} onChange={(e) => update("monthlyBill", e.target.value)} className={inputCls} placeholder={t("phBill")} aria-label={t("labelBill")} />
+                      <label htmlFor="contact-monthly-bill" className="block text-sm font-medium text-foreground mb-1.5">{t("labelBill")}</label>
+		                      <input id="contact-monthly-bill" name="monthlyBill" inputMode="decimal" type="number" min="0" value={formData.monthlyBill} onChange={(e) => update("monthlyBill", e.target.value)} className={inputCls} placeholder={t("phBill")} aria-label={t("labelBill")} />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-1.5">{t("labelRoof")}</label>
-	                      <input type="number" min="0" value={formData.roofArea} onChange={(e) => update("roofArea", e.target.value)} className={inputCls} placeholder={t("phRoof")} aria-label={t("labelRoof")} />
+                      <label htmlFor="contact-roof-area" className="block text-sm font-medium text-foreground mb-1.5">{t("labelRoof")}</label>
+		                      <input id="contact-roof-area" name="roofArea" inputMode="decimal" type="number" min="0" value={formData.roofArea} onChange={(e) => update("roofArea", e.target.value)} className={inputCls} placeholder={t("phRoof")} aria-label={t("labelRoof")} />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-1.5">{t("labelMessage")}</label>
-	                    <textarea rows={4} value={formData.message} onChange={(e) => update("message", e.target.value)}
+                    <label htmlFor="contact-message" className="block text-sm font-medium text-foreground mb-1.5">{t("labelMessage")}</label>
+		                    <textarea id="contact-message" name="message" rows={4} value={formData.message} onChange={(e) => update("message", e.target.value)}
 	                      className={`${inputCls} resize-none`} placeholder={t("phMessage")} aria-label={t("labelMessage")} />
                   </div>
                   <button

@@ -1,0 +1,521 @@
+{
+  "assetReferenceIssues": [],
+  "brokerDecisions": [
+    {
+      "action": "inspect",
+      "decision": "auto_allow_dry_run",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "web_sirinx_dist_manifest",
+      "decision": "auto_allow_dry_run",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "web_sirinx_static_asset_check",
+      "decision": "auto_allow_dry_run",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "web_sirinx_build_validation",
+      "decision": "requires_executor_lease",
+      "reason": "repo_affecting_executor_action",
+      "requiredGate": "executor_lease_and_lane_lock",
+      "tool": "codex-local"
+    },
+    {
+      "action": "simulate_deploy_plan",
+      "decision": "auto_allow_dry_run",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "web_sirinx_pages_deploy",
+      "decision": "blocked_first_phase",
+      "reason": "live_external_or_production_action_not_enabled",
+      "requiredGate": "dedicated_adapter_contract_and_runtime_preflight",
+      "tool": "codex-local"
+    },
+    {
+      "action": "deploy",
+      "decision": "blocked_first_phase",
+      "reason": "live_external_or_production_action_not_enabled",
+      "requiredGate": "dedicated_adapter_contract_and_runtime_preflight",
+      "tool": "codex-local"
+    },
+    {
+      "action": "production_deploy",
+      "decision": "blocked",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "push",
+      "decision": "blocked_first_phase",
+      "reason": "live_external_or_production_action_not_enabled",
+      "requiredGate": "dedicated_adapter_contract_and_runtime_preflight",
+      "tool": "codex-local"
+    },
+    {
+      "action": "approve_all_actions",
+      "decision": "blocked",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    }
+  ],
+  "distChangedSamples": [
+    {
+      "path": "apps/web-sirinx/dist/public/about/index.html",
+      "status": " M"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assessment/index.html",
+      "status": " M"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/About-DmjpwoGg.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/AgentMonitor-B4PgoV_m.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Analytics-DaFoBDNU.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Blog-BeG-JUf3.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/BlogCMS-q7NARNzs.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/BlogPost-DzNLqXoG.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Contact-DkiQoQVY.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/ContactSubmissions-DebSzXJR.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Cookies-DQJ-A_3Y.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Dashboard-D2rB2_pQ.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/DashboardLayout-XxPoPaqr.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/FloatingChatWidget-DmbrfEig.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/HeroSlideshow-t9DgeoMY.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Home-Bk-Qcmte.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/HomeSolution-CkV6QiND.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Industries-DKoXoeU6.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/InvestmentTaxHub-DHqzlRhU.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Leads-C6go-sAC.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/LegalPage-BcIsfkfW.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/NotFound-uYe9NsBC.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Partner-B77GWuSG.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Pricing-DpKOjzar.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Privacy-ckuQqJxn.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Projects-CMCVC1qd.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/SolarAssessment-DqfJ6nRT.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/SolarCarport-BbN-7GVN.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Solutions-CvamHBfE.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Strategy-NlYP8_H1.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Terms-CsokMpyO.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/activity-D2nnC6Tv.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/arrow-left-9EUsEDPr.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/arrow-right-CvqIPQcu.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/badge-D6Qe7tyO.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/battery-Bpsf-IZS.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/battery-charging-BqfbkBBG.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/brain-8KRWt4a_.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/building-2-Bjj9R_uu.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/button-CoTBkdBU.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/calendar-DicrpNPI.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/car-DcPyVd2I.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/card-CxnZmKbT.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/chevron-left-BXQFOFG6.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/chevron-up-mGnnJUa7.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/circle-check-C-9QTi9-.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/clock-BmA1V9ou.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/cpu-C_ffKPFX.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/dialog-D-4z04IR.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/download-CyB2xHzc.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/eye-CIaloZ9u.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/gauge-Bdc2068Z.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/handshake-WVUoxoiC.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/hotel-aEWQN6Y1.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/inbox-Bnmbsk-Q.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/index-BXIPGAV8.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/index-BpJY0eKf.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/index-Mkk5ymst.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/landmark-t-fj2O6D.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/leaf-Dia2ms2i.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/lightbulb-C34yL1MP.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/loader-circle-DduR7n7_.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/message-circle-C2Og29H6.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/plug-B1wpjOdx.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/shield-BVEYoKv4.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/shield-check-CuoSYdL9.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/tag-Bwsk2z6v.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/target-CbiZKEmA.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/textarea-BQhwb1tp.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/trending-up-BOT535I6.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/trpc-provider-Beux8tzd.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/video-2vtoBpXU.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/waves-CGN5dObF.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/wrench-DMRhxocc.js",
+      "status": " D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/blog/index.html",
+      "status": " M"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/contact/index.html",
+      "status": " M"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/cookies/index.html",
+      "status": " M"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/home-solution/index.html",
+      "status": " M"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/index.html",
+      "status": " M"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/industries/index.html",
+      "status": " M"
+    }
+  ],
+  "distFileCounts": {
+    "assetFiles": 84,
+    "distExists": 1,
+    "htmlFiles": 94,
+    "totalFiles": 221
+  },
+  "distGitStatusCounts": {
+    "??:asset": 72,
+    "??:total": 72,
+    "D:asset": 72,
+    "D:total": 72,
+    "M:html": 94,
+    "M:static_config": 1,
+    "M:total": 95
+  },
+  "generatedBy": "scripts/a2a/a2a_web_sirinx_deploy_lane.py",
+  "mode": "local_read_only_web_sirinx_deploy_lane",
+  "nextSafeActions": [
+    "Review asset reference issues before staging dist assets.",
+    "Run web-sirinx check, test, and build in a clean scoped lane before deploy.",
+    "Stage only web-sirinx source plus matching generated dist assets after validation.",
+    "Deploy to Cloudflare Pages only after target/auth/rollback evidence is bound."
+  ],
+  "policyBoundary": [
+    "read_only_manifest",
+    "no_git_add_dot",
+    "no_push",
+    "no_cloudflare_deploy",
+    "no_wrangler_publish",
+    "no_provider_call",
+    "no_secret_read_or_print",
+    "deploy_requires_clean_scoped_lane",
+    "deploy_requires_cloudflare_target_and_rollback_plan"
+  ],
+  "sourceChangedSamples": [
+    {
+      "path": "apps/web-sirinx/package.json",
+      "status": " M"
+    },
+    {
+      "path": "apps/web-sirinx/server/_core/env.ts",
+      "status": " M"
+    },
+    {
+      "path": "apps/web-sirinx/server/_core/index.ts",
+      "status": " M"
+    },
+    {
+      "path": "apps/web-sirinx/server/_core/integration-health.test.ts",
+      "status": " M"
+    },
+    {
+      "path": "apps/web-sirinx/server/_core/integration-health.ts",
+      "status": " M"
+    },
+    {
+      "path": "apps/web-sirinx/server/_core/supabasePublicEndpoint.test.ts",
+      "status": "??"
+    },
+    {
+      "path": "apps/web-sirinx/server/_core/supabasePublicEndpoint.ts",
+      "status": "??"
+    }
+  ],
+  "sourceGitStatusCounts": {
+    "??:source_or_other": 2,
+    "??:total": 2,
+    "M:source_or_other": 5,
+    "M:total": 5
+  },
+  "staticFiles": [
+    {
+      "bytes": 1296,
+      "exists": true,
+      "name": "_headers",
+      "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/apps/web-sirinx/dist/public/_headers"
+    },
+    {
+      "bytes": 19,
+      "exists": true,
+      "name": "_redirects",
+      "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/apps/web-sirinx/dist/public/_redirects"
+    },
+    {
+      "bytes": 18126,
+      "exists": true,
+      "name": "sitemap.xml",
+      "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/apps/web-sirinx/dist/public/sitemap.xml"
+    },
+    {
+      "bytes": 84,
+      "exists": true,
+      "name": "robots.txt",
+      "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/apps/web-sirinx/dist/public/robots.txt"
+    },
+    {
+      "bytes": 483,
+      "exists": true,
+      "name": "manifest.json",
+      "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/apps/web-sirinx/dist/public/manifest.json"
+    },
+    {
+      "bytes": 10797,
+      "exists": true,
+      "name": "index.html",
+      "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/apps/web-sirinx/dist/public/index.html"
+    }
+  ],
+  "summary": {
+    "assetFiles": 84,
+    "brokerDecisionCounts": {
+      "auto_allow_dry_run": 4,
+      "blocked": 2,
+      "blocked_first_phase": 3,
+      "requires_executor_lease": 1
+    },
+    "deployBlocked": true,
+    "distChangedFiles": 239,
+    "htmlFiles": 94,
+    "missingAssetReferences": 0,
+    "overallStatus": "deploy_blocked_local_manifest_ready",
+    "sourceChangedFiles": 7
+  },
+  "updatedAt": "2026-06-27T01:15:47+00:00"
+}

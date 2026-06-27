@@ -1,0 +1,488 @@
+{
+  "autonomousPolicy": {
+    "autoAllowDryRun": 12,
+    "blocked": 20,
+    "blockedFirstPhase": 0,
+    "exists": true,
+    "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/autonomous_execution_policy_sanitizer.json",
+    "requestedActions": 34,
+    "requiresExecutorLease": 2,
+    "sampleBlockedActions": [
+      "access_secrets",
+      "read_or_export_user_data",
+      "modify_authentication",
+      "modify_authorization",
+      "change_payment_logic",
+      "change_security_policy",
+      "install_new_dependencies",
+      "run_unknown_scripts",
+      "database_migration",
+      "delete_or_overwrite_files",
+      "production_deploy",
+      "external_api_write_actions"
+    ],
+    "status": "sanitized_with_hard_blocks"
+  },
+  "blockedActions": [
+    "access_secrets",
+    "approve_all_actions",
+    "autonomous_approve_all",
+    "bypass_access_control",
+    "bypass_command_policy",
+    "bypass_rate_limits",
+    "captcha_bypass",
+    "change_payment_logic",
+    "change_security_policy",
+    "connector_write_without_target_binding",
+    "copy_browser_profile",
+    "copy_token_store",
+    "database_migration",
+    "delete_or_overwrite_files",
+    "deploy",
+    "destructive_delete_without_backup",
+    "direct_repo_mutation",
+    "disable_logging",
+    "disable_monitoring",
+    "disable_policy",
+    "disable_security_controls",
+    "exfiltrate_credentials",
+    "external_api_write_actions",
+    "force_push",
+    "hide_execution_history",
+    "install_new_dependencies",
+    "jailbreak_policy",
+    "modify_audit_trail",
+    "modify_authentication",
+    "modify_authorization",
+    "print_secret",
+    "production_deploy",
+    "provider_call",
+    "provider_secret_dump",
+    "public_endpoint",
+    "push",
+    "quota_bypass",
+    "read_browser_profile",
+    "read_or_export_user_data",
+    "read_private_key",
+    "run_unknown_scripts",
+    "unlock_all_commands",
+    "unlock_all_security"
+  ],
+  "broker": {
+    "fixture_path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/apps/mission-control/src/fixtures/codexCommandBrokerStatus.json",
+    "latest_decisions": [
+      {
+        "action": "code_review_report",
+        "decision": "auto_allow_dry_run",
+        "reason": "local_non_mutating_action",
+        "required_gate": "none",
+        "tool": "codex-local"
+      },
+      {
+        "action": "approve_all_actions",
+        "decision": "blocked",
+        "reason": "hard_blocked_action",
+        "required_gate": "policy_change_required",
+        "tool": "codex-local"
+      },
+      {
+        "action": "external_api_write_actions",
+        "decision": "blocked",
+        "reason": "hard_blocked_action",
+        "required_gate": "policy_change_required",
+        "tool": "codex-local"
+      },
+      {
+        "action": "production_deploy",
+        "decision": "blocked",
+        "reason": "hard_blocked_action",
+        "required_gate": "policy_change_required",
+        "tool": "codex-local"
+      },
+      {
+        "action": "exfiltrate_credentials",
+        "decision": "blocked",
+        "reason": "hard_blocked_action",
+        "required_gate": "policy_change_required",
+        "tool": "codex-local"
+      },
+      {
+        "action": "disable_logging",
+        "decision": "blocked",
+        "reason": "hard_blocked_action",
+        "required_gate": "policy_change_required",
+        "tool": "codex-local"
+      }
+    ],
+    "summary": {
+      "autoAllowDryRun": 2,
+      "blocked": 8,
+      "blockedFirstPhase": 0,
+      "policyControlledRegistryAllow": 1,
+      "requiresExecutorLease": 1,
+      "total": 12
+    },
+    "updated_at": "2026-06-27T00:56:48+00:00"
+  },
+  "codeReview": {
+    "autoAllowDryRun": 7,
+    "blocked": 2,
+    "changedFilesVisible": 355,
+    "exists": true,
+    "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/automated_code_review_workflow.json",
+    "plannedStages": 6,
+    "requiresExecutorLease": 1,
+    "sourceExists": true,
+    "sourceHash": "1fac843943225f32fa20cd96a7a6ee95af8747cdb6153d5adff9347459f0d5c3",
+    "sourcePath": "/Users/sirinx/Downloads/\ud83e\udd16 AUTOMATED CODE REVIEW WORKFLOW.md",
+    "status": "ready_for_local_review_only"
+  },
+  "commandBrokerProduction": {
+    "denyAlwaysCount": 14,
+    "deployCommandAllowed": false,
+    "directExecutionEnabled": false,
+    "exists": true,
+    "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/command_broker_production_lane.json",
+    "registeredCommands": 45,
+    "runtimeFiles": 18,
+    "status": "ready_for_review_no_execution"
+  },
+  "commandPacket": {
+    "action": "web_sirinx_dist_manifest",
+    "commandHash": "45222851e3033dfb1d3898f2c987665bea4a35c59e2ae7cf0b9381d33161c4dd",
+    "executionAllowed": true,
+    "exists": true,
+    "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/codex_command_packet.json",
+    "riskFlags": 0,
+    "status": "ready_dry_run_packet",
+    "tool": "codex-local"
+  },
+  "connectors": {
+    "external_writes_enabled": false,
+    "fixture_path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/apps/mission-control/src/fixtures/toolIntegrationPayloadStatus.json",
+    "record_count": 22,
+    "target_unbound": ["airtable", "github", "linear", "notion"],
+    "updated_at": "2026-06-26T22:23:50+00:00"
+  },
+  "controlNode": {
+    "executionRoute": "kob-plans-codex-local-executes",
+    "label": "Mac mini M2 Codex local sidebar",
+    "obsidianDigest": "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md",
+    "repoRoot": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os",
+    "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async"
+  },
+  "generatedBy": "scripts/a2a/a2a_goal_plan_board.py",
+  "mode": "local_read_only_goal_plan_board",
+  "obsidian": {
+    "bytes": 339296,
+    "exists": true,
+    "lines": 3590,
+    "mtime": 1782528756,
+    "path": "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md",
+    "policy": "metadata_only_no_raw_note_ingest"
+  },
+  "policyBoundary": [
+    "fixture_only_no_browser_file_access",
+    "no_secret_read_or_print",
+    "no_provider_call",
+    "no_connector_write",
+    "no_clone_execution",
+    "no_push",
+    "no_deploy",
+    "blocked_decision_does_not_become_bypass"
+  ],
+  "projectDocs": [
+    {
+      "bytes": 62319,
+      "exists": true,
+      "lines": 917,
+      "mtime": 1782529382,
+      "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/PROJECT_STATE.md"
+    },
+    {
+      "bytes": 38165,
+      "exists": true,
+      "lines": 713,
+      "mtime": 1782529588,
+      "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/NEXT_ACTIONS.md"
+    },
+    {
+      "bytes": 17379,
+      "exists": true,
+      "lines": 358,
+      "mtime": 1782529436,
+      "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/AGENTS.md"
+    },
+    {
+      "bytes": 9100,
+      "exists": true,
+      "lines": 226,
+      "mtime": 1782522490,
+      "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/docs/a2async/CODEX_COMMAND_BROKER_TOOL_GITREPO_INTEGRATION.md"
+    },
+    {
+      "bytes": 2351,
+      "exists": true,
+      "lines": 69,
+      "mtime": 1782518470,
+      "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/docs/a2async/A2A_INTEGRATION_READINESS_MATRIX.md"
+    },
+    {
+      "bytes": 1832,
+      "exists": true,
+      "lines": 67,
+      "mtime": 1782517611,
+      "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/docs/a2async/A2A_SCOPED_LANE_STAGING_GUARD.md"
+    },
+    {
+      "bytes": 3657,
+      "exists": true,
+      "lines": 109,
+      "mtime": 1782520882,
+      "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/docs/a2async/AUTOMATED_CODE_REVIEW_WORKFLOW_INTEGRATION.md"
+    }
+  ],
+  "registry": {
+    "allow_clone_count": 22,
+    "allow_clone_repos": [
+      "DietrichGebert/ponytail",
+      "FlowiseAI/Flowise",
+      "PostHog/posthog",
+      "a2aproject/A2A",
+      "activepieces/activepieces",
+      "bytedance/deer-flow",
+      "chatwoot/chatwoot",
+      "dittofeed/dittofeed",
+      "formbricks/formbricks",
+      "gitroomhq/postiz-app",
+      "growthbook/growthbook",
+      "knadh/listmonk",
+      "mautic/mautic",
+      "metabase/metabase",
+      "n8n-io/n8n",
+      "openai/codex",
+      "pewdiepie-archdaemon/odysseus",
+      "plausible/analytics",
+      "towfiqi/serpbear",
+      "twentyhq/twenty",
+      "umami-software/umami",
+      "zai-org/GLM-5"
+    ],
+    "skip_clone_count": 2,
+    "total": 24
+  },
+  "runtimeReports": {
+    "automated_code_review": {
+      "errors": 0,
+      "exists": true,
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/automated_code_review_workflow.json",
+      "status": "valid",
+      "warnings": 0
+    },
+    "autonomous_policy_sanitizer": {
+      "errors": 0,
+      "exists": true,
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/autonomous_execution_policy_sanitizer.json",
+      "status": "valid",
+      "warnings": 0
+    },
+    "broker_status_validation": {
+      "errors": 0,
+      "exists": true,
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/broker_status_validation.json",
+      "status": "valid",
+      "warnings": 0
+    },
+    "command_broker_production": {
+      "errors": 0,
+      "exists": true,
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/command_broker_production_lane.json",
+      "status": "valid",
+      "warnings": 0
+    },
+    "command_packet": {
+      "errors": 0,
+      "exists": true,
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/codex_command_packet.json",
+      "status": "valid",
+      "warnings": 0
+    },
+    "readiness_matrix": {
+      "errors": 0,
+      "exists": true,
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/a2a_integration_readiness_matrix.json",
+      "status": "blocked_for_external_execution",
+      "warnings": 0
+    },
+    "scoped_lane": {
+      "errors": 0,
+      "exists": true,
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/scoped_lane_status_codex-command-broker-mission-control.json",
+      "status": "ready_for_scoped_stage",
+      "warnings": 1
+    },
+    "tool_repo_matrix": {
+      "errors": 0,
+      "exists": true,
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/codex_tool_repo_matrix.json",
+      "status": "valid",
+      "warnings": 0
+    },
+    "web_sirinx_deploy_lane": {
+      "errors": 0,
+      "exists": true,
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/web_sirinx_deploy_lane.json",
+      "status": "valid",
+      "warnings": 0
+    },
+    "web_sirinx_deploy_packet": {
+      "errors": 0,
+      "exists": true,
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/web_sirinx_deploy_packet.json",
+      "status": "valid",
+      "warnings": 0
+    }
+  },
+  "safeNextActions": [
+    "Review Mission Control Goal Plan board locally.",
+    "Review the Automated Code Review Workflow panel as report-only evidence.",
+    "Review the Tool Matrix panel before opening any new executor or repo action lane.",
+    "Review the Web Deploy panel before staging generated web-sirinx assets.",
+    "Review the pending Cloudflare Pages deploy packet before any deploy lane is opened.",
+    "Create a command packet for every local executor command before running it.",
+    "Keep KOB as planner/router and local Codex as executor.",
+    "Bind connector target IDs only in a scoped connector lane.",
+    "Use scoped lane staging guard before any commit request.",
+    "Keep unlock-all-security and autonomous-approve-all hard-blocked."
+  ],
+  "summary": {
+    "blockedActionCount": 43,
+    "brokerDecisions": 12,
+    "codeReviewPlannedStages": 6,
+    "commandBrokerProductionCommands": 45,
+    "commandBrokerRuntimeFiles": 18,
+    "commandPacketExecutionAllowed": true,
+    "commandPacketRiskFlags": 0,
+    "connectorTargetsUnbound": 4,
+    "overallStatus": "ready_for_local_review_only",
+    "registeredRepos": 24,
+    "safeNextActionCount": 10,
+    "sanitizedBlockedActions": 20,
+    "sanitizedRequestedActions": 34,
+    "toolMatrixRepoActions": 168,
+    "webSirinxDeployBlockedCommands": 1,
+    "webSirinxDeployLeaseRequiredCommands": 2,
+    "webSirinxDistChanges": 239,
+    "webSirinxMissingAssets": 0,
+    "workLaneCount": 11
+  },
+  "toolMatrix": {
+    "agentCount": 13,
+    "blockedOrGatedActions": 120,
+    "exists": true,
+    "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/codex_tool_repo_matrix.json",
+    "repoActionCount": 168,
+    "repoCount": 24,
+    "status": "ready_for_local_review_only"
+  },
+  "updatedAt": "2026-06-27T03:11:36+00:00",
+  "webSirinxDeploy": {
+    "deployBlocked": true,
+    "distChangedFiles": 239,
+    "exists": true,
+    "missingAssetReferences": 0,
+    "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/web_sirinx_deploy_lane.json",
+    "sourceChangedFiles": 7,
+    "status": "deploy_blocked_local_manifest_ready"
+  },
+  "webSirinxDeployPacket": {
+    "blockedCommands": 1,
+    "deployCommandBlocked": true,
+    "exists": true,
+    "laneId": "LANE_WEB_SIRINX_CLOUDFLARE_PAGES_DEPLOY",
+    "leaseRequiredCommands": 2,
+    "pagesProject": "sirinx-co",
+    "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/web_sirinx_deploy_packet.json",
+    "requiredValidationCommands": 5,
+    "status": "pending_validation_deploy_blocked"
+  },
+  "workLanes": [
+    {
+      "id": "codex-command-broker-mission-control",
+      "label": "Codex Command Broker + Mission Control",
+      "nextAction": "Review scoped stage packet; stage only the lane after explicit commit request.",
+      "source": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/scoped_lane_status_codex-command-broker-mission-control.json",
+      "status": "ready"
+    },
+    {
+      "id": "connector-target-binding",
+      "label": "Airtable / Linear / Notion / GitHub target binding",
+      "nextAction": "Wait for scoped target IDs before connector sync.",
+      "source": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/apps/mission-control/src/fixtures/toolIntegrationPayloadStatus.json",
+      "status": "blocked"
+    },
+    {
+      "id": "automated-code-review-workflow",
+      "label": "Automated Code Review Workflow",
+      "nextAction": "Review generated code-review manifest; keep recommendations report-only until a lease exists.",
+      "source": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/automated_code_review_workflow.json",
+      "status": "safe"
+    },
+    {
+      "id": "codex-tool-repo-matrix",
+      "label": "Codex Tool + Git Repo Command Matrix",
+      "nextAction": "Review command coverage before opening clone, provider, connector, deploy, or mutation lanes.",
+      "source": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/codex_tool_repo_matrix.json",
+      "status": "safe"
+    },
+    {
+      "id": "web-sirinx-generated-assets-deploy-lane",
+      "label": "web-sirinx generated assets + deploy backlog",
+      "nextAction": "Review generated dist manifest; run scoped validation before staging matching source and assets.",
+      "source": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/web_sirinx_deploy_lane.json",
+      "status": "blocked"
+    },
+    {
+      "id": "web-sirinx-cloudflare-pages-deploy-packet",
+      "label": "web-sirinx Cloudflare Pages pending deploy packet",
+      "nextAction": "Keep deploy blocked until check/test/build, target, rollback, health, and staging evidence are present.",
+      "source": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/web_sirinx_deploy_packet.json",
+      "status": "blocked"
+    },
+    {
+      "id": "codex-command-packet-control",
+      "label": "Codex Command Packet Control",
+      "nextAction": "Create/review a command packet before any local executor command leaves planning mode.",
+      "source": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/codex_command_packet.json",
+      "status": "safe"
+    },
+    {
+      "id": "command-broker-production-lane",
+      "label": "Command Broker Production Lane",
+      "nextAction": "Review production broker runtime registry before opening any executor lease.",
+      "source": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/command_broker_production_lane.json",
+      "status": "safe"
+    },
+    {
+      "id": "external-repo-registry",
+      "label": "External Git repo registry",
+      "nextAction": "Run registry audit only; clone remains separate gated lane.",
+      "source": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/registry/external_git_repos.yaml",
+      "status": "gated"
+    },
+    {
+      "id": "obsidian-brain-sync",
+      "label": "Obsidian Brain Sync",
+      "nextAction": "Append concise non-secret pulse after meaningful local work.",
+      "source": "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md",
+      "status": "safe"
+    },
+    {
+      "id": "unlock-security-request",
+      "label": "Unlock all security / autonomous approve",
+      "nextAction": "Keep hard blocks active; 8 blocked broker decisions are visible for review.",
+      "source": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/apps/mission-control/src/fixtures/codexCommandBrokerStatus.json",
+      "status": "blocked"
+    }
+  ]
+}

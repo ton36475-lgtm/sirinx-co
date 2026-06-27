@@ -1,0 +1,305 @@
+{
+  "actions": [
+    {
+      "action": "read_repository_files",
+      "decision": "auto_allow_dry_run",
+      "nextStep": "local_dry_run_only",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "inspect_architecture",
+      "decision": "auto_allow_dry_run",
+      "nextStep": "local_dry_run_only",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "run_lint",
+      "decision": "auto_allow_dry_run",
+      "nextStep": "local_dry_run_only",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "run_unit_tests",
+      "decision": "auto_allow_dry_run",
+      "nextStep": "local_dry_run_only",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "generate_docs",
+      "decision": "auto_allow_dry_run",
+      "nextStep": "local_dry_run_only",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "code_review_dry_run",
+      "decision": "auto_allow_dry_run",
+      "nextStep": "local_dry_run_only",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "code_review_report",
+      "decision": "auto_allow_dry_run",
+      "nextStep": "local_dry_run_only",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "diff_review",
+      "decision": "auto_allow_dry_run",
+      "nextStep": "local_dry_run_only",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "security_review_plan",
+      "decision": "auto_allow_dry_run",
+      "nextStep": "local_dry_run_only",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "create_non_destructive_patches",
+      "decision": "requires_executor_lease",
+      "nextStep": "executor_lease_and_lane_lock_required",
+      "reason": "repo_affecting_executor_action",
+      "requiredGate": "executor_lease_and_lane_lock",
+      "tool": "codex-local"
+    },
+    {
+      "action": "propose_refactors",
+      "decision": "requires_executor_lease",
+      "nextStep": "executor_lease_and_lane_lock_required",
+      "reason": "repo_affecting_executor_action",
+      "requiredGate": "executor_lease_and_lane_lock",
+      "tool": "codex-local"
+    },
+    {
+      "action": "update_markdown",
+      "decision": "auto_allow_dry_run",
+      "nextStep": "local_dry_run_only",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "create_test_files",
+      "decision": "auto_allow_dry_run",
+      "nextStep": "local_dry_run_only",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "simulate_deploy_plan",
+      "decision": "auto_allow_dry_run",
+      "nextStep": "local_dry_run_only",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "access_secrets",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "read_or_export_user_data",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "modify_authentication",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "modify_authorization",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "change_payment_logic",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "change_security_policy",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "install_new_dependencies",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "run_unknown_scripts",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "database_migration",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "delete_or_overwrite_files",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "production_deploy",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "external_api_write_actions",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "disable_logging",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "disable_monitoring",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "bypass_access_control",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "bypass_rate_limits",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "exfiltrate_credentials",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "approve_all_actions",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "modify_audit_trail",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "hide_execution_history",
+      "decision": "blocked",
+      "nextStep": "do_not_execute",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    }
+  ],
+  "generatedBy": "scripts/a2a/a2a_autonomous_policy_sanitizer.py",
+  "inputHash": "1d1acd3c797cdf1a93305e6038c633684456eed2ded5f180af7f5f4f3a1f8734",
+  "mode": "local_policy_sanitizer_only",
+  "policyBoundary": [
+    "no_security_controls_none",
+    "no_approve_all",
+    "no_secret_access",
+    "no_user_data_export",
+    "no_auth_payment_security_mutation",
+    "no_unknown_scripts_or_migrations",
+    "no_destructive_overwrite",
+    "no_production_deploy",
+    "no_external_api_write",
+    "no_logging_monitoring_disable",
+    "no_access_control_or_rate_limit_bypass",
+    "no_credential_exfiltration",
+    "no_audit_tamper_or_hidden_history"
+  ],
+  "summary": {
+    "autoAllowDryRun": 12,
+    "blocked": 20,
+    "blockedFirstPhase": 0,
+    "policyControlledRegistryAllow": 0,
+    "requestedActions": 34,
+    "requiresExecutorLease": 2,
+    "status": "sanitized_with_hard_blocks"
+  },
+  "tool": "codex-local",
+  "updatedAt": "2026-06-27T00:41:03+00:00"
+}

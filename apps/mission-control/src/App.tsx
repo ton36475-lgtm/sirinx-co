@@ -7,6 +7,18 @@ import { OpenClawOrchestrator } from "@sirinx/openclaw-adapter";
 import { Gemma4Client } from "@sirinx/ai-access-gateway";
 import { OrchestrationEnvelopeValidator } from "@sirinx/orchestration-envelope";
 import igamingPracticeStatusFixture from "./fixtures/igamingPracticeStatus.json";
+import toolIntegrationPayloadStatusFixture from "./fixtures/toolIntegrationPayloadStatus.json";
+import codexCommandBrokerStatusFixture from "./fixtures/codexCommandBrokerStatus.json";
+import codexGoalPlanStatusFixture from "./fixtures/codexGoalPlanStatus.json";
+import codexCommandPacketStatusFixture from "./fixtures/codexCommandPacketStatus.json";
+import autonomousExecutionPolicyStatusFixture from "./fixtures/autonomousExecutionPolicyStatus.json";
+import automatedCodeReviewStatusFixture from "./fixtures/automatedCodeReviewStatus.json";
+import codexToolRepoMatrixStatusFixture from "./fixtures/codexToolRepoMatrixStatus.json";
+import webSirinxDeployStatusFixture from "./fixtures/webSirinxDeployStatus.json";
+import webSirinxDeployPacketStatusFixture from "./fixtures/webSirinxDeployPacketStatus.json";
+import commandBrokerProductionStatusFixture from "./fixtures/commandBrokerProductionStatus.json";
+import codexSessionSidebarToolkitStatusFixture from "./fixtures/codexSessionSidebarToolkitStatus.json";
+import deepResearchStatusFixture from "./fixtures/deepResearchStatus.json";
 
 interface Worker {
   name: string;
@@ -33,12 +45,29 @@ type PanelKey =
   | "telemetry"
   | "testbenches"
   | "igamingPractice"
-  | "gitEvidence";
+  | "gitEvidence"
+  | "goalPlan"
+  | "codeReview"
+  | "toolMatrix"
+  | "webDeploy"
+  | "commandPacket"
+  | "commandBrokerProduction"
+  | "sessionToolkit"
+  | "deepResearch"
+  | "toolPayloads";
 type GitFileStatus = "modified" | "added" | "untracked" | "deleted";
 type ProofStatus = "LOCAL" | "EVIDENCED" | "COMMITTED";
 type RiskLevel = "low" | "medium" | "high";
 
 type PracticeStatus = "passing" | "ready" | "blocked";
+type PayloadReviewStatus = "ready" | "blocked";
+type BrokerDecisionStatus =
+  | "auto_allow_dry_run"
+  | "requires_executor_lease"
+  | "policy_controlled_registry_allow"
+  | "blocked_first_phase"
+  | "blocked";
+type GoalLaneStatus = "safe" | "ready" | "gated" | "blocked";
 
 const GIT_EVIDENCE_FIXTURE_NOTICE =
   "Static local review fixture. This panel does not read live git status yet; wire a generated manifest before using it for operator decisions.";
@@ -91,6 +120,401 @@ interface MockInterviewRow {
   expectedSignal: string;
 }
 
+interface ToolConnectorStatus {
+  name: string;
+  key: string;
+  mode: string;
+  targetBound: boolean;
+  draftCount: number;
+  requiredTargets: string[];
+  intendedUse: string;
+  sampleDraft: string;
+}
+
+interface ToolPayloadFinding {
+  status: PayloadReviewStatus;
+  label: string;
+  detail: string;
+}
+
+type ToolIntegrationPayloadStatusFixture = {
+  updatedAt: string;
+  mode: string;
+  runtimeBundlePath: string;
+  recordCount: number;
+  policy: {
+    externalWritesEnabled: boolean;
+    includeFileContents: boolean;
+    includeHashes: boolean;
+    noSecretValues: boolean;
+  };
+  connectors: ToolConnectorStatus[];
+  reviewFindings: ToolPayloadFinding[];
+  blockedActions: string[];
+};
+
+interface BrokerDecisionArtifact {
+  artifactPath: string;
+  createdAt: string;
+  tool: string;
+  action: string;
+  decision: BrokerDecisionStatus;
+  reason: string;
+  requiredGate: string;
+  nextStep: string;
+  targetRepo: string;
+  repoName: string;
+  repoRole: string;
+  goalHash: string;
+  goalPreview: string;
+}
+
+type CodexCommandBrokerStatusFixture = {
+  updatedAt: string;
+  mode: string;
+  sourceGlob: string;
+  generatedBy: string;
+  summary: {
+    total: number;
+    autoAllowDryRun: number;
+    requiresExecutorLease: number;
+    policyControlledRegistryAllow: number;
+    blockedFirstPhase: number;
+    blocked: number;
+  };
+  policyBoundary: string[];
+  decisions: BrokerDecisionArtifact[];
+};
+
+type CodexCommandPacketStatusFixture = {
+  created_at: string;
+  mode: string;
+  generated_by: string;
+  tool: string;
+  action: string;
+  target_repo: string;
+  lane: string;
+  goal: string;
+  command_preview: string;
+  command_sha256: string;
+  broker: {
+    decision: BrokerDecisionStatus;
+    reason: string;
+    required_gate: string;
+  };
+  risk_flags: {
+    level: string;
+    label: string;
+  }[];
+  lease: {
+    path: string;
+    lease_id: string;
+    executor: string;
+    valid: boolean;
+    reason: string;
+    allow_execution: boolean;
+  };
+  packet_decision: string;
+  packet_reason: string;
+  execution_allowed_by_packet: boolean;
+  policy_boundary: string[];
+};
+
+interface GoalPlanLane {
+  id: string;
+  label: string;
+  status: GoalLaneStatus;
+  source: string;
+  nextAction: string;
+}
+
+type CodexGoalPlanStatusFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  controlNode: {
+    label: string;
+    repoRoot: string;
+    runtimeRoot: string;
+    obsidianDigest: string;
+    executionRoute: string;
+  };
+  summary: {
+    overallStatus: string;
+    workLaneCount: number;
+    safeNextActionCount: number;
+    blockedActionCount: number;
+    connectorTargetsUnbound: number;
+    registeredRepos: number;
+    brokerDecisions: number;
+    sanitizedRequestedActions: number;
+    sanitizedBlockedActions: number;
+    commandPacketRiskFlags?: number;
+    commandPacketExecutionAllowed?: boolean;
+  };
+  workLanes: GoalPlanLane[];
+  safeNextActions: string[];
+  blockedActions: string[];
+  policyBoundary: string[];
+};
+
+type AutonomousExecutionPolicyStatusFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  summary: {
+    requestedActions: number;
+    autoAllowDryRun: number;
+    requiresExecutorLease: number;
+    policyControlledRegistryAllow: number;
+    blockedFirstPhase: number;
+    blocked: number;
+    status: string;
+  };
+  actions: {
+    action: string;
+    tool: string;
+    decision: BrokerDecisionStatus;
+    reason: string;
+    requiredGate: string;
+    nextStep: string;
+  }[];
+  policyBoundary: string[];
+};
+
+type AutomatedCodeReviewStatusFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  sourceDocument: {
+    path: string;
+    exists: boolean;
+    bytes: number;
+    lines: number;
+    sha256: string;
+    title: string;
+  };
+  summary: {
+    plannedStages: number;
+    changedFilesVisible: number;
+    autoAllowDryRun: number;
+    requiresExecutorLease: number;
+    blockedFirstPhase: number;
+    blocked: number;
+    status: string;
+  };
+  stages: {
+    id: string;
+    label: string;
+    mode: string;
+    checks: string[];
+  }[];
+  brokerDecisions: {
+    action: string;
+    tool: string;
+    decision: BrokerDecisionStatus;
+    reason: string;
+    requiredGate: string;
+  }[];
+  changedFileSamples: {
+    status: string;
+    path: string;
+  }[];
+  blockedWorkflowActions: string[];
+  policyBoundary: string[];
+};
+
+type CodexToolRepoMatrixStatusFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  summary: {
+    agentCount: number;
+    brokerRoutedAgents: number;
+    leaseRequiredAgents: number;
+    localOnlyGaps: number;
+    repoCount: number;
+    cloneAllowCount: number;
+    cloneSkipCount: number;
+    repoActionCount: number;
+    blockedOrGatedActions: number;
+    overallStatus: string;
+  };
+  actionSummary: Record<string, number>;
+  agents: {
+    agentId: string;
+    name: string;
+    role: string;
+    runtime: string;
+    localOnly: boolean;
+    brokerRouted: boolean;
+    allowedActionCount: number;
+    leaseRequiredActions: string[];
+    blockedActions: string[];
+    capabilitySample: string[];
+    cardPath: string;
+  }[];
+  repos: {
+    name: string;
+    repo: string;
+    role: string;
+    clonePolicy: string;
+    clonePath: string;
+    localPathExists: boolean;
+    actions: {
+      action: string;
+      decision: BrokerDecisionStatus;
+      reason: string;
+      requiredGate: string;
+    }[];
+    summary: Record<string, number>;
+  }[];
+  blockedActions: string[];
+  policyBoundary: string[];
+};
+
+type WebSirinxDeployStatusFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  summary: {
+    distChangedFiles: number;
+    sourceChangedFiles: number;
+    htmlFiles: number;
+    assetFiles: number;
+    missingAssetReferences: number;
+    brokerDecisionCounts: Record<string, number>;
+    deployBlocked: boolean;
+    overallStatus: string;
+  };
+  distFileCounts: {
+    distExists: number;
+    htmlFiles: number;
+    assetFiles: number;
+    totalFiles: number;
+  };
+  distGitStatusCounts: Record<string, number>;
+  sourceGitStatusCounts: Record<string, number>;
+  staticFiles: {
+    name: string;
+    path: string;
+    exists: boolean;
+    bytes: number;
+  }[];
+  assetReferenceIssues: {
+    html: string;
+    asset: string;
+    issue: string;
+  }[];
+  brokerDecisions: {
+    tool: string;
+    action: string;
+    decision: BrokerDecisionStatus;
+    reason: string;
+    requiredGate: string;
+  }[];
+  distChangedSamples: {
+    status: string;
+    path: string;
+  }[];
+  sourceChangedSamples: {
+    status: string;
+    path: string;
+  }[];
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
+type WebSirinxDeployPacketStatusFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  laneId: string;
+  project: string;
+  pagesProject: string;
+  distPath: string;
+  sourceManifest: string;
+  summary: {
+    overallStatus: string;
+    distChangedFiles: number;
+    sourceChangedFiles: number;
+    missingAssetReferences: number;
+    requiredValidationCommands: number;
+    dryRunReadyCommands: number;
+    leaseRequiredCommands: number;
+    blockedCommands: number;
+    deployCommandBlocked: boolean;
+    decisionCounts: Record<string, number>;
+  };
+  requiredEvidence: string[];
+  commands: {
+    id: string;
+    label: string;
+    required: boolean;
+    action: string;
+    commandPreview: string;
+    commandSha256: string;
+    brokerDecision: BrokerDecisionStatus;
+    brokerReason: string;
+    requiredGate: string;
+    riskNotes: string[];
+  }[];
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
+type CommandBrokerProductionStatusFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  summary: {
+    registeredCommands: number;
+    registeredTools: number;
+    adapterContracts: number;
+    runtimeFiles: number;
+    riskTierCounts: Record<string, number>;
+    decisionCounts: Record<string, number>;
+    denyAlwaysCount: number;
+    contractPackagePresent: boolean;
+    directExecutionEnabled: boolean;
+    deployCommandAllowed: boolean;
+    auditLogEditable: boolean;
+    status: string;
+  };
+  riskTiers: {
+    id: string;
+    label: string;
+    defaultDecision: string;
+    examples: string[];
+  }[];
+  decisions: string[];
+  contractPackage: {
+    name: string;
+    path: string;
+    entrypoint: string;
+    testFile: string;
+    executionEnabled: boolean;
+  };
+  blockedCommands: {
+    id: string;
+    lane: string;
+    tool: string;
+    action: string;
+    label: string;
+    riskTier: string;
+    brokerDecision: string;
+    productionDecision: string;
+    requiredGate: string;
+    commandSha256: string;
+    commandPreview: string;
+    executeByBroker: boolean;
+  }[];
+  runtimeFiles: string[];
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type IgamingPracticeStatusFixture = {
   updatedAt: string;
   mode: string;
@@ -111,6 +535,70 @@ const igamingPracticeArtifacts = igamingPracticeStatus.artifacts;
 const ledgerTestChecks = igamingPracticeStatus.checks;
 const mockInterviewRows = igamingPracticeStatus.mockInterviewRows;
 const igamingBoundaryBlocks = igamingPracticeStatus.boundaryBlocks;
+const toolIntegrationPayloadStatus =
+  toolIntegrationPayloadStatusFixture as ToolIntegrationPayloadStatusFixture;
+const toolConnectorStatuses = toolIntegrationPayloadStatus.connectors;
+const toolPayloadReviewFindings = toolIntegrationPayloadStatus.reviewFindings;
+const toolPayloadBlockedActions = toolIntegrationPayloadStatus.blockedActions;
+const codexCommandBrokerStatus =
+  codexCommandBrokerStatusFixture as CodexCommandBrokerStatusFixture;
+const brokerDecisionArtifacts = codexCommandBrokerStatus.decisions;
+const brokerPolicyBoundary = codexCommandBrokerStatus.policyBoundary;
+const codexCommandPacketStatus =
+  codexCommandPacketStatusFixture as CodexCommandPacketStatusFixture;
+const codexGoalPlanStatus =
+  codexGoalPlanStatusFixture as CodexGoalPlanStatusFixture;
+const goalPlanWorkLanes = codexGoalPlanStatus.workLanes;
+const goalPlanSafeNextActions = codexGoalPlanStatus.safeNextActions;
+const goalPlanBlockedActions = codexGoalPlanStatus.blockedActions;
+const goalPlanPolicyBoundary = codexGoalPlanStatus.policyBoundary;
+const autonomousExecutionPolicyStatus =
+  autonomousExecutionPolicyStatusFixture as AutonomousExecutionPolicyStatusFixture;
+const autonomousPolicyBlockedSamples =
+  autonomousExecutionPolicyStatus.actions.filter(
+    (action) => action.decision === "blocked",
+  );
+const automatedCodeReviewStatus =
+  automatedCodeReviewStatusFixture as AutomatedCodeReviewStatusFixture;
+const codeReviewStages = automatedCodeReviewStatus.stages;
+const codeReviewBrokerDecisions = automatedCodeReviewStatus.brokerDecisions;
+const codeReviewChangedFileSamples =
+  automatedCodeReviewStatus.changedFileSamples;
+const codexToolRepoMatrixStatus =
+  codexToolRepoMatrixStatusFixture as CodexToolRepoMatrixStatusFixture;
+const toolRepoMatrixAgents = codexToolRepoMatrixStatus.agents;
+const toolRepoMatrixRepos = codexToolRepoMatrixStatus.repos;
+const toolRepoMatrixBoundary = codexToolRepoMatrixStatus.policyBoundary;
+const webSirinxDeployStatus =
+  webSirinxDeployStatusFixture as WebSirinxDeployStatusFixture;
+const webSirinxDeployPacketStatus =
+  webSirinxDeployPacketStatusFixture as WebSirinxDeployPacketStatusFixture;
+const commandBrokerProductionStatus =
+  commandBrokerProductionStatusFixture as CommandBrokerProductionStatusFixture;
+const codexSessionSidebarToolkitStatus =
+  codexSessionSidebarToolkitStatusFixture;
+const sessionToolkitAgents = codexSessionSidebarToolkitStatus.agents;
+const sessionToolkitWorkflows = codexSessionSidebarToolkitStatus.workflows;
+const sessionToolkitReportEntries = Object.entries(
+  codexSessionSidebarToolkitStatus.reports.items,
+);
+const sessionToolkitDocs = codexSessionSidebarToolkitStatus.docs;
+const sessionToolkitSyncQueue =
+  codexSessionSidebarToolkitStatus.syncQueue.items;
+const sessionToolkitIntegrationRows =
+  codexSessionSidebarToolkitStatus.integrationReadiness.rows;
+const sessionToolkitLeaseRequests =
+  codexSessionSidebarToolkitStatus.leaseRequests.requests;
+const sessionToolkitExecutorPreflight =
+  codexSessionSidebarToolkitStatus.executorPreflight;
+const sessionToolkitObjectiveAudit =
+  codexSessionSidebarToolkitStatus.objectiveAudit;
+const sessionToolkitObjectiveAuditCounts =
+  sessionToolkitObjectiveAudit.counts as Record<string, number | undefined>;
+const deepResearchStatus = deepResearchStatusFixture;
+const deepResearchValidationEntries = Object.entries(
+  deepResearchStatus.validation,
+);
 
 const gitEvidenceFiles: GitEvidenceFile[] = [
   {
@@ -569,8 +1057,7 @@ export default function App() {
         ...prev,
         {
           cmd: command,
-          out:
-            "Blocked in browser guard. Mission Control will not execute local shell commands from the browser bundle. Route this through an approved localhost command bridge with audit logging before enabling execution.",
+          out: "Blocked in browser guard. Mission Control will not execute local shell commands from the browser bundle. Route this through an approved localhost command bridge with audit logging before enabling execution.",
           type: "error",
         },
       ]);
@@ -743,6 +1230,72 @@ export default function App() {
         return "practice-blocked";
       default:
         return "practice-ready";
+    }
+  };
+
+  const getPayloadReviewStatusClass = (status: PayloadReviewStatus) => {
+    switch (status) {
+      case "ready":
+        return "payload-ready";
+      case "blocked":
+        return "payload-blocked";
+      default:
+        return "payload-blocked";
+    }
+  };
+
+  const getBrokerDecisionClass = (decision: BrokerDecisionStatus) => {
+    switch (decision) {
+      case "auto_allow_dry_run":
+        return "payload-ready";
+      case "requires_executor_lease":
+      case "policy_controlled_registry_allow":
+        return "payload-warn";
+      case "blocked_first_phase":
+      case "blocked":
+        return "payload-blocked";
+      default:
+        return "payload-blocked";
+    }
+  };
+
+  const getGoalLaneStatusClass = (status: GoalLaneStatus) => {
+    switch (status) {
+      case "safe":
+      case "ready":
+        return "payload-ready";
+      case "gated":
+        return "payload-warn";
+      case "blocked":
+        return "payload-blocked";
+      default:
+        return "payload-blocked";
+    }
+  };
+
+  const getCommandPacketStatusClass = (decision: string) => {
+    switch (decision) {
+      case "ready_dry_run_packet":
+      case "ready_with_executor_lease":
+        return "payload-ready";
+      case "ready_plan_only_lease":
+      case "preflight_required":
+        return "payload-warn";
+      default:
+        return "payload-blocked";
+    }
+  };
+
+  const getProductionDecisionClass = (decision: string) => {
+    switch (decision) {
+      case "ALLOW_READONLY":
+      case "ALLOW_LOCAL_VALIDATION":
+      case "ALLOW_SCOPED_WRITE":
+        return "payload-ready";
+      case "REQUIRE_HUMAN_REVIEW":
+        return "payload-warn";
+      default:
+        return "payload-blocked";
     }
   };
 
@@ -1009,6 +1562,80 @@ export default function App() {
             >
               Git Evidence
             </button>
+            <button
+              className={`panel-tab ${activePanel === "goalPlan" ? "active" : ""}`}
+              onClick={() => setActivePanel("goalPlan")}
+              role="tab"
+              aria-selected={activePanel === "goalPlan"}
+            >
+              Goal Plan
+            </button>
+            <button
+              className={`panel-tab ${activePanel === "codeReview" ? "active" : ""}`}
+              onClick={() => setActivePanel("codeReview")}
+              role="tab"
+              aria-selected={activePanel === "codeReview"}
+            >
+              Code Review
+            </button>
+            <button
+              className={`panel-tab ${activePanel === "toolMatrix" ? "active" : ""}`}
+              onClick={() => setActivePanel("toolMatrix")}
+              role="tab"
+              aria-selected={activePanel === "toolMatrix"}
+            >
+              Tool Matrix
+            </button>
+            <button
+              className={`panel-tab ${activePanel === "webDeploy" ? "active" : ""}`}
+              onClick={() => setActivePanel("webDeploy")}
+              role="tab"
+              aria-selected={activePanel === "webDeploy"}
+            >
+              Web Deploy
+            </button>
+            <button
+              className={`panel-tab ${activePanel === "commandPacket" ? "active" : ""}`}
+              onClick={() => setActivePanel("commandPacket")}
+              role="tab"
+              aria-selected={activePanel === "commandPacket"}
+            >
+              Command Packet
+            </button>
+            <button
+              className={`panel-tab ${
+                activePanel === "commandBrokerProduction" ? "active" : ""
+              }`}
+              onClick={() => setActivePanel("commandBrokerProduction")}
+              role="tab"
+              aria-selected={activePanel === "commandBrokerProduction"}
+            >
+              Command Broker
+            </button>
+            <button
+              className={`panel-tab ${activePanel === "sessionToolkit" ? "active" : ""}`}
+              onClick={() => setActivePanel("sessionToolkit")}
+              role="tab"
+              aria-selected={activePanel === "sessionToolkit"}
+            >
+              Session Toolkit
+            </button>
+            <button
+              className={`panel-tab ${activePanel === "deepResearch" ? "active" : ""}`}
+              onClick={() => setActivePanel("deepResearch")}
+              role="tab"
+              aria-selected={activePanel === "deepResearch"}
+            >
+              Deep Research
+            </button>
+            <button
+              className={`panel-tab ${activePanel === "toolPayloads" ? "active" : ""}`}
+              onClick={() => setActivePanel("toolPayloads")}
+              role="tab"
+              aria-selected={activePanel === "toolPayloads"}
+            >
+              Tool Payloads
+            </button>
           </div>
 
           {activePanel === "telemetry" ? (
@@ -1189,7 +1816,10 @@ export default function App() {
                       <span className="approval-badge">local-files</span>
                     </div>
                     {igamingPracticeArtifacts.map((artifact) => (
-                      <div className="practice-artifact-row" key={artifact.path}>
+                      <div
+                        className="practice-artifact-row"
+                        key={artifact.path}
+                      >
                         <span
                           className={`practice-status ${getPracticeStatusClass(artifact.status)}`}
                         >
@@ -1449,6 +2079,2270 @@ export default function App() {
                       {action}
                     </span>
                   ))}
+                </div>
+              </div>
+            </>
+          ) : activePanel === "goalPlan" ? (
+            <>
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>Codex Goal Plan Board</span>
+                  <span className="accent-cyan">Local Only</span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Work Lanes</span>
+                    <strong>{codexGoalPlanStatus.summary.workLaneCount}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Safe Next Actions</span>
+                    <strong>
+                      {codexGoalPlanStatus.summary.safeNextActionCount}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Unbound Connectors</span>
+                    <strong>
+                      {codexGoalPlanStatus.summary.connectorTargetsUnbound}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Blocked Actions</span>
+                    <strong>
+                      {codexGoalPlanStatus.summary.blockedActionCount}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Sanitized Actions</span>
+                    <strong>
+                      {codexGoalPlanStatus.summary.sanitizedRequestedActions}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Sanitized Blocks</span>
+                    <strong>
+                      {codexGoalPlanStatus.summary.sanitizedBlockedActions}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Mode</span>
+                  <code>{codexGoalPlanStatus.mode}</code>
+                  <span>Status</span>
+                  <code>{codexGoalPlanStatus.summary.overallStatus}</code>
+                  <span>Updated</span>
+                  <code>{codexGoalPlanStatus.updatedAt}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  This board is a static fixture generated from local reports.
+                  It does not unlock security, auto-approve every workflow, run
+                  shell commands, read secrets, sync connectors, clone repos,
+                  push, deploy, call providers, or expose public endpoints.
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="Codex goal plan work lanes"
+                  >
+                    <div className="git-section-title">
+                      <span>Work Lanes</span>
+                      <span className="approval-badge">policy-routed</span>
+                    </div>
+                    {goalPlanWorkLanes.map((lane) => (
+                      <div className="practice-artifact-row" key={lane.id}>
+                        <span
+                          className={`practice-status ${getGoalLaneStatusClass(lane.status)}`}
+                        >
+                          {lane.status}
+                        </span>
+                        <div>
+                          <strong>{lane.label}</strong>
+                          <p>{lane.nextAction}</p>
+                          <code>{lane.source}</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="Codex goal plan safe next actions"
+                  >
+                    <div className="git-section-title">
+                      <span>Safe Next Actions</span>
+                      <span className="approval-badge">dry-run first</span>
+                    </div>
+                    {goalPlanSafeNextActions.map((action) => (
+                      <div className="practice-artifact-row" key={action}>
+                        <span className="practice-status payload-ready">
+                          safe
+                        </span>
+                        <div>
+                          <strong>{action}</strong>
+                          <p>
+                            Route through KOB planning and Codex local execution
+                            only when the broker allows the action class.
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+                </div>
+              </div>
+
+              <div className="practice-lower-grid">
+                <div className="card">
+                  <div className="card-title">
+                    <span>Control Node</span>
+                    <span className="accent-emerald">Mac mini M2</span>
+                  </div>
+                  <div className="approval-state-grid practice-boundary-grid">
+                    <div>
+                      <span>Route</span>
+                      <strong>
+                        {codexGoalPlanStatus.controlNode.executionRoute}
+                      </strong>
+                    </div>
+                    <div>
+                      <span>Registered Repos</span>
+                      <strong>
+                        {codexGoalPlanStatus.summary.registeredRepos}
+                      </strong>
+                    </div>
+                    <div>
+                      <span>Broker Decisions</span>
+                      <strong>
+                        {codexGoalPlanStatus.summary.brokerDecisions}
+                      </strong>
+                    </div>
+                    <div>
+                      <span>Repo Root</span>
+                      <strong>
+                        {codexGoalPlanStatus.controlNode.repoRoot}
+                      </strong>
+                    </div>
+                    <div>
+                      <span>Runtime Root</span>
+                      <strong>
+                        {codexGoalPlanStatus.controlNode.runtimeRoot}
+                      </strong>
+                    </div>
+                    <div>
+                      <span>Obsidian Digest</span>
+                      <strong>
+                        {codexGoalPlanStatus.controlNode.obsidianDigest}
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Blocked Boundary</span>
+                    <span className="accent-purple">No Bypass</span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {[...goalPlanBlockedActions, ...goalPlanPolicyBoundary].map(
+                      (action) => (
+                        <span className="blocked-action" key={action}>
+                          {action}
+                        </span>
+                      ),
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-title">
+                  <span>Autonomous Execution Sanitizer</span>
+                  <span className="accent-cyan">
+                    {autonomousExecutionPolicyStatus.summary.status}
+                  </span>
+                </div>
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Requested</span>
+                    <strong>
+                      {autonomousExecutionPolicyStatus.summary.requestedActions}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Dry Run</span>
+                    <strong>
+                      {autonomousExecutionPolicyStatus.summary.autoAllowDryRun}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Lease</span>
+                    <strong>
+                      {
+                        autonomousExecutionPolicyStatus.summary
+                          .requiresExecutorLease
+                      }
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Hard Block</span>
+                    <strong>
+                      {autonomousExecutionPolicyStatus.summary.blocked}
+                    </strong>
+                  </div>
+                </div>
+                <div className="git-fixture-notice">
+                  The approve-all YAML is treated as an input to sanitize, not
+                  as an instruction to apply. This fixture is generated locally
+                  and cannot execute tools from the browser.
+                </div>
+                <div className="blocked-action-list">
+                  {autonomousPolicyBlockedSamples.slice(0, 16).map((item) => (
+                    <span className="blocked-action" key={item.action}>
+                      {item.action}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : activePanel === "codeReview" ? (
+            <>
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>Automated Code Review Workflow</span>
+                  <span className="accent-cyan">Report Only</span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Stages</span>
+                    <strong>
+                      {automatedCodeReviewStatus.summary.plannedStages}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Changed Files</span>
+                    <strong>
+                      {automatedCodeReviewStatus.summary.changedFilesVisible}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Dry Run</span>
+                    <strong>
+                      {automatedCodeReviewStatus.summary.autoAllowDryRun}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Lease</span>
+                    <strong>
+                      {automatedCodeReviewStatus.summary.requiresExecutorLease}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Blocked</span>
+                    <strong>{automatedCodeReviewStatus.summary.blocked}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Source</span>
+                    <strong>
+                      {automatedCodeReviewStatus.sourceDocument.exists
+                        ? "HASHED"
+                        : "MISSING"}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Mode</span>
+                  <code>{automatedCodeReviewStatus.mode}</code>
+                  <span>Status</span>
+                  <code>{automatedCodeReviewStatus.summary.status}</code>
+                  <span>Updated</span>
+                  <code>{automatedCodeReviewStatus.updatedAt}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  This panel reads a static fixture generated from the exported
+                  review workflow. It does not run review commands, apply
+                  patches, read secrets, sync connectors, push, deploy, or
+                  expose endpoints from the browser.
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="Automated code review planned stages"
+                  >
+                    <div className="git-section-title">
+                      <span>Review Stages</span>
+                      <span className="approval-badge">plan-only</span>
+                    </div>
+                    {codeReviewStages.map((stage) => (
+                      <div className="practice-artifact-row" key={stage.id}>
+                        <span className="practice-status payload-ready">
+                          {stage.mode}
+                        </span>
+                        <div>
+                          <strong>{stage.label}</strong>
+                          <p>{stage.checks.join(" / ")}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="Automated code review broker decisions"
+                  >
+                    <div className="git-section-title">
+                      <span>Broker Decisions</span>
+                      <span className="approval-badge">codex-local</span>
+                    </div>
+                    {codeReviewBrokerDecisions.map((decision) => (
+                      <div
+                        className="practice-artifact-row"
+                        key={`${decision.tool}-${decision.action}`}
+                      >
+                        <span
+                          className={`practice-status ${getBrokerDecisionClass(decision.decision)}`}
+                        >
+                          {decision.decision}
+                        </span>
+                        <div>
+                          <strong>
+                            {decision.tool} / {decision.action}
+                          </strong>
+                          <p>
+                            {decision.reason} · gate:{" "}
+                            {decision.requiredGate || "none"}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+                </div>
+              </div>
+
+              <div className="practice-lower-grid">
+                <div className="card">
+                  <div className="card-title">
+                    <span>Source Artifact</span>
+                    <span className="accent-emerald">Hash Sync</span>
+                  </div>
+                  <div className="approval-state-grid practice-boundary-grid">
+                    <div>
+                      <span>Path</span>
+                      <strong>
+                        {automatedCodeReviewStatus.sourceDocument.path}
+                      </strong>
+                    </div>
+                    <div>
+                      <span>Lines</span>
+                      <strong>
+                        {automatedCodeReviewStatus.sourceDocument.lines}
+                      </strong>
+                    </div>
+                    <div>
+                      <span>Bytes</span>
+                      <strong>
+                        {automatedCodeReviewStatus.sourceDocument.bytes}
+                      </strong>
+                    </div>
+                    <div>
+                      <span>SHA-256</span>
+                      <strong>
+                        {automatedCodeReviewStatus.sourceDocument.sha256 ||
+                          "missing"}
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Execution Boundary</span>
+                    <span className="accent-purple">No Auto Apply</span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {[
+                      ...automatedCodeReviewStatus.blockedWorkflowActions,
+                      ...automatedCodeReviewStatus.policyBoundary,
+                    ].map((action) => (
+                      <span className="blocked-action" key={action}>
+                        {action}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-title">
+                  <span>Changed File Samples</span>
+                  <span className="accent-cyan">Metadata Only</span>
+                </div>
+                <div className="blocked-action-list">
+                  {codeReviewChangedFileSamples.slice(0, 16).map((item) => (
+                    <span
+                      className="blocked-action"
+                      key={`${item.status}-${item.path}`}
+                    >
+                      {item.status} {item.path}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : activePanel === "toolMatrix" ? (
+            <>
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>Codex Tool + Git Repo Matrix</span>
+                  <span className="accent-cyan">Read Only</span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Agent Cards</span>
+                    <strong>
+                      {codexToolRepoMatrixStatus.summary.agentCount}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Broker Routed</span>
+                    <strong>
+                      {codexToolRepoMatrixStatus.summary.brokerRoutedAgents}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Repos</span>
+                    <strong>
+                      {codexToolRepoMatrixStatus.summary.repoCount}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Repo Actions</span>
+                    <strong>
+                      {codexToolRepoMatrixStatus.summary.repoActionCount}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Gated / Blocked</span>
+                    <strong>
+                      {codexToolRepoMatrixStatus.summary.blockedOrGatedActions}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Clone Allowlist</span>
+                    <strong>
+                      {codexToolRepoMatrixStatus.summary.cloneAllowCount}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Mode</span>
+                  <code>{codexToolRepoMatrixStatus.mode}</code>
+                  <span>Status</span>
+                  <code>{codexToolRepoMatrixStatus.summary.overallStatus}</code>
+                  <span>Updated</span>
+                  <code>{codexToolRepoMatrixStatus.updatedAt}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  This matrix is generated from local agent cards, the external
+                  repo registry, and the Codex command broker. It classifies
+                  actions only; it does not clone, push, deploy, call providers,
+                  sync connectors, read secrets, or disable policy.
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="Codex tool and agent route matrix"
+                  >
+                    <div className="git-section-title">
+                      <span>Agent Routes</span>
+                      <span className="approval-badge">broker map</span>
+                    </div>
+                    {toolRepoMatrixAgents.map((agent) => (
+                      <div
+                        className="practice-artifact-row"
+                        key={agent.agentId}
+                      >
+                        <span
+                          className={`practice-status ${
+                            agent.brokerRouted
+                              ? "payload-ready"
+                              : "payload-warn"
+                          }`}
+                        >
+                          {agent.brokerRouted ? "routed" : "missing"}
+                        </span>
+                        <div>
+                          <strong>{agent.agentId}</strong>
+                          <p>
+                            {agent.role || agent.name} · runtime:{" "}
+                            {agent.runtime} · allowed:{" "}
+                            {agent.allowedActionCount} · lease:{" "}
+                            {agent.leaseRequiredActions.length}
+                          </p>
+                          <code>{agent.cardPath}</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="Codex external Git repository matrix"
+                  >
+                    <div className="git-section-title">
+                      <span>Repo Registry</span>
+                      <span className="approval-badge">action classified</span>
+                    </div>
+                    {toolRepoMatrixRepos.map((repo) => (
+                      <div className="practice-artifact-row" key={repo.repo}>
+                        <span
+                          className={`practice-status ${
+                            repo.clonePolicy === "allow"
+                              ? "payload-warn"
+                              : "payload-blocked"
+                          }`}
+                        >
+                          {repo.clonePolicy}
+                        </span>
+                        <div>
+                          <strong>{repo.repo}</strong>
+                          <p>
+                            {repo.role} · local path:{" "}
+                            {repo.localPathExists ? "present" : "not present"}
+                          </p>
+                          <code>
+                            {Object.entries(repo.summary)
+                              .map(([key, value]) => `${key}:${value}`)
+                              .join(" / ")}
+                          </code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+                </div>
+              </div>
+
+              <div className="practice-lower-grid">
+                <div className="card">
+                  <div className="card-title">
+                    <span>Action Decision Counts</span>
+                    <span className="accent-emerald">Broker Derived</span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {Object.entries(
+                      codexToolRepoMatrixStatus.actionSummary,
+                    ).map(([decision, count]) => (
+                      <span className="blocked-action" key={decision}>
+                        {decision}: {count}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Execution Boundary</span>
+                    <span className="accent-purple">No Jailbreak</span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {toolRepoMatrixBoundary.map((item) => (
+                      <span className="blocked-action" key={item}>
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : activePanel === "webDeploy" ? (
+            <>
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>web-sirinx Generated Assets + Deploy Lane</span>
+                  <span className="accent-cyan">Local Manifest</span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Dist Changes</span>
+                    <strong>
+                      {webSirinxDeployStatus.summary.distChangedFiles}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Source Changes</span>
+                    <strong>
+                      {webSirinxDeployStatus.summary.sourceChangedFiles}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>HTML Files</span>
+                    <strong>{webSirinxDeployStatus.summary.htmlFiles}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Assets</span>
+                    <strong>{webSirinxDeployStatus.summary.assetFiles}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Missing Assets</span>
+                    <strong>
+                      {webSirinxDeployStatus.summary.missingAssetReferences}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Deploy</span>
+                    <strong>
+                      {webSirinxDeployPacketStatus.summary.deployCommandBlocked
+                        ? "BLOCKED"
+                        : "READY"}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Mode</span>
+                  <code>{webSirinxDeployStatus.mode}</code>
+                  <span>Status</span>
+                  <code>
+                    {webSirinxDeployPacketStatus.summary.overallStatus}
+                  </code>
+                  <span>Updated</span>
+                  <code>{webSirinxDeployPacketStatus.updatedAt}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  This lane tracks generated `dist/public` assets and the
+                  Cloudflare Pages deploy backlog. It does not stage, push,
+                  deploy, call Wrangler, read credentials, or mutate production.
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="web-sirinx static file preflight"
+                  >
+                    <div className="git-section-title">
+                      <span>Static Files</span>
+                      <span className="approval-badge">dist/public</span>
+                    </div>
+                    {webSirinxDeployStatus.staticFiles.map((file) => (
+                      <div className="practice-artifact-row" key={file.name}>
+                        <span
+                          className={`practice-status ${
+                            file.exists ? "payload-ready" : "payload-blocked"
+                          }`}
+                        >
+                          {file.exists ? "exists" : "missing"}
+                        </span>
+                        <div>
+                          <strong>{file.name}</strong>
+                          <p>{file.bytes} bytes</p>
+                          <code>{file.path}</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="web-sirinx deploy broker decisions"
+                  >
+                    <div className="git-section-title">
+                      <span>Broker Decisions</span>
+                      <span className="approval-badge">deploy gated</span>
+                    </div>
+                    {webSirinxDeployStatus.brokerDecisions.map((decision) => (
+                      <div
+                        className="practice-artifact-row"
+                        key={`${decision.tool}-${decision.action}`}
+                      >
+                        <span
+                          className={`practice-status ${getBrokerDecisionClass(decision.decision)}`}
+                        >
+                          {decision.decision}
+                        </span>
+                        <div>
+                          <strong>
+                            {decision.tool} / {decision.action}
+                          </strong>
+                          <p>
+                            {decision.reason} · gate:{" "}
+                            {decision.requiredGate || "none"}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+                </div>
+              </div>
+
+              <div className="practice-lower-grid">
+                <div className="card">
+                  <div className="card-title">
+                    <span>Pending Deploy Lane</span>
+                    <span className="accent-cyan">
+                      {webSirinxDeployPacketStatus.laneId}
+                    </span>
+                  </div>
+                  <div className="approval-state-grid practice-boundary-grid">
+                    <div>
+                      <span>Pages Project</span>
+                      <strong>
+                        {webSirinxDeployPacketStatus.pagesProject}
+                      </strong>
+                    </div>
+                    <div>
+                      <span>Required Checks</span>
+                      <strong>
+                        {
+                          webSirinxDeployPacketStatus.summary
+                            .requiredValidationCommands
+                        }
+                      </strong>
+                    </div>
+                    <div>
+                      <span>Lease Required</span>
+                      <strong>
+                        {
+                          webSirinxDeployPacketStatus.summary
+                            .leaseRequiredCommands
+                        }
+                      </strong>
+                    </div>
+                    <div>
+                      <span>Blocked Commands</span>
+                      <strong>
+                        {webSirinxDeployPacketStatus.summary.blockedCommands}
+                      </strong>
+                    </div>
+                    <div>
+                      <span>Dist Path</span>
+                      <strong>{webSirinxDeployPacketStatus.distPath}</strong>
+                    </div>
+                    <div>
+                      <span>Manifest</span>
+                      <strong>
+                        {webSirinxDeployPacketStatus.sourceManifest}
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Changed Samples</span>
+                    <span className="accent-emerald">Generated Assets</span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {[
+                      ...webSirinxDeployStatus.sourceChangedSamples.slice(0, 8),
+                      ...webSirinxDeployStatus.distChangedSamples.slice(0, 24),
+                    ].map((item) => (
+                      <span className="blocked-action" key={item.path}>
+                        {item.status.trim() || "M"} {item.path}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Deploy Boundary</span>
+                    <span className="accent-purple">Production Guard</span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {[
+                      ...webSirinxDeployStatus.policyBoundary,
+                      ...webSirinxDeployStatus.nextSafeActions,
+                    ].map((item) => (
+                      <span className="blocked-action" key={item}>
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-title">
+                  <span>Deploy Commands</span>
+                  <span className="accent-cyan">
+                    {webSirinxDeployPacketStatus.commands.length}
+                  </span>
+                </div>
+                <div className="blocked-action-list">
+                  {webSirinxDeployPacketStatus.commands.map((command) => (
+                    <span className="blocked-action" key={command.id}>
+                      {command.brokerDecision} · {command.commandPreview}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-title">
+                  <span>Asset Reference Issues</span>
+                  <span className="accent-cyan">
+                    {webSirinxDeployStatus.assetReferenceIssues.length}
+                  </span>
+                </div>
+                <div className="blocked-action-list">
+                  {webSirinxDeployStatus.assetReferenceIssues.length ? (
+                    webSirinxDeployStatus.assetReferenceIssues.map((issue) => (
+                      <span
+                        className="blocked-action"
+                        key={`${issue.html}-${issue.asset}`}
+                      >
+                        {issue.issue} {issue.html} -&gt; {issue.asset}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="blocked-action">
+                      no missing asset references found in generated HTML
+                    </span>
+                  )}
+                </div>
+              </div>
+            </>
+          ) : activePanel === "commandPacket" ? (
+            <>
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>Codex Command Packet</span>
+                  <span className="accent-cyan">No Execution</span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Packet</span>
+                    <strong>{codexCommandPacketStatus.packet_decision}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Broker</span>
+                    <strong>{codexCommandPacketStatus.broker.decision}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Risk Flags</span>
+                    <strong>
+                      {codexCommandPacketStatus.risk_flags.length}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Lease</span>
+                    <strong>
+                      {codexCommandPacketStatus.lease.valid
+                        ? "valid"
+                        : "missing"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Execution</span>
+                    <strong>
+                      {codexCommandPacketStatus.execution_allowed_by_packet
+                        ? "DRY"
+                        : "BLOCKED"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Updated</span>
+                    <strong>{codexCommandPacketStatus.created_at}</strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Tool</span>
+                  <code>{codexCommandPacketStatus.tool}</code>
+                  <span>Action</span>
+                  <code>{codexCommandPacketStatus.action}</code>
+                  <span>Lane</span>
+                  <code>{codexCommandPacketStatus.lane || "none"}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  This packet is a local command-control artifact. It hashes and
+                  classifies the command before execution; it does not run shell
+                  commands, read secrets, push, deploy, call providers, sync
+                  connectors, or open public endpoints.
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="Codex command packet decision"
+                  >
+                    <div className="git-section-title">
+                      <span>Decision</span>
+                      <span className="approval-badge">broker + packet</span>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span
+                        className={`practice-status ${getCommandPacketStatusClass(
+                          codexCommandPacketStatus.packet_decision,
+                        )}`}
+                      >
+                        {codexCommandPacketStatus.packet_decision}
+                      </span>
+                      <div>
+                        <strong>
+                          {codexCommandPacketStatus.packet_reason}
+                        </strong>
+                        <p>
+                          Broker: {codexCommandPacketStatus.broker.reason} ·
+                          gate:{" "}
+                          {codexCommandPacketStatus.broker.required_gate ||
+                            "none"}
+                        </p>
+                        <code>{codexCommandPacketStatus.command_sha256}</code>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="Codex command packet command preview"
+                  >
+                    <div className="git-section-title">
+                      <span>Command Preview</span>
+                      <span className="approval-badge">masked</span>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span className="practice-status payload-ready">
+                        hash
+                      </span>
+                      <div>
+                        <strong>{codexCommandPacketStatus.goal}</strong>
+                        <p>{codexCommandPacketStatus.command_preview}</p>
+                        <code>
+                          target:{" "}
+                          {codexCommandPacketStatus.target_repo || "none"}
+                        </code>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </div>
+
+              <div className="practice-lower-grid">
+                <div className="card">
+                  <div className="card-title">
+                    <span>Risk Flags</span>
+                    <span className="accent-emerald">
+                      {codexCommandPacketStatus.risk_flags.length}
+                    </span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {codexCommandPacketStatus.risk_flags.length ? (
+                      codexCommandPacketStatus.risk_flags.map((flag) => (
+                        <span
+                          className="blocked-action"
+                          key={`${flag.level}-${flag.label}`}
+                        >
+                          {flag.level}: {flag.label}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="blocked-action">
+                        no command-level blocking pattern detected
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Boundary</span>
+                    <span className="accent-purple">Policy Locked</span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {codexCommandPacketStatus.policy_boundary.map((item) => (
+                      <span className="blocked-action" key={item}>
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : activePanel === "commandBrokerProduction" ? (
+            <>
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>Production Command Broker</span>
+                  <span className="accent-cyan">Read Only</span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Commands</span>
+                    <strong>
+                      {commandBrokerProductionStatus.summary.registeredCommands}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Tools</span>
+                    <strong>
+                      {commandBrokerProductionStatus.summary.registeredTools}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Adapters</span>
+                    <strong>
+                      {commandBrokerProductionStatus.summary.adapterContracts}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Runtime Files</span>
+                    <strong>
+                      {commandBrokerProductionStatus.summary.runtimeFiles}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Deny Always</span>
+                    <strong>
+                      {commandBrokerProductionStatus.summary.denyAlwaysCount}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Contract</span>
+                    <strong>
+                      {commandBrokerProductionStatus.summary
+                        .contractPackagePresent
+                        ? "READY"
+                        : "MISSING"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Execution</span>
+                    <strong>
+                      {commandBrokerProductionStatus.summary
+                        .directExecutionEnabled
+                        ? "ON"
+                        : "OFF"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Deploy</span>
+                    <strong>
+                      {commandBrokerProductionStatus.summary
+                        .deployCommandAllowed
+                        ? "ALLOW"
+                        : "BLOCK"}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Status</span>
+                  <code>{commandBrokerProductionStatus.summary.status}</code>
+                  <span>Runtime</span>
+                  <code>{commandBrokerProductionStatus.runtimeRoot}</code>
+                  <span>Contract</span>
+                  <code>
+                    {commandBrokerProductionStatus.contractPackage.name}
+                  </code>
+                  <span>Updated</span>
+                  <code>{commandBrokerProductionStatus.updatedAt}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  This panel unlocks command visibility through the broker. It
+                  does not execute commands, edit audit logs, read secrets,
+                  stage files, push, deploy, sync connectors, or provide an
+                  approve-all path. Adapter contracts are preflight validators
+                  only for Docker localhost, external repo clone, provider API
+                  smoke, and MCP connector activation.
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="Command broker risk tiers"
+                  >
+                    <div className="git-section-title">
+                      <span>Risk Tiers</span>
+                      <span className="approval-badge">T0-T5</span>
+                    </div>
+                    {commandBrokerProductionStatus.riskTiers.map((tier) => (
+                      <div className="practice-artifact-row" key={tier.id}>
+                        <span
+                          className={`practice-status ${getProductionDecisionClass(
+                            tier.defaultDecision,
+                          )}`}
+                        >
+                          {tier.id}
+                        </span>
+                        <div>
+                          <strong>{tier.label}</strong>
+                          <p>{tier.defaultDecision}</p>
+                          <code>{tier.examples.join(", ")}</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="Blocked or review-required commands"
+                  >
+                    <div className="git-section-title">
+                      <span>Blocked / Review Commands</span>
+                      <span className="approval-badge">
+                        {commandBrokerProductionStatus.blockedCommands.length}
+                      </span>
+                    </div>
+                    {commandBrokerProductionStatus.blockedCommands
+                      .slice(0, 12)
+                      .map((command) => (
+                        <div className="practice-artifact-row" key={command.id}>
+                          <span
+                            className={`practice-status ${getProductionDecisionClass(
+                              command.productionDecision,
+                            )}`}
+                          >
+                            {command.riskTier}
+                          </span>
+                          <div>
+                            <strong>
+                              {command.tool} / {command.action}
+                            </strong>
+                            <p>
+                              {command.productionDecision} · gate:{" "}
+                              {command.requiredGate || "none"}
+                            </p>
+                            <code>
+                              {command.commandPreview || command.label}
+                            </code>
+                          </div>
+                        </div>
+                      ))}
+                  </section>
+                </div>
+              </div>
+
+              <div className="practice-lower-grid">
+                <div className="card">
+                  <div className="card-title">
+                    <span>Decision Counts</span>
+                    <span className="accent-emerald">Policy Matrix</span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {Object.entries(
+                      commandBrokerProductionStatus.summary.decisionCounts,
+                    ).map(([decision, count]) => (
+                      <span className="blocked-action" key={decision}>
+                        {decision}: {count}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Runtime Files</span>
+                    <span className="accent-cyan">
+                      {commandBrokerProductionStatus.runtimeFiles.length}
+                    </span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {commandBrokerProductionStatus.runtimeFiles
+                      .slice(0, 24)
+                      .map((file) => (
+                        <span className="blocked-action" key={file}>
+                          {file}
+                        </span>
+                      ))}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Policy Boundary</span>
+                    <span className="accent-purple">No Bypass</span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {[
+                      ...commandBrokerProductionStatus.policyBoundary,
+                      ...commandBrokerProductionStatus.nextSafeActions,
+                    ].map((item) => (
+                      <span className="blocked-action" key={item}>
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : activePanel === "sessionToolkit" ? (
+            <>
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>Codex Session Sidebar Toolkit</span>
+                  <span className="accent-cyan">Read Only</span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Agents</span>
+                    <strong>
+                      {codexSessionSidebarToolkitStatus.summary.agentCount}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Broker Routed</span>
+                    <strong>
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .brokerRoutedAgents
+                      }
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Repos</span>
+                    <strong>
+                      {codexSessionSidebarToolkitStatus.summary.registeredRepos}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Reports</span>
+                    <strong>
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .runtimeReportsPresent
+                      }
+                      /
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .runtimeReportsExpected
+                      }
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Auto Dry-Run</span>
+                    <strong>
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .autoAllowDryRunActions
+                      }
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Lease Required</span>
+                    <strong>
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .leaseRequiredActions
+                      }
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>First Phase Blocks</span>
+                    <strong>
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .blockedFirstPhaseActions
+                      }
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Hard Blocks</span>
+                    <strong>
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .hardBlockedActions
+                      }
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Sync Queue</span>
+                    <strong>
+                      {codexSessionSidebarToolkitStatus.summary.syncQueueItems}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Ready / Lease / Blocked</span>
+                    <strong>
+                      {codexSessionSidebarToolkitStatus.summary.syncQueueReady}/
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .syncQueueLeaseRequired
+                      }
+                      /
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .syncQueueBlocked
+                      }
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Integration Rows</span>
+                    <strong>
+                      {codexSessionSidebarToolkitStatus.summary.integrationRows}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Integration R/L/B</span>
+                    <strong>
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .integrationReady
+                      }
+                      /
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .integrationLeaseRequired
+                      }
+                      /
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .integrationBlocked
+                      }
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Lease Requests</span>
+                    <strong>
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .leaseRequestPackets
+                      }
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Preflight Commands</span>
+                    <strong>
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .executorPreflightCommands
+                      }
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Exec Enabled</span>
+                    <strong>
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .executorPreflightExecutionEnabled
+                      }
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Objective Verified</span>
+                    <strong>
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .objectiveVerified
+                      }
+                      /{codexSessionSidebarToolkitStatus.summary.objectiveTotal}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Objective Blocked</span>
+                    <strong>
+                      {
+                        codexSessionSidebarToolkitStatus.summary
+                          .objectiveBlocked
+                      }
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Status</span>
+                  <code>{codexSessionSidebarToolkitStatus.status}</code>
+                  <span>Project</span>
+                  <code>
+                    {codexSessionSidebarToolkitStatus.controlSurface.project}
+                  </code>
+                  <span>Route</span>
+                  <code>
+                    {
+                      codexSessionSidebarToolkitStatus.controlSurface
+                        .executionRoute
+                    }
+                  </code>
+                  <span>Updated</span>
+                  <code>{codexSessionSidebarToolkitStatus.updatedAt}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  This panel is the local session control surface for Codex,
+                  KOB, Hermes, Manus, OpenCode, AGY, and repo registry routes.
+                  It reads a generated fixture only. It does not run commands,
+                  clone repos, start Docker, call providers, read secrets, sync
+                  connectors, push, deploy, mutate generated assets, or provide
+                  an approve-all bypass.
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A agent routes"
+                  >
+                    <div className="git-section-title">
+                      <span>Agent Routes</span>
+                      <span className="approval-badge">
+                        {sessionToolkitAgents.length}
+                      </span>
+                    </div>
+                    {sessionToolkitAgents.map((agent) => (
+                      <div
+                        className="practice-artifact-row"
+                        key={agent.agentId}
+                      >
+                        <span
+                          className={`practice-status ${
+                            agent.brokerRouted
+                              ? "payload-ready"
+                              : "payload-blocked"
+                          }`}
+                        >
+                          {agent.runtime}
+                        </span>
+                        <div>
+                          <strong>{agent.name}</strong>
+                          <p>
+                            {agent.role} · local only:{" "}
+                            {agent.localOnly ? "yes" : "no"}
+                          </p>
+                          <code>
+                            allow {agent.allowedActions.length} · lease{" "}
+                            {agent.leaseRequiredActions.length} · block{" "}
+                            {agent.blockedActions.length}
+                          </code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A session workflows"
+                  >
+                    <div className="git-section-title">
+                      <span>Workflows</span>
+                      <span className="approval-badge">
+                        {sessionToolkitWorkflows.length}
+                      </span>
+                    </div>
+                    {sessionToolkitWorkflows.map((workflow) => (
+                      <div className="practice-artifact-row" key={workflow.id}>
+                        <span className="practice-status payload-warn">
+                          {workflow.execution}
+                        </span>
+                        <div>
+                          <strong>{workflow.name}</strong>
+                          <p>{workflow.steps.join(" → ")}</p>
+                          <code>{workflow.id}</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A local sync queue"
+                  >
+                    <div className="git-section-title">
+                      <span>Local Sync Queue</span>
+                      <span className="approval-badge">
+                        {sessionToolkitSyncQueue.length}
+                      </span>
+                    </div>
+                    {sessionToolkitSyncQueue.map((item) => (
+                      <div className="practice-artifact-row" key={item.id}>
+                        <span
+                          className={`practice-status ${
+                            item.status === "ready"
+                              ? "payload-ready"
+                              : item.status === "lease_required"
+                                ? "payload-warn"
+                                : "payload-blocked"
+                          }`}
+                        >
+                          {item.status}
+                        </span>
+                        <div>
+                          <strong>{item.label}</strong>
+                          <p>
+                            {item.route} · {item.nextAction}
+                          </p>
+                          <code>
+                            {item.id} · {item.decision} · {item.requiredGate}
+                          </code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+                </div>
+              </div>
+
+              <div className="practice-lower-grid">
+                <div className="card">
+                  <div className="card-title">
+                    <span>Runtime Reports</span>
+                    <span className="accent-cyan">
+                      {codexSessionSidebarToolkitStatus.reports.present}/
+                      {codexSessionSidebarToolkitStatus.reports.expected}
+                    </span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {sessionToolkitReportEntries.map(([key, report]) => (
+                      <span
+                        className={`blocked-action ${
+                          report.exists ? "payload-ready" : "payload-blocked"
+                        }`}
+                        key={key}
+                      >
+                        {key}: {report.status}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Integration Readiness</span>
+                    <span className="accent-cyan">
+                      {sessionToolkitIntegrationRows.length}
+                    </span>
+                  </div>
+                  <div className="practice-artifacts compact-list">
+                    {sessionToolkitIntegrationRows.map((row) => (
+                      <div className="practice-artifact-row" key={row.id}>
+                        <span
+                          className={`practice-status ${
+                            row.status === "ready"
+                              ? "payload-ready"
+                              : row.status === "blocked" ||
+                                  row.status === "missing"
+                                ? "payload-blocked"
+                                : "payload-warn"
+                          }`}
+                        >
+                          {row.status}
+                        </span>
+                        <div>
+                          <strong>{row.surface}</strong>
+                          <p>
+                            {row.role} · {row.nextAction}
+                          </p>
+                          <code>
+                            {row.id} · {row.decision} · {row.evidence}
+                          </code>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Lease Request Packets</span>
+                    <span className="accent-cyan">
+                      {codexSessionSidebarToolkitStatus.leaseRequests.status}
+                    </span>
+                  </div>
+                  <div className="practice-artifacts compact-list">
+                    {sessionToolkitLeaseRequests.map((request) => (
+                      <div
+                        className="practice-artifact-row"
+                        key={request.requestId}
+                      >
+                        <span
+                          className={`practice-status ${
+                            request.requestStatus === "ready_for_review"
+                              ? "payload-ready"
+                              : request.requestStatus ===
+                                  "blocked_pending_targets"
+                                ? "payload-blocked"
+                                : "payload-warn"
+                          }`}
+                        >
+                          {request.requestStatus}
+                        </span>
+                        <div>
+                          <strong>{request.surface}</strong>
+                          <p>
+                            {request.executor || "target binding"} ·{" "}
+                            {request.nextAction}
+                          </p>
+                          <code>
+                            {request.sourceRowId} ·{" "}
+                            {request.lane || "no active lease"} · {request.path}
+                          </code>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Executor Lease Preflight</span>
+                    <span className="accent-cyan">
+                      {sessionToolkitExecutorPreflight.status}
+                    </span>
+                  </div>
+                  <div className="practice-summary-grid compact">
+                    <div className="practice-kpi">
+                      <span>Commands</span>
+                      <strong>
+                        {
+                          sessionToolkitExecutorPreflight.summary
+                            .registeredCommands
+                        }
+                      </strong>
+                    </div>
+                    <div className="practice-kpi">
+                      <span>Require Lease</span>
+                      <strong>
+                        {sessionToolkitExecutorPreflight.summary.requiresLease}
+                      </strong>
+                    </div>
+                    <div className="practice-kpi">
+                      <span>Active Leases</span>
+                      <strong>
+                        {sessionToolkitExecutorPreflight.summary.activeLeases}
+                      </strong>
+                    </div>
+                    <div className="practice-kpi">
+                      <span>Active Locks</span>
+                      <strong>
+                        {
+                          sessionToolkitExecutorPreflight.summary
+                            .activeLaneLocks
+                        }
+                      </strong>
+                    </div>
+                  </div>
+                  <div className="blocked-action-list">
+                    {sessionToolkitExecutorPreflight.requirements.map(
+                      (requirement) => (
+                        <span
+                          className="blocked-action payload-ready"
+                          key={requirement.id}
+                        >
+                          {requirement.id}: {requirement.status}
+                        </span>
+                      ),
+                    )}
+                  </div>
+                  <div className="practice-artifacts compact-list">
+                    {sessionToolkitExecutorPreflight.sampleCommands
+                      .slice(0, 6)
+                      .map((command) => (
+                        <div className="practice-artifact-row" key={command.id}>
+                          <span
+                            className={`practice-status ${
+                              command.brokerDecision ===
+                              "requires_executor_lease"
+                                ? "payload-warn"
+                                : command.brokerDecision === "blocked"
+                                  ? "payload-blocked"
+                                  : "payload-ready"
+                            }`}
+                          >
+                            {command.riskTier}
+                          </span>
+                          <div>
+                            <strong>{command.label}</strong>
+                            <p>
+                              {command.brokerDecision} · {command.requiredGate}
+                            </p>
+                            <code>{command.commandSha256 || "no-command"}</code>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Objective Audit</span>
+                    <span className="accent-cyan">
+                      {sessionToolkitObjectiveAudit.overallStatus}
+                    </span>
+                  </div>
+                  <div className="practice-summary-grid compact">
+                    <div className="practice-kpi">
+                      <span>Verified</span>
+                      <strong>
+                        {sessionToolkitObjectiveAudit.verifiedCount}/
+                        {sessionToolkitObjectiveAudit.totalCount}
+                      </strong>
+                    </div>
+                    <div className="practice-kpi">
+                      <span>Blocked</span>
+                      <strong>
+                        {sessionToolkitObjectiveAuditCounts.blocked ?? 0}
+                      </strong>
+                    </div>
+                    <div className="practice-kpi">
+                      <span>Partial</span>
+                      <strong>
+                        {sessionToolkitObjectiveAuditCounts.partial ?? 0}
+                      </strong>
+                    </div>
+                    <div className="practice-kpi">
+                      <span>Missing</span>
+                      <strong>
+                        {sessionToolkitObjectiveAuditCounts.missing ?? 0}
+                      </strong>
+                    </div>
+                  </div>
+                  <div className="practice-artifacts compact-list">
+                    {sessionToolkitObjectiveAudit.requirements.map((item) => (
+                      <div className="practice-artifact-row" key={item.id}>
+                        <span
+                          className={`practice-status ${
+                            item.status === "verified"
+                              ? "payload-ready"
+                              : item.status === "blocked"
+                                ? "payload-blocked"
+                                : "payload-warn"
+                          }`}
+                        >
+                          {item.status}
+                        </span>
+                        <div>
+                          <strong>{item.label}</strong>
+                          <p>{item.evidence}</p>
+                          <code>
+                            {item.id} · {item.nextAction}
+                          </code>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Docs + Repo Registry</span>
+                    <span className="accent-emerald">
+                      {codexSessionSidebarToolkitStatus.repos.registered} repos
+                    </span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {sessionToolkitDocs.map((doc) => (
+                      <span
+                        className={`blocked-action ${
+                          doc.exists ? "payload-ready" : "payload-blocked"
+                        }`}
+                        key={doc.path}
+                      >
+                        {doc.path}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Policy Boundary</span>
+                    <span className="accent-purple">Broker Only</span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {codexSessionSidebarToolkitStatus.allowedNow.map(
+                      (action) => (
+                        <span
+                          className="blocked-action payload-ready"
+                          key={action}
+                        >
+                          {action}
+                        </span>
+                      ),
+                    )}
+                    {codexSessionSidebarToolkitStatus.blockedInToolkit.map(
+                      (action) => (
+                        <span
+                          className="blocked-action payload-blocked"
+                          key={action}
+                        >
+                          {action}
+                        </span>
+                      ),
+                    )}
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : activePanel === "deepResearch" ? (
+            <>
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>Deep Research OS</span>
+                  <span className="accent-cyan">
+                    {deepResearchStatus.summary.status}
+                  </span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Docs</span>
+                    <strong>{deepResearchStatus.summary.docs}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Schemas</span>
+                    <strong>{deepResearchStatus.summary.schemaFiles}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Agent Roles</span>
+                    <strong>{deepResearchStatus.summary.agentRoles}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Job Classes</span>
+                    <strong>{deepResearchStatus.summary.jobClasses}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Output Artifacts</span>
+                    <strong>
+                      {deepResearchStatus.summary.outputArtifacts}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Report Pack</span>
+                    <strong>
+                      {deepResearchStatus.summary.reportPackArtifacts}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Source Registry</span>
+                    <strong>
+                      {deepResearchStatus.summary.sourceRegistryValid
+                        ? "valid"
+                        : "review"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>External Exec</span>
+                    <strong>
+                      {deepResearchStatus.summary.externalExecutionEnabled
+                        ? "on"
+                        : "off"}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Mode</span>
+                  <code>{deepResearchStatus.mode}</code>
+                  <span>Runtime</span>
+                  <code>{deepResearchStatus.runtimeRoot}</code>
+                  <span>Updated</span>
+                  <code>{deepResearchStatus.updatedAt}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  Deep Research is local-review-only here. This panel reads a
+                  generated fixture and does not browse, scrape, call providers,
+                  install models, run GPU jobs, publish, push, deploy, write
+                  connectors, read secrets, or expose public endpoints.
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="Deep Research job classes"
+                  >
+                    <div className="git-section-title">
+                      <span>Job Classes</span>
+                      <span className="approval-badge">
+                        {deepResearchStatus.jobClasses.length}
+                      </span>
+                    </div>
+                    {deepResearchStatus.jobClasses.map((jobClass) => (
+                      <div className="practice-artifact-row" key={jobClass.id}>
+                        <span className="practice-status payload-ready">
+                          {jobClass.gate}
+                        </span>
+                        <div>
+                          <strong>{jobClass.id}</strong>
+                          <p>{jobClass.purpose}</p>
+                          <code>{jobClass.firstOutput}</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="Deep Research agent mesh"
+                  >
+                    <div className="git-section-title">
+                      <span>Agent Mesh</span>
+                      <span className="approval-badge">
+                        {deepResearchStatus.agentMesh.length}
+                      </span>
+                    </div>
+                    {deepResearchStatus.agentMesh.map((agent) => (
+                      <div className="practice-artifact-row" key={agent}>
+                        <span className="practice-status payload-ready">
+                          local
+                        </span>
+                        <div>
+                          <strong>{agent}</strong>
+                          <p>Routes through the Deep Research control plane.</p>
+                          <code>read-only status fixture</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="Deep Research output pack"
+                  >
+                    <div className="git-section-title">
+                      <span>Output Pack</span>
+                      <span className="approval-badge">
+                        {deepResearchStatus.outputPack.length}
+                      </span>
+                    </div>
+                    {deepResearchStatus.outputPack.map((artifact) => (
+                      <div className="practice-artifact-row" key={artifact}>
+                        <span className="practice-status payload-warn">
+                          draft
+                        </span>
+                        <div>
+                          <strong>{artifact}</strong>
+                          <p>
+                            Generated only inside a future local job folder.
+                          </p>
+                          <code>no retrieval in this panel</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+                </div>
+              </div>
+
+              <div className="practice-lower-grid">
+                <div className="card">
+                  <div className="card-title">
+                    <span>Local Report Pack</span>
+                    <span className="accent-cyan">
+                      {deepResearchStatus.reportPack.artifact_count}
+                    </span>
+                  </div>
+                  <div className="practice-artifacts compact-list">
+                    <div className="practice-artifact-row">
+                      <span className="practice-status payload-ready">job</span>
+                      <div>
+                        <strong>{deepResearchStatus.reportPack.job_id}</strong>
+                        <p>Generated local-only for review before retrieval.</p>
+                        <code>{deepResearchStatus.reportPack.pack_dir}</code>
+                      </div>
+                    </div>
+                    {deepResearchStatus.reportPack.artifacts.map((artifact) => (
+                      <div className="practice-artifact-row" key={artifact}>
+                        <span className="practice-status payload-ready">
+                          file
+                        </span>
+                        <div>
+                          <strong>{artifact}</strong>
+                          <p>Local report-pack artifact.</p>
+                          <code>read-only fixture</code>
+                        </div>
+                      </div>
+                    ))}
+                    {deepResearchStatus.reportPack.source_registry_errors.map(
+                      (error) => (
+                        <div className="practice-artifact-row" key={error}>
+                          <span className="practice-status payload-blocked">
+                            review
+                          </span>
+                          <div>
+                            <strong>{error}</strong>
+                            <p>Source registry must be corrected locally.</p>
+                            <code>no retrieval until valid</code>
+                          </div>
+                        </div>
+                      ),
+                    )}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Validation</span>
+                    <span className="accent-emerald">
+                      {deepResearchStatus.summary.jobPacketValid &&
+                      deepResearchStatus.summary.evidencePackValid
+                        ? "Valid"
+                        : "Review"}
+                    </span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {deepResearchValidationEntries.map(([key, value]) => (
+                      <span
+                        className={`blocked-action ${
+                          Array.isArray(value) && value.length > 0
+                            ? "payload-blocked"
+                            : "payload-ready"
+                        }`}
+                        key={key}
+                      >
+                        {key}:{" "}
+                        {Array.isArray(value)
+                          ? value.length === 0
+                            ? "ok"
+                            : value.join(", ")
+                          : String(value)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Blocked Actions</span>
+                    <span className="accent-purple">
+                      {deepResearchStatus.blockedActions.length}
+                    </span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {deepResearchStatus.blockedActions.map((action) => (
+                      <span
+                        className="blocked-action payload-blocked"
+                        key={action}
+                      >
+                        {action}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Next Safe Actions</span>
+                    <span className="accent-cyan">Local Only</span>
+                  </div>
+                  <div className="practice-artifacts compact-list">
+                    {deepResearchStatus.nextSafeActions.map((action) => (
+                      <div className="practice-artifact-row" key={action}>
+                        <span className="practice-status payload-ready">
+                          next
+                        </span>
+                        <div>
+                          <strong>{action}</strong>
+                          <p>Requires no external execution from this panel.</p>
+                          <code>
+                            open separate lane for retrieval/provider work
+                          </code>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Docs + Schemas</span>
+                    <span className="accent-emerald">
+                      {deepResearchStatus.docs.length +
+                        deepResearchStatus.schemas.length}
+                    </span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {deepResearchStatus.docs.map((doc) => (
+                      <span className="blocked-action payload-ready" key={doc}>
+                        {doc}
+                      </span>
+                    ))}
+                    {deepResearchStatus.schemas.map((schema) => (
+                      <span
+                        className="blocked-action payload-ready"
+                        key={schema}
+                      >
+                        {schema}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : activePanel === "toolPayloads" ? (
+            <>
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>Tool Payloads + Broker Decisions</span>
+                  <span className="accent-cyan">Read Only</span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Connector Payloads</span>
+                    <strong>{toolIntegrationPayloadStatus.recordCount}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Broker Decisions</span>
+                    <strong>{codexCommandBrokerStatus.summary.total}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Lease Required</span>
+                    <strong>
+                      {codexCommandBrokerStatus.summary.requiresExecutorLease}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Blocked</span>
+                    <strong>{codexCommandBrokerStatus.summary.blocked}</strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Payload Mode</span>
+                  <code>{toolIntegrationPayloadStatus.mode}</code>
+                  <span>Broker Mode</span>
+                  <code>{codexCommandBrokerStatus.mode}</code>
+                  <span>Updated</span>
+                  <code>{codexCommandBrokerStatus.updatedAt}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  Fixture-only status panel. Mission Control does not read
+                  runtime files from the browser, run shell commands, sync
+                  external tools, clone repos, call providers, push, deploy, or
+                  expose public endpoints.
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="Connector draft payloads"
+                  >
+                    <div className="git-section-title">
+                      <span>Connector Drafts</span>
+                      <span className="approval-badge">target-gated</span>
+                    </div>
+                    {toolConnectorStatuses.map((connector) => (
+                      <div
+                        className="practice-artifact-row"
+                        key={connector.key}
+                      >
+                        <span
+                          className={`practice-status ${getPayloadReviewStatusClass(connector.targetBound ? "ready" : "blocked")}`}
+                        >
+                          {connector.targetBound ? "bound" : "blocked"}
+                        </span>
+                        <div>
+                          <strong>{connector.name}</strong>
+                          <p>
+                            {connector.intendedUse} · {connector.mode} ·{" "}
+                            {connector.draftCount} drafts
+                          </p>
+                          <code>
+                            targets: {connector.requiredTargets.join(", ")}
+                          </code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="Codex command broker decisions"
+                  >
+                    <div className="git-section-title">
+                      <span>Broker Decisions</span>
+                      <span className="approval-badge">runtime-fixture</span>
+                    </div>
+                    {brokerDecisionArtifacts.map((decision) => (
+                      <div
+                        className="practice-artifact-row"
+                        key={decision.artifactPath}
+                      >
+                        <span
+                          className={`practice-status ${getBrokerDecisionClass(decision.decision)}`}
+                        >
+                          {decision.decision}
+                        </span>
+                        <div>
+                          <strong>
+                            {decision.tool} / {decision.action}
+                          </strong>
+                          <p>
+                            {decision.reason} · gate:{" "}
+                            {decision.requiredGate || "none"}
+                          </p>
+                          <code>
+                            {decision.targetRepo || decision.goalPreview}
+                          </code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+                </div>
+              </div>
+
+              <div className="practice-lower-grid">
+                <div className="card">
+                  <div className="card-title">
+                    <span>Payload Review Findings</span>
+                    <span className="accent-purple">Local JSON</span>
+                  </div>
+                  <div className="evidence-checklist">
+                    {toolPayloadReviewFindings.map((finding) => (
+                      <div className="evidence-check-row" key={finding.label}>
+                        <span
+                          className={`packet-status ${getPayloadReviewStatusClass(finding.status)}`}
+                        >
+                          {finding.status}
+                        </span>
+                        <div>
+                          <strong>{finding.label}</strong>
+                          <p>{finding.detail}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Execution Boundary</span>
+                    <span className="accent-emerald">Broker Locked</span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {[
+                      ...toolPayloadBlockedActions,
+                      ...brokerPolicyBoundary,
+                    ].map((action) => (
+                      <span className="blocked-action" key={action}>
+                        {action}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="approval-state-grid practice-boundary-grid">
+                    <div>
+                      <span>Source</span>
+                      <strong>{codexCommandBrokerStatus.generatedBy}</strong>
+                    </div>
+                    <div>
+                      <span>Runtime Glob</span>
+                      <strong>{codexCommandBrokerStatus.sourceGlob}</strong>
+                    </div>
+                    <div>
+                      <span>External Writes</span>
+                      <strong>
+                        {toolIntegrationPayloadStatus.policy
+                          .externalWritesEnabled
+                          ? "ENABLED"
+                          : "DISABLED"}
+                      </strong>
+                    </div>
+                  </div>
                 </div>
               </div>
             </>

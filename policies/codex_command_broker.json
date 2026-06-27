@@ -1,0 +1,282 @@
+{
+  "version": "ghostclaw-codex-command-broker-v1",
+  "mode": {
+    "default_decision": "dry_run_or_block",
+    "public_endpoint_allowed": false,
+    "provider_call_allowed_by_default": false,
+    "repo_mutation_requires_lease": true,
+    "runtime_artifact_required": true
+  },
+  "tool_routes": {
+    "codex-local": {
+      "allowed_actions": [
+        "inspect",
+        "plan",
+        "dry_run_command_plan",
+        "repo_audit_readonly",
+        "registry_validate",
+        "read_repository_files",
+        "inspect_architecture",
+        "run_lint",
+        "run_unit_tests",
+        "generate_docs",
+        "code_review_dry_run",
+        "code_review_report",
+        "diff_review",
+        "security_review_plan",
+        "web_sirinx_dist_manifest",
+        "web_sirinx_static_asset_check",
+        "update_markdown",
+        "create_test_files",
+        "simulate_deploy_plan",
+        "web_sirinx_build_validation",
+        "web_sirinx_pages_deploy",
+        "scoped_repo_edit",
+        "create_non_destructive_patches",
+        "propose_refactors",
+        "validation"
+      ],
+      "lease_required_actions": [
+        "scoped_repo_edit",
+        "create_non_destructive_patches",
+        "propose_refactors",
+        "web_sirinx_build_validation"
+      ],
+      "role": "local repo supervisor and default executor"
+    },
+    "codex-5-6": {
+      "allowed_actions": [
+        "inspect",
+        "plan",
+        "dry_run_command_plan",
+        "repo_audit_readonly",
+        "registry_validate",
+        "validation"
+      ],
+      "blocked_actions": [
+        "route_repo_execution_through_kob_hosted_codex",
+        "provider_call",
+        "repo_mutation"
+      ],
+      "role": "legacy/profile alias that routes execution decisions back to codex-local"
+    },
+    "kob": {
+      "allowed_actions": ["plan", "route", "summarize", "compress_context"],
+      "blocked_actions": ["repo_mutation", "provider_secret_dump"],
+      "role": "planner, router, context compressor"
+    },
+    "kob-cli-opus": {
+      "allowed_actions": ["plan", "route", "summarize", "compress_context"],
+      "blocked_actions": ["repo_mutation", "provider_secret_dump"],
+      "role": "KOB planner profile alias for architecture and synthesis"
+    },
+    "kob-cli-fable": {
+      "allowed_actions": ["plan", "route", "summarize", "compress_context"],
+      "blocked_actions": ["repo_mutation", "provider_secret_dump"],
+      "role": "KOB fast-router profile alias for task slicing and summaries"
+    },
+    "opencode": {
+      "allowed_actions": [
+        "dry_run_command_plan",
+        "opencode_execution",
+        "scoped_repo_edit"
+      ],
+      "lease_required_actions": ["opencode_execution", "scoped_repo_edit"],
+      "role": "scoped coding executor"
+    },
+    "agy-antigravity2": {
+      "allowed_actions": [
+        "dry_run_command_plan",
+        "agy_execution",
+        "agy_scaffold",
+        "scoped_repo_edit"
+      ],
+      "lease_required_actions": [
+        "agy_execution",
+        "agy_scaffold",
+        "scoped_repo_edit"
+      ],
+      "role": "scoped scaffold and refactor executor"
+    },
+    "manus": {
+      "allowed_actions": [
+        "inspect",
+        "manus_artifact_review",
+        "artifact_hash_sync"
+      ],
+      "blocked_actions": ["direct_repo_mutation"],
+      "role": "artifact producer, metadata and hashes only"
+    },
+    "deerflow": {
+      "allowed_actions": [
+        "inspect",
+        "plan",
+        "dry_run_command_plan",
+        "repo_audit_readonly"
+      ],
+      "blocked_actions": [
+        "host_bash_without_policy",
+        "public_endpoint",
+        "secret_access",
+        "deploy",
+        "publish"
+      ],
+      "role": "long-horizon runtime candidate; local sandbox planning only before a dedicated runtime lane"
+    },
+    "flowise": {
+      "allowed_actions": ["inspect", "plan", "dry_run_command_plan"],
+      "blocked_actions": [
+        "disable_security_check",
+        "public_endpoint",
+        "unrestricted_custom_code",
+        "secret_access",
+        "connector_activation"
+      ],
+      "role": "local RAG and chatbot blueprint route; no service activation in this broker phase"
+    },
+    "n8n": {
+      "allowed_actions": ["inspect", "plan", "dry_run_command_plan"],
+      "blocked_actions": [
+        "activate_production_workflow",
+        "send_to_non_opt_in",
+        "public_endpoint",
+        "secret_access",
+        "connector_activation"
+      ],
+      "role": "workflow automation draft route; no activation or live sends in this broker phase"
+    },
+    "odysseus": {
+      "allowed_actions": ["inspect", "plan", "dry_run_command_plan"],
+      "blocked_actions": [
+        "public_endpoint",
+        "disable_auth",
+        "vendor_agpl_source",
+        "secret_access"
+      ],
+      "role": "private workspace UI route; localhost planning only before a dedicated service lane"
+    },
+    "hermes-project-planner": {
+      "allowed_actions": ["plan", "route", "risk_review", "policy_review"],
+      "blocked_actions": ["repo_mutation"],
+      "role": "policy and planning reviewer"
+    },
+    "ponytail": {
+      "allowed_actions": ["review", "minimalism_review"],
+      "blocked_actions": ["repo_mutation"],
+      "role": "code minimalism review gate"
+    }
+  },
+  "action_classes": {
+    "auto_allow_dry_run": [
+      "inspect",
+      "plan",
+      "dry_run_command_plan",
+      "repo_audit_readonly",
+      "registry_validate",
+      "read_repository_files",
+      "inspect_architecture",
+      "run_lint",
+      "run_unit_tests",
+      "generate_docs",
+      "code_review_dry_run",
+      "code_review_report",
+      "diff_review",
+      "security_review_plan",
+      "web_sirinx_dist_manifest",
+      "web_sirinx_static_asset_check",
+      "update_markdown",
+      "create_test_files",
+      "simulate_deploy_plan",
+      "summarize",
+      "route",
+      "compress_context",
+      "review",
+      "minimalism_review",
+      "manus_artifact_review",
+      "artifact_hash_sync",
+      "risk_review",
+      "policy_review",
+      "validation"
+    ],
+    "requires_executor_lease": [
+      "scoped_repo_edit",
+      "create_non_destructive_patches",
+      "propose_refactors",
+      "web_sirinx_build_validation",
+      "opencode_execution",
+      "agy_execution",
+      "agy_scaffold"
+    ],
+    "policy_controlled_registry_allow": ["clone_whitelisted_external_repo"],
+    "blocked_first_phase": [
+      "push",
+      "deploy",
+      "provider_call",
+      "connector_activation",
+      "docker_start",
+      "web_sirinx_pages_deploy",
+      "public_endpoint"
+    ]
+  },
+  "repo_actions": {
+    "registry_validate": "auto_allow_dry_run",
+    "repo_audit_readonly": "auto_allow_dry_run",
+    "clone_whitelisted_external_repo": "policy_controlled_registry_allow",
+    "scoped_repo_edit": "requires_executor_lease",
+    "create_non_destructive_patches": "requires_executor_lease",
+    "propose_refactors": "requires_executor_lease",
+    "web_sirinx_dist_manifest": "auto_allow_dry_run",
+    "web_sirinx_static_asset_check": "auto_allow_dry_run",
+    "web_sirinx_build_validation": "requires_executor_lease",
+    "web_sirinx_pages_deploy": "blocked_first_phase",
+    "push": "blocked_first_phase",
+    "deploy": "blocked_first_phase"
+  },
+  "hard_blocked_actions": [
+    "jailbreak_policy",
+    "bypass_command_policy",
+    "disable_policy",
+    "unlock_all_security",
+    "unlock_all_commands",
+    "autonomous_approve_all",
+    "approve_all_actions",
+    "disable_security_controls",
+    "access_secrets",
+    "read_or_export_user_data",
+    "modify_authentication",
+    "modify_authorization",
+    "change_payment_logic",
+    "change_security_policy",
+    "install_new_dependencies",
+    "run_unknown_scripts",
+    "database_migration",
+    "delete_or_overwrite_files",
+    "production_deploy",
+    "external_api_write_actions",
+    "disable_logging",
+    "disable_monitoring",
+    "bypass_access_control",
+    "bypass_rate_limits",
+    "exfiltrate_credentials",
+    "modify_audit_trail",
+    "hide_execution_history",
+    "print_secret",
+    "read_private_key",
+    "read_browser_profile",
+    "copy_browser_profile",
+    "copy_token_store",
+    "force_push",
+    "public_endpoint",
+    "provider_secret_dump",
+    "quota_bypass",
+    "captcha_bypass",
+    "direct_repo_mutation",
+    "destructive_delete_without_backup"
+  ],
+  "runtime": {
+    "artifact_dir": "artifacts",
+    "decision_prefix": "BROKER",
+    "audit_required": true,
+    "kill_switch_checked": true
+  }
+}

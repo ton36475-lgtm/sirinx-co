@@ -1,0 +1,248 @@
+{
+  "blockedWorkflowActions": [
+    "git_add_dot",
+    "git_commit_without_scope_review",
+    "git_push",
+    "deploy",
+    "modify_files_from_browser",
+    "apply_patch_without_executor_lease",
+    "secret_export",
+    "provider_call",
+    "connector_write"
+  ],
+  "brokerDecisions": [
+    {
+      "action": "read_repository_files",
+      "decision": "auto_allow_dry_run",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "diff_review",
+      "decision": "auto_allow_dry_run",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "code_review_dry_run",
+      "decision": "auto_allow_dry_run",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "code_review_report",
+      "decision": "auto_allow_dry_run",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "security_review_plan",
+      "decision": "auto_allow_dry_run",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "run_lint",
+      "decision": "auto_allow_dry_run",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "run_unit_tests",
+      "decision": "auto_allow_dry_run",
+      "reason": "local_non_mutating_action",
+      "requiredGate": "none",
+      "tool": "codex-local"
+    },
+    {
+      "action": "create_non_destructive_patches",
+      "decision": "requires_executor_lease",
+      "reason": "repo_affecting_executor_action",
+      "requiredGate": "executor_lease_and_lane_lock",
+      "tool": "codex-local"
+    },
+    {
+      "action": "production_deploy",
+      "decision": "blocked",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    },
+    {
+      "action": "external_api_write_actions",
+      "decision": "blocked",
+      "reason": "hard_blocked_action",
+      "requiredGate": "policy_change_required",
+      "tool": "codex-local"
+    }
+  ],
+  "changedFileSamples": [
+    {
+      "path": "AGENTS.md",
+      "status": "M"
+    },
+    {
+      "path": "NEXT_ACTIONS.md",
+      "status": "M"
+    },
+    {
+      "path": "PROJECT_STATE.md",
+      "status": "M"
+    },
+    {
+      "path": "apps/dev-command-center/src/App.tsx",
+      "status": "M"
+    },
+    {
+      "path": "apps/mission-control/dist/assets/index-CoUPTNDr.js",
+      "status": "D"
+    },
+    {
+      "path": "apps/mission-control/dist/assets/index-rzVlqVai.css",
+      "status": "D"
+    },
+    {
+      "path": "apps/mission-control/dist/index.html",
+      "status": "M"
+    },
+    {
+      "path": "apps/mission-control/src/App.tsx",
+      "status": "M"
+    },
+    {
+      "path": "apps/mission-control/src/index.css",
+      "status": "M"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/about/index.html",
+      "status": "M"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assessment/index.html",
+      "status": "M"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/About-DmjpwoGg.js",
+      "status": "D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/AgentMonitor-B4PgoV_m.js",
+      "status": "D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Analytics-DaFoBDNU.js",
+      "status": "D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Blog-BeG-JUf3.js",
+      "status": "D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/BlogCMS-q7NARNzs.js",
+      "status": "D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/BlogPost-DzNLqXoG.js",
+      "status": "D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Contact-DkiQoQVY.js",
+      "status": "D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/ContactSubmissions-DebSzXJR.js",
+      "status": "D"
+    },
+    {
+      "path": "apps/web-sirinx/dist/public/assets/Cookies-DQJ-A_3Y.js",
+      "status": "D"
+    }
+  ],
+  "generatedBy": "scripts/a2a/a2a_code_review_workflow.py",
+  "mode": "local_review_plan_only",
+  "policyBoundary": [
+    "report_only_no_code_mutation",
+    "no_git_add_dot",
+    "no_commit_push_or_deploy",
+    "no_secret_read_or_export",
+    "no_provider_or_connector_write",
+    "patch_suggestions_require_executor_lease",
+    "browser_ui_reads_fixture_only"
+  ],
+  "sourceDocument": {
+    "bytes": 21941,
+    "exists": true,
+    "lines": 813,
+    "path": "/Users/sirinx/Downloads/\ud83e\udd16 AUTOMATED CODE REVIEW WORKFLOW.md",
+    "sha256": "1fac843943225f32fa20cd96a7a6ee95af8747cdb6153d5adff9347459f0d5c3",
+    "title": "\ud83e\udd16 AUTOMATED CODE REVIEW WORKFLOW"
+  },
+  "stages": [
+    {
+      "checks": ["lint", "format", "typecheck", "code smell review"],
+      "id": "static_analysis",
+      "label": "Static analysis",
+      "mode": "plan_only"
+    },
+    {
+      "checks": ["unit tests", "integration tests", "critical path tests"],
+      "id": "test_coverage",
+      "label": "Test coverage",
+      "mode": "plan_only"
+    },
+    {
+      "checks": [
+        "dependency audit plan",
+        "secret pattern review",
+        "permission review",
+        "prompt injection surface review"
+      ],
+      "id": "security_review",
+      "label": "Security review",
+      "mode": "plan_only"
+    },
+    {
+      "checks": [
+        "bundle size plan",
+        "query pattern review",
+        "runtime regression notes"
+      ],
+      "id": "performance_review",
+      "label": "Performance review",
+      "mode": "plan_only"
+    },
+    {
+      "checks": ["README delta", "API change notes", "operator checklist"],
+      "id": "documentation_review",
+      "label": "Documentation review",
+      "mode": "plan_only"
+    },
+    {
+      "checks": [
+        "architecture fit",
+        "error handling",
+        "accessibility",
+        "minimalism review"
+      ],
+      "id": "best_practices_review",
+      "label": "Best practices review",
+      "mode": "plan_only"
+    }
+  ],
+  "summary": {
+    "autoAllowDryRun": 7,
+    "blocked": 2,
+    "blockedFirstPhase": 0,
+    "changedFilesVisible": 355,
+    "plannedStages": 6,
+    "requiresExecutorLease": 1,
+    "status": "ready_for_local_review_only"
+  },
+  "updatedAt": "2026-06-27T00:41:03+00:00"
+}

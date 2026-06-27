@@ -1,0 +1,126 @@
+{
+  "commands": [
+    {
+      "action": "web_sirinx_build_validation",
+      "brokerDecision": "requires_executor_lease",
+      "brokerReason": "repo_affecting_executor_action",
+      "commandPreview": "pnpm --filter @sirinx/web-sirinx check",
+      "commandSha256": "d6d3838e7aad8bee5261cb38e9646d0dba3fca30c472d390940cc1048deb5243",
+      "id": "web_sirinx_check",
+      "label": "web-sirinx check",
+      "required": true,
+      "requiredGate": "executor_lease_and_lane_lock",
+      "riskNotes": []
+    },
+    {
+      "action": "run_unit_tests",
+      "brokerDecision": "auto_allow_dry_run",
+      "brokerReason": "local_non_mutating_action",
+      "commandPreview": "pnpm --filter @sirinx/web-sirinx test",
+      "commandSha256": "bb4c6cae47e33a5ffb0db36a07598dd97d317c5bfa2823e7d0293910ec5519d8",
+      "id": "web_sirinx_test",
+      "label": "web-sirinx test",
+      "required": true,
+      "requiredGate": "none",
+      "riskNotes": []
+    },
+    {
+      "action": "web_sirinx_build_validation",
+      "brokerDecision": "requires_executor_lease",
+      "brokerReason": "repo_affecting_executor_action",
+      "commandPreview": "pnpm --filter @sirinx/web-sirinx build",
+      "commandSha256": "04687c037c51056987159d6ba2d79550fe8018fdaab28dddc5c74944a7b5f3f1",
+      "id": "web_sirinx_build",
+      "label": "web-sirinx build",
+      "required": true,
+      "requiredGate": "executor_lease_and_lane_lock",
+      "riskNotes": []
+    },
+    {
+      "action": "web_sirinx_static_asset_check",
+      "brokerDecision": "auto_allow_dry_run",
+      "brokerReason": "local_non_mutating_action",
+      "commandPreview": "python3 scripts/a2a/a2a_web_sirinx_deploy_lane.py",
+      "commandSha256": "45222851e3033dfb1d3898f2c987665bea4a35c59e2ae7cf0b9381d33161c4dd",
+      "id": "static_asset_manifest",
+      "label": "static asset manifest",
+      "required": true,
+      "requiredGate": "none",
+      "riskNotes": []
+    },
+    {
+      "action": "simulate_deploy_plan",
+      "brokerDecision": "auto_allow_dry_run",
+      "brokerReason": "local_non_mutating_action",
+      "commandPreview": "python3 scripts/a2a/a2a_web_sirinx_deploy_packet.py",
+      "commandSha256": "a7174f9216c3b606e4218dca12afa942d97efeae3c30b101a39d617d744403ab",
+      "id": "deploy_plan",
+      "label": "deploy plan simulation",
+      "required": true,
+      "requiredGate": "none",
+      "riskNotes": []
+    },
+    {
+      "action": "web_sirinx_pages_deploy",
+      "brokerDecision": "blocked_first_phase",
+      "brokerReason": "live_external_or_production_action_not_enabled",
+      "commandPreview": "wrangler pages deploy apps/web-sirinx/dist/public --project-name sirinx-co",
+      "commandSha256": "fee8818dad7a4ffff5772606c8192c8095267d3d8eeceb5b6092ae02d017968e",
+      "id": "cloudflare_pages_deploy",
+      "label": "Cloudflare Pages deploy",
+      "required": false,
+      "requiredGate": "dedicated_adapter_contract_and_runtime_preflight",
+      "riskNotes": ["cloudflare_deploy_command"]
+    }
+  ],
+  "distPath": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/apps/web-sirinx/dist/public",
+  "generatedBy": "scripts/a2a/a2a_web_sirinx_deploy_packet.py",
+  "laneId": "LANE_WEB_SIRINX_CLOUDFLARE_PAGES_DEPLOY",
+  "mode": "pending_deploy_lane_no_execution",
+  "nextSafeActions": [
+    "Run web-sirinx check/test/build only through command packets and scoped executor lease where required.",
+    "Regenerate web_sirinx_deploy_lane after validation.",
+    "Prepare scoped staging list for web-sirinx source and matching generated dist assets.",
+    "Keep Cloudflare deploy blocked until target, auth, rollback, and health evidence are ready."
+  ],
+  "pagesProject": "sirinx-co",
+  "policyBoundary": [
+    "no_command_execution",
+    "no_git_add_dot",
+    "no_stage",
+    "no_push",
+    "no_wrangler_deploy",
+    "no_cloudflare_secret_read",
+    "no_provider_call",
+    "deploy_requires_manual_final_review"
+  ],
+  "project": "web-sirinx",
+  "requiredEvidence": [
+    "check_passed",
+    "test_passed",
+    "build_passed",
+    "asset_manifest_missing_references_zero",
+    "cloudflare_target_verified_without_secret_printing",
+    "previous_deploy_or_rollback_reference",
+    "post_deploy_healthcheck_plan",
+    "scoped_staging_file_list"
+  ],
+  "sourceManifest": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/web_sirinx_deploy_lane.json",
+  "summary": {
+    "blockedCommands": 1,
+    "decisionCounts": {
+      "auto_allow_dry_run": 3,
+      "blocked_first_phase": 1,
+      "requires_executor_lease": 2
+    },
+    "deployCommandBlocked": true,
+    "distChangedFiles": 239,
+    "dryRunReadyCommands": 3,
+    "leaseRequiredCommands": 2,
+    "missingAssetReferences": 0,
+    "overallStatus": "pending_validation_deploy_blocked",
+    "requiredValidationCommands": 5,
+    "sourceChangedFiles": 7
+  },
+  "updatedAt": "2026-06-27T01:15:47+00:00"
+}

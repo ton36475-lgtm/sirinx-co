@@ -160,3 +160,888 @@ LOCAL ONLY — WAITING FOR PART 8 APPROVAL
   files; future scans must be masked and must not print values.
 - Existing `audit:secrets` command can print matching lines and should be
   replaced or supplemented by masked scanning before use.
+
+## Full Auto Autopilot State
+
+- Mode: `FULL_AUTO` design conversion in progress.
+- Unlock profile: `OPERATIONAL_MAX`.
+- Human approval gates are being replaced by the Autopilot Policy Engine.
+- Runtime state root: `/Users/sirinx/SIRINXDev/.ghostclaw_runtime`.
+- Tracked policy root: `policies/`.
+- Tracked Autopilot docs root: `docs/autopilot/`.
+- Execution model: job manifest -> policy decision -> execution lease ->
+  execute -> verify -> retry/rollback -> audit -> memory writeback.
+- Missing policy files or unknown actions must fail closed.
+- Kill switch path: `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/kill_switch/STOP_ALL`.
+- Former operational blocks are now policy-controlled actions: clone, install,
+  Docker localhost start, provider/API smoke, Telegram/social/email sends to
+  whitelisted or opt-in recipients, connector activation, deploy, push, and
+  memory writeback can run automatically when lease requirements pass.
+
+### Full Auto Boundaries
+
+- Local docs, policy files, specs, and allowed-path source edits can run
+  automatically when policy permits.
+- External clone/install/service/API/publish/deploy actions are not manually
+  approved anymore, but they still require machine policy allow, budget cap,
+  rate limit, sandbox/localhost boundary, and audit logging.
+- OpenOutreach remains research-only because LinkedIn personal-session
+  automation is blocked by policy.
+
+### Remaining Hard Blocks
+
+- Secret printing or credential exfiltration.
+- Disabling auth/security checks.
+- Public exposure of raw database/model/vector/admin ports.
+- Quota or captcha bypass.
+- Non-opt-in spam or scraped-contact outreach.
+- Destructive delete without backup/trash.
+- Deploy while tests/build/rollback fail.
+- Spending beyond budget caps.
+
+## AI Money System State
+
+- Module root: `docs/ai_money_system/`.
+- Runtime root: `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/ai_money`.
+- Policy files:
+  - `policies/ai_money_autopilot.yaml`
+  - `policies/revenue_metrics.yaml`
+  - `policies/content_publish_limits.yaml`
+  - `policies/lead_outreach_rules.yaml`
+  - `policies/offer_ladder.yaml`
+- Primary starting lane: AI Local Promo Pack for local businesses.
+- Scale ladder: Prompt Pack -> AI Content Agency -> AI Automation Service ->
+  Course / Community / Licensing.
+- Runtime scripts are not created yet in this documentation phase.
+- Runtime scripts are now scaffolded under `scripts/ai_money/` and generate
+  local markdown/CSV/JSON artifacts only. They do not call APIs, send messages,
+  install packages, or print secrets.
+
+## Autopilot Script State
+
+- Autopilot helper scripts are scaffolded under `scripts/autopilot/`.
+- Execution wrappers are scaffolded under `scripts/execution/`.
+- Scripts use local runtime state under `/Users/sirinx/SIRINXDev/.ghostclaw_runtime`.
+- External actions still require policy allow, execution lease, kill switch
+  check, budget/rate controls, and audit logs.
+- Automation sequence review completed at
+  `docs/autopilot/AUTOMATION_SEQUENCE_REVIEW_2026-06-21.md`.
+- Review decision: current Autopilot is safe for A0/A1/A2 local artifact lanes,
+  but not yet ready for unattended A3/A4/A5 external action adapters.
+- Adapter contract document created at
+  `docs/autopilot/AUTOPILOT_ADAPTER_CONTRACTS.md`.
+- Core hardening started: external adapter actions now require validated
+  contracts and are quarantined by default when contract fields are missing.
+- Machine-readable adapter registry created at
+  `policies/autopilot_adapter_registry.json`.
+- Per-adapter validators implemented for `docker_localhost_start`,
+  `external_repo_clone`, `provider_api_smoke`, and `mcp_connector_activation`.
+- Execution leases now carry command-hash, budget-ledger, and rate-ledger
+  metadata.
+- The executor quarantines `auto_allow_with_limits` external leases when command
+  hash verification is missing or ledger metadata is blocked.
+- Runtime ledger reservations are written under
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/{budgets,rate_limits,command_hashes}`
+  only when an allowed lease reaches the executor.
+- Next Autopilot hardening target: adapter runner registry and preflight
+  artifact writers. Live Docker/API/MCP/clone/publish/deploy execution remains
+  blocked until that layer exists.
+
+## Visual RAG Adapter State
+
+- Module root: `docs/research_memory/`.
+- Runtime root: `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/research_memory/visual_rag`.
+- Position: SPEC-02 Research-Memory-Pipeline adapter.
+- PixelRAG status: candidate/unverified dependency; not cloned, installed, or
+  trusted.
+- Initial mode: local manifest/testset/benchmark scaffold only.
+- No GPU model loading, external API call, screenshot crawling, or private
+  browser/session capture is part of this phase.
+- Scaffold scripts are created under `scripts/research_memory/`.
+- First runtime artifacts were generated under
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/research_memory/visual_rag`.
+
+## Model Training Dataset Candidate State
+
+- Module root: `docs/model_training/`.
+- Runtime root:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/model_training/fable_reasoning`.
+- Candidate dataset: `hotdogs/uka-fable-reasoning`.
+- Metadata status: verified from Hugging Face API on 2026-06-21.
+- Access status: manual gated access, not requested by Codex.
+- License: `AGPL-3.0`.
+- Use status: candidate-only. No dataset files downloaded, no row inspection,
+  no model training, no redistribution, and no production use.
+- Required next checks: truthful human access request if desired, AGPL review,
+  dataset revision pinning, outside-git storage, file hash manifest, row-level
+  secret/PII scan, and hidden reasoning leakage evaluation.
+- Real training start attempt is policy-blocked until the above gates pass and
+  local training dependencies are installed in an isolated environment.
+
+## TigrimOSR External Runtime Candidate State
+
+- Repository: `Sompote/TigrimOSR`.
+- Intake status: read-only GitHub metadata and raw file review completed.
+- License: Apache-2.0.
+- Role candidate: Rust desktop/headless multi-agent runtime and plugin/MCP
+  packaging research lane.
+- Clone/install/run status: not cloned, not installed, not started.
+- Risk class: high-capability local admin runtime because it includes shell,
+  terminal, browser control, file access, plugins, MCP, Docker, and remote
+  surfaces.
+
+## PinchTab Browser Automation Candidate State
+
+- Repository: `pinchtab/pinchtab`.
+- Intake status: external clone and read-only source audit completed.
+- License: MIT by GitHub metadata and `LICENSE`; README badge conflict says
+  Apache-2.0 and must be verified in clone audit.
+- Role candidate: browser-control HTTP API/CLI adapter for local dashboard QA,
+  Visual RAG evidence capture, and agent web workflows.
+- Clone/install/run status: cloned under
+  `/Users/sirinx/SIRINXDev/_external_repos/pinchtab`; not installed, daemon not
+  started, Docker not started, Chrome/profile not launched.
+- Risk class: high-capability browser control plane. Must stay localhost,
+  token/auth-enabled, dedicated profile, allowlist-first, and audit-logged.
+- Audit note: `go list -mod=readonly ./...` resolved package metadata and
+  downloaded Go modules into the Go module cache; no build or service start was
+  performed.
+- Localhost-only override created at
+  `/Users/sirinx/SIRINXDev/_external_repos/pinchtab/docker-compose.localhost.override.yml`.
+- Runbook created at `docs/runbooks/PINCHTAB_LOCALHOST_RUNBOOK.md`.
+- Compose preflight passed on 2026-06-21 with Docker Compose v5.1.2; rendered
+  config keeps port `9867` bound to `host_ip: 127.0.0.1` only.
+
+## Qwythos-9B Local Worker Evaluation State
+
+- Module root: `docs/model-evals/qwythos9b/`.
+- Runtime root:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/model_evals/qwythos9b`.
+- Candidate model family:
+  `empero-ai/Qwythos-9B-Claude-Mythos-5-1M-GGUF`.
+- Initial quant: `Q4_K_M`.
+- Intended role: local reasoning / dry-run agent worker, not public chatbot.
+- Local command detection on this Mac found `ollama` and `llama-server`
+  available; `litellm` was not found in `PATH`.
+- Created local-only scripts under `scripts/model_eval/` for runtime checks,
+  eval pack creation, prompt suite creation, and `<think>` block stripping.
+- Ollama model pull completed for `Q4_K_M`; `ollama list` reports the model at
+  approximately 6.8 GB.
+- Manual Ollama interactive smoke produced Thai output, but visible
+  `Thinking...` reasoning traces appeared before final output.
+- Reasoning sanitizer now strips both `<think>...</think>` and Ollama
+  `Thinking... ...done thinking.` blocks before user display.
+- Ollama API / CLI non-interactive tests with thinking disabled timed out on
+  short prompts on this Mac.
+- `llama-server` default Metal/GPU path loaded but hit Apple Metal
+  out-of-memory errors.
+- `llama-server` CPU-only localhost path loaded and `/health` returned OK, but
+  generation was too slow for realtime worker use.
+- Runtime decision: HOLD for Mac-local realtime worker use. Keep this Mac as
+  control plane / smoke-test node; move Qwythos realtime inference to a GPU
+  worker or use a smaller local model on Mac.
+- No public bind remains open; no provider/API call, deploy, push, external
+  message, database mutation, or paid API call was performed.
+
+## GLM-5.2 API-First Model Layer State
+
+- Module root: `docs/model-evals/glm52/`.
+- Policy file: `policies/glm52_api_worker.yaml`.
+- Smoke script: `scripts/models/glm52_api_smoke_test.py`.
+- Intended role: API-first long-context coding, repo planning, and frontend/UI
+  review worker.
+- Local runtime role: none. This is not a Mac-local inference lane.
+- Default model: `glm-5.2`.
+- Default API base URL: `https://api.z.ai/api/paas/v4/`.
+- API key source: `ZAI_API_KEY` from environment only.
+- Alternate provider route: Cloudflare Workers AI `@cf/zai-org/glm-5.2`.
+- Cloudflare Workers AI is recorded as quota-limited, not unlimited: manual
+  Playground testing is allowed for exploration, while API use must pass the
+  provider/budget/quota gate before execution.
+- OpenCode integration route is documented as `/connect` -> Cloudflare Workers
+  AI -> Cloudflare Account ID/API key -> `/models`; no key or provider call was
+  used in this lane.
+- Runtime status root:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/model_evals/glm52`.
+- Public leaderboard claims are treated as benchmark signals only. Production
+  routing requires local UI/frontend and governance tests.
+- No GLM-5.2 provider call has been performed in this lane unless
+  `ZAI_API_KEY` is present and the smoke script is intentionally run.
+
+## Facebook AI Content Factory Workflow State
+
+- Module docs:
+  - `docs/marketing_automation/FACEBOOK_AI_CONTENT_FACTORY_WORKFLOW.md`
+  - `docs/marketing_automation/FACEBOOK_AI_CONTENT_FACTORY_PROMPT_PACK.md`
+- Policy file: `policies/facebook_content_factory_workflow.yaml`.
+- Local generator:
+  `scripts/marketing_automation/create_facebook_content_factory_pack.py`.
+- Runtime root:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/marketing_automation/facebook_content_factory`.
+- Demo pack created:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/marketing_automation/facebook_content_factory/ai-money-facebook-content-factory-demo`.
+- Generated artifacts: campaign brief, Facebook post skeleton, visual prompt,
+  ad draft, landing/tracking plan, policy QA, and metrics CSV.
+- Scope: local-first content/marketing/full-stack planning workflow only.
+- Live Facebook post, Ads Manager mutation, ad spend, Meta API calls, customer
+  messages, production Pixel/CAPI events, Supabase service-role mutation, and
+  public endpoint exposure remain blocked until policy allow.
+
+## Content Automation Revenue Engine State
+
+- Module docs:
+  - `docs/marketing_automation/CONTENT_AUTOMATION_REVENUE_ENGINE.md`
+  - `docs/marketing_automation/CONTENT_AUTOMATION_SEQUENCE_MAP.md`
+- Policy file: `policies/content_automation_engine.yaml`.
+- Local generator:
+  `scripts/marketing_automation/create_content_automation_sprint.py`.
+- Runtime root:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/marketing_automation/content_engine`.
+- Demo sprint pack created:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/marketing_automation/content_engine/ai-money-content-automation-sprint-demo`.
+- Generated artifacts: sprint plan, automation wiring plan, lead capture plan,
+  policy QA checklist, next sprint backlog, content queue CSV, channel matrix
+  CSV, KPI dashboard CSV, and manifest JSON.
+- Role: umbrella revenue workflow that connects AI Money offers, Facebook
+  Content Factory artifacts, Visual RAG research inputs, Autopilot policy,
+  n8n/Postiz/CRM draft wiring, proof collection, and KPI review.
+- Scope: local-first planning and artifact generation only. No live publish,
+  ad spend, Meta API mutation, customer message, Supabase mutation, connector
+  activation, provider call, public endpoint, or production tracking event was
+  performed.
+
+## Operational Language Map State
+
+- Module doc: `docs/architecture/OPERATIONAL_LANGUAGE_MAP.md`.
+- Policy file: `policies/operational_language_map.yaml`.
+- Snapshot date: 2026-06-23.
+- Local repo inspection found the active system is multi-language:
+  TypeScript/TSX for apps and packages, Python for local artifact generators,
+  Shell for guarded wrappers, Rust for deterministic local tooling prototypes,
+  SQL for database/schema lanes, Markdown/YAML/JSON for the control plane, and
+  Thai/English/mixed Thai-English for operator and market communication.
+- `AGENTS.md` now points future agents to the operational language map before
+  creating new files or choosing implementation language.
+
+## iGaming Engineering Practice Lab State
+
+- Module docs:
+  - `docs/igaming_practice/IGAMING_ENGINEERING_PRACTICE_LAB.md`
+  - `docs/igaming_practice/LEDGER_AND_WALLET_KATA.md`
+  - `docs/igaming_practice/REALTIME_PLATFORM_KATA.md`
+  - `docs/igaming_practice/SECURITY_AND_OBSERVABILITY_KATA.md`
+  - `docs/igaming_practice/REAL_MONEY_GAMBLING_BOUNDARY.md`
+  - `docs/igaming_practice/PAYMENT_PROVIDER_SANDBOX_READINESS.md`
+  - `docs/igaming_practice/LEDGER_EVENT_SCHEMA.md`
+  - `docs/igaming_practice/LEDGER_METRICS_CHECKLIST.md`
+- Implementation plan:
+  `docs/superpowers/plans/2026-06-23-igaming-ledger-practice-lab.md`.
+- Policy files:
+  - `policies/igaming_practice_lab.yaml`
+  - `policies/real_money_gambling_boundary.yaml`
+- Local generator:
+  `scripts/igaming_practice/create_igaming_practice_pack.py`.
+- Payment sandbox generator:
+  `scripts/igaming_practice/create_payment_sandbox_readiness_pack.py`.
+- Runtime practice pack:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/igaming_practice/senior-lead-fullstack-igaming-practice`.
+- Runtime payment sandbox readiness pack:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/igaming_practice/payment-provider-sandbox-readiness`.
+- Mock interview pack:
+  `docs/igaming_practice/MOCK_INTERVIEW_LEDGER_KATA.md` and
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/igaming_practice/senior-lead-fullstack-igaming-practice/mock_interview_session.md`.
+- Toy implementation package: `packages/ledger-kata`.
+- Toy implementation coverage: balanced transaction posting, unbalanced
+  transaction rejection, sandbox deposit webhook idempotency, invalid webhook
+  signature rejection, stale webhook timestamp rejection, and double withdrawal
+  protection against spending the same balance twice.
+- Sandbox SQL schema draft:
+  `supabase/migrations/20260624024900_igaming_ledger_sandbox.sql` with
+  TEST-only currency constraints, RLS enabled, service-role-only grants, and a
+  ledger transaction reconciliation view.
+- Mission Control surface: `iGaming Lab` panel shows practice pack, ledger test
+  status, schema status, and hard live-money boundary state.
+- Practice scope: local-only senior/lead full-stack preparation for ledger,
+  idempotency, concurrency, realtime events, defensive security, and
+  observability.
+- Blocked scope: real gambling operations, betting/odds engine, real payment
+  provider integration, crypto transfers, production deploy, public endpoint,
+  player/customer data, compliance bypass, and secret printing.
+- Live real-money gambling and live payment-provider work is now recorded as a
+  hard-blocked lane. The safe alternative is sandbox provider readiness with
+  fake money, fake webhooks, idempotency tests, audit logs, and reconciliation
+  reports.
+
+## A2A Sync Bridge v2 State
+
+- Module docs: `docs/a2async/`.
+- Agent cards: `agents/a2a/`.
+- Repo registry: `registry/external_git_repos.yaml`.
+- Policies:
+  - `policies/a2async_policy.yaml`
+  - `policies/kob_codex_sync_policy.yaml`
+  - `policies/model_routing_policy.yaml`
+  - `policies/repo_integration_policy.yaml`
+  - `policies/autopilot_repo_actions.yaml`
+- Local scripts: `scripts/a2a/`.
+- Runtime root:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async`.
+- Role split: KOB Opus/Fable profiles plan, route, compress, and summarize;
+  Codex 5.6 profile executes repo changes and validation; Ponytail reviews
+  code minimalism; GLM-5.2 is long-context fallback.
+- Current phase: scaffolding only. No external repo clone, provider call,
+  Docker/service start, push, deploy, publish, public A2A server, or connector
+  activation was performed.
+- Known blocker: installed KOB CLI must have a valid `kob_` API key before real
+  KOB execution; the bridge therefore defaults to dry-run command plans.
+- Model reality update on 2026-06-27: `anthropic/claude-opus-4.8` returned
+  `KOB_OPUS_READY`; `anthropic/claude-fable-5` is present but currently
+  credit-blocked. KOB-hosted Codex models are intentionally not used for this
+  task. Repo execution routes to `codex-local`, meaning the active Codex
+  worker/session or local Codex CLI.
+
+## Mercury Whitelist Hermes Runtime State
+
+- Source repo: `cosmicstack-labs/mercury-agent-skills`.
+- Install report:
+  `reports/mercury-skills/20260606-145321/INSTALL_SUMMARY.md`.
+- Install mode: local-only, audit-first, whitelist-only.
+- Clone/vendor path:
+  `vendor/mercury-agent-skills`.
+- Staging/audit path:
+  `/Users/sirinx/.hermes/skills/mercury-whitelist`.
+- Active Hermes profile mirror:
+  `/Users/sirinx/.hermes/profiles/shogun/skills/<category>/<skill>/SKILL.md`.
+- Audit result: 130 total skills, 62 whitelist category candidates, 68 rejected
+  by category, 0 rejected by risky path/name, 32 manual-review keyword hits,
+  and 62 approved skills installed.
+- Hermes visibility after install: `9 hub-installed`, `76 builtin`,
+  `73 local`, `158 enabled`, `0 disabled`.
+- Example visible Mercury whitelist skills: `agent-audit-logging`,
+  `api-design`, `ui-design-system`, `react-patterns`, `product-strategy`,
+  `secure-coding`, and `test-strategy`.
+- Verification completed locally: `hermes doctor`, `hermes skills check`,
+  `hermes skills audit`, `hermes skills list`, and offline
+  `hermes -s secure-coding,product-strategy,ui-design-system,test-strategy prompt-size`.
+- Boundary: no live Hermes prompt provider call, gateway restart, deploy, push,
+  publish, production credential access, or public endpoint was performed.
+- Known caveat: `hermes skills audit` still reports existing findings from
+  already installed hub/community skills such as `axolotl` and `unsloth`; these
+  are not Mercury whitelist install findings.
+
+## Manus A2A Sync State
+
+- Agent card: `agents/a2a/manus.agent.json`.
+- Local Codex agent card: `agents/a2a/codex-local.agent.json`.
+- Sync doc: `docs/a2async/A2A_MANUS_SYNC.md`.
+- Local runbook: `docs/a2async/LOCAL_CODEX_KOB_MANUS_A2A_RUNBOOK.md`.
+- Policy: `policies/manus_a2a_sync.yaml`.
+- Adapter script: `scripts/a2a/a2a_manus_adapter.py`.
+- Isolated smoke test: `tests/a2a/test_local_codex_kob_manus_sync.py`.
+- Role: Manus is an artifact producer for visual specs, interactive HTML,
+  websites, slides, videos, and handoff summaries. Codex remains the repo
+  executor and reviewer.
+- Current exported artifact candidate: Manus `SPEC_DRIVING.html`, an
+  interactive GHOSTCLAW specification document, now exists locally at
+  `/Users/sirinx/Downloads/SPEC_DRIVING.html`.
+- Runtime metadata artifact:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/artifacts/A2A-20260627-034945-interactive_html_spec.json`.
+- Runtime dry-run task:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/completed/A2A-20260627-034945-manus-artifact-review.json`.
+- Dry-run dispatch completed with `source_exists=false`; Codex review of actual
+  HTML remains pending until the exported file is available on disk.
+- Hash-backed exported-file sync completed for `SPEC_DRIVING.html`:
+  size `52,704` bytes, SHA-256
+  `0ca8d018ba8aa7b0b6c22c91688828061339b3bcd83e7599a0b895a6461d078f`.
+- Exported-file runtime artifact:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/artifacts/A2A-20260627-040524-interactive_html_spec.json`.
+- Exported-file runtime dry-run task:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/completed/A2A-20260627-040524-manus-artifact-review.json`.
+- Light static inspection found one inline script and no external URL, `fetch`,
+  `XMLHttpRequest`, `eval`, `localStorage`, or `document.cookie` markers. The
+  file is still review-only and was not imported into production.
+- Codex content review completed:
+  `docs/a2async/SPEC_DRIVING_ARTIFACT_REVIEW.md`.
+- Mission Control backlog created:
+  `docs/product-design/SPEC_DRIVING_MISSION_CONTROL_TASKS.md`.
+- Remaining Manus export status created:
+  `docs/a2async/MANUS_REMAINING_EXPORT_SYNC.md`.
+- Review decision: convert stable sections into scoped docs and a read-only
+  Mission Control fixture/panel later; do not import the generated HTML
+  directly.
+- Remaining Manus files requested for export (`AGENT.md`, five CLAUDE
+  templates, ship protocol, schema, tests, and orchestrator) are not present on
+  the Mac yet. They have A2A metadata-only pending artifacts with
+  `source_exists=false`; no hashes exist for those files until the originals are
+  exported.
+- Manus attempted to create a combined ZIP but reported the original sandbox
+  files were missing and began recreating files from scratch. That run was
+  stopped so regenerated content does not contaminate hash-backed source sync.
+- A later package exists at
+  `/Users/sirinx/Downloads/GHOSTCLAW_COMPLETE_SYSTEM/` and has been
+  hash-synced through A2A as real local files. It is not import-ready:
+  `AGENT.md` is `43` bytes, `SPEC_DRIVING.html` is `44` bytes and does not
+  match the earlier full HTML export, the nested `GHOSTCLAW_SYSTEM` folder only
+  contains a duplicate README, and standalone schema/testing/orchestrator files
+  are still missing.
+- Runtime KOB dry-run artifact:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/artifacts/KOB-20260627-035815.json`.
+- Runtime Codex-local dry-run artifact:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/artifacts/CODEX-20260627-035815.json`.
+- Runtime Manus final-delivery summary artifact:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/artifacts/A2A-20260627-035828-delivery_summary.json`.
+- Runtime Manus final-delivery dry-run task:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/completed/A2A-20260627-035828-manus-artifact-review.json`.
+- Manus reported its generated files under `/home/ubuntu/godmode-ads-agency/`;
+  that path belongs to the Manus environment and has not been transferred to
+  the Mac repo yet.
+- Local smoke test now exercises KOB dry-run planning, Codex local dry-run
+  handoff, Manus exported-file metadata sync, dry-run dispatch, artifact
+  manifest, and daily summary under an isolated `A2A_RUNTIME_ROOT`.
+- Boundary: no Manus API call, UI automation, browser/session capture, provider
+  call, repo mutation from Manus, deploy, push, publish, or public endpoint.
+
+## Obsidian Brain Sync State
+
+## A2A Codex Sidebar Autoflow v3 State
+
+- Added OpenCode agent card:
+  `agents/a2a/opencode.agent.json`.
+- Added AGY Antigravity 2 agent card:
+  `agents/a2a/agy-antigravity2.agent.json`.
+- Added scoped executor policy:
+  `policies/a2async_executor_policy.yaml`.
+- Added v3 docs:
+  `docs/a2async/A2A_CODEX_SIDEBAR_AUTOFLOW_V3.md`,
+  `docs/a2async/OPENCODE_AGY_EXECUTOR_CONTRACT.md`,
+  `docs/a2async/A2A_EXECUTOR_LEASE_AND_LOCK_POLICY.md`, and
+  `docs/a2async/CODEX_SIDEBAR_CONTROL_PLANE.md`.
+- Added runtime-only lease and lane lock scripts:
+  `scripts/a2a/a2a_executor_lease.py` and
+  `scripts/a2a/a2a_lane_lock.py`.
+- Added dry-run command-plan adapters:
+  `scripts/a2a/a2a_opencode_adapter.py` and
+  `scripts/a2a/a2a_agy_adapter.py`.
+- Routing update: `opencode` and `agy-antigravity2` are scoped executors, while
+  `codex-local` remains the supervisor and fallback.
+- Boundary: no jailbreak, policy bypass, provider call, push, deploy, public
+  endpoint, or secret access was added.
+- Runtime OpenCode lease:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/state/executor_leases/LEASE-20260627-060602-a2a-v3-opencode.json`.
+- Runtime OpenCode command-plan artifact:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/artifacts/OPENCODE-20260627-060603-a2a-v3-opencode.json`.
+- Runtime AGY lease:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/state/executor_leases/LEASE-20260627-060603-a2a-v3-agy.json`.
+- Runtime AGY command-plan artifact:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/artifacts/AGY-20260627-060604-a2a-v3-agy.json`.
+- Lane locks were acquired and released for both dry-run lanes; no lock remains
+  intentionally held after validation.
+- Added Codex Command Broker scaffold for tool and Git repo routing:
+  `docs/a2async/CODEX_COMMAND_BROKER_TOOL_GITREPO_INTEGRATION.md`,
+  `policies/codex_command_broker.json`, and
+  `scripts/a2a/a2a_command_broker.py`.
+- Broker purpose: classify sidebar/KOB/Manus/OpenCode/AGY requests into
+  `auto_allow_dry_run`, `requires_executor_lease`,
+  `policy_controlled_registry_allow`, `blocked_first_phase`, or `blocked`
+  before any executor route.
+- Broker boundary: it writes runtime decision artifacts only. It does not
+  jailbreak, bypass policy, print secrets, run provider calls, clone repos,
+  push, deploy, expose public endpoints, or mutate repos directly.
+- Added read-only Mission Control broker status fixture flow:
+  `scripts/a2a/a2a_export_broker_status_fixture.py` exports runtime broker
+  decisions to
+  `apps/mission-control/src/fixtures/codexCommandBrokerStatus.json`.
+- Mission Control `Tool Payloads` tab now shows connector draft payloads and
+  broker decisions from fixtures only. The browser UI does not read runtime
+  folders, run shell commands, call providers, clone repos, push, deploy, or
+  expose endpoints.
+- Local browser-level DOM check passed for the `Tool Payloads` tab through an
+  isolated headless Chrome session against localhost Mission Control. Evidence:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/mission_control_tool_payloads_dom_check.json`.
+- Added broker fixture validator:
+  `scripts/a2a/a2a_validate_broker_status.py`. It checks fixture summary
+  counts, artifact-path consistency, allowed broker decision values,
+  secret-like text masking, and required no-provider/no-push/no-deploy
+  boundaries before the panel is used as operator evidence.
+- Added scoped staging review guard:
+  `policies/a2a_scoped_lanes.json`,
+  `scripts/a2a/a2a_scoped_lane_status.py`, and
+  `docs/a2async/A2A_SCOPED_LANE_STAGING_GUARD.md`. The guard writes read-only
+  runtime JSON/Markdown reports for the A2A/Mission Control broker lane and
+  never stages, commits, pushes, deploys, clones, calls providers, or bypasses
+  policy.
+- Latest guard output reports `ready_for_scoped_stage=true` for the broker lane
+  and keeps the unrelated dirty worktree context visible. Evidence:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/scoped_lane_status_codex-command-broker-mission-control.md`.
+- Added local integration readiness matrix:
+  `scripts/a2a/a2a_integration_readiness.py` and
+  `docs/a2async/A2A_INTEGRATION_READINESS_MATRIX.md`. It summarizes A2A agent
+  cards, broker route coverage, connector payload target binding, broker
+  runtime decisions, and external Git repo registry clone policy without
+  calling providers, writing connectors, cloning repos, pushing, deploying, or
+  bypassing policy.
+- Latest readiness output: `13` agent cards, `24` registered repos, `4`
+  connector payload surfaces, and `blocked_for_external_execution` because
+  Airtable, GitHub, Linear, and Notion targets remain unbound. Evidence:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/a2a_integration_readiness_matrix.md`.
+- Expanded Codex Command Broker route coverage for A2A agent cards including
+  KOB profile aliases, the `codex-5-6` compatibility alias, DeerFlow, Flowise,
+  n8n, and Odysseus. These routes are dry-run/planning routes unless a separate
+  executor lease, runtime lane, or connector target binding is opened.
+- Latest readiness output now reports `13/13` A2A agent cards broker-routed,
+  `14` broker tool routes, and `missing broker route: none`. External execution
+  remains blocked only because connector targets are unbound.
+- Added explicit hard blocks for `unlock_all_security`,
+  `unlock_all_commands`, `autonomous_approve_all`, `approve_all_actions`, and
+  `disable_security_controls` so broad autonomous approval requests cannot be
+  converted into executor leases, connector writes, provider calls, clone
+  preflights, pushes, deploys, or public endpoints.
+- Runtime broker evidence created for the requested unlock/autonomous-approve
+  class. `unlock_all_security` and `autonomous_approve_all` both resolve to
+  `blocked` with reason `hard_blocked_action`. Mission Control broker fixture
+  now validates with `6` decisions and `0` errors.
+- Added Codex Goal Plan Board:
+  `docs/a2async/CODEX_GOAL_PLAN_BOARD.md`,
+  `scripts/a2a/a2a_goal_plan_board.py`, and
+  `apps/mission-control/src/fixtures/codexGoalPlanStatus.json`.
+- Mission Control now has a `Goal Plan` tab that summarizes local work lanes,
+  safe next actions, connector target blockers, broker counts, registered repo
+  counts, runtime paths, and Obsidian metadata from a static fixture only.
+- Current goal board status is `ready_for_local_review_only` with `5` work
+  lanes, `5` safe next actions, `4` unbound connector targets, `24` registered
+  repos, and `9` blocked action classes.
+- Boundary: the goal board does not unlock security, approve every workflow,
+  run shell commands, read secrets, sync connectors, clone repos, call
+  providers, push, deploy, or expose public endpoints.
+- Sanitized the requested `autonomous_execution` YAML into the broker policy:
+  local read/inspect/lint/test/docs/markdown/simulation actions remain dry-run
+  or lease-gated, while secret access, user-data export, auth/authz/payment
+  mutation, dependency install, unknown scripts, migrations, destructive
+  overwrite, production deploy, external API writes, logging/monitoring
+  disablement, access-control/rate-limit bypass, credential exfiltration,
+  audit tampering, hidden history, and approve-all requests are hard-blocked.
+- Runtime broker evidence was created for `exfiltrate_credentials`,
+  `disable_logging`, `production_deploy`, and `external_api_write_actions`;
+  all resolve to `blocked` with reason `hard_blocked_action`.
+- Added Automated Code Review Workflow as a local review-only lane:
+  `docs/a2async/AUTOMATED_CODE_REVIEW_WORKFLOW_INTEGRATION.md` and
+  `scripts/a2a/a2a_code_review_workflow.py`.
+- The exported source at
+  `/Users/sirinx/Downloads/🤖 AUTOMATED CODE REVIEW WORKFLOW.md` is
+  hash-synced into runtime metadata only. Mission Control reads
+  `apps/mission-control/src/fixtures/automatedCodeReviewStatus.json` in a new
+  `Code Review` tab.
+- Boundary: the code review workflow can plan lint/type/test/security/doc
+  checks and generate local JSON/Markdown reports. It cannot apply patches,
+  stage, commit, push, deploy, read secrets, call providers, or write
+  connectors. Patch recommendations remain executor-lease gated.
+- Latest user-provided Downloads exports were hash-synced through A2A as
+  metadata-only inputs: `SKILL.md`, `ghostclaw-schema.ts`,
+  `GHOSTCLAW_MARKETING_CLAUDE.md`, `GHOSTCLAW_VIDEO_CLAUDE.md`,
+  `GHOSTCLAW_CONTENT_CLAUDE.md`,
+  `ghostclaw-zero-prompting-system.skill`, and
+  `🤖 AUTOMATED CODE REVIEW WORKFLOW.md`.
+- `a2a_manus_adapter.py` was hardened so same-second registrations include the
+  artifact title in filenames and no longer overwrite each other.
+- Boundary: the `.skill` package is not installed, the schema is not migrated,
+  and CLAUDE templates are not imported into agent instructions until separate
+  scoped review lanes are opened.
+
+## Codex Full Command Broker Matrix State
+
+- Generator: `scripts/a2a/a2a_codex_tool_repo_matrix.py`.
+- Mission Control fixture:
+  `apps/mission-control/src/fixtures/codexToolRepoMatrixStatus.json`.
+- Runtime JSON:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/codex_tool_repo_matrix.json`.
+- Runtime Markdown:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/codex_tool_repo_matrix.md`.
+- Mission Control panel: `Tool Matrix`.
+- Latest matrix covers `13` A2A agent cards, `24` external repo registry
+  entries, and `168` repo action classifications.
+- Definition of "unlock all commands": every command class is broker-classified
+  before execution. It does not mean bypassing safety, approving all actions, or
+  disabling policy.
+- Production/external actions remain gated or blocked: push, deploy, provider
+  calls, connector writes, public endpoints, Docker start, secret access, and
+  policy bypass.
+
+## web-sirinx Generated Assets / Deploy Lane State
+
+- Generator: `scripts/a2a/a2a_web_sirinx_deploy_lane.py`.
+- Mission Control fixture:
+  `apps/mission-control/src/fixtures/webSirinxDeployStatus.json`.
+- Runtime JSON:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/web_sirinx_deploy_lane.json`.
+- Runtime Markdown:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/web_sirinx_deploy_lane.md`.
+- Mission Control panel: `Web Deploy`.
+- Latest local manifest reports `239` changed files under
+  `apps/web-sirinx/dist/public`, `7` source/package/server changes, and `0`
+  missing generated asset references in scanned HTML.
+- Deploy is still broker-blocked. A Cloudflare Pages deploy requires a separate
+  scoped lane with check/test/build evidence, target binding, rollback plan,
+  health check, and clean staging packet.
+
+## web-sirinx Cloudflare Pages Pending Deploy Packet
+
+- Generator: `scripts/a2a/a2a_web_sirinx_deploy_packet.py`.
+- Lane doc: `docs/a2async/WEB_SIRINX_CLOUDFLARE_DEPLOY_PACKET.md`.
+- Mission Control fixture:
+  `apps/mission-control/src/fixtures/webSirinxDeployPacketStatus.json`.
+- Runtime JSON:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/web_sirinx_deploy_packet.json`.
+- Runtime Markdown:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/web_sirinx_deploy_packet.md`.
+- Lane ID: `LANE_WEB_SIRINX_CLOUDFLARE_PAGES_DEPLOY`.
+- Pages project: `sirinx-co`.
+- Current status: `pending_validation_deploy_blocked`.
+- The packet registers check/test/build/asset-manifest/deploy-plan/deploy
+  commands with broker decisions and hashes. It does not run the commands,
+  stage files, call Wrangler, push, deploy, read Cloudflare credentials, or
+  call provider APIs.
+
+## Codex Command Packet Control State
+
+- Generator: `scripts/a2a/a2a_command_packet.py`.
+- Mission Control fixture:
+  `apps/mission-control/src/fixtures/codexCommandPacketStatus.json`.
+- Runtime JSON:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/codex_command_packet.json`.
+- Runtime Markdown:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/codex_command_packet.md`.
+- Mission Control panel: `Command Packet`.
+- Latest sample packet classifies
+  `python3 scripts/a2a/a2a_web_sirinx_deploy_lane.py` as
+  `ready_dry_run_packet` for the `web_sirinx_dist_manifest` action.
+- The packet stores a masked command preview, command SHA-256, broker decision,
+  risk flags, lease status, packet decision, and execution boundary. The packet
+  generator does not execute shell commands.
+- Production rule: every local executor command should have a broker artifact
+  and command packet before any runner executes it. Repo-affecting commands
+  still require executor lease and lane lock.
+
+## Obsidian Brain Sync State
+
+- Canonical vault:
+  `/Users/sirinx/Documents/Obsidian Vault/SIRINX`.
+- Digest note:
+  `/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md`.
+- KOB config pointer: `/Users/sirinx/.kob-cli/obsidian-brain-sync.json`.
+- Codex config pointer: `/Users/sirinx/.codex/obsidian-brain-sync.json`.
+- Policy: `policies/obsidian_brain_sync.yaml`.
+- Script: `scripts/a2a/a2a_obsidian_sync.py`.
+- Runtime JSONL:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/memory/obsidian_sync.jsonl`.
+- Rule: all substantive KOB/Codex work gets one concise, non-secret digest
+  pulse with source path and next action. KOB proposes; Codex writes.
+
+## Hermes Project Planner Tool Integration State
+
+- Agent card:
+  `agents/a2a/hermes-project-planner.agent.json`.
+- Runbook:
+  `docs/a2async/HERMES_PROJECT_PLANNER_TOOL_INTEGRATION.md`.
+- Target binding policy:
+  `policies/tool_integration_targets.yaml`.
+- Payload generator:
+  `scripts/a2a/a2a_tool_integration_plan.py`.
+- Runtime payload bundle:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/tool_integrations/all_tool_payloads.json`.
+- Generated local draft payloads for Airtable, Linear, Notion, and GitHub from
+  current A2A Manus artifacts. No external app write was performed.
+- Payload summary: `22` artifact records, `22` Airtable draft records, `13`
+  Linear draft issues, `7` GitHub draft issues, and one Notion planning page
+  draft.
+- Boundary: writes to Airtable, Linear, Notion, or GitHub are blocked until the
+  user provides explicit target binding: Airtable base/table, Linear
+  workspace/team, Notion parent page/database, and GitHub owner/repo.
+
+## LLM Production Safety Article State
+
+- Defensive public-technical article created:
+  `docs/LLM_PRODUCTION_SAFETY_ARCHITECTURE.md`.
+- Risk-surface taxonomy created:
+  `docs/LLM_RISK_SURFACE_TAXONOMY.md`.
+- Article safety QA checklist created:
+  `docs/ARTICLE_SAFETY_QA_CHECKLIST.md`.
+- Defensive reference map created:
+  `docs/REFERENCES.md`.
+- Ship Protocol example payload created:
+  `docs/LLM_PRODUCTION_SAFETY_SHIP_PROTOCOL_PAYLOAD.json`.
+- Repo docs were identified across architecture, A2A, autopilot, security,
+  policies, deep research, product-design, research-memory, runbook, and
+  agent/memory surfaces.
+- Safety boundary: no jailbreak prompts, bypass instructions, reproducible
+  attack steps, evasion recipes, or obfuscation guidance were added. OWASP and
+  NIST references are used only as defensive engineering frameworks.
+- Source draft sanitization review added:
+  `docs/LLM_SAFETY_DRAFT_SANITIZATION_REVIEW.md`.
+- The adversarial source draft was treated as internal input only. Operational
+  attack detail was not copied into the public article. Specific numeric and
+  model-family claims remain citation-gated before publication.
+
+## Command Broker Production Lane State
+
+- Generator: `scripts/a2a/a2a_command_broker_production_lane.py`.
+- Mission Control fixture:
+  `apps/mission-control/src/fixtures/commandBrokerProductionStatus.json`.
+- Runtime root:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/`.
+- Runtime JSON:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/command_broker_production_lane.json`.
+- Runtime Markdown:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/command_broker_production_lane.md`.
+- Mission Control panel: `Command Broker`.
+- Current status: `ready_for_review_no_execution`.
+- Latest runtime registry generated `45` command entries from the command
+  broker policy and pending `web-sirinx` deploy lane.
+- Runtime scaffolds created under `registry/`, `policies/`, `schemas/`,
+  `logs/`, `locks/`, and `state/` outside git.
+- TypeScript contract package added:
+  `packages/command-broker`.
+- Package API:
+  `decideCommandRequest` and `validateAdapterContract`.
+- Package tests cover read-only, validation, scoped write, path violation,
+  executor lease, production deploy gating, approve-all denial, command text
+  denial, whitelisted clone preflight, unverified repo review, unknown tool
+  denial, Docker localhost adapter validation, external repo clone adapter
+  validation, provider API smoke adapter validation, and MCP connector
+  activation adapter validation.
+- Adapter validators are preflight-only. Passing validation still returns
+  `REQUIRE_HUMAN_REVIEW` with `allowedToExecute=false`.
+- Production boundary: this lane unlocks command visibility only. It does not
+  execute shell commands, stage files, commit, push, deploy, call providers,
+  sync connectors, read secrets, edit audit logs, or provide approve-all.
+- The pending Cloudflare Pages deploy command remains classified as a
+  production/external action and is not executable through this broker lane.
+
+## Deep Research OS System Design State
+
+- Main design doc:
+  `docs/deep_research/DEEP_RESEARCH_SYSTEM_DESIGN.md`.
+- Control plane doc:
+  `docs/deep_research/DEEP_RESEARCH_CONTROL_PLANE.md`.
+- Output contract:
+  `docs/deep_research/DEEP_RESEARCH_OUTPUT_PACK.md`.
+- Implementation plan:
+  `docs/superpowers/plans/2026-06-27-deep-research-control-plane.md`.
+- Existing OS spec:
+  `docs/deep_research/SOVEREIGN_DEEP_RESEARCH_OS.md`.
+- Schema index:
+  `docs/deep_research/SCHEMA_INDEX.md`.
+- Policy:
+  `policies/deep_research_os.yaml`.
+- Local validator/runtime generator:
+  `scripts/a2a/a2a_deep_research_system.py`.
+- Machine-readable schemas:
+  `schemas/deep-research-job-packet.schema.json`,
+  `schemas/deep-research-evidence-pack.schema.json`, and
+  `schemas/deep-research-source-registry.schema.json`.
+- Example job/evidence packets:
+  `docs/deep_research/examples/solar_bess_payback_job_packet.example.json` and
+  `docs/deep_research/examples/solar_bess_evidence_pack.example.json`.
+- Scoped lane:
+  `deep-research-system-design-lane` in `policies/a2a_scoped_lanes.json`.
+- Boundary: this lane validates local examples and writes runtime status only.
+  It does not browse, call providers, scrape, install models, run GPU tasks,
+  publish, push, deploy, write connectors, or read secrets.
+- Mission Control fixture:
+  `apps/mission-control/src/fixtures/deepResearchStatus.json`.
+- Mission Control UI: `apps/mission-control/src/App.tsx` now includes a
+  read-only `Deep Research` tab.
+- Control-plane scope now covers job classes, agent routing, source policy,
+  Mission Control read-only requirements, local job-packet factory, source
+  registry validation, and report-pack generation.
+- Generated local report pack:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/deep_research/report_packs/DR-20260624-001`.
+- Current job classes: claim verification, market intelligence, technical due
+  diligence, financial modeling, visual evidence audit, content research, tool
+  feasibility, and decision brief.
+
+## A2A Goal Coverage Audit State
+
+- Audit doc:
+  `docs/a2async/A2A_GOAL_COVERAGE_AUDIT.md`.
+- Local audit script:
+  `scripts/a2a/a2a_goal_coverage_audit.py`.
+- Scoped lane:
+  `goal-coverage-audit-lane` in `policies/a2a_scoped_lanes.json`.
+- Runtime JSON:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/goal_coverage_audit.json`.
+- Runtime Markdown:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/goal_coverage_audit.md`.
+- Purpose: report local evidence coverage for A2A agent cards, KOB/Codex local
+  routing, OpenCode/AGY/Manus routes, external Git repo registry, Command
+  Broker routes, adapter contracts, scoped lanes, runtime evidence, and
+  connector target binding.
+- Boundary: this lane is read-only plus runtime-report output. It does not
+  jailbreak, approve all, clone repos, call providers, start Docker, write
+  connectors, push, deploy, read secrets, or mutate generated web assets.
+
+## Codex Session Sidebar Toolkit State
+
+- Toolkit doc:
+  `docs/a2async/CODEX_SESSION_SIDEBAR_TOOLKIT.md`.
+- Local generator:
+  `scripts/a2a/a2a_session_sidebar_toolkit.py`.
+- Mission Control fixture:
+  `apps/mission-control/src/fixtures/codexSessionSidebarToolkitStatus.json`.
+- Mission Control UI:
+  `apps/mission-control/src/App.tsx` now includes a read-only `Session
+Toolkit` tab.
+- Scoped lane:
+  `codex-session-sidebar-toolkit-lane` in
+  `policies/a2a_scoped_lanes.json`.
+- Runtime JSON:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/codex_session_sidebar_toolkit.json`.
+- Runtime Markdown:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/codex_session_sidebar_toolkit.md`.
+- Runtime build evidence:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/mission_control_session_toolkit_build.md`.
+- Purpose: expose the current Codex sidebar session as a read-only toolkit
+  covering Codex local, KOB, Hermes planner, Manus, OpenCode, AGY Antigravity
+  2, A2A runtime reports, Command Broker policy, and Git repo registry state.
+- UI status: the panel shows agent routes, workflow routes, runtime reports,
+  docs, registered repo counts, auto-allow dry-run counts, lease-required
+  counts, and blocked-action boundaries from the generated fixture.
+- Integration readiness: the fixture now includes a local-only matrix for
+  Codex local, KOB CLI, Hermes, OpenCode, AGY Antigravity 2, Manus, external
+  Git repos, connector sync, Command Broker, A2A runtime reports, and Obsidian
+  brain sync. It separates `ready`, `lease_required`, `blocked`, and `partial`
+  rows without executing them.
+- Sync queue: the fixture now includes a local-only task queue for the next
+  all-tool/all-repo sync slices. It covers KOB/Hermes context sync, tool/repo
+  matrix refresh, external repo audit preparation, Manus artifact hash sync,
+  connector target binding review, generated web asset lane review, Deep
+  Research fixture work, executor lease preflight, and Obsidian memory pulses.
+- Executor preflight: the fixture now includes a read-only lease preflight
+  surface derived from the Command Broker production fixture plus runtime
+  executor lease and lane-lock directories. It shows registered commands,
+  required gates, command hashes, active leases, active locks, and confirms the
+  current panel does not execute commands.
+- Lease request packets: the fixture now includes review-only request packets
+  generated from lease-required or blocked readiness rows. Runtime packets are
+  written under
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/state/executor_lease_requests/`
+  with summary logs at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/executor_lease_requests.json`
+  and `.md`.
+- Current lease request output covers OpenCode executor candidate, AGY
+  Antigravity 2 executor candidate, external Git repo registry audit, and
+  connector target-binding review. These packets do not create active leases,
+  acquire lane locks, execute commands, write connectors, call providers, clone
+  repos, start Docker, push, deploy, read secrets, or mutate generated assets.
+- Objective audit: the fixture now includes a read-only coverage map for the
+  current all-tool/all-repo sidebar goal. It verifies brokered auto-approve
+  boundaries, Codex-local execution, KOB/Hermes routes, A2A runtime reports,
+  external Git repo registry visibility, the local sync queue, and executor
+  lease preflight, while explicitly blocking connector sync targets and real
+  external execution until separate scoped lanes exist.
+- Verification status: Mission Control typecheck passed and Vite built the
+  panel to a runtime directory outside git at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/mission-control-session-toolkit-build`.
+- Boundary: the toolkit is a fixture/status surface. It does not run shell
+  commands from UI code, approve blocked actions, write connectors, call
+  providers, clone repos, start Docker, push, deploy, read secrets, or mutate
+  generated assets.

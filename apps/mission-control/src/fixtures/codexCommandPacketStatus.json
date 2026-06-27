@@ -1,0 +1,40 @@
+{
+  "action": "web_sirinx_dist_manifest",
+  "broker": {
+    "decision": "auto_allow_dry_run",
+    "reason": "local_non_mutating_action",
+    "required_gate": "none"
+  },
+  "command_preview": "python3 scripts/a2a/a2a_web_sirinx_deploy_lane.py",
+  "command_sha256": "45222851e3033dfb1d3898f2c987665bea4a35c59e2ae7cf0b9381d33161c4dd",
+  "created_at": "2026-06-27T01:15:47+00:00",
+  "execution_allowed_by_packet": true,
+  "generated_by": "scripts/a2a/a2a_command_packet.py",
+  "goal": "Create local web-sirinx generated asset manifest without staging, push, deploy, secrets, or provider calls",
+  "goal_hash": "51b5d06fecf003dd9cfe26abdbd517fe3b313b9e0eef7cf26e00d43c631e9c46",
+  "lane": "web-sirinx-generated-assets-deploy-lane",
+  "lease": {
+    "allow_execution": false,
+    "executor": "",
+    "lease_id": "",
+    "path": "",
+    "reason": "missing_lease_file",
+    "valid": false
+  },
+  "mode": "local_command_packet_no_execution",
+  "packet_decision": "ready_dry_run_packet",
+  "packet_reason": "broker_allows_local_non_mutating_command",
+  "policy_boundary": [
+    "no_secret_printing",
+    "no_jailbreak_or_policy_bypass",
+    "no_push",
+    "no_deploy",
+    "no_provider_call",
+    "no_public_endpoint",
+    "no_command_execution_from_packet_generator"
+  ],
+  "risk_flags": [],
+  "target_repo": "",
+  "task_id": "",
+  "tool": "codex-local"
+}

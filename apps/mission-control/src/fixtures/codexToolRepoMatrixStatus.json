@@ -1,0 +1,1778 @@
+{
+  "actionSummary": {
+    "auto_allow_dry_run": 48,
+    "blocked": 26,
+    "blocked_first_phase": 48,
+    "policy_controlled_registry_allow": 22,
+    "requires_executor_lease": 24
+  },
+  "agents": [
+    {
+      "agentId": "agy-antigravity2",
+      "allowedActionCount": 4,
+      "blockedActions": [],
+      "brokerRouted": true,
+      "capabilitySample": [
+        "fast_scaffold_plan",
+        "refactor_plan",
+        "ui_draft_plan",
+        "dry_run_command_plan",
+        "scoped_execution_with_lease"
+      ],
+      "cardPath": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/agents/a2a/agy-antigravity2.agent.json",
+      "leaseRequiredActions": [
+        "agy_execution",
+        "agy_scaffold",
+        "scoped_repo_edit"
+      ],
+      "localOnly": true,
+      "name": "AGY Antigravity 2 Scoped Executor",
+      "role": "scoped scaffold and refactor executor",
+      "runtime": "local-cli"
+    },
+    {
+      "agentId": "codex-5-6",
+      "allowedActionCount": 6,
+      "blockedActions": [
+        "route_repo_execution_through_kob_hosted_codex",
+        "provider_call",
+        "repo_mutation"
+      ],
+      "brokerRouted": true,
+      "capabilitySample": [
+        "repo_inspection",
+        "file_generation",
+        "code_editing",
+        "patch_generation",
+        "test_running",
+        "docs_update"
+      ],
+      "cardPath": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/agents/a2a/codex-5-6.agent.json",
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "Codex 5.6 Repo Executor",
+      "role": "legacy/profile alias that routes execution decisions back to codex-local",
+      "runtime": "terminal"
+    },
+    {
+      "agentId": "codex-local",
+      "allowedActionCount": 25,
+      "blockedActions": [],
+      "brokerRouted": true,
+      "capabilitySample": [
+        "repo_inspection",
+        "file_generation",
+        "code_editing",
+        "patch_generation",
+        "test_running",
+        "docs_update"
+      ],
+      "cardPath": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/agents/a2a/codex-local.agent.json",
+      "leaseRequiredActions": [
+        "scoped_repo_edit",
+        "create_non_destructive_patches",
+        "propose_refactors",
+        "web_sirinx_build_validation"
+      ],
+      "localOnly": true,
+      "name": "Codex Local Repo Executor",
+      "role": "local repo supervisor and default executor",
+      "runtime": "codex-desktop-or-local-cli"
+    },
+    {
+      "agentId": "deerflow",
+      "allowedActionCount": 4,
+      "blockedActions": [
+        "host_bash_without_policy",
+        "public_endpoint",
+        "secret_access",
+        "deploy",
+        "publish"
+      ],
+      "brokerRouted": true,
+      "capabilitySample": [
+        "research",
+        "report_generation",
+        "artifact_generation",
+        "subagent_execution"
+      ],
+      "cardPath": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/agents/a2a/deerflow.agent.json",
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "DeerFlow Long-Horizon Runtime",
+      "role": "long-horizon runtime candidate; local sandbox planning only before a dedicated runtime lane",
+      "runtime": "external-local-service"
+    },
+    {
+      "agentId": "flowise",
+      "allowedActionCount": 3,
+      "blockedActions": [
+        "disable_security_check",
+        "public_endpoint",
+        "unrestricted_custom_code",
+        "secret_access",
+        "connector_activation"
+      ],
+      "brokerRouted": true,
+      "capabilitySample": [
+        "rag_flow_design",
+        "chatbot_blueprint",
+        "agentflow_blueprint",
+        "mcp_connector_draft"
+      ],
+      "cardPath": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/agents/a2a/flowise.agent.json",
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "Flowise Local RAG Builder",
+      "role": "local RAG and chatbot blueprint route; no service activation in this broker phase",
+      "runtime": "external-local-service"
+    },
+    {
+      "agentId": "hermes-project-planner",
+      "allowedActionCount": 4,
+      "blockedActions": ["repo_mutation"],
+      "brokerRouted": true,
+      "capabilitySample": [
+        "phase_planning",
+        "tool_routing",
+        "a2a_task_breakdown",
+        "mission_control_backlog_mapping",
+        "external_connector_payload_drafting",
+        "risk_and_blocker_classification"
+      ],
+      "cardPath": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/agents/a2a/hermes-project-planner.agent.json",
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "Hermes Project Planner",
+      "role": "policy and planning reviewer",
+      "runtime": "codex-desktop-local-planner"
+    },
+    {
+      "agentId": "kob-cli-fable",
+      "allowedActionCount": 4,
+      "blockedActions": ["repo_mutation", "provider_secret_dump"],
+      "brokerRouted": true,
+      "capabilitySample": [
+        "fast_summary",
+        "task_slicing",
+        "daily_sync",
+        "artifact_compression",
+        "lightweight_planning"
+      ],
+      "cardPath": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/agents/a2a/kob-cli-fable.agent.json",
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "KOB CLI Fable Fast Router",
+      "role": "KOB fast-router profile alias for task slicing and summaries",
+      "runtime": "terminal"
+    },
+    {
+      "agentId": "kob-cli-opus",
+      "allowedActionCount": 4,
+      "blockedActions": ["repo_mutation", "provider_secret_dump"],
+      "brokerRouted": true,
+      "capabilitySample": [
+        "architecture_planning",
+        "repo_integration_strategy",
+        "multi_repo_context_compression",
+        "task_decomposition",
+        "risk_synthesis",
+        "memory_summary"
+      ],
+      "cardPath": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/agents/a2a/kob-cli-opus.agent.json",
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "KOB CLI Opus Planner",
+      "role": "KOB planner profile alias for architecture and synthesis",
+      "runtime": "terminal"
+    },
+    {
+      "agentId": "manus",
+      "allowedActionCount": 3,
+      "blockedActions": ["direct_repo_mutation"],
+      "brokerRouted": true,
+      "capabilitySample": [
+        "interactive_html_spec_generation",
+        "website_artifact_generation",
+        "slide_artifact_generation",
+        "video_artifact_generation",
+        "visual_spec_drafting",
+        "handoff_summary_generation"
+      ],
+      "cardPath": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/agents/a2a/manus.agent.json",
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "Manus Artifact Studio",
+      "role": "artifact producer, metadata and hashes only",
+      "runtime": "desktop-app"
+    },
+    {
+      "agentId": "n8n",
+      "allowedActionCount": 3,
+      "blockedActions": [
+        "activate_production_workflow",
+        "send_to_non_opt_in",
+        "public_endpoint",
+        "secret_access",
+        "connector_activation"
+      ],
+      "brokerRouted": true,
+      "capabilitySample": [
+        "workflow_json_draft",
+        "webhook_blueprint",
+        "crm_routing_blueprint",
+        "marketing_automation_blueprint"
+      ],
+      "cardPath": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/agents/a2a/n8n.agent.json",
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "n8n Automation Backbone",
+      "role": "workflow automation draft route; no activation or live sends in this broker phase",
+      "runtime": "external-local-service"
+    },
+    {
+      "agentId": "odysseus",
+      "allowedActionCount": 3,
+      "blockedActions": [
+        "public_endpoint",
+        "disable_auth",
+        "vendor_agpl_source",
+        "secret_access"
+      ],
+      "brokerRouted": true,
+      "capabilitySample": [
+        "workspace_ui",
+        "documents",
+        "research",
+        "local_agent_workflows"
+      ],
+      "cardPath": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/agents/a2a/odysseus.agent.json",
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "Odysseus Private Workspace",
+      "role": "private workspace UI route; localhost planning only before a dedicated service lane",
+      "runtime": "external-local-service"
+    },
+    {
+      "agentId": "opencode",
+      "allowedActionCount": 3,
+      "blockedActions": [],
+      "brokerRouted": true,
+      "capabilitySample": [
+        "code_review",
+        "implementation_plan",
+        "patch_plan",
+        "model_route_review",
+        "dry_run_command_plan",
+        "scoped_execution_with_lease"
+      ],
+      "cardPath": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/agents/a2a/opencode.agent.json",
+      "leaseRequiredActions": ["opencode_execution", "scoped_repo_edit"],
+      "localOnly": true,
+      "name": "OpenCode Scoped Executor",
+      "role": "scoped coding executor",
+      "runtime": "local-cli"
+    },
+    {
+      "agentId": "ponytail",
+      "allowedActionCount": 2,
+      "blockedActions": ["repo_mutation"],
+      "brokerRouted": true,
+      "capabilitySample": [
+        "diff_review",
+        "repo_audit",
+        "debt_ledger",
+        "overengineering_detection"
+      ],
+      "cardPath": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/agents/a2a/ponytail.agent.json",
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "Ponytail Code Minimalism Gate",
+      "role": "code minimalism review gate",
+      "runtime": "codex-plugin"
+    }
+  ],
+  "blockedActions": [
+    "jailbreak_policy",
+    "bypass_command_policy",
+    "disable_policy",
+    "unlock_all_security",
+    "unlock_all_commands",
+    "autonomous_approve_all",
+    "approve_all_actions",
+    "disable_security_controls",
+    "access_secrets",
+    "read_or_export_user_data",
+    "modify_authentication",
+    "modify_authorization",
+    "change_payment_logic",
+    "change_security_policy",
+    "install_new_dependencies",
+    "run_unknown_scripts",
+    "database_migration",
+    "delete_or_overwrite_files",
+    "production_deploy",
+    "external_api_write_actions",
+    "disable_logging",
+    "disable_monitoring",
+    "bypass_access_control",
+    "bypass_rate_limits",
+    "exfiltrate_credentials",
+    "modify_audit_trail",
+    "hide_execution_history",
+    "print_secret",
+    "read_private_key",
+    "read_browser_profile",
+    "copy_browser_profile",
+    "copy_token_store",
+    "force_push",
+    "public_endpoint",
+    "provider_secret_dump",
+    "quota_bypass",
+    "captcha_bypass",
+    "direct_repo_mutation",
+    "destructive_delete_without_backup"
+  ],
+  "generatedBy": "scripts/a2a/a2a_codex_tool_repo_matrix.py",
+  "mode": "local_read_only_tool_repo_matrix",
+  "policyBoundary": [
+    "read_only_fixture",
+    "no_jailbreak_or_policy_bypass",
+    "no_secret_read_or_print",
+    "no_provider_call",
+    "no_connector_write",
+    "no_clone_execution",
+    "no_push",
+    "no_deploy",
+    "repo_mutation_requires_executor_lease"
+  ],
+  "repos": [
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/ponytail",
+      "clonePolicy": "allow",
+      "localPathExists": true,
+      "name": "ponytail",
+      "repo": "DietrichGebert/ponytail",
+      "role": "code_minimalism_gate",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/odysseus",
+      "clonePolicy": "allow",
+      "localPathExists": true,
+      "name": "odysseus",
+      "repo": "pewdiepie-archdaemon/odysseus",
+      "role": "private_ai_workspace_ui",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/GLM-5",
+      "clonePolicy": "allow",
+      "localPathExists": true,
+      "name": "glm-5",
+      "repo": "zai-org/GLM-5",
+      "role": "long_context_model_docs_and_self_host_reference",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/deer-flow",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "deer-flow",
+      "repo": "bytedance/deer-flow",
+      "role": "long_horizon_agent_runtime",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/flowise",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "flowise",
+      "repo": "FlowiseAI/Flowise",
+      "role": "visual_llm_app_builder_rag_agentflow",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/codex",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "codex",
+      "repo": "openai/codex",
+      "role": "codex_cli_reference_and_worker_docs",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/a2a",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "a2a",
+      "repo": "a2aproject/A2A",
+      "role": "agent_to_agent_protocol_reference",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/n8n",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "n8n",
+      "repo": "n8n-io/n8n",
+      "role": "automation_backbone",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/activepieces",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "activepieces",
+      "repo": "activepieces/activepieces",
+      "role": "optional_workflow_mcp_alternative",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/mautic",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "mautic",
+      "repo": "mautic/mautic",
+      "role": "marketing_automation_campaign_engine",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/twenty",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "twenty",
+      "repo": "twentyhq/twenty",
+      "role": "crm_layer",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/chatwoot",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "chatwoot",
+      "repo": "chatwoot/chatwoot",
+      "role": "inbox_livechat_line_social_support",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/postiz",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "postiz",
+      "repo": "gitroomhq/postiz-app",
+      "role": "social_scheduling_distribution",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/umami",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "umami",
+      "repo": "umami-software/umami",
+      "role": "privacy_web_analytics",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/plausible",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "plausible",
+      "repo": "plausible/analytics",
+      "role": "privacy_web_analytics_candidate",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/formbricks",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "formbricks",
+      "repo": "formbricks/formbricks",
+      "role": "survey_feedback_lead_qualification",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/listmonk",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "listmonk",
+      "repo": "knadh/listmonk",
+      "role": "newsletter_broadcast",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/dittofeed",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "dittofeed",
+      "repo": "dittofeed/dittofeed",
+      "role": "event_based_customer_journey",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/growthbook",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "growthbook",
+      "repo": "growthbook/growthbook",
+      "role": "feature_flags_experiments",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/posthog",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "posthog",
+      "repo": "PostHog/posthog",
+      "role": "product_analytics_experiments",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/serpbear",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "serpbear",
+      "repo": "towfiqi/serpbear",
+      "role": "seo_rank_tracking",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "policy_controlled_registry_allow",
+          "reason": "repo_registry_match_clone_policy_allow",
+          "requiredGate": "external_repo_clone_adapter_preflight"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "~/SIRINXDev/_external_repos/metabase",
+      "clonePolicy": "allow",
+      "localPathExists": false,
+      "name": "metabase",
+      "repo": "metabase/metabase",
+      "role": "bi_dashboard_reporting",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 1,
+        "blocked_first_phase": 2,
+        "policy_controlled_registry_allow": 1,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "blocked",
+          "reason": "repo_clone_policy_not_allow",
+          "requiredGate": "repo_policy_review"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "detect_from_local_git",
+      "clonePolicy": "skip",
+      "localPathExists": false,
+      "name": "sirinx",
+      "repo": "canonical_remote_pending",
+      "role": "sirinx_cloudflare_pages_project",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 2,
+        "blocked_first_phase": 2,
+        "requires_executor_lease": 1
+      }
+    },
+    {
+      "actions": [
+        {
+          "action": "registry_validate",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "repo_audit_readonly",
+          "decision": "auto_allow_dry_run",
+          "reason": "local_non_mutating_action",
+          "requiredGate": "none"
+        },
+        {
+          "action": "clone_whitelisted_external_repo",
+          "decision": "blocked",
+          "reason": "repo_clone_policy_not_allow",
+          "requiredGate": "repo_policy_review"
+        },
+        {
+          "action": "scoped_repo_edit",
+          "decision": "requires_executor_lease",
+          "reason": "repo_affecting_executor_action",
+          "requiredGate": "executor_lease_and_lane_lock"
+        },
+        {
+          "action": "push",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "deploy",
+          "decision": "blocked_first_phase",
+          "reason": "live_external_or_production_action_not_enabled",
+          "requiredGate": "dedicated_adapter_contract_and_runtime_preflight"
+        },
+        {
+          "action": "approve_all_actions",
+          "decision": "blocked",
+          "reason": "hard_blocked_action",
+          "requiredGate": "policy_change_required"
+        }
+      ],
+      "clonePath": "none",
+      "clonePolicy": "skip",
+      "localPathExists": false,
+      "name": "pixelrag",
+      "repo": "unverified",
+      "role": "visual_rag_candidate",
+      "summary": {
+        "auto_allow_dry_run": 2,
+        "blocked": 2,
+        "blocked_first_phase": 2,
+        "requires_executor_lease": 1
+      }
+    }
+  ],
+  "summary": {
+    "agentCount": 13,
+    "blockedOrGatedActions": 120,
+    "brokerRoutedAgents": 13,
+    "cloneAllowCount": 22,
+    "cloneSkipCount": 2,
+    "leaseRequiredAgents": 3,
+    "localOnlyGaps": 0,
+    "overallStatus": "ready_for_local_review_only",
+    "repoActionCount": 168,
+    "repoCount": 24
+  },
+  "updatedAt": "2026-06-27T00:56:48+00:00"
+}

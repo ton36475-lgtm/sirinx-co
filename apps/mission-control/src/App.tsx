@@ -33,6 +33,7 @@ import a2a2aTeamAssignmentBoardFixture from "./fixtures/a2a2aTeamAssignmentBoard
 import a2a2aCodexLaneOutcomeFixture from "./fixtures/a2a2aCodexLaneOutcome.json";
 import a2a2aTeamWorkPacketsFixture from "./fixtures/a2a2aTeamWorkPackets.json";
 import a2a2aTeamWorkPacketOutcomeFixture from "./fixtures/a2a2aTeamWorkPacketOutcome.json";
+import a2a2aTeamWorkPacketValidationFixture from "./fixtures/a2a2aTeamWorkPacketValidation.json";
 
 interface Worker {
   name: string;
@@ -1200,6 +1201,43 @@ type A2A2ATeamWorkPacketOutcomeFixture = {
   nextSafeActions: string[];
 };
 
+type A2A2ATeamWorkPacketValidationFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  summary: {
+    status: string;
+    packetId: string;
+    queueId: string;
+    task: string;
+    commands: number;
+    passed: number;
+    failed: number;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    gitAddDotAllowed: boolean;
+    dryRun: boolean;
+  };
+  selectedPacket: {
+    packetId: string;
+    queueId: string;
+    owner: string;
+    ownerMode: string;
+    status: string;
+    task: string;
+  };
+  results: {
+    id: string;
+    command: string;
+    exitCode: number;
+    status: string;
+    durationMs: number;
+  }[];
+  policyBoundary: string[];
+};
+
 type IgamingPracticeStatusFixture = {
   updatedAt: string;
   mode: string;
@@ -1287,6 +1325,8 @@ const a2a2aTeamWorkPackets =
   a2a2aTeamWorkPacketsFixture as A2A2ATeamWorkPacketsFixture;
 const a2a2aTeamWorkPacketOutcome =
   a2a2aTeamWorkPacketOutcomeFixture as A2A2ATeamWorkPacketOutcomeFixture;
+const a2a2aTeamWorkPacketValidation =
+  a2a2aTeamWorkPacketValidationFixture as A2A2ATeamWorkPacketValidationFixture;
 const codexSessionSidebarToolkitStatus =
   codexSessionSidebarToolkitStatusFixture;
 const sessionToolkitAgents = codexSessionSidebarToolkitStatus.agents;
@@ -3677,6 +3717,12 @@ export default function App() {
                     </strong>
                   </div>
                   <div className="practice-kpi">
+                    <span>Validation</span>
+                    <strong>
+                      {a2a2aTeamWorkPacketValidation.summary.status}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
                     <span>Providers</span>
                     <strong>
                       {a2a2aTeamWorkPackets.summary.providerCallsAllowed
@@ -3711,6 +3757,8 @@ export default function App() {
                   <code>{a2a2aTeamWorkPackets.runtimeReportPath}</code>
                   <span>Outcome</span>
                   <code>{a2a2aTeamWorkPacketOutcome.summary.status}</code>
+                  <span>Validation Report</span>
+                  <code>{a2a2aTeamWorkPacketValidation.runtimeReportPath}</code>
                 </div>
 
                 <div className="git-fixture-notice">
@@ -3861,6 +3909,45 @@ export default function App() {
                         </p>
                         <code>
                           {a2a2aTeamWorkPacketOutcome.runtimeReportPath}
+                        </code>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A latest team work packet validation"
+                  >
+                    <div className="git-section-title">
+                      <span>Validation Manifest</span>
+                      <span className="approval-badge">
+                        {a2a2aTeamWorkPacketValidation.summary.passed}/
+                        {a2a2aTeamWorkPacketValidation.summary.commands}
+                      </span>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span
+                        className={`practice-status ${
+                          a2a2aTeamWorkPacketValidation.summary.status ===
+                          "passed"
+                            ? "payload-ready"
+                            : "payload-blocked"
+                        }`}
+                      >
+                        {a2a2aTeamWorkPacketValidation.summary.status}
+                      </span>
+                      <div>
+                        <strong>
+                          {a2a2aTeamWorkPacketValidation.summary.task}
+                        </strong>
+                        <p>
+                          {a2a2aTeamWorkPacketValidation.summary.packetId} ·
+                          failed {a2a2aTeamWorkPacketValidation.summary.failed}
+                        </p>
+                        <code>
+                          {a2a2aTeamWorkPacketValidation.results
+                            .map((result) => `${result.id}:${result.status}`)
+                            .join(", ")}
                         </code>
                       </div>
                     </div>

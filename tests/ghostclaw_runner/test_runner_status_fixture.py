@@ -20,6 +20,7 @@ from scripts.a2a import a2a_codex_first_implementation_lane
 from scripts.a2a import a2a_scoped_path_guard
 from scripts.a2a import a2a_team_work_packets
 from scripts.a2a import a2a_team_work_packet_outcome
+from scripts.a2a import a2a_team_work_packet_validation
 from scripts.a2a import a2a_runner_dispatch_command
 from scripts.a2a import a2a_worker_report_digest
 from scripts.a2a import a2a_handoff_router
@@ -1028,6 +1029,7 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             outcome = a2a_team_work_packet_outcome.build_outcome(
                 first_fixture,
                 guard,
+                {},
                 runtime,
                 "987cf98 feat(a2a2a): add team work packets",
             )
@@ -1050,6 +1052,140 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertEqual(fixture_after_outcome["summary"]["nextCodexTask"], "run_validation_commands")
             self.assertEqual(fixture_after_outcome["nextCodexPacket"]["ownerMode"], "scoped_repo_edit")
             self.assertTrue(Path(outcome["runtimeReportPath"]).exists())
+
+    def test_team_work_packet_outcome_requires_validation_for_validation_packet(self) -> None:
+        assignment = {
+            "immediateQueue": [
+                {
+                    "queueId": "LANE-CODEX-LANE-TASK-02",
+                    "source": "first_codex_implementation_lane",
+                    "priority": 2,
+                    "owner": "codex",
+                    "status": "ready_for_codex",
+                    "task": "implement_only_allowed_paths",
+                    "why": "Dirty lanes exist outside A2A2A.",
+                    "acceptance": "Scoped git status contains only files listed in the lane packet.",
+                },
+                {
+                    "queueId": "LANE-CODEX-LANE-TASK-04",
+                    "source": "first_codex_implementation_lane",
+                    "priority": 4,
+                    "owner": "codex",
+                    "status": "ready_for_codex",
+                    "task": "run_validation_commands",
+                    "why": "Local validation proves the scoped packet.",
+                    "acceptance": "Python, JSON, TypeScript, Prettier, and diff checks pass.",
+                },
+                {
+                    "queueId": "LANE-CODEX-LANE-TASK-05",
+                    "source": "first_codex_implementation_lane",
+                    "priority": 5,
+                    "owner": "codex",
+                    "status": "ready_for_codex",
+                    "task": "stage_and_commit_scoped_lane",
+                    "why": "Only a validated scoped lane may be staged.",
+                    "acceptance": "No out-of-scope files are staged.",
+                },
+            ]
+        }
+        lane = {
+            "lane": {
+                "allowedPaths": ["scripts/a2a/", "apps/mission-control/src/fixtures/"],
+                "blockedPaths": [".env", "apps/web-sirinx/dist/"],
+                "validationCommands": ["python3 -m unittest tests.ghostclaw_runner.test_runner_status_fixture"],
+            }
+        }
+        guard = {
+            "summary": {
+                "status": "ready_with_external_dirty_lanes",
+                "plannedFiles": 2,
+                "plannedAllowed": 2,
+                "plannedBlocked": 0,
+                "outOfScopeDirty": 4,
+                "providerCalls": 0,
+                "gitAddDotAllowed": False,
+            },
+            "plannedFiles": [
+                {"path": "scripts/a2a/a2a_team_work_packets.py", "status": "allowed"},
+                {"path": "apps/mission-control/src/fixtures/a2a2aTeamWorkPackets.json", "status": "allowed"},
+            ],
+        }
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-team-work-validation-") as tmp:
+            runtime = Path(tmp) / "runtime"
+            first_fixture = a2a_team_work_packets.build_packets(assignment, lane, guard, runtime)
+            first_outcome = a2a_team_work_packet_outcome.build_outcome(
+                first_fixture,
+                guard,
+                {},
+                runtime,
+                "c12978a feat(a2a2a): record team work packet outcomes",
+            )
+            validation_fixture = a2a_team_work_packets.build_packets(
+                assignment,
+                lane,
+                guard,
+                runtime,
+                first_outcome,
+            )
+
+            blocked_outcome = a2a_team_work_packet_outcome.build_outcome(
+                validation_fixture,
+                guard,
+                {},
+                runtime,
+                "c12978a feat(a2a2a): record team work packet outcomes",
+            )
+            validation = {
+                "summary": {
+                    "status": "passed",
+                    "packetId": validation_fixture["nextCodexPacket"]["packetId"],
+                    "commands": 2,
+                    "passed": 2,
+                    "failed": 0,
+                },
+                "runtimeReportPath": str(runtime / "work_packet_validations" / "latest.json"),
+            }
+            completed_outcome = a2a_team_work_packet_outcome.build_outcome(
+                validation_fixture,
+                guard,
+                validation,
+                runtime,
+                "c12978a feat(a2a2a): record team work packet outcomes",
+            )
+            next_fixture = a2a_team_work_packets.build_packets(
+                assignment,
+                lane,
+                guard,
+                runtime,
+                completed_outcome,
+            )
+
+            self.assertEqual(validation_fixture["summary"]["nextCodexTask"], "run_validation_commands")
+            self.assertEqual(blocked_outcome["summary"]["status"], "blocked_until_local_evidence_ready")
+            self.assertEqual(completed_outcome["summary"]["status"], "packet_completed")
+            self.assertEqual(completed_outcome["summary"]["completedPackets"], 2)
+            self.assertEqual(completed_outcome["summary"]["validationStatus"], "passed")
+            self.assertEqual(next_fixture["summary"]["completedPackets"], 2)
+            self.assertEqual(next_fixture["summary"]["nextCodexTask"], "stage_and_commit_scoped_lane")
+
+    def test_team_work_packet_validation_can_dry_run_current_packet(self) -> None:
+        packets = {
+            "nextCodexPacket": {
+                "packetId": "WORK-VALIDATION",
+                "queueId": "LANE-CODEX-LANE-TASK-04",
+                "task": "run_validation_commands",
+            }
+        }
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-team-work-validation-dry-") as tmp:
+            runtime = Path(tmp) / "runtime"
+
+            fixture = a2a_team_work_packet_validation.build_validation(packets, runtime, dry_run=True)
+
+            self.assertEqual(fixture["summary"]["status"], "dry_run")
+            self.assertEqual(fixture["summary"]["packetId"], "WORK-VALIDATION")
+            self.assertTrue(fixture["summary"]["dryRun"])
+            self.assertEqual(fixture["summary"]["commands"], 6)
+            self.assertTrue(Path(fixture["runtimeReportPath"]).exists())
 
     def test_scoped_path_guard_allows_planned_a2a2a_files_only(self) -> None:
         packet = {

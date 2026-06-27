@@ -370,6 +370,32 @@ scoped repo edits; worker packets stay report-only; KOB remains validate-only.
 No packet enables provider calls, connector sync, deploy, push, secret reads,
 generated `web-sirinx` asset mutation, or `git add .`.
 
+## Team Work Packet Validation
+
+Run the allowlisted validation commands for the current validation packet:
+
+```bash
+python3 scripts/a2a/a2a_team_work_packet_validation.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This reads:
+
+- `apps/mission-control/src/fixtures/a2a2aTeamWorkPackets.json`
+
+It writes:
+
+- a runtime report at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/work_packet_validations/latest.json`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aTeamWorkPacketValidation.json`
+
+The validation runner does not execute arbitrary packet text. It runs the fixed
+allowlist for this lane: focused runner/fixture tests, Mission Control
+TypeScript, Prettier check, Python compile, JSON parse, and scoped diff checks.
+It keeps provider calls, connector sync, deploy, push, secrets, generated
+`web-sirinx` asset mutation, and `git add .` blocked.
+
 ## Team Work Packet Outcome
 
 Record a completed role-scoped packet before regenerating the work packet board:
@@ -396,6 +422,10 @@ The completed packet becomes `completed`, `executionAllowed=false`, and the
 next Codex packet advances to the next scoped task. This keeps A2A2A as a real
 queue with local evidence, without letting workers edit files or letting the UI
 touch runtime folders directly.
+
+For the `run_validation_commands` packet, the outcome requires
+`a2a2aTeamWorkPacketValidation.json` to report `passed`. A dry-run validation or
+missing validation report is not enough to close that packet.
 
 ## Codex Lane Outcome
 

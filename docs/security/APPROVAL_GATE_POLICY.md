@@ -1,6 +1,17 @@
 # Approval Gate Policy
 
-Status: active.
+Status: legacy compatibility.
+
+This file records the previous human approval-gated model. New autonomous work
+uses:
+
+- `docs/autopilot/AUTOPILOT_POLICY_SPEC.md`
+- `docs/autopilot/EXECUTION_LEASE_SPEC.md`
+- `policies/autopilot_policy.yaml`
+
+Approval packets are replaced by job manifests and execution leases. Human
+approval is no longer a normal execution state; policy allow/block/quarantine
+is the active decision mechanism.
 
 ## Gate Classes
 

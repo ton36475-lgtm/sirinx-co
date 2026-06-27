@@ -1,0 +1,43 @@
+projects:
+  sirinx_solar_opal:
+    auto_allow:
+      - lead_create_from_opt_in_form
+      - quote_draft
+      - seo_report
+      - followup_template_to_opt_in
+    blocked:
+      - cold_outreach
+      - production_price_change_without_tests
+  agm_autoglow:
+    auto_allow:
+      - storyboard_pack
+      - prompt_pack
+      - owned_channel_schedule
+      - export_pack
+    blocked:
+      - google_flow_private_api_replay
+      - quota_bypass
+  kusala_final_farewell:
+    auto_allow:
+      - internal_case_summary
+      - respectful_copy_draft
+      - whitelisted_partner_dispatch_template
+    blocked:
+      - non_opt_in_message
+      - sensitive_public_publish
+  phitsanulok_united_news:
+    auto_allow:
+      - low_risk_local_news_draft
+      - owned_channel_schedule
+      - seo_summary
+    quarantine:
+      - political
+      - legal_accusation
+      - crisis_or_death
+  ads_andromeda:
+    auto_allow:
+      - content_calendar
+      - prompt_pack
+      - owned_channel_schedule
+    blocked:
+      - paid_boost_over_cap

@@ -1,0 +1,20 @@
+social:
+  max_posts_per_day_per_project: 5
+  max_posts_per_hour_per_channel: 1
+
+email:
+  max_sends_per_day: 200
+  require_opt_in: true
+  require_unsubscribe: true
+
+line:
+  max_messages_per_day: 200
+  require_opt_in: true
+
+providers:
+  max_retries_per_task: 2
+  max_parallel_provider_jobs: 3
+
+local_services:
+  max_docker_services_running: 8
+  localhost_only: true

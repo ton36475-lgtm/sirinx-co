@@ -35,3 +35,17 @@ variables. They must not be placed in tracked files or output logs.
 
 If a secret value is printed or found in tracked files, stop immediately,
 record the file path without repeating the value, and request rotation guidance.
+
+## Full Auto Handling
+
+In full-auto mode, secret incidents do not wait for human approval. The system
+must automatically:
+
+1. Stop the offending task.
+2. Quarantine the artifact or path.
+3. Log only file path, line number, detector, and task id.
+4. Mask all values.
+5. Continue with unrelated safe tasks.
+
+The policy decision for secret printing or credential exfiltration is always
+`auto_block`.

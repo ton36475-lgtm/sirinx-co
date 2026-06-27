@@ -1,0 +1,72 @@
+mode:
+  name: FULL_AUTO
+  unlock_profile: OPERATIONAL_MAX
+  human_approval_required: false
+  ask_before_action: false
+  operational_blocks_unlocked: true
+  hard_safety_blocks_enforced: true
+  continue_on_safe_failure: true
+  fail_closed_on_policy_missing: true
+
+runtime:
+  root: "~/SIRINXDev/.ghostclaw_runtime"
+  audit_enabled: true
+  memory_writeback_enabled: true
+  kill_switch_enabled: true
+  kill_switch_file: "~/SIRINXDev/.ghostclaw_runtime/kill_switch/STOP_ALL"
+
+limits:
+  max_api_cost_per_day_usd: 10
+  max_social_posts_per_day_per_project: 5
+  max_email_sends_per_day: 200
+  max_line_messages_per_day: 200
+  max_docker_services_running: 8
+  max_retry_per_task: 2
+
+external_actions:
+  clone_repo: auto_allow_if_repo_whitelisted
+  install_dependency: auto_allow_in_venv_or_container_only
+  docker_start: auto_allow_localhost_only
+  api_call: auto_allow_if_key_exists_and_budget_ok
+  social_publish: auto_allow_if_owned_channel_and_rate_limit_ok
+  email_send: auto_allow_if_opt_in_and_rate_limit_ok
+  deploy: auto_allow_if_ci_green_backup_ready_canary_ok
+
+policy_controlled_actions:
+  - git_push
+  - git_merge
+  - git_rebase
+  - clone_repo
+  - install_dependency
+  - docker_start
+  - provider_api_call
+  - telegram_live_send
+  - social_publish
+  - email_send
+  - crm_write
+  - n8n_workflow_activate
+  - cloudflare_deploy
+  - production_deploy
+  - public_endpoint
+  - memory_writeback
+  - mcp_connector_activation
+
+soft_blocked: []
+
+hard_blocked:
+  - print_secret
+  - read_private_key
+  - read_browser_profile
+  - read_password_store
+  - exfiltrate_credentials
+  - disable_auth
+  - expose_raw_database_public
+  - expose_raw_model_port_public
+  - expose_raw_vector_database_public
+  - disable_flowise_security_check
+  - quota_bypass
+  - captcha_bypass
+  - destructive_delete_without_backup
+  - send_to_non_opt_in_contacts
+  - spend_over_budget_cap
+  - linkedin_personal_session_automation

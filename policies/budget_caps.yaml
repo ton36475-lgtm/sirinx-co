@@ -1,0 +1,23 @@
+daily_caps_usd:
+  global_api: 10
+  glm52: 5
+  openrouter_fusion: 5
+  image_video_generation: 10
+  email_infra: 2
+  social_scheduler: 2
+
+monthly_product_stack_usd:
+  default_target: 100
+  frontend: 0
+  database: 0
+  auth: 0
+  object_storage: 0
+  analytics: 0
+  queue_cache: 0
+  workers_usage_based_cap: 20
+  ai_api_cap: 50
+  contingency: 30
+
+on_exceed:
+  decision: auto_block_and_fallback
+  fallback: local_model_or_draft_only

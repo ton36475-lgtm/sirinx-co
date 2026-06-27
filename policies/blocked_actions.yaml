@@ -1,0 +1,62 @@
+operational_blocks_unlocked: true
+
+policy_controlled_actions:
+  - git_push
+  - git_merge
+  - git_rebase
+  - clone_external_repo
+  - install_dependency_in_venv_or_container
+  - docker_start_localhost
+  - provider_api_call_with_budget
+  - mcp_connector_activation
+  - n8n_workflow_activation
+  - memory_writeback
+  - crm_write
+  - telegram_live_send_to_whitelist_or_opt_in
+  - social_publish_owned_channel
+  - email_send_opt_in
+  - public_endpoint_with_auth_access_layer
+  - cloudflare_deploy_with_canary_rollback
+  - production_deploy_with_green_checks
+
+soft_blocked_actions: []
+
+hard_blocked_actions:
+  - print_secret
+  - read_private_key
+  - read_browser_profile
+  - read_password_store
+  - exfiltrate_credentials
+  - disable_auth
+  - bind_raw_database_public
+  - bind_raw_model_public
+  - bind_vector_database_public
+  - disable_security_check
+  - quota_bypass
+  - captcha_bypass
+  - spam_non_opt_in
+  - destructive_delete_without_backup
+  - deploy_failed_tests
+  - spend_over_budget_cap
+  - linkedin_personal_session_automation
+
+# Backward-compatible alias for scanners/scripts that still read
+# `blocked_actions`. This list intentionally contains only hard safety blocks.
+blocked_actions:
+  - print_secret
+  - read_private_key
+  - read_browser_profile
+  - read_password_store
+  - exfiltrate_credentials
+  - disable_auth
+  - bind_raw_database_public
+  - bind_raw_model_public
+  - bind_vector_database_public
+  - disable_security_check
+  - quota_bypass
+  - captcha_bypass
+  - spam_non_opt_in
+  - destructive_delete_without_backup
+  - deploy_failed_tests
+  - spend_over_budget_cap
+  - linkedin_personal_session_automation

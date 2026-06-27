@@ -1,13 +1,13 @@
 # Fusion Mode Spec
 
-Status: local-first design spec. External model calls are blocked until
-approved.
+Status: local-first design spec. External model calls require policy allow,
+budget cap, rate limit, key availability, and audit logging.
 
 ## Goal
 
-Fusion Mode coordinates multiple model roles through a policy-gated council:
-classifier, scout, technical expert, critic, judge, synthesizer, cost governor,
-approval gate, and memory writeback.
+Fusion Mode coordinates multiple model roles through an autopilot policy-gated
+council: classifier, scout, technical expert, critic, judge, synthesizer, cost
+governor, execution lease, and memory writeback.
 
 ## Task Packet
 
@@ -21,10 +21,14 @@ approval gate, and memory writeback.
   "requires_files": true,
   "requires_web": false,
   "requires_provider": false,
-  "requires_approval": true,
+  "requires_policy_allow": true,
   "budget_limit_usd": 0,
   "output_format": "markdown",
-  "forbidden_actions": ["deploy", "push", "publish", "live_send"]
+  "blocked_actions": [
+    "deploy_failed_tests",
+    "publish_non_whitelist",
+    "live_send_non_opt_in"
+  ]
 }
 ```
 
@@ -61,16 +65,17 @@ lowest-risk direction and marks uncertainty.
 - Stop or downgrade when budget is exceeded.
 - Log model, cost estimate, latency, confidence, and approval state.
 
-## Approval Gate
+## Autopilot Policy Gate
 
 Planning output can be local-only. External provider calls, push, deploy,
-publish, live messages, production DB writes, and paid API batches require a
-PRE_APPROVAL_PACKET.
+publish, live messages, production DB writes, and paid API batches require
+policy allow, execution lease, budget cap, rate limit, verification, rollback,
+and audit logging.
 
 ## Memory Writeback
 
-Write only approved memory deltas. Store decisions, risks, prompts, evidence,
-and next actions.
+Write only non-secret policy-allowed memory deltas. Store decisions, risks,
+prompts, evidence, and next actions.
 
 ## Final Output Format
 
@@ -81,11 +86,16 @@ and next actions.
 5. Risks.
 6. Execution plan.
 7. Cost / complexity.
-8. Approval required.
+8. Policy decision.
 9. Next action.
 10. Memory update.
 
 ## Stop Rules
 
-Stop if a task requires secrets, network calls, provider execution, public
-access, deploy, push, publish, or live sends without approval.
+Block or quarantine if a task requires secrets, network calls, provider
+execution, public access, deploy, push, publish, or live sends without policy
+allow.
+
+Also block gated dataset submission, dataset download, model training, or
+reasoning trace exposure unless dataset provenance, license, and trace-handling
+policies pass.

@@ -1,26 +1,29 @@
 # Local-First Security Policy
 
-Status: active local-only policy.
+Status: active local-first policy for full-auto mode.
 
 ## Rules
 
-- No deploy, push, publish, or public tunnel without explicit approval.
-- No public endpoint or reverse proxy without explicit approval.
+- No deploy, push, publish, or public tunnel unless policy allows it and
+  verification, rollback, budget, and audit requirements pass.
+- No public endpoint or reverse proxy unless policy allows it and auth/rate
+  limit/access-layer checks pass.
 - No raw model, database, vector service, queue, or admin port exposure.
 - No secret printing.
 - Localhost first for dashboards, workspaces, and runtime previews.
-- Mobile nodes are monitoring and approval surfaces only.
-- Cloudflare mutations require a PRE_APPROVAL_PACKET.
-- External APIs require approval, budget awareness, and key handling through
-  environment variables or approved local secret slots.
+- Mobile nodes are monitoring and kill-switch surfaces only.
+- Cloudflare mutations require policy allow, canary/rollback readiness, and
+  audit logging.
+- External APIs require policy allow, budget cap, rate limit, and key handling
+  through environment variables or approved local secret slots.
 
 ## Blocked By Default
 
 - `APP_BIND=0.0.0.0`.
 - `AUTH_ENABLED=false`.
-- Provider calls.
+- Provider calls without budget/rate/policy allow.
 - Paid API batches.
-- Telegram live sends.
+- Telegram live sends to non-whitelisted or non-opt-in recipients.
 - GitHub mutation APIs.
 - Production database writes.
 - Public tunnels.
@@ -37,5 +40,6 @@ Status: active local-only policy.
 
 ## Required Before External Action
 
-Create and review a PRE_APPROVAL_PACKET with goal, scope, files, commands,
-external services, secrets required, risks, rollback, tests, and stop condition.
+Create a job manifest and execution lease with goal, scope, files, commands,
+external services, secrets required, risks, rollback, tests, budget cap, rate
+limit, policy decision, and stop/quarantine condition.

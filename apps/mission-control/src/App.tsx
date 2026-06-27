@@ -20,6 +20,7 @@ import commandBrokerProductionStatusFixture from "./fixtures/commandBrokerProduc
 import codexSessionSidebarToolkitStatusFixture from "./fixtures/codexSessionSidebarToolkitStatus.json";
 import deepResearchStatusFixture from "./fixtures/deepResearchStatus.json";
 import a2a2aRunnerStatusFixture from "./fixtures/a2a2aRunnerStatus.json";
+import a2a2aHandoffRouterFixture from "./fixtures/a2a2aHandoffRouter.json";
 import a2a2aDependencyReadinessFixture from "./fixtures/a2a2aDependencyReadiness.json";
 import a2a2aCodexBuildPlanFixture from "./fixtures/a2a2aCodexBuildPlan.json";
 import a2a2aWorkerReportDigestFixture from "./fixtures/a2a2aWorkerReportDigest.json";
@@ -579,6 +580,62 @@ type A2A2ARunnerStatusFixture = {
   nextSafeActions: string[];
 };
 
+type A2A2AHandoffRouterFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  summary: {
+    status: string;
+    codexQueueItems: number;
+    roleHandoffs: number;
+    blockedHandoffs: number;
+    ignoredResults: number;
+    roleInboxWrites: number;
+    providerCalls: number;
+    executionAllowed: boolean;
+  };
+  codexQueue: {
+    queueId: string;
+    createdAt: string;
+    targetOwner: string;
+    sourceRole: string;
+    sourceTaskId: string;
+    sourceResultPath: string;
+    queuePath: string;
+    status: string;
+    executionAllowed: boolean;
+    summary: string;
+    goalPreview: string;
+    nextAction: string;
+  }[];
+  roleHandoffs: {
+    queueId: string;
+    targetOwner: string;
+    sourceRole: string;
+    sourceTaskId: string;
+    sourceResultPath: string;
+    inboxPath: string;
+    status: string;
+    executionAllowed: boolean;
+    summary: string;
+    nextAction: string;
+  }[];
+  blockedHandoffs: {
+    sourcePath: string;
+    sourceRole: string;
+    taskId: string;
+    status: string;
+    providerCall: boolean;
+    nextOwner: string;
+    blockedReason: string;
+    summary: string;
+  }[];
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type A2A2ADependencyReadinessFixture = {
   updatedAt: string;
   mode: string;
@@ -1086,6 +1143,8 @@ const webSirinxDeployPacketStatus =
 const commandBrokerProductionStatus =
   commandBrokerProductionStatusFixture as CommandBrokerProductionStatusFixture;
 const a2a2aRunnerStatus = a2a2aRunnerStatusFixture as A2A2ARunnerStatusFixture;
+const a2a2aHandoffRouter =
+  a2a2aHandoffRouterFixture as A2A2AHandoffRouterFixture;
 const a2a2aDependencyReadiness =
   a2a2aDependencyReadinessFixture as A2A2ADependencyReadinessFixture;
 const a2a2aCodexBuildPlan =
@@ -5741,6 +5800,135 @@ export default function App() {
 
               <div className="card practice-card">
                 <div className="card-title">
+                  <span>A2A2A Handoff Router</span>
+                  <span className="accent-cyan">
+                    {a2a2aHandoffRouter.summary.status}
+                  </span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Codex Queue</span>
+                    <strong>
+                      {a2a2aHandoffRouter.summary.codexQueueItems}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Role Handoffs</span>
+                    <strong>{a2a2aHandoffRouter.summary.roleHandoffs}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Blocked</span>
+                    <strong>
+                      {a2a2aHandoffRouter.summary.blockedHandoffs}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Provider Calls</span>
+                    <strong>{a2a2aHandoffRouter.summary.providerCalls}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Inbox Writes</span>
+                    <strong>
+                      {a2a2aHandoffRouter.summary.roleInboxWrites}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Execution</span>
+                    <strong>
+                      {a2a2aHandoffRouter.summary.executionAllowed
+                        ? "ALLOW"
+                        : "REVIEW"}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Mode</span>
+                  <code>{a2a2aHandoffRouter.mode}</code>
+                  <span>Report</span>
+                  <code>{a2a2aHandoffRouter.runtimeReportPath}</code>
+                  <span>Updated</span>
+                  <code>{a2a2aHandoffRouter.updatedAt}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  This router turns local runner outbox results into a
+                  review-only Codex queue. Role-to-role inbox routing requires a
+                  separate explicit flag, and runner execution remains separate
+                  to prevent accidental loops.
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A Codex handoff queue"
+                  >
+                    <div className="git-section-title">
+                      <span>Codex Handoff Queue</span>
+                      <span className="approval-badge">
+                        {a2a2aHandoffRouter.codexQueue.length}
+                      </span>
+                    </div>
+                    {a2a2aHandoffRouter.codexQueue.map((item) => (
+                      <div className="practice-artifact-row" key={item.queueId}>
+                        <span className="practice-status payload-ready">
+                          {item.sourceRole}
+                        </span>
+                        <div>
+                          <strong>{item.status}</strong>
+                          <p>{item.summary}</p>
+                          <code>{item.nextAction}</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A role-to-role handoffs"
+                  >
+                    <div className="git-section-title">
+                      <span>Role Handoffs</span>
+                      <span className="approval-badge">
+                        {a2a2aHandoffRouter.roleHandoffs.length}
+                      </span>
+                    </div>
+                    {a2a2aHandoffRouter.roleHandoffs.map((item) => (
+                      <div className="practice-artifact-row" key={item.queueId}>
+                        <span className="practice-status payload-warn">
+                          {item.sourceRole} → {item.targetOwner}
+                        </span>
+                        <div>
+                          <strong>{item.status}</strong>
+                          <p>{item.summary}</p>
+                          <code>{item.nextAction}</code>
+                        </div>
+                      </div>
+                    ))}
+                    {a2a2aHandoffRouter.blockedHandoffs.map((item) => (
+                      <div
+                        className="practice-artifact-row"
+                        key={`${item.sourcePath}-${item.blockedReason}`}
+                      >
+                        <span className="practice-status payload-blocked">
+                          blocked
+                        </span>
+                        <div>
+                          <strong>{item.blockedReason}</strong>
+                          <p>{item.summary}</p>
+                          <code>
+                            {item.sourceRole} → {item.nextOwner || "none"}
+                          </code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+                </div>
+              </div>
+
+              <div className="card practice-card">
+                <div className="card-title">
                   <span>Dependency Readiness</span>
                   <span className="accent-emerald">
                     {a2a2aDependencyReadiness.summary.overallStatus}
@@ -6010,6 +6198,7 @@ export default function App() {
                   <div className="practice-artifacts compact-list">
                     {[
                       ...a2a2aRunnerStatus.nextSafeActions,
+                      ...a2a2aHandoffRouter.nextSafeActions,
                       ...a2a2aDependencyReadiness.nextSafeActions,
                     ].map((action) => (
                       <div className="practice-artifact-row" key={action}>

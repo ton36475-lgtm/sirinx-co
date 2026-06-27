@@ -20,6 +20,7 @@ from scripts.a2a import a2a_codex_first_implementation_lane
 from scripts.a2a import a2a_scoped_path_guard
 from scripts.a2a import a2a_runner_dispatch_command
 from scripts.a2a import a2a_worker_report_digest
+from scripts.a2a import a2a_handoff_router
 
 
 class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
@@ -149,6 +150,94 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertEqual(fixture["summary"]["codexQueueItems"], 1)
             self.assertEqual(fixture["codexBuildQueue"][0]["targetOwner"], "codex")
             self.assertFalse(fixture["codexBuildQueue"][0]["executionAllowed"])
+
+    def test_handoff_router_registers_codex_queue_and_blocks_provider_results(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-handoff-router-") as tmp:
+            runtime = Path(tmp) / "runtime"
+            fixture_path = Path(tmp) / "handoffs.json"
+            opus_outbox = runtime / "outbox" / "opus"
+            kob_outbox = runtime / "outbox" / "kob"
+            glm_outbox = runtime / "outbox" / "glm52"
+            opus_outbox.mkdir(parents=True)
+            kob_outbox.mkdir(parents=True)
+            glm_outbox.mkdir(parents=True)
+            (opus_outbox / "OPUS.result.json").write_text(
+                json.dumps(
+                    {
+                        "created_at": "2026-06-27T00:00:00+00:00",
+                        "status": "dry_run_completed",
+                        "provider_call": False,
+                        "role": "opus",
+                        "task": {
+                            "task_id": "OPUS",
+                            "goal_preview": "Plan from TOKEN=abc123",
+                        },
+                        "output": {
+                            "summary": "architecture handoff",
+                            "handoff": {"next_owner": "codex", "safe_to_dispatch_locally": True},
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (kob_outbox / "KOB.result.json").write_text(
+                json.dumps(
+                    {
+                        "created_at": "2026-06-27T00:01:00+00:00",
+                        "status": "dry_run_completed",
+                        "provider_call": False,
+                        "role": "kob",
+                        "task": {"task_id": "KOB"},
+                        "output": {
+                            "summary": "validation handoff",
+                            "handoff": {"next_owner": "hermes", "safe_to_dispatch_locally": True},
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (glm_outbox / "GLM.result.json").write_text(
+                json.dumps(
+                    {
+                        "created_at": "2026-06-27T00:02:00+00:00",
+                        "status": "provider_call_completed",
+                        "provider_call": True,
+                        "role": "glm52",
+                        "task": {"task_id": "GLM"},
+                        "output": {
+                            "summary": "provider result",
+                            "handoff": {"next_owner": "codex", "safe_to_dispatch_locally": True},
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            exit_code = a2a_handoff_router.main(
+                [
+                    "--runtime-root",
+                    str(runtime),
+                    "--fixture-path",
+                    str(fixture_path),
+                ]
+            )
+
+            self.assertEqual(exit_code, 0)
+            fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+            self.assertEqual(fixture["summary"]["codexQueueItems"], 1)
+            self.assertEqual(fixture["summary"]["roleHandoffs"], 1)
+            self.assertEqual(fixture["summary"]["blockedHandoffs"], 1)
+            self.assertEqual(fixture["summary"]["roleInboxWrites"], 0)
+            self.assertFalse(fixture["summary"]["executionAllowed"])
+            self.assertTrue(Path(fixture["codexQueue"][0]["queuePath"]).exists())
+            self.assertIn("TOKEN=<masked>", fixture["codexQueue"][0]["goalPreview"])
+            self.assertEqual(fixture["roleHandoffs"][0]["targetOwner"], "hermes")
+            self.assertFalse((runtime / "inbox" / "hermes").exists())
+            self.assertEqual(
+                fixture["blockedHandoffs"][0]["blockedReason"],
+                "provider_call_result_requires_review",
+            )
+            self.assertIn("no_provider_call", fixture["policyBoundary"])
 
     def test_codex_build_plan_consumes_first_ready_queue_item(self) -> None:
         with tempfile.TemporaryDirectory(prefix="ghostclaw-codex-plan-") as tmp:

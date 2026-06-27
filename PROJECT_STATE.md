@@ -1053,6 +1053,7 @@ Toolkit` tab.
   `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a`.
 - Mission Control fixtures:
   - `apps/mission-control/src/fixtures/a2a2aRunnerStatus.json`
+  - `apps/mission-control/src/fixtures/a2a2aHandoffRouter.json`
   - `apps/mission-control/src/fixtures/a2a2aDependencyReadiness.json`
   - `apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json`
   - `apps/mission-control/src/fixtures/a2a2aWorkerReportDigest.json`
@@ -1062,6 +1063,8 @@ Toolkit` tab.
   `ghostclaw_runner/agent_runner.py`.
 - Dispatch command:
   `scripts/a2a/a2a_runner_dispatch_command.py`.
+- Handoff router:
+  `scripts/a2a/a2a_handoff_router.py`.
 - Readiness generator:
   `scripts/a2a/a2a_dependency_readiness.py`.
 - Codex build-plan generator:
@@ -1089,6 +1092,9 @@ Toolkit` tab.
   - provider calls: 0
   - latest AGY dispatch smoke: `role=agy`, `processed=1`,
     `providerCallAllowed=false`
+  - handoff router: `ready_handoffs_registered`, 6 Codex queue items, 1
+    role-to-role handoff, 0 blocked handoffs, 0 provider calls, 0 role inbox
+    writes
   - worker reports: 3
   - KOB validation reports: 1
   - dependency worst status: ready
@@ -1156,6 +1162,13 @@ Toolkit` tab.
   assets plus other dirty lanes visible but untouched. Current planned files
   are all allowed, while unrelated dirty paths are reported as external lane
   state only.
+- Current handoff router evidence:
+  `apps/mission-control/src/fixtures/a2a2aHandoffRouter.json` reads runner
+  outbox results and registers review-only Codex queue artifacts under
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/handoffs/codex_queue/`.
+  Current state has 6 Codex queue items, 1 KOB-to-Hermes handoff that is not
+  enqueued, 0 blocked handoffs, 0 provider calls, and
+  `executionAllowed=false`.
 - Boundary: this A2A2A state still does not call providers, execute KOB
   commands, clone repos, start Docker, write connectors, push, deploy, read
   secrets, or mutate generated `web-sirinx` assets. Worker reports are inputs

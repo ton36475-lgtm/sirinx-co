@@ -97,6 +97,35 @@ python3 scripts/a2a/a2a_runner_dispatch_command.py \
 `--run-once` still uses `ghostclaw_runner/agent_runner.py --dry-run`. It does
 not enable provider calls.
 
+## Handoff Router
+
+After runner results exist, register local handoffs into a reviewable queue:
+
+```bash
+python3 scripts/a2a/a2a_handoff_router.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This reads `outbox/<role>/*.result.json` and writes:
+
+- a runtime report at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/handoffs/latest.json`
+- Codex review queue artifacts under
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/handoffs/codex_queue/`
+- a static Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aHandoffRouter.json`
+
+Codex queue items are review-only. They do not permit file edits by themselves.
+Role-to-role routing is deliberately separate from runner execution. To enqueue
+safe role handoffs into a local role inbox, pass:
+
+```bash
+python3 scripts/a2a/a2a_handoff_router.py --route-role-inbox
+```
+
+Do not combine role inbox routing with unbounded runner watch mode. Use bounded
+cycles first so a bad handoff cannot create a repeated task loop.
+
 ## Dependency Readiness
 
 Generate the dependency board after runner output exists:

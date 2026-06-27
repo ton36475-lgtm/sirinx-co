@@ -827,6 +827,9 @@ configuration lane, then keep future entries concise and source-path based.
 - [x] Add A2A2A scoped path guard so Mission Control can show planned files,
       allowed/blocked path matches, external dirty lane samples, and
       `git add .` status before staging.
+- [x] Add A2A2A handoff router so runner outbox results become review-only
+      Codex queue artifacts and explicit role-to-role handoffs without
+      provider calls or command execution.
 - [x] For the first implementation lane, Codex must own all file edits, run
       validation, and stage only the file list from the packet.
 - [x] Keep GLM-5.2, DeepSeek, and AGY report-only until a separate provider
@@ -845,10 +848,11 @@ configuration lane, then keep future entries concise and source-path based.
 
 ### Current Recommended A2A2A Next Action
 
-After the scoped path guard lane is committed, pick the next smallest local-only
-A2A2A slice from the backlog or assignment board. Keep workers report-only,
-Mission Control fixture-backed, KOB validate-only, and external actions blocked
-until their own scoped lane exists.
+After the handoff router lane is committed, review
+`apps/mission-control/src/fixtures/a2a2aHandoffRouter.json` and pick the first
+still-relevant Codex queue item for a new scoped implementation lane. Keep
+workers report-only, Mission Control fixture-backed, KOB validate-only, and
+external actions blocked until their own scoped lane exists.
 
 The backlog priority board is now the read-only triage layer for old pending
 work. Use it to confirm that A2A2A P0 items stay ahead of connector sync,
@@ -863,6 +867,11 @@ Mission Control as fixture-backed observer.
 The first Codex-owned slice is now recorded as an outcome fixture. The next
 slice should come from the assignment board `immediateQueue`, while provider,
 connector, deploy, generated asset, and external runtime lanes stay blocked.
+
+The handoff router is now the mail-carrier layer between runner outbox results
+and Codex work. It registers Codex queue artifacts locally and reports
+role-to-role handoffs, but role inbox routing still requires an explicit
+`--route-role-inbox` run and bounded runner cycles to prevent loops.
 
 For watch-mode handoff, use bounded polling first:
 

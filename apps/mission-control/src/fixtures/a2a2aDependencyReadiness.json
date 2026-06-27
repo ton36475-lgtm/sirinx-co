@@ -36,7 +36,7 @@
   ],
   "dependencyChecks": [
     {
-      "evidence": "3 result files found",
+      "evidence": "6 result files found",
       "id": "runner_transport",
       "label": "Runner transport",
       "nextAction": "Create and run a local role task envelope.",
@@ -64,18 +64,18 @@
       "status": "ready"
     },
     {
-      "evidence": "0 worker result files found",
+      "evidence": "2 worker result files found",
       "id": "department_worker_reports",
       "label": "GLM/DeepSeek worker reports",
       "nextAction": "Dispatch worker report tasks after the Codex plan identifies department needs.",
-      "status": "partial"
+      "status": "ready"
     },
     {
-      "evidence": "0 KOB validation files found",
+      "evidence": "1 KOB validation files found",
       "id": "kob_local_validation",
       "label": "KOB local validation",
       "nextAction": "Dispatch KOB validation after Codex proposes commands.",
-      "status": "partial"
+      "status": "ready"
     },
     {
       "evidence": "0 provider-call results found",
@@ -109,11 +109,11 @@
   "summary": {
     "codexQueueItems": 3,
     "dependencyChecks": 7,
-    "kobReports": 0,
+    "kobReports": 1,
     "overallStatus": "ready_for_scoped_codex_plan",
     "providerCalls": 0,
-    "workerReports": 0,
-    "worstDependencyStatus": "partial"
+    "workerReports": 2,
+    "worstDependencyStatus": "ready"
   },
-  "updatedAt": "2026-06-27T11:51:03+00:00"
+  "updatedAt": "2026-06-27T12:03:45+00:00"
 }

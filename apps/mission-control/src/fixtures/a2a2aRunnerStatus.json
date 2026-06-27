@@ -2,6 +2,45 @@
   "generatedBy": "scripts/a2a/a2a_export_runner_status_fixture.py",
   "latestResults": [
     {
+      "createdAt": "2026-06-27T12:03:28+00:00",
+      "model": "kob/local-validator",
+      "nextOwner": "hermes",
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/outbox/kob/A2A2A-KOB-CODEX-PLAN-VALIDATE-001.result.json",
+      "promptSource": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/ghostclaw_runner/prompts/kob.md",
+      "providerCall": false,
+      "role": "kob",
+      "safeToDispatchLocally": true,
+      "status": "dry_run_completed",
+      "summary": "kob received task A2A2A-KOB-CODEX-PLAN-VALIDATE-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+      "taskId": "A2A2A-KOB-CODEX-PLAN-VALIDATE-001"
+    },
+    {
+      "createdAt": "2026-06-27T12:03:10+00:00",
+      "model": "deepseek/deepseek-v4-pro",
+      "nextOwner": "codex",
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/outbox/deepseek/A2A2A-DEEPSEEK-CODEX-PLAN-REVIEW-001.result.json",
+      "promptSource": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/ghostclaw_runner/prompts/deepseek.md",
+      "providerCall": false,
+      "role": "deepseek",
+      "safeToDispatchLocally": true,
+      "status": "dry_run_completed",
+      "summary": "deepseek received task A2A2A-DEEPSEEK-CODEX-PLAN-REVIEW-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+      "taskId": "A2A2A-DEEPSEEK-CODEX-PLAN-REVIEW-001"
+    },
+    {
+      "createdAt": "2026-06-27T12:02:50+00:00",
+      "model": "zai/glm-5.2",
+      "nextOwner": "codex",
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/outbox/glm52/A2A2A-GLM52-CODEX-PLAN-REVIEW-001.result.json",
+      "promptSource": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/ghostclaw_runner/prompts/glm52.md",
+      "providerCall": false,
+      "role": "glm52",
+      "safeToDispatchLocally": true,
+      "status": "dry_run_completed",
+      "summary": "glm52 received task A2A2A-GLM52-CODEX-PLAN-REVIEW-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+      "taskId": "A2A2A-GLM52-CODEX-PLAN-REVIEW-001"
+    },
+    {
       "createdAt": "2026-06-27T11:51:03+00:00",
       "model": "anthropic/claude-opus-4.8",
       "nextOwner": "codex",
@@ -77,26 +116,26 @@
       "running": 0
     },
     {
-      "completed": 0,
+      "completed": 1,
       "failed": 0,
       "inbox": 0,
-      "outbox": 0,
+      "outbox": 1,
       "role": "glm52",
       "running": 0
     },
     {
-      "completed": 0,
+      "completed": 1,
       "failed": 0,
       "inbox": 0,
-      "outbox": 0,
+      "outbox": 1,
       "role": "deepseek",
       "running": 0
     },
     {
-      "completed": 0,
+      "completed": 1,
       "failed": 0,
       "inbox": 0,
-      "outbox": 0,
+      "outbox": 1,
       "role": "kob",
       "running": 0
     }
@@ -104,16 +143,16 @@
   "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
   "sourceGlob": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/outbox/*/*.result.json",
   "summary": {
-    "completed": 3,
-    "dryRunCompleted": 3,
+    "completed": 6,
+    "dryRunCompleted": 6,
     "failed": 0,
     "inbox": 0,
-    "latestResults": 3,
-    "outbox": 3,
+    "latestResults": 6,
+    "outbox": 6,
     "overallStatus": "ready_local_runner",
     "providerCalls": 0,
     "roles": 5,
     "running": 0
   },
-  "updatedAt": "2026-06-27T11:51:03+00:00"
+  "updatedAt": "2026-06-27T12:03:28+00:00"
 }

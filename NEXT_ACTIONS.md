@@ -830,6 +830,9 @@ configuration lane, then keep future entries concise and source-path based.
 - [x] Add A2A2A handoff router so runner outbox results become review-only
       Codex queue artifacts and explicit role-to-role handoffs without
       provider calls or command execution.
+- [x] Add handoff router coverage to the A2A2A completion audit so readiness
+      requires a populated review-only Codex queue before opening the next
+      scoped lane.
 - [x] For the first implementation lane, Codex must own all file edits, run
       validation, and stage only the file list from the packet.
 - [x] Keep GLM-5.2, DeepSeek, and AGY report-only until a separate provider
@@ -848,9 +851,10 @@ configuration lane, then keep future entries concise and source-path based.
 
 ### Current Recommended A2A2A Next Action
 
-After the handoff router lane is committed, review
+After the handoff router audit lane is committed, review
 `apps/mission-control/src/fixtures/a2a2aHandoffRouter.json` and pick the first
-still-relevant Codex queue item for a new scoped implementation lane. Keep
+still-relevant Codex queue item for a new scoped implementation lane. Completion
+audit now requires the handoff router and shows 10/10 readiness checks. Keep
 workers report-only, Mission Control fixture-backed, KOB validate-only, and
 external actions blocked until their own scoped lane exists.
 

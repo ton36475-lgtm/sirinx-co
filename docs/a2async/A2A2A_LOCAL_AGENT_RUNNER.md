@@ -254,8 +254,8 @@ This reads only the generated Mission Control fixtures and writes:
   `apps/mission-control/src/fixtures/a2a2aCompletionAudit.json`
 
 The audit proves the role roster, dependency order, provider boundary, worker
-reports, AGY gate, blocked actions, and implementation packet readiness before
-Codex opens a real implementation lane.
+reports, handoff router, AGY gate, blocked actions, and implementation packet
+readiness before Codex opens a real implementation lane.
 
 ## First Codex Implementation Lane
 

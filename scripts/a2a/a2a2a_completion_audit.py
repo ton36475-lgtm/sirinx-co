@@ -49,6 +49,7 @@ def fixture_path(name: str) -> Path:
 def load_fixtures() -> dict[str, dict[str, Any]]:
     return {
         "runner": read_json(fixture_path("a2a2aRunnerStatus")),
+        "handoff": read_json(fixture_path("a2a2aHandoffRouter")),
         "readiness": read_json(fixture_path("a2a2aDependencyReadiness")),
         "plan": read_json(fixture_path("a2a2aCodexBuildPlan")),
         "digest": read_json(fixture_path("a2a2aWorkerReportDigest")),
@@ -72,12 +73,14 @@ def packet_dependency_status(packet: dict[str, Any]) -> dict[str, str]:
 
 def build_checks(fixtures: dict[str, dict[str, Any]]) -> list[dict[str, str]]:
     runner = fixtures["runner"]
+    handoff = fixtures["handoff"]
     readiness = fixtures["readiness"]
     plan = fixtures["plan"]
     digest = fixtures["digest"]
     packet = fixtures["packet"]
 
     runner_summary = runner.get("summary", {})
+    handoff_summary = handoff.get("summary", {})
     readiness_summary = readiness.get("summary", {})
     digest_summary = digest.get("summary", {})
     packet_summary = packet.get("summary", {})
@@ -89,8 +92,10 @@ def build_checks(fixtures: dict[str, dict[str, Any]]) -> list[dict[str, str]]:
         blocked_actions = []
 
     provider_calls = int(runner_summary.get("providerCalls", 0) or 0) + int(
-        readiness_summary.get("providerCalls", 0) or 0
-    ) + int(digest_summary.get("providerCalls", 0) or 0) + int(packet_summary.get("providerCalls", 0) or 0)
+        handoff_summary.get("providerCalls", 0) or 0
+    ) + int(readiness_summary.get("providerCalls", 0) or 0) + int(
+        digest_summary.get("providerCalls", 0) or 0
+    ) + int(packet_summary.get("providerCalls", 0) or 0)
 
     return [
         check(
@@ -113,6 +118,20 @@ def build_checks(fixtures: dict[str, dict[str, Any]]) -> list[dict[str, str]]:
             provider_calls == 0,
             f"combinedProviderCalls={provider_calls}",
             "Quarantine any provider-backed result before using it.",
+        ),
+        check(
+            "handoff_router",
+            "Handoff router has review-only Codex queue and no blocked results",
+            handoff_summary.get("status") == "ready_handoffs_registered"
+            and int(handoff_summary.get("codexQueueItems", 0) or 0) >= 1
+            and int(handoff_summary.get("blockedHandoffs", 0) or 0) == 0
+            and int(handoff_summary.get("providerCalls", 0) or 0) == 0
+            and not bool(handoff_summary.get("executionAllowed", True)),
+            (
+                f"status={handoff_summary.get('status')}; codexQueue={handoff_summary.get('codexQueueItems')}; "
+                f"blocked={handoff_summary.get('blockedHandoffs')}; executionAllowed={handoff_summary.get('executionAllowed')}"
+            ),
+            "Run the handoff router before claiming A2A2A is ready for Codex queue review.",
         ),
         check(
             "dependency_readiness",
@@ -192,11 +211,14 @@ def build_audit(runtime_root: Path) -> dict[str, Any]:
             "failed": failed,
             "providerCalls": fixtures["digest"].get("summary", {}).get("providerCalls", 0),
             "roles": fixtures["runner"].get("summary", {}).get("roles", 0),
+            "codexQueueItems": fixtures["handoff"].get("summary", {}).get("codexQueueItems", 0),
+            "handoffRouterStatus": fixtures["handoff"].get("summary", {}).get("status", "unknown"),
             "workerReports": fixtures["digest"].get("summary", {}).get("workerReports", 0),
             "implementationPacketStatus": fixtures["packet"].get("summary", {}).get("status", "unknown"),
         },
         "checks": checks,
         "prioritySequence": [
+            "Review a2a2aHandoffRouter.json and pick the first still-relevant Codex queue item.",
             "Review a2a2aImplementationLanePacket.json.",
             "Open the first scoped Codex implementation lane from packet priorityWorkItems.",
             "Keep GLM-5.2, DeepSeek, AGY, and KOB report-only until a separate execution lane exists.",

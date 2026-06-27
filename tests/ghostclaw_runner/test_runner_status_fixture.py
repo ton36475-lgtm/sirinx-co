@@ -445,6 +445,15 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
                     {"role": "kob"},
                 ],
             },
+            "handoff": {
+                "summary": {
+                    "status": "ready_handoffs_registered",
+                    "codexQueueItems": 2,
+                    "blockedHandoffs": 0,
+                    "providerCalls": 0,
+                    "executionAllowed": False,
+                }
+            },
             "readiness": {
                 "summary": {
                     "overallStatus": "ready_for_scoped_codex_plan",
@@ -491,6 +500,7 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
 
         self.assertTrue(all(item["status"] == "pass" for item in checks))
         self.assertIn("agy_dependency", {item["id"] for item in checks})
+        self.assertIn("handoff_router", {item["id"] for item in checks})
 
     def test_first_codex_lane_opens_only_from_ready_packet_and_audit(self) -> None:
         packet_fixture = {

@@ -869,6 +869,8 @@ type A2A2ACompletionAuditFixture = {
     failed: number;
     providerCalls: number;
     roles: number;
+    codexQueueItems: number;
+    handoffRouterStatus: string;
     workerReports: number;
     implementationPacketStatus: string;
   };
@@ -2995,6 +2997,18 @@ export default function App() {
                   <div className="practice-kpi">
                     <span>Roles</span>
                     <strong>{a2a2aCompletionAudit.summary.roles}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Codex Queue</span>
+                    <strong>
+                      {a2a2aCompletionAudit.summary.codexQueueItems}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Handoff</span>
+                    <strong>
+                      {a2a2aCompletionAudit.summary.handoffRouterStatus}
+                    </strong>
                   </div>
                   <div className="practice-kpi">
                     <span>Workers</span>

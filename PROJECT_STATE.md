@@ -1102,6 +1102,9 @@ Toolkit` tab.
     `ready_for_codex_scoped_implementation_review`
   - implementation packet execution: `false` / review-only
   - completion audit: `ready_for_first_scoped_codex_lane`, 9/9 checks passed
+  - completion audit after handoff router coverage:
+    `ready_for_first_scoped_codex_lane`, 10/10 checks passed, 6 Codex queue
+    items, `handoffRouterStatus=ready_handoffs_registered`
   - first Codex lane: `open_for_codex_scoped_work`, 5 tasks, 4 Codex-ready
     tasks, 1 report-input task, provider calls disabled
   - backlog priority board: 173 unchecked `NEXT_ACTIONS.md` items, 0 P0 items,
@@ -1134,8 +1137,10 @@ Toolkit` tab.
   excludes `git add .`.
 - Current completion audit evidence:
   `apps/mission-control/src/fixtures/a2a2aCompletionAudit.json` shows 9
-  passing readiness checks, `roles=6`, `workerReports=3`, `providerCalls=0`,
-  and `overallStatus=ready_for_first_scoped_codex_lane`.
+  passing readiness checks in the original audit and now 10 passing checks
+  after handoff router coverage, `roles=6`, `workerReports=3`,
+  `codexQueueItems=6`, `providerCalls=0`, and
+  `overallStatus=ready_for_first_scoped_codex_lane`.
 - Current first Codex lane evidence:
   `apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json`
   shows `codexFileEditsAllowed=true`, `workerDirectEditsAllowed=false`,

@@ -1,0 +1,103 @@
+{
+  "generatedBy": "scripts/a2a/a2a_codex_build_plan.py",
+  "mode": "read_only_codex_plan_fixture",
+  "nextSafeActions": [
+    "Codex reviews this plan and opens the next scoped implementation lane.",
+    "Dispatch GLM-5.2 or DeepSeek worker reports only after Codex defines the lane.",
+    "Dispatch KOB command validation only after Codex proposes validation commands."
+  ],
+  "plan": {
+    "executionAllowed": false,
+    "lane": "LANE_A2A2A_CODEX_BUILD_PLAN",
+    "objective": "Convert the Opus architecture handoff into a scoped Codex build lane.",
+    "orderedSteps": [
+      {
+        "action": "inspect_queue_item",
+        "detail": "Read the source Opus result and dependency fixture before editing files.",
+        "owner": "codex"
+      },
+      {
+        "action": "write_scoped_plan",
+        "detail": "List exact files, tests, and runtime artifacts for the next implementation lane.",
+        "owner": "codex"
+      },
+      {
+        "action": "worker_report",
+        "detail": "Only dispatch department workers for bounded review notes after the Codex plan exists.",
+        "owner": "glm52_or_deepseek"
+      },
+      {
+        "action": "validate_commands",
+        "detail": "Validate proposed local commands through Command Broker policy before execution.",
+        "owner": "kob"
+      },
+      {
+        "action": "implement_scoped_lane",
+        "detail": "Edit only planned files and preserve dirty lanes outside scope.",
+        "owner": "codex"
+      }
+    ],
+    "planId": "CODEX-PLAN-ec5461ae55",
+    "scope": {
+      "allowedPaths": [
+        "scripts/a2a/",
+        "ghostclaw_runner/",
+        "tests/ghostclaw_runner/",
+        "apps/mission-control/src/fixtures/",
+        "apps/mission-control/src/App.tsx",
+        "docs/a2async/"
+      ],
+      "blockedPaths": [
+        ".env",
+        ".env.*",
+        "apps/web-sirinx/dist/",
+        "packages/database/dist/",
+        "supabase/.temp/",
+        "production credentials"
+      ]
+    },
+    "sourceQueueId": "CODEX-BUILD-A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001",
+    "sourceResultPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/outbox/opus/A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001.result.json",
+    "sourceSummary": "opus received task A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+    "sourceTaskId": "A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001",
+    "status": "ready_for_codex_review",
+    "validationCommands": [
+      "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
+      "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+      "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+      "/usr/bin/git diff --check -- <scoped paths>"
+    ],
+    "workerDispatchRecommendations": [
+      {
+        "goal": "Review the scoped Codex build plan for code structure and long-context consistency.",
+        "role": "glm52",
+        "when": "after Codex writes the scoped plan"
+      },
+      {
+        "goal": "Review command and data-flow risk for the scoped build plan.",
+        "role": "deepseek",
+        "when": "after Codex writes the scoped plan"
+      },
+      {
+        "goal": "Validate local commands proposed by Codex against Command Broker policy.",
+        "role": "kob",
+        "when": "after validation commands are finalized"
+      }
+    ]
+  },
+  "planPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/codex_plans/CODEX-PLAN-ec5461ae55.json",
+  "policyBoundary": [
+    "plan_only_no_file_edits",
+    "codex_owns_git_state",
+    "workers_report_only",
+    "kob_validates_commands_before_execution",
+    "no_provider_call_by_default",
+    "no_push",
+    "no_deploy",
+    "no_connector_sync",
+    "no_secret_read_or_print"
+  ],
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+  "status": "ready_for_codex_review",
+  "updatedAt": "2026-06-27T11:54:17+00:00"
+}

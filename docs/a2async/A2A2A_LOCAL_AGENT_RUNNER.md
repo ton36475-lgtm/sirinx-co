@@ -98,6 +98,27 @@ The board turns runner results into a Codex build queue:
 This is a dependency gate, not a human approval gate. It prevents workers from
 running out of order while keeping all work local and reviewable.
 
+## Codex Build Plan
+
+Create a plan-only Codex build artifact from the first ready queue item:
+
+```bash
+python3 scripts/a2a/a2a_codex_build_plan.py \
+  --readiness-path apps/mission-control/src/fixtures/a2a2aDependencyReadiness.json \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This writes:
+
+- a runtime plan under
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/codex_plans/`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json`
+
+The plan defines ordered steps, allowed paths, blocked paths, validation
+commands, and worker dispatch recommendations. It is still plan-only; Codex
+must open a scoped implementation lane before editing files.
+
 ## Next Build Lane
 
 Codex should consume the first `ready_for_codex_plan` item from the dependency

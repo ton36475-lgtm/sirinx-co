@@ -21,6 +21,7 @@ import codexSessionSidebarToolkitStatusFixture from "./fixtures/codexSessionSide
 import deepResearchStatusFixture from "./fixtures/deepResearchStatus.json";
 import a2a2aRunnerStatusFixture from "./fixtures/a2a2aRunnerStatus.json";
 import a2a2aDependencyReadinessFixture from "./fixtures/a2a2aDependencyReadiness.json";
+import a2a2aCodexBuildPlanFixture from "./fixtures/a2a2aCodexBuildPlan.json";
 
 interface Worker {
   name: string;
@@ -597,6 +598,39 @@ type A2A2ADependencyReadinessFixture = {
   nextSafeActions: string[];
 };
 
+type A2A2ACodexBuildPlanFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  status: string;
+  planPath?: string;
+  plan: {
+    planId: string;
+    lane: string;
+    sourceQueueId: string;
+    sourceTaskId: string;
+    sourceResultPath: string;
+    status: string;
+    objective: string;
+    sourceSummary: string;
+    executionAllowed: boolean;
+    orderedSteps: {
+      owner: string;
+      action: string;
+      detail: string;
+    }[];
+    validationCommands: string[];
+    workerDispatchRecommendations: {
+      role: string;
+      goal: string;
+      when: string;
+    }[];
+  } | null;
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type IgamingPracticeStatusFixture = {
   updatedAt: string;
   mode: string;
@@ -660,6 +694,8 @@ const commandBrokerProductionStatus =
 const a2a2aRunnerStatus = a2a2aRunnerStatusFixture as A2A2ARunnerStatusFixture;
 const a2a2aDependencyReadiness =
   a2a2aDependencyReadinessFixture as A2A2ADependencyReadinessFixture;
+const a2a2aCodexBuildPlan =
+  a2a2aCodexBuildPlanFixture as A2A2ACodexBuildPlanFixture;
 const codexSessionSidebarToolkitStatus =
   codexSessionSidebarToolkitStatusFixture;
 const sessionToolkitAgents = codexSessionSidebarToolkitStatus.agents;
@@ -4228,6 +4264,127 @@ export default function App() {
                     ))}
                   </section>
                 </div>
+              </div>
+
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>Codex Build Plan</span>
+                  <span className="accent-cyan">
+                    {a2a2aCodexBuildPlan.status}
+                  </span>
+                </div>
+
+                {a2a2aCodexBuildPlan.plan ? (
+                  <>
+                    <div className="practice-summary-grid">
+                      <div className="practice-kpi">
+                        <span>Plan</span>
+                        <strong>{a2a2aCodexBuildPlan.plan.planId}</strong>
+                      </div>
+                      <div className="practice-kpi">
+                        <span>Lane</span>
+                        <strong>{a2a2aCodexBuildPlan.plan.lane}</strong>
+                      </div>
+                      <div className="practice-kpi">
+                        <span>Source Task</span>
+                        <strong>{a2a2aCodexBuildPlan.plan.sourceTaskId}</strong>
+                      </div>
+                      <div className="practice-kpi">
+                        <span>Execution</span>
+                        <strong>
+                          {a2a2aCodexBuildPlan.plan.executionAllowed
+                            ? "ALLOW"
+                            : "PLAN ONLY"}
+                        </strong>
+                      </div>
+                    </div>
+
+                    <div className="practice-manifest-line">
+                      <span>Mode</span>
+                      <code>{a2a2aCodexBuildPlan.mode}</code>
+                      <span>Plan Path</span>
+                      <code>
+                        {a2a2aCodexBuildPlan.planPath || "not-written"}
+                      </code>
+                      <span>Updated</span>
+                      <code>{a2a2aCodexBuildPlan.updatedAt}</code>
+                    </div>
+
+                    <div className="git-fixture-notice">
+                      {a2a2aCodexBuildPlan.plan.objective} This is a plan-only
+                      Codex handoff. It does not edit files or permit worker
+                      execution by itself.
+                    </div>
+
+                    <div className="practice-grid">
+                      <section
+                        className="practice-artifacts"
+                        aria-label="Codex ordered build steps"
+                      >
+                        <div className="git-section-title">
+                          <span>Ordered Steps</span>
+                          <span className="approval-badge">
+                            {a2a2aCodexBuildPlan.plan.orderedSteps.length}
+                          </span>
+                        </div>
+                        {a2a2aCodexBuildPlan.plan.orderedSteps.map((step) => (
+                          <div
+                            className="practice-artifact-row"
+                            key={`${step.owner}-${step.action}`}
+                          >
+                            <span className="practice-status payload-ready">
+                              {step.owner}
+                            </span>
+                            <div>
+                              <strong>{step.action}</strong>
+                              <p>{step.detail}</p>
+                              <code>
+                                {a2a2aCodexBuildPlan.plan?.sourceQueueId}
+                              </code>
+                            </div>
+                          </div>
+                        ))}
+                      </section>
+
+                      <section
+                        className="practice-artifacts"
+                        aria-label="Worker dispatch recommendations"
+                      >
+                        <div className="git-section-title">
+                          <span>Worker Dispatch</span>
+                          <span className="approval-badge">
+                            {
+                              a2a2aCodexBuildPlan.plan
+                                .workerDispatchRecommendations.length
+                            }
+                          </span>
+                        </div>
+                        {a2a2aCodexBuildPlan.plan.workerDispatchRecommendations.map(
+                          (item) => (
+                            <div
+                              className="practice-artifact-row"
+                              key={`${item.role}-${item.when}`}
+                            >
+                              <span className="practice-status payload-warn">
+                                {item.role}
+                              </span>
+                              <div>
+                                <strong>{item.goal}</strong>
+                                <p>{item.when}</p>
+                                <code>report-only worker task</code>
+                              </div>
+                            </div>
+                          ),
+                        )}
+                      </section>
+                    </div>
+                  </>
+                ) : (
+                  <div className="git-fixture-notice">
+                    No Codex build queue item is ready yet. Run dependency
+                    readiness after an Opus handoff exists.
+                  </div>
+                )}
               </div>
 
               <div className="practice-lower-grid">

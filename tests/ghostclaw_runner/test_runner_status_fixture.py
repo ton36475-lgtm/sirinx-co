@@ -10,6 +10,7 @@ from pathlib import Path
 
 from scripts.a2a import a2a_export_runner_status_fixture
 from scripts.a2a import a2a_dependency_readiness
+from scripts.a2a import a2a_codex_build_plan
 from scripts.a2a import a2a_runner_dispatch_command
 
 
@@ -123,6 +124,45 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertEqual(fixture["summary"]["codexQueueItems"], 1)
             self.assertEqual(fixture["codexBuildQueue"][0]["targetOwner"], "codex")
             self.assertFalse(fixture["codexBuildQueue"][0]["executionAllowed"])
+
+    def test_codex_build_plan_consumes_first_ready_queue_item(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-codex-plan-") as tmp:
+            runtime = Path(tmp) / "runtime"
+            readiness_path = Path(tmp) / "readiness.json"
+            fixture_path = Path(tmp) / "codex-plan.json"
+            readiness_path.write_text(
+                json.dumps(
+                    {
+                        "codexBuildQueue": [
+                            {
+                                "queueId": "CODEX-BUILD-A2A2A-TEST",
+                                "taskId": "A2A2A-TEST",
+                                "sourceResultPath": "/tmp/source.result.json",
+                                "summary": "safe handoff",
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            exit_code = a2a_codex_build_plan.main(
+                [
+                    "--readiness-path",
+                    str(readiness_path),
+                    "--fixture-path",
+                    str(fixture_path),
+                    "--runtime-root",
+                    str(runtime),
+                ]
+            )
+
+            self.assertEqual(exit_code, 0)
+            fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+            self.assertEqual(fixture["status"], "ready_for_codex_review")
+            self.assertFalse(fixture["plan"]["executionAllowed"])
+            self.assertEqual(fixture["plan"]["sourceQueueId"], "CODEX-BUILD-A2A2A-TEST")
+            self.assertTrue(Path(fixture["planPath"]).exists())
 
 
 if __name__ == "__main__":

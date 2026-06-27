@@ -34,8 +34,10 @@ runtime/inbox/<role>/<task>.json
 ## Safety Defaults
 
 - Dry-run is the default.
-- Provider calls are disabled unless both `--execute` and
-  `--allow-provider-call` are passed.
+- Provider calls are disabled unless `--execute`, `--allow-provider-call`, and
+  `--provider-lease-path <command-broker-lease.json>` are all present. A
+  missing, invalid, expired, or over-broad lease fails closed before any inbox
+  task is moved.
 - The browser UI never reads runtime folders directly.
 - Mission Control reads only
   `apps/mission-control/src/fixtures/a2a2aRunnerStatus.json`.
@@ -71,7 +73,8 @@ python3 ghostclaw_runner/agent_runner.py \
 This checks all role inboxes in role order and writes deterministic local
 results. Use `--max-cycles` during operator-reviewed runs. Continuous watch
 mode is available by leaving `--max-cycles` at `0`, but it still does not call
-providers unless `--execute --allow-provider-call` is explicitly supplied.
+providers unless `--execute --allow-provider-call --provider-lease-path ...` is
+explicitly supplied and the lease validates.
 
 ## Dispatch Command
 
@@ -221,6 +224,40 @@ planned actions, context references, and prompt hash. It does not include full
 prompt bodies, secrets, or executable commands. If any worker report has
 `providerCall=true`, treat the digest as review-required before using it for
 Codex planning.
+
+## Worker Follow-up Brief
+
+After the first Codex implementation lane is closed, convert the report-only
+worker packet into a concrete next-lane brief for Codex:
+
+```bash
+python3 scripts/a2a/a2a_worker_followup_brief.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This reads:
+
+- `apps/mission-control/src/fixtures/a2a2aWorkerReportDigest.json`
+- `apps/mission-control/src/fixtures/a2a2aTeamWorkPackets.json`
+
+It writes:
+
+- a runtime report at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup/latest.json`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aWorkerFollowupBrief.json`
+
+The brief does not execute worker recommendations. It translates GLM-5.2,
+DeepSeek, AGY, and KOB report-only output into a Codex-owned follow-up lane with
+allowed paths, blocked actions, validation commands, and the source packet that
+triggered the handoff. If the worker digest has any provider calls, or the
+`consume_report_only_feedback` packet is missing, the brief blocks the next lane
+instead of silently advancing.
+
+Mission Control uses this fixture to show the next safe action after all scoped
+Codex packets in the current implementation lane are complete. Workers remain
+inputs only; Codex remains the Git owner; provider calls still require a valid
+Command Broker lease.
 
 ## Implementation Lane Packet
 

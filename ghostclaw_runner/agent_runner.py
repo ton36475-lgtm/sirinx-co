@@ -188,6 +188,64 @@ def load_json(path: Path) -> dict[str, Any]:
     return data
 
 
+def truthy_lease_flag(value: Any) -> bool:
+    return value is True or str(value).strip().lower() in {"true", "1", "yes", "allow", "allowed"}
+
+
+def parse_lease_time(value: Any) -> dt.datetime | None:
+    if not value:
+        return None
+    text = str(value).strip()
+    if text.endswith("Z"):
+        text = text[:-1] + "+00:00"
+    try:
+        parsed = dt.datetime.fromisoformat(text)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=dt.UTC)
+    return parsed
+
+
+def provider_lease_valid(lease: dict[str, Any], now: dt.datetime | None = None) -> tuple[bool, str]:
+    now = now or dt.datetime.now(dt.UTC)
+    status = str(lease.get("status") or lease.get("decision") or "").strip().lower()
+    if status and status not in {"active", "approved", "valid", "allow", "allowed"}:
+        return False, f"lease_status_{status}"
+
+    allowed = (
+        truthy_lease_flag(lease.get("provider_call_allowed"))
+        or truthy_lease_flag(lease.get("allow_provider_call"))
+        or truthy_lease_flag(lease.get("allowProviderCall"))
+        or truthy_lease_flag(lease.get("valid"))
+    )
+    if not allowed:
+        return False, "provider_call_not_allowed_by_lease"
+
+    expires_at = parse_lease_time(lease.get("expires_at") or lease.get("expiresAt"))
+    if expires_at and expires_at <= now:
+        return False, "lease_expired"
+
+    if truthy_lease_flag(lease.get("secret_read_allowed")) or truthy_lease_flag(lease.get("external_write_allowed")):
+        return False, "lease_requests_blocked_capability"
+
+    return True, "lease_valid"
+
+
+def load_provider_lease(path_text: str | None) -> tuple[bool, str, dict[str, Any]]:
+    if not path_text:
+        return False, "missing_provider_lease", {}
+    path = expand_path(path_text)
+    if not path.exists():
+        return False, "provider_lease_not_found", {"path": str(path)}
+    try:
+        lease = load_json(path)
+    except ValueError as exc:
+        return False, f"invalid_provider_lease:{exc}", {"path": str(path)}
+    valid, reason = provider_lease_valid(lease)
+    return valid, reason, {"path": str(path), "lease_id": str(lease.get("lease_id") or lease.get("id") or "")}
+
+
 def task_files(runtime_root: Path, role: str) -> list[Path]:
     direct = sorted((runtime_root / "inbox" / role).glob("*.json"))
     pending = sorted((runtime_root / "tasks" / "pending").glob(f"*{role}*.json"))
@@ -476,6 +534,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     mode.add_argument("--dry-run", action="store_true", help="Write local deterministic result. This is the default.")
     mode.add_argument("--execute", action="store_true", help="Execute the runner loop. Provider calls still require opt-in.")
     parser.add_argument("--allow-provider-call", action="store_true", help="Allow an opt-in LiteLLM provider call.")
+    parser.add_argument(
+        "--provider-lease-path",
+        default=None,
+        help="Command Broker lease JSON required before provider calls are allowed.",
+    )
     parser.add_argument("--litellm-url", default=os.environ.get("LITELLM_URL", DEFAULT_LITELLM_URL))
     parser.add_argument("--model", default=None, help="Optional model override for provider calls.")
     parser.add_argument("--watch", action="store_true", help="Poll inboxes repeatedly until stopped or max cycles is reached.")
@@ -493,6 +556,22 @@ def main(argv: list[str] | None = None) -> int:
 
     mode = "execute" if args.execute else "dry-run"
     roles = ROLE_ORDER if args.agent == "all" else [args.agent]
+    if mode == "execute" and args.allow_provider_call:
+        lease_valid, lease_reason, lease_meta = load_provider_lease(args.provider_lease_path)
+        if not lease_valid:
+            append_jsonl(
+                runtime_root / "logs" / "runner-events.jsonl",
+                {
+                    "created_at": now_iso(),
+                    "event": "blocked",
+                    "reason": lease_reason,
+                    "lease": lease_meta,
+                    "provider_call_requested": True,
+                },
+            )
+            print(f"blocked: provider call requires valid Command Broker lease ({lease_reason})")
+            return 2
+
     processed: list[dict[str, Any]] = []
     cycles = 0
     while True:

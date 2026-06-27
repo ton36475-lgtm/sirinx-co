@@ -1213,3 +1213,14 @@ Toolkit` tab.
   `--watch --max-cycles <N> --poll-interval <seconds> --dry-run` until
   provider routing, budget caps, and Command Broker leases are explicitly
   opened.
+- Runner provider boundary: provider mode now fails closed unless
+  `--execute`, `--allow-provider-call`, and a valid Command Broker lease path
+  are all present. Invalid, missing, expired, or over-broad leases block before
+  any inbox task is moved.
+- Current worker follow-up evidence:
+  `apps/mission-control/src/fixtures/a2a2aWorkerFollowupBrief.json` converts
+  the remaining `WORK-8e54ea680f / consume_report_only_feedback` report-only
+  packet into a Codex-readable next-lane brief. It reports 4 worker/KOB signals,
+  4 safe reports, 0 provider calls, `codexMayOpenNextLane=true`, and keeps
+  workers as inputs only. Its runtime mirror is
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup/latest.json`.

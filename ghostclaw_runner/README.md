@@ -35,7 +35,8 @@ Use `--max-cycles` for operator-reviewed runs. Leaving it at `0` watches until
 the process is stopped, but still writes deterministic local dry-run results by
 default.
 
-Provider calls are opt-in only and still local-router oriented:
+Provider calls are opt-in only, local-router oriented, and require a Command
+Broker lease:
 
 ```bash
 python3 ghostclaw_runner/agent_runner.py \
@@ -43,8 +44,10 @@ python3 ghostclaw_runner/agent_runner.py \
   --once \
   --execute \
   --allow-provider-call \
+  --provider-lease-path /Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/leases/provider-smoke.json \
   --litellm-url http://127.0.0.1:4000/v1/chat/completions
 ```
 
-Do not use provider mode until LiteLLM routing, budget caps, and Command Broker
-policy are confirmed.
+Do not use provider mode until LiteLLM routing, budget caps, and a valid Command
+Broker lease are confirmed. Without that lease the runner fails closed before
+moving any task from the inbox.

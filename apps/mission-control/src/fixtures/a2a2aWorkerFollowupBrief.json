@@ -1,0 +1,139 @@
+{
+  "generatedBy": "scripts/a2a/a2a_worker_followup_brief.py",
+  "mode": "read_only_worker_followup_brief",
+  "nextSafeActions": [
+    "Review this brief in Mission Control.",
+    "Open one new Codex implementation-lane packet if the brief status is ready.",
+    "Keep GLM, DeepSeek, AGY, and KOB as report-only workers until a broker lease changes scope."
+  ],
+  "policyBoundary": [
+    "mission_control_reads_static_fixture_only",
+    "worker_reports_are_inputs_not_repo_edits",
+    "codex_owns_repo_changes",
+    "provider_calls_require_command_broker_lease",
+    "kob_validates_only_until_lease",
+    "no_external_sync",
+    "no_deploy",
+    "no_secret_values"
+  ],
+  "recommendedCodexFollowup": {
+    "allowedPaths": [
+      "scripts/a2a/",
+      "ghostclaw_runner/",
+      "tests/ghostclaw_runner/",
+      "apps/mission-control/src/fixtures/",
+      "apps/mission-control/src/App.tsx",
+      "docs/a2async/",
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md"
+    ],
+    "blockedActions": [
+      "provider_call_without_command_broker_lease",
+      "connector_sync",
+      "deploy",
+      "push",
+      "secret_read_or_print",
+      "git_add_dot",
+      "worker_direct_commit",
+      "generated_web_sirinx_asset_mutation"
+    ],
+    "lane": "LANE_A2A2A_WORKER_FEEDBACK_CONSUMPTION",
+    "nextAction": "Codex converts this brief into a new implementation-lane packet; workers remain report-only.",
+    "owner": "codex",
+    "task": "consume worker reports and open the next scoped implementation lane",
+    "validationCommands": [
+      "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
+      "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+      "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md PROJECT_STATE.md NEXT_ACTIONS.md",
+      "git diff --check -- scripts/a2a ghostclaw_runner tests/ghostclaw_runner apps/mission-control/src/fixtures apps/mission-control/src/App.tsx docs/a2async PROJECT_STATE.md NEXT_ACTIONS.md"
+    ]
+  },
+  "roleSignals": [
+    {
+      "nextOwner": "codex",
+      "plannedActions": [
+        "inspect UI and integration task shape",
+        "draft fast scaffold notes",
+        "flag missing screenshots or acceptance criteria",
+        "return report-only implementation hints"
+      ],
+      "providerCall": false,
+      "role": "agy",
+      "safeToDispatchLocally": true,
+      "status": "dry_run_completed",
+      "summary": "agy received task A2A2A-AGY-CODEX-PLAN-REVIEW-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+      "taskId": "A2A2A-AGY-CODEX-PLAN-REVIEW-001"
+    },
+    {
+      "nextOwner": "hermes",
+      "plannedActions": [
+        "validate command intent",
+        "check broker policy",
+        "prepare local validation command plan",
+        "return no-execution audit record"
+      ],
+      "providerCall": false,
+      "role": "kob",
+      "safeToDispatchLocally": true,
+      "status": "dry_run_completed",
+      "summary": "kob received task A2A2A-KOB-CODEX-PLAN-VALIDATE-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+      "taskId": "A2A2A-KOB-CODEX-PLAN-VALIDATE-001"
+    },
+    {
+      "nextOwner": "codex",
+      "plannedActions": [
+        "inspect department-specific task",
+        "draft focused technical notes",
+        "flag risk and verification needs",
+        "return worker report only"
+      ],
+      "providerCall": false,
+      "role": "deepseek",
+      "safeToDispatchLocally": true,
+      "status": "dry_run_completed",
+      "summary": "deepseek received task A2A2A-DEEPSEEK-CODEX-PLAN-REVIEW-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+      "taskId": "A2A2A-DEEPSEEK-CODEX-PLAN-REVIEW-001"
+    },
+    {
+      "nextOwner": "codex",
+      "plannedActions": [
+        "analyze code task locally",
+        "draft implementation notes",
+        "flag missing context",
+        "return patch proposal only"
+      ],
+      "providerCall": false,
+      "role": "glm52",
+      "safeToDispatchLocally": true,
+      "status": "dry_run_completed",
+      "summary": "glm52 received task A2A2A-GLM52-CODEX-PLAN-REVIEW-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+      "taskId": "A2A2A-GLM52-CODEX-PLAN-REVIEW-001"
+    }
+  ],
+  "runtimeReportPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup/latest.json",
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+  "sourceFixtures": {
+    "teamWorkPackets": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/apps/mission-control/src/fixtures/a2a2aTeamWorkPackets.json",
+    "workerReportDigest": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/apps/mission-control/src/fixtures/a2a2aWorkerReportDigest.json"
+  },
+  "sourcePacket": {
+    "acceptance": "No worker commits, provider calls, or command execution are required.",
+    "owner": "glm52_deepseek_agy_kob",
+    "ownerMode": "report_and_validate_only",
+    "packetId": "WORK-8e54ea680f",
+    "queueId": "LANE-CODEX-LANE-TASK-03",
+    "status": "ready_for_worker_report",
+    "task": "consume_report_only_feedback",
+    "why": "Worker reports available from: agy, deepseek, glm52, kob."
+  },
+  "summary": {
+    "codexMayOpenNextLane": true,
+    "packetReady": true,
+    "providerCalls": 0,
+    "reports": 4,
+    "roleSignals": 4,
+    "safeReports": 4,
+    "status": "ready_for_codex_followup_brief"
+  },
+  "updatedAt": "2026-06-27T16:16:55+00:00"
+}

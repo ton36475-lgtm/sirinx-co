@@ -165,6 +165,45 @@ class GhostclawAgentRunnerTest(unittest.TestCase):
             self.assertEqual(result["output"]["handoff"]["next_owner"], "codex")
             self.assertIn("ghostclaw_runner/prompts/agy.md", result["prompt_source"])
 
+    def test_provider_call_requires_command_broker_lease(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-runner-provider-block-") as tmp:
+            runtime = Path(tmp)
+            inbox = runtime / "inbox" / "opus"
+            inbox.mkdir(parents=True)
+            task_path = inbox / "provider-task.json"
+            task_path.write_text(
+                json.dumps(
+                    {
+                        "task_id": "A2A2A-PROVIDER-BLOCK",
+                        "from_agent": "hermes",
+                        "to_agent": "opus",
+                        "goal": "This should not call a provider without a Command Broker lease.",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            exit_code = agent_runner.main(
+                [
+                    "--runtime-root",
+                    str(runtime),
+                    "--repo-root",
+                    str(REPO_ROOT),
+                    "--agent",
+                    "opus",
+                    "--once",
+                    "--execute",
+                    "--allow-provider-call",
+                ]
+            )
+
+            self.assertEqual(exit_code, 2)
+            self.assertTrue(task_path.exists())
+            self.assertFalse((runtime / "outbox" / "opus" / "A2A2A-PROVIDER-BLOCK.result.json").exists())
+            log_path = runtime / "logs" / "runner-events.jsonl"
+            self.assertTrue(log_path.exists())
+            self.assertIn("missing_provider_lease", log_path.read_text(encoding="utf-8"))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -149,6 +149,7 @@ def build_fixture(runtime_root: Path, limit: int) -> dict[str, Any]:
             "mission_control_reads_static_fixture_only",
             "no_browser_runtime_filesystem_access",
             "no_provider_call_by_default",
+            "provider_calls_require_command_broker_lease",
             "no_secret_read_or_print",
             "no_git_mutation",
             "no_push",

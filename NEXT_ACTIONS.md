@@ -863,8 +863,12 @@ configuration lane, then keep future entries concise and source-path based.
       using commit evidence from the validation queue commit.
 - [x] Stage and commit only the packet-listed A2A2A guard lane files after
       validation passes.
-- [ ] Open the next A2A2A implementation lane or convert the remaining
-      report-only worker packet into a Codex-readable follow-up brief.
+- [x] Convert the remaining report-only worker packet into a Codex-readable
+      follow-up brief at
+      `apps/mission-control/src/fixtures/a2a2aWorkerFollowupBrief.json`.
+- [ ] Open the next A2A2A implementation lane from
+      `a2a2aWorkerFollowupBrief.recommendedCodexFollowup` only after reviewing
+      its allowed paths, blocked actions, and validation plan.
 - [ ] Do not use `git add .`, deploy, push, connector sync, provider calls,
       secret reads, Docker starts, external repo clone/audit, or generated
       `web-sirinx` asset mutation from this lane.
@@ -902,6 +906,13 @@ checks. `apps/mission-control/src/fixtures/a2a2aTeamWorkPacketOutcome.json`
 then records `WORK-8371c88bef / stage_and_commit_scoped_lane` as complete from
 commit evidence. The regenerated packet board now has no remaining active Codex
 packet in the current implementation lane.
+
+The worker follow-up brief is now the bridge from report-only workers back to
+Codex. `apps/mission-control/src/fixtures/a2a2aWorkerFollowupBrief.json`
+summarizes GLM-5.2, DeepSeek, AGY, and KOB signals, verifies 0 provider calls,
+and exposes the next Codex-owned lane as
+`LANE_A2A2A_WORKER_FEEDBACK_CONSUMPTION`. Use that brief as the next lane input;
+do not let workers edit files, commit, call providers, or execute KOB commands.
 
 The first Codex-owned slice is now recorded as an outcome fixture. The next
 slice should come from the assignment board `immediateQueue`, while provider,

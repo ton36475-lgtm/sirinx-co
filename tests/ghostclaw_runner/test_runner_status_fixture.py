@@ -23,6 +23,7 @@ from scripts.a2a import a2a_team_work_packet_outcome
 from scripts.a2a import a2a_team_work_packet_validation
 from scripts.a2a import a2a_runner_dispatch_command
 from scripts.a2a import a2a_worker_report_digest
+from scripts.a2a import a2a_worker_followup_brief
 from scripts.a2a import a2a_handoff_router
 
 
@@ -79,6 +80,7 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertEqual(fixture["summary"]["overallStatus"], "ready_local_runner")
             self.assertEqual(fixture["latestResults"][0]["nextOwner"], "codex")
             self.assertIn("no_provider_call_by_default", fixture["policyBoundary"])
+            self.assertIn("provider_calls_require_command_broker_lease", fixture["policyBoundary"])
             self.assertTrue(fixture["lastRunnerSummary"]["watch"])
             self.assertEqual(fixture["lastRunnerSummary"]["cycles"], 2)
 
@@ -475,6 +477,84 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertIn("no_command_execution", fixture["policyBoundary"])
             self.assertIn("SECRET_TOKEN=<masked>", fixture["reports"][0]["goalPreview"])
             self.assertEqual(fixture["reports"][0]["nextOwner"], "codex")
+
+    def test_worker_followup_brief_converts_reports_to_codex_lane_input(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-worker-followup-") as tmp:
+            runtime = Path(tmp) / "runtime"
+            digest_path = Path(tmp) / "digest.json"
+            packets_path = Path(tmp) / "packets.json"
+            fixture_path = Path(tmp) / "followup.json"
+            digest_path.write_text(
+                json.dumps(
+                    {
+                        "summary": {
+                            "reports": 4,
+                            "workerReports": 3,
+                            "kobReports": 1,
+                            "providerCalls": 0,
+                            "safeReports": 4,
+                            "overallStatus": "ready_worker_reports",
+                        },
+                        "reports": [
+                            {
+                                "role": "glm52",
+                                "taskId": "A2A2A-GLM-REPORT",
+                                "status": "dry_run_completed",
+                                "nextOwner": "codex",
+                                "safeToDispatchLocally": True,
+                                "providerCall": False,
+                                "summary": "implementation hint",
+                                "plannedActions": ["propose patch only"],
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            packets_path.write_text(
+                json.dumps(
+                    {
+                        "packets": [
+                            {
+                                "packetId": "WORK-REPORT",
+                                "queueId": "LANE-CODEX-LANE-TASK-03",
+                                "owner": "glm52_deepseek_agy_kob",
+                                "ownerMode": "report_and_validate_only",
+                                "status": "ready_for_worker_report",
+                                "task": "consume_report_only_feedback",
+                                "why": "Worker reports available from: agy, deepseek, glm52, kob.",
+                                "acceptance": "No worker commits, provider calls, or command execution are required.",
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            exit_code = a2a_worker_followup_brief.main(
+                [
+                    "--runtime-root",
+                    str(runtime),
+                    "--digest-path",
+                    str(digest_path),
+                    "--packets-path",
+                    str(packets_path),
+                    "--fixture-path",
+                    str(fixture_path),
+                ]
+            )
+
+            self.assertEqual(exit_code, 0)
+            fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+            self.assertEqual(fixture["summary"]["status"], "ready_for_codex_followup_brief")
+            self.assertTrue(fixture["summary"]["codexMayOpenNextLane"])
+            self.assertEqual(fixture["summary"]["providerCalls"], 0)
+            self.assertEqual(fixture["sourcePacket"]["task"], "consume_report_only_feedback")
+            self.assertEqual(fixture["recommendedCodexFollowup"]["owner"], "codex")
+            self.assertIn("scripts/a2a/", fixture["recommendedCodexFollowup"]["allowedPaths"])
+            self.assertIn("worker_direct_commit", fixture["recommendedCodexFollowup"]["blockedActions"])
+            self.assertIn("worker_reports_are_inputs_not_repo_edits", fixture["policyBoundary"])
+            self.assertTrue((runtime / "worker_followup" / "latest.json").exists())
 
     def test_implementation_lane_packet_requires_plan_and_worker_reports(self) -> None:
         with tempfile.TemporaryDirectory(prefix="ghostclaw-implementation-packet-") as tmp:

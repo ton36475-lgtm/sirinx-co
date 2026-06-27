@@ -24,6 +24,7 @@ import a2a2aHandoffRouterFixture from "./fixtures/a2a2aHandoffRouter.json";
 import a2a2aDependencyReadinessFixture from "./fixtures/a2a2aDependencyReadiness.json";
 import a2a2aCodexBuildPlanFixture from "./fixtures/a2a2aCodexBuildPlan.json";
 import a2a2aWorkerReportDigestFixture from "./fixtures/a2a2aWorkerReportDigest.json";
+import a2a2aWorkerFollowupBriefFixture from "./fixtures/a2a2aWorkerFollowupBrief.json";
 import a2a2aImplementationLanePacketFixture from "./fixtures/a2a2aImplementationLanePacket.json";
 import a2a2aScopedPathGuardFixture from "./fixtures/a2a2aScopedPathGuard.json";
 import a2a2aCompletionAuditFixture from "./fixtures/a2a2aCompletionAudit.json";
@@ -750,6 +751,55 @@ type A2A2AWorkerReportDigestFixture = {
   nextSafeActions: string[];
 };
 
+type A2A2AWorkerFollowupBriefFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  sourceFixtures: Record<string, string>;
+  summary: {
+    status: string;
+    reports: number;
+    safeReports: number;
+    providerCalls: number;
+    roleSignals: number;
+    packetReady: boolean;
+    codexMayOpenNextLane: boolean;
+  };
+  sourcePacket: {
+    packetId: string;
+    queueId: string;
+    task: string;
+    owner: string;
+    ownerMode: string;
+    status: string;
+    why: string;
+    acceptance: string;
+  };
+  recommendedCodexFollowup: {
+    lane: string;
+    owner: string;
+    task: string;
+    allowedPaths: string[];
+    blockedActions: string[];
+    validationCommands: string[];
+    nextAction: string;
+  };
+  roleSignals: {
+    role: string;
+    taskId: string;
+    status: string;
+    nextOwner: string;
+    safeToDispatchLocally: boolean;
+    providerCall: boolean;
+    summary: string;
+    plannedActions: string[];
+  }[];
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type A2A2AImplementationLanePacketFixture = {
   updatedAt: string;
   mode: string;
@@ -1307,6 +1357,8 @@ const a2a2aCodexBuildPlan =
   a2a2aCodexBuildPlanFixture as A2A2ACodexBuildPlanFixture;
 const a2a2aWorkerReportDigest =
   a2a2aWorkerReportDigestFixture as A2A2AWorkerReportDigestFixture;
+const a2a2aWorkerFollowupBrief =
+  a2a2aWorkerFollowupBriefFixture as A2A2AWorkerFollowupBriefFixture;
 const a2a2aImplementationLanePacket =
   a2a2aImplementationLanePacketFixture as A2A2AImplementationLanePacketFixture;
 const a2a2aScopedPathGuard =
@@ -3964,6 +4016,232 @@ export default function App() {
                         </code>
                       </div>
                     </div>
+                  </section>
+                </div>
+              </div>
+
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>A2A2A Worker Follow-up Brief</span>
+                  <span
+                    className={
+                      a2a2aWorkerFollowupBrief.summary.codexMayOpenNextLane
+                        ? "accent-emerald"
+                        : "accent-rose"
+                    }
+                  >
+                    {a2a2aWorkerFollowupBrief.summary.status}
+                  </span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Reports</span>
+                    <strong>{a2a2aWorkerFollowupBrief.summary.reports}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Safe</span>
+                    <strong>
+                      {a2a2aWorkerFollowupBrief.summary.safeReports}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Providers</span>
+                    <strong>
+                      {a2a2aWorkerFollowupBrief.summary.providerCalls}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Signals</span>
+                    <strong>
+                      {a2a2aWorkerFollowupBrief.summary.roleSignals}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Packet</span>
+                    <strong>
+                      {a2a2aWorkerFollowupBrief.summary.packetReady
+                        ? "READY"
+                        : "MISSING"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Codex Lane</span>
+                    <strong>
+                      {a2a2aWorkerFollowupBrief.summary.codexMayOpenNextLane
+                        ? "OPEN"
+                        : "BLOCK"}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Source Packet</span>
+                  <code>{a2a2aWorkerFollowupBrief.sourcePacket.packetId}</code>
+                  <span>Queue</span>
+                  <code>{a2a2aWorkerFollowupBrief.sourcePacket.queueId}</code>
+                  <span>Lane</span>
+                  <code>
+                    {a2a2aWorkerFollowupBrief.recommendedCodexFollowup.lane}
+                  </code>
+                  <span>Runtime Report</span>
+                  <code>{a2a2aWorkerFollowupBrief.runtimeReportPath}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  {a2a2aWorkerFollowupBrief.sourcePacket.why} Acceptance:{" "}
+                  {a2a2aWorkerFollowupBrief.sourcePacket.acceptance}
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A worker follow-up recommended Codex lane"
+                  >
+                    <div className="git-section-title">
+                      <span>Recommended Codex Follow-up</span>
+                      <span className="approval-badge">
+                        {
+                          a2a2aWorkerFollowupBrief.recommendedCodexFollowup
+                            .owner
+                        }
+                      </span>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span className="practice-status payload-ready">
+                        next
+                      </span>
+                      <div>
+                        <strong>
+                          {
+                            a2a2aWorkerFollowupBrief.recommendedCodexFollowup
+                              .task
+                          }
+                        </strong>
+                        <p>
+                          {
+                            a2a2aWorkerFollowupBrief.recommendedCodexFollowup
+                              .nextAction
+                          }
+                        </p>
+                        <code>
+                          {a2a2aWorkerFollowupBrief.recommendedCodexFollowup.allowedPaths.join(
+                            ", ",
+                          )}
+                        </code>
+                      </div>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span className="practice-status payload-blocked">
+                        guard
+                      </span>
+                      <div>
+                        <strong>Still blocked</strong>
+                        <p>
+                          Worker reports are inputs only. Codex remains the Git
+                          owner.
+                        </p>
+                        <code>
+                          {a2a2aWorkerFollowupBrief.recommendedCodexFollowup.blockedActions.join(
+                            ", ",
+                          )}
+                        </code>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A worker follow-up role signals"
+                  >
+                    <div className="git-section-title">
+                      <span>Role Signals</span>
+                      <span className="approval-badge">
+                        {a2a2aWorkerFollowupBrief.roleSignals.length}
+                      </span>
+                    </div>
+                    {a2a2aWorkerFollowupBrief.roleSignals
+                      .slice(0, 6)
+                      .map((signal) => (
+                        <div
+                          className="practice-artifact-row"
+                          key={`${signal.role}-${signal.taskId}`}
+                        >
+                          <span
+                            className={`practice-status ${
+                              signal.providerCall
+                                ? "payload-blocked"
+                                : signal.safeToDispatchLocally
+                                  ? "payload-ready"
+                                  : "payload-warn"
+                            }`}
+                          >
+                            {signal.role}
+                          </span>
+                          <div>
+                            <strong>
+                              {signal.status} → {signal.nextOwner || "none"}
+                            </strong>
+                            <p>{signal.summary}</p>
+                            <code>
+                              {signal.plannedActions.join(", ") ||
+                                "report-only handoff"}
+                            </code>
+                          </div>
+                        </div>
+                      ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A worker follow-up validation commands"
+                  >
+                    <div className="git-section-title">
+                      <span>Validation Plan</span>
+                      <span className="approval-badge">
+                        {
+                          a2a2aWorkerFollowupBrief.recommendedCodexFollowup
+                            .validationCommands.length
+                        }
+                      </span>
+                    </div>
+                    {a2a2aWorkerFollowupBrief.recommendedCodexFollowup.validationCommands.map(
+                      (command) => (
+                        <div className="practice-artifact-row" key={command}>
+                          <span className="practice-status payload-ready">
+                            check
+                          </span>
+                          <div>
+                            <strong>Scoped validation</strong>
+                            <p>Run only after Codex opens the next lane.</p>
+                            <code>{command}</code>
+                          </div>
+                        </div>
+                      ),
+                    )}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A worker follow-up policy"
+                  >
+                    <div className="git-section-title">
+                      <span>Policy Boundary</span>
+                      <span className="approval-badge">
+                        {a2a2aWorkerFollowupBrief.policyBoundary.length}
+                      </span>
+                    </div>
+                    {a2a2aWorkerFollowupBrief.policyBoundary.map((item) => (
+                      <div className="practice-artifact-row" key={item}>
+                        <span className="practice-status payload-ready">
+                          policy
+                        </span>
+                        <div>
+                          <strong>{item}</strong>
+                          <p>Fixture-only Mission Control evidence.</p>
+                        </div>
+                      </div>
+                    ))}
                   </section>
                 </div>
               </div>

@@ -6,9 +6,7 @@
     "mode": "dry-run",
     "processed": 1,
     "providerCallAllowed": false,
-    "rolesChecked": [
-      "agy"
-    ],
+    "rolesChecked": ["agy"],
     "watch": false
   },
   "latestResults": [
@@ -115,6 +113,7 @@
     "mission_control_reads_static_fixture_only",
     "no_browser_runtime_filesystem_access",
     "no_provider_call_by_default",
+    "provider_calls_require_command_broker_lease",
     "no_secret_read_or_print",
     "no_git_mutation",
     "no_push",
@@ -186,5 +185,5 @@
     "roles": 6,
     "running": 0
   },
-  "updatedAt": "2026-06-27T12:46:42+00:00"
+  "updatedAt": "2026-06-27T16:06:40+00:00"
 }

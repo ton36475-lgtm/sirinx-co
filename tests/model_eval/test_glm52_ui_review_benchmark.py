@@ -9,7 +9,6 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPT_PATH = REPO_ROOT / "scripts" / "model_eval" / "glm52_ui_review_benchmark.py"
-PACKET_PATH = REPO_ROOT / "apps" / "mission-control" / "src" / "fixtures" / "a2a2aNextScopedCodingPacket.json"
 
 
 def load_module():
@@ -20,10 +19,34 @@ def load_module():
     return module
 
 
+def backlog_092_packet() -> dict:
+    return {
+        "summary": {
+            "status": "ready_for_scoped_coding_packet",
+            "selectedBacklogId": "BACKLOG-092",
+            "providerCallsAllowed": False,
+            "workerDirectEditsAllowed": False,
+            "gitAddDotAllowed": False,
+        },
+        "packet": {
+            "packetId": "SCOPED-CODING-420bddf8b5",
+            "selectedBacklogId": "BACKLOG-092",
+            "status": "ready_for_scoped_coding",
+            "owner": "codex",
+            "ownerMode": "scoped_repo_edit",
+            "task": "Run GLM-5.2 frontend/UI review benchmark.",
+            "executionAllowed": True,
+            "providerCallsAllowed": False,
+            "workerDirectEditsAllowed": False,
+            "gitAddDotAllowed": False,
+        },
+    }
+
+
 class GLM52UiReviewBenchmarkTest(unittest.TestCase):
     def test_builds_local_status_from_scoped_packet_without_provider_call(self) -> None:
         module = load_module()
-        packet = json.loads(PACKET_PATH.read_text(encoding="utf-8"))
+        packet = backlog_092_packet()
         with tempfile.TemporaryDirectory() as tmp:
             runtime_root = Path(tmp) / "runtime"
             status = module.build_status(packet, runtime_root)
@@ -44,7 +67,7 @@ class GLM52UiReviewBenchmarkTest(unittest.TestCase):
 
     def test_writes_runtime_and_fixture_outputs(self) -> None:
         module = load_module()
-        packet = json.loads(PACKET_PATH.read_text(encoding="utf-8"))
+        packet = backlog_092_packet()
         with tempfile.TemporaryDirectory() as tmp:
             runtime_root = Path(tmp) / "runtime"
             fixture_path = Path(tmp) / "fixture.json"

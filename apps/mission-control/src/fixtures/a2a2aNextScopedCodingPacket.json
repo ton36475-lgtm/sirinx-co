@@ -1,4 +1,5 @@
 {
+  "completedBacklogIds": ["BACKLOG-092"],
   "generatedBy": "scripts/a2a/a2a_next_scoped_coding_packet.py",
   "mode": "read_only_next_scoped_coding_packet",
   "nextSafeActions": [
@@ -15,11 +16,11 @@
       "stage_packet_files_after_validation"
     ],
     "allowedPaths": [
-      "scripts/model_eval/",
-      "tests/model_eval/",
+      "scripts/a2a/",
+      "tests/ghostclaw_runner/",
       "apps/mission-control/src/fixtures/",
       "apps/mission-control/src/App.tsx",
-      "docs/model-evals/",
+      "docs/marketing_automation/",
       "PROJECT_STATE.md",
       "NEXT_ACTIONS.md"
     ],
@@ -35,32 +36,32 @@
       "public_benchmark_claim_without_local_evidence"
     ],
     "businessLogicEditsAllowed": false,
-    "createdAt": "2026-06-27T17:17:06+00:00",
+    "createdAt": "2026-06-27T18:00:42+00:00",
     "executionAllowed": true,
     "gitAddDotAllowed": false,
     "owner": "codex",
     "ownerMode": "scoped_repo_edit",
-    "packetId": "SCOPED-CODING-420bddf8b5",
+    "packetId": "SCOPED-CODING-c2e91f53d3",
     "plannedFiles": [
-      "scripts/model_eval/glm52_ui_review_benchmark.py",
-      "tests/model_eval/test_glm52_ui_review_benchmark.py",
-      "apps/mission-control/src/fixtures/glm52UiBenchmarkStatus.json",
+      "scripts/a2a/a2a_campaign_pack_browser_status.py",
+      "tests/ghostclaw_runner/test_runner_status_fixture.py",
+      "apps/mission-control/src/fixtures/campaignPackBrowserStatus.json",
       "apps/mission-control/src/App.tsx",
-      "docs/model-evals/GLM52_UI_REVIEW_BENCHMARK.md",
+      "docs/marketing_automation/FACEBOOK_AI_CONTENT_FACTORY_WORKFLOW.md",
       "PROJECT_STATE.md",
       "NEXT_ACTIONS.md"
     ],
     "providerCallsAllowed": false,
-    "selectedBacklogId": "BACKLOG-092",
+    "selectedBacklogId": "BACKLOG-096",
     "sourceStartPacketId": "TEAM-CODING-START-895c61d94d",
     "status": "ready_for_scoped_coding",
-    "task": "Run GLM-5.2 frontend/UI review benchmark on a small Mission Control or AGM AUTOGLOW UI excerpt.",
+    "task": "Add optional UI panel in Mission Control to browse local campaign packs.",
     "validationCommands": [
-      "python3 -m py_compile scripts/model_eval/glm52_ui_review_benchmark.py tests/model_eval/test_glm52_ui_review_benchmark.py",
-      "python3 -m unittest tests.model_eval.test_glm52_ui_review_benchmark",
+      "python3 -m py_compile scripts/a2a/a2a_campaign_pack_browser_status.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+      "python3 -m unittest tests.ghostclaw_runner.test_runner_status_fixture.A2A2ARunnerStatusFixtureTest.test_campaign_pack_browser_status_builds_read_only_fixture",
       "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
-      "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/model-evals/GLM52_UI_REVIEW_BENCHMARK.md PROJECT_STATE.md NEXT_ACTIONS.md",
-      "git diff --check -- scripts/model_eval tests/model_eval apps/mission-control/src/fixtures apps/mission-control/src/App.tsx docs/model-evals PROJECT_STATE.md NEXT_ACTIONS.md"
+      "pnpm exec prettier --check apps/mission-control/src/App.tsx apps/mission-control/src/fixtures/campaignPackBrowserStatus.json docs/marketing_automation/FACEBOOK_AI_CONTENT_FACTORY_WORKFLOW.md PROJECT_STATE.md NEXT_ACTIONS.md",
+      "git diff --check -- scripts/a2a/a2a_campaign_pack_browser_status.py tests/ghostclaw_runner/test_runner_status_fixture.py apps/mission-control/src/fixtures/campaignPackBrowserStatus.json apps/mission-control/src/App.tsx docs/marketing_automation/FACEBOOK_AI_CONTENT_FACTORY_WORKFLOW.md PROJECT_STATE.md NEXT_ACTIONS.md"
     ],
     "why": "Codex may inspect and prepare scoped local edits after validation.",
     "workerDirectEditsAllowed": false,
@@ -96,15 +97,16 @@
     "no_git_add_dot",
     "no_generated_web_sirinx_asset_mutation"
   ],
+  "requestedBacklogId": "BACKLOG-092",
   "runtimeReportPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/next_scoped_coding_packets/latest.json",
   "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
   "selectedBacklogItem": {
-    "id": "BACKLOG-092",
+    "id": "BACKLOG-096",
     "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
     "owner": "codex",
     "priority": 1,
     "source": "a2a2aBacklogPriority.topItems",
-    "task": "Run GLM-5.2 frontend/UI review benchmark on a small Mission Control or AGM AUTOGLOW UI excerpt."
+    "task": "Add optional UI panel in Mission Control to browse local campaign packs."
   },
   "summary": {
     "businessLogicEditsAllowed": false,
@@ -112,11 +114,11 @@
     "gitAddDotAllowed": false,
     "plannedFiles": 7,
     "providerCallsAllowed": false,
-    "selectedBacklogId": "BACKLOG-092",
+    "selectedBacklogId": "BACKLOG-096",
     "status": "ready_for_scoped_coding_packet",
     "validationCommands": 5,
     "workerDirectEditsAllowed": false,
     "workerInputs": 3
   },
-  "updatedAt": "2026-06-27T17:17:06+00:00"
+  "updatedAt": "2026-06-27T18:00:42+00:00"
 }

@@ -411,6 +411,8 @@ python3 scripts/a2a/a2a_next_scoped_coding_packet.py \
 This reads:
 
 - `apps/mission-control/src/fixtures/a2a2aTeamCodingStartPacket.json`
+- `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacketOutcome.json`
+  when present, so already completed scoped backlog items are skipped.
 
 It writes:
 
@@ -420,9 +422,12 @@ It writes:
   `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacket.json`
 
 The packet records the selected backlog item, owner, planned files, validation
-commands, worker inputs, and blocked actions. For the current team start packet
-it selects `BACKLOG-092`, a GLM-5.2 UI review benchmark slice, and limits Codex
-to the packet-listed local files. GLM-5.2 and AGY remain report-only until a
+commands, worker inputs, and blocked actions. If the selected backlog item is
+already present in the completed scoped outcome ledger, the generator selects
+the next Codex-owned ready queue item that is not a screenshot/capture-only
+task. In the current queue it advances from completed `BACKLOG-092` to
+`BACKLOG-096`, opening `SCOPED-CODING-c2e91f53d3` for the local Mission Control
+campaign-pack browse panel slice. GLM-5.2 and AGY remain report-only until a
 provider lease exists, KOB remains validate-only, and provider calls, connector
 sync, deploy, push, secret reads, `git add .`, generated `web-sirinx` asset
 mutation, and broad business logic edits stay blocked.

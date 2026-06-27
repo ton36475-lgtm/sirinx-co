@@ -1000,6 +1000,14 @@ records `packet_completed` for `SCOPED-CODING-420bddf8b5` with commit evidence
 step is to open another fresh scoped Codex packet from the ready queue, not to
 let workers edit files directly.
 
+The next scoped coding packet generator now advances past completed backlog
+items. `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacket.json`
+requested `BACKLOG-092`, detected it in the completed outcome ledger, and
+opened `SCOPED-CODING-c2e91f53d3` for `BACKLOG-096`: "Add optional UI panel in
+Mission Control to browse local campaign packs." This keeps the team coding
+queue moving without provider calls, connector sync, deploy, push, generated
+asset mutation, worker direct edits, or `git add .`.
+
 The first Codex-owned slice is now recorded as an outcome fixture. The next
 slice should come from the assignment board `immediateQueue`, while provider,
 connector, deploy, generated asset, and external runtime lanes stay blocked.

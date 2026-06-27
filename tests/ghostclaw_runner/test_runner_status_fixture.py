@@ -867,6 +867,69 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertIn("provider_calls_require_command_broker_lease", fixture["policyBoundary"])
             self.assertTrue(Path(fixture["runtimeReportPath"]).exists())
 
+    def test_next_scoped_coding_packet_skips_completed_backlog_item(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-next-scoped-coding-skip-") as tmp:
+            runtime = Path(tmp) / "runtime"
+            start_packet = {
+                "summary": {
+                    "status": "ready_for_team_coding",
+                    "providerCallsAllowed": False,
+                    "workerDirectEditsAllowed": False,
+                    "gitAddDotAllowed": False,
+                },
+                "codexStartPacket": {
+                    "packetId": "TEAM-CODING-START-TEST",
+                    "selectedBacklogId": "BACKLOG-092",
+                    "selectedBacklogOwner": "codex",
+                    "status": "ready_for_scoped_packet_creation",
+                    "blockedActions": ["provider_call_without_command_broker_lease"],
+                    "allowedPathsForPacketAuthoring": ["scripts/a2a/"],
+                },
+                "priorityQueue": [
+                    {
+                        "id": "BACKLOG-092",
+                        "owner": "codex",
+                        "priority": 1,
+                        "task": "Run GLM-5.2 frontend/UI review benchmark.",
+                        "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+                    },
+                    {
+                        "id": "BACKLOG-096",
+                        "owner": "codex",
+                        "priority": 1,
+                        "task": "Add optional UI panel in Mission Control to browse local campaign packs.",
+                        "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+                    },
+                ],
+            }
+            completed_outcome = {
+                "summary": {
+                    "status": "packet_completed",
+                    "selectedBacklogId": "BACKLOG-092",
+                    "selectedPacketId": "SCOPED-CODING-420bddf8b5",
+                    "validationStatus": "passed",
+                    "validationFailed": 0,
+                }
+            }
+
+            fixture = a2a_next_scoped_coding_packet.build_packet(
+                start_packet,
+                runtime,
+                completed_outcomes=[completed_outcome],
+            )
+
+            self.assertEqual(fixture["summary"]["status"], "ready_for_scoped_coding_packet")
+            self.assertEqual(fixture["summary"]["selectedBacklogId"], "BACKLOG-096")
+            self.assertEqual(fixture["packet"]["selectedBacklogId"], "BACKLOG-096")
+            self.assertEqual(fixture["packet"]["task"], "Add optional UI panel in Mission Control to browse local campaign packs.")
+            self.assertIn("BACKLOG-092", fixture["completedBacklogIds"])
+            self.assertIn("scripts/a2a/a2a_campaign_pack_browser_status.py", fixture["packet"]["plannedFiles"])
+            self.assertIn("docs/marketing_automation/", fixture["packet"]["allowedPaths"])
+            self.assertIn(
+                "python3 -m py_compile scripts/a2a/a2a_campaign_pack_browser_status.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+                fixture["packet"]["validationCommands"],
+            )
+
     def test_implementation_lane_packet_requires_plan_and_worker_reports(self) -> None:
         with tempfile.TemporaryDirectory(prefix="ghostclaw-implementation-packet-") as tmp:
             runtime = Path(tmp) / "runtime"

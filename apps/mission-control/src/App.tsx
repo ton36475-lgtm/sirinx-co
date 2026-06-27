@@ -29,6 +29,7 @@ import a2a2aWorkerFollowupLaneFixture from "./fixtures/a2a2aWorkerFollowupLane.j
 import a2a2aWorkerFollowupImplementationPacketFixture from "./fixtures/a2a2aWorkerFollowupImplementationPacket.json";
 import a2a2aWorkerFollowupPacketValidationFixture from "./fixtures/a2a2aWorkerFollowupPacketValidation.json";
 import a2a2aWorkerFollowupPacketOutcomeFixture from "./fixtures/a2a2aWorkerFollowupPacketOutcome.json";
+import a2a2aTeamCodingStartPacketFixture from "./fixtures/a2a2aTeamCodingStartPacket.json";
 import a2a2aImplementationLanePacketFixture from "./fixtures/a2a2aImplementationLanePacket.json";
 import a2a2aScopedPathGuardFixture from "./fixtures/a2a2aScopedPathGuard.json";
 import a2a2aCompletionAuditFixture from "./fixtures/a2a2aCompletionAudit.json";
@@ -957,6 +958,60 @@ type A2A2AWorkerFollowupPacketOutcomeFixture = {
   nextSafeActions: string[];
 };
 
+type A2A2ATeamCodingStartPacketFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  summary: {
+    status: string;
+    sourceOutcomeStatus: string;
+    sourceOutcomeValidation: string;
+    readyQueueItems: number;
+    blockedGates: number;
+    roles: number;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    gitAddDotAllowed: boolean;
+    businessLogicEditsAllowed: boolean;
+  };
+  codexStartPacket: {
+    packetId: string;
+    status: string;
+    owner: string;
+    ownerMode: string;
+    sourceOutcomePacketId: string;
+    sourceOutcomeStatus: string;
+    selectedBacklogId: string;
+    selectedBacklogOwner: string;
+    task: string;
+    why: string;
+    acceptance: string;
+    allowedActions: string[];
+    blockedActions: string[];
+    allowedPathsForPacketAuthoring: string[];
+    validationCommands: string[];
+  };
+  priorityQueue: {
+    id: string;
+    priority: number;
+    owner: string;
+    task: string;
+    nextAction: string;
+    source: string;
+  }[];
+  roleMap: {
+    role: string;
+    title: string;
+    responsibility: string;
+    currentAction: string;
+    editRights: string;
+  }[];
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type A2A2AImplementationLanePacketFixture = {
   updatedAt: string;
   mode: string;
@@ -1524,6 +1579,8 @@ const a2a2aWorkerFollowupPacketValidation =
   a2a2aWorkerFollowupPacketValidationFixture as A2A2AWorkerFollowupPacketValidationFixture;
 const a2a2aWorkerFollowupPacketOutcome =
   a2a2aWorkerFollowupPacketOutcomeFixture as A2A2AWorkerFollowupPacketOutcomeFixture;
+const a2a2aTeamCodingStartPacket =
+  a2a2aTeamCodingStartPacketFixture as A2A2ATeamCodingStartPacketFixture;
 const a2a2aImplementationLanePacket =
   a2a2aImplementationLanePacketFixture as A2A2AImplementationLanePacketFixture;
 const a2a2aScopedPathGuard =
@@ -4570,6 +4627,208 @@ export default function App() {
                         </div>
                       </div>
                     ))}
+                  </section>
+                </div>
+              </div>
+
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>A2A2A Team Coding Start</span>
+                  <span
+                    className={
+                      a2a2aTeamCodingStartPacket.summary.status ===
+                      "ready_for_team_coding"
+                        ? "accent-emerald"
+                        : "accent-rose"
+                    }
+                  >
+                    {a2a2aTeamCodingStartPacket.summary.status}
+                  </span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Ready Queue</span>
+                    <strong>
+                      {a2a2aTeamCodingStartPacket.summary.readyQueueItems}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Roles</span>
+                    <strong>{a2a2aTeamCodingStartPacket.summary.roles}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Blocked Gates</span>
+                    <strong>
+                      {a2a2aTeamCodingStartPacket.summary.blockedGates}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Outcome</span>
+                    <strong>
+                      {a2a2aTeamCodingStartPacket.summary.sourceOutcomeStatus}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Provider</span>
+                    <strong>
+                      {a2a2aTeamCodingStartPacket.summary.providerCallsAllowed
+                        ? "OPEN"
+                        : "BLOCK"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Business Edit</span>
+                    <strong>
+                      {a2a2aTeamCodingStartPacket.summary
+                        .businessLogicEditsAllowed
+                        ? "OPEN"
+                        : "PACKET"}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Start Packet</span>
+                  <code>
+                    {a2a2aTeamCodingStartPacket.codexStartPacket.packetId}
+                  </code>
+                  <span>Selected Backlog</span>
+                  <code>
+                    {
+                      a2a2aTeamCodingStartPacket.codexStartPacket
+                        .selectedBacklogId
+                    }
+                  </code>
+                  <span>Owner</span>
+                  <code>
+                    {
+                      a2a2aTeamCodingStartPacket.codexStartPacket
+                        .selectedBacklogOwner
+                    }
+                  </code>
+                  <span>Runtime</span>
+                  <code>{a2a2aTeamCodingStartPacket.runtimeReportPath}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  {a2a2aTeamCodingStartPacket.codexStartPacket.why} Acceptance:{" "}
+                  {a2a2aTeamCodingStartPacket.codexStartPacket.acceptance}
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A team coding start priority queue"
+                  >
+                    <div className="git-section-title">
+                      <span>Priority Queue</span>
+                      <span className="approval-badge">
+                        {a2a2aTeamCodingStartPacket.priorityQueue.length}
+                      </span>
+                    </div>
+                    {a2a2aTeamCodingStartPacket.priorityQueue
+                      .slice(0, 6)
+                      .map((item) => (
+                        <div className="practice-artifact-row" key={item.id}>
+                          <span
+                            className={`practice-status ${
+                              item.owner === "codex"
+                                ? "payload-ready"
+                                : "payload-warn"
+                            }`}
+                          >
+                            P{item.priority}
+                          </span>
+                          <div>
+                            <strong>
+                              {item.id} · {item.owner}
+                            </strong>
+                            <p>{item.task}</p>
+                            <code>{item.nextAction}</code>
+                          </div>
+                        </div>
+                      ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A team coding start role map"
+                  >
+                    <div className="git-section-title">
+                      <span>Role Map</span>
+                      <span className="approval-badge">
+                        {a2a2aTeamCodingStartPacket.roleMap.length}
+                      </span>
+                    </div>
+                    {a2a2aTeamCodingStartPacket.roleMap
+                      .slice(0, 8)
+                      .map((role) => (
+                        <div className="practice-artifact-row" key={role.role}>
+                          <span
+                            className={`practice-status ${
+                              role.role === "codex"
+                                ? "payload-ready"
+                                : role.editRights.includes("none")
+                                  ? "payload-blocked"
+                                  : "payload-warn"
+                            }`}
+                          >
+                            {role.role}
+                          </span>
+                          <div>
+                            <strong>{role.title}</strong>
+                            <p>{role.currentAction}</p>
+                            <code>{role.editRights}</code>
+                          </div>
+                        </div>
+                      ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A team coding start policy"
+                  >
+                    <div className="git-section-title">
+                      <span>Start Policy</span>
+                      <span className="approval-badge">
+                        {
+                          a2a2aTeamCodingStartPacket.codexStartPacket
+                            .blockedActions.length
+                        }
+                      </span>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span className="practice-status payload-ready">
+                        allowed
+                      </span>
+                      <div>
+                        <strong>Packet authoring scope</strong>
+                        <p>Codex defines a fresh scoped packet first.</p>
+                        <code>
+                          {a2a2aTeamCodingStartPacket.codexStartPacket.allowedPathsForPacketAuthoring.join(
+                            ", ",
+                          )}
+                        </code>
+                      </div>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span className="practice-status payload-blocked">
+                        blocked
+                      </span>
+                      <div>
+                        <strong>No broad execution</strong>
+                        <p>
+                          Business logic edits wait for a new scoped packet and
+                          validation.
+                        </p>
+                        <code>
+                          {a2a2aTeamCodingStartPacket.codexStartPacket.blockedActions.join(
+                            ", ",
+                          )}
+                        </code>
+                      </div>
+                    </div>
                   </section>
                 </div>
               </div>

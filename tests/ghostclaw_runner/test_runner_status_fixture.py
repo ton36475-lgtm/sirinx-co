@@ -28,6 +28,7 @@ from scripts.a2a import a2a_worker_followup_lane
 from scripts.a2a import a2a_worker_followup_implementation_packet
 from scripts.a2a import a2a_worker_followup_packet_validation
 from scripts.a2a import a2a_worker_followup_packet_outcome
+from scripts.a2a import a2a_team_coding_start_packet
 from scripts.a2a import a2a_handoff_router
 
 
@@ -751,6 +752,73 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertFalse(fixture["summary"]["providerCallsAllowed"])
             self.assertFalse(fixture["summary"]["workerDirectEditsAllowed"])
             self.assertFalse(fixture["summary"]["gitAddDotAllowed"])
+            self.assertTrue(Path(fixture["runtimeReportPath"]).exists())
+
+    def test_team_coding_start_packet_requires_completed_worker_outcome(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-team-coding-start-") as tmp:
+            runtime = Path(tmp) / "runtime"
+            outcome = {
+                "summary": {
+                    "status": "packet_completed",
+                    "selectedPacketId": "FOLLOWUP-PACKET-TEST",
+                    "validationStatus": "passed",
+                    "validationFailed": 0,
+                    "providerCallsAllowed": False,
+                    "workerDirectEditsAllowed": False,
+                    "gitAddDotAllowed": False,
+                }
+            }
+            backlog = {
+                "summary": {"readyForReview": 2, "blocked": 1},
+                "topItems": [
+                    {
+                        "id": "BACKLOG-001",
+                        "priority": 1,
+                        "status": "ready_for_review",
+                        "owner": "codex",
+                        "task": "Create the next scoped coding packet",
+                        "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+                    },
+                    {
+                        "id": "BACKLOG-002",
+                        "priority": 1,
+                        "status": "ready_for_review",
+                        "owner": "hermes",
+                        "task": "Classify remaining gates",
+                        "nextAction": "Hermes should classify before Codex edits.",
+                    },
+                ],
+                "blockedGates": [{"id": "BLOCKED-001", "task": "Deploy later"}],
+            }
+            assignment = {
+                "summary": {"roles": 7},
+                "roles": [
+                    {
+                        "role": "codex",
+                        "title": "Build Captain",
+                        "responsibility": "Own scoped repo edits.",
+                        "currentAction": "Prepare next packet.",
+                        "editRights": "scoped_repo_editor",
+                    }
+                ],
+            }
+
+            fixture = a2a_team_coding_start_packet.build_packet(
+                outcome,
+                backlog,
+                assignment,
+                runtime,
+            )
+
+            self.assertEqual(fixture["summary"]["status"], "ready_for_team_coding")
+            self.assertEqual(fixture["summary"]["sourceOutcomeStatus"], "packet_completed")
+            self.assertEqual(fixture["summary"]["readyQueueItems"], 2)
+            self.assertEqual(fixture["summary"]["blockedGates"], 1)
+            self.assertFalse(fixture["summary"]["providerCallsAllowed"])
+            self.assertFalse(fixture["summary"]["workerDirectEditsAllowed"])
+            self.assertFalse(fixture["summary"]["gitAddDotAllowed"])
+            self.assertEqual(fixture["codexStartPacket"]["owner"], "codex")
+            self.assertEqual(fixture["priorityQueue"][0]["id"], "BACKLOG-001")
             self.assertTrue(Path(fixture["runtimeReportPath"]).exists())
 
     def test_implementation_lane_packet_requires_plan_and_worker_reports(self) -> None:

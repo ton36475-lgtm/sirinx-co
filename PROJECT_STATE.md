@@ -1253,3 +1253,11 @@ implement_next_scoped_a2a2a_sync_slice` as `packet_completed` with validation
   `9dda990 feat(a2a2a): add worker follow-up implementation packet`. Its
   runtime report is
   `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup_packet_outcomes/latest.json`.
+- Current team coding start evidence:
+  `apps/mission-control/src/fixtures/a2a2aTeamCodingStartPacket.json` records
+  `ready_for_team_coding` after the worker follow-up outcome is completed. It
+  selects `BACKLOG-092` as the next Codex-owned coding candidate, exposes 8
+  ready queue items and 8 role mappings, and keeps provider calls, worker
+  direct edits, business logic edits without a fresh packet, and
+  `gitAddDotAllowed` blocked. Its runtime report is
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/team_coding_start_packets/latest.json`.

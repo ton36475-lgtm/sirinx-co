@@ -1,0 +1,210 @@
+{
+  "codexStartPacket": {
+    "acceptance": "Create a fresh scoped packet for the selected queue item before editing business code.",
+    "allowedActions": [
+      "inspect_priority_queue",
+      "create_scoped_packet",
+      "define_allowed_paths",
+      "define_validation_commands",
+      "keep_workers_report_only"
+    ],
+    "allowedPathsForPacketAuthoring": [
+      "scripts/a2a/",
+      "apps/mission-control/src/fixtures/",
+      "apps/mission-control/src/App.tsx",
+      "docs/a2async/",
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md",
+      "tests/ghostclaw_runner/"
+    ],
+    "blockedActions": [
+      "provider_call_without_command_broker_lease",
+      "connector_sync",
+      "deploy",
+      "push",
+      "secret_read_or_print",
+      "git_add_dot",
+      "worker_direct_commit",
+      "generated_web_sirinx_asset_mutation",
+      "business_logic_edit_without_fresh_packet"
+    ],
+    "owner": "codex",
+    "ownerMode": "scoped_packet_author",
+    "packetId": "TEAM-CODING-START-895c61d94d",
+    "selectedBacklogId": "BACKLOG-092",
+    "selectedBacklogOwner": "codex",
+    "sourceOutcomePacketId": "FOLLOWUP-PACKET-1f1dc503cc",
+    "sourceOutcomeStatus": "packet_completed",
+    "status": "ready_for_scoped_packet_creation",
+    "task": "create_next_scoped_codex_coding_packet",
+    "validationCommands": [
+      "python3 -m unittest tests.ghostclaw_runner.test_runner_status_fixture",
+      "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+      "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md PROJECT_STATE.md NEXT_ACTIONS.md",
+      "git diff --check -- scripts/a2a tests/ghostclaw_runner apps/mission-control/src/fixtures apps/mission-control/src/App.tsx docs/a2async PROJECT_STATE.md NEXT_ACTIONS.md"
+    ],
+    "why": "The report-only worker feedback cycle is closed; Codex can open the next smallest coding packet."
+  },
+  "generatedBy": "scripts/a2a/a2a_team_coding_start_packet.py",
+  "mode": "read_only_team_coding_start_packet",
+  "nextSafeActions": [
+    "Codex creates a fresh scoped implementation packet for the selected backlog item.",
+    "Hermes keeps blocked gates separate from ready coding work.",
+    "Workers may produce reports only after Codex defines the scoped packet."
+  ],
+  "policyBoundary": [
+    "read_only_team_coding_start_packet",
+    "codex_creates_fresh_scoped_packet_before_business_edits",
+    "hermes_classifies_dependency_and_gate_order",
+    "opus_architecture_before_build",
+    "glm52_deepseek_agy_report_only",
+    "kob_validate_only",
+    "mission_control_read_only",
+    "no_provider_call",
+    "no_connector_sync",
+    "no_deploy",
+    "no_push",
+    "no_secret_read_or_print",
+    "no_git_add_dot",
+    "no_generated_web_sirinx_asset_mutation"
+  ],
+  "priorityQueue": [
+    {
+      "id": "BACKLOG-004",
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 1,
+      "source": "a2a2aBacklogPriority.topItems",
+      "task": "Capture Mission Control `Git Evidence` tab screenshot as evidence"
+    },
+    {
+      "id": "BACKLOG-071",
+      "nextAction": "Hermes should classify the gate and update policy/state docs first.",
+      "owner": "hermes",
+      "priority": 1,
+      "source": "a2a2aBacklogPriority.topItems",
+      "task": "Add adapter runner registry and preflight artifact writers."
+    },
+    {
+      "id": "BACKLOG-072",
+      "nextAction": "Hermes should classify the gate and update policy/state docs first.",
+      "owner": "hermes",
+      "priority": 1,
+      "source": "a2a2aBacklogPriority.topItems",
+      "task": "Run full-auto local setup phase only after scripts enforce policy, kill switch, rate limits, budget caps, and audit logs."
+    },
+    {
+      "id": "BACKLOG-073",
+      "nextAction": "Hermes should classify the gate and update policy/state docs first.",
+      "owner": "hermes",
+      "priority": 1,
+      "source": "a2a2aBacklogPriority.topItems",
+      "task": "Convert old approval packet docs into job manifest / execution lease references or mark them legacy."
+    },
+    {
+      "id": "BACKLOG-092",
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 1,
+      "source": "a2a2aBacklogPriority.topItems",
+      "task": "Run GLM-5.2 frontend/UI review benchmark on a small Mission Control or AGM AUTOGLOW UI excerpt."
+    },
+    {
+      "id": "BACKLOG-096",
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 1,
+      "source": "a2a2aBacklogPriority.topItems",
+      "task": "Add optional UI panel in Mission Control to browse local campaign packs."
+    },
+    {
+      "id": "BACKLOG-101",
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 1,
+      "source": "a2a2aBacklogPriority.topItems",
+      "task": "Add optional Mission Control panel to browse sprint packs, content queue, policy QA, and KPI CSVs."
+    },
+    {
+      "id": "BACKLOG-108",
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 1,
+      "source": "a2a2aBacklogPriority.topItems",
+      "task": "Capture a browser screenshot of the Mission Control `iGaming Lab` panel after the local app is started."
+    }
+  ],
+  "roleMap": [
+    {
+      "currentAction": "Confirm P0/P1 ordering and keep blocked gates closed.",
+      "editRights": "policy_state_only",
+      "responsibility": "Owns mission order, dependency gates, blocked actions, and policy boundaries.",
+      "role": "hermes",
+      "title": "Supreme Mission Commander"
+    },
+    {
+      "currentAction": "Architecture handoff is already represented by the implementation packet.",
+      "editRights": "report_only",
+      "responsibility": "Produces architecture-first handoff before Codex edits.",
+      "role": "opus",
+      "title": "Chief Architect"
+    },
+    {
+      "currentAction": "Start with inspect_plan_and_worker_digest, then implement only allowed paths.",
+      "editRights": "scoped_repo_owner",
+      "responsibility": "Owns repo edits, validation, scoped staging, and commits.",
+      "role": "codex",
+      "title": "Build Captain"
+    },
+    {
+      "currentAction": "Remain report-only until provider execution lane exists.",
+      "editRights": "report_only",
+      "responsibility": "Reviews structure, code consistency, and long-context implementation risks.",
+      "role": "glm52",
+      "title": "Coding Consistency Worker"
+    },
+    {
+      "currentAction": "Remain report-only until provider execution lane exists.",
+      "editRights": "report_only",
+      "responsibility": "Reviews command/data-flow risks and implementation edge cases.",
+      "role": "deepseek",
+      "title": "Risk and Data-Flow Worker"
+    },
+    {
+      "currentAction": "Remain report-only until provider execution lane exists.",
+      "editRights": "report_only",
+      "responsibility": "Reviews UI/integration scaffold shape and Mission Control readability.",
+      "role": "agy",
+      "title": "UI and Integration Scaffold Worker"
+    },
+    {
+      "currentAction": "Stay validate-only until Command Broker issues an execution lease.",
+      "editRights": "validate_only",
+      "responsibility": "Validates local command plans through Command Broker assumptions.",
+      "role": "kob",
+      "title": "Local Validator"
+    },
+    {
+      "currentAction": "Show assignment, backlog, lane, and blocked-gate state.",
+      "editRights": "read_only_fixture",
+      "responsibility": "Displays generated fixtures; never polls runtime files directly.",
+      "role": "mission_control",
+      "title": "Read-Only Observer"
+    }
+  ],
+  "runtimeReportPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/team_coding_start_packets/latest.json",
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+  "summary": {
+    "blockedGates": 56,
+    "businessLogicEditsAllowed": false,
+    "gitAddDotAllowed": false,
+    "providerCallsAllowed": false,
+    "readyQueueItems": 8,
+    "roles": 8,
+    "sourceOutcomeStatus": "packet_completed",
+    "sourceOutcomeValidation": "passed",
+    "status": "ready_for_team_coding",
+    "workerDirectEditsAllowed": false
+  },
+  "updatedAt": "2026-06-27T17:06:46+00:00"
+}

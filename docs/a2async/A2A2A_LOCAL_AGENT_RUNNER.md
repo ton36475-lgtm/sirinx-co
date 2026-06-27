@@ -367,6 +367,37 @@ calls remain disabled, worker direct edits remain disabled, and
 feedback cycle, not a new permission to call providers or mutate external
 systems.
 
+## Team Coding Start Packet
+
+After the worker follow-up packet is closed, create the team coding start
+packet:
+
+```bash
+python3 scripts/a2a/a2a_team_coding_start_packet.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This reads:
+
+- `apps/mission-control/src/fixtures/a2a2aWorkerFollowupPacketOutcome.json`
+- `apps/mission-control/src/fixtures/a2a2aBacklogPriority.json`
+- `apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json`
+
+It writes:
+
+- a runtime report at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/team_coding_start_packets/latest.json`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aTeamCodingStartPacket.json`
+
+The start packet is the first "team may now start coding" marker after the
+worker report loop closes. It does not edit business logic. It selects the next
+Codex-owned coding candidate from the ready backlog, carries the role map into
+Mission Control, and requires Codex to create a fresh scoped implementation
+packet before touching application modules. Provider calls, connector sync,
+deploy, push, secret reads, `git add .`, generated `web-sirinx` asset mutation,
+and worker direct commits remain blocked.
+
 ## Implementation Lane Packet
 
 Create the final review packet that turns the Codex plan and worker reports into

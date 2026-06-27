@@ -891,6 +891,12 @@ configuration lane, then keep future entries concise and source-path based.
 - [x] Complete the planned local files from
       `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacket.json` for
       the `BACKLOG-092` prompt/status benchmark slice.
+- [x] Validate and record the `BACKLOG-092` scoped packet outcome with
+      `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacketValidation.json`
+      and
+      `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacketOutcome.json`.
+- [ ] Open the next Codex-owned scoped coding packet from the ready queue after
+      `BACKLOG-092` is recorded as `packet_completed`.
 - [ ] If a provider lease is later opened, run the generated GLM-5.2 UI review
       prompt manually or through a budget-gated route and store only summarized
       report-only findings.
@@ -984,6 +990,15 @@ runtime report under
 records 0 provider calls, 0 auto-patch permission, and no public benchmark
 claim. This is evidence that the prompt/status lane exists, not evidence that
 GLM-5.2 has been called.
+
+The BACKLOG-092 scoped coding packet is now closed locally.
+`apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacketValidation.json`
+reports `passed` with 6/6 allowlisted checks and 0 failures.
+`apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacketOutcome.json`
+records `packet_completed` for `SCOPED-CODING-420bddf8b5` with commit evidence
+`1ef0919 feat(model-eval): add GLM52 UI benchmark scaffold`. The next A2A2A
+step is to open another fresh scoped Codex packet from the ready queue, not to
+let workers edit files directly.
 
 The first Codex-owned slice is now recorded as an outcome fixture. The next
 slice should come from the assignment board `immediateQueue`, while provider,

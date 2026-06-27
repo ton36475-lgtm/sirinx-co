@@ -1,0 +1,122 @@
+{
+  "generatedBy": "scripts/a2a/a2a_next_scoped_coding_packet_outcome.py",
+  "mode": "read_only_next_scoped_coding_packet_outcome",
+  "nextSafeActions": [
+    "open_next_scoped_coding_packet_from_ready_queue",
+    "keep_provider_connector_deploy_push_and_generated_asset_lanes_blocked",
+    "store_future_glm52_findings_as_report_only_evidence"
+  ],
+  "policyBoundary": [
+    "read_only_outcome_fixture",
+    "codex_only_scoped_repo_edits",
+    "workers_report_only",
+    "kob_validate_only",
+    "mission_control_read_only",
+    "no_provider_call",
+    "no_connector_sync",
+    "no_deploy",
+    "no_push",
+    "no_secret_read_or_print",
+    "no_git_add_dot",
+    "no_generated_web_sirinx_asset_mutation",
+    "no_public_benchmark_claim_without_local_evidence"
+  ],
+  "runtimeReportPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/next_scoped_coding_packet_outcomes/latest.json",
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+  "selectedPacket": {
+    "acceptance": "Implement only the planned local files, run validation, and stage only this packet scope.",
+    "allowedActions": [
+      "inspect_selected_backlog_item",
+      "edit_planned_files_only",
+      "run_scoped_validation",
+      "stage_packet_files_after_validation"
+    ],
+    "allowedPaths": [
+      "scripts/model_eval/",
+      "tests/model_eval/",
+      "apps/mission-control/src/fixtures/",
+      "apps/mission-control/src/App.tsx",
+      "docs/model-evals/",
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md"
+    ],
+    "blockedActions": [
+      "provider_call_without_command_broker_lease",
+      "connector_sync",
+      "deploy",
+      "push",
+      "secret_read_or_print",
+      "git_add_dot",
+      "worker_direct_commit",
+      "generated_web_sirinx_asset_mutation",
+      "public_benchmark_claim_without_local_evidence"
+    ],
+    "businessLogicEditsAllowed": false,
+    "createdAt": "2026-06-27T17:17:06+00:00",
+    "executionAllowed": true,
+    "gitAddDotAllowed": false,
+    "owner": "codex",
+    "ownerMode": "scoped_repo_edit",
+    "packetId": "SCOPED-CODING-420bddf8b5",
+    "plannedFiles": [
+      "scripts/model_eval/glm52_ui_review_benchmark.py",
+      "tests/model_eval/test_glm52_ui_review_benchmark.py",
+      "apps/mission-control/src/fixtures/glm52UiBenchmarkStatus.json",
+      "apps/mission-control/src/App.tsx",
+      "docs/model-evals/GLM52_UI_REVIEW_BENCHMARK.md",
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md"
+    ],
+    "providerCallsAllowed": false,
+    "selectedBacklogId": "BACKLOG-092",
+    "sourceStartPacketId": "TEAM-CODING-START-895c61d94d",
+    "status": "ready_for_scoped_coding",
+    "task": "Run GLM-5.2 frontend/UI review benchmark on a small Mission Control or AGM AUTOGLOW UI excerpt.",
+    "validationCommands": [
+      "python3 -m py_compile scripts/model_eval/glm52_ui_review_benchmark.py tests/model_eval/test_glm52_ui_review_benchmark.py",
+      "python3 -m unittest tests.model_eval.test_glm52_ui_review_benchmark",
+      "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+      "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/model-evals/GLM52_UI_REVIEW_BENCHMARK.md PROJECT_STATE.md NEXT_ACTIONS.md",
+      "git diff --check -- scripts/model_eval tests/model_eval apps/mission-control/src/fixtures apps/mission-control/src/App.tsx docs/model-evals PROJECT_STATE.md NEXT_ACTIONS.md"
+    ],
+    "why": "Codex may inspect and prepare scoped local edits after validation.",
+    "workerDirectEditsAllowed": false,
+    "workerInputs": [
+      {
+        "mode": "report_only_until_provider_lease",
+        "role": "glm52",
+        "task": "Review frontend/UI benchmark criteria after Codex creates local fixture."
+      },
+      {
+        "mode": "report_only_until_provider_lease",
+        "role": "agy",
+        "task": "Review Mission Control panel clarity after Codex creates local fixture."
+      },
+      {
+        "mode": "validate_only",
+        "role": "kob",
+        "task": "Validate proposed local commands through Command Broker policy."
+      }
+    ]
+  },
+  "summary": {
+    "commitEvidence": "1ef0919 feat(model-eval): add GLM52 UI benchmark scaffold",
+    "gitAddDotAllowed": false,
+    "providerCallsAllowed": false,
+    "selectedBacklogId": "BACKLOG-092",
+    "selectedPacketId": "SCOPED-CODING-420bddf8b5",
+    "selectedTask": "Run GLM-5.2 frontend/UI review benchmark on a small Mission Control or AGM AUTOGLOW UI excerpt.",
+    "status": "packet_completed",
+    "validationFailed": 0,
+    "validationStatus": "passed",
+    "workerDirectEditsAllowed": false
+  },
+  "updatedAt": "2026-06-27T17:38:57+00:00",
+  "validationEvidence": {
+    "validationCommands": 6,
+    "validationFailed": 0,
+    "validationPassed": 6,
+    "validationReportPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/next_scoped_coding_packet_validations/latest.json",
+    "validationStatus": "passed"
+  }
+}

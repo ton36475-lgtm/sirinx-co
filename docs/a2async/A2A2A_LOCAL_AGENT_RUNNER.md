@@ -427,6 +427,58 @@ provider lease exists, KOB remains validate-only, and provider calls, connector
 sync, deploy, push, secret reads, `git add .`, generated `web-sirinx` asset
 mutation, and broad business logic edits stay blocked.
 
+## Next Scoped Coding Packet Validation
+
+Run the allowlisted validation commands for the active scoped coding packet:
+
+```bash
+python3 scripts/a2a/a2a_next_scoped_coding_packet_validation.py
+```
+
+This reads:
+
+- `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacket.json`
+
+It writes:
+
+- a runtime report at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/next_scoped_coding_packet_validations/latest.json`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacketValidation.json`
+
+The validator runs the fixed local allowlist for the `BACKLOG-092` benchmark:
+unit test, Mission Control TypeScript, Prettier check, Python compile, JSON
+parse, and scoped diff check. It does not read secrets, call providers, sync
+connectors, deploy, push, mutate generated `web-sirinx` assets, or use
+`git add .`.
+
+## Next Scoped Coding Packet Outcome
+
+Record the completed scoped coding packet after validation passes:
+
+```bash
+python3 scripts/a2a/a2a_next_scoped_coding_packet_outcome.py \
+  --commit-evidence "1ef0919 feat(model-eval): add GLM52 UI benchmark scaffold"
+```
+
+This reads:
+
+- `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacket.json`
+- `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacketValidation.json`
+
+It writes:
+
+- a runtime report at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/next_scoped_coding_packet_outcomes/latest.json`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacketOutcome.json`
+
+The outcome reports `packet_completed` only when the packet is Codex-owned,
+scoped, validation status is `passed`, validation failures are zero, provider
+calls remain disabled, worker direct edits remain disabled, and
+`gitAddDotAllowed=false`. This closes the `BACKLOG-092` local benchmark slice
+and lets the queue open another scoped packet from the ready backlog.
+
 ## Implementation Lane Packet
 
 Create the final review packet that turns the Codex plan and worker reports into

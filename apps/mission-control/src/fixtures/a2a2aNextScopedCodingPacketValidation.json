@@ -1,0 +1,162 @@
+{
+  "generatedBy": "scripts/a2a/a2a_next_scoped_coding_packet_validation.py",
+  "mode": "local_allowlisted_next_scoped_coding_packet_validation",
+  "policyBoundary": [
+    "allowlisted_validation_commands_only",
+    "no_provider_call",
+    "no_connector_sync",
+    "no_deploy",
+    "no_push",
+    "no_secret_read_or_print",
+    "no_git_add_dot",
+    "no_generated_web_sirinx_asset_mutation",
+    "no_public_benchmark_claim_without_local_evidence"
+  ],
+  "results": [
+    {
+      "command": "python3 -m unittest tests.model_eval.test_glm52_ui_review_benchmark",
+      "durationMs": 74,
+      "exitCode": 0,
+      "id": "glm52_ui_benchmark_tests",
+      "status": "passed",
+      "stderrTail": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.006s\n\nOK\n",
+      "stdoutTail": ""
+    },
+    {
+      "command": "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+      "durationMs": 3209,
+      "exitCode": 0,
+      "id": "mission_control_typecheck",
+      "status": "passed",
+      "stderrTail": "",
+      "stdoutTail": ""
+    },
+    {
+      "command": "pnpm exec prettier --check apps/mission-control/src/App.tsx apps/mission-control/src/fixtures/glm52UiBenchmarkStatus.json docs/model-evals/GLM52_UI_REVIEW_BENCHMARK.md PROJECT_STATE.md NEXT_ACTIONS.md",
+      "durationMs": 841,
+      "exitCode": 0,
+      "id": "prettier_check_glm52_ui_benchmark",
+      "status": "passed",
+      "stderrTail": "",
+      "stdoutTail": "Checking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "command": "python3 -m py_compile scripts/model_eval/glm52_ui_review_benchmark.py tests/model_eval/test_glm52_ui_review_benchmark.py",
+      "durationMs": 42,
+      "exitCode": 0,
+      "id": "python_compile_glm52_ui_benchmark",
+      "status": "passed",
+      "stderrTail": "",
+      "stdoutTail": ""
+    },
+    {
+      "command": "python3 -c import json, pathlib; files=['apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacket.json','apps/mission-control/src/fixtures/glm52UiBenchmarkStatus.json']; [json.loads(pathlib.Path(f).read_text()) for f in files]",
+      "durationMs": 22,
+      "exitCode": 0,
+      "id": "json_parse_glm52_ui_benchmark_fixtures",
+      "status": "passed",
+      "stderrTail": "",
+      "stdoutTail": ""
+    },
+    {
+      "command": "/usr/bin/git diff --check -- scripts/model_eval/glm52_ui_review_benchmark.py tests/model_eval/test_glm52_ui_review_benchmark.py apps/mission-control/src/fixtures/glm52UiBenchmarkStatus.json apps/mission-control/src/App.tsx docs/model-evals/GLM52_UI_REVIEW_BENCHMARK.md PROJECT_STATE.md NEXT_ACTIONS.md",
+      "durationMs": 89,
+      "exitCode": 0,
+      "id": "git_diff_check_glm52_ui_benchmark_paths",
+      "status": "passed",
+      "stderrTail": "",
+      "stdoutTail": ""
+    }
+  ],
+  "runtimeReportPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/next_scoped_coding_packet_validations/latest.json",
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+  "selectedPacket": {
+    "acceptance": "Implement only the planned local files, run validation, and stage only this packet scope.",
+    "allowedActions": [
+      "inspect_selected_backlog_item",
+      "edit_planned_files_only",
+      "run_scoped_validation",
+      "stage_packet_files_after_validation"
+    ],
+    "allowedPaths": [
+      "scripts/model_eval/",
+      "tests/model_eval/",
+      "apps/mission-control/src/fixtures/",
+      "apps/mission-control/src/App.tsx",
+      "docs/model-evals/",
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md"
+    ],
+    "blockedActions": [
+      "provider_call_without_command_broker_lease",
+      "connector_sync",
+      "deploy",
+      "push",
+      "secret_read_or_print",
+      "git_add_dot",
+      "worker_direct_commit",
+      "generated_web_sirinx_asset_mutation",
+      "public_benchmark_claim_without_local_evidence"
+    ],
+    "businessLogicEditsAllowed": false,
+    "createdAt": "2026-06-27T17:17:06+00:00",
+    "executionAllowed": true,
+    "gitAddDotAllowed": false,
+    "owner": "codex",
+    "ownerMode": "scoped_repo_edit",
+    "packetId": "SCOPED-CODING-420bddf8b5",
+    "plannedFiles": [
+      "scripts/model_eval/glm52_ui_review_benchmark.py",
+      "tests/model_eval/test_glm52_ui_review_benchmark.py",
+      "apps/mission-control/src/fixtures/glm52UiBenchmarkStatus.json",
+      "apps/mission-control/src/App.tsx",
+      "docs/model-evals/GLM52_UI_REVIEW_BENCHMARK.md",
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md"
+    ],
+    "providerCallsAllowed": false,
+    "selectedBacklogId": "BACKLOG-092",
+    "sourceStartPacketId": "TEAM-CODING-START-895c61d94d",
+    "status": "ready_for_scoped_coding",
+    "task": "Run GLM-5.2 frontend/UI review benchmark on a small Mission Control or AGM AUTOGLOW UI excerpt.",
+    "validationCommands": [
+      "python3 -m py_compile scripts/model_eval/glm52_ui_review_benchmark.py tests/model_eval/test_glm52_ui_review_benchmark.py",
+      "python3 -m unittest tests.model_eval.test_glm52_ui_review_benchmark",
+      "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+      "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/model-evals/GLM52_UI_REVIEW_BENCHMARK.md PROJECT_STATE.md NEXT_ACTIONS.md",
+      "git diff --check -- scripts/model_eval tests/model_eval apps/mission-control/src/fixtures apps/mission-control/src/App.tsx docs/model-evals PROJECT_STATE.md NEXT_ACTIONS.md"
+    ],
+    "why": "Codex may inspect and prepare scoped local edits after validation.",
+    "workerDirectEditsAllowed": false,
+    "workerInputs": [
+      {
+        "mode": "report_only_until_provider_lease",
+        "role": "glm52",
+        "task": "Review frontend/UI benchmark criteria after Codex creates local fixture."
+      },
+      {
+        "mode": "report_only_until_provider_lease",
+        "role": "agy",
+        "task": "Review Mission Control panel clarity after Codex creates local fixture."
+      },
+      {
+        "mode": "validate_only",
+        "role": "kob",
+        "task": "Validate proposed local commands through Command Broker policy."
+      }
+    ]
+  },
+  "summary": {
+    "commands": 6,
+    "dryRun": false,
+    "failed": 0,
+    "gitAddDotAllowed": false,
+    "packetId": "SCOPED-CODING-420bddf8b5",
+    "passed": 6,
+    "providerCallsAllowed": false,
+    "selectedBacklogId": "BACKLOG-092",
+    "status": "passed",
+    "workerDirectEditsAllowed": false
+  },
+  "updatedAt": "2026-06-27T17:38:38+00:00"
+}

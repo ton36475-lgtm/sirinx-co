@@ -31,6 +31,8 @@ import a2a2aWorkerFollowupPacketValidationFixture from "./fixtures/a2a2aWorkerFo
 import a2a2aWorkerFollowupPacketOutcomeFixture from "./fixtures/a2a2aWorkerFollowupPacketOutcome.json";
 import a2a2aTeamCodingStartPacketFixture from "./fixtures/a2a2aTeamCodingStartPacket.json";
 import a2a2aNextScopedCodingPacketFixture from "./fixtures/a2a2aNextScopedCodingPacket.json";
+import a2a2aNextScopedCodingPacketValidationFixture from "./fixtures/a2a2aNextScopedCodingPacketValidation.json";
+import a2a2aNextScopedCodingPacketOutcomeFixture from "./fixtures/a2a2aNextScopedCodingPacketOutcome.json";
 import glm52UiBenchmarkStatusFixture from "./fixtures/glm52UiBenchmarkStatus.json";
 import a2a2aImplementationLanePacketFixture from "./fixtures/a2a2aImplementationLanePacket.json";
 import a2a2aScopedPathGuardFixture from "./fixtures/a2a2aScopedPathGuard.json";
@@ -1070,6 +1072,67 @@ type A2A2ANextScopedCodingPacketFixture = {
   nextSafeActions: string[];
 };
 
+type A2A2ANextScopedCodingPacketValidationFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  summary: {
+    status: string;
+    packetId: string;
+    selectedBacklogId: string;
+    commands: number;
+    passed: number;
+    failed: number;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    gitAddDotAllowed: boolean;
+    dryRun: boolean;
+  };
+  selectedPacket: Record<string, unknown>;
+  results: {
+    id: string;
+    command: string;
+    exitCode: number;
+    status: string;
+    durationMs: number;
+    stdoutTail: string;
+    stderrTail: string;
+  }[];
+  policyBoundary: string[];
+};
+
+type A2A2ANextScopedCodingPacketOutcomeFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  summary: {
+    status: string;
+    selectedPacketId: string;
+    selectedBacklogId: string;
+    selectedTask: string;
+    validationStatus: string;
+    validationFailed: number;
+    commitEvidence: string;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    gitAddDotAllowed: boolean;
+  };
+  selectedPacket: Record<string, unknown>;
+  validationEvidence: {
+    validationStatus: string;
+    validationCommands: number;
+    validationPassed: number;
+    validationFailed: number;
+    validationReportPath: string;
+  };
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type GLM52UiBenchmarkStatusFixture = {
   updatedAt: string;
   mode: string;
@@ -1677,6 +1740,10 @@ const a2a2aTeamCodingStartPacket =
   a2a2aTeamCodingStartPacketFixture as A2A2ATeamCodingStartPacketFixture;
 const a2a2aNextScopedCodingPacket =
   a2a2aNextScopedCodingPacketFixture as A2A2ANextScopedCodingPacketFixture;
+const a2a2aNextScopedCodingPacketValidation =
+  a2a2aNextScopedCodingPacketValidationFixture as A2A2ANextScopedCodingPacketValidationFixture;
+const a2a2aNextScopedCodingPacketOutcome =
+  a2a2aNextScopedCodingPacketOutcomeFixture as A2A2ANextScopedCodingPacketOutcomeFixture;
 const glm52UiBenchmarkStatus =
   glm52UiBenchmarkStatusFixture as GLM52UiBenchmarkStatusFixture;
 const a2a2aImplementationLanePacket =
@@ -5073,6 +5140,34 @@ export default function App() {
                         : "BLOCK"}
                     </strong>
                   </div>
+                  <div className="practice-kpi">
+                    <span>Validation</span>
+                    <strong>
+                      {a2a2aNextScopedCodingPacketValidation.summary.status}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Passed</span>
+                    <strong>
+                      {a2a2aNextScopedCodingPacketValidation.summary.passed}/
+                      {a2a2aNextScopedCodingPacketValidation.summary.commands}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Outcome</span>
+                    <strong>
+                      {a2a2aNextScopedCodingPacketOutcome.summary.status}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Failed</span>
+                    <strong>
+                      {
+                        a2a2aNextScopedCodingPacketOutcome.summary
+                          .validationFailed
+                      }
+                    </strong>
+                  </div>
                 </div>
 
                 <div className="practice-manifest-line">
@@ -5082,6 +5177,18 @@ export default function App() {
                   <code>{glm52UiBenchmarkStatus.promptPath}</code>
                   <span>Runtime</span>
                   <code>{glm52UiBenchmarkStatus.runtimeReportPath}</code>
+                  <span>Validation</span>
+                  <code>
+                    {a2a2aNextScopedCodingPacketValidation.runtimeReportPath}
+                  </code>
+                  <span>Outcome</span>
+                  <code>
+                    {a2a2aNextScopedCodingPacketOutcome.runtimeReportPath}
+                  </code>
+                  <span>Commit</span>
+                  <code>
+                    {a2a2aNextScopedCodingPacketOutcome.summary.commitEvidence}
+                  </code>
                 </div>
 
                 <div className="git-fixture-notice">
@@ -5178,6 +5285,69 @@ export default function App() {
                           </div>
                         </div>
                       ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="GLM 5.2 UI benchmark validation evidence"
+                  >
+                    <div className="git-section-title">
+                      <span>Validation Evidence</span>
+                      <span className="approval-badge">
+                        {a2a2aNextScopedCodingPacketValidation.summary.passed}/
+                        {a2a2aNextScopedCodingPacketValidation.summary.commands}
+                      </span>
+                    </div>
+                    {a2a2aNextScopedCodingPacketValidation.results.map(
+                      (result) => (
+                        <div className="practice-artifact-row" key={result.id}>
+                          <span className="practice-status payload-ready">
+                            {result.status}
+                          </span>
+                          <div>
+                            <strong>{result.id}</strong>
+                            <p>
+                              Exit {result.exitCode}; {result.durationMs}ms
+                            </p>
+                            <code>{result.command}</code>
+                          </div>
+                        </div>
+                      ),
+                    )}
+                    <div className="practice-artifact-row">
+                      <span
+                        className={`practice-status ${
+                          a2a2aNextScopedCodingPacketOutcome.summary.status ===
+                          "packet_completed"
+                            ? "payload-ready"
+                            : "payload-blocked"
+                        }`}
+                      >
+                        outcome
+                      </span>
+                      <div>
+                        <strong>
+                          {
+                            a2a2aNextScopedCodingPacketOutcome.summary
+                              .selectedBacklogId
+                          }
+                        </strong>
+                        <p>
+                          Validation{" "}
+                          {
+                            a2a2aNextScopedCodingPacketOutcome.summary
+                              .validationStatus
+                          }
+                          ; GLM-5.2 output is still report-only.
+                        </p>
+                        <code>
+                          {
+                            a2a2aNextScopedCodingPacketOutcome.summary
+                              .commitEvidence
+                          }
+                        </code>
+                      </div>
+                    </div>
                   </section>
                 </div>
               </div>

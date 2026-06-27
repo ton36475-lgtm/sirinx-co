@@ -30,6 +30,8 @@ from scripts.a2a import a2a_worker_followup_packet_validation
 from scripts.a2a import a2a_worker_followup_packet_outcome
 from scripts.a2a import a2a_team_coding_start_packet
 from scripts.a2a import a2a_next_scoped_coding_packet
+from scripts.a2a import a2a_next_scoped_coding_packet_validation
+from scripts.a2a import a2a_next_scoped_coding_packet_outcome
 from scripts.a2a import a2a_handoff_router
 
 
@@ -1638,6 +1640,94 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertEqual(fixture["summary"]["plannedBlocked"], 1)
             self.assertEqual(fixture["plannedViolations"][0]["path"], "apps/web-sirinx/dist/public/index.html")
             self.assertEqual(fixture["plannedViolations"][0]["status"], "blocked")
+
+    def test_next_scoped_coding_packet_validation_dry_run_uses_backlog_092_commands(self) -> None:
+        packet = {
+            "summary": {
+                "status": "ready_for_scoped_coding_packet",
+                "selectedBacklogId": "BACKLOG-092",
+                "providerCallsAllowed": False,
+                "workerDirectEditsAllowed": False,
+                "gitAddDotAllowed": False,
+            },
+            "packet": {
+                "packetId": "SCOPED-CODING-420bddf8b5",
+                "selectedBacklogId": "BACKLOG-092",
+                "status": "ready_for_scoped_coding",
+                "owner": "codex",
+                "ownerMode": "scoped_repo_edit",
+                "task": "Run GLM-5.2 frontend/UI review benchmark.",
+                "executionAllowed": True,
+                "providerCallsAllowed": False,
+                "workerDirectEditsAllowed": False,
+                "gitAddDotAllowed": False,
+            },
+        }
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-next-scoped-validation-") as tmp:
+            runtime = Path(tmp) / "runtime"
+
+            fixture = a2a_next_scoped_coding_packet_validation.build_validation(packet, runtime, dry_run=True)
+
+            self.assertEqual(fixture["summary"]["status"], "dry_run")
+            self.assertEqual(fixture["summary"]["packetId"], "SCOPED-CODING-420bddf8b5")
+            self.assertEqual(fixture["summary"]["selectedBacklogId"], "BACKLOG-092")
+            self.assertEqual(fixture["summary"]["commands"], 6)
+            self.assertTrue(fixture["summary"]["dryRun"])
+            self.assertFalse(fixture["summary"]["providerCallsAllowed"])
+            self.assertIn("no_public_benchmark_claim_without_local_evidence", fixture["policyBoundary"])
+            self.assertTrue(Path(fixture["runtimeReportPath"]).exists())
+
+    def test_next_scoped_coding_packet_outcome_closes_validated_packet(self) -> None:
+        packet = {
+            "summary": {
+                "status": "ready_for_scoped_coding_packet",
+                "selectedBacklogId": "BACKLOG-092",
+                "providerCallsAllowed": False,
+                "workerDirectEditsAllowed": False,
+                "gitAddDotAllowed": False,
+            },
+            "packet": {
+                "packetId": "SCOPED-CODING-420bddf8b5",
+                "selectedBacklogId": "BACKLOG-092",
+                "status": "ready_for_scoped_coding",
+                "owner": "codex",
+                "ownerMode": "scoped_repo_edit",
+                "task": "Run GLM-5.2 frontend/UI review benchmark.",
+                "executionAllowed": True,
+                "providerCallsAllowed": False,
+                "workerDirectEditsAllowed": False,
+                "gitAddDotAllowed": False,
+            },
+        }
+        validation = {
+            "summary": {
+                "status": "passed",
+                "packetId": "SCOPED-CODING-420bddf8b5",
+                "selectedBacklogId": "BACKLOG-092",
+                "commands": 6,
+                "passed": 6,
+                "failed": 0,
+            },
+            "runtimeReportPath": "/tmp/validation.json",
+        }
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-next-scoped-outcome-") as tmp:
+            runtime = Path(tmp) / "runtime"
+
+            outcome = a2a_next_scoped_coding_packet_outcome.build_outcome(
+                packet,
+                validation,
+                runtime,
+                "1ef0919 feat(model-eval): add GLM52 UI benchmark scaffold",
+            )
+
+            self.assertEqual(outcome["summary"]["status"], "packet_completed")
+            self.assertEqual(outcome["summary"]["selectedPacketId"], "SCOPED-CODING-420bddf8b5")
+            self.assertEqual(outcome["summary"]["selectedBacklogId"], "BACKLOG-092")
+            self.assertEqual(outcome["summary"]["validationStatus"], "passed")
+            self.assertEqual(outcome["summary"]["validationFailed"], 0)
+            self.assertFalse(outcome["summary"]["providerCallsAllowed"])
+            self.assertIn("open_next_scoped_coding_packet_from_ready_queue", outcome["nextSafeActions"])
+            self.assertTrue(Path(outcome["runtimeReportPath"]).exists())
 
 
 if __name__ == "__main__":

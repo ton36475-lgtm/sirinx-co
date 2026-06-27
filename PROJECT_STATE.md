@@ -1278,3 +1278,11 @@ implement_next_scoped_a2a2a_sync_slice` as `packet_completed` with validation
   `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/model_evals/glm52_ui_review/`,
   defines 7 scoring criteria and 6 prompt sections, and records that no provider
   call, auto-patch, or public benchmark claim has been performed.
+- Current next scoped coding packet outcome evidence:
+  `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacketValidation.json`
+  reports `passed` with 6/6 allowlisted checks and 0 failures for
+  `SCOPED-CODING-420bddf8b5`. The paired
+  `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacketOutcome.json`
+  records `packet_completed` for `BACKLOG-092` with commit evidence
+  `1ef0919 feat(model-eval): add GLM52 UI benchmark scaffold`, provider calls
+  disabled, worker direct edits disabled, and `gitAddDotAllowed=false`.

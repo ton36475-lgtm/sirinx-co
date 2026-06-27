@@ -782,3 +782,44 @@ configuration lane, then keep future entries concise and source-path based.
       frontend task is opened.
 - [ ] Start `LANE_1_DATABASE_FOUNDATION` only after the audit and payload gate
       are reviewed.
+
+## A2A2A Team Coding Sync
+
+- [x] Add a local A2A2A runner that processes role inbox files through dry-run
+      prompts only.
+- [x] Add Mission Control runner status fixture and read-only panel.
+- [x] Add dry-run dispatch command for Hermes/Opus/GLM-5.2/DeepSeek/KOB role
+      task envelopes.
+- [x] Add dependency readiness fixture so no worker can skip Hermes -> Opus ->
+      Codex ordering.
+- [x] Add Codex build-plan fixture from the first ready Opus handoff.
+- [x] Dispatch GLM-5.2, DeepSeek, and KOB dry-run worker reports for the Codex
+      plan.
+- [x] Add worker report digest fixture and Mission Control panel.
+- [x] Add implementation lane packet fixture and Mission Control panel.
+- [x] Keep all A2A2A worker flow local-only with `providerCalls=0`.
+- [ ] Review the implementation packet in
+      `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`.
+- [ ] Open the first scoped Codex implementation lane only after confirming the
+      packet has no blocked or missing dependencies.
+- [ ] For the first implementation lane, Codex must own all file edits, run
+      validation, and stage only the file list from the packet.
+- [ ] Keep GLM-5.2 and DeepSeek report-only until a separate provider execution
+      lane exists.
+- [ ] Keep KOB validate-only until Command Broker issues an execution lease.
+- [ ] Keep Mission Control read-only and fixture-backed; do not let the browser
+      poll runtime files directly.
+- [ ] Do not use `git add .`, deploy, push, connector sync, provider calls,
+      secret reads, Docker starts, external repo clone/audit, or generated
+      `web-sirinx` asset mutation from this lane.
+
+### Current Recommended A2A2A Next Action
+
+Review the implementation packet, then create the first scoped Codex coding
+task from the `priorityWorkItems` sequence:
+
+1. Codex inspects plan and worker digest.
+2. Codex edits only allowed paths.
+3. GLM-5.2 / DeepSeek / KOB remain report-only inputs.
+4. Codex runs validation commands.
+5. Codex stages and commits only the packet-listed files.

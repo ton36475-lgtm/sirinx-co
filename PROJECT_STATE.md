@@ -1045,3 +1045,55 @@ Toolkit` tab.
   commands from UI code, approve blocked actions, write connectors, call
   providers, clone repos, start Docker, push, deploy, read secrets, or mutate
   generated assets.
+
+## A2A2A Team Coding Sync State
+
+- Current lane family: local-only A2A2A team coding sync for GHOSTCLAW.
+- Runtime root:
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a`.
+- Mission Control fixtures:
+  - `apps/mission-control/src/fixtures/a2a2aRunnerStatus.json`
+  - `apps/mission-control/src/fixtures/a2a2aDependencyReadiness.json`
+  - `apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json`
+  - `apps/mission-control/src/fixtures/a2a2aWorkerReportDigest.json`
+  - `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`
+- Local runner:
+  `ghostclaw_runner/agent_runner.py`.
+- Dispatch command:
+  `scripts/a2a/a2a_runner_dispatch_command.py`.
+- Readiness generator:
+  `scripts/a2a/a2a_dependency_readiness.py`.
+- Codex build-plan generator:
+  `scripts/a2a/a2a_codex_build_plan.py`.
+- Worker report digest generator:
+  `scripts/a2a/a2a_worker_report_digest.py`.
+- Implementation lane packet generator:
+  `scripts/a2a/a2a_implementation_lane_packet.py`.
+- Current status:
+  - runner completed tasks: 6
+  - runner failed tasks: 0
+  - provider calls: 0
+  - worker reports: 2
+  - KOB validation reports: 1
+  - dependency worst status: ready
+  - implementation packet status:
+    `ready_for_codex_scoped_implementation_review`
+  - implementation packet execution: `false` / review-only
+- Role ownership:
+  - Hermes: mission commander and dependency gate owner.
+  - Opus: architecture handoff source before Codex edits.
+  - Codex: only repo editor, validator, stager, and committer.
+  - GLM-5.2: report-only structural/code consistency worker.
+  - DeepSeek: report-only command/data-flow risk worker.
+  - KOB: report-only local command validation worker through Command Broker
+    assumptions.
+  - Mission Control: read-only observer of generated fixtures.
+- Current implementation packet evidence:
+  `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`
+  shows 5 ready dependencies, 3 worker evidence items, 0 provider calls, 0
+  blocked dependencies, 0 missing dependencies, and a scoped stage command that
+  excludes `git add .`.
+- Boundary: this A2A2A state still does not call providers, execute KOB
+  commands, clone repos, start Docker, write connectors, push, deploy, read
+  secrets, or mutate generated `web-sirinx` assets. Worker reports are inputs
+  only; they never commit directly.

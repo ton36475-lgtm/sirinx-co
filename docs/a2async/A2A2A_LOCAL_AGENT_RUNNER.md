@@ -250,6 +250,29 @@ allowed paths and only after reviewing the lane tasks. Workers remain
 report-only. Provider calls, connector sync, deploy, push, secrets, generated
 `web-sirinx` asset mutation, and `git add .` remain blocked.
 
+## Backlog Priority Board
+
+Export a read-only backlog priority board from `NEXT_ACTIONS.md`:
+
+```bash
+python3 scripts/a2a/a2a_backlog_priority.py \
+  --next-actions NEXT_ACTIONS.md \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This writes:
+
+- a runtime report at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/backlog_priority/latest.json`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aBacklogPriority.json`
+
+The board is deterministic and local-only. It reads `NEXT_ACTIONS.md`, extracts
+unchecked tasks, assigns owner and priority labels, masks secret-like text, and
+keeps blocked gates separate from ready review items. It does not execute KOB,
+call providers, sync connectors, clone repos, deploy, push, or mutate generated
+`web-sirinx` assets.
+
 ## Next Build Lane
 
 Codex should consume the first `ready_for_codex_plan` item from the dependency

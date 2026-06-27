@@ -1,0 +1,351 @@
+{
+  "blockedGates": [
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-008",
+      "line": 22,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "Start Claw-Empire local preview only after explicit approval"
+    },
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-009",
+      "line": 24,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "Install or locate OpenCode after explicit approval"
+    },
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-010",
+      "line": 25,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "Run OpenCode `deepseek-v4-flash-free` dummy smoke test after explicit approval"
+    },
+    {
+      "blockedReason": "external_runtime_boundary",
+      "id": "BACKLOG-012",
+      "line": 28,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "Create per-repo install packets for selected GitHub Trending repos"
+    },
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-013",
+      "line": 35,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "Run Headroom MCP dry-run only after explicit approval"
+    },
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-015",
+      "line": 51,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "Prototype Rust evidence-hasher CLI after explicit approval"
+    },
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-026",
+      "line": 64,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "After explicit `APPROVE_IMPLEMENTATION`, implement `packages/oracle-provenance`"
+    },
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-027",
+      "line": 65,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "After explicit `APPROVE_IMPLEMENTATION`, implement `packages/timeline-engine`"
+    },
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-028",
+      "line": 66,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "After explicit `APPROVE_IMPLEMENTATION`, implement `packages/evidence-hasher`"
+    },
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-029",
+      "line": 67,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "After explicit `APPROVE_IMPLEMENTATION`, implement `packages/memory-indexer`"
+    },
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-030",
+      "line": 68,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "After explicit `APPROVE_IMPLEMENTATION`, implement `packages/proof-classifier`"
+    },
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-031",
+      "line": 69,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "codex",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "After explicit `APPROVE_IMPLEMENTATION`, implement `packages/codex-product-design`"
+    }
+  ],
+  "generatedBy": "scripts/a2a/a2a_backlog_priority.py",
+  "mode": "read_only_next_actions_backlog_priority",
+  "nextSafeActions": [
+    "Review P0 A2A2A items first.",
+    "Keep blocked gates as blocked until a separate lane opens.",
+    "Codex stages only the scoped backlog-priority files after validation."
+  ],
+  "ownerCounts": [
+    {
+      "count": 48,
+      "owner": "codex"
+    },
+    {
+      "count": 18,
+      "owner": "glm52_deepseek"
+    },
+    {
+      "count": 91,
+      "owner": "hermes"
+    },
+    {
+      "count": 2,
+      "owner": "kob"
+    },
+    {
+      "count": 17,
+      "owner": "marketing_revenue"
+    },
+    {
+      "count": 4,
+      "owner": "research_memory"
+    }
+  ],
+  "policyBoundary": [
+    "read_only_next_actions_source",
+    "no_provider_call",
+    "no_connector_sync",
+    "no_deploy",
+    "no_push",
+    "no_secret_read_or_print",
+    "no_git_add_dot",
+    "no_generated_web_sirinx_asset_mutation"
+  ],
+  "runtimeReportPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/backlog_priority/latest.json",
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+  "sourcePath": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/NEXT_ACTIONS.md",
+  "summary": {
+    "blocked": 56,
+    "owners": 6,
+    "p0": 7,
+    "p1": 22,
+    "p2": 95,
+    "p3": 56,
+    "readyForReview": 124,
+    "totalPending": 180
+  },
+  "topItems": [
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-173",
+      "line": 812,
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 0,
+      "section": "A2A2A Team Coding Sync",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Review the implementation packet in `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-174",
+      "line": 814,
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 0,
+      "section": "A2A2A Team Coding Sync",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Review `apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json` and choose the smallest first implementation slice."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-175",
+      "line": 817,
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 0,
+      "section": "A2A2A Team Coding Sync",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Review `apps/mission-control/src/fixtures/a2a2aBacklogPriority.json` and confirm the P0/P1 ordering before opening the next scoped Codex lane."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-176",
+      "line": 820,
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 0,
+      "section": "A2A2A Team Coding Sync",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "For the first implementation lane, Codex must own all file edits, run validation, and stage only the file list from the packet."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-177",
+      "line": 822,
+      "nextAction": "Keep model workers report-only until provider/runtime lane opens.",
+      "owner": "glm52_deepseek",
+      "priority": 0,
+      "section": "A2A2A Team Coding Sync",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Keep GLM-5.2, DeepSeek, and AGY report-only until a separate provider execution lane exists."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-178",
+      "line": 824,
+      "nextAction": "KOB remains validate-only until Command Broker issues a lease.",
+      "owner": "kob",
+      "priority": 0,
+      "section": "A2A2A Team Coding Sync",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Keep KOB validate-only until Command Broker issues an execution lease."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-179",
+      "line": 825,
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 0,
+      "section": "A2A2A Team Coding Sync",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Keep Mission Control read-only and fixture-backed; do not let the browser poll runtime files directly."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-004",
+      "line": 16,
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 1,
+      "section": "Uncategorized",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Capture Mission Control `Git Evidence` tab screenshot as evidence"
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-071",
+      "line": 162,
+      "nextAction": "Hermes should classify the gate and update policy/state docs first.",
+      "owner": "hermes",
+      "priority": 1,
+      "section": "Full Auto Autopilot Conversion",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Add adapter runner registry and preflight artifact writers."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-072",
+      "line": 163,
+      "nextAction": "Hermes should classify the gate and update policy/state docs first.",
+      "owner": "hermes",
+      "priority": 1,
+      "section": "Full Auto Autopilot Conversion",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Run full-auto local setup phase only after scripts enforce policy, kill switch, rate limits, budget caps, and audit logs."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-073",
+      "line": 165,
+      "nextAction": "Hermes should classify the gate and update policy/state docs first.",
+      "owner": "hermes",
+      "priority": 1,
+      "section": "Full Auto Autopilot Conversion",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Convert old approval packet docs into job manifest / execution lease references or mark them legacy."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-092",
+      "line": 314,
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 1,
+      "section": "GLM-5.2 API-First Evaluation",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Run GLM-5.2 frontend/UI review benchmark on a small Mission Control or AGM AUTOGLOW UI excerpt."
+    }
+  ],
+  "updatedAt": "2026-06-27T13:16:47+00:00"
+}

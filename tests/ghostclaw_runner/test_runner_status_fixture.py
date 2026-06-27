@@ -12,6 +12,7 @@ from scripts.a2a import a2a_export_runner_status_fixture
 from scripts.a2a import a2a_dependency_readiness
 from scripts.a2a import a2a_codex_build_plan
 from scripts.a2a import a2a2a_completion_audit
+from scripts.a2a import a2a_backlog_priority
 from scripts.a2a import a2a_implementation_lane_packet
 from scripts.a2a import a2a_codex_first_implementation_lane
 from scripts.a2a import a2a_runner_dispatch_command
@@ -456,6 +457,50 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertEqual(fixture["summary"]["codexReadyTasks"], 1)
             self.assertIn("no_git_add_dot", fixture["policyBoundary"])
             self.assertTrue(Path(fixture["runtimeLanePath"]).exists())
+
+    def test_backlog_priority_reads_next_actions_without_opening_external_actions(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-backlog-priority-") as tmp:
+            next_actions = Path(tmp) / "NEXT_ACTIONS.md"
+            runtime = Path(tmp) / "runtime"
+            fixture_path = Path(tmp) / "backlog.json"
+            next_actions.write_text(
+                "\n".join(
+                    [
+                        "## A2A2A Team Coding Sync",
+                        "- [ ] Review the Mission Control implementation packet fixture.",
+                        "- [ ] Keep GLM-5.2 workers report-only until provider lane opens.",
+                        "## Still Blocked",
+                        "- [ ] Deploy / public tunnel / external activation",
+                        "## CODEX Execution Pack v1.1",
+                        "- [ ] Review TOKEN=abc123 before connector sync.",
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            exit_code = a2a_backlog_priority.main(
+                [
+                    "--next-actions",
+                    str(next_actions),
+                    "--runtime-root",
+                    str(runtime),
+                    "--fixture-path",
+                    str(fixture_path),
+                ]
+            )
+
+            self.assertEqual(exit_code, 0)
+            fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+            self.assertEqual(fixture["summary"]["totalPending"], 4)
+            self.assertEqual(fixture["summary"]["p0"], 2)
+            self.assertGreaterEqual(fixture["summary"]["blocked"], 2)
+            self.assertEqual(fixture["topItems"][0]["owner"], "codex")
+            all_text = json.dumps(fixture)
+            self.assertIn("TOKEN=<masked>", all_text)
+            self.assertNotIn("abc123", all_text)
+            self.assertIn("no_provider_call", fixture["policyBoundary"])
+            self.assertTrue(Path(fixture["runtimeReportPath"]).exists())
 
 
 if __name__ == "__main__":

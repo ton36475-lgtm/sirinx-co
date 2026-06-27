@@ -806,11 +806,17 @@ configuration lane, then keep future entries concise and source-path based.
       9/9 pass with `ready_for_first_scoped_codex_lane`.
 - [x] Open the first scoped Codex implementation lane as a read-only Mission
       Control fixture with Codex-only scoped file edits enabled.
+- [x] Add A2A2A backlog priority board from `NEXT_ACTIONS.md` so Mission
+      Control can show the oldest pending work, P0/P1 queues, owner groups, and
+      blocked gates without executing anything.
 - [ ] Review the implementation packet in
       `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`.
 - [ ] Review
       `apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json`
       and choose the smallest first implementation slice.
+- [ ] Review
+      `apps/mission-control/src/fixtures/a2a2aBacklogPriority.json` and confirm
+      the P0/P1 ordering before opening the next scoped Codex lane.
 - [ ] For the first implementation lane, Codex must own all file edits, run
       validation, and stage only the file list from the packet.
 - [ ] Keep GLM-5.2, DeepSeek, and AGY report-only until a separate provider
@@ -832,6 +838,11 @@ task from the `priorityWorkItems` sequence:
 3. GLM-5.2 / DeepSeek / AGY / KOB remain report-only inputs.
 4. Codex runs validation commands.
 5. Codex stages and commits only the packet-listed files.
+
+The backlog priority board is now the read-only triage layer for old pending
+work. Use it to confirm that A2A2A P0 items stay ahead of connector sync,
+provider calls, deploy lanes, generated `web-sirinx` asset cleanup, and any
+external action gate.
 
 For watch-mode handoff, use bounded polling first:
 

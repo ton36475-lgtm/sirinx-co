@@ -26,6 +26,7 @@ import a2a2aWorkerReportDigestFixture from "./fixtures/a2a2aWorkerReportDigest.j
 import a2a2aImplementationLanePacketFixture from "./fixtures/a2a2aImplementationLanePacket.json";
 import a2a2aCompletionAuditFixture from "./fixtures/a2a2aCompletionAudit.json";
 import a2a2aFirstCodexImplementationLaneFixture from "./fixtures/a2a2aFirstCodexImplementationLane.json";
+import a2a2aBacklogPriorityFixture from "./fixtures/a2a2aBacklogPriority.json";
 
 interface Worker {
   name: string;
@@ -816,6 +817,55 @@ type A2A2AFirstCodexImplementationLaneFixture = {
   nextSafeActions: string[];
 };
 
+type A2A2ABacklogPriorityFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  sourcePath: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  summary: {
+    totalPending: number;
+    readyForReview: number;
+    blocked: number;
+    p0: number;
+    p1: number;
+    p2: number;
+    p3: number;
+    owners: number;
+  };
+  ownerCounts: {
+    owner: string;
+    count: number;
+  }[];
+  topItems: {
+    id: string;
+    priority: number;
+    status: string;
+    owner: string;
+    line: number;
+    section: string;
+    subsection: string;
+    task: string;
+    blockedReason: string;
+    nextAction: string;
+  }[];
+  blockedGates: {
+    id: string;
+    priority: number;
+    status: string;
+    owner: string;
+    line: number;
+    section: string;
+    subsection: string;
+    task: string;
+    blockedReason: string;
+    nextAction: string;
+  }[];
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type IgamingPracticeStatusFixture = {
   updatedAt: string;
   mode: string;
@@ -889,6 +939,8 @@ const a2a2aCompletionAudit =
   a2a2aCompletionAuditFixture as A2A2ACompletionAuditFixture;
 const a2a2aFirstCodexImplementationLane =
   a2a2aFirstCodexImplementationLaneFixture as A2A2AFirstCodexImplementationLaneFixture;
+const a2a2aBacklogPriority =
+  a2a2aBacklogPriorityFixture as A2A2ABacklogPriorityFixture;
 const codexSessionSidebarToolkitStatus =
   codexSessionSidebarToolkitStatusFixture;
 const sessionToolkitAgents = codexSessionSidebarToolkitStatus.agents;
@@ -2820,6 +2872,127 @@ export default function App() {
                         </code>
                       </div>
                     </div>
+                  </section>
+                </div>
+              </div>
+
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>A2A2A Backlog Priority</span>
+                  <span className="accent-emerald">
+                    {a2a2aBacklogPriority.summary.readyForReview} ready
+                  </span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Pending</span>
+                    <strong>{a2a2aBacklogPriority.summary.totalPending}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>P0</span>
+                    <strong>{a2a2aBacklogPriority.summary.p0}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>P1</span>
+                    <strong>{a2a2aBacklogPriority.summary.p1}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>P2</span>
+                    <strong>{a2a2aBacklogPriority.summary.p2}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Blocked</span>
+                    <strong>{a2a2aBacklogPriority.summary.blocked}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Owners</span>
+                    <strong>{a2a2aBacklogPriority.summary.owners}</strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Source</span>
+                  <code>{a2a2aBacklogPriority.sourcePath}</code>
+                  <span>Runtime Report</span>
+                  <code>{a2a2aBacklogPriority.runtimeReportPath}</code>
+                  <span>Updated</span>
+                  <code>{a2a2aBacklogPriority.updatedAt}</code>
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A backlog top priority items"
+                  >
+                    <div className="git-section-title">
+                      <span>Top Priority Items</span>
+                      <span className="approval-badge">
+                        {a2a2aBacklogPriority.topItems.length}
+                      </span>
+                    </div>
+                    {a2a2aBacklogPriority.topItems.slice(0, 8).map((item) => (
+                      <div className="practice-artifact-row" key={item.id}>
+                        <span
+                          className={`practice-status ${
+                            item.status === "blocked"
+                              ? "payload-blocked"
+                              : item.priority === 0
+                                ? "payload-ready"
+                                : "payload-warn"
+                          }`}
+                        >
+                          P{item.priority}
+                        </span>
+                        <div>
+                          <strong>
+                            {item.owner}: {item.task}
+                          </strong>
+                          <p>
+                            {item.section}
+                            {item.subsection ? ` / ${item.subsection}` : ""} -
+                            line {item.line}
+                          </p>
+                          <code>{item.nextAction}</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A backlog owner and blocked gates"
+                  >
+                    <div className="git-section-title">
+                      <span>Owners / Gates</span>
+                      <span className="approval-badge">
+                        {a2a2aBacklogPriority.ownerCounts.length}
+                      </span>
+                    </div>
+                    <div className="blocked-action-list">
+                      {a2a2aBacklogPriority.ownerCounts.map((owner) => (
+                        <span
+                          className="blocked-action payload-ready"
+                          key={owner.owner}
+                        >
+                          {owner.owner}: {owner.count}
+                        </span>
+                      ))}
+                    </div>
+                    {a2a2aBacklogPriority.blockedGates
+                      .slice(0, 5)
+                      .map((item) => (
+                        <div className="practice-artifact-row" key={item.id}>
+                          <span className="practice-status payload-blocked">
+                            gate
+                          </span>
+                          <div>
+                            <strong>{item.task}</strong>
+                            <p>{item.blockedReason}</p>
+                            <code>{item.nextAction}</code>
+                          </div>
+                        </div>
+                      ))}
                   </section>
                 </div>
               </div>

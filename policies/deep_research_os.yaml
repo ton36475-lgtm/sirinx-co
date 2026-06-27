@@ -1,0 +1,98 @@
+version: 2026-06-27
+mode: local_first
+name: sovereign_deep_research_os
+
+runtime:
+  root: "~/SIRINXDev/.ghostclaw_runtime/a2async/deep_research"
+  write_runtime_reports: true
+  write_obsidian_pulse: true
+
+allowed_current_lane:
+  - create_job_packet_templates
+  - validate_local_examples
+  - generate_local_runtime_report
+  - design_control_plane
+  - update_docs
+  - create_schema_contracts
+  - create_report_templates
+
+blocked_current_lane:
+  - provider_api_call
+  - web_scraping
+  - browser_session_capture
+  - paid_portal_access
+  - confidential_raw_upload
+  - public_endpoint
+  - model_install
+  - gpu_execution
+  - connector_write
+  - publish_report
+  - push
+  - deploy
+  - secret_read
+
+source_budget_defaults:
+  max_sources_total: 60
+  min_sources_per_material_claim: 2
+  max_search_loops_per_claim: 3
+
+confidence_labels:
+  - high
+  - medium
+  - low
+  - unverified
+
+verification_status:
+  - supported
+  - partially_supported
+  - contradicted
+  - unverified
+  - out_of_scope
+
+quality_gates:
+  - material_claims_have_evidence_or_unverified_status
+  - video_claims_have_timestamps
+  - visual_claims_have_page_or_crop_reference
+  - financial_claims_have_scenario_ranges
+  - conflicts_are_logged
+  - sponsored_sources_are_labeled
+  - recommendations_include_confidence
+
+job_classes:
+  claim_verification:
+    first_output: claim_evidence_matrix.csv
+    gate: retrieval_lane
+  market_intelligence:
+    first_output: market_evidence_table.csv
+    gate: browser_or_source_capture_lane
+  technical_due_diligence:
+    first_output: technical_risk_register.md
+    gate: source_retrieval_or_repo_audit_lane
+  financial_modeling:
+    first_output: scenario_model.json
+    gate: local_modeling_lane
+  visual_evidence_audit:
+    first_output: visual_evidence_manifest.json
+    gate: visual_rag_lane
+  content_research:
+    first_output: content_research_brief.md
+    gate: publication_qa_lane
+  tool_feasibility:
+    first_output: tool_feasibility_scorecard.md
+    gate: external_repo_audit_lane
+  decision_brief:
+    first_output: executive_summary.md
+    gate: local_only_if_inputs_are_local
+
+mission_control:
+  read_only: true
+  allow_execution_buttons: false
+  fixture_allowed: true
+  forbidden_payloads:
+    - raw_confidential_sources
+    - secrets
+    - tokens
+    - cookies
+    - browser_sessions
+    - service_role_keys
+    - large_raw_logs

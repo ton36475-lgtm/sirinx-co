@@ -70,9 +70,7 @@ confidence, conflicts, and final recommendations.
     "low CAPEX",
     "controlled battery degradation"
   ],
-  "conflicts": [
-    "Some sources report longer BESS payback ranges."
-  ],
+  "conflicts": ["Some sources report longer BESS payback ranges."],
   "recommendation": "Model project-specific load profile before accepting the 3-year claim."
 }
 ```

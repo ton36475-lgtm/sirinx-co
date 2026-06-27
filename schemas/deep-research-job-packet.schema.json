@@ -60,7 +60,15 @@
     "inputs": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["videos", "transcripts", "pdfs", "screenshots", "urls", "tables", "notes"],
+      "required": [
+        "videos",
+        "transcripts",
+        "pdfs",
+        "screenshots",
+        "urls",
+        "tables",
+        "notes"
+      ],
       "properties": {
         "videos": {
           "type": "array",
@@ -207,7 +215,15 @@
         },
         "source_type": {
           "type": "string",
-          "enum": ["video", "transcript", "pdf", "screenshot", "url", "table", "note"]
+          "enum": [
+            "video",
+            "transcript",
+            "pdf",
+            "screenshot",
+            "url",
+            "table",
+            "note"
+          ]
         },
         "uri": {
           "type": "string",

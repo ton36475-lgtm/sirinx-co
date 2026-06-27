@@ -59,15 +59,15 @@ The input layer converts raw media into auditable evidence units.
 
 Modules:
 
-| Module | Responsibility |
-| --- | --- |
-| Video Ingestion | Accept local video, metadata, and source notes |
-| Scene Slicer | Split video into scene/segment ranges |
-| ASR | Convert speech into transcript with timestamps |
-| OCR | Extract on-screen text, tables, labels, and captions |
-| Visual Grounding | Identify visible objects, charts, tables, UI, diagrams, products, and equipment |
-| Timestamp Indexer | Link every claim to timestamp/page/frame/region |
-| Frame Hashing | Hash frames or crops for repeatable evidence checks |
+| Module            | Responsibility                                                                  |
+| ----------------- | ------------------------------------------------------------------------------- |
+| Video Ingestion   | Accept local video, metadata, and source notes                                  |
+| Scene Slicer      | Split video into scene/segment ranges                                           |
+| ASR               | Convert speech into transcript with timestamps                                  |
+| OCR               | Extract on-screen text, tables, labels, and captions                            |
+| Visual Grounding  | Identify visible objects, charts, tables, UI, diagrams, products, and equipment |
+| Timestamp Indexer | Link every claim to timestamp/page/frame/region                                 |
+| Frame Hashing     | Hash frames or crops for repeatable evidence checks                             |
 
 Output is not a summary. Output is an evidence ledger.
 
@@ -96,15 +96,15 @@ The system must extract atomic claims before searching.
 
 Claim classes:
 
-| Claim Type | Example |
-| --- | --- |
-| Technical | Battery chemistry tolerates high heat |
-| Financial | Payback is 3 years |
-| Market | Market grows 20 percent per year |
-| Regulatory | No additional license required |
-| Operational | Production capacity is 10 tons per day |
-| Strategic | Suitable for the Thailand-Laos border market |
-| Speculative | Could become the next dominant platform |
+| Claim Type  | Example                                      |
+| ----------- | -------------------------------------------- |
+| Technical   | Battery chemistry tolerates high heat        |
+| Financial   | Payback is 3 years                           |
+| Market      | Market grows 20 percent per year             |
+| Regulatory  | No additional license required               |
+| Operational | Production capacity is 10 tons per day       |
+| Strategic   | Suitable for the Thailand-Laos border market |
+| Speculative | Could become the next dominant platform      |
 
 Every important claim should become multiple search queries.
 
@@ -150,17 +150,17 @@ flowchart TD
 
 Agent roles:
 
-| Agent | Responsibility |
-| --- | --- |
-| Academic Research Agent | Papers, technical reports, datasheets, PDF sources |
-| Market Intelligence Agent | Business reports, competitors, pricing, adoption |
-| Patent / Technology Agent | Patents, technology novelty, claims around invention |
-| Regulatory Agent | Law, permits, standards, tariffs, compliance |
-| Financial Modeling Agent | ROI, LCOE, NPV, sensitivity analysis |
-| Supply Chain Agent | Input materials, logistics, availability, border context |
-| Local Context Agent | Thai language, local market, local rules, local competitors |
-| Red Team Verification Agent | Contradictions, hallucination risk, weak assumptions |
-| Synthesis Agent | Final report, confidence, roadmap, unresolved questions |
+| Agent                       | Responsibility                                              |
+| --------------------------- | ----------------------------------------------------------- |
+| Academic Research Agent     | Papers, technical reports, datasheets, PDF sources          |
+| Market Intelligence Agent   | Business reports, competitors, pricing, adoption            |
+| Patent / Technology Agent   | Patents, technology novelty, claims around invention        |
+| Regulatory Agent            | Law, permits, standards, tariffs, compliance                |
+| Financial Modeling Agent    | ROI, LCOE, NPV, sensitivity analysis                        |
+| Supply Chain Agent          | Input materials, logistics, availability, border context    |
+| Local Context Agent         | Thai language, local market, local rules, local competitors |
+| Red Team Verification Agent | Contradictions, hallucination risk, weak assumptions        |
+| Synthesis Agent             | Final report, confidence, roadmap, unresolved questions     |
 
 ## Verification Gate
 
@@ -182,12 +182,12 @@ Evidence Score =
 
 Confidence levels:
 
-| Level | Meaning |
-| --- | --- |
-| High | Primary or authoritative sources agree, method is transparent, recent enough |
-| Medium | Evidence is usable but assumptions or context are limited |
-| Low | Old, indirect, marketing-led, sponsored, or conflict-heavy |
-| Unverified | No independent evidence yet |
+| Level      | Meaning                                                                      |
+| ---------- | ---------------------------------------------------------------------------- |
+| High       | Primary or authoritative sources agree, method is transparent, recent enough |
+| Medium     | Evidence is usable but assumptions or context are limited                    |
+| Low        | Old, indirect, marketing-led, sponsored, or conflict-heavy                   |
+| Unverified | No independent evidence yet                                                  |
 
 ## Conflict Resolution Loop
 
@@ -274,14 +274,14 @@ This architecture is MIT-inspired, not MIT-certified.
 
 Borrowed principles:
 
-| MIT-style idea | System translation |
-| --- | --- |
-| Human-AI collaboration | Operator review, uncertainty labels, decision roadmap |
-| Prototype-driven research | Simulator, dashboard, experiment pack |
-| Multimodal intelligence | Video, speech, OCR, screenshot, PDF, table, chart |
-| Creative computation | Knowledge graph, visual report, model outputs |
-| Management science | ROI, NPV, scenario planning, KPI evaluation |
-| Risk and regulation | Compliance checklist, red-team review, audit trail |
+| MIT-style idea            | System translation                                    |
+| ------------------------- | ----------------------------------------------------- |
+| Human-AI collaboration    | Operator review, uncertainty labels, decision roadmap |
+| Prototype-driven research | Simulator, dashboard, experiment pack                 |
+| Multimodal intelligence   | Video, speech, OCR, screenshot, PDF, table, chart     |
+| Creative computation      | Knowledge graph, visual report, model outputs         |
+| Management science        | ROI, NPV, scenario planning, KPI evaluation           |
+| Risk and regulation       | Compliance checklist, red-team review, audit trail    |
 
 ## Implementation Phases
 
@@ -416,3 +416,13 @@ Initial connector path:
 ```text
 APPROVE_ADD_DEEP_RESEARCH_JOB_PACKET_AND_SCHEMA_LOCAL_ONLY
 ```
+
+## Local Execution Design
+
+See `docs/deep_research/DEEP_RESEARCH_SYSTEM_DESIGN.md` for the current
+GHOSTCLAW execution lane design and
+`docs/deep_research/DEEP_RESEARCH_OUTPUT_PACK.md` for the required report pack.
+
+Use `scripts/a2a/a2a_deep_research_system.py` to validate local examples and
+write a runtime report. The validator is design-only: it does not browse, call
+providers, install models, run GPU jobs, publish, deploy, or sync connectors.

@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "blocked_until_policy_lane": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "generated_at": {
+      "type": "string"
+    },
+    "job_id": {
+      "type": "string"
+    },
+    "mode": {
+      "enum": ["local_source_registry_placeholder", "local_sources_bound"],
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "source_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "sources": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "allowed_use": {
+            "type": "string"
+          },
+          "confidentiality": {
+            "type": "string"
+          },
+          "hash": {
+            "pattern": "^sha256:",
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "source_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "source_type": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "uri": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_id",
+          "source_type",
+          "uri",
+          "title",
+          "confidentiality",
+          "status",
+          "hash",
+          "allowed_use",
+          "notes"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "job_id",
+    "generated_at",
+    "mode",
+    "source_count",
+    "sources",
+    "blocked_until_policy_lane"
+  ],
+  "title": "GHOSTCLAW Deep Research Source Registry",
+  "type": "object"
+}

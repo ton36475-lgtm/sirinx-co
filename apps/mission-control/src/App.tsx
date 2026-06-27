@@ -19,6 +19,7 @@ import webSirinxDeployPacketStatusFixture from "./fixtures/webSirinxDeployPacket
 import commandBrokerProductionStatusFixture from "./fixtures/commandBrokerProductionStatus.json";
 import codexSessionSidebarToolkitStatusFixture from "./fixtures/codexSessionSidebarToolkitStatus.json";
 import deepResearchStatusFixture from "./fixtures/deepResearchStatus.json";
+import a2a2aRunnerStatusFixture from "./fixtures/a2a2aRunnerStatus.json";
 
 interface Worker {
   name: string;
@@ -53,6 +54,7 @@ type PanelKey =
   | "commandPacket"
   | "commandBrokerProduction"
   | "sessionToolkit"
+  | "a2a2aRunner"
   | "deepResearch"
   | "toolPayloads";
 type GitFileStatus = "modified" | "added" | "untracked" | "deleted";
@@ -515,6 +517,49 @@ type CommandBrokerProductionStatusFixture = {
   nextSafeActions: string[];
 };
 
+type A2A2ARunnerStatusFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  sourceGlob: string;
+  summary: {
+    roles: number;
+    inbox: number;
+    running: number;
+    outbox: number;
+    completed: number;
+    failed: number;
+    latestResults: number;
+    providerCalls: number;
+    dryRunCompleted: number;
+    overallStatus: string;
+  };
+  roleCounts: {
+    role: string;
+    inbox: number;
+    running: number;
+    outbox: number;
+    completed: number;
+    failed: number;
+  }[];
+  latestResults: {
+    path: string;
+    createdAt: string;
+    role: string;
+    taskId: string;
+    status: string;
+    providerCall: boolean;
+    model: string;
+    promptSource: string;
+    nextOwner: string;
+    safeToDispatchLocally: boolean;
+    summary: string;
+  }[];
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type IgamingPracticeStatusFixture = {
   updatedAt: string;
   mode: string;
@@ -575,6 +620,7 @@ const webSirinxDeployPacketStatus =
   webSirinxDeployPacketStatusFixture as WebSirinxDeployPacketStatusFixture;
 const commandBrokerProductionStatus =
   commandBrokerProductionStatusFixture as CommandBrokerProductionStatusFixture;
+const a2a2aRunnerStatus = a2a2aRunnerStatusFixture as A2A2ARunnerStatusFixture;
 const codexSessionSidebarToolkitStatus =
   codexSessionSidebarToolkitStatusFixture;
 const sessionToolkitAgents = codexSessionSidebarToolkitStatus.agents;
@@ -1619,6 +1665,14 @@ export default function App() {
               aria-selected={activePanel === "sessionToolkit"}
             >
               Session Toolkit
+            </button>
+            <button
+              className={`panel-tab ${activePanel === "a2a2aRunner" ? "active" : ""}`}
+              onClick={() => setActivePanel("a2a2aRunner")}
+              role="tab"
+              aria-selected={activePanel === "a2a2aRunner"}
+            >
+              A2A2A Runner
             </button>
             <button
               className={`panel-tab ${activePanel === "deepResearch" ? "active" : ""}`}
@@ -3873,6 +3927,176 @@ export default function App() {
                         </span>
                       ),
                     )}
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : activePanel === "a2a2aRunner" ? (
+            <>
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>A2A2A Local Agent Runner</span>
+                  <span className="accent-cyan">
+                    {a2a2aRunnerStatus.summary.overallStatus}
+                  </span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Roles</span>
+                    <strong>{a2a2aRunnerStatus.summary.roles}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Inbox</span>
+                    <strong>{a2a2aRunnerStatus.summary.inbox}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Outbox</span>
+                    <strong>{a2a2aRunnerStatus.summary.outbox}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Completed</span>
+                    <strong>{a2a2aRunnerStatus.summary.completed}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Failed</span>
+                    <strong>{a2a2aRunnerStatus.summary.failed}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Provider Calls</span>
+                    <strong>{a2a2aRunnerStatus.summary.providerCalls}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Dry Runs</span>
+                    <strong>{a2a2aRunnerStatus.summary.dryRunCompleted}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Latest Results</span>
+                    <strong>{a2a2aRunnerStatus.summary.latestResults}</strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Mode</span>
+                  <code>{a2a2aRunnerStatus.mode}</code>
+                  <span>Runtime</span>
+                  <code>{a2a2aRunnerStatus.runtimeRoot}</code>
+                  <span>Updated</span>
+                  <code>{a2a2aRunnerStatus.updatedAt}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  This panel reads a generated static fixture from the local
+                  runner outbox. It does not poll the filesystem from the
+                  browser, call LiteLLM, execute commands, mutate git, sync
+                  connectors, push, deploy, or read secrets.
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A runner role queues"
+                  >
+                    <div className="git-section-title">
+                      <span>Role Queue Counts</span>
+                      <span className="approval-badge">
+                        {a2a2aRunnerStatus.roleCounts.length}
+                      </span>
+                    </div>
+                    {a2a2aRunnerStatus.roleCounts.map((role) => (
+                      <div className="practice-artifact-row" key={role.role}>
+                        <span
+                          className={`practice-status ${
+                            role.failed > 0
+                              ? "payload-blocked"
+                              : "payload-ready"
+                          }`}
+                        >
+                          {role.role}
+                        </span>
+                        <div>
+                          <strong>
+                            inbox {role.inbox} · running {role.running} · outbox{" "}
+                            {role.outbox}
+                          </strong>
+                          <p>
+                            completed {role.completed}; failed {role.failed}
+                          </p>
+                          <code>local file queue only</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A runner latest results"
+                  >
+                    <div className="git-section-title">
+                      <span>Latest Runner Results</span>
+                      <span className="approval-badge">
+                        {a2a2aRunnerStatus.latestResults.length}
+                      </span>
+                    </div>
+                    {a2a2aRunnerStatus.latestResults.map((result) => (
+                      <div className="practice-artifact-row" key={result.path}>
+                        <span
+                          className={`practice-status ${
+                            result.providerCall
+                              ? "payload-warn"
+                              : "payload-ready"
+                          }`}
+                        >
+                          {result.status}
+                        </span>
+                        <div>
+                          <strong>
+                            {result.role} → {result.nextOwner || "queue"}
+                          </strong>
+                          <p>{result.summary}</p>
+                          <code>{result.taskId}</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+                </div>
+              </div>
+
+              <div className="practice-lower-grid">
+                <div className="card">
+                  <div className="card-title">
+                    <span>Runner Policy Boundary</span>
+                    <span className="accent-purple">No Provider Default</span>
+                  </div>
+                  <div className="blocked-action-list">
+                    {a2a2aRunnerStatus.policyBoundary.map((item) => (
+                      <span className="blocked-action payload-ready" key={item}>
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-title">
+                    <span>Next Safe Actions</span>
+                    <span className="accent-cyan">A2A2A</span>
+                  </div>
+                  <div className="practice-artifacts compact-list">
+                    {a2a2aRunnerStatus.nextSafeActions.map((action) => (
+                      <div className="practice-artifact-row" key={action}>
+                        <span className="practice-status payload-ready">
+                          next
+                        </span>
+                        <div>
+                          <strong>{action}</strong>
+                          <p>
+                            Keep execution local until broker policy allows.
+                          </p>
+                          <code>{a2a2aRunnerStatus.generatedBy}</code>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>

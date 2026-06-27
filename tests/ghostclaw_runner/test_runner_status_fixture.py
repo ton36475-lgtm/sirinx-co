@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+"""Tests for exporting A2A2A runner status to Mission Control."""
+
+from __future__ import annotations
+
+import json
+import tempfile
+import unittest
+from pathlib import Path
+
+from scripts.a2a import a2a_export_runner_status_fixture
+
+
+class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
+    def test_exporter_summarizes_outbox_without_provider_calls(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-runner-fixture-") as tmp:
+            runtime = Path(tmp) / "runtime"
+            outbox = runtime / "outbox" / "opus"
+            outbox.mkdir(parents=True)
+            result = {
+                "created_at": "2026-06-27T00:00:00+00:00",
+                "status": "dry_run_completed",
+                "provider_call": False,
+                "role": "opus",
+                "model": "anthropic/claude-opus-4.8",
+                "prompt_source": "ghostclaw_runner/prompts/opus.md",
+                "task": {"task_id": "A2A2A-TEST"},
+                "output": {
+                    "summary": "local handoff",
+                    "handoff": {"next_owner": "codex", "safe_to_dispatch_locally": True},
+                },
+            }
+            (outbox / "A2A2A-TEST.result.json").write_text(json.dumps(result), encoding="utf-8")
+            fixture_path = Path(tmp) / "fixture.json"
+
+            exit_code = a2a_export_runner_status_fixture.main(
+                [
+                    "--runtime-root",
+                    str(runtime),
+                    "--fixture-path",
+                    str(fixture_path),
+                ]
+            )
+
+            self.assertEqual(exit_code, 0)
+            fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+            self.assertEqual(fixture["summary"]["outbox"], 1)
+            self.assertEqual(fixture["summary"]["providerCalls"], 0)
+            self.assertEqual(fixture["summary"]["overallStatus"], "ready_local_runner")
+            self.assertEqual(fixture["latestResults"][0]["nextOwner"], "codex")
+            self.assertIn("no_provider_call_by_default", fixture["policyBoundary"])
+
+
+if __name__ == "__main__":
+    unittest.main()

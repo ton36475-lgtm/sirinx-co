@@ -1,0 +1,93 @@
+{
+  "generatedBy": "scripts/a2a/a2a_export_runner_status_fixture.py",
+  "latestResults": [
+    {
+      "createdAt": "2026-06-27T11:29:36+00:00",
+      "model": "anthropic/claude-opus-4.8",
+      "nextOwner": "codex",
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/outbox/opus/A2A2A-RUNNER-SMOKE-001.result.json",
+      "promptSource": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/ghostclaw_runner/prompts/opus.md",
+      "providerCall": false,
+      "role": "opus",
+      "safeToDispatchLocally": true,
+      "status": "dry_run_completed",
+      "summary": "opus received task A2A2A-RUNNER-SMOKE-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+      "taskId": "A2A2A-RUNNER-SMOKE-001"
+    }
+  ],
+  "mode": "read_only_runtime_fixture",
+  "nextSafeActions": [
+    "wire Mission Control runner panel to this fixture",
+    "add dry-run dispatch command that writes inbox envelopes",
+    "keep LiteLLM provider mode disabled until Command Broker policy allows it",
+    "route Opus architecture handoff to Codex only after dependency status is visible"
+  ],
+  "policyBoundary": [
+    "mission_control_reads_static_fixture_only",
+    "no_browser_runtime_filesystem_access",
+    "no_provider_call_by_default",
+    "no_secret_read_or_print",
+    "no_git_mutation",
+    "no_push",
+    "no_deploy",
+    "no_connector_sync",
+    "no_docker_start"
+  ],
+  "roleCounts": [
+    {
+      "completed": 0,
+      "failed": 0,
+      "inbox": 0,
+      "outbox": 0,
+      "role": "hermes",
+      "running": 0
+    },
+    {
+      "completed": 1,
+      "failed": 0,
+      "inbox": 0,
+      "outbox": 1,
+      "role": "opus",
+      "running": 0
+    },
+    {
+      "completed": 0,
+      "failed": 0,
+      "inbox": 0,
+      "outbox": 0,
+      "role": "glm52",
+      "running": 0
+    },
+    {
+      "completed": 0,
+      "failed": 0,
+      "inbox": 0,
+      "outbox": 0,
+      "role": "deepseek",
+      "running": 0
+    },
+    {
+      "completed": 0,
+      "failed": 0,
+      "inbox": 0,
+      "outbox": 0,
+      "role": "kob",
+      "running": 0
+    }
+  ],
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+  "sourceGlob": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/outbox/*/*.result.json",
+  "summary": {
+    "completed": 1,
+    "dryRunCompleted": 1,
+    "failed": 0,
+    "inbox": 0,
+    "latestResults": 1,
+    "outbox": 1,
+    "overallStatus": "ready_local_runner",
+    "providerCalls": 0,
+    "roles": 5,
+    "running": 0
+  },
+  "updatedAt": "2026-06-27T11:36:01+00:00"
+}

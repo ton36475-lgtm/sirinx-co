@@ -1231,3 +1231,10 @@ Toolkit` tab.
   worker direct edits disabled, and `gitAddDotAllowed=false`. Its runtime lane
   is under
   `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup_lanes/`.
+- Current worker follow-up implementation packet evidence:
+  `apps/mission-control/src/fixtures/a2a2aWorkerFollowupImplementationPacket.json`
+  converts the follow-up lane into a scoped Codex packet. It reports
+  `ready_for_codex_scoped_work`, 7 planned files, 6 validation commands,
+  provider calls disabled, worker direct edits disabled, and
+  `gitAddDotAllowed=false`. Its runtime packet is under
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup_packets/`.

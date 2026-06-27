@@ -1,0 +1,118 @@
+{
+  "generatedBy": "scripts/a2a/a2a_worker_followup_implementation_packet.py",
+  "mode": "read_only_worker_followup_implementation_packet",
+  "nextSafeActions": [
+    "Codex reviews this packet and confirms the planned file list.",
+    "Run validation before scoped staging.",
+    "Stage only the packet-listed files."
+  ],
+  "packet": {
+    "acceptance": "Codex edits only packet files, runs validation, and stages only this packet scope.",
+    "allowedActions": [
+      "inspect_source_fixtures",
+      "edit_allowed_paths_only",
+      "run_scoped_validation",
+      "stage_packet_files_after_validation"
+    ],
+    "allowedPaths": [
+      "scripts/a2a/",
+      "ghostclaw_runner/",
+      "tests/ghostclaw_runner/",
+      "apps/mission-control/src/fixtures/",
+      "apps/mission-control/src/App.tsx",
+      "docs/a2async/",
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md"
+    ],
+    "blockedActions": [
+      "provider_call_without_command_broker_lease",
+      "connector_sync",
+      "deploy",
+      "push",
+      "secret_read_or_print",
+      "git_add_dot",
+      "worker_direct_commit",
+      "generated_web_sirinx_asset_mutation"
+    ],
+    "createdAt": "2026-06-27T16:39:16+00:00",
+    "executionAllowed": true,
+    "gitAddDotAllowed": false,
+    "owner": "codex",
+    "ownerMode": "scoped_repo_edit",
+    "packetId": "FOLLOWUP-PACKET-1f1dc503cc",
+    "plannedFiles": [
+      "scripts/a2a/a2a_worker_followup_implementation_packet.py",
+      "apps/mission-control/src/fixtures/a2a2aWorkerFollowupImplementationPacket.json",
+      "apps/mission-control/src/App.tsx",
+      "tests/ghostclaw_runner/test_runner_status_fixture.py",
+      "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md"
+    ],
+    "providerCallsAllowed": false,
+    "sourceFixtures": {
+      "workerFollowupBrief": "apps/mission-control/src/fixtures/a2a2aWorkerFollowupBrief.json",
+      "workerFollowupLane": "apps/mission-control/src/fixtures/a2a2aWorkerFollowupLane.json"
+    },
+    "sourceLaneId": "LANE_A2A2A_WORKER_FEEDBACK_CONSUMPTION-77d00d8d",
+    "sourcePacketId": "WORK-8e54ea680f",
+    "sourceQueueId": "LANE-CODEX-LANE-TASK-03",
+    "status": "ready_for_codex_scoped_work",
+    "task": "implement_next_scoped_a2a2a_sync_slice",
+    "tasks": [
+      {
+        "name": "inspect_followup_lane",
+        "owner": "codex",
+        "status": "ready",
+        "taskId": "FOLLOWUP-PACKET-01"
+      },
+      {
+        "name": "implement_packet_files_only",
+        "owner": "codex",
+        "status": "ready",
+        "taskId": "FOLLOWUP-PACKET-02"
+      },
+      {
+        "name": "run_validation_and_stage_scope",
+        "owner": "codex",
+        "status": "ready",
+        "taskId": "FOLLOWUP-PACKET-03"
+      }
+    ],
+    "validationCommands": [
+      "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
+      "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+      "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md PROJECT_STATE.md NEXT_ACTIONS.md",
+      "git diff --check -- scripts/a2a ghostclaw_runner tests/ghostclaw_runner apps/mission-control/src/fixtures apps/mission-control/src/App.tsx docs/a2async PROJECT_STATE.md NEXT_ACTIONS.md",
+      "python3 -m py_compile scripts/a2a/a2a_worker_followup_implementation_packet.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+      "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aWorkerFollowupImplementationPacket.json >/tmp/a2a2aWorkerFollowupImplementationPacket.json.check"
+    ],
+    "why": "Worker reports have been normalized into a Codex-owned follow-up lane.",
+    "workerDirectEditsAllowed": false
+  },
+  "policyBoundary": [
+    "read_only_packet_fixture",
+    "codex_git_owner",
+    "workers_report_only",
+    "provider_calls_require_command_broker_lease",
+    "no_connector_sync",
+    "no_deploy",
+    "no_push",
+    "no_secret_values",
+    "no_git_add_dot"
+  ],
+  "runtimePacketPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup_packets/FOLLOWUP-PACKET-1f1dc503cc.json",
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+  "summary": {
+    "allowedPaths": 8,
+    "executionAllowed": true,
+    "gitAddDotAllowed": false,
+    "plannedFiles": 7,
+    "providerCallsAllowed": false,
+    "status": "ready_for_codex_scoped_work",
+    "tasks": 3,
+    "validationCommands": 6,
+    "workerDirectEditsAllowed": false
+  },
+  "updatedAt": "2026-06-27T16:39:16+00:00"
+}

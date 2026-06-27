@@ -26,6 +26,7 @@ import a2a2aCodexBuildPlanFixture from "./fixtures/a2a2aCodexBuildPlan.json";
 import a2a2aWorkerReportDigestFixture from "./fixtures/a2a2aWorkerReportDigest.json";
 import a2a2aWorkerFollowupBriefFixture from "./fixtures/a2a2aWorkerFollowupBrief.json";
 import a2a2aWorkerFollowupLaneFixture from "./fixtures/a2a2aWorkerFollowupLane.json";
+import a2a2aWorkerFollowupImplementationPacketFixture from "./fixtures/a2a2aWorkerFollowupImplementationPacket.json";
 import a2a2aImplementationLanePacketFixture from "./fixtures/a2a2aImplementationLanePacket.json";
 import a2a2aScopedPathGuardFixture from "./fixtures/a2a2aScopedPathGuard.json";
 import a2a2aCompletionAuditFixture from "./fixtures/a2a2aCompletionAudit.json";
@@ -845,6 +846,54 @@ type A2A2AWorkerFollowupLaneFixture = {
   nextSafeActions: string[];
 };
 
+type A2A2AWorkerFollowupImplementationPacketFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimePacketPath: string;
+  summary: {
+    status: string;
+    tasks: number;
+    plannedFiles: number;
+    allowedPaths: number;
+    validationCommands: number;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    gitAddDotAllowed: boolean;
+    executionAllowed: boolean;
+  };
+  packet: {
+    packetId: string;
+    sourceLaneId: string;
+    sourcePacketId: string;
+    sourceQueueId: string;
+    status: string;
+    owner: string;
+    ownerMode: string;
+    executionAllowed: boolean;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    gitAddDotAllowed: boolean;
+    task: string;
+    why: string;
+    acceptance: string;
+    allowedActions: string[];
+    allowedPaths: string[];
+    blockedActions: string[];
+    plannedFiles: string[];
+    validationCommands: string[];
+    tasks: {
+      taskId: string;
+      name: string;
+      owner: string;
+      status: string;
+    }[];
+  };
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type A2A2AImplementationLanePacketFixture = {
   updatedAt: string;
   mode: string;
@@ -1406,6 +1455,8 @@ const a2a2aWorkerFollowupBrief =
   a2a2aWorkerFollowupBriefFixture as A2A2AWorkerFollowupBriefFixture;
 const a2a2aWorkerFollowupLane =
   a2a2aWorkerFollowupLaneFixture as A2A2AWorkerFollowupLaneFixture;
+const a2a2aWorkerFollowupImplementationPacket =
+  a2a2aWorkerFollowupImplementationPacketFixture as A2A2AWorkerFollowupImplementationPacketFixture;
 const a2a2aImplementationLanePacket =
   a2a2aImplementationLanePacketFixture as A2A2AImplementationLanePacketFixture;
 const a2a2aScopedPathGuard =
@@ -4130,6 +4181,24 @@ export default function App() {
                       {a2a2aWorkerFollowupLane.summary.validationCommands}
                     </strong>
                   </div>
+                  <div className="practice-kpi">
+                    <span>Next Packet</span>
+                    <strong>
+                      {a2a2aWorkerFollowupImplementationPacket.summary
+                        .status === "ready_for_codex_scoped_work"
+                        ? "READY"
+                        : "BLOCK"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Files</span>
+                    <strong>
+                      {
+                        a2a2aWorkerFollowupImplementationPacket.summary
+                          .plannedFiles
+                      }
+                    </strong>
+                  </div>
                 </div>
 
                 <div className="practice-manifest-line">
@@ -4145,6 +4214,14 @@ export default function App() {
                   <code>{a2a2aWorkerFollowupLane.summary.status}</code>
                   <span>Lane Runtime</span>
                   <code>{a2a2aWorkerFollowupLane.runtimeLanePath}</code>
+                  <span>Next Packet</span>
+                  <code>
+                    {a2a2aWorkerFollowupImplementationPacket.packet.packetId}
+                  </code>
+                  <span>Packet Runtime</span>
+                  <code>
+                    {a2a2aWorkerFollowupImplementationPacket.runtimePacketPath}
+                  </code>
                   <span>Runtime Report</span>
                   <code>{a2a2aWorkerFollowupBrief.runtimeReportPath}</code>
                 </div>
@@ -4225,6 +4302,34 @@ export default function App() {
                         <p>{a2a2aWorkerFollowupLane.lane.objective}</p>
                         <code>
                           {a2a2aWorkerFollowupLane.lane.acceptanceCriteria.join(
+                            ", ",
+                          )}
+                        </code>
+                      </div>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span
+                        className={`practice-status ${
+                          a2a2aWorkerFollowupImplementationPacket.summary
+                            .status === "ready_for_codex_scoped_work"
+                            ? "payload-ready"
+                            : "payload-blocked"
+                        }`}
+                      >
+                        packet
+                      </span>
+                      <div>
+                        <strong>
+                          {a2a2aWorkerFollowupImplementationPacket.packet.task}
+                        </strong>
+                        <p>
+                          {
+                            a2a2aWorkerFollowupImplementationPacket.packet
+                              .acceptance
+                          }
+                        </p>
+                        <code>
+                          {a2a2aWorkerFollowupImplementationPacket.packet.plannedFiles.join(
                             ", ",
                           )}
                         </code>

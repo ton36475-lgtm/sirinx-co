@@ -868,9 +868,11 @@ configuration lane, then keep future entries concise and source-path based.
       `apps/mission-control/src/fixtures/a2a2aWorkerFollowupBrief.json`.
 - [x] Convert the worker follow-up brief into a machine-readable Codex lane at
       `apps/mission-control/src/fixtures/a2a2aWorkerFollowupLane.json`.
+- [x] Convert the worker follow-up lane into a scoped implementation packet at
+      `apps/mission-control/src/fixtures/a2a2aWorkerFollowupImplementationPacket.json`.
 - [ ] Open the next A2A2A implementation lane from
-      `a2a2aWorkerFollowupLane.lane` only after reviewing its source packet,
-      allowed paths, blocked actions, and validation plan.
+      `a2a2aWorkerFollowupImplementationPacket.packet` only after reviewing
+      its planned files, source fixtures, blocked actions, and validation plan.
 - [ ] Do not use `git add .`, deploy, push, connector sync, provider calls,
       secret reads, Docker starts, external repo clone/audit, or generated
       `web-sirinx` asset mutation from this lane.
@@ -921,6 +923,12 @@ The worker follow-up lane fixture is now the machine-readable next step.
 `open_for_codex_scoped_work`, 3 Codex-ready tasks, provider calls disabled,
 worker direct edits disabled, and `gitAddDotAllowed=false`. Use this fixture as
 the next implementation packet source.
+
+The worker follow-up implementation packet is now the next scoped Codex input.
+`apps/mission-control/src/fixtures/a2a2aWorkerFollowupImplementationPacket.json`
+reports `ready_for_codex_scoped_work`, 7 planned files, 6 validation commands,
+provider calls disabled, worker direct edits disabled, and
+`gitAddDotAllowed=false`. Use this packet as the next smallest coding slice.
 
 The first Codex-owned slice is now recorded as an outcome fixture. The next
 slice should come from the assignment board `immediateQueue`, while provider,

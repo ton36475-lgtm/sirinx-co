@@ -286,6 +286,33 @@ the lane status becomes `blocked_until_followup_brief_ready`. When ready, the
 lane status is `open_for_codex_scoped_work`, but Codex must still create or
 review a scoped implementation packet before editing files.
 
+## Worker Follow-up Implementation Packet
+
+Create the scoped packet for the follow-up lane:
+
+```bash
+python3 scripts/a2a/a2a_worker_followup_implementation_packet.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This reads:
+
+- `apps/mission-control/src/fixtures/a2a2aWorkerFollowupLane.json`
+
+It writes:
+
+- a runtime packet at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup_packets/`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aWorkerFollowupImplementationPacket.json`
+
+The packet is the first machine-readable "do these files next" artifact after
+the worker report cycle. It names owner, owner mode, planned files, allowed
+paths, blocked actions, validation commands, source fixtures, and acceptance
+criteria. Codex may use it as the next scoped implementation input, but workers
+still cannot edit or commit, and provider calls still require a Command Broker
+lease.
+
 ## Implementation Lane Packet
 
 Create the final review packet that turns the Codex plan and worker reports into

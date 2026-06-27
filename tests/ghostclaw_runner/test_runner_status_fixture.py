@@ -14,6 +14,7 @@ from scripts.a2a import a2a_codex_build_plan
 from scripts.a2a import a2a2a_completion_audit
 from scripts.a2a import a2a_backlog_priority
 from scripts.a2a import a2a_team_assignment_board
+from scripts.a2a import a2a_codex_lane_outcome
 from scripts.a2a import a2a_implementation_lane_packet
 from scripts.a2a import a2a_codex_first_implementation_lane
 from scripts.a2a import a2a_runner_dispatch_command
@@ -570,6 +571,15 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
                         "why": "Workers are inputs only.",
                         "acceptance": "No worker commits.",
                     },
+                    {
+                        "taskId": "CODEX-LANE-TASK-03",
+                        "priority": 3,
+                        "owner": "codex",
+                        "status": "ready_for_codex",
+                        "name": "implement_only_allowed_paths",
+                        "why": "Codex performs scoped repo edits.",
+                        "acceptance": "Only listed files change.",
+                    },
                 ]
             },
         }
@@ -599,6 +609,52 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertTrue(fixture["summary"]["codexFileEditsAllowed"])
             self.assertIn("workers_report_only", fixture["policyBoundary"])
             self.assertEqual(len(fixture["roles"]), 8)
+            self.assertTrue(Path(fixture["runtimeReportPath"]).exists())
+
+            fixture_after_outcome = a2a_team_assignment_board.build_assignment(
+                backlog_fixture,
+                lane_fixture,
+                packet_fixture,
+                runtime,
+                {
+                    "selectedSlice": {
+                        "sourceNextAction": {
+                            "task": "inspect_plan_and_worker_digest",
+                        }
+                    }
+                },
+            )
+            self.assertEqual(fixture_after_outcome["summary"]["completedCodexTasks"], 1)
+            self.assertEqual(fixture_after_outcome["nextCodexAction"]["task"], "implement_only_allowed_paths")
+
+    def test_codex_lane_outcome_closes_first_slice_only_when_assignment_ready(self) -> None:
+        assignment = {
+            "summary": {
+                "status": "ready_for_codex_assignment",
+                "codexFileEditsAllowed": True,
+                "providerCallsAllowed": False,
+                "workerDirectEditsAllowed": False,
+            },
+            "nextCodexAction": {
+                "task": "inspect_plan_and_worker_digest",
+                "why": "Codex owns repo state.",
+                "acceptance": "Scope is explicit.",
+            },
+        }
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-codex-outcome-") as tmp:
+            runtime = Path(tmp) / "runtime"
+
+            fixture = a2a_codex_lane_outcome.build_outcome(
+                assignment,
+                runtime,
+                "abc1234 feat(a2a2a): add team assignment board",
+            )
+
+            self.assertEqual(fixture["summary"]["status"], "first_codex_slice_completed")
+            self.assertEqual(fixture["summary"]["completedChecklistItems"], 7)
+            self.assertEqual(fixture["summary"]["providerCalls"], 0)
+            self.assertFalse(fixture["summary"]["workerDirectEdits"])
+            self.assertIn("workers_report_only", fixture["policyBoundary"])
             self.assertTrue(Path(fixture["runtimeReportPath"]).exists())
 
 

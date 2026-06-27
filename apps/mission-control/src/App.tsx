@@ -28,6 +28,7 @@ import a2a2aCompletionAuditFixture from "./fixtures/a2a2aCompletionAudit.json";
 import a2a2aFirstCodexImplementationLaneFixture from "./fixtures/a2a2aFirstCodexImplementationLane.json";
 import a2a2aBacklogPriorityFixture from "./fixtures/a2a2aBacklogPriority.json";
 import a2a2aTeamAssignmentBoardFixture from "./fixtures/a2a2aTeamAssignmentBoard.json";
+import a2a2aCodexLaneOutcomeFixture from "./fixtures/a2a2aCodexLaneOutcome.json";
 
 interface Worker {
   name: string;
@@ -878,6 +879,7 @@ type A2A2ATeamAssignmentBoardFixture = {
     roles: number;
     immediateQueueItems: number;
     codexReadyTasks: number;
+    completedCodexTasks: number;
     reportOnlyWorkerTasks: number;
     backlogP0: number;
     backlogP1: number;
@@ -933,6 +935,41 @@ type A2A2ATeamAssignmentBoardFixture = {
   sourceFixtures: Record<string, string>;
   policyBoundary: string[];
   nextSafeActions: string[];
+};
+
+type A2A2ACodexLaneOutcomeFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  summary: {
+    status: string;
+    selectedSlice: string;
+    completedChecklistItems: number;
+    providerCalls: number;
+    workerDirectEdits: boolean;
+    codexOwnedCommit: string;
+  };
+  completedChecklistItems: string[];
+  selectedSlice: {
+    name: string;
+    why: string;
+    sourceNextAction: {
+      queueId: string;
+      source: string;
+      priority: number;
+      owner: string;
+      status: string;
+      task: string;
+      why: string;
+      acceptance: string;
+    };
+    commitEvidence: string;
+    validationEvidence: string[];
+  };
+  remainingQueue: string[];
+  policyBoundary: string[];
 };
 
 type IgamingPracticeStatusFixture = {
@@ -1012,6 +1049,8 @@ const a2a2aBacklogPriority =
   a2a2aBacklogPriorityFixture as A2A2ABacklogPriorityFixture;
 const a2a2aTeamAssignmentBoard =
   a2a2aTeamAssignmentBoardFixture as A2A2ATeamAssignmentBoardFixture;
+const a2a2aCodexLaneOutcome =
+  a2a2aCodexLaneOutcomeFixture as A2A2ACodexLaneOutcomeFixture;
 const codexSessionSidebarToolkitStatus =
   codexSessionSidebarToolkitStatusFixture;
 const sessionToolkitAgents = codexSessionSidebarToolkitStatus.agents;
@@ -2949,6 +2988,124 @@ export default function App() {
 
               <div className="card practice-card">
                 <div className="card-title">
+                  <span>A2A2A Codex Lane Outcome</span>
+                  <span className="accent-emerald">
+                    {a2a2aCodexLaneOutcome.summary.status}
+                  </span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Slice</span>
+                    <strong>
+                      {a2a2aCodexLaneOutcome.summary.selectedSlice}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Checklist</span>
+                    <strong>
+                      {a2a2aCodexLaneOutcome.summary.completedChecklistItems}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Providers</span>
+                    <strong>
+                      {a2a2aCodexLaneOutcome.summary.providerCalls}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Worker Edits</span>
+                    <strong>
+                      {a2a2aCodexLaneOutcome.summary.workerDirectEdits
+                        ? "YES"
+                        : "NO"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Commit</span>
+                    <strong>
+                      {a2a2aCodexLaneOutcome.summary.codexOwnedCommit.split(
+                        " ",
+                      )[0] || "local"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Remaining</span>
+                    <strong>
+                      {a2a2aCodexLaneOutcome.remainingQueue.length}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Selected</span>
+                  <code>{a2a2aCodexLaneOutcome.selectedSlice.name}</code>
+                  <span>Runtime Report</span>
+                  <code>{a2a2aCodexLaneOutcome.runtimeReportPath}</code>
+                  <span>Updated</span>
+                  <code>{a2a2aCodexLaneOutcome.updatedAt}</code>
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A completed checklist items"
+                  >
+                    <div className="git-section-title">
+                      <span>Completed Checklist</span>
+                      <span className="approval-badge">
+                        {a2a2aCodexLaneOutcome.completedChecklistItems.length}
+                      </span>
+                    </div>
+                    {a2a2aCodexLaneOutcome.completedChecklistItems.map(
+                      (item) => (
+                        <div className="practice-artifact-row" key={item}>
+                          <span className="practice-status payload-ready">
+                            done
+                          </span>
+                          <div>
+                            <strong>{item}</strong>
+                            <p>{a2a2aCodexLaneOutcome.selectedSlice.why}</p>
+                            <code>
+                              {
+                                a2a2aCodexLaneOutcome.selectedSlice
+                                  .commitEvidence
+                              }
+                            </code>
+                          </div>
+                        </div>
+                      ),
+                    )}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A remaining queue"
+                  >
+                    <div className="git-section-title">
+                      <span>Remaining Queue</span>
+                      <span className="approval-badge">
+                        {a2a2aCodexLaneOutcome.remainingQueue.length}
+                      </span>
+                    </div>
+                    {a2a2aCodexLaneOutcome.remainingQueue.map((item) => (
+                      <div className="practice-artifact-row" key={item}>
+                        <span className="practice-status payload-warn">
+                          next
+                        </span>
+                        <div>
+                          <strong>{item}</strong>
+                          <p>Keep this routed through the assignment board.</p>
+                          <code>{a2a2aCodexLaneOutcome.generatedBy}</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+                </div>
+              </div>
+
+              <div className="card practice-card">
+                <div className="card-title">
                   <span>A2A2A Team Assignment</span>
                   <span className="accent-cyan">
                     {a2a2aTeamAssignmentBoard.summary.status}
@@ -2970,6 +3127,12 @@ export default function App() {
                     <span>Codex Tasks</span>
                     <strong>
                       {a2a2aTeamAssignmentBoard.summary.codexReadyTasks}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Completed</span>
+                    <strong>
+                      {a2a2aTeamAssignmentBoard.summary.completedCodexTasks}
                     </strong>
                   </div>
                   <div className="practice-kpi">

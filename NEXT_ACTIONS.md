@@ -811,24 +811,28 @@ configuration lane, then keep future entries concise and source-path based.
       blocked gates without executing anything.
 - [x] Add A2A2A team assignment board so Mission Control can show the next
       Codex action, immediate queue, role responsibilities, and edit rights.
-- [ ] Review the implementation packet in
+- [x] Review the implementation packet in
       `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`.
-- [ ] Review
+- [x] Review
       `apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json`
       and choose the smallest first implementation slice.
-- [ ] Review
+- [x] Review
       `apps/mission-control/src/fixtures/a2a2aBacklogPriority.json` and confirm
       the P0/P1 ordering before opening the next scoped Codex lane.
-- [ ] Review
+- [x] Review
       `apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json` and use
       its `nextCodexAction` as the first coding step for this A2A2A lane.
-- [ ] For the first implementation lane, Codex must own all file edits, run
+- [x] Record the first Codex-owned slice outcome in
+      `apps/mission-control/src/fixtures/a2a2aCodexLaneOutcome.json`.
+- [x] For the first implementation lane, Codex must own all file edits, run
       validation, and stage only the file list from the packet.
-- [ ] Keep GLM-5.2, DeepSeek, and AGY report-only until a separate provider
+- [x] Keep GLM-5.2, DeepSeek, and AGY report-only until a separate provider
       execution lane exists.
-- [ ] Keep KOB validate-only until Command Broker issues an execution lease.
-- [ ] Keep Mission Control read-only and fixture-backed; do not let the browser
+- [x] Keep KOB validate-only until Command Broker issues an execution lease.
+- [x] Keep Mission Control read-only and fixture-backed; do not let the browser
       poll runtime files directly.
+- [ ] Open the next scoped Codex implementation slice from the assignment board
+      immediate queue.
 - [ ] Do not use `git add .`, deploy, push, connector sync, provider calls,
       secret reads, Docker starts, external repo clone/audit, or generated
       `web-sirinx` asset mutation from this lane.
@@ -853,6 +857,10 @@ The team assignment board is now the role/queue handoff layer. Use it to keep
 Hermes as mission commander, Opus as architecture handoff, Codex as sole repo
 editor, GLM-5.2/DeepSeek/AGY as report-only workers, KOB as validate-only, and
 Mission Control as fixture-backed observer.
+
+The first Codex-owned slice is now recorded as an outcome fixture. The next
+slice should come from the assignment board `immediateQueue`, while provider,
+connector, deploy, generated asset, and external runtime lanes stay blocked.
 
 For watch-mode handoff, use bounded polling first:
 

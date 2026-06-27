@@ -16,6 +16,7 @@ FIXTURE_DIR = REPO_ROOT / "apps" / "mission-control" / "src" / "fixtures"
 DEFAULT_BACKLOG_PATH = FIXTURE_DIR / "a2a2aBacklogPriority.json"
 DEFAULT_LANE_PATH = FIXTURE_DIR / "a2a2aFirstCodexImplementationLane.json"
 DEFAULT_PACKET_PATH = FIXTURE_DIR / "a2a2aImplementationLanePacket.json"
+DEFAULT_OUTCOME_PATH = FIXTURE_DIR / "a2a2aCodexLaneOutcome.json"
 DEFAULT_FIXTURE_PATH = FIXTURE_DIR / "a2a2aTeamAssignmentBoard.json"
 DEFAULT_RUNTIME_ROOT = Path(
     os.path.expanduser(os.environ.get("GHOSTCLAW_A2A2A_RUNTIME", "~/SIRINXDev/.ghostclaw_runtime/a2a2a"))
@@ -100,20 +101,37 @@ def role_rows() -> list[dict[str, str]]:
     ]
 
 
-def lane_queue(lane_fixture: dict[str, Any]) -> list[dict[str, Any]]:
+def completed_tasks_from_outcome(outcome_fixture: dict[str, Any] | None) -> set[str]:
+    if not outcome_fixture:
+        return set()
+    source_next_action = (
+        outcome_fixture.get("selectedSlice", {}).get("sourceNextAction", {})
+        if isinstance(outcome_fixture.get("selectedSlice"), dict)
+        else {}
+    )
+    task = str(source_next_action.get("task", "")).strip()
+    return {task} if task else set()
+
+
+def lane_queue(lane_fixture: dict[str, Any], completed_tasks: set[str] | None = None) -> list[dict[str, Any]]:
     lane = lane_fixture.get("lane", {}) if isinstance(lane_fixture.get("lane"), dict) else {}
+    completed_tasks = completed_tasks or set()
     rows = []
     for task in lane.get("tasks", []):
         if not isinstance(task, dict):
             continue
+        task_name = compact(str(task.get("name", "")))
+        status = str(task.get("status", ""))
+        if task_name in completed_tasks:
+            status = "completed"
         rows.append(
             {
                 "queueId": f"LANE-{task.get('taskId', 'unknown')}",
                 "source": "first_codex_implementation_lane",
                 "priority": int(task.get("priority", 99) or 99),
                 "owner": str(task.get("owner", "")),
-                "status": str(task.get("status", "")),
-                "task": compact(str(task.get("name", ""))),
+                "status": status,
+                "task": task_name,
                 "why": compact(str(task.get("why", ""))),
                 "acceptance": compact(str(task.get("acceptance", ""))),
             }
@@ -166,14 +184,17 @@ def build_assignment(
     lane_fixture: dict[str, Any],
     packet_fixture: dict[str, Any],
     runtime_root: Path,
+    outcome_fixture: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     lane_summary = lane_fixture.get("summary", {})
     backlog_summary = backlog_fixture.get("summary", {})
     packet_summary = packet_fixture.get("summary", {})
-    lane_items = lane_queue(lane_fixture)
+    completed_tasks = completed_tasks_from_outcome(outcome_fixture)
+    lane_items = lane_queue(lane_fixture, completed_tasks)
     backlog_items = backlog_queue(backlog_fixture)
-    immediate_queue = lane_items[:5] + backlog_items[:7]
-    next_codex = next((item for item in lane_items if item["owner"].startswith("codex")), {})
+    open_lane_items = [item for item in lane_items if item["status"] != "completed"]
+    immediate_queue = open_lane_items[:5] + backlog_items[:7]
+    next_codex = next((item for item in open_lane_items if item["owner"].startswith("codex")), {})
     status = (
         "ready_for_codex_assignment"
         if lane_summary.get("status") == "open_for_codex_scoped_work"
@@ -191,6 +212,7 @@ def build_assignment(
             "roles": len(role_rows()),
             "immediateQueueItems": len(immediate_queue),
             "codexReadyTasks": int(lane_summary.get("codexReadyTasks", 0) or 0),
+            "completedCodexTasks": sum(1 for item in lane_items if item["status"] == "completed"),
             "reportOnlyWorkerTasks": int(lane_summary.get("reportInputTasks", 0) or 0),
             "backlogP0": int(backlog_summary.get("p0", 0) or 0),
             "backlogP1": int(backlog_summary.get("p1", 0) or 0),
@@ -202,6 +224,7 @@ def build_assignment(
         "nextCodexAction": next_codex,
         "roles": role_rows(),
         "immediateQueue": immediate_queue,
+        "completedLaneTasks": [item for item in lane_items if item["status"] == "completed"],
         "dependencyGate": packet_dependencies(packet_fixture),
         "blockedGates": backlog_fixture.get("blockedGates", [])[:8],
         "sourceFixtures": {
@@ -240,6 +263,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--backlog-path", default=str(DEFAULT_BACKLOG_PATH))
     parser.add_argument("--lane-path", default=str(DEFAULT_LANE_PATH))
     parser.add_argument("--packet-path", default=str(DEFAULT_PACKET_PATH))
+    parser.add_argument("--outcome-path", default=str(DEFAULT_OUTCOME_PATH))
     parser.add_argument("--runtime-root", default=str(DEFAULT_RUNTIME_ROOT))
     parser.add_argument("--fixture-path", default=str(DEFAULT_FIXTURE_PATH))
     return parser.parse_args(argv)
@@ -250,8 +274,10 @@ def main(argv: list[str] | None = None) -> int:
     backlog = read_json(Path(os.path.expanduser(args.backlog_path)).resolve())
     lane = read_json(Path(os.path.expanduser(args.lane_path)).resolve())
     packet = read_json(Path(os.path.expanduser(args.packet_path)).resolve())
+    outcome_path = Path(os.path.expanduser(args.outcome_path)).resolve()
+    outcome = read_json(outcome_path) if outcome_path.exists() else None
     runtime_root = Path(os.path.expanduser(args.runtime_root)).resolve()
-    fixture = build_assignment(backlog, lane, packet, runtime_root)
+    fixture = build_assignment(backlog, lane, packet, runtime_root, outcome)
     write_json(Path(os.path.expanduser(args.fixture_path)).resolve(), fixture)
     print(f"wrote {args.fixture_path}")
     return 0

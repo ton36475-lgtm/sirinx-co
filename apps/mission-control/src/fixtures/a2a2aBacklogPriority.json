@@ -154,11 +154,11 @@
   ],
   "ownerCounts": [
     {
-      "count": 49,
+      "count": 44,
       "owner": "codex"
     },
     {
-      "count": 18,
+      "count": 17,
       "owner": "glm52_deepseek"
     },
     {
@@ -166,7 +166,7 @@
       "owner": "hermes"
     },
     {
-      "count": 2,
+      "count": 1,
       "owner": "kob"
     },
     {
@@ -194,109 +194,25 @@
   "summary": {
     "blocked": 56,
     "owners": 6,
-    "p0": 8,
+    "p0": 1,
     "p1": 22,
     "p2": 95,
     "p3": 56,
-    "readyForReview": 125,
-    "totalPending": 181
+    "readyForReview": 118,
+    "totalPending": 174
   },
   "topItems": [
     {
       "blockedReason": "",
       "id": "BACKLOG-173",
-      "line": 814,
+      "line": 834,
       "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
       "owner": "codex",
       "priority": 0,
       "section": "A2A2A Team Coding Sync",
       "status": "ready_for_review",
       "subsection": "",
-      "task": "Review the implementation packet in `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`."
-    },
-    {
-      "blockedReason": "",
-      "id": "BACKLOG-174",
-      "line": 816,
-      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
-      "owner": "codex",
-      "priority": 0,
-      "section": "A2A2A Team Coding Sync",
-      "status": "ready_for_review",
-      "subsection": "",
-      "task": "Review `apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json` and choose the smallest first implementation slice."
-    },
-    {
-      "blockedReason": "",
-      "id": "BACKLOG-175",
-      "line": 819,
-      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
-      "owner": "codex",
-      "priority": 0,
-      "section": "A2A2A Team Coding Sync",
-      "status": "ready_for_review",
-      "subsection": "",
-      "task": "Review `apps/mission-control/src/fixtures/a2a2aBacklogPriority.json` and confirm the P0/P1 ordering before opening the next scoped Codex lane."
-    },
-    {
-      "blockedReason": "",
-      "id": "BACKLOG-176",
-      "line": 822,
-      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
-      "owner": "codex",
-      "priority": 0,
-      "section": "A2A2A Team Coding Sync",
-      "status": "ready_for_review",
-      "subsection": "",
-      "task": "Review `apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json` and use its `nextCodexAction` as the first coding step for this A2A2A lane."
-    },
-    {
-      "blockedReason": "",
-      "id": "BACKLOG-177",
-      "line": 825,
-      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
-      "owner": "codex",
-      "priority": 0,
-      "section": "A2A2A Team Coding Sync",
-      "status": "ready_for_review",
-      "subsection": "",
-      "task": "For the first implementation lane, Codex must own all file edits, run validation, and stage only the file list from the packet."
-    },
-    {
-      "blockedReason": "",
-      "id": "BACKLOG-178",
-      "line": 827,
-      "nextAction": "Keep model workers report-only until provider/runtime lane opens.",
-      "owner": "glm52_deepseek",
-      "priority": 0,
-      "section": "A2A2A Team Coding Sync",
-      "status": "ready_for_review",
-      "subsection": "",
-      "task": "Keep GLM-5.2, DeepSeek, and AGY report-only until a separate provider execution lane exists."
-    },
-    {
-      "blockedReason": "",
-      "id": "BACKLOG-179",
-      "line": 829,
-      "nextAction": "KOB remains validate-only until Command Broker issues a lease.",
-      "owner": "kob",
-      "priority": 0,
-      "section": "A2A2A Team Coding Sync",
-      "status": "ready_for_review",
-      "subsection": "",
-      "task": "Keep KOB validate-only until Command Broker issues an execution lease."
-    },
-    {
-      "blockedReason": "",
-      "id": "BACKLOG-180",
-      "line": 830,
-      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
-      "owner": "codex",
-      "priority": 0,
-      "section": "A2A2A Team Coding Sync",
-      "status": "ready_for_review",
-      "subsection": "",
-      "task": "Keep Mission Control read-only and fixture-backed; do not let the browser poll runtime files directly."
+      "task": "Open the next scoped Codex implementation slice from the assignment board immediate queue."
     },
     {
       "blockedReason": "",
@@ -345,7 +261,91 @@
       "status": "ready_for_review",
       "subsection": "",
       "task": "Convert old approval packet docs into job manifest / execution lease references or mark them legacy."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-092",
+      "line": 314,
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 1,
+      "section": "GLM-5.2 API-First Evaluation",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Run GLM-5.2 frontend/UI review benchmark on a small Mission Control or AGM AUTOGLOW UI excerpt."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-096",
+      "line": 340,
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 1,
+      "section": "Facebook AI Content Factory Workflow",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Add optional UI panel in Mission Control to browse local campaign packs."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-101",
+      "line": 363,
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 1,
+      "section": "Content Automation Revenue Engine",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Add optional Mission Control panel to browse sprint packs, content queue, policy QA, and KPI CSVs."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-108",
+      "line": 421,
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 1,
+      "section": "iGaming Engineering Practice Lab",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Capture a browser screenshot of the Mission Control `iGaming Lab` panel after the local app is started."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-109",
+      "line": 423,
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 1,
+      "section": "iGaming Engineering Practice Lab",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Add generated machine-readable ledger test status manifest for Mission Control to read instead of static fixture data."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-119",
+      "line": 500,
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 1,
+      "section": "A2A Sync Bridge v2",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Implement a read-only Mission Control `Spec Driving` fixture/panel from `docs/product-design/SPEC_DRIVING_MISSION_CONTROL_TASKS.md` after a clean scoped implementation lane is available."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-126",
+      "line": 569,
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 1,
+      "section": "A2A Codex Sidebar Autoflow v3",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Review the Mission Control `Tool Matrix` tab to confirm command class coverage before opening new tool/repo executor lanes."
     }
   ],
-  "updatedAt": "2026-06-27T13:27:27+00:00"
+  "updatedAt": "2026-06-27T13:36:41+00:00"
 }

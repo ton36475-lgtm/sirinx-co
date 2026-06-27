@@ -301,6 +301,26 @@ backlog items, and surfaces the next Codex action. It remains read-only: GLM-5.2
 DeepSeek, AGY, and KOB are report/validation inputs only, while Codex is the only
 scoped repo editor.
 
+## Codex Lane Outcome
+
+Record the first Codex-owned implementation slice outcome:
+
+```bash
+python3 scripts/a2a/a2a_codex_lane_outcome.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This writes:
+
+- a runtime report at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/codex_lane_outcome/latest.json`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aCodexLaneOutcome.json`
+
+The outcome fixture closes only the first Codex-owned inspection slice. After it
+exists, the assignment board treats `inspect_plan_and_worker_digest` as
+completed and advances the next Codex action to `implement_only_allowed_paths`.
+
 ## Next Build Lane
 
 Codex should consume the first `ready_for_codex_plan` item from the dependency

@@ -1077,6 +1077,8 @@ Toolkit` tab.
   `scripts/a2a/a2a_backlog_priority.py`.
 - Team assignment generator:
   `scripts/a2a/a2a_team_assignment_board.py`.
+- Codex lane outcome generator:
+  `scripts/a2a/a2a_codex_lane_outcome.py`.
 - Current status:
   - runner roles: 6 (`hermes`, `opus`, `glm52`, `deepseek`, `agy`, `kob`)
   - runner completed tasks: 7
@@ -1093,11 +1095,13 @@ Toolkit` tab.
   - completion audit: `ready_for_first_scoped_codex_lane`, 9/9 checks passed
   - first Codex lane: `open_for_codex_scoped_work`, 5 tasks, 4 Codex-ready
     tasks, 1 report-input task, provider calls disabled
-  - backlog priority board: 181 unchecked `NEXT_ACTIONS.md` items, 8 P0 items,
+  - backlog priority board: 174 unchecked `NEXT_ACTIONS.md` items, 1 P0 item,
     22 P1 items, 56 blocked gates, and 6 owner groups
-  - team assignment board: `ready_for_codex_assignment`, 8 roles, 9 immediate
-    queue items, 4 Codex-ready tasks, 1 report-only worker task, provider calls
-    disabled, worker direct edits disabled
+  - team assignment board: `ready_for_codex_assignment`, 8 roles, 11 immediate
+    queue items, 4 Codex-ready tasks, 1 completed Codex task, 1 report-only
+    worker task, provider calls disabled, worker direct edits disabled
+  - first Codex lane outcome: `first_codex_slice_completed`, selected slice
+    `a2a2a_team_assignment_board`, 7 checklist items closed, provider calls 0
 - Role ownership:
   - Hermes: mission commander and dependency gate owner.
   - Opus: architecture handoff source before Codex edits.
@@ -1129,9 +1133,14 @@ Toolkit` tab.
   blocked.
 - Current assignment evidence:
   `apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json` combines the
-  first Codex lane with the P0/P1 backlog queue. The next Codex action is
-  `inspect_plan_and_worker_digest`; Hermes, Opus, GLM-5.2, DeepSeek, AGY, KOB,
-  and Mission Control have explicit responsibilities and edit rights.
+  first Codex lane with the P0/P1 backlog queue. After outcome recording, the
+  next Codex action is `implement_only_allowed_paths`; Hermes, Opus, GLM-5.2,
+  DeepSeek, AGY, KOB, and Mission Control have explicit responsibilities and
+  edit rights.
+- Current outcome evidence:
+  `apps/mission-control/src/fixtures/a2a2aCodexLaneOutcome.json` records the
+  first Codex-owned slice as complete with commit evidence
+  `3840ca4 feat(a2a2a): add team assignment board` and validation evidence.
 - Boundary: this A2A2A state still does not call providers, execute KOB
   commands, clone repos, start Docker, write connectors, push, deploy, read
   secrets, or mutate generated `web-sirinx` assets. Worker reports are inputs

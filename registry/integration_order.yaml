@@ -1,0 +1,51 @@
+version: ghostclaw-a2async-v2
+phases:
+  - id: phase_1_a2a_sync_core
+    actions:
+      - create_docs
+      - create_agent_cards
+      - create_registry
+      - create_policies
+      - create_local_scripts
+  - id: phase_2_healthcheck
+    actions:
+      - check_kob_cli
+      - check_kob_profiles_or_models
+      - check_codex_cli
+      - check_node_npm
+      - check_optional_cloudflare_when_sirinx_active
+  - id: phase_3_repo_registry_audit
+    actions:
+      - validate_registry
+      - mark_license_status_role
+      - mark_clone_path
+      - mark_service_start_policy
+  - id: phase_4_whitelisted_clone
+    actions:
+      - clone_whitelisted_external_repos
+      - skip_unverified_pixelrag
+      - skip_sirinx_remote_assumption
+  - id: phase_5_per_repo_audit
+    actions:
+      - audit_readme_license_security
+      - audit_package_python_docker_workflows
+      - masked_risk_grep
+  - id: phase_6_tool_wiring
+    actions:
+      - ponytail_review_gate
+      - manus_artifact_handoff
+      - flowise_rag_layer
+      - deerflow_long_task_runtime
+      - odysseus_workspace_ui
+      - glm52_model_layer_reference
+      - marketing_stack_registry
+      - visual_rag_spec02
+  - id: phase_7_sirinx_recovery_task
+    actions:
+      - detect_canonical_remote
+      - clean_build
+      - cloudflare_pages_direct_deploy_if_configured
+    blocked_until:
+      - adapter_contract_ready
+      - auth_available
+      - no_force_push

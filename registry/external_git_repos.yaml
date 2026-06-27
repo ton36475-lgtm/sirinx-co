@@ -1,0 +1,137 @@
+version: ghostclaw-a2async-v2
+external_root: ~/SIRINXDev/_external_repos
+defaults:
+  clone_policy: whitelisted_external_only
+  install_dependencies: false
+  start_services: false
+  print_secrets: false
+repos:
+  ai_agent_stack:
+    - name: ponytail
+      repo: DietrichGebert/ponytail
+      role: code_minimalism_gate
+      clone_path: ~/SIRINXDev/_external_repos/ponytail
+      clone_policy: allow
+    - name: odysseus
+      repo: pewdiepie-archdaemon/odysseus
+      role: private_ai_workspace_ui
+      clone_path: ~/SIRINXDev/_external_repos/odysseus
+      clone_policy: allow
+      license_note: external_only_agpl_risk_review_required
+    - name: glm-5
+      repo: zai-org/GLM-5
+      role: long_context_model_docs_and_self_host_reference
+      clone_path: ~/SIRINXDev/_external_repos/GLM-5
+      clone_policy: allow
+    - name: deer-flow
+      repo: bytedance/deer-flow
+      role: long_horizon_agent_runtime
+      clone_path: ~/SIRINXDev/_external_repos/deer-flow
+      clone_policy: allow
+    - name: flowise
+      repo: FlowiseAI/Flowise
+      role: visual_llm_app_builder_rag_agentflow
+      clone_path: ~/SIRINXDev/_external_repos/flowise
+      clone_policy: allow
+    - name: codex
+      repo: openai/codex
+      role: codex_cli_reference_and_worker_docs
+      clone_path: ~/SIRINXDev/_external_repos/codex
+      clone_policy: allow
+  a2a_stack:
+    - name: a2a
+      repo: a2aproject/A2A
+      role: agent_to_agent_protocol_reference
+      clone_path: ~/SIRINXDev/_external_repos/a2a
+      clone_policy: allow
+  automation_stack:
+    - name: n8n
+      repo: n8n-io/n8n
+      role: automation_backbone
+      clone_path: ~/SIRINXDev/_external_repos/n8n
+      clone_policy: allow
+    - name: activepieces
+      repo: activepieces/activepieces
+      role: optional_workflow_mcp_alternative
+      clone_path: ~/SIRINXDev/_external_repos/activepieces
+      clone_policy: allow
+  marketing_stack:
+    - name: mautic
+      repo: mautic/mautic
+      role: marketing_automation_campaign_engine
+      clone_path: ~/SIRINXDev/_external_repos/mautic
+      clone_policy: allow
+    - name: twenty
+      repo: twentyhq/twenty
+      role: crm_layer
+      clone_path: ~/SIRINXDev/_external_repos/twenty
+      clone_policy: allow
+    - name: chatwoot
+      repo: chatwoot/chatwoot
+      role: inbox_livechat_line_social_support
+      clone_path: ~/SIRINXDev/_external_repos/chatwoot
+      clone_policy: allow
+    - name: postiz
+      repo: gitroomhq/postiz-app
+      role: social_scheduling_distribution
+      clone_path: ~/SIRINXDev/_external_repos/postiz
+      clone_policy: allow
+    - name: umami
+      repo: umami-software/umami
+      role: privacy_web_analytics
+      clone_path: ~/SIRINXDev/_external_repos/umami
+      clone_policy: allow
+    - name: plausible
+      repo: plausible/analytics
+      role: privacy_web_analytics_candidate
+      clone_path: ~/SIRINXDev/_external_repos/plausible
+      clone_policy: allow
+    - name: formbricks
+      repo: formbricks/formbricks
+      role: survey_feedback_lead_qualification
+      clone_path: ~/SIRINXDev/_external_repos/formbricks
+      clone_policy: allow
+    - name: listmonk
+      repo: knadh/listmonk
+      role: newsletter_broadcast
+      clone_path: ~/SIRINXDev/_external_repos/listmonk
+      clone_policy: allow
+    - name: dittofeed
+      repo: dittofeed/dittofeed
+      role: event_based_customer_journey
+      clone_path: ~/SIRINXDev/_external_repos/dittofeed
+      clone_policy: allow
+    - name: growthbook
+      repo: growthbook/growthbook
+      role: feature_flags_experiments
+      clone_path: ~/SIRINXDev/_external_repos/growthbook
+      clone_policy: allow
+    - name: posthog
+      repo: PostHog/posthog
+      role: product_analytics_experiments
+      clone_path: ~/SIRINXDev/_external_repos/posthog
+      clone_policy: allow
+    - name: serpbear
+      repo: towfiqi/serpbear
+      role: seo_rank_tracking
+      clone_path: ~/SIRINXDev/_external_repos/serpbear
+      clone_policy: allow
+    - name: metabase
+      repo: metabase/metabase
+      role: bi_dashboard_reporting
+      clone_path: ~/SIRINXDev/_external_repos/metabase
+      clone_policy: allow
+  project_repos:
+    - name: sirinx
+      repo: canonical_remote_pending
+      role: sirinx_cloudflare_pages_project
+      clone_path: detect_from_local_git
+      clone_policy: skip
+      notes: detect canonical GitHub remote from local git before pushing
+  candidate_unverified:
+    - name: pixelrag
+      repo: unverified
+      role: visual_rag_candidate
+      clone_path: none
+      clone_policy: skip
+      policy: do_not_clone_until_official_repo_verified

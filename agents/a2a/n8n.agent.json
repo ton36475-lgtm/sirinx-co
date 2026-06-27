@@ -1,0 +1,21 @@
+{
+  "agent_id": "n8n",
+  "name": "n8n Automation Backbone",
+  "role": "workflow-automation-and-webhook-draft-layer",
+  "model_profile": "none",
+  "runtime": "external-local-service",
+  "capabilities": [
+    "workflow_json_draft",
+    "webhook_blueprint",
+    "crm_routing_blueprint",
+    "marketing_automation_blueprint"
+  ],
+  "default_tasks": ["workflow_draft", "dry_run_plan"],
+  "local_only": true,
+  "blocked_actions": [
+    "activate_production_workflow",
+    "send_to_non_opt_in",
+    "public_endpoint",
+    "secret_access"
+  ]
+}

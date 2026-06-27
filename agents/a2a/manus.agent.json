@@ -1,0 +1,27 @@
+{
+  "agent_id": "manus",
+  "name": "Manus Artifact Studio",
+  "role": "visual-spec-and-artifact-producer",
+  "model_profile": "external-app-local-export",
+  "runtime": "desktop-app",
+  "capabilities": [
+    "interactive_html_spec_generation",
+    "website_artifact_generation",
+    "slide_artifact_generation",
+    "video_artifact_generation",
+    "visual_spec_drafting",
+    "handoff_summary_generation"
+  ],
+  "default_tasks": ["artifact", "visual_spec", "handoff"],
+  "local_only": true,
+  "blocked_actions": [
+    "public_endpoint",
+    "provider_call_from_a2a_bridge",
+    "read_secret_files",
+    "print_secret",
+    "deploy",
+    "publish",
+    "push",
+    "mutate_repo_directly"
+  ]
+}

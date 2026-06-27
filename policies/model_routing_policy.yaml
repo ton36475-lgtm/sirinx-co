@@ -1,0 +1,48 @@
+version: ghostclaw-a2async-v2
+aliases:
+  opus-5:
+    purpose: architecture_and_deep_planning
+    provider_resolution: kob_discovery
+    current_confirmed_model: anthropic/claude-opus-4.8
+    status: available
+    smoke_test: KOB_OPUS_READY
+    fallback_hint: anthropic/claude-opus-4.8
+  fable-5:
+    purpose: fast_summary_and_routing
+    provider_resolution: kob_discovery
+    current_candidate_model: anthropic/claude-fable-5
+    status: unavailable_credit_blocked
+    last_error_class: insufficient_kob_credits
+    fallback_hint: anthropic/claude-opus-4.8
+  codex-local:
+    purpose: repo_execution
+    provider_resolution: active_codex_worker_or_local_codex_cli
+    status: active_for_this_task
+    kob_hosted_codex_models_allowed: false
+    fallback_hint: current_codex_session
+  codex-5.6:
+    purpose: legacy_repo_execution_alias
+    provider_resolution: alias_only
+    status: not_discovered_as_concrete_local_model
+    kob_hosted_codex_models_allowed: false
+    fallback_hint: codex-local
+  opencode:
+    purpose: scoped_code_review_and_execution
+    provider_resolution: local_cli_discovery
+    command: opencode
+    requires_executor_lease: true
+    fallback_hint: codex-local
+  agy-antigravity2:
+    purpose: scoped_fast_scaffold_and_refactor_execution
+    provider_resolution: local_cli_discovery
+    command: agy
+    requires_executor_lease: true
+    fallback_hint: codex-local
+  glm-5.2:
+    purpose: long_context_fallback
+    provider_resolution: env_or_config
+    fallback_hint: local_chunking
+first_phase:
+  external_provider_calls: false
+  model_discovery_only: true
+  secret_values_logged: false

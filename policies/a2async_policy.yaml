@@ -1,0 +1,38 @@
+mode:
+  name: FULL_AUTO_LOCAL_FILE_QUEUE
+  human_approval_required: false
+  public_server_enabled: false
+runtime:
+  root: ~/SIRINXDev/.ghostclaw_runtime/a2async
+  audit_enabled: true
+  kill_switch_enabled: true
+defaults:
+  dry_run: true
+  no_secret_printing: true
+  no_public_ports: true
+  no_force_push: true
+  no_external_api_call_first_phase: true
+  no_docker_start_first_phase: true
+states:
+  allowed:
+    - queued
+    - policy_checked
+    - running
+    - verifying
+    - completed
+    - skipped
+    - failed
+    - quarantined
+blocked_actions:
+  - print_secret
+  - read_env_values
+  - copy_browser_profile
+  - copy_app_session_state
+  - expose_public_port
+  - force_push
+  - deploy
+  - publish
+  - connector_activation
+  - provider_api_call
+  - docker_start
+  - clone_unverified_repo

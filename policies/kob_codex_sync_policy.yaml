@@ -1,0 +1,31 @@
+version: ghostclaw-a2async-v2
+role_split:
+  kob:
+    may:
+      - plan
+      - summarize
+      - route
+      - compress_context
+      - propose_next_actions
+    must_not:
+      - mutate_repo_directly
+      - deploy
+      - push
+      - print_secrets
+  codex:
+    may:
+      - inspect_repo
+      - edit_allowed_paths
+      - generate_docs
+      - generate_scripts
+      - run_local_validation
+      - produce_diff_summary
+    must_not:
+      - force_push
+      - read_secret_files
+      - expose_public_endpoint
+      - mutate_external_services_without_policy
+coordination:
+  simultaneous_mutation_same_repo_lane: false
+  planner_before_executor: true
+  artifacts_before_memory_writeback: true

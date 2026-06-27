@@ -1,0 +1,21 @@
+{
+  "agent_id": "flowise",
+  "name": "Flowise Local RAG Builder",
+  "role": "visual-rag-chatbot-agentflow-builder",
+  "model_profile": "policy-routed",
+  "runtime": "external-local-service",
+  "capabilities": [
+    "rag_flow_design",
+    "chatbot_blueprint",
+    "agentflow_blueprint",
+    "mcp_connector_draft"
+  ],
+  "default_tasks": ["rag_blueprint", "chatbot_blueprint"],
+  "local_only": true,
+  "blocked_actions": [
+    "disable_security_check",
+    "public_endpoint",
+    "unrestricted_custom_code",
+    "secret_access"
+  ]
+}

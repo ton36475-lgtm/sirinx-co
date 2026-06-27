@@ -1,0 +1,44 @@
+version: ghostclaw-a2async-v2
+agent: manus
+mode: local_artifact_sync
+defaults:
+  local_only: true
+  dry_run_task_creation: true
+  copy_artifact_contents: false
+  provider_call_from_bridge: false
+  ui_automation: false
+allowed:
+  - record_artifact_metadata
+  - hash_local_exported_file
+  - create_a2a_review_task
+  - write_runtime_manifest
+  - write_obsidian_pulse
+blocked:
+  - read_secret_files
+  - copy_browser_profile
+  - copy_app_session_state
+  - provider_api_call
+  - public_endpoint
+  - deploy
+  - publish
+  - push
+  - mutate_repo_directly_from_manus
+artifact_limits:
+  manifest_embeds_full_content: false
+  max_copy_bytes_first_phase: 0
+  allowed_metadata_only_extensions:
+    - .html
+    - .md
+    - .txt
+    - .json
+    - .png
+    - .jpg
+    - .jpeg
+    - .pdf
+review_gate:
+  executor: codex-local
+  required_before_import:
+    - inspect_file_content
+    - classify_security_risk
+    - identify_repo_target
+    - run_task_scoped_validation

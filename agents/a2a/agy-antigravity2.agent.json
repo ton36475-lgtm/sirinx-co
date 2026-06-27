@@ -1,0 +1,27 @@
+{
+  "agent_id": "agy-antigravity2",
+  "name": "AGY Antigravity 2 Scoped Executor",
+  "role": "fast-scaffold-refactor-and-local-command-plan-executor",
+  "model_profile": "agy-local-configured-provider",
+  "runtime": "local-cli",
+  "capabilities": [
+    "fast_scaffold_plan",
+    "refactor_plan",
+    "ui_draft_plan",
+    "dry_run_command_plan",
+    "scoped_execution_with_lease"
+  ],
+  "default_tasks": ["scaffold_plan", "refactor_plan", "dry_run"],
+  "local_only": true,
+  "requires_executor_lease": true,
+  "blocked_actions": [
+    "print_secret",
+    "read_secret_files",
+    "force_push",
+    "public_endpoint",
+    "deploy_without_policy",
+    "mutate_unscoped_dirty_lanes",
+    "provider_call_without_budget_and_scope",
+    "bypass_policy_or_sandbox"
+  ]
+}

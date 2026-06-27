@@ -1,0 +1,24 @@
+{
+  "agent_id": "kob-cli-fable",
+  "name": "KOB CLI Fable Fast Router",
+  "role": "fast-planner-summarizer-router",
+  "model_profile": "fable-5",
+  "runtime": "terminal",
+  "capabilities": [
+    "fast_summary",
+    "task_slicing",
+    "daily_sync",
+    "artifact_compression",
+    "lightweight_planning"
+  ],
+  "default_tasks": ["summarize", "classify", "route", "daily_report"],
+  "local_only": true,
+  "blocked_actions": [
+    "print_secret",
+    "mutate_repo",
+    "deploy",
+    "push",
+    "publish",
+    "public_endpoint"
+  ]
+}

@@ -1,0 +1,26 @@
+version: ghostclaw-a2async-v2
+external_root: ~/SIRINXDev/_external_repos
+clone:
+  default: dry_run
+  execute_requires:
+    - repo_in_registry
+    - clone_policy_allow
+    - sanitized_clone_path_under_external_root
+  skip:
+    - repo_unverified
+    - canonical_remote_pending
+    - clone_policy_skip
+audit:
+  readme: true
+  license: true
+  security: true
+  package_files: true
+  docker_files: true
+  workflows: true
+  masked_risk_grep: true
+blocked:
+  - install_dependencies
+  - start_services
+  - copy_external_source_into_monorepo
+  - print_secret_lines
+  - mutate_upstream_repo

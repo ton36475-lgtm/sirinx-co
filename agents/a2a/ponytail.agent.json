@@ -1,0 +1,21 @@
+{
+  "agent_id": "ponytail",
+  "name": "Ponytail Code Minimalism Gate",
+  "role": "code-review-minimalism-overengineering-check",
+  "model_profile": "plugin-routed",
+  "runtime": "codex-plugin",
+  "capabilities": [
+    "diff_review",
+    "repo_audit",
+    "debt_ledger",
+    "overengineering_detection"
+  ],
+  "default_tasks": ["review", "audit", "debt"],
+  "local_only": true,
+  "blocked_actions": [
+    "remove_validation",
+    "remove_security",
+    "remove_error_handling",
+    "remove_accessibility"
+  ]
+}

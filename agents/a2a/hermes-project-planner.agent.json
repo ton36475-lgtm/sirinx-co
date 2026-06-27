@@ -1,0 +1,35 @@
+{
+  "agent_id": "hermes-project-planner",
+  "name": "Hermes Project Planner",
+  "role": "project-planner-tool-integration-router",
+  "model_profile": "planner-current-session",
+  "runtime": "codex-desktop-local-planner",
+  "capabilities": [
+    "phase_planning",
+    "tool_routing",
+    "a2a_task_breakdown",
+    "mission_control_backlog_mapping",
+    "external_connector_payload_drafting",
+    "risk_and_blocker_classification",
+    "obsidian_memory_summary"
+  ],
+  "tool_integrations": ["airtable", "linear", "notion", "github"],
+  "default_tasks": [
+    "plan",
+    "route",
+    "draft_external_payloads",
+    "sync_status_summary"
+  ],
+  "local_only": true,
+  "blocked_actions": [
+    "print_secret",
+    "mutate_external_app_without_target",
+    "create_issue_without_repo_or_team",
+    "write_notion_without_parent",
+    "write_airtable_without_base_table",
+    "push",
+    "deploy",
+    "publish",
+    "public_endpoint"
+  ]
+}

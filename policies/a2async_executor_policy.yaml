@@ -1,0 +1,70 @@
+version: ghostclaw-a2async-v3
+mode:
+  name: CODEX_SIDEBAR_SCOPED_EXECUTORS
+  local_file_queue: true
+  public_a2a_server: false
+  default_adapter_mode: dry_run_command_plan
+
+supervisor:
+  agent_id: codex-local
+  owns_repo_safety: true
+  reviews_executor_artifacts: true
+
+executors:
+  codex-local:
+    authority: scoped_repo_executor
+    requires_lease: false
+    can_write_repo: true
+  opencode:
+    authority: scoped_executor
+    requires_lease: true
+    can_write_repo: true
+    default_mode: dry_run
+  agy-antigravity2:
+    authority: scoped_executor
+    requires_lease: true
+    can_write_repo: true
+    default_mode: dry_run
+
+lease_requirements:
+  required_fields:
+    - executor
+    - lane
+    - allowed_paths
+    - validation_commands
+    - goal
+  lock_required: true
+  runtime_only: true
+  path: ~/SIRINXDev/.ghostclaw_runtime/a2async/state/executor_leases
+
+blocked_paths:
+  - .env
+  - .env.*
+  - id_rsa
+  - credentials
+  - secrets
+  - private_keys
+  - browser_profiles
+  - token_stores
+
+blocked_actions:
+  - jailbreak_policy
+  - bypass_command_policy
+  - print_secret
+  - read_private_key
+  - copy_browser_profile
+  - copy_app_session_state
+  - force_push
+  - public_endpoint
+  - deploy_without_policy
+  - provider_call_without_budget_and_scope
+  - mutate_lane_without_lock
+  - simultaneous_executor_mutation
+
+allowed_first_phase:
+  - cli_discovery
+  - agent_card_registration
+  - dry_run_command_plan
+  - runtime_lease_manifest
+  - lane_lock_manifest
+  - codex_review_summary

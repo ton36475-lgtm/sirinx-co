@@ -1,0 +1,29 @@
+version: ghostclaw-a2async-v2
+roles:
+  code_minimalism_gate:
+    review_gate: ponytail
+    start_services: false
+  private_ai_workspace_ui:
+    localhost_only: true
+    auth_required: true
+    vendor_source_into_monorepo: false
+  long_horizon_agent_runtime:
+    sandbox_first: true
+    localhost_only: true
+    host_bash: blocked_by_default
+  automation_backbone:
+    dry_run_workflow_json_first: true
+    production_activation: policy_gated
+  marketing_automation_campaign_engine:
+    opt_in_required: true
+    rate_limit_required: true
+  agent_to_agent_protocol_reference:
+    docs_reference_only_first: true
+    public_server: false
+  codex_cli_reference_and_worker_docs:
+    local_reference_only: true
+    no_global_config_mutation: true
+  sirinx_cloudflare_pages_project:
+    detect_remote_before_push: true
+    no_force_push: true
+    deploy_requires_adapter_contract: true

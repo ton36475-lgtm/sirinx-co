@@ -1,0 +1,60 @@
+mode:
+  name: EXTERNAL_TOOL_INTEGRATION_DRY_RUN
+  local_payloads_only: true
+  external_writes_enabled: false
+
+planner:
+  agent_id: hermes-project-planner
+  source_of_truth:
+    - PROJECT_STATE.md
+    - NEXT_ACTIONS.md
+    - docs/a2async/
+    - /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/
+
+required_targets_before_write:
+  airtable:
+    required:
+      - base_id
+      - table_id_or_name
+    intended_use: artifact_hash_tracker
+  linear:
+    required:
+      - workspace
+      - team_key_or_id
+    intended_use: implementation_backlog_and_blockers
+  notion:
+    required:
+      - parent_page_or_database_id
+    intended_use: executive_summary_and_decision_log
+  github:
+    required:
+      - owner
+      - repo
+    intended_use: issue_or_pr_backlog_only
+
+blocked_without_explicit_target:
+  - create_airtable_record
+  - update_airtable_record
+  - create_linear_issue
+  - update_linear_issue
+  - create_notion_page
+  - update_notion_page
+  - create_github_issue
+  - update_github_issue
+
+always_blocked:
+  - print_secret
+  - upload_env_file
+  - attach_private_key
+  - publish_public_page
+  - push_git
+  - deploy_production
+  - invite_external_user
+
+payload_defaults:
+  privacy: local_metadata_only
+  include_file_contents: false
+  include_hashes: true
+  include_absolute_paths: true
+  include_secret_values: false
+  status: draft_ready_for_target_binding

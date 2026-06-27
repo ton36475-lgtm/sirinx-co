@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "runtime_root": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime",
+  "adapters": {
+    "docker_localhost_start": {
+      "risk_tier": "A3",
+      "required_fields": [
+        "service_name",
+        "localhost_bind",
+        "auth_required",
+        "rollback_command"
+      ],
+      "loopback_hosts": ["127.0.0.1", "localhost"],
+      "require_auth": true,
+      "description": "Start a local Docker service only after rendered config proves loopback binding and auth."
+    },
+    "external_repo_clone": {
+      "risk_tier": "A3",
+      "required_fields": [
+        "target_repository",
+        "target_path",
+        "rollback_command"
+      ],
+      "allowed_path_prefix": "/Users/sirinx/SIRINXDev/_external_repos",
+      "allowed_repositories": [
+        "DietrichGebert/ponytail",
+        "pewdiepie-archdaemon/odysseus",
+        "zai-org/GLM-5",
+        "bytedance/deer-flow",
+        "FlowiseAI/Flowise",
+        "n8n-io/n8n",
+        "twentyhq/twenty",
+        "chatwoot/chatwoot",
+        "mautic/mautic",
+        "gitroomhq/postiz-app",
+        "umami-software/umami",
+        "metabase/metabase",
+        "formbricks/formbricks",
+        "knadh/listmonk",
+        "towfiqi/serpbear",
+        "Anil-matcha/Open-AI-UGC",
+        "zubair-trabzada/ai-marketing-claude",
+        "AgriciDaniel/claude-seo",
+        "alirezarezvani/claude-skills",
+        "pinchtab/pinchtab",
+        "Sompote/TigrimOSR"
+      ],
+      "description": "Clone approved external repositories into the isolated external repo root only."
+    },
+    "provider_api_smoke": {
+      "risk_tier": "A3",
+      "required_fields": ["provider_name", "budget_cap_usd", "rate_limit_key"],
+      "providers": {
+        "glm52": {
+          "budget_cap_usd": 5,
+          "rate_limit_key": "providers"
+        },
+        "openrouter_fusion": {
+          "budget_cap_usd": 5,
+          "rate_limit_key": "providers"
+        }
+      },
+      "description": "Run a tiny provider smoke test only when key, budget, and rate limit policy are present."
+    },
+    "mcp_connector_activation": {
+      "risk_tier": "A3",
+      "required_fields": [
+        "connector_name",
+        "auth_required",
+        "rollback_command"
+      ],
+      "allowed_connectors": [
+        "supabase_project_scoped",
+        "slayer_local_config",
+        "testsprite_local_config"
+      ],
+      "require_auth": true,
+      "description": "Activate only named, scoped MCP connector configs with auth and rollback."
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "agent_id": "odysseus",
+  "name": "Odysseus Private Workspace",
+  "role": "private-ai-workspace-ui",
+  "model_profile": "policy-routed",
+  "runtime": "external-local-service",
+  "capabilities": [
+    "workspace_ui",
+    "documents",
+    "research",
+    "local_agent_workflows"
+  ],
+  "default_tasks": ["workspace_ui", "local_workflow"],
+  "local_only": true,
+  "blocked_actions": [
+    "public_endpoint",
+    "disable_auth",
+    "vendor_agpl_source",
+    "secret_access"
+  ]
+}

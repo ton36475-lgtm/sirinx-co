@@ -1,0 +1,28 @@
+{
+  "agent_id": "opencode",
+  "name": "OpenCode Scoped Executor",
+  "role": "scoped-coding-review-and-command-plan-executor",
+  "model_profile": "opencode-configured-provider",
+  "runtime": "local-cli",
+  "capabilities": [
+    "code_review",
+    "implementation_plan",
+    "patch_plan",
+    "model_route_review",
+    "dry_run_command_plan",
+    "scoped_execution_with_lease"
+  ],
+  "default_tasks": ["review", "plan", "dry_run"],
+  "local_only": true,
+  "requires_executor_lease": true,
+  "blocked_actions": [
+    "print_secret",
+    "read_secret_files",
+    "force_push",
+    "public_endpoint",
+    "deploy_without_policy",
+    "mutate_unscoped_dirty_lanes",
+    "provider_call_without_budget_and_scope",
+    "bypass_policy_or_sandbox"
+  ]
+}

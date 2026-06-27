@@ -1,0 +1,22 @@
+{
+  "agent_id": "deerflow",
+  "name": "DeerFlow Long-Horizon Runtime",
+  "role": "sandboxed-long-task-artifact-runtime",
+  "model_profile": "policy-routed",
+  "runtime": "external-local-service",
+  "capabilities": [
+    "research",
+    "report_generation",
+    "artifact_generation",
+    "subagent_execution"
+  ],
+  "default_tasks": ["research", "artifact", "report"],
+  "local_only": true,
+  "blocked_actions": [
+    "host_bash_without_policy",
+    "public_endpoint",
+    "secret_access",
+    "deploy",
+    "publish"
+  ]
+}

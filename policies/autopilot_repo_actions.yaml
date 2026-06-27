@@ -1,0 +1,34 @@
+version: ghostclaw-a2async-v2
+actions:
+  registry_validate:
+    decision: auto_allow
+    risk_tier: A0
+  repo_audit_readonly:
+    decision: auto_allow
+    risk_tier: A0
+  clone_whitelisted_external_repo:
+    decision: auto_allow_when_registry_allows
+    risk_tier: A3
+    destination: ~/SIRINXDev/_external_repos
+  install_dependency:
+    decision: block_first_phase
+    risk_tier: A3
+  docker_start:
+    decision: block_first_phase
+    risk_tier: A3
+  provider_api_call:
+    decision: block_first_phase
+    risk_tier: A3
+  push:
+    decision: block_until_remote_verified_and_lane_clean
+    risk_tier: A5
+  deploy:
+    decision: block_until_adapter_contract_and_healthcheck_pass
+    risk_tier: A5
+hard_blocks:
+  - print_secret
+  - clone_unverified_pixelrag
+  - force_push
+  - public_endpoint_without_contract
+  - disable_auth
+  - destructive_delete_without_backup

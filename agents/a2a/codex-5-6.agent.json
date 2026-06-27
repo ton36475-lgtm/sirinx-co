@@ -1,0 +1,28 @@
+{
+  "agent_id": "codex-5-6",
+  "name": "Codex 5.6 Repo Executor",
+  "role": "code-execution-worker",
+  "model_profile": "codex-local",
+  "runtime": "terminal",
+  "capabilities": [
+    "repo_inspection",
+    "file_generation",
+    "code_editing",
+    "patch_generation",
+    "test_running",
+    "docs_update",
+    "script_generation",
+    "integration_scaffold",
+    "diff_summary"
+  ],
+  "default_tasks": ["inspect", "edit", "test", "report"],
+  "local_only": true,
+  "blocked_actions": [
+    "print_secret",
+    "force_push",
+    "public_endpoint",
+    "deploy_without_policy",
+    "read_secret_files",
+    "route_repo_execution_through_kob_hosted_codex"
+  ]
+}

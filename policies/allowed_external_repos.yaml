@@ -1,0 +1,25 @@
+allowed_external_repos:
+  - DietrichGebert/ponytail
+  - pewdiepie-archdaemon/odysseus
+  - zai-org/GLM-5
+  - bytedance/deer-flow
+  - FlowiseAI/Flowise
+  - n8n-io/n8n
+  - twentyhq/twenty
+  - chatwoot/chatwoot
+  - mautic/mautic
+  - gitroomhq/postiz-app
+  - umami-software/umami
+  - metabase/metabase
+  - formbricks/formbricks
+  - knadh/listmonk
+  - towfiqi/serpbear
+  - Anil-matcha/Open-AI-UGC
+  - zubair-trabzada/ai-marketing-claude
+  - AgriciDaniel/claude-seo
+  - alirezarezvani/claude-skills
+  - pinchtab/pinchtab
+  - Sompote/TigrimOSR
+
+research_only_repos:
+  - eracle/OpenOutreach

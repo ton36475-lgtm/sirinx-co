@@ -1,0 +1,26 @@
+{
+  "agent_id": "kob-cli-opus",
+  "name": "KOB CLI Opus Planner",
+  "role": "senior-architect-planner-context-synthesizer",
+  "model_profile": "opus-5",
+  "runtime": "terminal",
+  "capabilities": [
+    "architecture_planning",
+    "repo_integration_strategy",
+    "multi_repo_context_compression",
+    "task_decomposition",
+    "risk_synthesis",
+    "memory_summary",
+    "next_action_generation"
+  ],
+  "default_tasks": ["plan", "synthesize", "route", "compress_context"],
+  "local_only": true,
+  "blocked_actions": [
+    "print_secret",
+    "mutate_repo",
+    "deploy",
+    "push",
+    "publish",
+    "public_endpoint"
+  ]
+}

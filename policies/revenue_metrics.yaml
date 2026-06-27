@@ -1,0 +1,29 @@
+metrics:
+  revenue:
+    - total_revenue
+    - revenue_by_offer
+    - profit_after_direct_costs
+    - recurring_revenue
+    - average_order_value
+  leads:
+    - new_leads
+    - qualified_leads
+    - reply_rate
+    - meetings_booked
+    - close_rate
+  content:
+    - posts_published
+    - reach
+    - engagement
+    - dm_generated
+    - leads_per_content_item
+  delivery:
+    - on_time_delivery
+    - revision_count
+    - delivery_time
+    - testimonials_collected
+  assets:
+    - prompt_packs_created
+    - templates_created
+    - case_studies_created
+    - reusable_sops_created

@@ -1,0 +1,18 @@
+lead_outreach:
+  allowed_sources:
+    - owned_form
+    - line_oa_opt_in
+    - chatwoot_inbound
+    - referral
+    - existing_customer
+    - public_business_directory_for_research_only
+  auto_send_requires:
+    - opt_in
+    - unsubscribe_or_opt_out_path
+    - rate_limit
+    - audit_log
+  blocked:
+    - linkedin_personal_session_automation
+    - scraped_personal_contact_outreach
+    - non_opt_in_broadcast
+    - hidden_sender_identity

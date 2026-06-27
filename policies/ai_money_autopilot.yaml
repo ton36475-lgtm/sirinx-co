@@ -1,0 +1,22 @@
+module:
+  name: AI_MONEY_SYSTEM_2026
+  mode: FULL_AUTO
+  runtime_root: "~/SIRINXDev/.ghostclaw_runtime/ai_money"
+
+loops:
+  market_research: auto_allow
+  offer_generation: auto_allow
+  content_calendar: auto_allow
+  lead_tracker_update: auto_allow_allowed_sources_only
+  crm_update: auto_allow_owned_inbound_or_opt_in
+  follow_up: auto_allow_opt_in_only
+  case_study_draft: auto_allow_no_private_data
+  kpi_summary: auto_allow
+
+hard_blocks:
+  - print_secret
+  - spam_non_opt_in
+  - false_or_unverified_claim
+  - scrape_private_contact_data
+  - spend_over_budget_cap
+  - publish_sensitive_news_without_safe_category

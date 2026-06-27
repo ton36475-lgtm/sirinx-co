@@ -1,0 +1,12 @@
+content_publish_limits:
+  max_posts_per_day_per_project: 5
+  max_posts_per_hour_per_channel: 1
+  owned_channel_required: true
+  audit_log_required: true
+
+blocked_categories:
+  - sensitive_political_news
+  - legal_accusation
+  - crisis_or_death_without_review_category
+  - unverified_health_finance_claim
+  - deceptive_result_claim

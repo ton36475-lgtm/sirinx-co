@@ -1,0 +1,31 @@
+offers:
+  ai_local_promo_pack:
+    price_thb: "3500-7900"
+    deliverables:
+      - promotional_images_5
+      - short_video_prompts_3
+      - captions_10
+      - prompt_brand_template
+      - seven_day_content_calendar
+  prompt_template_pack:
+    price_thb: "390-9900"
+    deliverables:
+      - niche_prompt_pack
+      - captions
+      - usage_examples
+  ai_content_agency:
+    price_thb_monthly: "9900-39000+"
+    deliverables:
+      - monthly_strategy
+      - images
+      - clips_or_video_prompts
+      - captions
+      - report
+  ai_automation_service:
+    price_thb: "15000-120000"
+    deliverables:
+      - flowise_assistant
+      - n8n_webhook
+      - crm_setup
+      - chatwoot_inbox
+      - dashboard

@@ -1113,7 +1113,7 @@ type A2A2ATeamWorkPacketsFixture = {
     workerDirectEditsAllowed: boolean;
     gitAddDotAllowed: boolean;
   };
-  nextCodexPacket: {
+  nextCodexPacket: Partial<{
     packetId: string;
     queueId: string;
     priority: number;
@@ -1133,7 +1133,7 @@ type A2A2ATeamWorkPacketsFixture = {
     executionAllowed: boolean;
     providerCallsAllowed: boolean;
     workerDirectEditsAllowed: boolean;
-  };
+  }>;
   packets: {
     packetId: string;
     queueId: string;
@@ -1327,6 +1327,18 @@ const a2a2aTeamWorkPacketOutcome =
   a2a2aTeamWorkPacketOutcomeFixture as A2A2ATeamWorkPacketOutcomeFixture;
 const a2a2aTeamWorkPacketValidation =
   a2a2aTeamWorkPacketValidationFixture as A2A2ATeamWorkPacketValidationFixture;
+const a2a2aNextTeamWorkPacket = a2a2aTeamWorkPackets.nextCodexPacket;
+const a2a2aHasNextTeamWorkPacket = Boolean(a2a2aNextTeamWorkPacket.packetId);
+const a2a2aNextTeamWorkAllowedPaths = Array.isArray(
+  a2a2aNextTeamWorkPacket.allowedPaths,
+)
+  ? a2a2aNextTeamWorkPacket.allowedPaths
+  : [];
+const a2a2aNextTeamWorkBlockedActions = Array.isArray(
+  a2a2aNextTeamWorkPacket.blockedActions,
+)
+  ? a2a2aNextTeamWorkPacket.blockedActions
+  : [];
 const codexSessionSidebarToolkitStatus =
   codexSessionSidebarToolkitStatusFixture;
 const sessionToolkitAgents = codexSessionSidebarToolkitStatus.agents;
@@ -3750,9 +3762,14 @@ export default function App() {
 
                 <div className="practice-manifest-line">
                   <span>Next Packet</span>
-                  <code>{a2a2aTeamWorkPackets.summary.nextCodexPacketId}</code>
+                  <code>
+                    {a2a2aTeamWorkPackets.summary.nextCodexPacketId || "none"}
+                  </code>
                   <span>Task</span>
-                  <code>{a2a2aTeamWorkPackets.summary.nextCodexTask}</code>
+                  <code>
+                    {a2a2aTeamWorkPackets.summary.nextCodexTask ||
+                      "codex_lane_complete"}
+                  </code>
                   <span>Runtime Report</span>
                   <code>{a2a2aTeamWorkPackets.runtimeReportPath}</code>
                   <span>Outcome</span>
@@ -3762,8 +3779,9 @@ export default function App() {
                 </div>
 
                 <div className="git-fixture-notice">
-                  {a2a2aTeamWorkPackets.nextCodexPacket.why} Acceptance:
-                  {` ${a2a2aTeamWorkPackets.nextCodexPacket.acceptance}`}
+                  {a2a2aHasNextTeamWorkPacket
+                    ? `${a2a2aNextTeamWorkPacket.why} Acceptance: ${a2a2aNextTeamWorkPacket.acceptance}`
+                    : "All Codex scoped packets in this implementation lane are completed. Worker report and validation packets remain read-only inputs unless a new lane is opened."}
                 </div>
 
                 <div className="practice-grid">
@@ -3813,10 +3831,7 @@ export default function App() {
                     <div className="git-section-title">
                       <span>Next Codex Boundaries</span>
                       <span className="approval-badge">
-                        {
-                          a2a2aTeamWorkPackets.nextCodexPacket.allowedPaths
-                            .length
-                        }
+                        {a2a2aNextTeamWorkAllowedPaths.length}
                       </span>
                     </div>
                     <div className="practice-artifact-row">
@@ -3830,9 +3845,8 @@ export default function App() {
                           packet.
                         </p>
                         <code>
-                          {a2a2aTeamWorkPackets.nextCodexPacket.allowedPaths.join(
-                            ", ",
-                          )}
+                          {a2a2aNextTeamWorkAllowedPaths.join(", ") ||
+                            "no active Codex packet"}
                         </code>
                       </div>
                     </div>
@@ -3847,9 +3861,8 @@ export default function App() {
                           closed.
                         </p>
                         <code>
-                          {a2a2aTeamWorkPackets.nextCodexPacket.blockedActions.join(
-                            ", ",
-                          )}
+                          {a2a2aNextTeamWorkBlockedActions.join(", ") ||
+                            "provider_call, connector_sync, deploy, push, secret_read_or_print, git_add_dot"}
                         </code>
                       </div>
                     </div>

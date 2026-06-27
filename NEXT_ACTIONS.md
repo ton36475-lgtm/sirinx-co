@@ -859,10 +859,12 @@ configuration lane, then keep future entries concise and source-path based.
 - [x] Run scoped validation for the path guard lane.
 - [x] Complete work packet `WORK-647fc5edf6 / run_validation_commands` using
       the passed local validation manifest.
+- [x] Complete work packet `WORK-8371c88bef / stage_and_commit_scoped_lane`
+      using commit evidence from the validation queue commit.
 - [x] Stage and commit only the packet-listed A2A2A guard lane files after
       validation passes.
-- [ ] Execute work packet `WORK-8371c88bef / stage_and_commit_scoped_lane` as
-      the next Codex-owned scoped staging lane.
+- [ ] Open the next A2A2A implementation lane or convert the remaining
+      report-only worker packet into a Codex-readable follow-up brief.
 - [ ] Do not use `git add .`, deploy, push, connector sync, provider calls,
       secret reads, Docker starts, external repo clone/audit, or generated
       `web-sirinx` asset mutation from this lane.
@@ -897,8 +899,9 @@ The team work packet outcome ledger is now the queue-advance layer.
 `apps/mission-control/src/fixtures/a2a2aTeamWorkPacketValidation.json` records
 `WORK-647fc5edf6 / run_validation_commands` as passed with 6/6 allowlisted
 checks. `apps/mission-control/src/fixtures/a2a2aTeamWorkPacketOutcome.json`
-then records that packet as complete, and the regenerated packet board now
-points Codex at `WORK-8371c88bef / stage_and_commit_scoped_lane`.
+then records `WORK-8371c88bef / stage_and_commit_scoped_lane` as complete from
+commit evidence. The regenerated packet board now has no remaining active Codex
+packet in the current implementation lane.
 
 The first Codex-owned slice is now recorded as an outcome fixture. The next
 slice should come from the assignment board `immediateQueue`, while provider,

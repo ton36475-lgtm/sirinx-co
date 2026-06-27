@@ -1121,16 +1121,16 @@ Toolkit` tab.
     queue items, 4 Codex-ready tasks, 1 completed Codex task, 1 report-only
     worker task, provider calls disabled, worker direct edits disabled
   - team work packets: `ready_for_team_packets`, 11 packets, 7 Codex packets,
-    2 completed packets, 1 worker/report packet, next Codex task
-    `stage_and_commit_scoped_lane`, provider calls disabled, worker direct
-    edits disabled, `gitAddDotAllowed=false`
+    3 completed packets, 1 worker/report packet, no remaining active Codex
+    packet in the current implementation lane, provider calls disabled, worker
+    direct edits disabled, `gitAddDotAllowed=false`
   - team work packet validation: `passed`, selected packet
     `WORK-647fc5edf6`, selected task `run_validation_commands`, 6 commands
     passed, 0 failed, provider calls disabled
   - team work packet outcome: `packet_completed`, selected packet
-    `WORK-647fc5edf6`, selected task `run_validation_commands`,
-    validation status `passed`, `plannedBlocked=0`, provider calls disabled,
-    worker direct edits disabled, `gitAddDotAllowed=false`
+    `WORK-8371c88bef`, selected task `stage_and_commit_scoped_lane`,
+    validation status `not_required`, `plannedBlocked=0`, provider calls
+    disabled, worker direct edits disabled, `gitAddDotAllowed=false`
   - first Codex lane outcome: `first_codex_slice_completed`, selected slice
     `a2a2a_team_assignment_board`, 7 checklist items closed, provider calls 0
   - scoped path guard: `ready_with_external_dirty_lanes`, 16 planned files,
@@ -1181,10 +1181,10 @@ Toolkit` tab.
   `3840ca4 feat(a2a2a): add team assignment board` and validation evidence.
 - Current team work packet outcome evidence:
   `apps/mission-control/src/fixtures/a2a2aTeamWorkPacketOutcome.json` records
-  `WORK-647fc5edf6 / run_validation_commands` as complete from a passed local
-  validation manifest. Regenerated
-  `apps/mission-control/src/fixtures/a2a2aTeamWorkPackets.json` now points the
-  next Codex packet to `WORK-8371c88bef / stage_and_commit_scoped_lane`.
+  `WORK-8371c88bef / stage_and_commit_scoped_lane` as complete from commit
+  evidence `28439ca feat(a2a2a): validate team work packet queue`.
+  Regenerated `apps/mission-control/src/fixtures/a2a2aTeamWorkPackets.json`
+  now has no remaining active Codex packet in this implementation lane.
 - Current team work packet validation evidence:
   `apps/mission-control/src/fixtures/a2a2aTeamWorkPacketValidation.json`
   reports 6 allowlisted validation commands, 6 passed, 0 failed, provider

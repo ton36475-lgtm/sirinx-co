@@ -61,7 +61,16 @@ def select_packet(packets: dict[str, Any], packet_id: str) -> dict[str, Any]:
                 return packet
         return {}
     packet = packets.get("nextCodexPacket", {})
-    return packet if isinstance(packet, dict) else {}
+    if isinstance(packet, dict) and packet.get("packetId"):
+        return packet
+    completed_codex_packets = [
+        packet
+        for packet in packets.get("packets", [])
+        if isinstance(packet, dict)
+        and packet.get("ownerMode") == "scoped_repo_edit"
+        and packet.get("status") == "completed"
+    ]
+    return completed_codex_packets[-1] if completed_codex_packets else {}
 
 
 def existing_completed_packets(packets: dict[str, Any]) -> tuple[list[str], list[str]]:
@@ -111,11 +120,17 @@ def build_outcome(
     validation_summary = validation.get("summary", {})
     planned_blocked = int(guard_summary.get("plannedBlocked", 0) or 0)
     validation_is_ready = validation_ready(selected_packet, validation)
+    already_completed = selected_packet.get("status") == "completed"
     ready = (
         bool(selected_packet)
         and selected_packet.get("ownerMode") == "scoped_repo_edit"
-        and selected_packet.get("status") == "ready_for_codex_scoped_work"
-        and bool(selected_packet.get("executionAllowed"))
+        and (
+            already_completed
+            or (
+                selected_packet.get("status") == "ready_for_codex_scoped_work"
+                and bool(selected_packet.get("executionAllowed"))
+            )
+        )
         and not bool(packets_summary.get("providerCallsAllowed"))
         and not bool(packets_summary.get("workerDirectEditsAllowed"))
         and not bool(packets_summary.get("gitAddDotAllowed"))
@@ -134,7 +149,11 @@ def build_outcome(
         "outOfScopeDirty": int(guard_summary.get("outOfScopeDirty", 0) or 0),
         "providerCalls": int(guard_summary.get("providerCalls", 0) or 0),
         "gitAddDotAllowed": bool(guard_summary.get("gitAddDotAllowed")),
-        "validationStatus": str(validation_summary.get("status", "not_required" if validation_is_ready else "missing")),
+        "validationStatus": (
+            str(validation_summary.get("status", "missing"))
+            if selected_packet.get("task") == "run_validation_commands"
+            else "not_required"
+        ),
         "validationCommands": int(validation_summary.get("commands", 0) or 0),
         "validationPassed": int(validation_summary.get("passed", 0) or 0),
         "validationFailed": int(validation_summary.get("failed", 0) or 0),

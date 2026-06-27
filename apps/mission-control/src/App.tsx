@@ -25,6 +25,7 @@ import a2a2aDependencyReadinessFixture from "./fixtures/a2a2aDependencyReadiness
 import a2a2aCodexBuildPlanFixture from "./fixtures/a2a2aCodexBuildPlan.json";
 import a2a2aWorkerReportDigestFixture from "./fixtures/a2a2aWorkerReportDigest.json";
 import a2a2aWorkerFollowupBriefFixture from "./fixtures/a2a2aWorkerFollowupBrief.json";
+import a2a2aWorkerFollowupLaneFixture from "./fixtures/a2a2aWorkerFollowupLane.json";
 import a2a2aImplementationLanePacketFixture from "./fixtures/a2a2aImplementationLanePacket.json";
 import a2a2aScopedPathGuardFixture from "./fixtures/a2a2aScopedPathGuard.json";
 import a2a2aCompletionAuditFixture from "./fixtures/a2a2aCompletionAudit.json";
@@ -800,6 +801,50 @@ type A2A2AWorkerFollowupBriefFixture = {
   nextSafeActions: string[];
 };
 
+type A2A2AWorkerFollowupLaneFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeLanePath: string;
+  summary: {
+    status: string;
+    tasks: number;
+    codexReadyTasks: number;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    gitAddDotAllowed: boolean;
+    allowedPaths: number;
+    validationCommands: number;
+  };
+  lane: {
+    laneId: string;
+    sourceBriefStatus: string;
+    sourcePacketId: string;
+    sourceQueueId: string;
+    status: string;
+    owner: string;
+    gitOwner: string;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    gitAddDotAllowed: boolean;
+    objective: string;
+    allowedPaths: string[];
+    blockedActions: string[];
+    validationCommands: string[];
+    tasks: {
+      taskId: string;
+      owner: string;
+      status: string;
+      name: string;
+      acceptance: string;
+    }[];
+    acceptanceCriteria: string[];
+  };
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type A2A2AImplementationLanePacketFixture = {
   updatedAt: string;
   mode: string;
@@ -1359,6 +1404,8 @@ const a2a2aWorkerReportDigest =
   a2a2aWorkerReportDigestFixture as A2A2AWorkerReportDigestFixture;
 const a2a2aWorkerFollowupBrief =
   a2a2aWorkerFollowupBriefFixture as A2A2AWorkerFollowupBriefFixture;
+const a2a2aWorkerFollowupLane =
+  a2a2aWorkerFollowupLaneFixture as A2A2AWorkerFollowupLaneFixture;
 const a2a2aImplementationLanePacket =
   a2a2aImplementationLanePacketFixture as A2A2AImplementationLanePacketFixture;
 const a2a2aScopedPathGuard =
@@ -4073,6 +4120,16 @@ export default function App() {
                         : "BLOCK"}
                     </strong>
                   </div>
+                  <div className="practice-kpi">
+                    <span>Lane Tasks</span>
+                    <strong>{a2a2aWorkerFollowupLane.summary.tasks}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Checks</span>
+                    <strong>
+                      {a2a2aWorkerFollowupLane.summary.validationCommands}
+                    </strong>
+                  </div>
                 </div>
 
                 <div className="practice-manifest-line">
@@ -4084,6 +4141,10 @@ export default function App() {
                   <code>
                     {a2a2aWorkerFollowupBrief.recommendedCodexFollowup.lane}
                   </code>
+                  <span>Lane Status</span>
+                  <code>{a2a2aWorkerFollowupLane.summary.status}</code>
+                  <span>Lane Runtime</span>
+                  <code>{a2a2aWorkerFollowupLane.runtimeLanePath}</code>
                   <span>Runtime Report</span>
                   <code>{a2a2aWorkerFollowupBrief.runtimeReportPath}</code>
                 </div>
@@ -4143,6 +4204,27 @@ export default function App() {
                         </p>
                         <code>
                           {a2a2aWorkerFollowupBrief.recommendedCodexFollowup.blockedActions.join(
+                            ", ",
+                          )}
+                        </code>
+                      </div>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span
+                        className={`practice-status ${
+                          a2a2aWorkerFollowupLane.summary.status ===
+                          "open_for_codex_scoped_work"
+                            ? "payload-ready"
+                            : "payload-blocked"
+                        }`}
+                      >
+                        lane
+                      </span>
+                      <div>
+                        <strong>{a2a2aWorkerFollowupLane.lane.laneId}</strong>
+                        <p>{a2a2aWorkerFollowupLane.lane.objective}</p>
+                        <code>
+                          {a2a2aWorkerFollowupLane.lane.acceptanceCriteria.join(
                             ", ",
                           )}
                         </code>

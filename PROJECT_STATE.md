@@ -1224,3 +1224,10 @@ Toolkit` tab.
   4 safe reports, 0 provider calls, `codexMayOpenNextLane=true`, and keeps
   workers as inputs only. Its runtime mirror is
   `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup/latest.json`.
+- Current worker follow-up lane evidence:
+  `apps/mission-control/src/fixtures/a2a2aWorkerFollowupLane.json` turns that
+  brief into the next machine-readable Codex lane. It reports
+  `open_for_codex_scoped_work`, 3 Codex-ready tasks, provider calls disabled,
+  worker direct edits disabled, and `gitAddDotAllowed=false`. Its runtime lane
+  is under
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup_lanes/`.

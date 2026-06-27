@@ -24,6 +24,7 @@ from scripts.a2a import a2a_team_work_packet_validation
 from scripts.a2a import a2a_runner_dispatch_command
 from scripts.a2a import a2a_worker_report_digest
 from scripts.a2a import a2a_worker_followup_brief
+from scripts.a2a import a2a_worker_followup_lane
 from scripts.a2a import a2a_handoff_router
 
 
@@ -555,6 +556,57 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertIn("worker_direct_commit", fixture["recommendedCodexFollowup"]["blockedActions"])
             self.assertIn("worker_reports_are_inputs_not_repo_edits", fixture["policyBoundary"])
             self.assertTrue((runtime / "worker_followup" / "latest.json").exists())
+
+    def test_worker_followup_lane_opens_read_only_codex_lane_from_brief(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-worker-followup-lane-") as tmp:
+            runtime = Path(tmp) / "runtime"
+            brief_path = Path(tmp) / "brief.json"
+            fixture_path = Path(tmp) / "lane.json"
+            brief_path.write_text(
+                json.dumps(
+                    {
+                        "summary": {
+                            "status": "ready_for_codex_followup_brief",
+                            "providerCalls": 0,
+                            "codexMayOpenNextLane": True,
+                        },
+                        "sourcePacket": {
+                            "packetId": "WORK-REPORT",
+                            "queueId": "LANE-CODEX-LANE-TASK-03",
+                        },
+                        "recommendedCodexFollowup": {
+                            "lane": "LANE_A2A2A_WORKER_FEEDBACK_CONSUMPTION",
+                            "task": "consume worker reports and open the next scoped implementation lane",
+                            "allowedPaths": ["scripts/a2a/", "apps/mission-control/src/fixtures/"],
+                            "blockedActions": ["provider_call_without_command_broker_lease", "git_add_dot"],
+                            "validationCommands": ["python3 -m unittest tests.ghostclaw_runner.test_runner_status_fixture"],
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            exit_code = a2a_worker_followup_lane.main(
+                [
+                    "--brief-path",
+                    str(brief_path),
+                    "--runtime-root",
+                    str(runtime),
+                    "--fixture-path",
+                    str(fixture_path),
+                ]
+            )
+
+            self.assertEqual(exit_code, 0)
+            fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+            self.assertEqual(fixture["summary"]["status"], "open_for_codex_scoped_work")
+            self.assertEqual(fixture["summary"]["codexReadyTasks"], 3)
+            self.assertFalse(fixture["summary"]["providerCallsAllowed"])
+            self.assertFalse(fixture["summary"]["workerDirectEditsAllowed"])
+            self.assertFalse(fixture["summary"]["gitAddDotAllowed"])
+            self.assertEqual(fixture["lane"]["gitOwner"], "codex")
+            self.assertIn("provider_calls_require_command_broker_lease", fixture["policyBoundary"])
+            self.assertTrue(Path(fixture["runtimeLanePath"]).exists())
 
     def test_implementation_lane_packet_requires_plan_and_worker_reports(self) -> None:
         with tempfile.TemporaryDirectory(prefix="ghostclaw-implementation-packet-") as tmp:

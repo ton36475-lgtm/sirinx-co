@@ -1,0 +1,105 @@
+{
+  "generatedBy": "scripts/a2a/a2a_worker_followup_lane.py",
+  "lane": {
+    "acceptanceCriteria": [
+      "Workers remain report-only inputs.",
+      "Codex owns all repo edits and git state.",
+      "Provider calls require a valid Command Broker lease.",
+      "No deploy, push, connector sync, secret read, Docker start, external clone, or git add dot."
+    ],
+    "allowedPaths": [
+      "scripts/a2a/",
+      "ghostclaw_runner/",
+      "tests/ghostclaw_runner/",
+      "apps/mission-control/src/fixtures/",
+      "apps/mission-control/src/App.tsx",
+      "docs/a2async/",
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md"
+    ],
+    "blockedActions": [
+      "provider_call_without_command_broker_lease",
+      "connector_sync",
+      "deploy",
+      "push",
+      "secret_read_or_print",
+      "git_add_dot",
+      "worker_direct_commit",
+      "generated_web_sirinx_asset_mutation"
+    ],
+    "connectorSyncAllowed": false,
+    "createdAt": "2026-06-27T16:31:52+00:00",
+    "deployAllowed": false,
+    "gitAddDotAllowed": false,
+    "gitOwner": "codex",
+    "laneId": "LANE_A2A2A_WORKER_FEEDBACK_CONSUMPTION-77d00d8d",
+    "objective": "consume worker reports and open the next scoped implementation lane",
+    "owner": "codex",
+    "providerCallsAllowed": false,
+    "pushAllowed": false,
+    "sourceBriefStatus": "ready_for_codex_followup_brief",
+    "sourcePacketId": "WORK-8e54ea680f",
+    "sourceQueueId": "LANE-CODEX-LANE-TASK-03",
+    "status": "open_for_codex_scoped_work",
+    "tasks": [
+      {
+        "acceptance": "Codex confirms source packet, worker signals, providerCalls=0, and allowed paths.",
+        "name": "review_worker_followup_brief",
+        "owner": "codex",
+        "status": "ready_for_codex",
+        "taskId": "FOLLOWUP-CODEX-01"
+      },
+      {
+        "acceptance": "New packet names files, tests, and blocked actions before any edit.",
+        "name": "create_next_scoped_implementation_packet",
+        "owner": "codex",
+        "status": "ready_for_codex",
+        "taskId": "FOLLOWUP-CODEX-02"
+      },
+      {
+        "acceptance": "Focused tests, Mission Control typecheck, JSON parse, Prettier, and scoped diff check pass.",
+        "name": "run_validation_before_stage",
+        "owner": "codex",
+        "status": "ready_for_codex",
+        "taskId": "FOLLOWUP-CODEX-03"
+      }
+    ],
+    "validationCommands": [
+      "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
+      "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+      "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md PROJECT_STATE.md NEXT_ACTIONS.md",
+      "git diff --check -- scripts/a2a ghostclaw_runner tests/ghostclaw_runner apps/mission-control/src/fixtures apps/mission-control/src/App.tsx docs/a2async PROJECT_STATE.md NEXT_ACTIONS.md"
+    ],
+    "workerDirectEditsAllowed": false
+  },
+  "mode": "read_only_worker_followup_lane",
+  "nextSafeActions": [
+    "Codex reviews this lane fixture before opening the next implementation packet.",
+    "Keep worker report signals as inputs only.",
+    "Regenerate Mission Control fixtures after the next packet is created."
+  ],
+  "policyBoundary": [
+    "read_only_lane_fixture",
+    "codex_only_scoped_repo_edits",
+    "workers_report_only",
+    "provider_calls_require_command_broker_lease",
+    "no_connector_sync",
+    "no_deploy",
+    "no_push",
+    "no_secret_values",
+    "no_git_add_dot"
+  ],
+  "runtimeLanePath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup_lanes/LANE_A2A2A_WORKER_FEEDBACK_CONSUMPTION-77d00d8d.json",
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+  "summary": {
+    "allowedPaths": 8,
+    "codexReadyTasks": 3,
+    "gitAddDotAllowed": false,
+    "providerCallsAllowed": false,
+    "status": "open_for_codex_scoped_work",
+    "tasks": 3,
+    "validationCommands": 4,
+    "workerDirectEditsAllowed": false
+  },
+  "updatedAt": "2026-06-27T16:31:52+00:00"
+}

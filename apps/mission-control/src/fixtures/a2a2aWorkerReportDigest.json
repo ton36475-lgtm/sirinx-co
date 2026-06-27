@@ -1,0 +1,102 @@
+{
+  "generatedBy": "scripts/a2a/a2a_worker_report_digest.py",
+  "mode": "read_only_worker_report_digest",
+  "nextSafeActions": [
+    "Codex reviews worker report digest before opening implementation.",
+    "If providerCalls is greater than zero, quarantine the worker result before use.",
+    "KOB validation remains report-only until Command Broker grants an execution lease."
+  ],
+  "policyBoundary": [
+    "read_only_digest",
+    "no_runtime_polling_from_browser",
+    "no_provider_call",
+    "no_command_execution",
+    "no_git_mutation_from_workers",
+    "no_secret_values"
+  ],
+  "reports": [
+    {
+      "contextRefs": [
+        "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/codex_plans/CODEX-PLAN-ec5461ae55.json"
+      ],
+      "createdAt": "2026-06-27T12:03:28+00:00",
+      "goalPreview": "Validate the local commands proposed by the Codex build plan through Command Broker assumptions. Produce a dry-run KOB validation report only; do not execute risky commands, read secrets, deploy, push, or call providers.",
+      "model": "kob/local-validator",
+      "nextOwner": "hermes",
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/outbox/kob/A2A2A-KOB-CODEX-PLAN-VALIDATE-001.result.json",
+      "plannedActions": [
+        "validate command intent",
+        "check broker policy",
+        "prepare local validation command plan",
+        "return no-execution audit record"
+      ],
+      "promptSha256": "d78f09d2ae5e26205c1c47f9fc877c8ae2b0cfee3626c9603a4c386077e64c29",
+      "providerCall": false,
+      "requiresHumanReview": false,
+      "role": "kob",
+      "safeToDispatchLocally": true,
+      "status": "dry_run_completed",
+      "summary": "kob received task A2A2A-KOB-CODEX-PLAN-VALIDATE-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+      "taskId": "A2A2A-KOB-CODEX-PLAN-VALIDATE-001"
+    },
+    {
+      "contextRefs": [
+        "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/codex_plans/CODEX-PLAN-ec5461ae55.json"
+      ],
+      "createdAt": "2026-06-27T12:03:10+00:00",
+      "goalPreview": "Review the Codex build plan for command/data-flow risk, dependency ordering, and loop-guard gaps. Produce a dry-run worker report only; do not edit files or call providers.",
+      "model": "deepseek/deepseek-v4-pro",
+      "nextOwner": "codex",
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/outbox/deepseek/A2A2A-DEEPSEEK-CODEX-PLAN-REVIEW-001.result.json",
+      "plannedActions": [
+        "inspect department-specific task",
+        "draft focused technical notes",
+        "flag risk and verification needs",
+        "return worker report only"
+      ],
+      "promptSha256": "ae4387a9981c0c88859a5c920f5576cc52bc9334f611a7a31d4b21da3af7582c",
+      "providerCall": false,
+      "requiresHumanReview": false,
+      "role": "deepseek",
+      "safeToDispatchLocally": true,
+      "status": "dry_run_completed",
+      "summary": "deepseek received task A2A2A-DEEPSEEK-CODEX-PLAN-REVIEW-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+      "taskId": "A2A2A-DEEPSEEK-CODEX-PLAN-REVIEW-001"
+    },
+    {
+      "contextRefs": [
+        "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/codex_plans/CODEX-PLAN-ec5461ae55.json"
+      ],
+      "createdAt": "2026-06-27T12:02:50+00:00",
+      "goalPreview": "Review the Codex build plan for A2A2A code structure, Mission Control fixture shape, and test coverage. Produce a dry-run worker report only; do not edit files or call providers.",
+      "model": "zai/glm-5.2",
+      "nextOwner": "codex",
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/outbox/glm52/A2A2A-GLM52-CODEX-PLAN-REVIEW-001.result.json",
+      "plannedActions": [
+        "analyze code task locally",
+        "draft implementation notes",
+        "flag missing context",
+        "return patch proposal only"
+      ],
+      "promptSha256": "18a097e8686b93dec03dc85e09af4c6697bbc10965303e702091906f2480ded5",
+      "providerCall": false,
+      "requiresHumanReview": false,
+      "role": "glm52",
+      "safeToDispatchLocally": true,
+      "status": "dry_run_completed",
+      "summary": "glm52 received task A2A2A-GLM52-CODEX-PLAN-REVIEW-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+      "taskId": "A2A2A-GLM52-CODEX-PLAN-REVIEW-001"
+    }
+  ],
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+  "sourceGlob": "outbox/{glm52,deepseek,kob}/*.result.json",
+  "summary": {
+    "kobReports": 1,
+    "overallStatus": "ready_worker_reports",
+    "providerCalls": 0,
+    "reports": 3,
+    "safeReports": 3,
+    "workerReports": 2
+  },
+  "updatedAt": "2026-06-27T12:10:24+00:00"
+}

@@ -22,6 +22,7 @@ import deepResearchStatusFixture from "./fixtures/deepResearchStatus.json";
 import a2a2aRunnerStatusFixture from "./fixtures/a2a2aRunnerStatus.json";
 import a2a2aDependencyReadinessFixture from "./fixtures/a2a2aDependencyReadiness.json";
 import a2a2aCodexBuildPlanFixture from "./fixtures/a2a2aCodexBuildPlan.json";
+import a2a2aWorkerReportDigestFixture from "./fixtures/a2a2aWorkerReportDigest.json";
 
 interface Worker {
   name: string;
@@ -631,6 +632,41 @@ type A2A2ACodexBuildPlanFixture = {
   nextSafeActions: string[];
 };
 
+type A2A2AWorkerReportDigestFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  sourceGlob: string;
+  summary: {
+    reports: number;
+    workerReports: number;
+    kobReports: number;
+    providerCalls: number;
+    safeReports: number;
+    overallStatus: string;
+  };
+  reports: {
+    path: string;
+    createdAt: string;
+    role: string;
+    taskId: string;
+    status: string;
+    model: string;
+    providerCall: boolean;
+    promptSha256: string;
+    nextOwner: string;
+    safeToDispatchLocally: boolean;
+    requiresHumanReview: boolean;
+    summary: string;
+    goalPreview: string;
+    plannedActions: string[];
+    contextRefs: string[];
+  }[];
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type IgamingPracticeStatusFixture = {
   updatedAt: string;
   mode: string;
@@ -696,6 +732,8 @@ const a2a2aDependencyReadiness =
   a2a2aDependencyReadinessFixture as A2A2ADependencyReadinessFixture;
 const a2a2aCodexBuildPlan =
   a2a2aCodexBuildPlanFixture as A2A2ACodexBuildPlanFixture;
+const a2a2aWorkerReportDigest =
+  a2a2aWorkerReportDigestFixture as A2A2AWorkerReportDigestFixture;
 const codexSessionSidebarToolkitStatus =
   codexSessionSidebarToolkitStatusFixture;
 const sessionToolkitAgents = codexSessionSidebarToolkitStatus.agents;
@@ -1997,6 +2035,144 @@ export default function App() {
                         </div>
                       </div>
                     ))}
+                  </section>
+                </div>
+              </div>
+
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>Worker Report Digest</span>
+                  <span className="accent-emerald">
+                    {a2a2aWorkerReportDigest.summary.overallStatus}
+                  </span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Reports</span>
+                    <strong>{a2a2aWorkerReportDigest.summary.reports}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Workers</span>
+                    <strong>
+                      {a2a2aWorkerReportDigest.summary.workerReports}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>KOB</span>
+                    <strong>
+                      {a2a2aWorkerReportDigest.summary.kobReports}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Safe Reports</span>
+                    <strong>
+                      {a2a2aWorkerReportDigest.summary.safeReports}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Provider Calls</span>
+                    <strong>
+                      {a2a2aWorkerReportDigest.summary.providerCalls}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Mode</span>
+                  <code>{a2a2aWorkerReportDigest.mode}</code>
+                  <span>Source</span>
+                  <code>{a2a2aWorkerReportDigest.sourceGlob}</code>
+                  <span>Updated</span>
+                  <code>{a2a2aWorkerReportDigest.updatedAt}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  This digest is generated from local worker outbox files. It is
+                  read-only and does not execute worker commands, call
+                  providers, mutate git, or expose prompt bodies.
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A worker report cards"
+                  >
+                    <div className="git-section-title">
+                      <span>Worker Reports</span>
+                      <span className="approval-badge">
+                        {a2a2aWorkerReportDigest.reports.length}
+                      </span>
+                    </div>
+                    {a2a2aWorkerReportDigest.reports.map((report) => (
+                      <div className="practice-artifact-row" key={report.path}>
+                        <span
+                          className={`practice-status ${
+                            report.providerCall || report.requiresHumanReview
+                              ? "payload-warn"
+                              : "payload-ready"
+                          }`}
+                        >
+                          {report.role}
+                        </span>
+                        <div>
+                          <strong>
+                            {report.taskId} → {report.nextOwner || "queue"}
+                          </strong>
+                          <p>{report.summary}</p>
+                          <code>
+                            {report.model} · providerCall=
+                            {String(report.providerCall)}
+                          </code>
+                          <div className="blocked-action-list compact-list">
+                            {report.plannedActions.map((action) => (
+                              <span
+                                className="blocked-action payload-ready"
+                                key={`${report.taskId}-${action}`}
+                              >
+                                {action}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A worker report policy"
+                  >
+                    <div className="git-section-title">
+                      <span>Report Policy</span>
+                      <span className="approval-badge">
+                        {a2a2aWorkerReportDigest.policyBoundary.length}
+                      </span>
+                    </div>
+                    <div className="blocked-action-list">
+                      {a2a2aWorkerReportDigest.policyBoundary.map((item) => (
+                        <span
+                          className="blocked-action payload-ready"
+                          key={item}
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="practice-artifacts compact-list">
+                      {a2a2aWorkerReportDigest.nextSafeActions.map((action) => (
+                        <div className="practice-artifact-row" key={action}>
+                          <span className="practice-status payload-ready">
+                            next
+                          </span>
+                          <div>
+                            <strong>{action}</strong>
+                            <p>Keep worker reports local and reviewable.</p>
+                            <code>{a2a2aWorkerReportDigest.generatedBy}</code>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </section>
                 </div>
               </div>

@@ -119,6 +119,43 @@ The plan defines ordered steps, allowed paths, blocked paths, validation
 commands, and worker dispatch recommendations. It is still plan-only; Codex
 must open a scoped implementation lane before editing files.
 
+## Worker Report Digest
+
+After Codex creates a build plan, dispatch worker reports as local dry-runs:
+
+```bash
+python3 scripts/a2a/a2a_runner_dispatch_command.py \
+  --role glm52 \
+  --goal "Review the Codex build plan for structure and test coverage" \
+  --context-ref /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/codex_plans/CODEX-PLAN-ec5461ae55.json \
+  --run-once
+
+python3 scripts/a2a/a2a_runner_dispatch_command.py \
+  --role deepseek \
+  --goal "Review command and data-flow risk for the Codex build plan" \
+  --context-ref /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/codex_plans/CODEX-PLAN-ec5461ae55.json \
+  --run-once
+
+python3 scripts/a2a/a2a_runner_dispatch_command.py \
+  --role kob \
+  --goal "Validate local commands proposed by the Codex build plan" \
+  --context-ref /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/codex_plans/CODEX-PLAN-ec5461ae55.json \
+  --run-once
+```
+
+Then export a read-only digest for Mission Control:
+
+```bash
+python3 scripts/a2a/a2a_worker_report_digest.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+The digest includes role, task id, model alias, provider-call flag, summary,
+planned actions, context references, and prompt hash. It does not include full
+prompt bodies, secrets, or executable commands. If any worker report has
+`providerCall=true`, treat the digest as review-required before using it for
+Codex planning.
+
 ## Next Build Lane
 
 Codex should consume the first `ready_for_codex_plan` item from the dependency

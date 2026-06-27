@@ -12,6 +12,7 @@ from scripts.a2a import a2a_export_runner_status_fixture
 from scripts.a2a import a2a_dependency_readiness
 from scripts.a2a import a2a_codex_build_plan
 from scripts.a2a import a2a_runner_dispatch_command
+from scripts.a2a import a2a_worker_report_digest
 
 
 class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
@@ -163,6 +164,55 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertFalse(fixture["plan"]["executionAllowed"])
             self.assertEqual(fixture["plan"]["sourceQueueId"], "CODEX-BUILD-A2A2A-TEST")
             self.assertTrue(Path(fixture["planPath"]).exists())
+
+    def test_worker_report_digest_summarizes_report_only_results(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-worker-digest-") as tmp:
+            runtime = Path(tmp) / "runtime"
+            outbox = runtime / "outbox" / "glm52"
+            outbox.mkdir(parents=True)
+            result = {
+                "created_at": "2026-06-27T00:00:00+00:00",
+                "status": "dry_run_completed",
+                "provider_call": False,
+                "role": "glm52",
+                "model": "zai/glm-5.2",
+                "prompt_sha256": "abc123",
+                "task": {
+                    "task_id": "A2A2A-WORKER-REPORT",
+                    "goal_preview": "Review without reading SECRET_TOKEN=abc123",
+                    "context_refs": ["/tmp/codex-plan.json"],
+                },
+                "output": {
+                    "summary": "report ready",
+                    "planned_actions": ["return patch proposal only"],
+                    "handoff": {
+                        "next_owner": "codex",
+                        "safe_to_dispatch_locally": True,
+                        "requires_human_review": False,
+                    },
+                },
+            }
+            (outbox / "A2A2A-WORKER-REPORT.result.json").write_text(json.dumps(result), encoding="utf-8")
+            fixture_path = Path(tmp) / "worker-digest.json"
+
+            exit_code = a2a_worker_report_digest.main(
+                [
+                    "--runtime-root",
+                    str(runtime),
+                    "--fixture-path",
+                    str(fixture_path),
+                ]
+            )
+
+            self.assertEqual(exit_code, 0)
+            fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+            self.assertEqual(fixture["summary"]["reports"], 1)
+            self.assertEqual(fixture["summary"]["workerReports"], 1)
+            self.assertEqual(fixture["summary"]["providerCalls"], 0)
+            self.assertEqual(fixture["summary"]["overallStatus"], "ready_worker_reports")
+            self.assertIn("no_command_execution", fixture["policyBoundary"])
+            self.assertIn("SECRET_TOKEN=<masked>", fixture["reports"][0]["goalPreview"])
+            self.assertEqual(fixture["reports"][0]["nextOwner"], "codex")
 
 
 if __name__ == "__main__":

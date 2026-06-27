@@ -1069,6 +1069,8 @@ Toolkit` tab.
   `scripts/a2a/a2a_worker_report_digest.py`.
 - Implementation lane packet generator:
   `scripts/a2a/a2a_implementation_lane_packet.py`.
+- Completion audit generator:
+  `scripts/a2a/a2a2a_completion_audit.py`.
 - Current status:
   - runner roles: 6 (`hermes`, `opus`, `glm52`, `deepseek`, `agy`, `kob`)
   - runner completed tasks: 7
@@ -1082,6 +1084,7 @@ Toolkit` tab.
   - implementation packet status:
     `ready_for_codex_scoped_implementation_review`
   - implementation packet execution: `false` / review-only
+  - completion audit: `ready_for_first_scoped_codex_lane`, 9/9 checks passed
 - Role ownership:
   - Hermes: mission commander and dependency gate owner.
   - Opus: architecture handoff source before Codex edits.
@@ -1097,6 +1100,10 @@ Toolkit` tab.
   shows 6 ready dependencies, 4 worker evidence items, 0 provider calls, 0
   blocked dependencies, 0 missing dependencies, and a scoped stage command that
   excludes `git add .`.
+- Current completion audit evidence:
+  `apps/mission-control/src/fixtures/a2a2aCompletionAudit.json` shows 9
+  passing readiness checks, `roles=6`, `workerReports=3`, `providerCalls=0`,
+  and `overallStatus=ready_for_first_scoped_codex_lane`.
 - Boundary: this A2A2A state still does not call providers, execute KOB
   commands, clone repos, start Docker, write connectors, push, deploy, read
   secrets, or mutate generated `web-sirinx` assets. Worker reports are inputs

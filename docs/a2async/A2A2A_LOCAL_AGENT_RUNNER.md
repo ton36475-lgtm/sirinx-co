@@ -207,6 +207,27 @@ criteria, and the exact scoped stage command. It intentionally keeps
 `executionAllowed=false`; Codex still has to review, implement, validate, and
 stage only the listed files.
 
+## Completion Audit
+
+Before opening the first scoped Codex implementation lane, generate the
+read-only completion audit:
+
+```bash
+python3 scripts/a2a/a2a2a_completion_audit.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This reads only the generated Mission Control fixtures and writes:
+
+- a runtime report at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/completion_audits/latest.json`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aCompletionAudit.json`
+
+The audit proves the role roster, dependency order, provider boundary, worker
+reports, AGY gate, blocked actions, and implementation packet readiness before
+Codex opens a real implementation lane.
+
 ## Next Build Lane
 
 Codex should consume the first `ready_for_codex_plan` item from the dependency

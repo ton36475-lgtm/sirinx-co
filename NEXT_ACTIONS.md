@@ -802,6 +802,8 @@ configuration lane, then keep future entries concise and source-path based.
 - [x] Keep all A2A2A worker flow local-only with `providerCalls=0`.
 - [x] Add bounded runner watch mode and surface the last runner summary in
       Mission Control.
+- [x] Add completion audit fixture and Mission Control panel; current audit is
+      9/9 pass with `ready_for_first_scoped_codex_lane`.
 - [ ] Review the implementation packet in
       `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`.
 - [ ] Open the first scoped Codex implementation lane only after confirming the

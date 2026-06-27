@@ -11,6 +11,7 @@ from pathlib import Path
 from scripts.a2a import a2a_export_runner_status_fixture
 from scripts.a2a import a2a_dependency_readiness
 from scripts.a2a import a2a_codex_build_plan
+from scripts.a2a import a2a2a_completion_audit
 from scripts.a2a import a2a_implementation_lane_packet
 from scripts.a2a import a2a_runner_dispatch_command
 from scripts.a2a import a2a_worker_report_digest
@@ -336,6 +337,66 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertIn("git_add_dot", fixture["packet"]["blockedActions"])
             self.assertNotIn(".", fixture["packet"]["scopedStageCommand"])
             self.assertTrue(Path(fixture["packetPath"]).exists())
+
+    def test_completion_audit_requires_agy_and_policy_boundaries(self) -> None:
+        fixture = {
+            "runner": {
+                "summary": {"completed": 7, "failed": 0, "providerCalls": 0, "roles": 6},
+                "roleCounts": [
+                    {"role": "hermes"},
+                    {"role": "opus"},
+                    {"role": "glm52"},
+                    {"role": "deepseek"},
+                    {"role": "agy"},
+                    {"role": "kob"},
+                ],
+            },
+            "readiness": {
+                "summary": {
+                    "overallStatus": "ready_for_scoped_codex_plan",
+                    "worstDependencyStatus": "ready",
+                    "providerCalls": 0,
+                }
+            },
+            "plan": {
+                "status": "ready_for_codex_review",
+                "plan": {"executionAllowed": False},
+            },
+            "digest": {
+                "summary": {
+                    "reports": 4,
+                    "workerReports": 3,
+                    "kobReports": 1,
+                    "safeReports": 4,
+                    "providerCalls": 0,
+                }
+            },
+            "packet": {
+                "summary": {
+                    "status": "ready_for_codex_scoped_implementation_review",
+                    "blockedDependencies": 0,
+                    "missingDependencies": 0,
+                    "executionAllowed": False,
+                },
+                "packet": {
+                    "dependencyGate": [
+                        {"id": "agy_worker_report", "status": "ready"},
+                    ],
+                    "blockedActions": [
+                        "git_add_dot",
+                        "provider_call",
+                        "deploy",
+                        "push",
+                        "secret_read_or_print",
+                    ],
+                },
+            },
+        }
+
+        checks = a2a2a_completion_audit.build_checks(fixture)
+
+        self.assertTrue(all(item["status"] == "pass" for item in checks))
+        self.assertIn("agy_dependency", {item["id"] for item in checks})
 
 
 if __name__ == "__main__":

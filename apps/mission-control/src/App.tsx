@@ -24,6 +24,7 @@ import a2a2aDependencyReadinessFixture from "./fixtures/a2a2aDependencyReadiness
 import a2a2aCodexBuildPlanFixture from "./fixtures/a2a2aCodexBuildPlan.json";
 import a2a2aWorkerReportDigestFixture from "./fixtures/a2a2aWorkerReportDigest.json";
 import a2a2aImplementationLanePacketFixture from "./fixtures/a2a2aImplementationLanePacket.json";
+import a2a2aCompletionAuditFixture from "./fixtures/a2a2aCompletionAudit.json";
 
 interface Worker {
   name: string;
@@ -741,6 +742,33 @@ type A2A2AImplementationLanePacketFixture = {
   policyBoundary: string[];
 };
 
+type A2A2ACompletionAuditFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  summary: {
+    overallStatus: string;
+    requirements: number;
+    passed: number;
+    failed: number;
+    providerCalls: number;
+    roles: number;
+    workerReports: number;
+    implementationPacketStatus: string;
+  };
+  checks: {
+    id: string;
+    label: string;
+    status: "pass" | "fail";
+    evidence: string;
+    nextAction: string;
+  }[];
+  prioritySequence: string[];
+  policyBoundary: string[];
+};
+
 type IgamingPracticeStatusFixture = {
   updatedAt: string;
   mode: string;
@@ -810,6 +838,8 @@ const a2a2aWorkerReportDigest =
   a2a2aWorkerReportDigestFixture as A2A2AWorkerReportDigestFixture;
 const a2a2aImplementationLanePacket =
   a2a2aImplementationLanePacketFixture as A2A2AImplementationLanePacketFixture;
+const a2a2aCompletionAudit =
+  a2a2aCompletionAuditFixture as A2A2ACompletionAuditFixture;
 const codexSessionSidebarToolkitStatus =
   codexSessionSidebarToolkitStatusFixture;
 const sessionToolkitAgents = codexSessionSidebarToolkitStatus.agents;
@@ -2466,6 +2496,111 @@ export default function App() {
                         ),
                       )}
                     </div>
+                  </section>
+                </div>
+              </div>
+
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>A2A2A Completion Audit</span>
+                  <span className="accent-emerald">
+                    {a2a2aCompletionAudit.summary.overallStatus}
+                  </span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Requirements</span>
+                    <strong>{a2a2aCompletionAudit.summary.requirements}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Passed</span>
+                    <strong>{a2a2aCompletionAudit.summary.passed}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Failed</span>
+                    <strong>{a2a2aCompletionAudit.summary.failed}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Roles</span>
+                    <strong>{a2a2aCompletionAudit.summary.roles}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Workers</span>
+                    <strong>
+                      {a2a2aCompletionAudit.summary.workerReports}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Provider Calls</span>
+                    <strong>
+                      {a2a2aCompletionAudit.summary.providerCalls}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Mode</span>
+                  <code>{a2a2aCompletionAudit.mode}</code>
+                  <span>Runtime Report</span>
+                  <code>{a2a2aCompletionAudit.runtimeReportPath}</code>
+                  <span>Updated</span>
+                  <code>{a2a2aCompletionAudit.updatedAt}</code>
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A completion audit checks"
+                  >
+                    <div className="git-section-title">
+                      <span>Completion Checks</span>
+                      <span className="approval-badge">
+                        {a2a2aCompletionAudit.checks.length}
+                      </span>
+                    </div>
+                    {a2a2aCompletionAudit.checks.map((check) => (
+                      <div className="practice-artifact-row" key={check.id}>
+                        <span
+                          className={`practice-status ${
+                            check.status === "pass"
+                              ? "payload-ready"
+                              : "payload-blocked"
+                          }`}
+                        >
+                          {check.status}
+                        </span>
+                        <div>
+                          <strong>{check.label}</strong>
+                          <p>{check.evidence}</p>
+                          <code>{check.nextAction}</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A next priority sequence"
+                  >
+                    <div className="git-section-title">
+                      <span>Priority Sequence</span>
+                      <span className="approval-badge">
+                        {a2a2aCompletionAudit.prioritySequence.length}
+                      </span>
+                    </div>
+                    {a2a2aCompletionAudit.prioritySequence.map((action) => (
+                      <div className="practice-artifact-row" key={action}>
+                        <span className="practice-status payload-ready">
+                          next
+                        </span>
+                        <div>
+                          <strong>{action}</strong>
+                          <p>Keep this lane fixture-backed and reviewable.</p>
+                          <code>{a2a2aCompletionAudit.generatedBy}</code>
+                        </div>
+                      </div>
+                    ))}
                   </section>
                 </div>
               </div>

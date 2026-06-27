@@ -1,0 +1,1232 @@
+{
+  "agents": [
+    {
+      "agentId": "agy-antigravity2",
+      "allowedActions": [
+        "dry_run_command_plan",
+        "agy_execution",
+        "agy_scaffold",
+        "scoped_repo_edit"
+      ],
+      "blockedActions": [],
+      "brokerRouted": true,
+      "leaseRequiredActions": [
+        "agy_execution",
+        "agy_scaffold",
+        "scoped_repo_edit"
+      ],
+      "localOnly": true,
+      "name": "AGY Antigravity 2 Scoped Executor",
+      "path": "agents/a2a/agy-antigravity2.agent.json",
+      "role": "scoped scaffold and refactor executor",
+      "runtime": "local-cli"
+    },
+    {
+      "agentId": "codex-5-6",
+      "allowedActions": [
+        "inspect",
+        "plan",
+        "dry_run_command_plan",
+        "repo_audit_readonly",
+        "registry_validate",
+        "validation"
+      ],
+      "blockedActions": [
+        "route_repo_execution_through_kob_hosted_codex",
+        "provider_call",
+        "repo_mutation"
+      ],
+      "brokerRouted": true,
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "Codex 5.6 Repo Executor",
+      "path": "agents/a2a/codex-5-6.agent.json",
+      "role": "legacy/profile alias that routes execution decisions back to codex-local",
+      "runtime": "terminal"
+    },
+    {
+      "agentId": "codex-local",
+      "allowedActions": [
+        "inspect",
+        "plan",
+        "dry_run_command_plan",
+        "repo_audit_readonly",
+        "registry_validate",
+        "read_repository_files",
+        "inspect_architecture",
+        "run_lint",
+        "run_unit_tests",
+        "generate_docs",
+        "code_review_dry_run",
+        "code_review_report",
+        "diff_review",
+        "security_review_plan",
+        "web_sirinx_dist_manifest",
+        "web_sirinx_static_asset_check",
+        "update_markdown",
+        "create_test_files",
+        "simulate_deploy_plan",
+        "web_sirinx_build_validation",
+        "web_sirinx_pages_deploy",
+        "scoped_repo_edit",
+        "create_non_destructive_patches",
+        "propose_refactors",
+        "validation"
+      ],
+      "blockedActions": [],
+      "brokerRouted": true,
+      "leaseRequiredActions": [
+        "scoped_repo_edit",
+        "create_non_destructive_patches",
+        "propose_refactors",
+        "web_sirinx_build_validation"
+      ],
+      "localOnly": true,
+      "name": "Codex Local Repo Executor",
+      "path": "agents/a2a/codex-local.agent.json",
+      "role": "local repo supervisor and default executor",
+      "runtime": "codex-desktop-or-local-cli"
+    },
+    {
+      "agentId": "deerflow",
+      "allowedActions": [
+        "inspect",
+        "plan",
+        "dry_run_command_plan",
+        "repo_audit_readonly"
+      ],
+      "blockedActions": [
+        "host_bash_without_policy",
+        "public_endpoint",
+        "secret_access",
+        "deploy",
+        "publish"
+      ],
+      "brokerRouted": true,
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "DeerFlow Long-Horizon Runtime",
+      "path": "agents/a2a/deerflow.agent.json",
+      "role": "long-horizon runtime candidate; local sandbox planning only before a dedicated runtime lane",
+      "runtime": "external-local-service"
+    },
+    {
+      "agentId": "flowise",
+      "allowedActions": ["inspect", "plan", "dry_run_command_plan"],
+      "blockedActions": [
+        "disable_security_check",
+        "public_endpoint",
+        "unrestricted_custom_code",
+        "secret_access",
+        "connector_activation"
+      ],
+      "brokerRouted": true,
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "Flowise Local RAG Builder",
+      "path": "agents/a2a/flowise.agent.json",
+      "role": "local RAG and chatbot blueprint route; no service activation in this broker phase",
+      "runtime": "external-local-service"
+    },
+    {
+      "agentId": "hermes-project-planner",
+      "allowedActions": ["plan", "route", "risk_review", "policy_review"],
+      "blockedActions": ["repo_mutation"],
+      "brokerRouted": true,
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "Hermes Project Planner",
+      "path": "agents/a2a/hermes-project-planner.agent.json",
+      "role": "policy and planning reviewer",
+      "runtime": "codex-desktop-local-planner"
+    },
+    {
+      "agentId": "kob-cli-fable",
+      "allowedActions": ["plan", "route", "summarize", "compress_context"],
+      "blockedActions": ["repo_mutation", "provider_secret_dump"],
+      "brokerRouted": true,
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "KOB CLI Fable Fast Router",
+      "path": "agents/a2a/kob-cli-fable.agent.json",
+      "role": "KOB fast-router profile alias for task slicing and summaries",
+      "runtime": "terminal"
+    },
+    {
+      "agentId": "kob-cli-opus",
+      "allowedActions": ["plan", "route", "summarize", "compress_context"],
+      "blockedActions": ["repo_mutation", "provider_secret_dump"],
+      "brokerRouted": true,
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "KOB CLI Opus Planner",
+      "path": "agents/a2a/kob-cli-opus.agent.json",
+      "role": "KOB planner profile alias for architecture and synthesis",
+      "runtime": "terminal"
+    },
+    {
+      "agentId": "manus",
+      "allowedActions": [
+        "inspect",
+        "manus_artifact_review",
+        "artifact_hash_sync"
+      ],
+      "blockedActions": ["direct_repo_mutation"],
+      "brokerRouted": true,
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "Manus Artifact Studio",
+      "path": "agents/a2a/manus.agent.json",
+      "role": "artifact producer, metadata and hashes only",
+      "runtime": "desktop-app"
+    },
+    {
+      "agentId": "n8n",
+      "allowedActions": ["inspect", "plan", "dry_run_command_plan"],
+      "blockedActions": [
+        "activate_production_workflow",
+        "send_to_non_opt_in",
+        "public_endpoint",
+        "secret_access",
+        "connector_activation"
+      ],
+      "brokerRouted": true,
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "n8n Automation Backbone",
+      "path": "agents/a2a/n8n.agent.json",
+      "role": "workflow automation draft route; no activation or live sends in this broker phase",
+      "runtime": "external-local-service"
+    },
+    {
+      "agentId": "odysseus",
+      "allowedActions": ["inspect", "plan", "dry_run_command_plan"],
+      "blockedActions": [
+        "public_endpoint",
+        "disable_auth",
+        "vendor_agpl_source",
+        "secret_access"
+      ],
+      "brokerRouted": true,
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "Odysseus Private Workspace",
+      "path": "agents/a2a/odysseus.agent.json",
+      "role": "private workspace UI route; localhost planning only before a dedicated service lane",
+      "runtime": "external-local-service"
+    },
+    {
+      "agentId": "opencode",
+      "allowedActions": [
+        "dry_run_command_plan",
+        "opencode_execution",
+        "scoped_repo_edit"
+      ],
+      "blockedActions": [],
+      "brokerRouted": true,
+      "leaseRequiredActions": ["opencode_execution", "scoped_repo_edit"],
+      "localOnly": true,
+      "name": "OpenCode Scoped Executor",
+      "path": "agents/a2a/opencode.agent.json",
+      "role": "scoped coding executor",
+      "runtime": "local-cli"
+    },
+    {
+      "agentId": "ponytail",
+      "allowedActions": ["review", "minimalism_review"],
+      "blockedActions": ["repo_mutation"],
+      "brokerRouted": true,
+      "leaseRequiredActions": [],
+      "localOnly": true,
+      "name": "Ponytail Code Minimalism Gate",
+      "path": "agents/a2a/ponytail.agent.json",
+      "role": "code minimalism review gate",
+      "runtime": "codex-plugin"
+    }
+  ],
+  "allowedNow": [
+    "read_repository_files",
+    "inspect_architecture",
+    "generate_docs",
+    "run_lint",
+    "run_unit_tests",
+    "create_non_destructive_patches_with_lease",
+    "update_markdown",
+    "create_test_files",
+    "simulate_deploy_plan",
+    "artifact_hash_sync",
+    "obsidian_memory_pulse"
+  ],
+  "blockedInToolkit": [
+    "approve_all_without_broker",
+    "jailbreak_or_policy_bypass",
+    "secret_read_or_print",
+    "connector_write",
+    "provider_call",
+    "external_repo_clone",
+    "docker_start",
+    "push",
+    "deploy",
+    "public_endpoint",
+    "generated_asset_mutation"
+  ],
+  "controlSurface": {
+    "executionRoute": "kob_and_hermes_plan_codex_local_executes",
+    "name": "Codex local sidebar toolkit",
+    "project": "Ghostclaw Autoflow and autocut",
+    "repoRoot": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os",
+    "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async"
+  },
+  "docs": [
+    {
+      "exists": true,
+      "path": "docs/a2async/CODEX_SIDEBAR_CONTROL_PLANE.md"
+    },
+    {
+      "exists": true,
+      "path": "docs/a2async/A2A_CODEX_SIDEBAR_AUTOFLOW_V3.md"
+    },
+    {
+      "exists": true,
+      "path": "docs/a2async/CODEX_COMMAND_BROKER_TOOL_GITREPO_INTEGRATION.md"
+    },
+    {
+      "exists": true,
+      "path": "docs/a2async/A2A_GOAL_COVERAGE_AUDIT.md"
+    },
+    {
+      "exists": true,
+      "path": "docs/a2async/A2A_INTEGRATION_READINESS_MATRIX.md"
+    },
+    {
+      "exists": true,
+      "path": "docs/a2async/A2A_SCOPED_LANE_STAGING_GUARD.md"
+    },
+    {
+      "exists": true,
+      "path": "docs/a2async/A2A_EXECUTOR_LEASE_REQUEST_PACKETS.md"
+    },
+    {
+      "exists": true,
+      "path": "docs/a2async/OPENCODE_AGY_EXECUTOR_CONTRACT.md"
+    },
+    {
+      "exists": true,
+      "path": "docs/a2async/LOCAL_CODEX_KOB_MANUS_A2A_RUNBOOK.md"
+    }
+  ],
+  "executorPreflight": {
+    "activeLaneLocks": [],
+    "activeLeases": [
+      {
+        "allowExecution": false,
+        "executor": "opencode",
+        "lane": "a2a-v3-opencode",
+        "leaseId": "LEASE-20260627-060602",
+        "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/state/executor_leases/LEASE-20260627-060602-a2a-v3-opencode.json"
+      },
+      {
+        "allowExecution": false,
+        "executor": "agy-antigravity2",
+        "lane": "a2a-v3-agy",
+        "leaseId": "LEASE-20260627-060603",
+        "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/state/executor_leases/LEASE-20260627-060603-a2a-v3-agy.json"
+      }
+    ],
+    "decisionCounts": {
+      "blocked": 17,
+      "blocked_first_phase": 1,
+      "requires_executor_lease": 2
+    },
+    "mode": "read_only_executor_lease_preflight",
+    "nextActions": [
+      "Create executor leases only through a dedicated scoped lane.",
+      "Keep executeByBroker false until lane lock, validation, runtime evidence, and review pass.",
+      "Never convert T5 deny commands into runnable commands from this panel."
+    ],
+    "requiredGateCounts": {
+      "dedicated_adapter_contract_and_runtime_preflight": 1,
+      "executor_lease_and_lane_lock": 2,
+      "security_policy_change_required": 17
+    },
+    "requirements": [
+      {
+        "detail": "Every executor command must carry a stable command SHA-256 before execution.",
+        "id": "command_hash_required",
+        "status": "required"
+      },
+      {
+        "detail": "T3 and executor actions need a runtime lease before leaving plan mode.",
+        "id": "executor_lease_required",
+        "status": "required"
+      },
+      {
+        "detail": "Mutation lanes need a lane lock so KOB/OpenCode/AGY/Codex cannot edit the same lane concurrently.",
+        "id": "lane_lock_required",
+        "status": "required"
+      },
+      {
+        "detail": "Each execution-capable command must write a runtime report before any staging decision.",
+        "id": "runtime_evidence_required",
+        "status": "required"
+      },
+      {
+        "detail": "The current broker and Mission Control fixture expose decisions only; they do not run commands.",
+        "id": "direct_broker_execution_disabled",
+        "status": "enforced"
+      }
+    ],
+    "riskTierCounts": {
+      "T3": 2,
+      "T4": 1,
+      "T5": 17
+    },
+    "sampleCommands": [
+      {
+        "brokerDecision": "requires_executor_lease",
+        "commandSha256": "d6d3838e7aad8bee5261cb38e9646d0dba3fca30c472d390940cc1048deb5243",
+        "executeByBroker": false,
+        "id": "web_sirinx_check",
+        "label": "web-sirinx check",
+        "lane": "LANE_WEB_SIRINX_CLOUDFLARE_PAGES_DEPLOY",
+        "productionDecision": "REQUIRE_HUMAN_REVIEW",
+        "requiredGate": "executor_lease_and_lane_lock",
+        "riskTier": "T3",
+        "tool": "codex-local"
+      },
+      {
+        "brokerDecision": "requires_executor_lease",
+        "commandSha256": "04687c037c51056987159d6ba2d79550fe8018fdaab28dddc5c74944a7b5f3f1",
+        "executeByBroker": false,
+        "id": "web_sirinx_build",
+        "label": "web-sirinx build",
+        "lane": "LANE_WEB_SIRINX_CLOUDFLARE_PAGES_DEPLOY",
+        "productionDecision": "REQUIRE_HUMAN_REVIEW",
+        "requiredGate": "executor_lease_and_lane_lock",
+        "riskTier": "T3",
+        "tool": "codex-local"
+      },
+      {
+        "brokerDecision": "blocked_first_phase",
+        "commandSha256": "fee8818dad7a4ffff5772606c8192c8095267d3d8eeceb5b6092ae02d017968e",
+        "executeByBroker": false,
+        "id": "cloudflare_pages_deploy",
+        "label": "Cloudflare Pages deploy",
+        "lane": "LANE_WEB_SIRINX_CLOUDFLARE_PAGES_DEPLOY",
+        "productionDecision": "REQUIRE_HUMAN_REVIEW",
+        "requiredGate": "dedicated_adapter_contract_and_runtime_preflight",
+        "riskTier": "T4",
+        "tool": "codex-local"
+      },
+      {
+        "brokerDecision": "blocked",
+        "commandSha256": "",
+        "executeByBroker": false,
+        "id": "deny_jailbreak_policy",
+        "label": "jailbreak policy",
+        "lane": "GLOBAL_DENY_ALWAYS",
+        "productionDecision": "DENY",
+        "requiredGate": "security_policy_change_required",
+        "riskTier": "T5",
+        "tool": "*"
+      },
+      {
+        "brokerDecision": "blocked",
+        "commandSha256": "",
+        "executeByBroker": false,
+        "id": "deny_bypass_command_policy",
+        "label": "bypass command policy",
+        "lane": "GLOBAL_DENY_ALWAYS",
+        "productionDecision": "DENY",
+        "requiredGate": "security_policy_change_required",
+        "riskTier": "T5",
+        "tool": "*"
+      },
+      {
+        "brokerDecision": "blocked",
+        "commandSha256": "",
+        "executeByBroker": false,
+        "id": "deny_disable_policy",
+        "label": "disable policy",
+        "lane": "GLOBAL_DENY_ALWAYS",
+        "productionDecision": "DENY",
+        "requiredGate": "security_policy_change_required",
+        "riskTier": "T5",
+        "tool": "*"
+      },
+      {
+        "brokerDecision": "blocked",
+        "commandSha256": "",
+        "executeByBroker": false,
+        "id": "deny_unlock_all_security",
+        "label": "unlock all security",
+        "lane": "GLOBAL_DENY_ALWAYS",
+        "productionDecision": "DENY",
+        "requiredGate": "security_policy_change_required",
+        "riskTier": "T5",
+        "tool": "*"
+      },
+      {
+        "brokerDecision": "blocked",
+        "commandSha256": "",
+        "executeByBroker": false,
+        "id": "deny_unlock_all_commands",
+        "label": "unlock all commands",
+        "lane": "GLOBAL_DENY_ALWAYS",
+        "productionDecision": "DENY",
+        "requiredGate": "security_policy_change_required",
+        "riskTier": "T5",
+        "tool": "*"
+      },
+      {
+        "brokerDecision": "blocked",
+        "commandSha256": "",
+        "executeByBroker": false,
+        "id": "deny_autonomous_approve_all",
+        "label": "autonomous approve all",
+        "lane": "GLOBAL_DENY_ALWAYS",
+        "productionDecision": "DENY",
+        "requiredGate": "security_policy_change_required",
+        "riskTier": "T5",
+        "tool": "*"
+      },
+      {
+        "brokerDecision": "blocked",
+        "commandSha256": "",
+        "executeByBroker": false,
+        "id": "deny_approve_all_actions",
+        "label": "approve all actions",
+        "lane": "GLOBAL_DENY_ALWAYS",
+        "productionDecision": "DENY",
+        "requiredGate": "security_policy_change_required",
+        "riskTier": "T5",
+        "tool": "*"
+      },
+      {
+        "brokerDecision": "blocked",
+        "commandSha256": "",
+        "executeByBroker": false,
+        "id": "deny_disable_security_controls",
+        "label": "disable security controls",
+        "lane": "GLOBAL_DENY_ALWAYS",
+        "productionDecision": "DENY",
+        "requiredGate": "security_policy_change_required",
+        "riskTier": "T5",
+        "tool": "*"
+      },
+      {
+        "brokerDecision": "blocked",
+        "commandSha256": "",
+        "executeByBroker": false,
+        "id": "deny_access_secrets",
+        "label": "access secrets",
+        "lane": "GLOBAL_DENY_ALWAYS",
+        "productionDecision": "DENY",
+        "requiredGate": "security_policy_change_required",
+        "riskTier": "T5",
+        "tool": "*"
+      }
+    ],
+    "source": "apps/mission-control/src/fixtures/commandBrokerProductionStatus.json",
+    "status": "ready_for_preflight_review",
+    "summary": {
+      "activeLaneLocks": 0,
+      "activeLeases": 2,
+      "blockedFirstPhase": 1,
+      "denied": 17,
+      "executionEnabledCommands": 0,
+      "registeredCommands": 20,
+      "requiresLease": 2
+    },
+    "warnings": []
+  },
+  "integrationReadiness": {
+    "counts": {
+      "blocked": 1,
+      "lease_required": 3,
+      "ready": 7
+    },
+    "mode": "local_read_only_integration_readiness_matrix",
+    "policy": {
+      "autoAllowDryRunActions": 29,
+      "hardBlockedActions": 39,
+      "leaseRequiredActions": 7
+    },
+    "rows": [
+      {
+        "blockedActions": ["provider_call", "push", "deploy"],
+        "decision": "auto_allow_dry_run",
+        "evidence": "agents/a2a/codex-local.agent.json",
+        "id": "codex-local-executor",
+        "nextAction": "Use Codex local for repo edits and validation only.",
+        "role": "repo executor, patch writer, test runner",
+        "status": "ready",
+        "surface": "Codex Local"
+      },
+      {
+        "blockedActions": ["repo_mutation", "provider_secret_dump"],
+        "decision": "auto_allow_dry_run",
+        "evidence": "kob-cli-opus + kob-cli-fable agent cards",
+        "id": "kob-planner-router",
+        "nextAction": "Keep KOB out of direct repo mutation.",
+        "role": "planner, router, context compression",
+        "status": "ready",
+        "surface": "KOB CLI"
+      },
+      {
+        "blockedActions": ["repo_mutation"],
+        "decision": "auto_allow_dry_run",
+        "evidence": "agents/a2a/hermes-project-planner.agent.json",
+        "id": "hermes-policy-review",
+        "nextAction": "Use Hermes as policy reviewer before executor lanes.",
+        "role": "policy, risk, and route review",
+        "status": "ready",
+        "surface": "Hermes"
+      },
+      {
+        "blockedActions": [
+          "unknown_shell",
+          "provider_key_capture",
+          "direct_repo_mutation"
+        ],
+        "decision": "requires_executor_lease",
+        "evidence": "agents/a2a/opencode.agent.json",
+        "id": "opencode-executor-candidate",
+        "nextAction": "Create executor lease before any OpenCode command leaves plan mode.",
+        "role": "optional scoped executor candidate",
+        "status": "lease_required",
+        "surface": "OpenCode"
+      },
+      {
+        "blockedActions": [
+          "install_cli",
+          "unknown_shell",
+          "direct_repo_mutation"
+        ],
+        "decision": "requires_executor_lease",
+        "evidence": "agents/a2a/agy-antigravity2.agent.json",
+        "id": "agy-antigravity2-executor-candidate",
+        "nextAction": "Verify binary and create scoped lease before any execution.",
+        "role": "optional scoped scaffold/refactor executor",
+        "status": "lease_required",
+        "surface": "AGY Antigravity 2"
+      },
+      {
+        "blockedActions": [
+          "automate_manus_ui",
+          "copy_browser_profile",
+          "direct_repo_mutation"
+        ],
+        "decision": "auto_allow_dry_run",
+        "evidence": "agents/a2a/manus.agent.json",
+        "id": "manus-artifact-sync",
+        "nextAction": "Sync exported files by hash after they are local on Mac.",
+        "role": "artifact producer, hash-sync only",
+        "status": "ready",
+        "surface": "Manus"
+      },
+      {
+        "blockedActions": ["clone_repo", "install_dependency", "docker_start"],
+        "decision": "requires_executor_lease",
+        "evidence": "24 registered repos",
+        "id": "external-git-repo-registry",
+        "nextAction": "Run clone/audit only through a dedicated repo lane.",
+        "role": "external repo registry and audit planning",
+        "status": "lease_required",
+        "surface": "Git Repos"
+      },
+      {
+        "blockedActions": ["connector_write", "external_api_write_actions"],
+        "decision": "blocked_first_phase",
+        "evidence": "target IDs are intentionally unbound",
+        "id": "connector-sync",
+        "nextAction": "Bind target IDs before any connector write lane.",
+        "role": "scoped connector sync targets",
+        "status": "blocked",
+        "surface": "Airtable/Linear/Notion/GitHub"
+      },
+      {
+        "blockedActions": ["approve_all_without_broker", "modify_audit_trail"],
+        "decision": "broker_locked",
+        "evidence": "20 registered commands; 0 execution-enabled",
+        "id": "command-broker",
+        "nextAction": "Keep executeByBroker false until scoped lease evidence exists.",
+        "role": "decision engine and executor lease preflight",
+        "status": "ready",
+        "surface": "Command Broker"
+      },
+      {
+        "blockedActions": ["raw_log_dump", "secret_printing"],
+        "decision": "auto_allow_dry_run",
+        "evidence": "8/8 reports present",
+        "id": "runtime-report-pack",
+        "nextAction": "Refresh reports after each local control-plane change.",
+        "role": "local reports, fixtures, patch evidence",
+        "status": "ready",
+        "surface": "A2A Runtime"
+      },
+      {
+        "blockedActions": [
+          "secret_printing",
+          "frontmatter_rewrite",
+          "raw_log_dump"
+        ],
+        "decision": "auto_allow_dry_run",
+        "evidence": "scripts/a2a/a2a_obsidian_sync.py",
+        "id": "obsidian-brain-sync",
+        "nextAction": "Append concise no-secret pulse after meaningful local work.",
+        "role": "concise memory pulse",
+        "status": "ready",
+        "surface": "Obsidian Brain"
+      }
+    ]
+  },
+  "leaseRequests": {
+    "counts": {
+      "blocked_pending_targets": 1,
+      "ready_for_review": 3
+    },
+    "mode": "review_only_executor_lease_request_packets",
+    "requestCount": 4,
+    "requestDir": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/state/executor_lease_requests",
+    "requests": [
+      {
+        "executor": "opencode",
+        "lane": "opencode-scoped-executor-candidate",
+        "nextAction": "Create executor lease before any OpenCode command leaves plan mode.",
+        "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/state/executor_lease_requests/LEASE-REQ-opencode-executor-candidate-b70ba4b12e2c.json",
+        "requestId": "LEASE-REQ-opencode-executor-candidate-b70ba4b12e2c",
+        "requestStatus": "ready_for_review",
+        "sourceRowId": "opencode-executor-candidate",
+        "surface": "OpenCode"
+      },
+      {
+        "executor": "agy-antigravity2",
+        "lane": "agy-antigravity2-scoped-executor-candidate",
+        "nextAction": "Verify binary and create scoped lease before any execution.",
+        "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/state/executor_lease_requests/LEASE-REQ-agy-antigravity2-executor-candidate-be72748f73d2.json",
+        "requestId": "LEASE-REQ-agy-antigravity2-executor-candidate-be72748f73d2",
+        "requestStatus": "ready_for_review",
+        "sourceRowId": "agy-antigravity2-executor-candidate",
+        "surface": "AGY Antigravity 2"
+      },
+      {
+        "executor": "codex-local",
+        "lane": "external-git-repo-registry-audit",
+        "nextAction": "Run clone/audit only through a dedicated repo lane.",
+        "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/state/executor_lease_requests/LEASE-REQ-external-git-repo-registry-1193eaee4b32.json",
+        "requestId": "LEASE-REQ-external-git-repo-registry-1193eaee4b32",
+        "requestStatus": "ready_for_review",
+        "sourceRowId": "external-git-repo-registry",
+        "surface": "Git Repos"
+      },
+      {
+        "executor": "",
+        "lane": "",
+        "nextAction": "Bind target IDs before any connector write lane.",
+        "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/state/executor_lease_requests/LEASE-REQ-connector-sync-d5514266f332.json",
+        "requestId": "LEASE-REQ-connector-sync-d5514266f332",
+        "requestStatus": "blocked_pending_targets",
+        "sourceRowId": "connector-sync",
+        "surface": "Airtable/Linear/Notion/GitHub"
+      }
+    ],
+    "status": "ready_for_local_review_only"
+  },
+  "mode": "local_read_only_session_sidebar_toolkit",
+  "objectiveAudit": {
+    "counts": {
+      "blocked": 2,
+      "verified": 10
+    },
+    "mode": "objective_completion_audit_local_only",
+    "objective": "auto approve all command and create codex integration to all tool and gitrepo a2a sync codex and hermes and kob in this session sidebar toolkit",
+    "overallStatus": "local_control_plane_ready_external_actions_gated",
+    "requirements": [
+      {
+        "evidence": "29 dry-run actions, 39 hard blocks",
+        "id": "brokered_auto_approve_boundary",
+        "label": "Auto-approve is brokered, not raw bypass",
+        "nextAction": "Keep approve-all requests routed through Command Broker decisions.",
+        "status": "verified"
+      },
+      {
+        "evidence": "agents/a2a/codex-local.agent.json",
+        "id": "codex_local_executor_route",
+        "label": "Codex local is the repo executor",
+        "nextAction": "Use codex-local for repo edits, tests, patches, and validation.",
+        "status": "verified"
+      },
+      {
+        "evidence": "kob-cli-opus + kob-cli-fable agent cards",
+        "id": "kob_planner_routes",
+        "label": "KOB planner/router profiles are registered",
+        "nextAction": "Keep KOB in plan/route/context-compression mode.",
+        "status": "verified"
+      },
+      {
+        "evidence": "agents/a2a/hermes-project-planner.agent.json",
+        "id": "hermes_policy_route",
+        "label": "Hermes policy reviewer is registered",
+        "nextAction": "Use Hermes for policy/risk review before executor lanes.",
+        "status": "verified"
+      },
+      {
+        "evidence": "13/13 broker routed",
+        "id": "all_agent_cards_broker_routed",
+        "label": "All A2A agent cards are broker-routed",
+        "nextAction": "Add broker routes for any future agent cards before display.",
+        "status": "verified"
+      },
+      {
+        "evidence": "24 registered repos; registry_only_no_clone",
+        "id": "external_git_repo_registry",
+        "label": "External Git repo registry is visible",
+        "nextAction": "Open clone/audit only through a separate repo lane.",
+        "status": "verified"
+      },
+      {
+        "evidence": "8/8 runtime reports present",
+        "id": "a2a_runtime_reports",
+        "label": "A2A runtime evidence is present",
+        "nextAction": "Refresh runtime reports when routes or policies change.",
+        "status": "verified"
+      },
+      {
+        "evidence": "10 queue items",
+        "id": "session_sync_queue",
+        "label": "Session sync queue exists",
+        "nextAction": "Promote one ready item into a dedicated local fixture lane.",
+        "status": "verified"
+      },
+      {
+        "evidence": "20 commands, 0 execution-enabled",
+        "id": "executor_lease_preflight",
+        "label": "Executor lease preflight is visible",
+        "nextAction": "Create executor leases only in scoped lanes after review.",
+        "status": "verified"
+      },
+      {
+        "evidence": "11 local readiness rows",
+        "id": "all_tool_integration_readiness",
+        "label": "All visible tool integrations have a readiness row",
+        "nextAction": "Promote one lease-required row into a scoped executor lane only after review.",
+        "status": "verified"
+      },
+      {
+        "evidence": "connector target binding review remains target-ID gated",
+        "id": "connector_sync_targets",
+        "label": "Connector sync targets are bound",
+        "nextAction": "Provide Airtable/Linear/Notion/GitHub target IDs before connector write lanes.",
+        "status": "blocked"
+      },
+      {
+        "evidence": "clone, Docker, provider calls, connector writes, push, and deploy remain outside this toolkit lane",
+        "id": "real_external_execution",
+        "label": "Real external execution is enabled",
+        "nextAction": "Open separate executor-lease lanes for each real external action.",
+        "status": "blocked"
+      }
+    ],
+    "totalCount": 12,
+    "verifiedCount": 10
+  },
+  "policy": {
+    "autoAllowDryRun": [
+      "inspect",
+      "plan",
+      "dry_run_command_plan",
+      "repo_audit_readonly",
+      "registry_validate",
+      "read_repository_files",
+      "inspect_architecture",
+      "run_lint",
+      "run_unit_tests",
+      "generate_docs",
+      "code_review_dry_run",
+      "code_review_report",
+      "diff_review",
+      "security_review_plan",
+      "web_sirinx_dist_manifest",
+      "web_sirinx_static_asset_check",
+      "update_markdown",
+      "create_test_files",
+      "simulate_deploy_plan",
+      "summarize",
+      "route",
+      "compress_context",
+      "review",
+      "minimalism_review",
+      "manus_artifact_review",
+      "artifact_hash_sync",
+      "risk_review",
+      "policy_review",
+      "validation"
+    ],
+    "blockedFirstPhase": [
+      "push",
+      "deploy",
+      "provider_call",
+      "connector_activation",
+      "docker_start",
+      "web_sirinx_pages_deploy",
+      "public_endpoint"
+    ],
+    "hardBlockedActions": [
+      "jailbreak_policy",
+      "bypass_command_policy",
+      "disable_policy",
+      "unlock_all_security",
+      "unlock_all_commands",
+      "autonomous_approve_all",
+      "approve_all_actions",
+      "disable_security_controls",
+      "access_secrets",
+      "read_or_export_user_data",
+      "modify_authentication",
+      "modify_authorization",
+      "change_payment_logic",
+      "change_security_policy",
+      "install_new_dependencies",
+      "run_unknown_scripts",
+      "database_migration",
+      "delete_or_overwrite_files",
+      "production_deploy",
+      "external_api_write_actions",
+      "disable_logging",
+      "disable_monitoring",
+      "bypass_access_control",
+      "bypass_rate_limits",
+      "exfiltrate_credentials",
+      "modify_audit_trail",
+      "hide_execution_history",
+      "print_secret",
+      "read_private_key",
+      "read_browser_profile",
+      "copy_browser_profile",
+      "copy_token_store",
+      "force_push",
+      "public_endpoint",
+      "provider_secret_dump",
+      "quota_bypass",
+      "captcha_bypass",
+      "direct_repo_mutation",
+      "destructive_delete_without_backup"
+    ],
+    "mode": {
+      "default_decision": "dry_run_or_block",
+      "provider_call_allowed_by_default": false,
+      "public_endpoint_allowed": false,
+      "repo_mutation_requires_lease": true,
+      "runtime_artifact_required": true
+    },
+    "requiresExecutorLease": [
+      "scoped_repo_edit",
+      "create_non_destructive_patches",
+      "propose_refactors",
+      "web_sirinx_build_validation",
+      "opencode_execution",
+      "agy_execution",
+      "agy_scaffold"
+    ],
+    "toolRouteCount": 14
+  },
+  "reports": {
+    "expected": 8,
+    "items": {
+      "a2a_readiness": {
+        "exists": true,
+        "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/a2a_integration_readiness_matrix.json",
+        "status": "blocked_for_external_execution"
+      },
+      "broker_validation": {
+        "exists": true,
+        "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/broker_status_validation.json",
+        "status": "present"
+      },
+      "command_broker_production": {
+        "exists": true,
+        "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/command_broker_production_lane.json",
+        "status": "ready_for_review_no_execution"
+      },
+      "deep_research_system": {
+        "exists": true,
+        "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/deep_research_system_design.json",
+        "status": "ready_for_local_review_only"
+      },
+      "executor_lease_requests": {
+        "exists": true,
+        "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/executor_lease_requests.json",
+        "status": "present"
+      },
+      "goal_coverage": {
+        "exists": true,
+        "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/goal_coverage_audit.json",
+        "status": "ready_for_scoped_dry_run_review"
+      },
+      "goal_plan_board": {
+        "exists": true,
+        "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/codex_goal_plan_board.json",
+        "status": "ready_for_local_review_only"
+      },
+      "tool_repo_matrix": {
+        "exists": true,
+        "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/codex_tool_repo_matrix.json",
+        "status": "ready_for_local_review_only"
+      }
+    },
+    "present": 8
+  },
+  "repos": {
+    "clonePolicyCounts": {
+      "allow": 22,
+      "skip": 2
+    },
+    "execution": "registry_only_no_clone",
+    "registered": 24
+  },
+  "status": "ready_for_local_sidebar_review",
+  "summary": {
+    "agentCount": 13,
+    "autoAllowDryRunActions": 29,
+    "blockedFirstPhaseActions": 7,
+    "brokerRoutedAgents": 13,
+    "executorPreflightActiveLeases": 2,
+    "executorPreflightCommands": 20,
+    "executorPreflightExecutionEnabled": 0,
+    "executorPreflightRequiresLease": 2,
+    "hardBlockedActions": 39,
+    "integrationBlocked": 1,
+    "integrationLeaseRequired": 3,
+    "integrationPartial": 0,
+    "integrationReady": 7,
+    "integrationRows": 11,
+    "leaseRequestBlocked": 1,
+    "leaseRequestPackets": 4,
+    "leaseRequestReady": 3,
+    "leaseRequiredActions": 7,
+    "objectiveBlocked": 2,
+    "objectiveTotal": 12,
+    "objectiveVerified": 10,
+    "registeredRepos": 24,
+    "runtimeReportsExpected": 8,
+    "runtimeReportsPresent": 8,
+    "syncQueueBlocked": 1,
+    "syncQueueItems": 10,
+    "syncQueueLeaseRequired": 2,
+    "syncQueueReady": 7
+  },
+  "syncQueue": {
+    "counts": {
+      "blocked": 1,
+      "lease_required": 2,
+      "ready": 7
+    },
+    "items": [
+      {
+        "blockedActions": [
+          "push",
+          "deploy",
+          "connector_write",
+          "provider_call"
+        ],
+        "decision": "auto_allow_dry_run",
+        "id": "session-toolkit-review",
+        "label": "Review Mission Control Session Toolkit panel",
+        "nextAction": "Review the read-only panel and scoped lane report before staging.",
+        "owner": "codex-local",
+        "requiredGate": "local_review_only",
+        "route": "codex-local -> mission-control",
+        "source": "apps/mission-control/src/fixtures/codexSessionSidebarToolkitStatus.json",
+        "status": "ready"
+      },
+      {
+        "blockedActions": ["repo_mutation_from_kob", "provider_secret_dump"],
+        "decision": "auto_allow_dry_run",
+        "id": "kob-hermes-context-sync",
+        "label": "KOB and Hermes planning context sync",
+        "nextAction": "Keep KOB as planner/router and Codex local as the only repo executor.",
+        "owner": "kob-cli-opus + hermes-project-planner",
+        "requiredGate": "context_summary_only",
+        "route": "kob/hermes plan -> codex-local executes",
+        "source": "agents/a2a/kob-cli-opus.agent.json",
+        "status": "ready"
+      },
+      {
+        "blockedActions": ["clone_repo", "install_dependency", "start_service"],
+        "decision": "auto_allow_dry_run",
+        "id": "tool-repo-matrix-refresh",
+        "label": "Refresh all-tool and all-repo matrix",
+        "nextAction": "Refresh matrix when agent cards, broker routes, or repo registry change.",
+        "owner": "codex-local",
+        "requiredGate": "runtime_report_only",
+        "route": "registry + agent cards -> runtime matrix",
+        "source": "scripts/a2a/a2a_codex_tool_repo_matrix.py",
+        "status": "ready"
+      },
+      {
+        "blockedActions": ["clone_repo", "install_dependency", "docker_start"],
+        "decision": "requires_executor_lease",
+        "id": "external-repo-registry-audit",
+        "label": "Prepare external Git repo registry audit",
+        "nextAction": "Validate 24 registered repos before any clone lane.",
+        "owner": "codex-local",
+        "requiredGate": "repo_audit_lane",
+        "route": "registry validate -> audit packet",
+        "source": "registry/external_git_repos.yaml",
+        "status": "lease_required"
+      },
+      {
+        "blockedActions": [
+          "direct_repo_mutation",
+          "browser_profile_copy",
+          "provider_call"
+        ],
+        "decision": "auto_allow_dry_run",
+        "id": "manus-artifact-hash-sync",
+        "label": "Sync exported Manus artifacts by hash",
+        "nextAction": "Hash exported files after they exist on Mac; do not automate Manus UI.",
+        "owner": "manus + codex-local",
+        "requiredGate": "metadata_and_hash_only",
+        "route": "manus export -> hash manifest -> codex review",
+        "source": "docs/a2async/A2A_MANUS_SYNC.md",
+        "status": "ready"
+      },
+      {
+        "blockedActions": ["connector_write", "external_api_write_actions"],
+        "decision": "blocked_first_phase",
+        "id": "connector-target-binding-review",
+        "label": "Bind Airtable, Linear, Notion, and GitHub connector targets",
+        "nextAction": "Provide scoped target IDs before connector sync can leave local draft mode.",
+        "owner": "hermes-project-planner",
+        "requiredGate": "target_ids_required",
+        "route": "payload review -> target IDs -> scoped connector packet",
+        "source": "policies/tool_integration_targets.yaml",
+        "status": "blocked"
+      },
+      {
+        "blockedActions": ["deploy", "push", "generated_asset_mutation"],
+        "decision": "requires_executor_lease",
+        "id": "web-sirinx-generated-assets-lane",
+        "label": "Handle generated web-sirinx assets and deploy backlog",
+        "nextAction": "Keep generated assets out of this toolkit lane and review separately.",
+        "owner": "codex-local",
+        "requiredGate": "generated_assets_lane",
+        "route": "dist manifest -> validation -> deploy packet",
+        "source": "docs/a2async/WEB_SIRINX_GENERATED_ASSETS_DEPLOY_LANE.md",
+        "status": "lease_required"
+      },
+      {
+        "blockedActions": [
+          "web_scraping",
+          "provider_call",
+          "gpu_model_loading"
+        ],
+        "decision": "auto_allow_dry_run",
+        "id": "deep-research-fixture-panel",
+        "label": "Review Deep Research Mission Control fixture",
+        "nextAction": "Use the read-only panel, then build the local job-packet factory before retrieval lanes.",
+        "owner": "codex-local",
+        "requiredGate": "local_fixture_only",
+        "route": "deep research report -> Mission Control read-only panel",
+        "source": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/deep_research_system_design.json",
+        "status": "ready"
+      },
+      {
+        "blockedActions": [
+          "execute_unknown_command",
+          "modify_audit_trail",
+          "approve_all_without_broker"
+        ],
+        "decision": "auto_allow_dry_run",
+        "id": "executor-lease-preflight-panel",
+        "label": "Create executor lease preflight panel",
+        "nextAction": "Expose lease requirements before any OpenCode, AGY, clone, Docker, or deploy executor lane.",
+        "owner": "codex-local + command-broker",
+        "requiredGate": "preflight_report_only",
+        "route": "broker decisions -> lease preflight fixture",
+        "source": "packages/command-broker/src/index.ts",
+        "status": "ready"
+      },
+      {
+        "blockedActions": [
+          "secret_printing",
+          "raw_log_dump",
+          "frontmatter_rewrite"
+        ],
+        "decision": "auto_allow_dry_run",
+        "id": "obsidian-brain-pulse",
+        "label": "Append concise Obsidian brain pulse",
+        "nextAction": "Write concise pulses only after meaningful local work.",
+        "owner": "codex-local",
+        "requiredGate": "no_secrets_no_raw_logs",
+        "route": "runtime evidence -> concise memory pulse",
+        "source": "scripts/a2a/a2a_obsidian_sync.py",
+        "status": "ready"
+      }
+    ],
+    "mode": "local_read_only_task_queue"
+  },
+  "updatedAt": "2026-06-27T11:01:34+00:00",
+  "warnings": [],
+  "workflows": [
+    {
+      "execution": "dry_run_or_scoped_local_only",
+      "id": "plan_route_execute_local",
+      "name": "KOB plans, Codex local executes",
+      "steps": [
+        "user_goal",
+        "kob_plan_or_context_compression",
+        "a2a_task_manifest",
+        "codex_command_broker_decision",
+        "codex_local_patch_or_report",
+        "validation",
+        "obsidian_pulse"
+      ]
+    },
+    {
+      "execution": "plan_only",
+      "id": "hermes_policy_review",
+      "name": "Hermes policy review",
+      "steps": [
+        "route_to_hermes_project_planner",
+        "risk_review",
+        "policy_review",
+        "return_broker_constraints"
+      ]
+    },
+    {
+      "execution": "metadata_and_hash_only",
+      "id": "manus_artifact_hash_sync",
+      "name": "Manus artifact hash sync",
+      "steps": [
+        "export_artifact_to_mac",
+        "hash_and_manifest",
+        "codex_review",
+        "a2a_artifact_record"
+      ]
+    },
+    {
+      "execution": "lease_required_no_direct_shell",
+      "id": "opencode_agy_executor_candidate",
+      "name": "OpenCode / AGY executor candidate",
+      "steps": [
+        "broker_classification",
+        "executor_lease",
+        "lane_lock",
+        "dry_run_command_plan",
+        "codex_local_review"
+      ]
+    },
+    {
+      "execution": "no_clone_in_toolkit",
+      "id": "git_repo_registry",
+      "name": "Git repo registry",
+      "steps": [
+        "registry_validate",
+        "readonly_audit_plan",
+        "clone_lane_only_after_policy"
+      ]
+    }
+  ]
+}

@@ -870,9 +870,17 @@ configuration lane, then keep future entries concise and source-path based.
       `apps/mission-control/src/fixtures/a2a2aWorkerFollowupLane.json`.
 - [x] Convert the worker follow-up lane into a scoped implementation packet at
       `apps/mission-control/src/fixtures/a2a2aWorkerFollowupImplementationPacket.json`.
-- [ ] Open the next A2A2A implementation lane from
+- [x] Open the next A2A2A implementation lane from
       `a2a2aWorkerFollowupImplementationPacket.packet` only after reviewing
       its planned files, source fixtures, blocked actions, and validation plan.
+- [x] Run allowlisted validation for the worker follow-up implementation packet
+      and export
+      `apps/mission-control/src/fixtures/a2a2aWorkerFollowupPacketValidation.json`.
+- [x] Record the worker follow-up packet outcome at
+      `apps/mission-control/src/fixtures/a2a2aWorkerFollowupPacketOutcome.json`.
+- [ ] Use the completed worker follow-up packet outcome as proof that the
+      report-only worker cycle is closed, then open the next smallest Codex
+      coding slice from a fresh scoped packet.
 - [ ] Do not use `git add .`, deploy, push, connector sync, provider calls,
       secret reads, Docker starts, external repo clone/audit, or generated
       `web-sirinx` asset mutation from this lane.
@@ -928,7 +936,16 @@ The worker follow-up implementation packet is now the next scoped Codex input.
 `apps/mission-control/src/fixtures/a2a2aWorkerFollowupImplementationPacket.json`
 reports `ready_for_codex_scoped_work`, 7 planned files, 6 validation commands,
 provider calls disabled, worker direct edits disabled, and
-`gitAddDotAllowed=false`. Use this packet as the next smallest coding slice.
+`gitAddDotAllowed=false`.
+
+The worker follow-up packet validation and outcome now close that packet cycle.
+`apps/mission-control/src/fixtures/a2a2aWorkerFollowupPacketValidation.json`
+reports `passed` with 6/6 allowlisted checks and 0 failures.
+`apps/mission-control/src/fixtures/a2a2aWorkerFollowupPacketOutcome.json`
+records `packet_completed` for `FOLLOWUP-PACKET-1f1dc503cc` with provider
+calls disabled, worker direct edits disabled, and `gitAddDotAllowed=false`.
+Use this outcome as proof that worker report feedback was consumed safely before
+opening the next scoped Codex coding slice.
 
 The first Codex-owned slice is now recorded as an outcome fixture. The next
 slice should come from the assignment board `immediateQueue`, while provider,

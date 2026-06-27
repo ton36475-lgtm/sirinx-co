@@ -27,6 +27,8 @@ import a2a2aWorkerReportDigestFixture from "./fixtures/a2a2aWorkerReportDigest.j
 import a2a2aWorkerFollowupBriefFixture from "./fixtures/a2a2aWorkerFollowupBrief.json";
 import a2a2aWorkerFollowupLaneFixture from "./fixtures/a2a2aWorkerFollowupLane.json";
 import a2a2aWorkerFollowupImplementationPacketFixture from "./fixtures/a2a2aWorkerFollowupImplementationPacket.json";
+import a2a2aWorkerFollowupPacketValidationFixture from "./fixtures/a2a2aWorkerFollowupPacketValidation.json";
+import a2a2aWorkerFollowupPacketOutcomeFixture from "./fixtures/a2a2aWorkerFollowupPacketOutcome.json";
 import a2a2aImplementationLanePacketFixture from "./fixtures/a2a2aImplementationLanePacket.json";
 import a2a2aScopedPathGuardFixture from "./fixtures/a2a2aScopedPathGuard.json";
 import a2a2aCompletionAuditFixture from "./fixtures/a2a2aCompletionAudit.json";
@@ -894,6 +896,67 @@ type A2A2AWorkerFollowupImplementationPacketFixture = {
   nextSafeActions: string[];
 };
 
+type A2A2AWorkerFollowupPacketValidationFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  summary: {
+    status: string;
+    packetId: string;
+    sourceLaneId: string;
+    commands: number;
+    passed: number;
+    failed: number;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    gitAddDotAllowed: boolean;
+    dryRun: boolean;
+  };
+  selectedPacket: Record<string, unknown>;
+  results: {
+    id: string;
+    command: string;
+    exitCode: number;
+    status: string;
+    durationMs: number;
+    stdoutTail: string;
+    stderrTail: string;
+  }[];
+  policyBoundary: string[];
+};
+
+type A2A2AWorkerFollowupPacketOutcomeFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  summary: {
+    status: string;
+    selectedPacketId: string;
+    sourceLaneId: string;
+    selectedTask: string;
+    validationStatus: string;
+    validationFailed: number;
+    commitEvidence: string;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    gitAddDotAllowed: boolean;
+  };
+  selectedPacket: Record<string, unknown>;
+  validationEvidence: {
+    validationStatus: string;
+    validationCommands: number;
+    validationPassed: number;
+    validationFailed: number;
+    validationReportPath: string;
+  };
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type A2A2AImplementationLanePacketFixture = {
   updatedAt: string;
   mode: string;
@@ -1457,6 +1520,10 @@ const a2a2aWorkerFollowupLane =
   a2a2aWorkerFollowupLaneFixture as A2A2AWorkerFollowupLaneFixture;
 const a2a2aWorkerFollowupImplementationPacket =
   a2a2aWorkerFollowupImplementationPacketFixture as A2A2AWorkerFollowupImplementationPacketFixture;
+const a2a2aWorkerFollowupPacketValidation =
+  a2a2aWorkerFollowupPacketValidationFixture as A2A2AWorkerFollowupPacketValidationFixture;
+const a2a2aWorkerFollowupPacketOutcome =
+  a2a2aWorkerFollowupPacketOutcomeFixture as A2A2AWorkerFollowupPacketOutcomeFixture;
 const a2a2aImplementationLanePacket =
   a2a2aImplementationLanePacketFixture as A2A2AImplementationLanePacketFixture;
 const a2a2aScopedPathGuard =
@@ -4199,6 +4266,34 @@ export default function App() {
                       }
                     </strong>
                   </div>
+                  <div className="practice-kpi">
+                    <span>Validation</span>
+                    <strong>
+                      {a2a2aWorkerFollowupPacketValidation.summary.status}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Passed</span>
+                    <strong>
+                      {a2a2aWorkerFollowupPacketValidation.summary.passed}/
+                      {a2a2aWorkerFollowupPacketValidation.summary.commands}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Outcome</span>
+                    <strong>
+                      {a2a2aWorkerFollowupPacketOutcome.summary.status}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Failed</span>
+                    <strong>
+                      {
+                        a2a2aWorkerFollowupPacketOutcome.summary
+                          .validationFailed
+                      }
+                    </strong>
+                  </div>
                 </div>
 
                 <div className="practice-manifest-line">
@@ -4221,6 +4316,18 @@ export default function App() {
                   <span>Packet Runtime</span>
                   <code>
                     {a2a2aWorkerFollowupImplementationPacket.runtimePacketPath}
+                  </code>
+                  <span>Validation Runtime</span>
+                  <code>
+                    {a2a2aWorkerFollowupPacketValidation.runtimeReportPath}
+                  </code>
+                  <span>Outcome Runtime</span>
+                  <code>
+                    {a2a2aWorkerFollowupPacketOutcome.runtimeReportPath}
+                  </code>
+                  <span>Commit Evidence</span>
+                  <code>
+                    {a2a2aWorkerFollowupPacketOutcome.summary.commitEvidence}
                   </code>
                   <span>Runtime Report</span>
                   <code>{a2a2aWorkerFollowupBrief.runtimeReportPath}</code>
@@ -4384,28 +4491,62 @@ export default function App() {
                     aria-label="A2A2A worker follow-up validation commands"
                   >
                     <div className="git-section-title">
-                      <span>Validation Plan</span>
+                      <span>Validation Evidence</span>
                       <span className="approval-badge">
-                        {
-                          a2a2aWorkerFollowupBrief.recommendedCodexFollowup
-                            .validationCommands.length
-                        }
+                        {a2a2aWorkerFollowupPacketValidation.summary.passed}/
+                        {a2a2aWorkerFollowupPacketValidation.summary.commands}
                       </span>
                     </div>
-                    {a2a2aWorkerFollowupBrief.recommendedCodexFollowup.validationCommands.map(
-                      (command) => (
-                        <div className="practice-artifact-row" key={command}>
+                    {a2a2aWorkerFollowupPacketValidation.results.map(
+                      (result) => (
+                        <div className="practice-artifact-row" key={result.id}>
                           <span className="practice-status payload-ready">
-                            check
+                            {result.status}
                           </span>
                           <div>
-                            <strong>Scoped validation</strong>
-                            <p>Run only after Codex opens the next lane.</p>
-                            <code>{command}</code>
+                            <strong>{result.id}</strong>
+                            <p>
+                              Exit {result.exitCode}; {result.durationMs}ms
+                            </p>
+                            <code>{result.command}</code>
                           </div>
                         </div>
                       ),
                     )}
+                    <div className="practice-artifact-row">
+                      <span
+                        className={`practice-status ${
+                          a2a2aWorkerFollowupPacketOutcome.summary.status ===
+                          "packet_completed"
+                            ? "payload-ready"
+                            : "payload-blocked"
+                        }`}
+                      >
+                        outcome
+                      </span>
+                      <div>
+                        <strong>
+                          {
+                            a2a2aWorkerFollowupPacketOutcome.summary
+                              .selectedTask
+                          }
+                        </strong>
+                        <p>
+                          Validation{" "}
+                          {
+                            a2a2aWorkerFollowupPacketOutcome.summary
+                              .validationStatus
+                          }
+                          ; worker reports remain input-only.
+                        </p>
+                        <code>
+                          {
+                            a2a2aWorkerFollowupPacketOutcome.summary
+                              .commitEvidence
+                          }
+                        </code>
+                      </div>
+                    </div>
                   </section>
 
                   <section

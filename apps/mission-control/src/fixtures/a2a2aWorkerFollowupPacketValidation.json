@@ -1,0 +1,169 @@
+{
+  "generatedBy": "scripts/a2a/a2a_worker_followup_packet_validation.py",
+  "mode": "local_allowlisted_worker_followup_packet_validation",
+  "policyBoundary": [
+    "allowlisted_validation_commands_only",
+    "no_provider_call",
+    "no_connector_sync",
+    "no_deploy",
+    "no_push",
+    "no_secret_read_or_print",
+    "no_git_add_dot",
+    "no_generated_web_sirinx_asset_mutation"
+  ],
+  "results": [
+    {
+      "command": "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
+      "durationMs": 288,
+      "exitCode": 0,
+      "id": "python_runner_fixture_tests",
+      "status": "passed",
+      "stderrTail": "...............................\n----------------------------------------------------------------------\nRan 31 tests in 0.187s\n\nOK\n",
+      "stdoutTail": "diness.json\nwrote /private/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/ghostclaw-readiness-order-xscn_w4f/readiness.json\n{\"created_at\": \"2026-06-27T16:56:12+00:00\", \"cycles\": 1, \"mode\": \"dry-run\", \"processed\": 1, \"provider_call_allowed\": false, \"roles_checked\": [\"kob\"], \"watch\": false}\nwrote /private/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/ghostclaw-runner-dispatch-d0ik_glr/fixture.json\n{\"fixture_path\": \"/private/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/ghostclaw-runner-dispatch-d0ik_glr/fixture.json\", \"role\": \"kob\", \"run_once\": true, \"runner_exit\": 0, \"task_id\": \"A2A2A-DISPATCH-TEST\", \"task_path\": \"/private/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/ghostclaw-runner-dispatch-d0ik_glr/runtime/inbox/kob/A2A2A-DISPATCH-TEST.json\"}\nwrote /private/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/ghostclaw-runner-fixture-wfp6rqa4/fixture.json\nwrote /private/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/ghostclaw-handoff-opus-priority-ql9xlo0o/handoffs.json\nwrote /private/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/ghostclaw-handoff-order-q8kizwk5/handoffs.json\nwrote /private/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/ghostclaw-handoff-router-y2h_j5ei/handoffs.json\nwrote /private/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/ghostclaw-implementation-packet-rvbbrnsk/implementation-packet.json\nwrote /private/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/ghostclaw-worker-followup-5tqw324j/followup.json\nwrote /private/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/ghostclaw-worker-followup-packet-vl19xbag/packet.json\nwrote /private/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/ghostclaw-worker-followup-lane-xq7_0t10/lane.json\nwrote /private/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/ghostclaw-worker-digest-ahd6cc0p/worker-digest.json\n"
+    },
+    {
+      "command": "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+      "durationMs": 2796,
+      "exitCode": 0,
+      "id": "mission_control_typecheck",
+      "status": "passed",
+      "stderrTail": "",
+      "stdoutTail": ""
+    },
+    {
+      "command": "pnpm exec prettier --check apps/mission-control/src/App.tsx apps/mission-control/src/fixtures/a2a2aWorkerFollowupBrief.json apps/mission-control/src/fixtures/a2a2aWorkerFollowupLane.json apps/mission-control/src/fixtures/a2a2aWorkerFollowupImplementationPacket.json docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md ghostclaw_runner/README.md PROJECT_STATE.md NEXT_ACTIONS.md",
+      "durationMs": 819,
+      "exitCode": 0,
+      "id": "prettier_check_scoped_docs_ui",
+      "status": "passed",
+      "stderrTail": "",
+      "stdoutTail": "Checking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "command": "python3 -m py_compile scripts/a2a/a2a_worker_followup_brief.py scripts/a2a/a2a_worker_followup_lane.py scripts/a2a/a2a_worker_followup_implementation_packet.py scripts/a2a/a2a_worker_followup_packet_validation.py tests/ghostclaw_runner/test_agent_runner.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+      "durationMs": 50,
+      "exitCode": 0,
+      "id": "python_compile_followup_scripts",
+      "status": "passed",
+      "stderrTail": "",
+      "stdoutTail": ""
+    },
+    {
+      "command": "python3 -c import json, pathlib; files=['apps/mission-control/src/fixtures/a2a2aWorkerFollowupBrief.json','apps/mission-control/src/fixtures/a2a2aWorkerFollowupLane.json','apps/mission-control/src/fixtures/a2a2aWorkerFollowupImplementationPacket.json']; [json.loads(pathlib.Path(f).read_text()) for f in files]",
+      "durationMs": 23,
+      "exitCode": 0,
+      "id": "json_parse_followup_fixtures",
+      "status": "passed",
+      "stderrTail": "",
+      "stdoutTail": ""
+    },
+    {
+      "command": "/usr/bin/git diff --check -- scripts/a2a/a2a_worker_followup_brief.py scripts/a2a/a2a_worker_followup_lane.py scripts/a2a/a2a_worker_followup_implementation_packet.py scripts/a2a/a2a_worker_followup_packet_validation.py tests/ghostclaw_runner/test_agent_runner.py tests/ghostclaw_runner/test_runner_status_fixture.py apps/mission-control/src/App.tsx apps/mission-control/src/fixtures/a2a2aRunnerStatus.json apps/mission-control/src/fixtures/a2a2aWorkerFollowupBrief.json apps/mission-control/src/fixtures/a2a2aWorkerFollowupLane.json apps/mission-control/src/fixtures/a2a2aWorkerFollowupImplementationPacket.json docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md ghostclaw_runner/README.md ghostclaw_runner/agent_runner.py PROJECT_STATE.md NEXT_ACTIONS.md",
+      "durationMs": 37,
+      "exitCode": 0,
+      "id": "git_diff_check_scoped_paths",
+      "status": "passed",
+      "stderrTail": "",
+      "stdoutTail": ""
+    }
+  ],
+  "runtimeReportPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup_packet_validations/latest.json",
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+  "selectedPacket": {
+    "acceptance": "Codex edits only packet files, runs validation, and stages only this packet scope.",
+    "allowedActions": [
+      "inspect_source_fixtures",
+      "edit_allowed_paths_only",
+      "run_scoped_validation",
+      "stage_packet_files_after_validation"
+    ],
+    "allowedPaths": [
+      "scripts/a2a/",
+      "ghostclaw_runner/",
+      "tests/ghostclaw_runner/",
+      "apps/mission-control/src/fixtures/",
+      "apps/mission-control/src/App.tsx",
+      "docs/a2async/",
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md"
+    ],
+    "blockedActions": [
+      "provider_call_without_command_broker_lease",
+      "connector_sync",
+      "deploy",
+      "push",
+      "secret_read_or_print",
+      "git_add_dot",
+      "worker_direct_commit",
+      "generated_web_sirinx_asset_mutation"
+    ],
+    "createdAt": "2026-06-27T16:39:16+00:00",
+    "executionAllowed": true,
+    "gitAddDotAllowed": false,
+    "owner": "codex",
+    "ownerMode": "scoped_repo_edit",
+    "packetId": "FOLLOWUP-PACKET-1f1dc503cc",
+    "plannedFiles": [
+      "scripts/a2a/a2a_worker_followup_implementation_packet.py",
+      "apps/mission-control/src/fixtures/a2a2aWorkerFollowupImplementationPacket.json",
+      "apps/mission-control/src/App.tsx",
+      "tests/ghostclaw_runner/test_runner_status_fixture.py",
+      "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md"
+    ],
+    "providerCallsAllowed": false,
+    "sourceFixtures": {
+      "workerFollowupBrief": "apps/mission-control/src/fixtures/a2a2aWorkerFollowupBrief.json",
+      "workerFollowupLane": "apps/mission-control/src/fixtures/a2a2aWorkerFollowupLane.json"
+    },
+    "sourceLaneId": "LANE_A2A2A_WORKER_FEEDBACK_CONSUMPTION-77d00d8d",
+    "sourcePacketId": "WORK-8e54ea680f",
+    "sourceQueueId": "LANE-CODEX-LANE-TASK-03",
+    "status": "ready_for_codex_scoped_work",
+    "task": "implement_next_scoped_a2a2a_sync_slice",
+    "tasks": [
+      {
+        "name": "inspect_followup_lane",
+        "owner": "codex",
+        "status": "ready",
+        "taskId": "FOLLOWUP-PACKET-01"
+      },
+      {
+        "name": "implement_packet_files_only",
+        "owner": "codex",
+        "status": "ready",
+        "taskId": "FOLLOWUP-PACKET-02"
+      },
+      {
+        "name": "run_validation_and_stage_scope",
+        "owner": "codex",
+        "status": "ready",
+        "taskId": "FOLLOWUP-PACKET-03"
+      }
+    ],
+    "validationCommands": [
+      "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
+      "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+      "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md PROJECT_STATE.md NEXT_ACTIONS.md",
+      "git diff --check -- scripts/a2a ghostclaw_runner tests/ghostclaw_runner apps/mission-control/src/fixtures apps/mission-control/src/App.tsx docs/a2async PROJECT_STATE.md NEXT_ACTIONS.md",
+      "python3 -m py_compile scripts/a2a/a2a_worker_followup_implementation_packet.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+      "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aWorkerFollowupImplementationPacket.json >/tmp/a2a2aWorkerFollowupImplementationPacket.json.check"
+    ],
+    "why": "Worker reports have been normalized into a Codex-owned follow-up lane.",
+    "workerDirectEditsAllowed": false
+  },
+  "summary": {
+    "commands": 6,
+    "dryRun": false,
+    "failed": 0,
+    "gitAddDotAllowed": false,
+    "packetId": "FOLLOWUP-PACKET-1f1dc503cc",
+    "passed": 6,
+    "providerCallsAllowed": false,
+    "sourceLaneId": "LANE_A2A2A_WORKER_FEEDBACK_CONSUMPTION-77d00d8d",
+    "status": "passed",
+    "workerDirectEditsAllowed": false
+  },
+  "updatedAt": "2026-06-27T16:56:16+00:00"
+}

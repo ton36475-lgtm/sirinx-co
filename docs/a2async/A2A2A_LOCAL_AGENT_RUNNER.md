@@ -313,6 +313,60 @@ criteria. Codex may use it as the next scoped implementation input, but workers
 still cannot edit or commit, and provider calls still require a Command Broker
 lease.
 
+## Worker Follow-up Packet Validation
+
+Run the allowlisted validation commands for the worker follow-up packet:
+
+```bash
+python3 scripts/a2a/a2a_worker_followup_packet_validation.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This reads:
+
+- `apps/mission-control/src/fixtures/a2a2aWorkerFollowupImplementationPacket.json`
+
+It writes:
+
+- a runtime report at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup_packet_validations/latest.json`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aWorkerFollowupPacketValidation.json`
+
+The validator does not execute commands from the packet. It runs the fixed
+allowlist for this lane: focused runner/fixture tests, Mission Control
+TypeScript, Prettier check, Python compile, JSON parse, and scoped diff checks.
+It keeps provider calls, connector sync, deploy, push, secrets, generated
+`web-sirinx` asset mutation, worker direct edits, and `git add .` blocked.
+
+## Worker Follow-up Packet Outcome
+
+Record the completed worker follow-up packet after validation passes:
+
+```bash
+python3 scripts/a2a/a2a_worker_followup_packet_outcome.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This reads:
+
+- `apps/mission-control/src/fixtures/a2a2aWorkerFollowupImplementationPacket.json`
+- `apps/mission-control/src/fixtures/a2a2aWorkerFollowupPacketValidation.json`
+
+It writes:
+
+- a runtime report at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup_packet_outcomes/latest.json`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aWorkerFollowupPacketOutcome.json`
+
+The outcome reports `packet_completed` only when the packet is Codex-owned,
+scoped, validation status is `passed`, validation failures are zero, provider
+calls remain disabled, worker direct edits remain disabled, and
+`gitAddDotAllowed=false`. It is evidence for closing the report-only worker
+feedback cycle, not a new permission to call providers or mutate external
+systems.
+
 ## Implementation Lane Packet
 
 Create the final review packet that turns the Codex plan and worker reports into

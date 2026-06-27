@@ -26,6 +26,8 @@ from scripts.a2a import a2a_worker_report_digest
 from scripts.a2a import a2a_worker_followup_brief
 from scripts.a2a import a2a_worker_followup_lane
 from scripts.a2a import a2a_worker_followup_implementation_packet
+from scripts.a2a import a2a_worker_followup_packet_validation
+from scripts.a2a import a2a_worker_followup_packet_outcome
 from scripts.a2a import a2a_handoff_router
 
 
@@ -664,6 +666,92 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertIn("scripts/a2a/", fixture["packet"]["allowedPaths"])
             self.assertIn("provider_calls_require_command_broker_lease", fixture["policyBoundary"])
             self.assertTrue(Path(fixture["runtimePacketPath"]).exists())
+
+    def test_worker_followup_packet_validation_dry_run_uses_allowlist(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-worker-followup-validation-") as tmp:
+            runtime = Path(tmp) / "runtime"
+            packet = {
+                "summary": {"status": "ready_for_codex_scoped_work"},
+                "packet": {
+                    "packetId": "FOLLOWUP-PACKET-TEST",
+                    "sourceLaneId": "LANE-TEST",
+                    "providerCallsAllowed": False,
+                    "workerDirectEditsAllowed": False,
+                    "gitAddDotAllowed": False,
+                },
+            }
+
+            fixture = a2a_worker_followup_packet_validation.build_validation(packet, runtime, dry_run=True)
+
+            self.assertEqual(fixture["summary"]["status"], "dry_run")
+            self.assertEqual(fixture["summary"]["packetId"], "FOLLOWUP-PACKET-TEST")
+            self.assertEqual(fixture["summary"]["sourceLaneId"], "LANE-TEST")
+            self.assertEqual(fixture["summary"]["commands"], 6)
+            self.assertFalse(fixture["summary"]["providerCallsAllowed"])
+            self.assertFalse(fixture["summary"]["workerDirectEditsAllowed"])
+            self.assertFalse(fixture["summary"]["gitAddDotAllowed"])
+            self.assertTrue(Path(fixture["runtimeReportPath"]).exists())
+            self.assertTrue(
+                all(result["status"] == "dry_run" for result in fixture["results"])
+            )
+            self.assertIn("allowlisted_validation_commands_only", fixture["policyBoundary"])
+
+    def test_worker_followup_packet_outcome_closes_passed_packet(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-worker-followup-outcome-") as tmp:
+            runtime = Path(tmp) / "runtime"
+            packet = {
+                "summary": {
+                    "status": "ready_for_codex_scoped_work",
+                    "providerCallsAllowed": False,
+                    "workerDirectEditsAllowed": False,
+                    "gitAddDotAllowed": False,
+                },
+                "packet": {
+                    "packetId": "FOLLOWUP-PACKET-TEST",
+                    "sourceLaneId": "LANE-TEST",
+                    "sourcePacketId": "WORK-REPORT",
+                    "sourceQueueId": "LANE-CODEX-LANE-TASK-03",
+                    "status": "ready_for_codex_scoped_work",
+                    "task": "implement_next_scoped_a2a2a_sync_slice",
+                    "owner": "codex",
+                    "ownerMode": "scoped_repo_edit",
+                    "executionAllowed": True,
+                    "providerCallsAllowed": False,
+                    "workerDirectEditsAllowed": False,
+                    "gitAddDotAllowed": False,
+                },
+            }
+            validation = {
+                "summary": {
+                    "status": "passed",
+                    "packetId": "FOLLOWUP-PACKET-TEST",
+                    "sourceLaneId": "LANE-TEST",
+                    "commands": 6,
+                    "passed": 6,
+                    "failed": 0,
+                    "providerCallsAllowed": False,
+                    "workerDirectEditsAllowed": False,
+                    "gitAddDotAllowed": False,
+                },
+                "runtimeReportPath": str(runtime / "validation.json"),
+            }
+
+            fixture = a2a_worker_followup_packet_outcome.build_outcome(
+                packet,
+                validation,
+                runtime,
+                commit_evidence="abc1234 feat(a2a2a): test",
+            )
+
+            self.assertEqual(fixture["summary"]["status"], "packet_completed")
+            self.assertEqual(fixture["summary"]["selectedPacketId"], "FOLLOWUP-PACKET-TEST")
+            self.assertEqual(fixture["summary"]["validationStatus"], "passed")
+            self.assertEqual(fixture["summary"]["validationFailed"], 0)
+            self.assertEqual(fixture["summary"]["commitEvidence"], "abc1234 feat(a2a2a): test")
+            self.assertFalse(fixture["summary"]["providerCallsAllowed"])
+            self.assertFalse(fixture["summary"]["workerDirectEditsAllowed"])
+            self.assertFalse(fixture["summary"]["gitAddDotAllowed"])
+            self.assertTrue(Path(fixture["runtimeReportPath"]).exists())
 
     def test_implementation_lane_packet_requires_plan_and_worker_reports(self) -> None:
         with tempfile.TemporaryDirectory(prefix="ghostclaw-implementation-packet-") as tmp:

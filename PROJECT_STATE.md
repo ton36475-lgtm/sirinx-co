@@ -1238,3 +1238,18 @@ Toolkit` tab.
   provider calls disabled, worker direct edits disabled, and
   `gitAddDotAllowed=false`. Its runtime packet is under
   `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup_packets/`.
+- Current worker follow-up packet validation evidence:
+  `apps/mission-control/src/fixtures/a2a2aWorkerFollowupPacketValidation.json`
+  runs the fixed allowlisted validation set for the follow-up packet. It
+  reports `passed`, 6 commands, 6 passed, 0 failed, provider calls disabled,
+  worker direct edits disabled, and `gitAddDotAllowed=false`. Its runtime
+  report is
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup_packet_validations/latest.json`.
+- Current worker follow-up packet outcome evidence:
+  `apps/mission-control/src/fixtures/a2a2aWorkerFollowupPacketOutcome.json`
+  records `FOLLOWUP-PACKET-1f1dc503cc /
+implement_next_scoped_a2a2a_sync_slice` as `packet_completed` with validation
+  status `passed`, 0 validation failures, and commit evidence
+  `9dda990 feat(a2a2a): add worker follow-up implementation packet`. Its
+  runtime report is
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/worker_followup_packet_outcomes/latest.json`.

@@ -17,7 +17,8 @@ DEFAULT_RUNTIME_ROOT = Path(
     os.path.expanduser(os.environ.get("GHOSTCLAW_A2A2A_RUNTIME", "~/SIRINXDev/.ghostclaw_runtime/a2a2a"))
 )
 DEFAULT_FIXTURE_PATH = REPO_ROOT / "apps" / "mission-control" / "src" / "fixtures" / "a2a2aWorkerReportDigest.json"
-REPORT_ROLES = ("glm52", "deepseek", "kob")
+WORKER_REPORT_ROLES = {"glm52", "deepseek", "agy"}
+REPORT_ROLES = ("glm52", "deepseek", "agy", "kob")
 SECRET_PATTERNS = [
     re.compile(r"(sk-[A-Za-z0-9_-]{12,})"),
     re.compile(r"(kob_[A-Za-z0-9_-]{8,})"),
@@ -90,7 +91,7 @@ def collect_reports(runtime_root: Path, limit: int) -> list[dict[str, Any]]:
 def build_fixture(runtime_root: Path, limit: int) -> dict[str, Any]:
     reports = collect_reports(runtime_root, limit)
     provider_calls = sum(1 for report in reports if report["providerCall"])
-    worker_reports = sum(1 for report in reports if report["role"] in {"glm52", "deepseek"})
+    worker_reports = sum(1 for report in reports if report["role"] in WORKER_REPORT_ROLES)
     kob_reports = sum(1 for report in reports if report["role"] == "kob")
     safe_reports = sum(1 for report in reports if report["safeToDispatchLocally"] and not report["providerCall"])
     overall_status = "ready_worker_reports" if reports and provider_calls == 0 else "review_required"
@@ -101,7 +102,7 @@ def build_fixture(runtime_root: Path, limit: int) -> dict[str, Any]:
         "mode": "read_only_worker_report_digest",
         "generatedBy": "scripts/a2a/a2a_worker_report_digest.py",
         "runtimeRoot": str(runtime_root),
-        "sourceGlob": "outbox/{glm52,deepseek,kob}/*.result.json",
+        "sourceGlob": "outbox/{glm52,deepseek,agy,kob}/*.result.json",
         "summary": {
             "reports": len(reports),
             "workerReports": worker_reports,

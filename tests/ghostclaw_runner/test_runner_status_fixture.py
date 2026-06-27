@@ -285,6 +285,18 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
                                 "plannedActions": ["return worker report only"],
                             },
                             {
+                                "role": "agy",
+                                "taskId": "AGY",
+                                "status": "dry_run_completed",
+                                "model": "google/gemini-3.5-flash-high",
+                                "providerCall": False,
+                                "safeToDispatchLocally": True,
+                                "requiresHumanReview": False,
+                                "nextOwner": "codex",
+                                "summary": "ui scaffold report",
+                                "plannedActions": ["return report-only implementation hints"],
+                            },
+                            {
                                 "role": "kob",
                                 "taskId": "KOB",
                                 "status": "dry_run_completed",
@@ -318,7 +330,8 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertEqual(exit_code, 0)
             fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
             self.assertEqual(fixture["summary"]["status"], "ready_for_codex_scoped_implementation_review")
-            self.assertEqual(fixture["summary"]["workerEvidence"], 3)
+            self.assertEqual(fixture["summary"]["dependencies"], 6)
+            self.assertEqual(fixture["summary"]["workerEvidence"], 4)
             self.assertFalse(fixture["summary"]["executionAllowed"])
             self.assertIn("git_add_dot", fixture["packet"]["blockedActions"])
             self.assertNotIn(".", fixture["packet"]["scopedStageCommand"])

@@ -150,6 +150,11 @@ def build_plan(readiness: dict[str, Any], runtime_root: Path) -> dict[str, Any]:
                 "when": "after Codex writes the scoped plan",
             },
             {
+                "role": "agy",
+                "goal": "Review UI and integration scaffolding clarity for the scoped build plan.",
+                "when": "after Codex writes the scoped plan",
+            },
+            {
                 "role": "kob",
                 "goal": "Validate local commands proposed by Codex against Command Broker policy.",
                 "when": "after validation commands are finalized",

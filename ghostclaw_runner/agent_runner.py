@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import Any
 
 
-ROLE_ORDER = ["hermes", "opus", "glm52", "deepseek", "kob"]
+ROLE_ORDER = ["hermes", "opus", "glm52", "deepseek", "agy", "kob"]
 DEFAULT_RUNTIME_ROOT = "~/SIRINXDev/.ghostclaw_runtime/a2a2a"
 DEFAULT_LITELLM_URL = "http://127.0.0.1:4000/v1/chat/completions"
 
@@ -92,6 +92,18 @@ AGENTS: dict[str, AgentSpec] = {
             "draft focused technical notes",
             "flag risk and verification needs",
             "return worker report only",
+        ),
+    ),
+    "agy": AgentSpec(
+        role="agy",
+        doctrine_file="05_GLM_DEEPSEEK_WORKER_DOCTRINE.md",
+        fallback_prompt_file="agy.md",
+        default_model="google/gemini-3.5-flash-high",
+        default_actions=(
+            "inspect UI and integration task shape",
+            "draft fast scaffold notes",
+            "flag missing screenshots or acceptance criteria",
+            "return report-only implementation hints",
         ),
     ),
     "kob": AgentSpec(
@@ -268,7 +280,7 @@ def build_local_result(normalized: dict[str, Any], spec: AgentSpec, prompt_sourc
             ),
             "planned_actions": list(spec.default_actions),
             "handoff": {
-                "next_owner": "codex" if spec.role in {"opus", "glm52", "deepseek"} else "hermes",
+                "next_owner": "codex" if spec.role in {"opus", "glm52", "deepseek", "agy"} else "hermes",
                 "requires_human_review": False,
                 "safe_to_dispatch_locally": True,
             },

@@ -79,6 +79,11 @@
         "when": "after Codex writes the scoped plan"
       },
       {
+        "goal": "Review UI and integration scaffolding clarity for the scoped build plan.",
+        "role": "agy",
+        "when": "after Codex writes the scoped plan"
+      },
+      {
         "goal": "Validate local commands proposed by Codex against Command Broker policy.",
         "role": "kob",
         "when": "after validation commands are finalized"
@@ -99,5 +104,5 @@
   ],
   "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
   "status": "ready_for_codex_review",
-  "updatedAt": "2026-06-27T12:03:45+00:00"
+  "updatedAt": "2026-06-27T12:46:42+00:00"
 }

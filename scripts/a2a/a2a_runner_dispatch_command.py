@@ -28,7 +28,7 @@ import a2a_export_runner_status_fixture  # noqa: E402
 DEFAULT_RUNTIME_ROOT = Path(
     os.path.expanduser(os.environ.get("GHOSTCLAW_A2A2A_RUNTIME", "~/SIRINXDev/.ghostclaw_runtime/a2a2a"))
 )
-ROLES = ["hermes", "opus", "glm52", "deepseek", "kob"]
+ROLES = ["hermes", "opus", "glm52", "deepseek", "agy", "kob"]
 SECRET_PATTERNS = [
     re.compile(r"(sk-[A-Za-z0-9_-]{12,})"),
     re.compile(r"(kob_[A-Za-z0-9_-]{8,})"),

@@ -795,6 +795,8 @@ configuration lane, then keep future entries concise and source-path based.
 - [x] Add Codex build-plan fixture from the first ready Opus handoff.
 - [x] Dispatch GLM-5.2, DeepSeek, and KOB dry-run worker reports for the Codex
       plan.
+- [x] Add AGY Antigravity as the sixth A2A2A runner role and dispatch a
+      report-only UI/integration scaffold review.
 - [x] Add worker report digest fixture and Mission Control panel.
 - [x] Add implementation lane packet fixture and Mission Control panel.
 - [x] Keep all A2A2A worker flow local-only with `providerCalls=0`.
@@ -806,8 +808,8 @@ configuration lane, then keep future entries concise and source-path based.
       packet has no blocked or missing dependencies.
 - [ ] For the first implementation lane, Codex must own all file edits, run
       validation, and stage only the file list from the packet.
-- [ ] Keep GLM-5.2 and DeepSeek report-only until a separate provider execution
-      lane exists.
+- [ ] Keep GLM-5.2, DeepSeek, and AGY report-only until a separate provider
+      execution lane exists.
 - [ ] Keep KOB validate-only until Command Broker issues an execution lease.
 - [ ] Keep Mission Control read-only and fixture-backed; do not let the browser
       poll runtime files directly.
@@ -822,7 +824,7 @@ task from the `priorityWorkItems` sequence:
 
 1. Codex inspects plan and worker digest.
 2. Codex edits only allowed paths.
-3. GLM-5.2 / DeepSeek / KOB remain report-only inputs.
+3. GLM-5.2 / DeepSeek / AGY / KOB remain report-only inputs.
 4. Codex runs validation commands.
 5. Codex stages and commits only the packet-listed files.
 

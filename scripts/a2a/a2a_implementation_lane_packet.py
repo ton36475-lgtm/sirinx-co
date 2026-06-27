@@ -111,6 +111,12 @@ def build_dependencies(plan: dict[str, Any], worker_digest: dict[str, Any], repo
             "evidence": "report-only digest present" if "deepseek" in roles else "dispatch deepseek dry-run report",
         },
         {
+            "id": "agy_worker_report",
+            "owner": "agy",
+            "status": "ready" if "agy" in roles else "missing",
+            "evidence": "report-only digest present" if "agy" in roles else "dispatch agy dry-run report",
+        },
+        {
             "id": "kob_validation_report",
             "owner": "kob",
             "status": "ready" if "kob" in roles else "missing",
@@ -147,7 +153,7 @@ def build_priority_work_items(plan: dict[str, Any], reports: list[dict[str, Any]
         },
         {
             "priority": 3,
-            "owner": "glm52_deepseek_kob",
+            "owner": "glm52_deepseek_agy_kob",
             "task": "consume_report_only_feedback",
             "status": "ready" if reports else "missing_reports",
             "why": f"Worker reports available from: {worker_roles}.",

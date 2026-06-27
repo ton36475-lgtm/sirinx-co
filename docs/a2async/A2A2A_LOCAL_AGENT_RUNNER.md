@@ -16,8 +16,9 @@ The missing part was a runner that polls role inboxes and writes results.
 2. Opus writes architecture-first handoff notes before build work starts.
 3. Codex owns repo integration, patches, tests, staging, and commits.
 4. GLM-5.2 and DeepSeek return department worker reports and patch proposals.
-5. KOB validates local command intent through Command Broker policy.
-6. Mission Control observes generated fixtures only.
+5. AGY Antigravity returns fast UI/integration scaffold review notes.
+6. KOB validates local command intent through Command Broker policy.
+7. Mission Control observes generated fixtures only.
 
 ## Runtime Flow
 
@@ -110,8 +111,8 @@ The board turns runner results into a Codex build queue:
 1. Hermes-owned routing must exist.
 2. Opus architecture handoff must exist.
 3. Codex may then create a scoped implementation plan.
-4. GLM-5.2 and DeepSeek worker reports follow only when Codex identifies a
-   department-specific need.
+4. GLM-5.2, DeepSeek, and AGY worker reports follow only when Codex identifies
+   a department-specific need.
 5. KOB validates local command intent only after Codex proposes commands.
 
 This is a dependency gate, not a human approval gate. It prevents workers from
@@ -152,6 +153,12 @@ python3 scripts/a2a/a2a_runner_dispatch_command.py \
 python3 scripts/a2a/a2a_runner_dispatch_command.py \
   --role deepseek \
   --goal "Review command and data-flow risk for the Codex build plan" \
+  --context-ref /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/codex_plans/CODEX-PLAN-ec5461ae55.json \
+  --run-once
+
+python3 scripts/a2a/a2a_runner_dispatch_command.py \
+  --role agy \
+  --goal "Review UI and integration scaffolding clarity for the Codex build plan" \
   --context-ref /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/codex_plans/CODEX-PLAN-ec5461ae55.json \
   --run-once
 

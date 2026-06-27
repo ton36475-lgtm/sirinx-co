@@ -1070,12 +1070,13 @@ Toolkit` tab.
 - Implementation lane packet generator:
   `scripts/a2a/a2a_implementation_lane_packet.py`.
 - Current status:
-  - runner completed tasks: 6
+  - runner roles: 6 (`hermes`, `opus`, `glm52`, `deepseek`, `agy`, `kob`)
+  - runner completed tasks: 7
   - runner failed tasks: 0
   - provider calls: 0
-  - bounded watch smoke: `watch=true`, `cycles=2`, `processed=0`,
+  - latest AGY dispatch smoke: `role=agy`, `processed=1`,
     `providerCallAllowed=false`
-  - worker reports: 2
+  - worker reports: 3
   - KOB validation reports: 1
   - dependency worst status: ready
   - implementation packet status:
@@ -1087,12 +1088,13 @@ Toolkit` tab.
   - Codex: only repo editor, validator, stager, and committer.
   - GLM-5.2: report-only structural/code consistency worker.
   - DeepSeek: report-only command/data-flow risk worker.
+  - AGY Antigravity: report-only UI/integration scaffold review worker.
   - KOB: report-only local command validation worker through Command Broker
     assumptions.
   - Mission Control: read-only observer of generated fixtures.
 - Current implementation packet evidence:
   `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`
-  shows 5 ready dependencies, 3 worker evidence items, 0 provider calls, 0
+  shows 6 ready dependencies, 4 worker evidence items, 0 provider calls, 0
   blocked dependencies, 0 missing dependencies, and a scoped stage command that
   excludes `git add .`.
 - Boundary: this A2A2A state still does not call providers, execute KOB

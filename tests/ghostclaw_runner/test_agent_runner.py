@@ -126,6 +126,45 @@ class GhostclawAgentRunnerTest(unittest.TestCase):
             self.assertEqual(summary["cycles"], 2)
             self.assertEqual(summary["processed"], 1)
 
+    def test_runner_processes_agy_task_as_report_only_worker(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-runner-agy-") as tmp:
+            runtime = Path(tmp)
+            inbox = runtime / "inbox" / "agy"
+            inbox.mkdir(parents=True)
+            (inbox / "ui-scaffold-task.json").write_text(
+                json.dumps(
+                    {
+                        "task_id": "A2A2A-AGY-001",
+                        "from_agent": "codex",
+                        "to_agent": "agy",
+                        "goal": "Review UI scaffolding for the A2A2A Mission Control lane.",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            exit_code = agent_runner.main(
+                [
+                    "--runtime-root",
+                    str(runtime),
+                    "--repo-root",
+                    str(REPO_ROOT),
+                    "--agent",
+                    "agy",
+                    "--once",
+                    "--dry-run",
+                ]
+            )
+
+            self.assertEqual(exit_code, 0)
+            result_path = runtime / "outbox" / "agy" / "A2A2A-AGY-001.result.json"
+            self.assertTrue(result_path.exists())
+            result = json.loads(result_path.read_text(encoding="utf-8"))
+            self.assertEqual(result["role"], "agy")
+            self.assertFalse(result["provider_call"])
+            self.assertEqual(result["output"]["handoff"]["next_owner"], "codex")
+            self.assertIn("ghostclaw_runner/prompts/agy.md", result["prompt_source"])
+
 
 if __name__ == "__main__":
     unittest.main()

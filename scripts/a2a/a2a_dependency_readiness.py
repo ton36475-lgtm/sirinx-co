@@ -125,7 +125,7 @@ def build_fixture(runtime_root: Path, limit: int) -> dict[str, Any]:
         for row in results
         if row["role"] == "opus" and row["nextOwner"] == "codex" and row["safeToDispatchLocally"]
     ]
-    worker_reports = [row for row in results if row["role"] in {"glm52", "deepseek"}]
+    worker_reports = [row for row in results if row["role"] in {"glm52", "deepseek", "agy"}]
     kob_reports = [row for row in results if row["role"] == "kob"]
     codex_queue = build_codex_queue(results, limit)
 
@@ -160,7 +160,7 @@ def build_fixture(runtime_root: Path, limit: int) -> dict[str, Any]:
         ),
         make_check(
             "department_worker_reports",
-            "GLM/DeepSeek worker reports",
+            "GLM/DeepSeek/AGY worker reports",
             "partial" if not worker_reports else "ready",
             f"{len(worker_reports)} worker result files found",
             "Dispatch worker report tasks after the Codex plan identifies department needs.",
@@ -213,7 +213,7 @@ def build_fixture(runtime_root: Path, limit: int) -> dict[str, Any]:
         "nextSafeActions": [
             "Codex reviews the first ready Codex build queue item.",
             "Codex writes a scoped implementation plan with files, commands, and validation.",
-            "Dispatch GLM/DeepSeek only for department-specific worker reports.",
+            "Dispatch GLM/DeepSeek/AGY only for department-specific worker reports.",
             "Dispatch KOB only for command validation after Codex proposes commands.",
         ],
     }

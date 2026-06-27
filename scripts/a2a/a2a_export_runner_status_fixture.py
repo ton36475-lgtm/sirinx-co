@@ -20,7 +20,7 @@ DEFAULT_RUNTIME_ROOT = Path(
 DEFAULT_FIXTURE_PATH = (
     REPO_ROOT / "apps" / "mission-control" / "src" / "fixtures" / "a2a2aRunnerStatus.json"
 )
-ROLES = ["hermes", "opus", "glm52", "deepseek", "kob"]
+ROLES = ["hermes", "opus", "glm52", "deepseek", "agy", "kob"]
 SECRET_PATTERNS = [
     re.compile(r"(sk-[A-Za-z0-9_-]{12,})"),
     re.compile(r"(kob_[A-Za-z0-9_-]{8,})"),

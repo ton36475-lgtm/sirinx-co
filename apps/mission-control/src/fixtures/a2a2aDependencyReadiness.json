@@ -36,14 +36,14 @@
   ],
   "dependencyChecks": [
     {
-      "evidence": "6 result files found",
+      "evidence": "7 result files found",
       "id": "runner_transport",
       "label": "Runner transport",
       "nextAction": "Create and run a local role task envelope.",
       "status": "ready"
     },
     {
-      "evidence": "3 Hermes-origin or Hermes-role result files found",
+      "evidence": "4 Hermes-origin or Hermes-role result files found",
       "id": "hermes_routing",
       "label": "Hermes routing",
       "nextAction": "Dispatch Hermes-owned tasks into role inboxes.",
@@ -64,9 +64,9 @@
       "status": "ready"
     },
     {
-      "evidence": "2 worker result files found",
+      "evidence": "3 worker result files found",
       "id": "department_worker_reports",
-      "label": "GLM/DeepSeek worker reports",
+      "label": "GLM/DeepSeek/AGY worker reports",
       "nextAction": "Dispatch worker report tasks after the Codex plan identifies department needs.",
       "status": "ready"
     },
@@ -90,7 +90,7 @@
   "nextSafeActions": [
     "Codex reviews the first ready Codex build queue item.",
     "Codex writes a scoped implementation plan with files, commands, and validation.",
-    "Dispatch GLM/DeepSeek only for department-specific worker reports.",
+    "Dispatch GLM/DeepSeek/AGY only for department-specific worker reports.",
     "Dispatch KOB only for command validation after Codex proposes commands."
   ],
   "policyBoundary": [
@@ -112,8 +112,8 @@
     "kobReports": 1,
     "overallStatus": "ready_for_scoped_codex_plan",
     "providerCalls": 0,
-    "workerReports": 2,
+    "workerReports": 3,
     "worstDependencyStatus": "ready"
   },
-  "updatedAt": "2026-06-27T12:03:45+00:00"
+  "updatedAt": "2026-06-27T12:46:42+00:00"
 }

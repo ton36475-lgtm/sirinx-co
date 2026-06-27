@@ -1,21 +1,30 @@
 {
   "generatedBy": "scripts/a2a/a2a_export_runner_status_fixture.py",
   "lastRunnerSummary": {
-    "createdAt": "2026-06-27T12:32:56+00:00",
-    "cycles": 2,
+    "createdAt": "2026-06-27T12:46:42+00:00",
+    "cycles": 1,
     "mode": "dry-run",
-    "processed": 0,
+    "processed": 1,
     "providerCallAllowed": false,
     "rolesChecked": [
-      "hermes",
-      "opus",
-      "glm52",
-      "deepseek",
-      "kob"
+      "agy"
     ],
-    "watch": true
+    "watch": false
   },
   "latestResults": [
+    {
+      "createdAt": "2026-06-27T12:46:42+00:00",
+      "model": "google/gemini-3.5-flash-high",
+      "nextOwner": "codex",
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/outbox/agy/A2A2A-AGY-CODEX-PLAN-REVIEW-001.result.json",
+      "promptSource": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/ghostclaw_runner/prompts/agy.md",
+      "providerCall": false,
+      "role": "agy",
+      "safeToDispatchLocally": true,
+      "status": "dry_run_completed",
+      "summary": "agy received task A2A2A-AGY-CODEX-PLAN-REVIEW-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+      "taskId": "A2A2A-AGY-CODEX-PLAN-REVIEW-001"
+    },
     {
       "createdAt": "2026-06-27T12:03:28+00:00",
       "model": "kob/local-validator",
@@ -151,6 +160,14 @@
       "failed": 0,
       "inbox": 0,
       "outbox": 1,
+      "role": "agy",
+      "running": 0
+    },
+    {
+      "completed": 1,
+      "failed": 0,
+      "inbox": 0,
+      "outbox": 1,
       "role": "kob",
       "running": 0
     }
@@ -158,16 +175,16 @@
   "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
   "sourceGlob": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/outbox/*/*.result.json",
   "summary": {
-    "completed": 6,
-    "dryRunCompleted": 6,
+    "completed": 7,
+    "dryRunCompleted": 7,
     "failed": 0,
     "inbox": 0,
-    "latestResults": 6,
-    "outbox": 6,
+    "latestResults": 7,
+    "outbox": 7,
     "overallStatus": "ready_local_runner",
     "providerCalls": 0,
-    "roles": 5,
+    "roles": 6,
     "running": 0
   },
-  "updatedAt": "2026-06-27T12:33:12+00:00"
+  "updatedAt": "2026-06-27T12:46:42+00:00"
 }

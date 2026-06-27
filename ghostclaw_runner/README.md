@@ -1,7 +1,8 @@
 # GHOSTCLAW Local Agent Runner
 
 `ghostclaw_runner/agent_runner.py` is the Fast Fix for A2A2A role dispatch.
-It gives Hermes, Opus, GLM-5.2, DeepSeek, and KOB a real local inbox poller.
+It gives Hermes, Opus, GLM-5.2, DeepSeek, AGY Antigravity, and KOB a real
+local inbox poller.
 
 Default behavior is safe and local:
 

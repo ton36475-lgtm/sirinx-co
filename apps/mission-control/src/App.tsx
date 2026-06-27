@@ -32,6 +32,7 @@ import a2a2aBacklogPriorityFixture from "./fixtures/a2a2aBacklogPriority.json";
 import a2a2aTeamAssignmentBoardFixture from "./fixtures/a2a2aTeamAssignmentBoard.json";
 import a2a2aCodexLaneOutcomeFixture from "./fixtures/a2a2aCodexLaneOutcome.json";
 import a2a2aTeamWorkPacketsFixture from "./fixtures/a2a2aTeamWorkPackets.json";
+import a2a2aTeamWorkPacketOutcomeFixture from "./fixtures/a2a2aTeamWorkPacketOutcome.json";
 
 interface Worker {
   name: string;
@@ -1104,6 +1105,7 @@ type A2A2ATeamWorkPacketsFixture = {
     packets: number;
     codexPackets: number;
     workerPackets: number;
+    completedPackets: number;
     nextCodexPacketId: string;
     nextCodexTask: string;
     providerCallsAllowed: boolean;
@@ -1152,6 +1154,48 @@ type A2A2ATeamWorkPacketsFixture = {
     providerCallsAllowed: boolean;
     workerDirectEditsAllowed: boolean;
   }[];
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
+type A2A2ATeamWorkPacketOutcomeFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  summary: {
+    status: string;
+    selectedPacketId: string;
+    selectedQueueId: string;
+    selectedTask: string;
+    completedPackets: number;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    gitAddDotAllowed: boolean;
+    plannedBlocked: number;
+    commitEvidence: string;
+  };
+  completedPackets: string[];
+  completedQueueIds: string[];
+  selectedPacket: {
+    packetId: string;
+    queueId: string;
+    owner: string;
+    ownerMode: string;
+    status: string;
+    task: string;
+    acceptance: string;
+  };
+  validationEvidence: {
+    scopedPathGuardStatus: string;
+    plannedFiles: number;
+    plannedAllowed: number;
+    plannedBlocked: number;
+    outOfScopeDirty: number;
+    providerCalls: number;
+    gitAddDotAllowed: boolean;
+  };
   policyBoundary: string[];
   nextSafeActions: string[];
 };
@@ -1241,6 +1285,8 @@ const a2a2aCodexLaneOutcome =
   a2a2aCodexLaneOutcomeFixture as A2A2ACodexLaneOutcomeFixture;
 const a2a2aTeamWorkPackets =
   a2a2aTeamWorkPacketsFixture as A2A2ATeamWorkPacketsFixture;
+const a2a2aTeamWorkPacketOutcome =
+  a2a2aTeamWorkPacketOutcomeFixture as A2A2ATeamWorkPacketOutcomeFixture;
 const codexSessionSidebarToolkitStatus =
   codexSessionSidebarToolkitStatusFixture;
 const sessionToolkitAgents = codexSessionSidebarToolkitStatus.agents;
@@ -3625,6 +3671,12 @@ export default function App() {
                     </strong>
                   </div>
                   <div className="practice-kpi">
+                    <span>Completed</span>
+                    <strong>
+                      {a2a2aTeamWorkPackets.summary.completedPackets}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
                     <span>Providers</span>
                     <strong>
                       {a2a2aTeamWorkPackets.summary.providerCallsAllowed
@@ -3657,6 +3709,8 @@ export default function App() {
                   <code>{a2a2aTeamWorkPackets.summary.nextCodexTask}</code>
                   <span>Runtime Report</span>
                   <code>{a2a2aTeamWorkPackets.runtimeReportPath}</code>
+                  <span>Outcome</span>
+                  <code>{a2a2aTeamWorkPacketOutcome.summary.status}</code>
                 </div>
 
                 <div className="git-fixture-notice">
@@ -3748,6 +3802,65 @@ export default function App() {
                           {a2a2aTeamWorkPackets.nextCodexPacket.blockedActions.join(
                             ", ",
                           )}
+                        </code>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A latest team work packet outcome"
+                  >
+                    <div className="git-section-title">
+                      <span>Latest Outcome</span>
+                      <span className="approval-badge">
+                        {a2a2aTeamWorkPacketOutcome.summary.completedPackets}
+                      </span>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span
+                        className={`practice-status ${
+                          a2a2aTeamWorkPacketOutcome.summary.status ===
+                          "packet_completed"
+                            ? "payload-ready"
+                            : "payload-blocked"
+                        }`}
+                      >
+                        {a2a2aTeamWorkPacketOutcome.summary.status}
+                      </span>
+                      <div>
+                        <strong>
+                          {a2a2aTeamWorkPacketOutcome.summary.selectedTask}
+                        </strong>
+                        <p>
+                          {a2a2aTeamWorkPacketOutcome.summary.selectedPacketId}{" "}
+                          · {a2a2aTeamWorkPacketOutcome.summary.selectedQueueId}
+                        </p>
+                        <code>
+                          {a2a2aTeamWorkPacketOutcome.summary.commitEvidence}
+                        </code>
+                      </div>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span className="practice-status payload-ready">
+                        guard
+                      </span>
+                      <div>
+                        <strong>Scoped path evidence</strong>
+                        <p>
+                          Planned blocked:{" "}
+                          {
+                            a2a2aTeamWorkPacketOutcome.validationEvidence
+                              .plannedBlocked
+                          }{" "}
+                          · External dirty lanes:{" "}
+                          {
+                            a2a2aTeamWorkPacketOutcome.validationEvidence
+                              .outOfScopeDirty
+                          }
+                        </p>
+                        <code>
+                          {a2a2aTeamWorkPacketOutcome.runtimeReportPath}
                         </code>
                       </div>
                     </div>

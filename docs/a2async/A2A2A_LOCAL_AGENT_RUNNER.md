@@ -370,6 +370,33 @@ scoped repo edits; worker packets stay report-only; KOB remains validate-only.
 No packet enables provider calls, connector sync, deploy, push, secret reads,
 generated `web-sirinx` asset mutation, or `git add .`.
 
+## Team Work Packet Outcome
+
+Record a completed role-scoped packet before regenerating the work packet board:
+
+```bash
+python3 scripts/a2a/a2a_team_work_packet_outcome.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This reads:
+
+- `apps/mission-control/src/fixtures/a2a2aTeamWorkPackets.json`
+- `apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json`
+
+It writes:
+
+- a runtime report at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/work_packet_outcomes/latest.json`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aTeamWorkPacketOutcome.json`
+
+After an outcome reports `packet_completed`, regenerate the work packet board.
+The completed packet becomes `completed`, `executionAllowed=false`, and the
+next Codex packet advances to the next scoped task. This keeps A2A2A as a real
+queue with local evidence, without letting workers edit files or letting the UI
+touch runtime folders directly.
+
 ## Codex Lane Outcome
 
 Record the first Codex-owned implementation slice outcome:

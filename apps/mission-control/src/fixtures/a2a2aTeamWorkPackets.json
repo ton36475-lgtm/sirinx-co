@@ -2,7 +2,7 @@
   "generatedBy": "scripts/a2a/a2a_team_work_packets.py",
   "mode": "read_only_a2a2a_team_work_packets",
   "nextCodexPacket": {
-    "acceptance": "Scoped git status contains only files listed in the lane packet.",
+    "acceptance": "All validation commands pass and results are summarized in final report.",
     "allowedActions": [
       "inspect_source_fixtures",
       "edit_allowed_paths_only",
@@ -40,7 +40,7 @@
     "executionAllowed": true,
     "owner": "codex",
     "ownerMode": "scoped_repo_edit",
-    "packetId": "WORK-de338016d5",
+    "packetId": "WORK-647fc5edf6",
     "plannedFiles": [
       "scripts/a2a/a2a_codex_build_plan.py",
       "scripts/a2a/a2a_implementation_lane_packet.py",
@@ -59,9 +59,9 @@
       "PROJECT_STATE.md",
       "NEXT_ACTIONS.md"
     ],
-    "priority": 2,
+    "priority": 4,
     "providerCallsAllowed": false,
-    "queueId": "LANE-CODEX-LANE-TASK-02",
+    "queueId": "LANE-CODEX-LANE-TASK-04",
     "source": "first_codex_implementation_lane",
     "sourceFixtures": {
       "assignmentBoard": "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
@@ -69,7 +69,7 @@
       "scopedPathGuard": "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json"
     },
     "status": "ready_for_codex_scoped_work",
-    "task": "implement_only_allowed_paths",
+    "task": "run_validation_commands",
     "validationCommands": [
       "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
       "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
@@ -79,7 +79,7 @@
       "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json >/tmp/a2a2aImplementationLanePacket.json.check",
       "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json >/tmp/a2a2aScopedPathGuard.json.check"
     ],
-    "why": "Dirty lanes exist outside A2A2A; edits must stay inside the plan scope.",
+    "why": "Every implementation lane must prove tests and UI checks before staging.",
     "workerDirectEditsAllowed": false
   },
   "nextSafeActions": [
@@ -124,7 +124,7 @@
         "supabase/.temp/",
         "production credentials"
       ],
-      "executionAllowed": true,
+      "executionAllowed": false,
       "owner": "codex",
       "ownerMode": "scoped_repo_edit",
       "packetId": "WORK-de338016d5",
@@ -155,7 +155,7 @@
         "firstCodexLane": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
         "scopedPathGuard": "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json"
       },
-      "status": "ready_for_codex_scoped_work",
+      "status": "completed",
       "task": "implement_only_allowed_paths",
       "validationCommands": [
         "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
@@ -855,14 +855,15 @@
   "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
   "summary": {
     "codexPackets": 7,
+    "completedPackets": 1,
     "gitAddDotAllowed": false,
-    "nextCodexPacketId": "WORK-de338016d5",
-    "nextCodexTask": "implement_only_allowed_paths",
+    "nextCodexPacketId": "WORK-647fc5edf6",
+    "nextCodexTask": "run_validation_commands",
     "packets": 11,
     "providerCallsAllowed": false,
     "status": "ready_for_team_packets",
     "workerDirectEditsAllowed": false,
     "workerPackets": 1
   },
-  "updatedAt": "2026-06-27T15:15:21+00:00"
+  "updatedAt": "2026-06-27T15:31:06+00:00"
 }

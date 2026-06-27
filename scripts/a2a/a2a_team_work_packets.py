@@ -17,6 +17,7 @@ FIXTURE_DIR = REPO_ROOT / "apps" / "mission-control" / "src" / "fixtures"
 DEFAULT_ASSIGNMENT_PATH = FIXTURE_DIR / "a2a2aTeamAssignmentBoard.json"
 DEFAULT_LANE_PATH = FIXTURE_DIR / "a2a2aFirstCodexImplementationLane.json"
 DEFAULT_GUARD_PATH = FIXTURE_DIR / "a2a2aScopedPathGuard.json"
+DEFAULT_OUTCOME_PATH = FIXTURE_DIR / "a2a2aTeamWorkPacketOutcome.json"
 DEFAULT_FIXTURE_PATH = FIXTURE_DIR / "a2a2aTeamWorkPackets.json"
 DEFAULT_RUNTIME_ROOT = Path(
     os.path.expanduser(os.environ.get("GHOSTCLAW_A2A2A_RUNTIME", "~/SIRINXDev/.ghostclaw_runtime/a2a2a"))
@@ -33,6 +34,12 @@ def sha256_text(value: str) -> str:
 
 def read_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def read_optional_json(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    return read_json(path)
 
 
 def write_json(path: Path, data: Any) -> None:
@@ -97,11 +104,14 @@ def build_packet(
     lane: dict[str, Any],
     guard: dict[str, Any],
     sequence: int,
+    completed_packet_ids: set[str],
+    completed_queue_ids: set[str],
 ) -> dict[str, Any]:
     owner = str(item.get("owner", ""))
     mode = owner_mode(owner)
     queue_id = str(item.get("queueId", f"QUEUE-{sequence:02d}"))
     packet_id = f"WORK-{sha256_text(queue_id)[:10]}"
+    completed = packet_id in completed_packet_ids or queue_id in completed_queue_ids
     allowed_paths = lane.get("lane", {}).get("allowedPaths", [])
     blocked_paths = lane.get("lane", {}).get("blockedPaths", [])
     validation_commands = lane.get("lane", {}).get("validationCommands", [])
@@ -112,7 +122,7 @@ def build_packet(
         "priority": int(item.get("priority", 99) or 99),
         "owner": owner,
         "ownerMode": mode,
-        "status": packet_status(item, mode),
+        "status": "completed" if completed else packet_status(item, mode),
         "source": str(item.get("source", "")),
         "task": compact(item.get("task", "")),
         "why": compact(item.get("why", "")),
@@ -137,10 +147,27 @@ def build_packet(
             "firstCodexLane": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
             "scopedPathGuard": "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json",
         },
-        "executionAllowed": mode == "scoped_repo_edit",
+        "executionAllowed": mode == "scoped_repo_edit" and not completed,
         "providerCallsAllowed": False,
         "workerDirectEditsAllowed": False,
     }
+
+
+def completed_keys(outcome: dict[str, Any]) -> tuple[set[str], set[str]]:
+    completed_packets = outcome.get("completedPackets", [])
+    completed_queues = outcome.get("completedQueueIds", [])
+    if not isinstance(completed_packets, list):
+        completed_packets = []
+    if not isinstance(completed_queues, list):
+        completed_queues = []
+    selected_packet = outcome.get("selectedPacket", {})
+    if isinstance(selected_packet, dict) and outcome.get("summary", {}).get("status") == "packet_completed":
+        completed_packets.append(selected_packet.get("packetId", ""))
+        completed_queues.append(selected_packet.get("queueId", ""))
+    return (
+        {str(packet_id) for packet_id in completed_packets if str(packet_id)},
+        {str(queue_id) for queue_id in completed_queues if str(queue_id)},
+    )
 
 
 def build_packets(
@@ -148,12 +175,14 @@ def build_packets(
     lane: dict[str, Any],
     guard: dict[str, Any],
     runtime_root: Path,
+    outcome: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     queue = assignment.get("immediateQueue", [])
     if not isinstance(queue, list):
         queue = []
+    completed_packet_ids, completed_queue_ids = completed_keys(outcome or {})
     packets = [
-        build_packet(item, lane, guard, index + 1)
+        build_packet(item, lane, guard, index + 1, completed_packet_ids, completed_queue_ids)
         for index, item in enumerate(queue)
         if isinstance(item, dict)
     ]
@@ -163,8 +192,13 @@ def build_packets(
         for packet in packets
         if packet["ownerMode"] in {"report_only", "report_and_validate_only", "validate_only"}
     ]
+    completed_packets = [packet for packet in packets if packet["status"] == "completed"]
     next_codex_packet = next(
-        (packet for packet in codex_packets if packet["status"] == "ready_for_codex_scoped_work"),
+        (
+            packet
+            for packet in codex_packets
+            if packet["status"] == "ready_for_codex_scoped_work" and packet["packetId"] not in completed_packet_ids
+        ),
         {},
     )
     report = {
@@ -177,6 +211,7 @@ def build_packets(
             "packets": len(packets),
             "codexPackets": len(codex_packets),
             "workerPackets": len(worker_packets),
+            "completedPackets": len(completed_packets),
             "nextCodexPacketId": str(next_codex_packet.get("packetId", "")),
             "nextCodexTask": str(next_codex_packet.get("task", "")),
             "providerCallsAllowed": False,
@@ -216,6 +251,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--assignment-path", default=str(DEFAULT_ASSIGNMENT_PATH))
     parser.add_argument("--lane-path", default=str(DEFAULT_LANE_PATH))
     parser.add_argument("--guard-path", default=str(DEFAULT_GUARD_PATH))
+    parser.add_argument("--outcome-path", default=str(DEFAULT_OUTCOME_PATH))
     parser.add_argument("--runtime-root", default=str(DEFAULT_RUNTIME_ROOT))
     parser.add_argument("--fixture-path", default=str(DEFAULT_FIXTURE_PATH))
     return parser.parse_args(argv)
@@ -226,8 +262,9 @@ def main(argv: list[str] | None = None) -> int:
     assignment = read_json(Path(os.path.expanduser(args.assignment_path)).resolve())
     lane = read_json(Path(os.path.expanduser(args.lane_path)).resolve())
     guard = read_json(Path(os.path.expanduser(args.guard_path)).resolve())
+    outcome = read_optional_json(Path(os.path.expanduser(args.outcome_path)).resolve())
     runtime_root = Path(os.path.expanduser(args.runtime_root)).resolve()
-    fixture = build_packets(assignment, lane, guard, runtime_root)
+    fixture = build_packets(assignment, lane, guard, runtime_root, outcome)
     write_json(Path(os.path.expanduser(args.fixture_path)).resolve(), fixture)
     print(f"wrote {args.fixture_path}")
     return 0

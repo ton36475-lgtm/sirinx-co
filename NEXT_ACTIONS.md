@@ -814,6 +814,8 @@ configuration lane, then keep future entries concise and source-path based.
 - [x] Add A2A2A team work packets so Mission Control can show role-scoped
       packets with owner mode, allowed actions, blocked actions, allowed paths,
       planned files, and validation commands.
+- [x] Add A2A2A team work packet outcome ledger so completed packets are
+      recorded locally and the next Codex packet advances deterministically.
 - [x] Review the implementation packet in
       `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`.
 - [x] Review
@@ -850,9 +852,13 @@ configuration lane, then keep future entries concise and source-path based.
       poll runtime files directly.
 - [x] Open the next scoped Codex implementation slice from the assignment board
       immediate queue.
+- [x] Complete work packet `WORK-de338016d5 / implement_only_allowed_paths`
+      using local scoped path evidence.
 - [x] Run scoped validation for the path guard lane.
 - [x] Stage and commit only the packet-listed A2A2A guard lane files after
       validation passes.
+- [ ] Execute work packet `WORK-647fc5edf6 / run_validation_commands` as the
+      next Codex-owned scoped validation lane.
 - [ ] Do not use `git add .`, deploy, push, connector sync, provider calls,
       secret reads, Docker starts, external repo clone/audit, or generated
       `web-sirinx` asset mutation from this lane.
@@ -882,6 +888,12 @@ The team work packet board is now the machine-readable "do this next" layer.
 Use `apps/mission-control/src/fixtures/a2a2aTeamWorkPackets.json` to hand
 Codex the next scoped packet, while GLM-5.2, DeepSeek, AGY, and KOB consume
 their packets as report/validation inputs only.
+
+The team work packet outcome ledger is now the queue-advance layer.
+`apps/mission-control/src/fixtures/a2a2aTeamWorkPacketOutcome.json` records
+`WORK-de338016d5 / implement_only_allowed_paths` as complete, and the
+regenerated packet board now points Codex at
+`WORK-647fc5edf6 / run_validation_commands`.
 
 The first Codex-owned slice is now recorded as an outcome fixture. The next
 slice should come from the assignment board `immediateQueue`, while provider,

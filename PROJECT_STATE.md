@@ -1083,6 +1083,8 @@ Toolkit` tab.
   `scripts/a2a/a2a_team_assignment_board.py`.
 - Team work packet generator:
   `scripts/a2a/a2a_team_work_packets.py`.
+- Team work packet outcome generator:
+  `scripts/a2a/a2a_team_work_packet_outcome.py`.
 - Codex lane outcome generator:
   `scripts/a2a/a2a_codex_lane_outcome.py`.
 - Scoped path guard generator:
@@ -1117,8 +1119,12 @@ Toolkit` tab.
     queue items, 4 Codex-ready tasks, 1 completed Codex task, 1 report-only
     worker task, provider calls disabled, worker direct edits disabled
   - team work packets: `ready_for_team_packets`, 11 packets, 7 Codex packets,
-    1 worker/report packet, next Codex task `implement_only_allowed_paths`,
-    provider calls disabled, worker direct edits disabled,
+    1 completed packet, 1 worker/report packet, next Codex task
+    `run_validation_commands`, provider calls disabled, worker direct edits
+    disabled, `gitAddDotAllowed=false`
+  - team work packet outcome: `packet_completed`, selected packet
+    `WORK-de338016d5`, selected task `implement_only_allowed_paths`,
+    `plannedBlocked=0`, provider calls disabled, worker direct edits disabled,
     `gitAddDotAllowed=false`
   - first Codex lane outcome: `first_codex_slice_completed`, selected slice
     `a2a2a_team_assignment_board`, 7 checklist items closed, provider calls 0
@@ -1161,14 +1167,19 @@ Toolkit` tab.
   blocked.
 - Current assignment evidence:
   `apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json` combines the
-  first Codex lane with the P0/P1 backlog queue. After outcome recording, the
-  next Codex action is `implement_only_allowed_paths`; Hermes, Opus, GLM-5.2,
+  first Codex lane with the P0/P1 backlog queue. Hermes, Opus, GLM-5.2,
   DeepSeek, AGY, KOB, and Mission Control have explicit responsibilities and
   edit rights.
 - Current outcome evidence:
   `apps/mission-control/src/fixtures/a2a2aCodexLaneOutcome.json` records the
   first Codex-owned slice as complete with commit evidence
   `3840ca4 feat(a2a2a): add team assignment board` and validation evidence.
+- Current team work packet outcome evidence:
+  `apps/mission-control/src/fixtures/a2a2aTeamWorkPacketOutcome.json` records
+  `WORK-de338016d5 / implement_only_allowed_paths` as complete from local
+  scoped path evidence. Regenerated
+  `apps/mission-control/src/fixtures/a2a2aTeamWorkPackets.json` now points the
+  next Codex packet to `WORK-647fc5edf6 / run_validation_commands`.
 - Current scoped path guard evidence:
   `apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json` verifies the
   packet stage list against allowed paths and keeps generated `web-sirinx`

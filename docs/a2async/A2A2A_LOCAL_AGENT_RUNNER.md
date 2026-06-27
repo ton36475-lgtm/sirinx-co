@@ -53,6 +53,30 @@ python3 scripts/a2a/a2a_export_runner_status_fixture.py \
 The fixture is intentionally static so it can be reviewed, staged, and committed
 as evidence without giving the frontend runtime access to local files.
 
+## Dispatch Command
+
+Create a local role task envelope without provider calls:
+
+```bash
+python3 scripts/a2a/a2a_runner_dispatch_command.py \
+  --role opus \
+  --goal "Plan the next Codex build lane from the current A2A2A runner status" \
+  --context-ref "Mission Control runner panel"
+```
+
+Create the envelope and process one task immediately through the dry-run runner:
+
+```bash
+python3 scripts/a2a/a2a_runner_dispatch_command.py \
+  --role opus \
+  --goal "Plan the next Codex build lane from the current A2A2A runner status" \
+  --context-ref "Mission Control runner panel" \
+  --run-once
+```
+
+`--run-once` still uses `ghostclaw_runner/agent_runner.py --dry-run`. It does
+not enable provider calls.
+
 ## Next Build Lane
 
 Add a dry-run dispatch command that writes a new role task envelope into

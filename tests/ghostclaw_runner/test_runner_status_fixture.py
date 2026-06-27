@@ -9,6 +9,7 @@ import unittest
 from pathlib import Path
 
 from scripts.a2a import a2a_export_runner_status_fixture
+from scripts.a2a import a2a_runner_dispatch_command
 
 
 class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
@@ -49,6 +50,40 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertEqual(fixture["summary"]["overallStatus"], "ready_local_runner")
             self.assertEqual(fixture["latestResults"][0]["nextOwner"], "codex")
             self.assertIn("no_provider_call_by_default", fixture["policyBoundary"])
+
+    def test_dispatch_command_writes_envelope_and_can_run_once(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-runner-dispatch-") as tmp:
+            runtime = Path(tmp) / "runtime"
+            fixture_path = Path(tmp) / "fixture.json"
+
+            exit_code = a2a_runner_dispatch_command.main(
+                [
+                    "--runtime-root",
+                    str(runtime),
+                    "--fixture-path",
+                    str(fixture_path),
+                    "--role",
+                    "kob",
+                    "--goal",
+                    "Validate the local runner dispatch command.",
+                    "--context-ref",
+                    "unit-test",
+                    "--task-id",
+                    "A2A2A-DISPATCH-TEST",
+                    "--run-once",
+                ]
+            )
+
+            self.assertEqual(exit_code, 0)
+            self.assertTrue((runtime / "tasks" / "completed" / "kob" / "A2A2A-DISPATCH-TEST.json").exists())
+            result_path = runtime / "outbox" / "kob" / "A2A2A-DISPATCH-TEST.result.json"
+            self.assertTrue(result_path.exists())
+            result = json.loads(result_path.read_text(encoding="utf-8"))
+            self.assertFalse(result["provider_call"])
+            self.assertTrue(fixture_path.exists())
+            fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+            self.assertEqual(fixture["summary"]["completed"], 1)
+            self.assertEqual(fixture["summary"]["providerCalls"], 0)
 
 
 if __name__ == "__main__":

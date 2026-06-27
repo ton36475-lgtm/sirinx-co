@@ -2,6 +2,19 @@
   "generatedBy": "scripts/a2a/a2a_export_runner_status_fixture.py",
   "latestResults": [
     {
+      "createdAt": "2026-06-27T11:42:56+00:00",
+      "model": "anthropic/claude-opus-4.8",
+      "nextOwner": "codex",
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/outbox/opus/A2A2A-DISPATCH-SMOKE-001.result.json",
+      "promptSource": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/ghostclaw_runner/prompts/opus.md",
+      "providerCall": false,
+      "role": "opus",
+      "safeToDispatchLocally": true,
+      "status": "dry_run_completed",
+      "summary": "opus received task A2A2A-DISPATCH-SMOKE-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+      "taskId": "A2A2A-DISPATCH-SMOKE-001"
+    },
+    {
       "createdAt": "2026-06-27T11:29:36+00:00",
       "model": "anthropic/claude-opus-4.8",
       "nextOwner": "codex",
@@ -43,10 +56,10 @@
       "running": 0
     },
     {
-      "completed": 1,
+      "completed": 2,
       "failed": 0,
       "inbox": 0,
-      "outbox": 1,
+      "outbox": 2,
       "role": "opus",
       "running": 0
     },
@@ -78,16 +91,16 @@
   "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
   "sourceGlob": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/outbox/*/*.result.json",
   "summary": {
-    "completed": 1,
-    "dryRunCompleted": 1,
+    "completed": 2,
+    "dryRunCompleted": 2,
     "failed": 0,
     "inbox": 0,
-    "latestResults": 1,
-    "outbox": 1,
+    "latestResults": 2,
+    "outbox": 2,
     "overallStatus": "ready_local_runner",
     "providerCalls": 0,
     "roles": 5,
     "running": 0
   },
-  "updatedAt": "2026-06-27T11:36:01+00:00"
+  "updatedAt": "2026-06-27T11:42:56+00:00"
 }

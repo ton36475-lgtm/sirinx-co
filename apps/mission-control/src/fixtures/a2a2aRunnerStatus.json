@@ -2,6 +2,19 @@
   "generatedBy": "scripts/a2a/a2a_export_runner_status_fixture.py",
   "latestResults": [
     {
+      "createdAt": "2026-06-27T11:51:03+00:00",
+      "model": "anthropic/claude-opus-4.8",
+      "nextOwner": "codex",
+      "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/outbox/opus/A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001.result.json",
+      "promptSource": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/ghostclaw_runner/prompts/opus.md",
+      "providerCall": false,
+      "role": "opus",
+      "safeToDispatchLocally": true,
+      "status": "dry_run_completed",
+      "summary": "opus received task A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+      "taskId": "A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001"
+    },
+    {
       "createdAt": "2026-06-27T11:42:56+00:00",
       "model": "anthropic/claude-opus-4.8",
       "nextOwner": "codex",
@@ -56,10 +69,10 @@
       "running": 0
     },
     {
-      "completed": 2,
+      "completed": 3,
       "failed": 0,
       "inbox": 0,
-      "outbox": 2,
+      "outbox": 3,
       "role": "opus",
       "running": 0
     },
@@ -91,16 +104,16 @@
   "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
   "sourceGlob": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/outbox/*/*.result.json",
   "summary": {
-    "completed": 2,
-    "dryRunCompleted": 2,
+    "completed": 3,
+    "dryRunCompleted": 3,
     "failed": 0,
     "inbox": 0,
-    "latestResults": 2,
-    "outbox": 2,
+    "latestResults": 3,
+    "outbox": 3,
     "overallStatus": "ready_local_runner",
     "providerCalls": 0,
     "roles": 5,
     "running": 0
   },
-  "updatedAt": "2026-06-27T11:42:56+00:00"
+  "updatedAt": "2026-06-27T11:51:03+00:00"
 }

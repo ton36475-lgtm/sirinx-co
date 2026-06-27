@@ -9,6 +9,7 @@ import unittest
 from pathlib import Path
 
 from scripts.a2a import a2a_export_runner_status_fixture
+from scripts.a2a import a2a_dependency_readiness
 from scripts.a2a import a2a_runner_dispatch_command
 
 
@@ -84,6 +85,44 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
             self.assertEqual(fixture["summary"]["completed"], 1)
             self.assertEqual(fixture["summary"]["providerCalls"], 0)
+
+    def test_dependency_readiness_builds_codex_queue_from_opus_handoff(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-readiness-") as tmp:
+            runtime = Path(tmp) / "runtime"
+            outbox = runtime / "outbox" / "opus"
+            outbox.mkdir(parents=True)
+            result = {
+                "created_at": "2026-06-27T00:00:00+00:00",
+                "status": "dry_run_completed",
+                "provider_call": False,
+                "role": "opus",
+                "task": {
+                    "task_id": "A2A2A-OPUS-HANDOFF",
+                    "raw_from_agent": "hermes",
+                },
+                "output": {
+                    "summary": "architecture handoff ready",
+                    "handoff": {"next_owner": "codex", "safe_to_dispatch_locally": True},
+                },
+            }
+            (outbox / "A2A2A-OPUS-HANDOFF.result.json").write_text(json.dumps(result), encoding="utf-8")
+            fixture_path = Path(tmp) / "readiness.json"
+
+            exit_code = a2a_dependency_readiness.main(
+                [
+                    "--runtime-root",
+                    str(runtime),
+                    "--fixture-path",
+                    str(fixture_path),
+                ]
+            )
+
+            self.assertEqual(exit_code, 0)
+            fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+            self.assertEqual(fixture["summary"]["overallStatus"], "ready_for_scoped_codex_plan")
+            self.assertEqual(fixture["summary"]["codexQueueItems"], 1)
+            self.assertEqual(fixture["codexBuildQueue"][0]["targetOwner"], "codex")
+            self.assertFalse(fixture["codexBuildQueue"][0]["executionAllowed"])
 
 
 if __name__ == "__main__":

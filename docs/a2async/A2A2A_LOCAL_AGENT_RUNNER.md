@@ -77,7 +77,28 @@ python3 scripts/a2a/a2a_runner_dispatch_command.py \
 `--run-once` still uses `ghostclaw_runner/agent_runner.py --dry-run`. It does
 not enable provider calls.
 
+## Dependency Readiness
+
+Generate the dependency board after runner output exists:
+
+```bash
+python3 scripts/a2a/a2a_dependency_readiness.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+The board turns runner results into a Codex build queue:
+
+1. Hermes-owned routing must exist.
+2. Opus architecture handoff must exist.
+3. Codex may then create a scoped implementation plan.
+4. GLM-5.2 and DeepSeek worker reports follow only when Codex identifies a
+   department-specific need.
+5. KOB validates local command intent only after Codex proposes commands.
+
+This is a dependency gate, not a human approval gate. It prevents workers from
+running out of order while keeping all work local and reviewable.
+
 ## Next Build Lane
 
-Add a dry-run dispatch command that writes a new role task envelope into
-`runtime/inbox/<role>/`, refreshes the fixture, and leaves provider mode off.
+Codex should consume the first `ready_for_codex_plan` item from the dependency
+fixture and produce a scoped implementation plan before any file edits.

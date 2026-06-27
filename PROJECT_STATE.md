@@ -1057,6 +1057,7 @@ Toolkit` tab.
   - `apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json`
   - `apps/mission-control/src/fixtures/a2a2aWorkerReportDigest.json`
   - `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`
+  - `apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json`
 - Local runner:
   `ghostclaw_runner/agent_runner.py`.
 - Dispatch command:
@@ -1079,6 +1080,8 @@ Toolkit` tab.
   `scripts/a2a/a2a_team_assignment_board.py`.
 - Codex lane outcome generator:
   `scripts/a2a/a2a_codex_lane_outcome.py`.
+- Scoped path guard generator:
+  `scripts/a2a/a2a_scoped_path_guard.py`.
 - Current status:
   - runner roles: 6 (`hermes`, `opus`, `glm52`, `deepseek`, `agy`, `kob`)
   - runner completed tasks: 7
@@ -1095,13 +1098,19 @@ Toolkit` tab.
   - completion audit: `ready_for_first_scoped_codex_lane`, 9/9 checks passed
   - first Codex lane: `open_for_codex_scoped_work`, 5 tasks, 4 Codex-ready
     tasks, 1 report-input task, provider calls disabled
-  - backlog priority board: 174 unchecked `NEXT_ACTIONS.md` items, 1 P0 item,
+  - backlog priority board: 173 unchecked `NEXT_ACTIONS.md` items, 0 P0 items,
     22 P1 items, 56 blocked gates, and 6 owner groups
   - team assignment board: `ready_for_codex_assignment`, 8 roles, 11 immediate
     queue items, 4 Codex-ready tasks, 1 completed Codex task, 1 report-only
     worker task, provider calls disabled, worker direct edits disabled
   - first Codex lane outcome: `first_codex_slice_completed`, selected slice
     `a2a2a_team_assignment_board`, 7 checklist items closed, provider calls 0
+  - scoped path guard: `ready_with_external_dirty_lanes`, 16 planned files,
+    16 allowed planned files, 0 planned violations, 342 out-of-scope dirty
+    paths reported without cleanup or staging, `gitAddDotAllowed=false`
+  - scoped path guard validation: Python compile, unit tests, Mission Control
+    typecheck, Prettier check, JSON parse, and scoped diff whitespace check
+    passed before staging
 - Role ownership:
   - Hermes: mission commander and dependency gate owner.
   - Opus: architecture handoff source before Codex edits.
@@ -1141,6 +1150,12 @@ Toolkit` tab.
   `apps/mission-control/src/fixtures/a2a2aCodexLaneOutcome.json` records the
   first Codex-owned slice as complete with commit evidence
   `3840ca4 feat(a2a2a): add team assignment board` and validation evidence.
+- Current scoped path guard evidence:
+  `apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json` verifies the
+  packet stage list against allowed paths and keeps generated `web-sirinx`
+  assets plus other dirty lanes visible but untouched. Current planned files
+  are all allowed, while unrelated dirty paths are reported as external lane
+  state only.
 - Boundary: this A2A2A state still does not call providers, execute KOB
   commands, clone repos, start Docker, write connectors, push, deploy, read
   secrets, or mutate generated `web-sirinx` assets. Worker reports are inputs

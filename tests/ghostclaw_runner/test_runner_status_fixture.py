@@ -17,6 +17,7 @@ from scripts.a2a import a2a_team_assignment_board
 from scripts.a2a import a2a_codex_lane_outcome
 from scripts.a2a import a2a_implementation_lane_packet
 from scripts.a2a import a2a_codex_first_implementation_lane
+from scripts.a2a import a2a_scoped_path_guard
 from scripts.a2a import a2a_runner_dispatch_command
 from scripts.a2a import a2a_worker_report_digest
 
@@ -656,6 +657,69 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertFalse(fixture["summary"]["workerDirectEdits"])
             self.assertIn("workers_report_only", fixture["policyBoundary"])
             self.assertTrue(Path(fixture["runtimeReportPath"]).exists())
+
+    def test_scoped_path_guard_allows_planned_a2a2a_files_only(self) -> None:
+        packet = {
+            "packet": {
+                "packetId": "IMPLEMENT-PACKET-TEST",
+                "laneId": "LANE-A2A2A-TEST",
+                "scope": {
+                    "allowedPaths": [
+                        "scripts/a2a/",
+                        "apps/mission-control/src/fixtures/",
+                        "PROJECT_STATE.md",
+                    ],
+                    "blockedPaths": [".env", "apps/web-sirinx/dist/"],
+                    "plannedFilesForThisPacket": [
+                        "scripts/a2a/a2a_scoped_path_guard.py",
+                        "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json",
+                        "PROJECT_STATE.md",
+                    ],
+                },
+                "scopedStageCommand": [
+                    "/usr/bin/git",
+                    "add",
+                    "scripts/a2a/a2a_scoped_path_guard.py",
+                    "PROJECT_STATE.md",
+                ],
+            }
+        }
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-scoped-path-guard-") as tmp:
+            runtime = Path(tmp) / "runtime"
+
+            fixture = a2a_scoped_path_guard.build_guard(packet, None, runtime, [])
+
+            self.assertEqual(fixture["summary"]["status"], "ready_clean_scope")
+            self.assertEqual(fixture["summary"]["plannedBlocked"], 0)
+            self.assertFalse(fixture["summary"]["gitAddDotAllowed"])
+            self.assertIn("no_generated_web_sirinx_asset_mutation", fixture["policyBoundary"])
+            self.assertTrue(Path(fixture["runtimeReportPath"]).exists())
+
+    def test_scoped_path_guard_blocks_generated_deploy_assets(self) -> None:
+        packet = {
+            "packet": {
+                "packetId": "IMPLEMENT-PACKET-TEST",
+                "laneId": "LANE-A2A2A-TEST",
+                "scope": {
+                    "allowedPaths": ["scripts/a2a/"],
+                    "blockedPaths": ["apps/web-sirinx/dist/"],
+                    "plannedFilesForThisPacket": [
+                        "scripts/a2a/a2a_scoped_path_guard.py",
+                        "apps/web-sirinx/dist/public/index.html",
+                    ],
+                },
+                "scopedStageCommand": ["/usr/bin/git", "add", "scripts/a2a/a2a_scoped_path_guard.py"],
+            }
+        }
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-scoped-path-block-") as tmp:
+            runtime = Path(tmp) / "runtime"
+
+            fixture = a2a_scoped_path_guard.build_guard(packet, None, runtime, [])
+
+            self.assertEqual(fixture["summary"]["status"], "blocked_by_scoped_path_violation")
+            self.assertEqual(fixture["summary"]["plannedBlocked"], 1)
+            self.assertEqual(fixture["plannedViolations"][0]["path"], "apps/web-sirinx/dist/public/index.html")
+            self.assertEqual(fixture["plannedViolations"][0]["status"], "blocked")
 
 
 if __name__ == "__main__":

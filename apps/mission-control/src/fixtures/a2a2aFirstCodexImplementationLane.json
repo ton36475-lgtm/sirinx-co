@@ -17,7 +17,9 @@
       "tests/ghostclaw_runner/",
       "apps/mission-control/src/fixtures/",
       "apps/mission-control/src/App.tsx",
-      "docs/a2async/"
+      "docs/a2async/",
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md"
     ],
     "blockedActions": [
       "git_add_dot",
@@ -38,7 +40,7 @@
       "production credentials"
     ],
     "codexFileEditsAllowed": true,
-    "createdAt": "2026-06-27T13:01:58+00:00",
+    "createdAt": "2026-06-27T13:59:09+00:00",
     "gitOwner": "codex",
     "laneId": "CODEX-FIRST-93b325b1e4",
     "objective": "Execute the first Codex-owned implementation lane from the A2A2A packet while keeping workers report-only.",
@@ -68,11 +70,22 @@
     "scopedStageCommand": [
       "/usr/bin/git",
       "add",
+      "scripts/a2a/a2a_codex_build_plan.py",
       "scripts/a2a/a2a_implementation_lane_packet.py",
+      "scripts/a2a/a2a_codex_first_implementation_lane.py",
+      "scripts/a2a/a2a_team_assignment_board.py",
+      "scripts/a2a/a2a_scoped_path_guard.py",
+      "apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json",
       "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+      "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+      "apps/mission-control/src/fixtures/a2a2aBacklogPriority.json",
+      "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+      "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json",
       "apps/mission-control/src/App.tsx",
       "tests/ghostclaw_runner/test_runner_status_fixture.py",
-      "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md"
+      "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md"
     ],
     "sourceLaneId": "LANE-A2A2A-IMPLEMENT-5dde74d092",
     "sourcePacketId": "IMPLEMENT-PACKET-93b325b1e4",
@@ -127,10 +140,11 @@
     "validationCommands": [
       "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
       "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
-      "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+      "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md PROJECT_STATE.md NEXT_ACTIONS.md",
       "/usr/bin/git diff --check -- <scoped paths>",
-      "python3 -m py_compile scripts/a2a/a2a_implementation_lane_packet.py tests/ghostclaw_runner/test_runner_status_fixture.py",
-      "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json >/tmp/a2a2aImplementationLanePacket.json.check"
+      "python3 -m py_compile scripts/a2a/a2a_codex_build_plan.py scripts/a2a/a2a_implementation_lane_packet.py scripts/a2a/a2a_scoped_path_guard.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+      "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json >/tmp/a2a2aImplementationLanePacket.json.check",
+      "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json >/tmp/a2a2aScopedPathGuard.json.check"
     ],
     "workerDirectEditsAllowed": false
   },
@@ -160,8 +174,8 @@
     "reportInputTasks": 1,
     "status": "open_for_codex_scoped_work",
     "tasks": 5,
-    "validationCommands": 6,
+    "validationCommands": 7,
     "workerDirectEditsAllowed": false
   },
-  "updatedAt": "2026-06-27T13:01:58+00:00"
+  "updatedAt": "2026-06-27T13:59:09+00:00"
 }

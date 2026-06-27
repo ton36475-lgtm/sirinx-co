@@ -95,6 +95,8 @@ def build_plan(readiness: dict[str, Any], runtime_root: Path) -> dict[str, Any]:
                 "apps/mission-control/src/fixtures/",
                 "apps/mission-control/src/App.tsx",
                 "docs/a2async/",
+                "PROJECT_STATE.md",
+                "NEXT_ACTIONS.md",
             ],
             "blockedPaths": [
                 ".env",
@@ -135,7 +137,7 @@ def build_plan(readiness: dict[str, Any], runtime_root: Path) -> dict[str, Any]:
         "validationCommands": [
             "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
             "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
-            "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+            "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md PROJECT_STATE.md NEXT_ACTIONS.md",
             "/usr/bin/git diff --check -- <scoped paths>",
         ],
         "workerDispatchRecommendations": [

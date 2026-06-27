@@ -154,7 +154,7 @@
   ],
   "ownerCounts": [
     {
-      "count": 44,
+      "count": 43,
       "owner": "codex"
     },
     {
@@ -194,26 +194,14 @@
   "summary": {
     "blocked": 56,
     "owners": 6,
-    "p0": 1,
+    "p0": 0,
     "p1": 22,
     "p2": 95,
     "p3": 56,
-    "readyForReview": 118,
-    "totalPending": 174
+    "readyForReview": 117,
+    "totalPending": 173
   },
   "topItems": [
-    {
-      "blockedReason": "",
-      "id": "BACKLOG-173",
-      "line": 834,
-      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
-      "owner": "codex",
-      "priority": 0,
-      "section": "A2A2A Team Coding Sync",
-      "status": "ready_for_review",
-      "subsection": "",
-      "task": "Open the next scoped Codex implementation slice from the assignment board immediate queue."
-    },
     {
       "blockedReason": "",
       "id": "BACKLOG-004",
@@ -345,7 +333,19 @@
       "status": "ready_for_review",
       "subsection": "",
       "task": "Review the Mission Control `Tool Matrix` tab to confirm command class coverage before opening new tool/repo executor lanes."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-128",
+      "line": 573,
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 1,
+      "section": "A2A Codex Sidebar Autoflow v3",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Review the Mission Control `Command Packet` tab before running any local executor command from Codex/OpenCode/AGY/Manus lanes."
     }
   ],
-  "updatedAt": "2026-06-27T13:36:41+00:00"
+  "updatedAt": "2026-06-27T14:02:23+00:00"
 }

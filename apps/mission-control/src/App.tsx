@@ -24,6 +24,7 @@ import a2a2aDependencyReadinessFixture from "./fixtures/a2a2aDependencyReadiness
 import a2a2aCodexBuildPlanFixture from "./fixtures/a2a2aCodexBuildPlan.json";
 import a2a2aWorkerReportDigestFixture from "./fixtures/a2a2aWorkerReportDigest.json";
 import a2a2aImplementationLanePacketFixture from "./fixtures/a2a2aImplementationLanePacket.json";
+import a2a2aScopedPathGuardFixture from "./fixtures/a2a2aScopedPathGuard.json";
 import a2a2aCompletionAuditFixture from "./fixtures/a2a2aCompletionAudit.json";
 import a2a2aFirstCodexImplementationLaneFixture from "./fixtures/a2a2aFirstCodexImplementationLane.json";
 import a2a2aBacklogPriorityFixture from "./fixtures/a2a2aBacklogPriority.json";
@@ -746,6 +747,58 @@ type A2A2AImplementationLanePacketFixture = {
   policyBoundary: string[];
 };
 
+type A2A2AScopedPathGuardFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  sourcePacketId: string;
+  sourceLaneId: string;
+  summary: {
+    status: string;
+    allowedPaths: number;
+    blockedPaths: number;
+    plannedFiles: number;
+    plannedAllowed: number;
+    plannedBlocked: number;
+    dirtyPaths: number;
+    outOfScopeDirty: number;
+    blockedDirty: number;
+    gitAddDotAllowed: boolean;
+    providerCalls: number;
+  };
+  allowedPaths: string[];
+  blockedPaths: string[];
+  plannedFiles: {
+    path: string;
+    status: string;
+    matchedRule: string;
+  }[];
+  plannedViolations: {
+    path: string;
+    status: string;
+    matchedRule: string;
+  }[];
+  dirtyPathSamples: {
+    path: string;
+    status: string;
+    matchedRule: string;
+  }[];
+  outOfScopeDirtySamples: {
+    path: string;
+    status: string;
+    matchedRule: string;
+  }[];
+  blockedDirtySamples: {
+    path: string;
+    status: string;
+    matchedRule: string;
+  }[];
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type A2A2ACompletionAuditFixture = {
   updatedAt: string;
   mode: string;
@@ -1041,6 +1094,8 @@ const a2a2aWorkerReportDigest =
   a2a2aWorkerReportDigestFixture as A2A2AWorkerReportDigestFixture;
 const a2a2aImplementationLanePacket =
   a2a2aImplementationLanePacketFixture as A2A2AImplementationLanePacketFixture;
+const a2a2aScopedPathGuard =
+  a2a2aScopedPathGuardFixture as A2A2AScopedPathGuardFixture;
 const a2a2aCompletionAudit =
   a2a2aCompletionAuditFixture as A2A2ACompletionAuditFixture;
 const a2a2aFirstCodexImplementationLane =
@@ -2706,6 +2761,152 @@ export default function App() {
                           </span>
                         ),
                       )}
+                    </div>
+                  </section>
+                </div>
+              </div>
+
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>A2A2A Scoped Path Guard</span>
+                  <span
+                    className={
+                      a2a2aScopedPathGuard.summary.plannedBlocked > 0
+                        ? "accent-rose"
+                        : "accent-emerald"
+                    }
+                  >
+                    {a2a2aScopedPathGuard.summary.status}
+                  </span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Planned Files</span>
+                    <strong>{a2a2aScopedPathGuard.summary.plannedFiles}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Allowed</span>
+                    <strong>
+                      {a2a2aScopedPathGuard.summary.plannedAllowed}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Blocked Planned</span>
+                    <strong>
+                      {a2a2aScopedPathGuard.summary.plannedBlocked}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Dirty Paths</span>
+                    <strong>{a2a2aScopedPathGuard.summary.dirtyPaths}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Out-of-scope Dirty</span>
+                    <strong>
+                      {a2a2aScopedPathGuard.summary.outOfScopeDirty}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>git add dot</span>
+                    <strong>
+                      {a2a2aScopedPathGuard.summary.gitAddDotAllowed
+                        ? "ALLOW"
+                        : "BLOCKED"}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Packet</span>
+                  <code>{a2a2aScopedPathGuard.sourcePacketId}</code>
+                  <span>Runtime Report</span>
+                  <code>{a2a2aScopedPathGuard.runtimeReportPath}</code>
+                  <span>Updated</span>
+                  <code>{a2a2aScopedPathGuard.updatedAt}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  This guard checks the Codex lane file list against allowed and
+                  blocked paths. Existing dirty lanes are reported for
+                  visibility only and are not cleaned, staged, or modified by
+                  this panel.
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A scoped planned files"
+                  >
+                    <div className="git-section-title">
+                      <span>Planned Files</span>
+                      <span className="approval-badge">
+                        {a2a2aScopedPathGuard.plannedFiles.length}
+                      </span>
+                    </div>
+                    {a2a2aScopedPathGuard.plannedFiles.map((item) => (
+                      <div className="practice-artifact-row" key={item.path}>
+                        <span
+                          className={`practice-status ${
+                            item.status === "allowed"
+                              ? "payload-ready"
+                              : "payload-blocked"
+                          }`}
+                        >
+                          {item.status}
+                        </span>
+                        <div>
+                          <strong>{item.path}</strong>
+                          <p>Matched scope rule for this Codex-owned lane.</p>
+                          <code>{item.matchedRule || "no matching rule"}</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A scoped dirty path samples"
+                  >
+                    <div className="git-section-title">
+                      <span>Dirty Lane Samples</span>
+                      <span className="approval-badge">
+                        {a2a2aScopedPathGuard.outOfScopeDirtySamples.length}
+                      </span>
+                    </div>
+                    {a2a2aScopedPathGuard.outOfScopeDirtySamples
+                      .slice(0, 8)
+                      .map((item) => (
+                        <div className="practice-artifact-row" key={item.path}>
+                          <span
+                            className={`practice-status ${
+                              item.status === "blocked"
+                                ? "payload-blocked"
+                                : "payload-warn"
+                            }`}
+                          >
+                            {item.status}
+                          </span>
+                          <div>
+                            <strong>{item.path}</strong>
+                            <p>
+                              Out-of-scope dirty lane. Leave untouched here.
+                            </p>
+                            <code>
+                              {item.matchedRule || "outside A2A2A scope"}
+                            </code>
+                          </div>
+                        </div>
+                      ))}
+                    <div className="blocked-action-list">
+                      {a2a2aScopedPathGuard.policyBoundary.map((item) => (
+                        <span
+                          className="blocked-action payload-ready"
+                          key={item}
+                        >
+                          {item}
+                        </span>
+                      ))}
                     </div>
                   </section>
                 </div>

@@ -321,6 +321,41 @@ The outcome fixture closes only the first Codex-owned inspection slice. After it
 exists, the assignment board treats `inspect_plan_and_worker_digest` as
 completed and advances the next Codex action to `implement_only_allowed_paths`.
 
+## Scoped Path Guard
+
+Before Codex stages any A2A2A implementation slice, regenerate the scoped path
+guard:
+
+```bash
+python3 scripts/a2a/a2a_scoped_path_guard.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This writes:
+
+- a runtime report at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/scoped_path_guard/latest.json`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json`
+
+The guard compares the implementation packet's planned files and scoped stage
+command against the lane's allowed and blocked paths. It also reports existing
+dirty paths from the worktree so generated `web-sirinx` assets and other
+unrelated lanes stay visible but untouched.
+
+The guard is intentionally evidence-only:
+
+- it does not stage files
+- it does not clean dirty lanes
+- it does not read secrets
+- it does not call providers
+- it does not deploy, push, or sync connectors
+- it keeps `git add .` blocked
+
+If `plannedBlocked` is greater than zero, stop and fix the packet before any
+stage attempt. If only `outOfScopeDirty` is greater than zero, continue with the
+scoped file list and leave those dirty lanes alone.
+
 ## Next Build Lane
 
 Codex should consume the first `ready_for_codex_plan` item from the dependency

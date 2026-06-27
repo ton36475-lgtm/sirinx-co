@@ -59,6 +59,18 @@ def write_json(path: Path, data: Any) -> None:
     path.write_text(json.dumps(data, indent=2, sort_keys=True, ensure_ascii=True) + "\n", encoding="utf-8")
 
 
+def unique_strings(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    result = []
+    for value in values:
+        normalized = str(value)
+        if normalized in seen:
+            continue
+        seen.add(normalized)
+        result.append(normalized)
+    return result
+
+
 def selected_reports(worker_digest: dict[str, Any]) -> list[dict[str, Any]]:
     reports = worker_digest.get("reports", [])
     if not isinstance(reports, list):
@@ -190,13 +202,26 @@ def build_packet(build_plan_fixture: dict[str, Any], worker_digest: dict[str, An
     allowed_paths = plan.get("scope", {}).get("allowedPaths", []) if isinstance(plan.get("scope"), dict) else []
     blocked_paths = plan.get("scope", {}).get("blockedPaths", []) if isinstance(plan.get("scope"), dict) else []
     validation_commands = plan.get("validationCommands", []) if isinstance(plan.get("validationCommands"), list) else []
-    planned_files = [
-        "scripts/a2a/a2a_implementation_lane_packet.py",
-        "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
-        "apps/mission-control/src/App.tsx",
-        "tests/ghostclaw_runner/test_runner_status_fixture.py",
-        "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
-    ]
+    planned_files = unique_strings(
+        [
+            "scripts/a2a/a2a_codex_build_plan.py",
+            "scripts/a2a/a2a_implementation_lane_packet.py",
+            "scripts/a2a/a2a_codex_first_implementation_lane.py",
+            "scripts/a2a/a2a_team_assignment_board.py",
+            "scripts/a2a/a2a_scoped_path_guard.py",
+            "apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json",
+            "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+            "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+            "apps/mission-control/src/fixtures/a2a2aBacklogPriority.json",
+            "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+            "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json",
+            "apps/mission-control/src/App.tsx",
+            "tests/ghostclaw_runner/test_runner_status_fixture.py",
+            "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+            "PROJECT_STATE.md",
+            "NEXT_ACTIONS.md",
+        ]
+    )
     dependencies = build_dependencies(plan, worker_digest, reports)
     blocked_dependencies = [item for item in dependencies if item["status"] == "blocked"]
     missing_dependencies = [item for item in dependencies if item["status"] == "missing"]
@@ -228,8 +253,9 @@ def build_packet(build_plan_fixture: dict[str, Any], worker_digest: dict[str, An
         },
         "validationCommands": [str(command) for command in validation_commands]
         + [
-            "python3 -m py_compile scripts/a2a/a2a_implementation_lane_packet.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+            "python3 -m py_compile scripts/a2a/a2a_codex_build_plan.py scripts/a2a/a2a_implementation_lane_packet.py scripts/a2a/a2a_scoped_path_guard.py tests/ghostclaw_runner/test_runner_status_fixture.py",
             "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json >/tmp/a2a2aImplementationLanePacket.json.check",
+            "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json >/tmp/a2a2aScopedPathGuard.json.check",
         ],
         "scopedStageCommand": stage_command_for(planned_files),
         "blockedActions": [

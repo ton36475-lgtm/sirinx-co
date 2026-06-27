@@ -1,0 +1,506 @@
+{
+  "allowedPaths": [
+    "scripts/a2a/",
+    "ghostclaw_runner/",
+    "tests/ghostclaw_runner/",
+    "apps/mission-control/src/fixtures/",
+    "apps/mission-control/src/App.tsx",
+    "docs/a2async/",
+    "PROJECT_STATE.md",
+    "NEXT_ACTIONS.md"
+  ],
+  "blockedDirtySamples": [
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/about/index.html",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assessment/index.html",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/About-DmjpwoGg.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/AgentMonitor-B4PgoV_m.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Analytics-DaFoBDNU.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Blog-BeG-JUf3.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/BlogCMS-q7NARNzs.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/BlogPost-DzNLqXoG.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Contact-DkiQoQVY.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/ContactSubmissions-DebSzXJR.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Cookies-DQJ-A_3Y.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Dashboard-D2rB2_pQ.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/DashboardLayout-XxPoPaqr.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/FloatingChatWidget-DmbrfEig.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/HeroSlideshow-t9DgeoMY.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Home-Bk-Qcmte.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/HomeSolution-CkV6QiND.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Industries-DKoXoeU6.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/InvestmentTaxHub-DHqzlRhU.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Leads-C6go-sAC.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/LegalPage-BcIsfkfW.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/NotFound-uYe9NsBC.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Partner-B77GWuSG.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Pricing-DpKOjzar.js",
+      "status": "blocked"
+    }
+  ],
+  "blockedPaths": [
+    ".env",
+    ".env.*",
+    "apps/web-sirinx/dist/",
+    "packages/database/dist/",
+    "supabase/.temp/",
+    "production credentials"
+  ],
+  "dirtyPathSamples": [
+    {
+      "matchedRule": "NEXT_ACTIONS.md",
+      "path": "NEXT_ACTIONS.md",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "PROJECT_STATE.md",
+      "path": "PROJECT_STATE.md",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "",
+      "path": "apps/dev-command-center/src/App.tsx",
+      "status": "out_of_scope"
+    },
+    {
+      "matchedRule": "",
+      "path": "apps/mission-control/dist/assets/index-CoUPTNDr.js",
+      "status": "out_of_scope"
+    },
+    {
+      "matchedRule": "",
+      "path": "apps/mission-control/dist/assets/index-rzVlqVai.css",
+      "status": "out_of_scope"
+    },
+    {
+      "matchedRule": "",
+      "path": "apps/mission-control/dist/index.html",
+      "status": "out_of_scope"
+    },
+    {
+      "matchedRule": "apps/mission-control/src/App.tsx",
+      "path": "apps/mission-control/src/App.tsx",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "apps/mission-control/src/fixtures/",
+      "path": "apps/mission-control/src/fixtures/a2a2aBacklogPriority.json",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "apps/mission-control/src/fixtures/",
+      "path": "apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "apps/mission-control/src/fixtures/",
+      "path": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "apps/mission-control/src/fixtures/",
+      "path": "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "apps/mission-control/src/fixtures/",
+      "path": "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/about/index.html",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assessment/index.html",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/About-DmjpwoGg.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/AgentMonitor-B4PgoV_m.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Analytics-DaFoBDNU.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Blog-BeG-JUf3.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/BlogCMS-q7NARNzs.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/BlogPost-DzNLqXoG.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Contact-DkiQoQVY.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/ContactSubmissions-DebSzXJR.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Cookies-DQJ-A_3Y.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Dashboard-D2rB2_pQ.js",
+      "status": "blocked"
+    }
+  ],
+  "generatedBy": "scripts/a2a/a2a_scoped_path_guard.py",
+  "mode": "read_only_scoped_path_guard",
+  "nextSafeActions": [
+    "If plannedBlocked is zero, Codex may validate and stage only planned files.",
+    "Do not clean or stage out-of-scope dirty lanes from this A2A2A guard lane.",
+    "Regenerate this guard after each scoped implementation packet update."
+  ],
+  "outOfScopeDirtySamples": [
+    {
+      "matchedRule": "",
+      "path": "apps/dev-command-center/src/App.tsx",
+      "status": "out_of_scope"
+    },
+    {
+      "matchedRule": "",
+      "path": "apps/mission-control/dist/assets/index-CoUPTNDr.js",
+      "status": "out_of_scope"
+    },
+    {
+      "matchedRule": "",
+      "path": "apps/mission-control/dist/assets/index-rzVlqVai.css",
+      "status": "out_of_scope"
+    },
+    {
+      "matchedRule": "",
+      "path": "apps/mission-control/dist/index.html",
+      "status": "out_of_scope"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/about/index.html",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assessment/index.html",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/About-DmjpwoGg.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/AgentMonitor-B4PgoV_m.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Analytics-DaFoBDNU.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Blog-BeG-JUf3.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/BlogCMS-q7NARNzs.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/BlogPost-DzNLqXoG.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Contact-DkiQoQVY.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/ContactSubmissions-DebSzXJR.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Cookies-DQJ-A_3Y.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Dashboard-D2rB2_pQ.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/DashboardLayout-XxPoPaqr.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/FloatingChatWidget-DmbrfEig.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/HeroSlideshow-t9DgeoMY.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Home-Bk-Qcmte.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/HomeSolution-CkV6QiND.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Industries-DKoXoeU6.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/InvestmentTaxHub-DHqzlRhU.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/Leads-C6go-sAC.js",
+      "status": "blocked"
+    }
+  ],
+  "plannedFiles": [
+    {
+      "matchedRule": "scripts/a2a/",
+      "path": "scripts/a2a/a2a_codex_build_plan.py",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "scripts/a2a/",
+      "path": "scripts/a2a/a2a_implementation_lane_packet.py",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "scripts/a2a/",
+      "path": "scripts/a2a/a2a_codex_first_implementation_lane.py",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "scripts/a2a/",
+      "path": "scripts/a2a/a2a_team_assignment_board.py",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "scripts/a2a/",
+      "path": "scripts/a2a/a2a_scoped_path_guard.py",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "apps/mission-control/src/fixtures/",
+      "path": "apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "apps/mission-control/src/fixtures/",
+      "path": "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "apps/mission-control/src/fixtures/",
+      "path": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "apps/mission-control/src/fixtures/",
+      "path": "apps/mission-control/src/fixtures/a2a2aBacklogPriority.json",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "apps/mission-control/src/fixtures/",
+      "path": "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "apps/mission-control/src/fixtures/",
+      "path": "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "apps/mission-control/src/App.tsx",
+      "path": "apps/mission-control/src/App.tsx",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "tests/ghostclaw_runner/",
+      "path": "tests/ghostclaw_runner/test_runner_status_fixture.py",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "docs/a2async/",
+      "path": "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "PROJECT_STATE.md",
+      "path": "PROJECT_STATE.md",
+      "status": "allowed"
+    },
+    {
+      "matchedRule": "NEXT_ACTIONS.md",
+      "path": "NEXT_ACTIONS.md",
+      "status": "allowed"
+    }
+  ],
+  "plannedViolations": [],
+  "policyBoundary": [
+    "codex_git_owner",
+    "planned_files_must_match_allowed_paths",
+    "dirty_lanes_reported_not_mutated",
+    "no_git_add_dot",
+    "no_generated_web_sirinx_asset_mutation",
+    "no_provider_call",
+    "no_push",
+    "no_deploy",
+    "no_connector_sync",
+    "no_secret_read_or_print"
+  ],
+  "runtimeReportPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/scoped_path_guard/latest.json",
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+  "sourceLaneId": "LANE-A2A2A-IMPLEMENT-5dde74d092",
+  "sourcePacketId": "IMPLEMENT-PACKET-93b325b1e4",
+  "summary": {
+    "allowedPaths": 8,
+    "blockedDirty": 248,
+    "blockedPaths": 6,
+    "dirtyPaths": 357,
+    "gitAddDotAllowed": false,
+    "outOfScopeDirty": 342,
+    "plannedAllowed": 16,
+    "plannedBlocked": 0,
+    "plannedFiles": 16,
+    "providerCalls": 0,
+    "status": "ready_with_external_dirty_lanes"
+  },
+  "updatedAt": "2026-06-27T14:03:50+00:00"
+}

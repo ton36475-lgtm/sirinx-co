@@ -350,7 +350,7 @@
     "implementationLanePacket": "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json"
   },
   "summary": {
-    "backlogP0": 1,
+    "backlogP0": 0,
     "backlogP1": 22,
     "blockedGates": 56,
     "codexFileEditsAllowed": true,
@@ -363,5 +363,5 @@
     "status": "ready_for_codex_assignment",
     "workerDirectEditsAllowed": false
   },
-  "updatedAt": "2026-06-27T13:36:41+00:00"
+  "updatedAt": "2026-06-27T14:02:41+00:00"
 }

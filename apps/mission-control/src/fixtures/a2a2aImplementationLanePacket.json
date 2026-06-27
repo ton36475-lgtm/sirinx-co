@@ -19,7 +19,7 @@
       "secret_read_or_print",
       "modify_generated_web_sirinx_assets"
     ],
-    "createdAt": "2026-06-27T12:46:42+00:00",
+    "createdAt": "2026-06-27T13:58:53+00:00",
     "dependencyGate": [
       {
         "evidence": "CODEX-PLAN-ec5461ae55",
@@ -119,7 +119,9 @@
         "tests/ghostclaw_runner/",
         "apps/mission-control/src/fixtures/",
         "apps/mission-control/src/App.tsx",
-        "docs/a2async/"
+        "docs/a2async/",
+        "PROJECT_STATE.md",
+        "NEXT_ACTIONS.md"
       ],
       "blockedPaths": [
         ".env",
@@ -130,21 +132,43 @@
         "production credentials"
       ],
       "plannedFilesForThisPacket": [
+        "scripts/a2a/a2a_codex_build_plan.py",
         "scripts/a2a/a2a_implementation_lane_packet.py",
+        "scripts/a2a/a2a_codex_first_implementation_lane.py",
+        "scripts/a2a/a2a_team_assignment_board.py",
+        "scripts/a2a/a2a_scoped_path_guard.py",
+        "apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json",
         "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+        "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "apps/mission-control/src/fixtures/a2a2aBacklogPriority.json",
+        "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json",
         "apps/mission-control/src/App.tsx",
         "tests/ghostclaw_runner/test_runner_status_fixture.py",
-        "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md"
+        "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+        "PROJECT_STATE.md",
+        "NEXT_ACTIONS.md"
       ]
     },
     "scopedStageCommand": [
       "/usr/bin/git",
       "add",
+      "scripts/a2a/a2a_codex_build_plan.py",
       "scripts/a2a/a2a_implementation_lane_packet.py",
+      "scripts/a2a/a2a_codex_first_implementation_lane.py",
+      "scripts/a2a/a2a_team_assignment_board.py",
+      "scripts/a2a/a2a_scoped_path_guard.py",
+      "apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json",
       "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+      "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+      "apps/mission-control/src/fixtures/a2a2aBacklogPriority.json",
+      "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+      "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json",
       "apps/mission-control/src/App.tsx",
       "tests/ghostclaw_runner/test_runner_status_fixture.py",
-      "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md"
+      "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md"
     ],
     "sourcePlanId": "CODEX-PLAN-ec5461ae55",
     "sourceTaskId": "A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001",
@@ -152,10 +176,11 @@
     "validationCommands": [
       "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
       "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
-      "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+      "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md PROJECT_STATE.md NEXT_ACTIONS.md",
       "/usr/bin/git diff --check -- <scoped paths>",
-      "python3 -m py_compile scripts/a2a/a2a_implementation_lane_packet.py tests/ghostclaw_runner/test_runner_status_fixture.py",
-      "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json >/tmp/a2a2aImplementationLanePacket.json.check"
+      "python3 -m py_compile scripts/a2a/a2a_codex_build_plan.py scripts/a2a/a2a_implementation_lane_packet.py scripts/a2a/a2a_scoped_path_guard.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+      "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json >/tmp/a2a2aImplementationLanePacket.json.check",
+      "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json >/tmp/a2a2aScopedPathGuard.json.check"
     ],
     "workerEvidence": [
       {
@@ -250,5 +275,5 @@
     "status": "ready_for_codex_scoped_implementation_review",
     "workerEvidence": 4
   },
-  "updatedAt": "2026-06-27T12:46:42+00:00"
+  "updatedAt": "2026-06-27T13:58:53+00:00"
 }

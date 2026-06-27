@@ -824,6 +824,9 @@ configuration lane, then keep future entries concise and source-path based.
       its `nextCodexAction` as the first coding step for this A2A2A lane.
 - [x] Record the first Codex-owned slice outcome in
       `apps/mission-control/src/fixtures/a2a2aCodexLaneOutcome.json`.
+- [x] Add A2A2A scoped path guard so Mission Control can show planned files,
+      allowed/blocked path matches, external dirty lane samples, and
+      `git add .` status before staging.
 - [x] For the first implementation lane, Codex must own all file edits, run
       validation, and stage only the file list from the packet.
 - [x] Keep GLM-5.2, DeepSeek, and AGY report-only until a separate provider
@@ -831,22 +834,21 @@ configuration lane, then keep future entries concise and source-path based.
 - [x] Keep KOB validate-only until Command Broker issues an execution lease.
 - [x] Keep Mission Control read-only and fixture-backed; do not let the browser
       poll runtime files directly.
-- [ ] Open the next scoped Codex implementation slice from the assignment board
+- [x] Open the next scoped Codex implementation slice from the assignment board
       immediate queue.
+- [x] Run scoped validation for the path guard lane.
+- [x] Stage and commit only the packet-listed A2A2A guard lane files after
+      validation passes.
 - [ ] Do not use `git add .`, deploy, push, connector sync, provider calls,
       secret reads, Docker starts, external repo clone/audit, or generated
       `web-sirinx` asset mutation from this lane.
 
 ### Current Recommended A2A2A Next Action
 
-Review the implementation packet, then create the first scoped Codex coding
-task from the `priorityWorkItems` sequence:
-
-1. Codex inspects plan and worker digest.
-2. Codex edits only allowed paths.
-3. GLM-5.2 / DeepSeek / AGY / KOB remain report-only inputs.
-4. Codex runs validation commands.
-5. Codex stages and commits only the packet-listed files.
+After the scoped path guard lane is committed, pick the next smallest local-only
+A2A2A slice from the backlog or assignment board. Keep workers report-only,
+Mission Control fixture-backed, KOB validate-only, and external actions blocked
+until their own scoped lane exists.
 
 The backlog priority board is now the read-only triage layer for old pending
 work. Use it to confirm that A2A2A P0 items stay ahead of connector sync,

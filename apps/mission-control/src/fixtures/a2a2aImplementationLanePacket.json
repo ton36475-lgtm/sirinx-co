@@ -1,0 +1,231 @@
+{
+  "generatedBy": "scripts/a2a/a2a_implementation_lane_packet.py",
+  "mode": "read_only_implementation_lane_fixture",
+  "packet": {
+    "acceptanceCriteria": [
+      "Mission Control shows the implementation lane packet from a static fixture.",
+      "Dependency gate is ready or explicitly blocked with evidence.",
+      "Worker evidence includes GLM-5.2, DeepSeek, and KOB report-only outputs before coding.",
+      "Codex remains the only git state owner.",
+      "Validation commands pass before any scoped stage/commit."
+    ],
+    "blockedActions": [
+      "git_add_dot",
+      "provider_call",
+      "worker_direct_commit",
+      "deploy",
+      "push",
+      "connector_sync",
+      "secret_read_or_print",
+      "modify_generated_web_sirinx_assets"
+    ],
+    "createdAt": "2026-06-27T12:19:38+00:00",
+    "dependencyGate": [
+      {
+        "evidence": "CODEX-PLAN-ec5461ae55",
+        "id": "codex_plan_ready",
+        "owner": "codex",
+        "status": "ready"
+      },
+      {
+        "evidence": "report-only digest present",
+        "id": "glm52_worker_report",
+        "owner": "glm52",
+        "status": "ready"
+      },
+      {
+        "evidence": "report-only digest present",
+        "id": "deepseek_worker_report",
+        "owner": "deepseek",
+        "status": "ready"
+      },
+      {
+        "evidence": "local validator report present",
+        "id": "kob_validation_report",
+        "owner": "kob",
+        "status": "ready"
+      },
+      {
+        "evidence": "providerCalls=0",
+        "id": "provider_boundary",
+        "owner": "hermes",
+        "status": "ready"
+      }
+    ],
+    "executionAllowed": false,
+    "generatedBy": "scripts/a2a/a2a_implementation_lane_packet.py",
+    "laneId": "LANE-A2A2A-IMPLEMENT-5dde74d092",
+    "mode": "read_only_implementation_lane_packet",
+    "nextSafeActions": [
+      "Codex reviews this packet and confirms no blocked dependencies.",
+      "Codex implements only planned lane files.",
+      "Codex runs validation and stages only the scoped file list."
+    ],
+    "objective": "Convert the Opus architecture handoff into a scoped Codex build lane.",
+    "packetId": "IMPLEMENT-PACKET-93b325b1e4",
+    "priorityWorkItems": [
+      {
+        "acceptance": "Implementation scope references the build plan id and worker digest status.",
+        "owner": "codex",
+        "priority": 1,
+        "status": "ready",
+        "task": "inspect_plan_and_worker_digest",
+        "why": "Codex owns repo state and must read the plan plus worker reports before edits."
+      },
+      {
+        "acceptance": "Scoped git status contains only files listed in the lane packet.",
+        "owner": "codex",
+        "priority": 2,
+        "status": "ready",
+        "task": "implement_only_allowed_paths",
+        "why": "Dirty lanes exist outside A2A2A; edits must stay inside the plan scope."
+      },
+      {
+        "acceptance": "No worker commits, provider calls, or command execution are required.",
+        "owner": "glm52_deepseek_kob",
+        "priority": 3,
+        "status": "ready",
+        "task": "consume_report_only_feedback",
+        "why": "Worker reports available from: deepseek, glm52, kob."
+      },
+      {
+        "acceptance": "All validation commands pass and results are summarized in final report.",
+        "owner": "codex",
+        "priority": 4,
+        "status": "ready",
+        "task": "run_validation_commands",
+        "why": "Every implementation lane must prove tests and UI checks before staging."
+      },
+      {
+        "acceptance": "Commit contains only lane files and no generated unrelated assets.",
+        "owner": "codex",
+        "priority": 5,
+        "status": "manual_codex_step",
+        "task": "stage_and_commit_scoped_lane",
+        "why": "Only Codex stages and commits after validation; workers never mutate git."
+      }
+    ],
+    "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+    "scope": {
+      "allowedPaths": [
+        "scripts/a2a/",
+        "ghostclaw_runner/",
+        "tests/ghostclaw_runner/",
+        "apps/mission-control/src/fixtures/",
+        "apps/mission-control/src/App.tsx",
+        "docs/a2async/"
+      ],
+      "blockedPaths": [
+        ".env",
+        ".env.*",
+        "apps/web-sirinx/dist/",
+        "packages/database/dist/",
+        "supabase/.temp/",
+        "production credentials"
+      ],
+      "plannedFilesForThisPacket": [
+        "scripts/a2a/a2a_implementation_lane_packet.py",
+        "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+        "apps/mission-control/src/App.tsx",
+        "tests/ghostclaw_runner/test_runner_status_fixture.py",
+        "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md"
+      ]
+    },
+    "scopedStageCommand": [
+      "/usr/bin/git",
+      "add",
+      "scripts/a2a/a2a_implementation_lane_packet.py",
+      "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+      "apps/mission-control/src/App.tsx",
+      "tests/ghostclaw_runner/test_runner_status_fixture.py",
+      "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md"
+    ],
+    "sourcePlanId": "CODEX-PLAN-ec5461ae55",
+    "sourceTaskId": "A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001",
+    "status": "ready_for_codex_scoped_implementation_review",
+    "validationCommands": [
+      "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
+      "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+      "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+      "/usr/bin/git diff --check -- <scoped paths>",
+      "python3 -m py_compile scripts/a2a/a2a_implementation_lane_packet.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+      "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json >/tmp/a2a2aImplementationLanePacket.json.check"
+    ],
+    "workerEvidence": [
+      {
+        "model": "kob/local-validator",
+        "nextOwner": "hermes",
+        "plannedActions": [
+          "validate command intent",
+          "check broker policy",
+          "prepare local validation command plan",
+          "return no-execution audit record"
+        ],
+        "providerCall": false,
+        "requiresHumanReview": false,
+        "role": "kob",
+        "safeToDispatchLocally": true,
+        "status": "dry_run_completed",
+        "summary": "kob received task A2A2A-KOB-CODEX-PLAN-VALIDATE-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+        "taskId": "A2A2A-KOB-CODEX-PLAN-VALIDATE-001"
+      },
+      {
+        "model": "deepseek/deepseek-v4-pro",
+        "nextOwner": "codex",
+        "plannedActions": [
+          "inspect department-specific task",
+          "draft focused technical notes",
+          "flag risk and verification needs",
+          "return worker report only"
+        ],
+        "providerCall": false,
+        "requiresHumanReview": false,
+        "role": "deepseek",
+        "safeToDispatchLocally": true,
+        "status": "dry_run_completed",
+        "summary": "deepseek received task A2A2A-DEEPSEEK-CODEX-PLAN-REVIEW-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+        "taskId": "A2A2A-DEEPSEEK-CODEX-PLAN-REVIEW-001"
+      },
+      {
+        "model": "zai/glm-5.2",
+        "nextOwner": "codex",
+        "plannedActions": [
+          "analyze code task locally",
+          "draft implementation notes",
+          "flag missing context",
+          "return patch proposal only"
+        ],
+        "providerCall": false,
+        "requiresHumanReview": false,
+        "role": "glm52",
+        "safeToDispatchLocally": true,
+        "status": "dry_run_completed",
+        "summary": "glm52 received task A2A2A-GLM52-CODEX-PLAN-REVIEW-001 and generated a local-only handoff record. No provider, deploy, connector, Docker, or secret access occurred.",
+        "taskId": "A2A2A-GLM52-CODEX-PLAN-REVIEW-001"
+      }
+    ]
+  },
+  "packetPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/implementation_lanes/LANE-A2A2A-IMPLEMENT-5dde74d092.json",
+  "policyBoundary": [
+    "read_only_fixture",
+    "codex_git_owner",
+    "worker_reports_are_inputs_only",
+    "no_provider_call",
+    "no_push",
+    "no_deploy",
+    "no_connector_sync",
+    "no_secret_values"
+  ],
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+  "summary": {
+    "blockedDependencies": 0,
+    "dependencies": 5,
+    "executionAllowed": false,
+    "missingDependencies": 0,
+    "priorityItems": 5,
+    "providerCalls": 0,
+    "status": "ready_for_codex_scoped_implementation_review",
+    "workerEvidence": 3
+  },
+  "updatedAt": "2026-06-27T12:19:38+00:00"
+}

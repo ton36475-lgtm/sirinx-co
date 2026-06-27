@@ -23,6 +23,7 @@ import a2a2aRunnerStatusFixture from "./fixtures/a2a2aRunnerStatus.json";
 import a2a2aDependencyReadinessFixture from "./fixtures/a2a2aDependencyReadiness.json";
 import a2a2aCodexBuildPlanFixture from "./fixtures/a2a2aCodexBuildPlan.json";
 import a2a2aWorkerReportDigestFixture from "./fixtures/a2a2aWorkerReportDigest.json";
+import a2a2aImplementationLanePacketFixture from "./fixtures/a2a2aImplementationLanePacket.json";
 
 interface Worker {
   name: string;
@@ -667,6 +668,70 @@ type A2A2AWorkerReportDigestFixture = {
   nextSafeActions: string[];
 };
 
+type A2A2AImplementationLanePacketFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  packetPath: string;
+  summary: {
+    status: string;
+    dependencies: number;
+    blockedDependencies: number;
+    missingDependencies: number;
+    workerEvidence: number;
+    providerCalls: number;
+    priorityItems: number;
+    executionAllowed: boolean;
+  };
+  packet: {
+    packetId: string;
+    laneId: string;
+    sourcePlanId: string;
+    sourceTaskId: string;
+    status: string;
+    executionAllowed: boolean;
+    objective: string;
+    dependencyGate: {
+      id: string;
+      owner: string;
+      status: string;
+      evidence: string;
+    }[];
+    priorityWorkItems: {
+      priority: number;
+      owner: string;
+      task: string;
+      status: string;
+      why: string;
+      acceptance: string;
+    }[];
+    workerEvidence: {
+      role: string;
+      taskId: string;
+      status: string;
+      model: string;
+      providerCall: boolean;
+      safeToDispatchLocally: boolean;
+      requiresHumanReview: boolean;
+      nextOwner: string;
+      summary: string;
+      plannedActions: string[];
+    }[];
+    scope: {
+      allowedPaths: string[];
+      blockedPaths: string[];
+      plannedFilesForThisPacket: string[];
+    };
+    validationCommands: string[];
+    scopedStageCommand: string[];
+    blockedActions: string[];
+    acceptanceCriteria: string[];
+    nextSafeActions: string[];
+  };
+  policyBoundary: string[];
+};
+
 type IgamingPracticeStatusFixture = {
   updatedAt: string;
   mode: string;
@@ -734,6 +799,8 @@ const a2a2aCodexBuildPlan =
   a2a2aCodexBuildPlanFixture as A2A2ACodexBuildPlanFixture;
 const a2a2aWorkerReportDigest =
   a2a2aWorkerReportDigestFixture as A2A2AWorkerReportDigestFixture;
+const a2a2aImplementationLanePacket =
+  a2a2aImplementationLanePacketFixture as A2A2AImplementationLanePacketFixture;
 const codexSessionSidebarToolkitStatus =
   codexSessionSidebarToolkitStatusFixture;
 const sessionToolkitAgents = codexSessionSidebarToolkitStatus.agents;
@@ -2172,6 +2239,223 @@ export default function App() {
                           </div>
                         </div>
                       ))}
+                    </div>
+                  </section>
+                </div>
+              </div>
+
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>Implementation Lane Packet</span>
+                  <span className="accent-cyan">
+                    {a2a2aImplementationLanePacket.summary.status}
+                  </span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Dependencies</span>
+                    <strong>
+                      {a2a2aImplementationLanePacket.summary.dependencies}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Blocked</span>
+                    <strong>
+                      {
+                        a2a2aImplementationLanePacket.summary
+                          .blockedDependencies
+                      }
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Missing</span>
+                    <strong>
+                      {
+                        a2a2aImplementationLanePacket.summary
+                          .missingDependencies
+                      }
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Worker Evidence</span>
+                    <strong>
+                      {a2a2aImplementationLanePacket.summary.workerEvidence}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Provider Calls</span>
+                    <strong>
+                      {a2a2aImplementationLanePacket.summary.providerCalls}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Execution</span>
+                    <strong>
+                      {a2a2aImplementationLanePacket.summary.executionAllowed
+                        ? "ALLOW"
+                        : "REVIEW ONLY"}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Lane</span>
+                  <code>{a2a2aImplementationLanePacket.packet.laneId}</code>
+                  <span>Packet</span>
+                  <code>{a2a2aImplementationLanePacket.packet.packetId}</code>
+                  <span>Updated</span>
+                  <code>{a2a2aImplementationLanePacket.updatedAt}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  {a2a2aImplementationLanePacket.packet.objective} This packet
+                  turns the plan and worker reports into an ordered Codex lane.
+                  It remains review-only and does not grant execution.
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A implementation dependencies"
+                  >
+                    <div className="git-section-title">
+                      <span>Dependency Gate</span>
+                      <span className="approval-badge">
+                        {
+                          a2a2aImplementationLanePacket.packet.dependencyGate
+                            .length
+                        }
+                      </span>
+                    </div>
+                    {a2a2aImplementationLanePacket.packet.dependencyGate.map(
+                      (dependency) => (
+                        <div
+                          className="practice-artifact-row"
+                          key={dependency.id}
+                        >
+                          <span
+                            className={`practice-status ${
+                              dependency.status === "ready"
+                                ? "payload-ready"
+                                : "payload-warn"
+                            }`}
+                          >
+                            {dependency.owner}
+                          </span>
+                          <div>
+                            <strong>{dependency.id}</strong>
+                            <p>{dependency.evidence}</p>
+                            <code>{dependency.status}</code>
+                          </div>
+                        </div>
+                      ),
+                    )}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A implementation priority work"
+                  >
+                    <div className="git-section-title">
+                      <span>Priority Work Items</span>
+                      <span className="approval-badge">
+                        {
+                          a2a2aImplementationLanePacket.packet.priorityWorkItems
+                            .length
+                        }
+                      </span>
+                    </div>
+                    {a2a2aImplementationLanePacket.packet.priorityWorkItems.map(
+                      (item) => (
+                        <div
+                          className="practice-artifact-row"
+                          key={`${item.priority}-${item.task}`}
+                        >
+                          <span className="practice-status payload-ready">
+                            P{item.priority}
+                          </span>
+                          <div>
+                            <strong>
+                              {item.owner}: {item.task}
+                            </strong>
+                            <p>{item.why}</p>
+                            <code>{item.acceptance}</code>
+                          </div>
+                        </div>
+                      ),
+                    )}
+                  </section>
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A implementation validation"
+                  >
+                    <div className="git-section-title">
+                      <span>Validation Commands</span>
+                      <span className="approval-badge">
+                        {
+                          a2a2aImplementationLanePacket.packet
+                            .validationCommands.length
+                        }
+                      </span>
+                    </div>
+                    {a2a2aImplementationLanePacket.packet.validationCommands.map(
+                      (command) => (
+                        <div className="practice-artifact-row" key={command}>
+                          <span className="practice-status payload-ready">
+                            check
+                          </span>
+                          <div>
+                            <strong>local validation</strong>
+                            <p>Run before any scoped stage or commit.</p>
+                            <code>{command}</code>
+                          </div>
+                        </div>
+                      ),
+                    )}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A implementation boundaries"
+                  >
+                    <div className="git-section-title">
+                      <span>Stage + Blocks</span>
+                      <span className="approval-badge">
+                        {
+                          a2a2aImplementationLanePacket.packet.blockedActions
+                            .length
+                        }
+                      </span>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span className="practice-status payload-ready">
+                        stage
+                      </span>
+                      <div>
+                        <strong>Scoped stage command</strong>
+                        <p>Do not use git add dot.</p>
+                        <code>
+                          {a2a2aImplementationLanePacket.packet.scopedStageCommand.join(
+                            " ",
+                          )}
+                        </code>
+                      </div>
+                    </div>
+                    <div className="blocked-action-list">
+                      {a2a2aImplementationLanePacket.packet.blockedActions.map(
+                        (action) => (
+                          <span
+                            className="blocked-action payload-blocked"
+                            key={action}
+                          >
+                            {action}
+                          </span>
+                        ),
+                      )}
                     </div>
                   </section>
                 </div>

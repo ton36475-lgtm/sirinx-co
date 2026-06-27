@@ -156,6 +156,31 @@ prompt bodies, secrets, or executable commands. If any worker report has
 `providerCall=true`, treat the digest as review-required before using it for
 Codex planning.
 
+## Implementation Lane Packet
+
+Create the final review packet that turns the Codex plan and worker reports into
+an ordered implementation lane:
+
+```bash
+python3 scripts/a2a/a2a_implementation_lane_packet.py \
+  --build-plan-path apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json \
+  --worker-digest-path apps/mission-control/src/fixtures/a2a2aWorkerReportDigest.json \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This writes:
+
+- a runtime packet under
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/implementation_lanes/`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`
+
+The packet defines dependency gates, priority work items, worker evidence,
+allowed paths, blocked paths, validation commands, blocked actions, acceptance
+criteria, and the exact scoped stage command. It intentionally keeps
+`executionAllowed=false`; Codex still has to review, implement, validate, and
+stage only the listed files.
+
 ## Next Build Lane
 
 Codex should consume the first `ready_for_codex_plan` item from the dependency

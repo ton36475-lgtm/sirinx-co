@@ -11,6 +11,7 @@ from pathlib import Path
 from scripts.a2a import a2a_export_runner_status_fixture
 from scripts.a2a import a2a_dependency_readiness
 from scripts.a2a import a2a_codex_build_plan
+from scripts.a2a import a2a_implementation_lane_packet
 from scripts.a2a import a2a_runner_dispatch_command
 from scripts.a2a import a2a_worker_report_digest
 
@@ -213,6 +214,98 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertIn("no_command_execution", fixture["policyBoundary"])
             self.assertIn("SECRET_TOKEN=<masked>", fixture["reports"][0]["goalPreview"])
             self.assertEqual(fixture["reports"][0]["nextOwner"], "codex")
+
+    def test_implementation_lane_packet_requires_plan_and_worker_reports(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-implementation-packet-") as tmp:
+            runtime = Path(tmp) / "runtime"
+            plan_path = Path(tmp) / "plan.json"
+            digest_path = Path(tmp) / "digest.json"
+            fixture_path = Path(tmp) / "implementation-packet.json"
+            plan_path.write_text(
+                json.dumps(
+                    {
+                        "plan": {
+                            "planId": "CODEX-PLAN-TEST",
+                            "sourceTaskId": "A2A2A-OPUS-TEST",
+                            "objective": "Implement a scoped A2A2A lane.",
+                            "scope": {
+                                "allowedPaths": ["scripts/a2a/", "apps/mission-control/src/App.tsx"],
+                                "blockedPaths": [".env", "apps/web-sirinx/dist/"],
+                            },
+                            "validationCommands": ["python3 -m unittest tests.ghostclaw_runner.test_agent_runner"],
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            digest_path.write_text(
+                json.dumps(
+                    {
+                        "summary": {"providerCalls": 0},
+                        "reports": [
+                            {
+                                "role": "glm52",
+                                "taskId": "GLM",
+                                "status": "dry_run_completed",
+                                "model": "zai/glm-5.2",
+                                "providerCall": False,
+                                "safeToDispatchLocally": True,
+                                "requiresHumanReview": False,
+                                "nextOwner": "codex",
+                                "summary": "structure report",
+                                "plannedActions": ["return patch proposal only"],
+                            },
+                            {
+                                "role": "deepseek",
+                                "taskId": "DEEPSEEK",
+                                "status": "dry_run_completed",
+                                "model": "deepseek/deepseek-v4-pro",
+                                "providerCall": False,
+                                "safeToDispatchLocally": True,
+                                "requiresHumanReview": False,
+                                "nextOwner": "codex",
+                                "summary": "risk report",
+                                "plannedActions": ["return worker report only"],
+                            },
+                            {
+                                "role": "kob",
+                                "taskId": "KOB",
+                                "status": "dry_run_completed",
+                                "model": "kob/local-validator",
+                                "providerCall": False,
+                                "safeToDispatchLocally": True,
+                                "requiresHumanReview": False,
+                                "nextOwner": "hermes",
+                                "summary": "validation report",
+                                "plannedActions": ["return no-execution audit record"],
+                            },
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            exit_code = a2a_implementation_lane_packet.main(
+                [
+                    "--build-plan-path",
+                    str(plan_path),
+                    "--worker-digest-path",
+                    str(digest_path),
+                    "--fixture-path",
+                    str(fixture_path),
+                    "--runtime-root",
+                    str(runtime),
+                ]
+            )
+
+            self.assertEqual(exit_code, 0)
+            fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+            self.assertEqual(fixture["summary"]["status"], "ready_for_codex_scoped_implementation_review")
+            self.assertEqual(fixture["summary"]["workerEvidence"], 3)
+            self.assertFalse(fixture["summary"]["executionAllowed"])
+            self.assertIn("git_add_dot", fixture["packet"]["blockedActions"])
+            self.assertNotIn(".", fixture["packet"]["scopedStageCommand"])
+            self.assertTrue(Path(fixture["packetPath"]).exists())
 
 
 if __name__ == "__main__":

@@ -25,6 +25,7 @@ import a2a2aCodexBuildPlanFixture from "./fixtures/a2a2aCodexBuildPlan.json";
 import a2a2aWorkerReportDigestFixture from "./fixtures/a2a2aWorkerReportDigest.json";
 import a2a2aImplementationLanePacketFixture from "./fixtures/a2a2aImplementationLanePacket.json";
 import a2a2aCompletionAuditFixture from "./fixtures/a2a2aCompletionAudit.json";
+import a2a2aFirstCodexImplementationLaneFixture from "./fixtures/a2a2aFirstCodexImplementationLane.json";
 
 interface Worker {
   name: string;
@@ -769,6 +770,52 @@ type A2A2ACompletionAuditFixture = {
   policyBoundary: string[];
 };
 
+type A2A2AFirstCodexImplementationLaneFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeLanePath: string;
+  summary: {
+    status: string;
+    tasks: number;
+    codexReadyTasks: number;
+    reportInputTasks: number;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    codexFileEditsAllowed: boolean;
+    validationCommands: number;
+  };
+  lane: {
+    laneId: string;
+    sourcePacketId: string;
+    sourceLaneId: string;
+    status: string;
+    objective: string;
+    codexFileEditsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    providerCallsAllowed: boolean;
+    gitOwner: string;
+    allowedPaths: string[];
+    blockedPaths: string[];
+    tasks: {
+      taskId: string;
+      priority: number;
+      owner: string;
+      name: string;
+      status: string;
+      why: string;
+      acceptance: string;
+    }[];
+    validationCommands: string[];
+    scopedStageCommand: string[];
+    blockedActions: string[];
+    acceptanceCriteria: string[];
+  };
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type IgamingPracticeStatusFixture = {
   updatedAt: string;
   mode: string;
@@ -840,6 +887,8 @@ const a2a2aImplementationLanePacket =
   a2a2aImplementationLanePacketFixture as A2A2AImplementationLanePacketFixture;
 const a2a2aCompletionAudit =
   a2a2aCompletionAuditFixture as A2A2ACompletionAuditFixture;
+const a2a2aFirstCodexImplementationLane =
+  a2a2aFirstCodexImplementationLaneFixture as A2A2AFirstCodexImplementationLaneFixture;
 const codexSessionSidebarToolkitStatus =
   codexSessionSidebarToolkitStatusFixture;
 const sessionToolkitAgents = codexSessionSidebarToolkitStatus.agents;
@@ -2601,6 +2650,176 @@ export default function App() {
                         </div>
                       </div>
                     ))}
+                  </section>
+                </div>
+              </div>
+
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>First Codex Implementation Lane</span>
+                  <span className="accent-cyan">
+                    {a2a2aFirstCodexImplementationLane.summary.status}
+                  </span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Tasks</span>
+                    <strong>
+                      {a2a2aFirstCodexImplementationLane.summary.tasks}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Codex Tasks</span>
+                    <strong>
+                      {
+                        a2a2aFirstCodexImplementationLane.summary
+                          .codexReadyTasks
+                      }
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Report Inputs</span>
+                    <strong>
+                      {
+                        a2a2aFirstCodexImplementationLane.summary
+                          .reportInputTasks
+                      }
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Codex Edits</span>
+                    <strong>
+                      {a2a2aFirstCodexImplementationLane.summary
+                        .codexFileEditsAllowed
+                        ? "SCOPED"
+                        : "BLOCKED"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Workers Edit</span>
+                    <strong>
+                      {a2a2aFirstCodexImplementationLane.summary
+                        .workerDirectEditsAllowed
+                        ? "ALLOW"
+                        : "NO"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Provider Calls</span>
+                    <strong>
+                      {a2a2aFirstCodexImplementationLane.summary
+                        .providerCallsAllowed
+                        ? "ALLOW"
+                        : "NO"}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Lane</span>
+                  <code>{a2a2aFirstCodexImplementationLane.lane.laneId}</code>
+                  <span>Git Owner</span>
+                  <code>{a2a2aFirstCodexImplementationLane.lane.gitOwner}</code>
+                  <span>Runtime</span>
+                  <code>
+                    {a2a2aFirstCodexImplementationLane.runtimeLanePath}
+                  </code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  {a2a2aFirstCodexImplementationLane.lane.objective} This lane
+                  opens scoped Codex file edits only; workers remain
+                  report-only.
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="First Codex implementation lane tasks"
+                  >
+                    <div className="git-section-title">
+                      <span>Lane Tasks</span>
+                      <span className="approval-badge">
+                        {a2a2aFirstCodexImplementationLane.lane.tasks.length}
+                      </span>
+                    </div>
+                    {a2a2aFirstCodexImplementationLane.lane.tasks.map(
+                      (task) => (
+                        <div
+                          className="practice-artifact-row"
+                          key={task.taskId}
+                        >
+                          <span
+                            className={`practice-status ${
+                              task.status === "ready_for_codex"
+                                ? "payload-ready"
+                                : "payload-warn"
+                            }`}
+                          >
+                            P{task.priority}
+                          </span>
+                          <div>
+                            <strong>
+                              {task.owner}: {task.name}
+                            </strong>
+                            <p>{task.why}</p>
+                            <code>{task.acceptance}</code>
+                          </div>
+                        </div>
+                      ),
+                    )}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="First Codex implementation lane boundaries"
+                  >
+                    <div className="git-section-title">
+                      <span>Scope Boundary</span>
+                      <span className="approval-badge">
+                        {
+                          a2a2aFirstCodexImplementationLane.lane.allowedPaths
+                            .length
+                        }
+                      </span>
+                    </div>
+                    <div className="blocked-action-list">
+                      {a2a2aFirstCodexImplementationLane.lane.allowedPaths.map(
+                        (path) => (
+                          <span
+                            className="blocked-action payload-ready"
+                            key={path}
+                          >
+                            {path}
+                          </span>
+                        ),
+                      )}
+                      {a2a2aFirstCodexImplementationLane.lane.blockedPaths.map(
+                        (path) => (
+                          <span
+                            className="blocked-action payload-blocked"
+                            key={path}
+                          >
+                            {path}
+                          </span>
+                        ),
+                      )}
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span className="practice-status payload-ready">
+                        stage
+                      </span>
+                      <div>
+                        <strong>Scoped stage command</strong>
+                        <p>Codex owns staging after validation only.</p>
+                        <code>
+                          {a2a2aFirstCodexImplementationLane.lane.scopedStageCommand.join(
+                            " ",
+                          )}
+                        </code>
+                      </div>
+                    </div>
                   </section>
                 </div>
               </div>

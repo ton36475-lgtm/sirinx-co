@@ -228,6 +228,28 @@ The audit proves the role roster, dependency order, provider boundary, worker
 reports, AGY gate, blocked actions, and implementation packet readiness before
 Codex opens a real implementation lane.
 
+## First Codex Implementation Lane
+
+Open the first scoped Codex-owned implementation lane from the implementation
+packet and completion audit:
+
+```bash
+python3 scripts/a2a/a2a_codex_first_implementation_lane.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This writes:
+
+- a runtime lane at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/codex_implementation_lanes/`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json`
+
+The lane is the first point where Codex may edit files, but only inside the
+allowed paths and only after reviewing the lane tasks. Workers remain
+report-only. Provider calls, connector sync, deploy, push, secrets, generated
+`web-sirinx` asset mutation, and `git add .` remain blocked.
+
 ## Next Build Lane
 
 Codex should consume the first `ready_for_codex_plan` item from the dependency

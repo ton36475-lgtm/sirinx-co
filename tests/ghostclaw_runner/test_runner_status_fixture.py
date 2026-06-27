@@ -13,6 +13,7 @@ from scripts.a2a import a2a_dependency_readiness
 from scripts.a2a import a2a_codex_build_plan
 from scripts.a2a import a2a2a_completion_audit
 from scripts.a2a import a2a_implementation_lane_packet
+from scripts.a2a import a2a_codex_first_implementation_lane
 from scripts.a2a import a2a_runner_dispatch_command
 from scripts.a2a import a2a_worker_report_digest
 
@@ -397,6 +398,64 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
 
         self.assertTrue(all(item["status"] == "pass" for item in checks))
         self.assertIn("agy_dependency", {item["id"] for item in checks})
+
+    def test_first_codex_lane_opens_only_from_ready_packet_and_audit(self) -> None:
+        packet_fixture = {
+            "summary": {
+                "status": "ready_for_codex_scoped_implementation_review",
+                "blockedDependencies": 0,
+                "missingDependencies": 0,
+                "providerCalls": 0,
+            },
+            "packet": {
+                "packetId": "IMPLEMENT-PACKET-TEST",
+                "laneId": "LANE-A2A2A-TEST",
+                "scope": {
+                    "allowedPaths": ["scripts/a2a/"],
+                    "blockedPaths": [".env"],
+                },
+                "priorityWorkItems": [
+                    {
+                        "priority": 1,
+                        "owner": "codex",
+                        "task": "inspect_plan_and_worker_digest",
+                        "why": "Codex owns git state.",
+                        "acceptance": "Scope is explicit.",
+                    },
+                    {
+                        "priority": 2,
+                        "owner": "glm52_deepseek_agy_kob",
+                        "task": "consume_report_only_feedback",
+                        "why": "Workers are inputs only.",
+                        "acceptance": "No worker commits.",
+                    },
+                ],
+                "validationCommands": ["python3 -m unittest tests.ghostclaw_runner.test_agent_runner"],
+                "scopedStageCommand": ["/usr/bin/git", "add", "scripts/a2a/"],
+                "blockedActions": ["git_add_dot", "provider_call"],
+                "acceptanceCriteria": ["Mission Control shows lane."],
+            },
+        }
+        audit_fixture = {
+            "summary": {
+                "overallStatus": "ready_for_first_scoped_codex_lane",
+                "failed": 0,
+                "providerCalls": 0,
+            }
+        }
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-first-codex-lane-") as tmp:
+            runtime = Path(tmp) / "runtime"
+
+            fixture = a2a_codex_first_implementation_lane.build_lane(packet_fixture, audit_fixture, runtime)
+
+            self.assertEqual(fixture["summary"]["status"], "open_for_codex_scoped_work")
+            self.assertTrue(fixture["summary"]["codexFileEditsAllowed"])
+            self.assertFalse(fixture["summary"]["workerDirectEditsAllowed"])
+            self.assertFalse(fixture["summary"]["providerCallsAllowed"])
+            self.assertEqual(fixture["summary"]["tasks"], 2)
+            self.assertEqual(fixture["summary"]["codexReadyTasks"], 1)
+            self.assertIn("no_git_add_dot", fixture["policyBoundary"])
+            self.assertTrue(Path(fixture["runtimeLanePath"]).exists())
 
 
 if __name__ == "__main__":

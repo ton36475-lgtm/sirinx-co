@@ -804,10 +804,13 @@ configuration lane, then keep future entries concise and source-path based.
       Mission Control.
 - [x] Add completion audit fixture and Mission Control panel; current audit is
       9/9 pass with `ready_for_first_scoped_codex_lane`.
+- [x] Open the first scoped Codex implementation lane as a read-only Mission
+      Control fixture with Codex-only scoped file edits enabled.
 - [ ] Review the implementation packet in
       `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`.
-- [ ] Open the first scoped Codex implementation lane only after confirming the
-      packet has no blocked or missing dependencies.
+- [ ] Review
+      `apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json`
+      and choose the smallest first implementation slice.
 - [ ] For the first implementation lane, Codex must own all file edits, run
       validation, and stage only the file list from the packet.
 - [ ] Keep GLM-5.2, DeepSeek, and AGY report-only until a separate provider

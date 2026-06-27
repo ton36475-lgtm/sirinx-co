@@ -1,0 +1,167 @@
+{
+  "generatedBy": "scripts/a2a/a2a_codex_first_implementation_lane.py",
+  "lane": {
+    "acceptanceCriteria": [
+      "Mission Control shows the implementation lane packet from a static fixture.",
+      "Dependency gate is ready or explicitly blocked with evidence.",
+      "Worker evidence includes GLM-5.2, DeepSeek, and KOB report-only outputs before coding.",
+      "Codex remains the only git state owner.",
+      "Validation commands pass before any scoped stage/commit.",
+      "Completion audit remains 9/9 pass before Codex edits.",
+      "Workers provide reports only; no worker commits or direct file edits.",
+      "Codex validates and stages only lane-scoped files."
+    ],
+    "allowedPaths": [
+      "scripts/a2a/",
+      "ghostclaw_runner/",
+      "tests/ghostclaw_runner/",
+      "apps/mission-control/src/fixtures/",
+      "apps/mission-control/src/App.tsx",
+      "docs/a2async/"
+    ],
+    "blockedActions": [
+      "git_add_dot",
+      "provider_call",
+      "worker_direct_commit",
+      "deploy",
+      "push",
+      "connector_sync",
+      "secret_read_or_print",
+      "modify_generated_web_sirinx_assets"
+    ],
+    "blockedPaths": [
+      ".env",
+      ".env.*",
+      "apps/web-sirinx/dist/",
+      "packages/database/dist/",
+      "supabase/.temp/",
+      "production credentials"
+    ],
+    "codexFileEditsAllowed": true,
+    "createdAt": "2026-06-27T13:01:58+00:00",
+    "gitOwner": "codex",
+    "laneId": "CODEX-FIRST-93b325b1e4",
+    "objective": "Execute the first Codex-owned implementation lane from the A2A2A packet while keeping workers report-only.",
+    "providerCallsAllowed": false,
+    "reviewInputs": {
+      "completionAudit": {
+        "failed": 0,
+        "implementationPacketStatus": "ready_for_codex_scoped_implementation_review",
+        "overallStatus": "ready_for_first_scoped_codex_lane",
+        "passed": 9,
+        "providerCalls": 0,
+        "requirements": 9,
+        "roles": 6,
+        "workerReports": 3
+      },
+      "implementationPacket": {
+        "blockedDependencies": 0,
+        "dependencies": 6,
+        "executionAllowed": false,
+        "missingDependencies": 0,
+        "priorityItems": 5,
+        "providerCalls": 0,
+        "status": "ready_for_codex_scoped_implementation_review",
+        "workerEvidence": 4
+      }
+    },
+    "scopedStageCommand": [
+      "/usr/bin/git",
+      "add",
+      "scripts/a2a/a2a_implementation_lane_packet.py",
+      "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+      "apps/mission-control/src/App.tsx",
+      "tests/ghostclaw_runner/test_runner_status_fixture.py",
+      "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md"
+    ],
+    "sourceLaneId": "LANE-A2A2A-IMPLEMENT-5dde74d092",
+    "sourcePacketId": "IMPLEMENT-PACKET-93b325b1e4",
+    "status": "open_for_codex_scoped_work",
+    "tasks": [
+      {
+        "acceptance": "Implementation scope references the build plan id and worker digest status.",
+        "name": "inspect_plan_and_worker_digest",
+        "owner": "codex",
+        "priority": 1,
+        "status": "ready_for_codex",
+        "taskId": "CODEX-LANE-TASK-01",
+        "why": "Codex owns repo state and must read the plan plus worker reports before edits."
+      },
+      {
+        "acceptance": "Scoped git status contains only files listed in the lane packet.",
+        "name": "implement_only_allowed_paths",
+        "owner": "codex",
+        "priority": 2,
+        "status": "ready_for_codex",
+        "taskId": "CODEX-LANE-TASK-02",
+        "why": "Dirty lanes exist outside A2A2A; edits must stay inside the plan scope."
+      },
+      {
+        "acceptance": "No worker commits, provider calls, or command execution are required.",
+        "name": "consume_report_only_feedback",
+        "owner": "glm52_deepseek_agy_kob",
+        "priority": 3,
+        "status": "report_input",
+        "taskId": "CODEX-LANE-TASK-03",
+        "why": "Worker reports available from: agy, deepseek, glm52, kob."
+      },
+      {
+        "acceptance": "All validation commands pass and results are summarized in final report.",
+        "name": "run_validation_commands",
+        "owner": "codex",
+        "priority": 4,
+        "status": "ready_for_codex",
+        "taskId": "CODEX-LANE-TASK-04",
+        "why": "Every implementation lane must prove tests and UI checks before staging."
+      },
+      {
+        "acceptance": "Commit contains only lane files and no generated unrelated assets.",
+        "name": "stage_and_commit_scoped_lane",
+        "owner": "codex",
+        "priority": 5,
+        "status": "ready_for_codex",
+        "taskId": "CODEX-LANE-TASK-05",
+        "why": "Only Codex stages and commits after validation; workers never mutate git."
+      }
+    ],
+    "validationCommands": [
+      "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
+      "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+      "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+      "/usr/bin/git diff --check -- <scoped paths>",
+      "python3 -m py_compile scripts/a2a/a2a_implementation_lane_packet.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+      "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json >/tmp/a2a2aImplementationLanePacket.json.check"
+    ],
+    "workerDirectEditsAllowed": false
+  },
+  "mode": "read_only_first_codex_implementation_lane",
+  "nextSafeActions": [
+    "Codex reviews lane tasks and selects the smallest implementation slice.",
+    "Codex edits only allowed paths and keeps worker reports as inputs.",
+    "Run validation commands before scoped staging."
+  ],
+  "policyBoundary": [
+    "codex_only_file_edits",
+    "workers_report_only",
+    "no_provider_call",
+    "no_connector_sync",
+    "no_deploy",
+    "no_push",
+    "no_secret_read_or_print",
+    "no_git_add_dot",
+    "no_generated_web_sirinx_asset_mutation"
+  ],
+  "runtimeLanePath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/codex_implementation_lanes/CODEX-FIRST-93b325b1e4.json",
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+  "summary": {
+    "codexFileEditsAllowed": true,
+    "codexReadyTasks": 4,
+    "providerCallsAllowed": false,
+    "reportInputTasks": 1,
+    "status": "open_for_codex_scoped_work",
+    "tasks": 5,
+    "validationCommands": 6,
+    "workerDirectEditsAllowed": false
+  },
+  "updatedAt": "2026-06-27T13:01:58+00:00"
+}

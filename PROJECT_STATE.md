@@ -1071,6 +1071,8 @@ Toolkit` tab.
   `scripts/a2a/a2a_implementation_lane_packet.py`.
 - Completion audit generator:
   `scripts/a2a/a2a2a_completion_audit.py`.
+- First Codex implementation lane generator:
+  `scripts/a2a/a2a_codex_first_implementation_lane.py`.
 - Current status:
   - runner roles: 6 (`hermes`, `opus`, `glm52`, `deepseek`, `agy`, `kob`)
   - runner completed tasks: 7
@@ -1085,6 +1087,8 @@ Toolkit` tab.
     `ready_for_codex_scoped_implementation_review`
   - implementation packet execution: `false` / review-only
   - completion audit: `ready_for_first_scoped_codex_lane`, 9/9 checks passed
+  - first Codex lane: `open_for_codex_scoped_work`, 5 tasks, 4 Codex-ready
+    tasks, 1 report-input task, provider calls disabled
 - Role ownership:
   - Hermes: mission commander and dependency gate owner.
   - Opus: architecture handoff source before Codex edits.
@@ -1104,6 +1108,10 @@ Toolkit` tab.
   `apps/mission-control/src/fixtures/a2a2aCompletionAudit.json` shows 9
   passing readiness checks, `roles=6`, `workerReports=3`, `providerCalls=0`,
   and `overallStatus=ready_for_first_scoped_codex_lane`.
+- Current first Codex lane evidence:
+  `apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json`
+  shows `codexFileEditsAllowed=true`, `workerDirectEditsAllowed=false`,
+  `providerCallsAllowed=false`, and 5 ordered lane tasks.
 - Boundary: this A2A2A state still does not call providers, execute KOB
   commands, clone repos, start Docker, write connectors, push, deploy, read
   secrets, or mutate generated `web-sirinx` assets. Worker reports are inputs

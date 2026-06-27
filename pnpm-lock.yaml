@@ -352,6 +352,12 @@ importers:
         specifier: ^5.0.0
         version: 5.9.3
 
+  packages/command-broker:
+    devDependencies:
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
+
   packages/config: {}
 
   packages/content-factory:

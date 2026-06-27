@@ -174,10 +174,10 @@
   "generatedBy": "scripts/a2a/a2a_goal_plan_board.py",
   "mode": "local_read_only_goal_plan_board",
   "obsidian": {
-    "bytes": 339296,
+    "bytes": 373883,
     "exists": true,
-    "lines": 3590,
-    "mtime": 1782528756,
+    "lines": 3862,
+    "mtime": 1782557679,
     "path": "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md",
     "policy": "metadata_only_no_raw_note_ingest"
   },
@@ -193,24 +193,24 @@
   ],
   "projectDocs": [
     {
-      "bytes": 62319,
+      "bytes": 69270,
       "exists": true,
-      "lines": 917,
-      "mtime": 1782529382,
+      "lines": 1047,
+      "mtime": 1782540069,
       "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/PROJECT_STATE.md"
     },
     {
-      "bytes": 38165,
+      "bytes": 41935,
       "exists": true,
-      "lines": 713,
-      "mtime": 1782529588,
+      "lines": 784,
+      "mtime": 1782540098,
       "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/NEXT_ACTIONS.md"
     },
     {
-      "bytes": 17379,
+      "bytes": 20961,
       "exists": true,
-      "lines": 358,
-      "mtime": 1782529436,
+      "lines": 419,
+      "mtime": 1782540043,
       "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/AGENTS.md"
     },
     {
@@ -319,7 +319,7 @@
       "exists": true,
       "path": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/logs/scoped_lane_status_codex-command-broker-mission-control.json",
       "status": "ready_for_scoped_stage",
-      "warnings": 1
+      "warnings": 2
     },
     "tool_repo_matrix": {
       "errors": 0,
@@ -385,7 +385,7 @@
     "repoCount": 24,
     "status": "ready_for_local_review_only"
   },
-  "updatedAt": "2026-06-27T03:11:36+00:00",
+  "updatedAt": "2026-06-27T10:57:15+00:00",
   "webSirinxDeploy": {
     "deployBlocked": true,
     "distChangedFiles": 239,

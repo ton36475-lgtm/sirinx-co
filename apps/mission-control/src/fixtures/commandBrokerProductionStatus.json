@@ -1,0 +1,420 @@
+{
+  "blockedCommands": [
+    {
+      "action": "web_sirinx_build_validation",
+      "brokerDecision": "requires_executor_lease",
+      "commandPreview": "pnpm --filter @sirinx/web-sirinx check",
+      "commandSha256": "d6d3838e7aad8bee5261cb38e9646d0dba3fca30c472d390940cc1048deb5243",
+      "executeByBroker": false,
+      "id": "web_sirinx_check",
+      "label": "web-sirinx check",
+      "lane": "LANE_WEB_SIRINX_CLOUDFLARE_PAGES_DEPLOY",
+      "productionDecision": "REQUIRE_HUMAN_REVIEW",
+      "requiredGate": "executor_lease_and_lane_lock",
+      "riskTier": "T3",
+      "tool": "codex-local"
+    },
+    {
+      "action": "web_sirinx_build_validation",
+      "brokerDecision": "requires_executor_lease",
+      "commandPreview": "pnpm --filter @sirinx/web-sirinx build",
+      "commandSha256": "04687c037c51056987159d6ba2d79550fe8018fdaab28dddc5c74944a7b5f3f1",
+      "executeByBroker": false,
+      "id": "web_sirinx_build",
+      "label": "web-sirinx build",
+      "lane": "LANE_WEB_SIRINX_CLOUDFLARE_PAGES_DEPLOY",
+      "productionDecision": "REQUIRE_HUMAN_REVIEW",
+      "requiredGate": "executor_lease_and_lane_lock",
+      "riskTier": "T3",
+      "tool": "codex-local"
+    },
+    {
+      "action": "web_sirinx_pages_deploy",
+      "brokerDecision": "blocked_first_phase",
+      "commandPreview": "wrangler pages deploy apps/web-sirinx/dist/public --project-name sirinx-co",
+      "commandSha256": "fee8818dad7a4ffff5772606c8192c8095267d3d8eeceb5b6092ae02d017968e",
+      "executeByBroker": false,
+      "id": "cloudflare_pages_deploy",
+      "label": "Cloudflare Pages deploy",
+      "lane": "LANE_WEB_SIRINX_CLOUDFLARE_PAGES_DEPLOY",
+      "productionDecision": "REQUIRE_HUMAN_REVIEW",
+      "requiredGate": "dedicated_adapter_contract_and_runtime_preflight",
+      "riskTier": "T4",
+      "tool": "codex-local"
+    },
+    {
+      "action": "jailbreak_policy",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_jailbreak_policy",
+      "label": "jailbreak policy",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    },
+    {
+      "action": "bypass_command_policy",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_bypass_command_policy",
+      "label": "bypass command policy",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    },
+    {
+      "action": "disable_policy",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_disable_policy",
+      "label": "disable policy",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    },
+    {
+      "action": "unlock_all_security",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_unlock_all_security",
+      "label": "unlock all security",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    },
+    {
+      "action": "unlock_all_commands",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_unlock_all_commands",
+      "label": "unlock all commands",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    },
+    {
+      "action": "autonomous_approve_all",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_autonomous_approve_all",
+      "label": "autonomous approve all",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    },
+    {
+      "action": "approve_all_actions",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_approve_all_actions",
+      "label": "approve all actions",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    },
+    {
+      "action": "disable_security_controls",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_disable_security_controls",
+      "label": "disable security controls",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    },
+    {
+      "action": "access_secrets",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_access_secrets",
+      "label": "access secrets",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    },
+    {
+      "action": "read_or_export_user_data",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_read_or_export_user_data",
+      "label": "read or export user data",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    },
+    {
+      "action": "modify_authentication",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_modify_authentication",
+      "label": "modify authentication",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    },
+    {
+      "action": "modify_authorization",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_modify_authorization",
+      "label": "modify authorization",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    },
+    {
+      "action": "change_payment_logic",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_change_payment_logic",
+      "label": "change payment logic",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    },
+    {
+      "action": "change_security_policy",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_change_security_policy",
+      "label": "change security policy",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    },
+    {
+      "action": "install_new_dependencies",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_install_new_dependencies",
+      "label": "install new dependencies",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    },
+    {
+      "action": "run_unknown_scripts",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_run_unknown_scripts",
+      "label": "run unknown scripts",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    },
+    {
+      "action": "database_migration",
+      "brokerDecision": "blocked",
+      "commandPreview": "",
+      "commandSha256": "",
+      "executeByBroker": false,
+      "id": "deny_database_migration",
+      "label": "database migration",
+      "lane": "GLOBAL_DENY_ALWAYS",
+      "productionDecision": "DENY",
+      "requiredGate": "security_policy_change_required",
+      "riskTier": "T5",
+      "tool": "*"
+    }
+  ],
+  "contractPackage": {
+    "entrypoint": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/packages/command-broker/src/index.ts",
+    "executionEnabled": false,
+    "name": "@sirinx/command-broker",
+    "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/packages/command-broker",
+    "testFile": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/packages/command-broker/src/index.test.ts"
+  },
+  "decisions": [
+    "ALLOW_READONLY",
+    "ALLOW_LOCAL_VALIDATION",
+    "ALLOW_SCOPED_WRITE",
+    "REQUIRE_HUMAN_REVIEW",
+    "DENY",
+    "ESCALATE_INCIDENT"
+  ],
+  "generatedBy": "scripts/a2a/a2a_command_broker_production_lane.py",
+  "mode": "production_command_broker_scaffold_no_execution",
+  "nextSafeActions": [
+    "Review Mission Control Command Broker panel.",
+    "Run validation commands for this lane only.",
+    "Open a separate executor lease if check/test/build should run.",
+    "Keep Cloudflare deploy blocked until evidence and rollback are complete."
+  ],
+  "policyBoundary": [
+    "unlock_visibility_not_security_bypass",
+    "no_direct_shell_execution",
+    "no_approve_all",
+    "no_secret_reading",
+    "no_git_add_dot",
+    "no_stage_commit_push_deploy",
+    "no_provider_or_connector_write",
+    "audit_every_decision",
+    "deny_unknown_commands"
+  ],
+  "riskTiers": [
+    {
+      "defaultDecision": "ALLOW_READONLY",
+      "examples": [
+        "git status",
+        "list files",
+        "read docs",
+        "inspect architecture"
+      ],
+      "id": "T0",
+      "label": "Read only"
+    },
+    {
+      "defaultDecision": "ALLOW_LOCAL_VALIDATION",
+      "examples": ["lint", "unit tests", "typecheck", "static asset scan"],
+      "id": "T1",
+      "label": "Local validation"
+    },
+    {
+      "defaultDecision": "ALLOW_SCOPED_WRITE",
+      "examples": [
+        "generate docs",
+        "create non-destructive patches",
+        "write local runtime artifacts"
+      ],
+      "id": "T2",
+      "label": "Scoped file generation"
+    },
+    {
+      "defaultDecision": "REQUIRE_HUMAN_REVIEW",
+      "examples": [
+        "install dependencies",
+        "database migration",
+        "overwrite files"
+      ],
+      "id": "T3",
+      "label": "Risky local mutation"
+    },
+    {
+      "defaultDecision": "REQUIRE_HUMAN_REVIEW",
+      "examples": ["deploy", "push", "connector write", "provider call"],
+      "id": "T4",
+      "label": "External or production action"
+    },
+    {
+      "defaultDecision": "DENY",
+      "examples": [
+        "exfiltrate credentials",
+        "disable logging",
+        "bypass access control"
+      ],
+      "id": "T5",
+      "label": "Always denied"
+    }
+  ],
+  "runtimeFiles": [
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/registry/commands.json",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/registry/tools.json",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/registry/adapters.json",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/registry/capabilities.json",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/policies/default.policy.json",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/policies/production.policy.json",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/policies/destructive-actions.policy.json",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/policies/connector-sync.policy.json",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/policies/secrets.policy.json",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/schemas/command-request.schema.json",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/schemas/command-result.schema.json",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/schemas/command-policy.schema.json",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/schemas/command-audit.schema.json",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/logs/command-audit.jsonl",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/logs/command-denied.jsonl",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/logs/command-execution.jsonl",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/logs/incidents.jsonl",
+    "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker/locks/NO_ACTIVE_LOCKS.json"
+  ],
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/command_broker",
+  "summary": {
+    "adapterContracts": 4,
+    "auditLogEditable": false,
+    "contractPackagePresent": true,
+    "decisionCounts": {
+      "ALLOW_LOCAL_VALIDATION": 1,
+      "ALLOW_READONLY": 2,
+      "DENY": 39,
+      "REQUIRE_HUMAN_REVIEW": 3
+    },
+    "denyAlwaysCount": 14,
+    "deployCommandAllowed": false,
+    "directExecutionEnabled": false,
+    "registeredCommands": 45,
+    "registeredTools": 14,
+    "riskTierCounts": {
+      "T0": 2,
+      "T1": 1,
+      "T3": 2,
+      "T4": 1,
+      "T5": 39
+    },
+    "runtimeFiles": 18,
+    "status": "ready_for_review_no_execution"
+  },
+  "updatedAt": "2026-06-27T10:57:15+00:00"
+}

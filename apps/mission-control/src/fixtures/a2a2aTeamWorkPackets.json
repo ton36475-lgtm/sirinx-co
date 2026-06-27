@@ -1,0 +1,868 @@
+{
+  "generatedBy": "scripts/a2a/a2a_team_work_packets.py",
+  "mode": "read_only_a2a2a_team_work_packets",
+  "nextCodexPacket": {
+    "acceptance": "Scoped git status contains only files listed in the lane packet.",
+    "allowedActions": [
+      "inspect_source_fixtures",
+      "edit_allowed_paths_only",
+      "run_scoped_validation",
+      "stage_packet_files_after_validation"
+    ],
+    "allowedPaths": [
+      "scripts/a2a/",
+      "ghostclaw_runner/",
+      "tests/ghostclaw_runner/",
+      "apps/mission-control/src/fixtures/",
+      "apps/mission-control/src/App.tsx",
+      "docs/a2async/",
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md"
+    ],
+    "blockedActions": [
+      "git_add_dot",
+      "worker_direct_commit",
+      "provider_call",
+      "connector_sync",
+      "deploy",
+      "push",
+      "secret_read_or_print",
+      "generated_web_sirinx_asset_mutation"
+    ],
+    "blockedPaths": [
+      ".env",
+      ".env.*",
+      "apps/web-sirinx/dist/",
+      "packages/database/dist/",
+      "supabase/.temp/",
+      "production credentials"
+    ],
+    "executionAllowed": true,
+    "owner": "codex",
+    "ownerMode": "scoped_repo_edit",
+    "packetId": "WORK-de338016d5",
+    "plannedFiles": [
+      "scripts/a2a/a2a_codex_build_plan.py",
+      "scripts/a2a/a2a_implementation_lane_packet.py",
+      "scripts/a2a/a2a_codex_first_implementation_lane.py",
+      "scripts/a2a/a2a_team_assignment_board.py",
+      "scripts/a2a/a2a_scoped_path_guard.py",
+      "apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json",
+      "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+      "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+      "apps/mission-control/src/fixtures/a2a2aBacklogPriority.json",
+      "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+      "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json",
+      "apps/mission-control/src/App.tsx",
+      "tests/ghostclaw_runner/test_runner_status_fixture.py",
+      "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md"
+    ],
+    "priority": 2,
+    "providerCallsAllowed": false,
+    "queueId": "LANE-CODEX-LANE-TASK-02",
+    "source": "first_codex_implementation_lane",
+    "sourceFixtures": {
+      "assignmentBoard": "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+      "firstCodexLane": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+      "scopedPathGuard": "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json"
+    },
+    "status": "ready_for_codex_scoped_work",
+    "task": "implement_only_allowed_paths",
+    "validationCommands": [
+      "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
+      "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+      "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md PROJECT_STATE.md NEXT_ACTIONS.md",
+      "/usr/bin/git diff --check -- <scoped paths>",
+      "python3 -m py_compile scripts/a2a/a2a_codex_build_plan.py scripts/a2a/a2a_implementation_lane_packet.py scripts/a2a/a2a_scoped_path_guard.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+      "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json >/tmp/a2a2aImplementationLanePacket.json.check",
+      "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json >/tmp/a2a2aScopedPathGuard.json.check"
+    ],
+    "why": "Dirty lanes exist outside A2A2A; edits must stay inside the plan scope.",
+    "workerDirectEditsAllowed": false
+  },
+  "nextSafeActions": [
+    "Codex executes only the nextCodexPacket allowed paths and validation commands.",
+    "Workers use their packets for report-only review; they do not edit or commit.",
+    "KOB validates proposed commands only after a Command Broker lease exists."
+  ],
+  "packets": [
+    {
+      "acceptance": "Scoped git status contains only files listed in the lane packet.",
+      "allowedActions": [
+        "inspect_source_fixtures",
+        "edit_allowed_paths_only",
+        "run_scoped_validation",
+        "stage_packet_files_after_validation"
+      ],
+      "allowedPaths": [
+        "scripts/a2a/",
+        "ghostclaw_runner/",
+        "tests/ghostclaw_runner/",
+        "apps/mission-control/src/fixtures/",
+        "apps/mission-control/src/App.tsx",
+        "docs/a2async/",
+        "PROJECT_STATE.md",
+        "NEXT_ACTIONS.md"
+      ],
+      "blockedActions": [
+        "git_add_dot",
+        "worker_direct_commit",
+        "provider_call",
+        "connector_sync",
+        "deploy",
+        "push",
+        "secret_read_or_print",
+        "generated_web_sirinx_asset_mutation"
+      ],
+      "blockedPaths": [
+        ".env",
+        ".env.*",
+        "apps/web-sirinx/dist/",
+        "packages/database/dist/",
+        "supabase/.temp/",
+        "production credentials"
+      ],
+      "executionAllowed": true,
+      "owner": "codex",
+      "ownerMode": "scoped_repo_edit",
+      "packetId": "WORK-de338016d5",
+      "plannedFiles": [
+        "scripts/a2a/a2a_codex_build_plan.py",
+        "scripts/a2a/a2a_implementation_lane_packet.py",
+        "scripts/a2a/a2a_codex_first_implementation_lane.py",
+        "scripts/a2a/a2a_team_assignment_board.py",
+        "scripts/a2a/a2a_scoped_path_guard.py",
+        "apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json",
+        "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+        "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "apps/mission-control/src/fixtures/a2a2aBacklogPriority.json",
+        "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json",
+        "apps/mission-control/src/App.tsx",
+        "tests/ghostclaw_runner/test_runner_status_fixture.py",
+        "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+        "PROJECT_STATE.md",
+        "NEXT_ACTIONS.md"
+      ],
+      "priority": 2,
+      "providerCallsAllowed": false,
+      "queueId": "LANE-CODEX-LANE-TASK-02",
+      "source": "first_codex_implementation_lane",
+      "sourceFixtures": {
+        "assignmentBoard": "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "firstCodexLane": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "scopedPathGuard": "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json"
+      },
+      "status": "ready_for_codex_scoped_work",
+      "task": "implement_only_allowed_paths",
+      "validationCommands": [
+        "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
+        "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+        "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md PROJECT_STATE.md NEXT_ACTIONS.md",
+        "/usr/bin/git diff --check -- <scoped paths>",
+        "python3 -m py_compile scripts/a2a/a2a_codex_build_plan.py scripts/a2a/a2a_implementation_lane_packet.py scripts/a2a/a2a_scoped_path_guard.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+        "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json >/tmp/a2a2aImplementationLanePacket.json.check",
+        "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json >/tmp/a2a2aScopedPathGuard.json.check"
+      ],
+      "why": "Dirty lanes exist outside A2A2A; edits must stay inside the plan scope.",
+      "workerDirectEditsAllowed": false
+    },
+    {
+      "acceptance": "No worker commits, provider calls, or command execution are required.",
+      "allowedActions": [
+        "read_source_fixtures",
+        "write_report_only_feedback",
+        "validate_command_plan_only"
+      ],
+      "allowedPaths": [],
+      "blockedActions": [
+        "git_add_dot",
+        "worker_direct_commit",
+        "provider_call",
+        "connector_sync",
+        "deploy",
+        "push",
+        "secret_read_or_print",
+        "generated_web_sirinx_asset_mutation"
+      ],
+      "blockedPaths": [
+        ".env",
+        ".env.*",
+        "apps/web-sirinx/dist/",
+        "packages/database/dist/",
+        "supabase/.temp/",
+        "production credentials"
+      ],
+      "executionAllowed": false,
+      "owner": "glm52_deepseek_agy_kob",
+      "ownerMode": "report_and_validate_only",
+      "packetId": "WORK-8e54ea680f",
+      "plannedFiles": [],
+      "priority": 3,
+      "providerCallsAllowed": false,
+      "queueId": "LANE-CODEX-LANE-TASK-03",
+      "source": "first_codex_implementation_lane",
+      "sourceFixtures": {
+        "assignmentBoard": "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "firstCodexLane": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "scopedPathGuard": "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json"
+      },
+      "status": "ready_for_worker_report",
+      "task": "consume_report_only_feedback",
+      "validationCommands": [],
+      "why": "Worker reports available from: agy, deepseek, glm52, kob.",
+      "workerDirectEditsAllowed": false
+    },
+    {
+      "acceptance": "All validation commands pass and results are summarized in final report.",
+      "allowedActions": [
+        "inspect_source_fixtures",
+        "edit_allowed_paths_only",
+        "run_scoped_validation",
+        "stage_packet_files_after_validation"
+      ],
+      "allowedPaths": [
+        "scripts/a2a/",
+        "ghostclaw_runner/",
+        "tests/ghostclaw_runner/",
+        "apps/mission-control/src/fixtures/",
+        "apps/mission-control/src/App.tsx",
+        "docs/a2async/",
+        "PROJECT_STATE.md",
+        "NEXT_ACTIONS.md"
+      ],
+      "blockedActions": [
+        "git_add_dot",
+        "worker_direct_commit",
+        "provider_call",
+        "connector_sync",
+        "deploy",
+        "push",
+        "secret_read_or_print",
+        "generated_web_sirinx_asset_mutation"
+      ],
+      "blockedPaths": [
+        ".env",
+        ".env.*",
+        "apps/web-sirinx/dist/",
+        "packages/database/dist/",
+        "supabase/.temp/",
+        "production credentials"
+      ],
+      "executionAllowed": true,
+      "owner": "codex",
+      "ownerMode": "scoped_repo_edit",
+      "packetId": "WORK-647fc5edf6",
+      "plannedFiles": [
+        "scripts/a2a/a2a_codex_build_plan.py",
+        "scripts/a2a/a2a_implementation_lane_packet.py",
+        "scripts/a2a/a2a_codex_first_implementation_lane.py",
+        "scripts/a2a/a2a_team_assignment_board.py",
+        "scripts/a2a/a2a_scoped_path_guard.py",
+        "apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json",
+        "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+        "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "apps/mission-control/src/fixtures/a2a2aBacklogPriority.json",
+        "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json",
+        "apps/mission-control/src/App.tsx",
+        "tests/ghostclaw_runner/test_runner_status_fixture.py",
+        "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+        "PROJECT_STATE.md",
+        "NEXT_ACTIONS.md"
+      ],
+      "priority": 4,
+      "providerCallsAllowed": false,
+      "queueId": "LANE-CODEX-LANE-TASK-04",
+      "source": "first_codex_implementation_lane",
+      "sourceFixtures": {
+        "assignmentBoard": "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "firstCodexLane": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "scopedPathGuard": "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json"
+      },
+      "status": "ready_for_codex_scoped_work",
+      "task": "run_validation_commands",
+      "validationCommands": [
+        "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
+        "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+        "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md PROJECT_STATE.md NEXT_ACTIONS.md",
+        "/usr/bin/git diff --check -- <scoped paths>",
+        "python3 -m py_compile scripts/a2a/a2a_codex_build_plan.py scripts/a2a/a2a_implementation_lane_packet.py scripts/a2a/a2a_scoped_path_guard.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+        "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json >/tmp/a2a2aImplementationLanePacket.json.check",
+        "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json >/tmp/a2a2aScopedPathGuard.json.check"
+      ],
+      "why": "Every implementation lane must prove tests and UI checks before staging.",
+      "workerDirectEditsAllowed": false
+    },
+    {
+      "acceptance": "Commit contains only lane files and no generated unrelated assets.",
+      "allowedActions": [
+        "inspect_source_fixtures",
+        "edit_allowed_paths_only",
+        "run_scoped_validation",
+        "stage_packet_files_after_validation"
+      ],
+      "allowedPaths": [
+        "scripts/a2a/",
+        "ghostclaw_runner/",
+        "tests/ghostclaw_runner/",
+        "apps/mission-control/src/fixtures/",
+        "apps/mission-control/src/App.tsx",
+        "docs/a2async/",
+        "PROJECT_STATE.md",
+        "NEXT_ACTIONS.md"
+      ],
+      "blockedActions": [
+        "git_add_dot",
+        "worker_direct_commit",
+        "provider_call",
+        "connector_sync",
+        "deploy",
+        "push",
+        "secret_read_or_print",
+        "generated_web_sirinx_asset_mutation"
+      ],
+      "blockedPaths": [
+        ".env",
+        ".env.*",
+        "apps/web-sirinx/dist/",
+        "packages/database/dist/",
+        "supabase/.temp/",
+        "production credentials"
+      ],
+      "executionAllowed": true,
+      "owner": "codex",
+      "ownerMode": "scoped_repo_edit",
+      "packetId": "WORK-8371c88bef",
+      "plannedFiles": [
+        "scripts/a2a/a2a_codex_build_plan.py",
+        "scripts/a2a/a2a_implementation_lane_packet.py",
+        "scripts/a2a/a2a_codex_first_implementation_lane.py",
+        "scripts/a2a/a2a_team_assignment_board.py",
+        "scripts/a2a/a2a_scoped_path_guard.py",
+        "apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json",
+        "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+        "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "apps/mission-control/src/fixtures/a2a2aBacklogPriority.json",
+        "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json",
+        "apps/mission-control/src/App.tsx",
+        "tests/ghostclaw_runner/test_runner_status_fixture.py",
+        "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+        "PROJECT_STATE.md",
+        "NEXT_ACTIONS.md"
+      ],
+      "priority": 5,
+      "providerCallsAllowed": false,
+      "queueId": "LANE-CODEX-LANE-TASK-05",
+      "source": "first_codex_implementation_lane",
+      "sourceFixtures": {
+        "assignmentBoard": "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "firstCodexLane": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "scopedPathGuard": "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json"
+      },
+      "status": "ready_for_codex_scoped_work",
+      "task": "stage_and_commit_scoped_lane",
+      "validationCommands": [
+        "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
+        "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+        "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md PROJECT_STATE.md NEXT_ACTIONS.md",
+        "/usr/bin/git diff --check -- <scoped paths>",
+        "python3 -m py_compile scripts/a2a/a2a_codex_build_plan.py scripts/a2a/a2a_implementation_lane_packet.py scripts/a2a/a2a_scoped_path_guard.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+        "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json >/tmp/a2a2aImplementationLanePacket.json.check",
+        "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json >/tmp/a2a2aScopedPathGuard.json.check"
+      ],
+      "why": "Only Codex stages and commits after validation; workers never mutate git.",
+      "workerDirectEditsAllowed": false
+    },
+    {
+      "acceptance": "Codex may inspect and prepare scoped local edits after validation.",
+      "allowedActions": [
+        "inspect_source_fixtures",
+        "edit_allowed_paths_only",
+        "run_scoped_validation",
+        "stage_packet_files_after_validation"
+      ],
+      "allowedPaths": [
+        "scripts/a2a/",
+        "ghostclaw_runner/",
+        "tests/ghostclaw_runner/",
+        "apps/mission-control/src/fixtures/",
+        "apps/mission-control/src/App.tsx",
+        "docs/a2async/",
+        "PROJECT_STATE.md",
+        "NEXT_ACTIONS.md"
+      ],
+      "blockedActions": [
+        "git_add_dot",
+        "worker_direct_commit",
+        "provider_call",
+        "connector_sync",
+        "deploy",
+        "push",
+        "secret_read_or_print",
+        "generated_web_sirinx_asset_mutation"
+      ],
+      "blockedPaths": [
+        ".env",
+        ".env.*",
+        "apps/web-sirinx/dist/",
+        "packages/database/dist/",
+        "supabase/.temp/",
+        "production credentials"
+      ],
+      "executionAllowed": true,
+      "owner": "codex",
+      "ownerMode": "scoped_repo_edit",
+      "packetId": "WORK-d48b788e45",
+      "plannedFiles": [
+        "scripts/a2a/a2a_codex_build_plan.py",
+        "scripts/a2a/a2a_implementation_lane_packet.py",
+        "scripts/a2a/a2a_codex_first_implementation_lane.py",
+        "scripts/a2a/a2a_team_assignment_board.py",
+        "scripts/a2a/a2a_scoped_path_guard.py",
+        "apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json",
+        "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+        "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "apps/mission-control/src/fixtures/a2a2aBacklogPriority.json",
+        "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json",
+        "apps/mission-control/src/App.tsx",
+        "tests/ghostclaw_runner/test_runner_status_fixture.py",
+        "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+        "PROJECT_STATE.md",
+        "NEXT_ACTIONS.md"
+      ],
+      "priority": 1,
+      "providerCallsAllowed": false,
+      "queueId": "BACKLOG-L16",
+      "source": "next_actions_backlog",
+      "sourceFixtures": {
+        "assignmentBoard": "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "firstCodexLane": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "scopedPathGuard": "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json"
+      },
+      "status": "read_only",
+      "task": "Capture Mission Control `Git Evidence` tab screenshot as evidence",
+      "validationCommands": [
+        "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
+        "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+        "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md PROJECT_STATE.md NEXT_ACTIONS.md",
+        "/usr/bin/git diff --check -- <scoped paths>",
+        "python3 -m py_compile scripts/a2a/a2a_codex_build_plan.py scripts/a2a/a2a_implementation_lane_packet.py scripts/a2a/a2a_scoped_path_guard.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+        "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json >/tmp/a2a2aImplementationLanePacket.json.check",
+        "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json >/tmp/a2a2aScopedPathGuard.json.check"
+      ],
+      "why": "Uncategorized line 16",
+      "workerDirectEditsAllowed": false
+    },
+    {
+      "acceptance": "Hermes should classify the gate and update policy/state docs first.",
+      "allowedActions": [
+        "read_source_fixtures",
+        "update_policy_state_docs_only"
+      ],
+      "allowedPaths": [],
+      "blockedActions": [
+        "git_add_dot",
+        "worker_direct_commit",
+        "provider_call",
+        "connector_sync",
+        "deploy",
+        "push",
+        "secret_read_or_print",
+        "generated_web_sirinx_asset_mutation"
+      ],
+      "blockedPaths": [
+        ".env",
+        ".env.*",
+        "apps/web-sirinx/dist/",
+        "packages/database/dist/",
+        "supabase/.temp/",
+        "production credentials"
+      ],
+      "executionAllowed": false,
+      "owner": "hermes",
+      "ownerMode": "policy_state_only",
+      "packetId": "WORK-baf271643d",
+      "plannedFiles": [],
+      "priority": 1,
+      "providerCallsAllowed": false,
+      "queueId": "BACKLOG-L162",
+      "source": "next_actions_backlog",
+      "sourceFixtures": {
+        "assignmentBoard": "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "firstCodexLane": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "scopedPathGuard": "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json"
+      },
+      "status": "ready_for_hermes_policy_review",
+      "task": "Add adapter runner registry and preflight artifact writers.",
+      "validationCommands": [],
+      "why": "Full Auto Autopilot Conversion line 162",
+      "workerDirectEditsAllowed": false
+    },
+    {
+      "acceptance": "Hermes should classify the gate and update policy/state docs first.",
+      "allowedActions": [
+        "read_source_fixtures",
+        "update_policy_state_docs_only"
+      ],
+      "allowedPaths": [],
+      "blockedActions": [
+        "git_add_dot",
+        "worker_direct_commit",
+        "provider_call",
+        "connector_sync",
+        "deploy",
+        "push",
+        "secret_read_or_print",
+        "generated_web_sirinx_asset_mutation"
+      ],
+      "blockedPaths": [
+        ".env",
+        ".env.*",
+        "apps/web-sirinx/dist/",
+        "packages/database/dist/",
+        "supabase/.temp/",
+        "production credentials"
+      ],
+      "executionAllowed": false,
+      "owner": "hermes",
+      "ownerMode": "policy_state_only",
+      "packetId": "WORK-ebd9cfb8b9",
+      "plannedFiles": [],
+      "priority": 1,
+      "providerCallsAllowed": false,
+      "queueId": "BACKLOG-L163",
+      "source": "next_actions_backlog",
+      "sourceFixtures": {
+        "assignmentBoard": "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "firstCodexLane": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "scopedPathGuard": "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json"
+      },
+      "status": "ready_for_hermes_policy_review",
+      "task": "Run full-auto local setup phase only after scripts enforce policy, kill switch, rate limits, budget caps, and audit logs.",
+      "validationCommands": [],
+      "why": "Full Auto Autopilot Conversion line 163",
+      "workerDirectEditsAllowed": false
+    },
+    {
+      "acceptance": "Hermes should classify the gate and update policy/state docs first.",
+      "allowedActions": [
+        "read_source_fixtures",
+        "update_policy_state_docs_only"
+      ],
+      "allowedPaths": [],
+      "blockedActions": [
+        "git_add_dot",
+        "worker_direct_commit",
+        "provider_call",
+        "connector_sync",
+        "deploy",
+        "push",
+        "secret_read_or_print",
+        "generated_web_sirinx_asset_mutation"
+      ],
+      "blockedPaths": [
+        ".env",
+        ".env.*",
+        "apps/web-sirinx/dist/",
+        "packages/database/dist/",
+        "supabase/.temp/",
+        "production credentials"
+      ],
+      "executionAllowed": false,
+      "owner": "hermes",
+      "ownerMode": "policy_state_only",
+      "packetId": "WORK-652b8663f3",
+      "plannedFiles": [],
+      "priority": 1,
+      "providerCallsAllowed": false,
+      "queueId": "BACKLOG-L165",
+      "source": "next_actions_backlog",
+      "sourceFixtures": {
+        "assignmentBoard": "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "firstCodexLane": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "scopedPathGuard": "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json"
+      },
+      "status": "ready_for_hermes_policy_review",
+      "task": "Convert old approval packet docs into job manifest / execution lease references or mark them legacy.",
+      "validationCommands": [],
+      "why": "Full Auto Autopilot Conversion line 165",
+      "workerDirectEditsAllowed": false
+    },
+    {
+      "acceptance": "Codex may inspect and prepare scoped local edits after validation.",
+      "allowedActions": [
+        "inspect_source_fixtures",
+        "edit_allowed_paths_only",
+        "run_scoped_validation",
+        "stage_packet_files_after_validation"
+      ],
+      "allowedPaths": [
+        "scripts/a2a/",
+        "ghostclaw_runner/",
+        "tests/ghostclaw_runner/",
+        "apps/mission-control/src/fixtures/",
+        "apps/mission-control/src/App.tsx",
+        "docs/a2async/",
+        "PROJECT_STATE.md",
+        "NEXT_ACTIONS.md"
+      ],
+      "blockedActions": [
+        "git_add_dot",
+        "worker_direct_commit",
+        "provider_call",
+        "connector_sync",
+        "deploy",
+        "push",
+        "secret_read_or_print",
+        "generated_web_sirinx_asset_mutation"
+      ],
+      "blockedPaths": [
+        ".env",
+        ".env.*",
+        "apps/web-sirinx/dist/",
+        "packages/database/dist/",
+        "supabase/.temp/",
+        "production credentials"
+      ],
+      "executionAllowed": true,
+      "owner": "codex",
+      "ownerMode": "scoped_repo_edit",
+      "packetId": "WORK-d51048bf6d",
+      "plannedFiles": [
+        "scripts/a2a/a2a_codex_build_plan.py",
+        "scripts/a2a/a2a_implementation_lane_packet.py",
+        "scripts/a2a/a2a_codex_first_implementation_lane.py",
+        "scripts/a2a/a2a_team_assignment_board.py",
+        "scripts/a2a/a2a_scoped_path_guard.py",
+        "apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json",
+        "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+        "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "apps/mission-control/src/fixtures/a2a2aBacklogPriority.json",
+        "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json",
+        "apps/mission-control/src/App.tsx",
+        "tests/ghostclaw_runner/test_runner_status_fixture.py",
+        "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+        "PROJECT_STATE.md",
+        "NEXT_ACTIONS.md"
+      ],
+      "priority": 1,
+      "providerCallsAllowed": false,
+      "queueId": "BACKLOG-L314",
+      "source": "next_actions_backlog",
+      "sourceFixtures": {
+        "assignmentBoard": "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "firstCodexLane": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "scopedPathGuard": "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json"
+      },
+      "status": "read_only",
+      "task": "Run GLM-5.2 frontend/UI review benchmark on a small Mission Control or AGM AUTOGLOW UI excerpt.",
+      "validationCommands": [
+        "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
+        "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+        "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md PROJECT_STATE.md NEXT_ACTIONS.md",
+        "/usr/bin/git diff --check -- <scoped paths>",
+        "python3 -m py_compile scripts/a2a/a2a_codex_build_plan.py scripts/a2a/a2a_implementation_lane_packet.py scripts/a2a/a2a_scoped_path_guard.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+        "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json >/tmp/a2a2aImplementationLanePacket.json.check",
+        "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json >/tmp/a2a2aScopedPathGuard.json.check"
+      ],
+      "why": "GLM-5.2 API-First Evaluation line 314",
+      "workerDirectEditsAllowed": false
+    },
+    {
+      "acceptance": "Codex may inspect and prepare scoped local edits after validation.",
+      "allowedActions": [
+        "inspect_source_fixtures",
+        "edit_allowed_paths_only",
+        "run_scoped_validation",
+        "stage_packet_files_after_validation"
+      ],
+      "allowedPaths": [
+        "scripts/a2a/",
+        "ghostclaw_runner/",
+        "tests/ghostclaw_runner/",
+        "apps/mission-control/src/fixtures/",
+        "apps/mission-control/src/App.tsx",
+        "docs/a2async/",
+        "PROJECT_STATE.md",
+        "NEXT_ACTIONS.md"
+      ],
+      "blockedActions": [
+        "git_add_dot",
+        "worker_direct_commit",
+        "provider_call",
+        "connector_sync",
+        "deploy",
+        "push",
+        "secret_read_or_print",
+        "generated_web_sirinx_asset_mutation"
+      ],
+      "blockedPaths": [
+        ".env",
+        ".env.*",
+        "apps/web-sirinx/dist/",
+        "packages/database/dist/",
+        "supabase/.temp/",
+        "production credentials"
+      ],
+      "executionAllowed": true,
+      "owner": "codex",
+      "ownerMode": "scoped_repo_edit",
+      "packetId": "WORK-a88f7e356c",
+      "plannedFiles": [
+        "scripts/a2a/a2a_codex_build_plan.py",
+        "scripts/a2a/a2a_implementation_lane_packet.py",
+        "scripts/a2a/a2a_codex_first_implementation_lane.py",
+        "scripts/a2a/a2a_team_assignment_board.py",
+        "scripts/a2a/a2a_scoped_path_guard.py",
+        "apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json",
+        "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+        "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "apps/mission-control/src/fixtures/a2a2aBacklogPriority.json",
+        "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json",
+        "apps/mission-control/src/App.tsx",
+        "tests/ghostclaw_runner/test_runner_status_fixture.py",
+        "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+        "PROJECT_STATE.md",
+        "NEXT_ACTIONS.md"
+      ],
+      "priority": 1,
+      "providerCallsAllowed": false,
+      "queueId": "BACKLOG-L340",
+      "source": "next_actions_backlog",
+      "sourceFixtures": {
+        "assignmentBoard": "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "firstCodexLane": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "scopedPathGuard": "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json"
+      },
+      "status": "read_only",
+      "task": "Add optional UI panel in Mission Control to browse local campaign packs.",
+      "validationCommands": [
+        "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
+        "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+        "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md PROJECT_STATE.md NEXT_ACTIONS.md",
+        "/usr/bin/git diff --check -- <scoped paths>",
+        "python3 -m py_compile scripts/a2a/a2a_codex_build_plan.py scripts/a2a/a2a_implementation_lane_packet.py scripts/a2a/a2a_scoped_path_guard.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+        "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json >/tmp/a2a2aImplementationLanePacket.json.check",
+        "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json >/tmp/a2a2aScopedPathGuard.json.check"
+      ],
+      "why": "Facebook AI Content Factory Workflow line 340",
+      "workerDirectEditsAllowed": false
+    },
+    {
+      "acceptance": "Codex may inspect and prepare scoped local edits after validation.",
+      "allowedActions": [
+        "inspect_source_fixtures",
+        "edit_allowed_paths_only",
+        "run_scoped_validation",
+        "stage_packet_files_after_validation"
+      ],
+      "allowedPaths": [
+        "scripts/a2a/",
+        "ghostclaw_runner/",
+        "tests/ghostclaw_runner/",
+        "apps/mission-control/src/fixtures/",
+        "apps/mission-control/src/App.tsx",
+        "docs/a2async/",
+        "PROJECT_STATE.md",
+        "NEXT_ACTIONS.md"
+      ],
+      "blockedActions": [
+        "git_add_dot",
+        "worker_direct_commit",
+        "provider_call",
+        "connector_sync",
+        "deploy",
+        "push",
+        "secret_read_or_print",
+        "generated_web_sirinx_asset_mutation"
+      ],
+      "blockedPaths": [
+        ".env",
+        ".env.*",
+        "apps/web-sirinx/dist/",
+        "packages/database/dist/",
+        "supabase/.temp/",
+        "production credentials"
+      ],
+      "executionAllowed": true,
+      "owner": "codex",
+      "ownerMode": "scoped_repo_edit",
+      "packetId": "WORK-200e475d4e",
+      "plannedFiles": [
+        "scripts/a2a/a2a_codex_build_plan.py",
+        "scripts/a2a/a2a_implementation_lane_packet.py",
+        "scripts/a2a/a2a_codex_first_implementation_lane.py",
+        "scripts/a2a/a2a_team_assignment_board.py",
+        "scripts/a2a/a2a_scoped_path_guard.py",
+        "apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json",
+        "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json",
+        "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "apps/mission-control/src/fixtures/a2a2aBacklogPriority.json",
+        "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json",
+        "apps/mission-control/src/App.tsx",
+        "tests/ghostclaw_runner/test_runner_status_fixture.py",
+        "docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md",
+        "PROJECT_STATE.md",
+        "NEXT_ACTIONS.md"
+      ],
+      "priority": 1,
+      "providerCallsAllowed": false,
+      "queueId": "BACKLOG-L363",
+      "source": "next_actions_backlog",
+      "sourceFixtures": {
+        "assignmentBoard": "apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json",
+        "firstCodexLane": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+        "scopedPathGuard": "apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json"
+      },
+      "status": "read_only",
+      "task": "Add optional Mission Control panel to browse sprint packs, content queue, policy QA, and KPI CSVs.",
+      "validationCommands": [
+        "python3 -m unittest tests.ghostclaw_runner.test_agent_runner tests.ghostclaw_runner.test_runner_status_fixture",
+        "pnpm --filter @sirinx/mission-control exec tsc --noEmit",
+        "pnpm exec prettier --check apps/mission-control/src/App.tsx docs/a2async/A2A2A_LOCAL_AGENT_RUNNER.md PROJECT_STATE.md NEXT_ACTIONS.md",
+        "/usr/bin/git diff --check -- <scoped paths>",
+        "python3 -m py_compile scripts/a2a/a2a_codex_build_plan.py scripts/a2a/a2a_implementation_lane_packet.py scripts/a2a/a2a_scoped_path_guard.py tests/ghostclaw_runner/test_runner_status_fixture.py",
+        "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json >/tmp/a2a2aImplementationLanePacket.json.check",
+        "python3 -m json.tool apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json >/tmp/a2a2aScopedPathGuard.json.check"
+      ],
+      "why": "Content Automation Revenue Engine line 363",
+      "workerDirectEditsAllowed": false
+    }
+  ],
+  "policyBoundary": [
+    "read_only_work_packet_fixture",
+    "codex_only_scoped_repo_edits",
+    "workers_report_only",
+    "kob_validate_only",
+    "mission_control_read_only",
+    "no_provider_call",
+    "no_connector_sync",
+    "no_deploy",
+    "no_push",
+    "no_secret_read_or_print",
+    "no_git_add_dot",
+    "no_generated_web_sirinx_asset_mutation"
+  ],
+  "runtimeReportPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/work_packets/latest.json",
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+  "summary": {
+    "codexPackets": 7,
+    "gitAddDotAllowed": false,
+    "nextCodexPacketId": "WORK-de338016d5",
+    "nextCodexTask": "implement_only_allowed_paths",
+    "packets": 11,
+    "providerCallsAllowed": false,
+    "status": "ready_for_team_packets",
+    "workerDirectEditsAllowed": false,
+    "workerPackets": 1
+  },
+  "updatedAt": "2026-06-27T15:15:21+00:00"
+}

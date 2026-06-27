@@ -31,6 +31,7 @@ import a2a2aFirstCodexImplementationLaneFixture from "./fixtures/a2a2aFirstCodex
 import a2a2aBacklogPriorityFixture from "./fixtures/a2a2aBacklogPriority.json";
 import a2a2aTeamAssignmentBoardFixture from "./fixtures/a2a2aTeamAssignmentBoard.json";
 import a2a2aCodexLaneOutcomeFixture from "./fixtures/a2a2aCodexLaneOutcome.json";
+import a2a2aTeamWorkPacketsFixture from "./fixtures/a2a2aTeamWorkPackets.json";
 
 interface Worker {
   name: string;
@@ -1092,6 +1093,69 @@ type A2A2ACodexLaneOutcomeFixture = {
   policyBoundary: string[];
 };
 
+type A2A2ATeamWorkPacketsFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  summary: {
+    status: string;
+    packets: number;
+    codexPackets: number;
+    workerPackets: number;
+    nextCodexPacketId: string;
+    nextCodexTask: string;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    gitAddDotAllowed: boolean;
+  };
+  nextCodexPacket: {
+    packetId: string;
+    queueId: string;
+    priority: number;
+    owner: string;
+    ownerMode: string;
+    status: string;
+    source: string;
+    task: string;
+    why: string;
+    acceptance: string;
+    allowedActions: string[];
+    blockedActions: string[];
+    allowedPaths: string[];
+    blockedPaths: string[];
+    plannedFiles: string[];
+    validationCommands: string[];
+    executionAllowed: boolean;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+  };
+  packets: {
+    packetId: string;
+    queueId: string;
+    priority: number;
+    owner: string;
+    ownerMode: string;
+    status: string;
+    source: string;
+    task: string;
+    why: string;
+    acceptance: string;
+    allowedActions: string[];
+    blockedActions: string[];
+    allowedPaths: string[];
+    blockedPaths: string[];
+    plannedFiles: string[];
+    validationCommands: string[];
+    executionAllowed: boolean;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+  }[];
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type IgamingPracticeStatusFixture = {
   updatedAt: string;
   mode: string;
@@ -1175,6 +1239,8 @@ const a2a2aTeamAssignmentBoard =
   a2a2aTeamAssignmentBoardFixture as A2A2ATeamAssignmentBoardFixture;
 const a2a2aCodexLaneOutcome =
   a2a2aCodexLaneOutcomeFixture as A2A2ACodexLaneOutcomeFixture;
+const a2a2aTeamWorkPackets =
+  a2a2aTeamWorkPacketsFixture as A2A2ATeamWorkPacketsFixture;
 const codexSessionSidebarToolkitStatus =
   codexSessionSidebarToolkitStatusFixture;
 const sessionToolkitAgents = codexSessionSidebarToolkitStatus.agents;
@@ -3531,6 +3597,160 @@ export default function App() {
                         </div>
                       </div>
                     ))}
+                  </section>
+                </div>
+              </div>
+
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>A2A2A Team Work Packets</span>
+                  <span className="accent-emerald">
+                    {a2a2aTeamWorkPackets.summary.status}
+                  </span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Packets</span>
+                    <strong>{a2a2aTeamWorkPackets.summary.packets}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Codex</span>
+                    <strong>{a2a2aTeamWorkPackets.summary.codexPackets}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Workers</span>
+                    <strong>
+                      {a2a2aTeamWorkPackets.summary.workerPackets}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Providers</span>
+                    <strong>
+                      {a2a2aTeamWorkPackets.summary.providerCallsAllowed
+                        ? "ON"
+                        : "OFF"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Worker Edits</span>
+                    <strong>
+                      {a2a2aTeamWorkPackets.summary.workerDirectEditsAllowed
+                        ? "YES"
+                        : "NO"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>git add .</span>
+                    <strong>
+                      {a2a2aTeamWorkPackets.summary.gitAddDotAllowed
+                        ? "YES"
+                        : "NO"}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Next Packet</span>
+                  <code>{a2a2aTeamWorkPackets.summary.nextCodexPacketId}</code>
+                  <span>Task</span>
+                  <code>{a2a2aTeamWorkPackets.summary.nextCodexTask}</code>
+                  <span>Runtime Report</span>
+                  <code>{a2a2aTeamWorkPackets.runtimeReportPath}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  {a2a2aTeamWorkPackets.nextCodexPacket.why} Acceptance:
+                  {` ${a2a2aTeamWorkPackets.nextCodexPacket.acceptance}`}
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A role-scoped work packets"
+                  >
+                    <div className="git-section-title">
+                      <span>Role Packets</span>
+                      <span className="approval-badge">
+                        {a2a2aTeamWorkPackets.packets.length}
+                      </span>
+                    </div>
+                    {a2a2aTeamWorkPackets.packets.slice(0, 8).map((packet) => (
+                      <div
+                        className="practice-artifact-row"
+                        key={packet.packetId}
+                      >
+                        <span
+                          className={`practice-status ${
+                            packet.ownerMode === "scoped_repo_edit"
+                              ? "payload-ready"
+                              : packet.ownerMode.includes("report")
+                                ? "payload-warn"
+                                : "payload-blocked"
+                          }`}
+                        >
+                          P{packet.priority}
+                        </span>
+                        <div>
+                          <strong>
+                            {packet.owner}: {packet.task}
+                          </strong>
+                          <p>
+                            {packet.ownerMode} · {packet.status}
+                          </p>
+                          <code>{packet.packetId}</code>
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A next Codex packet boundaries"
+                  >
+                    <div className="git-section-title">
+                      <span>Next Codex Boundaries</span>
+                      <span className="approval-badge">
+                        {
+                          a2a2aTeamWorkPackets.nextCodexPacket.allowedPaths
+                            .length
+                        }
+                      </span>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span className="practice-status payload-ready">
+                        allowed
+                      </span>
+                      <div>
+                        <strong>Allowed paths</strong>
+                        <p>
+                          Codex may edit only inside these paths for this
+                          packet.
+                        </p>
+                        <code>
+                          {a2a2aTeamWorkPackets.nextCodexPacket.allowedPaths.join(
+                            ", ",
+                          )}
+                        </code>
+                      </div>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span className="practice-status payload-blocked">
+                        blocked
+                      </span>
+                      <div>
+                        <strong>Blocked actions</strong>
+                        <p>
+                          Provider calls, deploy, push, and broad staging stay
+                          closed.
+                        </p>
+                        <code>
+                          {a2a2aTeamWorkPackets.nextCodexPacket.blockedActions.join(
+                            ", ",
+                          )}
+                        </code>
+                      </div>
+                    </div>
                   </section>
                 </div>
               </div>

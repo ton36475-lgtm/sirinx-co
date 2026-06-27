@@ -1081,6 +1081,8 @@ Toolkit` tab.
   `scripts/a2a/a2a_backlog_priority.py`.
 - Team assignment generator:
   `scripts/a2a/a2a_team_assignment_board.py`.
+- Team work packet generator:
+  `scripts/a2a/a2a_team_work_packets.py`.
 - Codex lane outcome generator:
   `scripts/a2a/a2a_codex_lane_outcome.py`.
 - Scoped path guard generator:
@@ -1114,6 +1116,10 @@ Toolkit` tab.
   - team assignment board: `ready_for_codex_assignment`, 8 roles, 11 immediate
     queue items, 4 Codex-ready tasks, 1 completed Codex task, 1 report-only
     worker task, provider calls disabled, worker direct edits disabled
+  - team work packets: `ready_for_team_packets`, 11 packets, 7 Codex packets,
+    1 worker/report packet, next Codex task `implement_only_allowed_paths`,
+    provider calls disabled, worker direct edits disabled,
+    `gitAddDotAllowed=false`
   - first Codex lane outcome: `first_codex_slice_completed`, selected slice
     `a2a2a_team_assignment_board`, 7 checklist items closed, provider calls 0
   - scoped path guard: `ready_with_external_dirty_lanes`, 16 planned files,

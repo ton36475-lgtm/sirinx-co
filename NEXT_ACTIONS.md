@@ -811,6 +811,9 @@ configuration lane, then keep future entries concise and source-path based.
       blocked gates without executing anything.
 - [x] Add A2A2A team assignment board so Mission Control can show the next
       Codex action, immediate queue, role responsibilities, and edit rights.
+- [x] Add A2A2A team work packets so Mission Control can show role-scoped
+      packets with owner mode, allowed actions, blocked actions, allowed paths,
+      planned files, and validation commands.
 - [x] Review the implementation packet in
       `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`.
 - [x] Review
@@ -874,6 +877,11 @@ The team assignment board is now the role/queue handoff layer. Use it to keep
 Hermes as mission commander, Opus as architecture handoff, Codex as sole repo
 editor, GLM-5.2/DeepSeek/AGY as report-only workers, KOB as validate-only, and
 Mission Control as fixture-backed observer.
+
+The team work packet board is now the machine-readable "do this next" layer.
+Use `apps/mission-control/src/fixtures/a2a2aTeamWorkPackets.json` to hand
+Codex the next scoped packet, while GLM-5.2, DeepSeek, AGY, and KOB consume
+their packets as report/validation inputs only.
 
 The first Codex-owned slice is now recorded as an outcome fixture. The next
 slice should come from the assignment board `immediateQueue`, while provider,

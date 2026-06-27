@@ -341,6 +341,35 @@ backlog items, and surfaces the next Codex action. It remains read-only: GLM-5.2
 DeepSeek, AGY, and KOB are report/validation inputs only, while Codex is the only
 scoped repo editor.
 
+## Team Work Packets
+
+Export role-scoped work packets from the assignment board:
+
+```bash
+python3 scripts/a2a/a2a_team_work_packets.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This reads:
+
+- `apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json`
+- `apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json`
+- `apps/mission-control/src/fixtures/a2a2aScopedPathGuard.json`
+
+It writes:
+
+- a runtime report at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/work_packets/latest.json`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aTeamWorkPackets.json`
+
+The packet layer is the first machine-readable "do this next" surface for the
+team. Each packet declares owner, owner mode, allowed actions, blocked actions,
+allowed paths, planned files, and validation commands. Codex packets may allow
+scoped repo edits; worker packets stay report-only; KOB remains validate-only.
+No packet enables provider calls, connector sync, deploy, push, secret reads,
+generated `web-sirinx` asset mutation, or `git add .`.
+
 ## Codex Lane Outcome
 
 Record the first Codex-owned implementation slice outcome:

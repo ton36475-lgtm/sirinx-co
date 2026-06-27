@@ -18,6 +18,7 @@ from scripts.a2a import a2a_codex_lane_outcome
 from scripts.a2a import a2a_implementation_lane_packet
 from scripts.a2a import a2a_codex_first_implementation_lane
 from scripts.a2a import a2a_scoped_path_guard
+from scripts.a2a import a2a_team_work_packets
 from scripts.a2a import a2a_runner_dispatch_command
 from scripts.a2a import a2a_worker_report_digest
 from scripts.a2a import a2a_handoff_router
@@ -903,6 +904,63 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertEqual(fixture["summary"]["providerCalls"], 0)
             self.assertFalse(fixture["summary"]["workerDirectEdits"])
             self.assertIn("workers_report_only", fixture["policyBoundary"])
+            self.assertTrue(Path(fixture["runtimeReportPath"]).exists())
+
+    def test_team_work_packets_exports_next_codex_packet_without_provider_calls(self) -> None:
+        assignment = {
+            "immediateQueue": [
+                {
+                    "queueId": "LANE-CODEX-LANE-TASK-02",
+                    "source": "first_codex_implementation_lane",
+                    "priority": 2,
+                    "owner": "codex",
+                    "status": "ready_for_codex",
+                    "task": "implement_only_allowed_paths",
+                    "why": "Dirty lanes exist outside A2A2A.",
+                    "acceptance": "Scoped git status contains only files listed in the lane packet.",
+                },
+                {
+                    "queueId": "LANE-CODEX-LANE-TASK-03",
+                    "source": "first_codex_implementation_lane",
+                    "priority": 3,
+                    "owner": "glm52_deepseek_agy_kob",
+                    "status": "report_input",
+                    "task": "consume_report_only_feedback",
+                    "why": "Worker reports exist.",
+                    "acceptance": "No worker commits, provider calls, or command execution are required.",
+                },
+            ]
+        }
+        lane = {
+            "lane": {
+                "allowedPaths": ["scripts/a2a/", "apps/mission-control/src/fixtures/"],
+                "blockedPaths": [".env", "apps/web-sirinx/dist/"],
+                "validationCommands": ["python3 -m unittest tests.ghostclaw_runner.test_runner_status_fixture"],
+            }
+        }
+        guard = {
+            "plannedFiles": [
+                {"path": "scripts/a2a/a2a_team_work_packets.py", "status": "allowed"},
+                {"path": "apps/mission-control/src/fixtures/a2a2aTeamWorkPackets.json", "status": "allowed"},
+            ]
+        }
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-team-work-packets-") as tmp:
+            runtime = Path(tmp) / "runtime"
+
+            fixture = a2a_team_work_packets.build_packets(assignment, lane, guard, runtime)
+
+            self.assertEqual(fixture["summary"]["status"], "ready_for_team_packets")
+            self.assertEqual(fixture["summary"]["nextCodexTask"], "implement_only_allowed_paths")
+            self.assertFalse(fixture["summary"]["providerCallsAllowed"])
+            self.assertFalse(fixture["summary"]["workerDirectEditsAllowed"])
+            self.assertFalse(fixture["summary"]["gitAddDotAllowed"])
+            self.assertEqual(fixture["nextCodexPacket"]["ownerMode"], "scoped_repo_edit")
+            self.assertTrue(fixture["nextCodexPacket"]["executionAllowed"])
+            self.assertIn("scripts/a2a/", fixture["nextCodexPacket"]["allowedPaths"])
+            self.assertIn("provider_call", fixture["nextCodexPacket"]["blockedActions"])
+            self.assertTrue(fixture["nextCodexPacket"]["validationCommands"])
+            self.assertEqual(fixture["packets"][1]["ownerMode"], "report_and_validate_only")
+            self.assertFalse(fixture["packets"][1]["workerDirectEditsAllowed"])
             self.assertTrue(Path(fixture["runtimeReportPath"]).exists())
 
     def test_scoped_path_guard_allows_planned_a2a2a_files_only(self) -> None:

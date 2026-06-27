@@ -121,14 +121,18 @@ def build_checks(fixtures: dict[str, dict[str, Any]]) -> list[dict[str, str]]:
         ),
         check(
             "handoff_router",
-            "Handoff router has review-only Codex queue and no blocked results",
+            "Handoff router has buildable Opus-first review-only Codex queue and no blocked results",
             handoff_summary.get("status") == "ready_handoffs_registered"
             and int(handoff_summary.get("codexQueueItems", 0) or 0) >= 1
+            and handoff_summary.get("nextCodexSourceRole") == "opus"
+            and "HERMES-OPUS-NEXT-CODEX-LANE" in str(handoff_summary.get("nextCodexSourceTaskId", ""))
             and int(handoff_summary.get("blockedHandoffs", 0) or 0) == 0
             and int(handoff_summary.get("providerCalls", 0) or 0) == 0
             and not bool(handoff_summary.get("executionAllowed", True)),
             (
                 f"status={handoff_summary.get('status')}; codexQueue={handoff_summary.get('codexQueueItems')}; "
+                f"nextSource={handoff_summary.get('nextCodexSourceRole')}; "
+                f"nextTask={handoff_summary.get('nextCodexSourceTaskId')}; "
                 f"blocked={handoff_summary.get('blockedHandoffs')}; executionAllowed={handoff_summary.get('executionAllowed')}"
             ),
             "Run the handoff router before claiming A2A2A is ready for Codex queue review.",
@@ -213,12 +217,13 @@ def build_audit(runtime_root: Path) -> dict[str, Any]:
             "roles": fixtures["runner"].get("summary", {}).get("roles", 0),
             "codexQueueItems": fixtures["handoff"].get("summary", {}).get("codexQueueItems", 0),
             "handoffRouterStatus": fixtures["handoff"].get("summary", {}).get("status", "unknown"),
+            "nextCodexSourceTaskId": fixtures["handoff"].get("summary", {}).get("nextCodexSourceTaskId", ""),
             "workerReports": fixtures["digest"].get("summary", {}).get("workerReports", 0),
             "implementationPacketStatus": fixtures["packet"].get("summary", {}).get("status", "unknown"),
         },
         "checks": checks,
         "prioritySequence": [
-            "Review a2a2aHandoffRouter.json and pick the first still-relevant Codex queue item.",
+            "Review a2a2aHandoffRouter.json and use the buildable Opus architecture handoff before smoke tasks.",
             "Review a2a2aImplementationLanePacket.json.",
             "Open the first scoped Codex implementation lane from packet priorityWorkItems.",
             "Keep GLM-5.2, DeepSeek, AGY, and KOB report-only until a separate execution lane exists.",

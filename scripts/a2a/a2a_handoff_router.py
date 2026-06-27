@@ -24,6 +24,21 @@ DEFAULT_RUNTIME_ROOT = Path(
 )
 DEFAULT_FIXTURE_PATH = REPO_ROOT / "apps" / "mission-control" / "src" / "fixtures" / "a2a2aHandoffRouter.json"
 RUNNER_ROLES = {"hermes", "opus", "glm52", "deepseek", "agy", "kob"}
+CODEX_QUEUE_ROLE_PRIORITY = {
+    "opus": 0,
+    "glm52": 1,
+    "deepseek": 2,
+    "agy": 3,
+    "kob": 4,
+    "hermes": 5,
+}
+CODEX_QUEUE_TASK_PRIORITY = {
+    "HERMES-OPUS-NEXT-CODEX-LANE": 0,
+    "CODEX-PLAN": 10,
+    "PLAN-REVIEW": 20,
+    "VALIDATE": 30,
+    "SMOKE": 90,
+}
 SECRET_PATTERNS = [
     re.compile(r"(sk-[A-Za-z0-9_-]{12,})"),
     re.compile(r"(kob_[A-Za-z0-9_-]{8,})"),
@@ -116,6 +131,8 @@ def queue_id_for(row: dict[str, Any]) -> str:
 def build_codex_queue_item(runtime_root: Path, row: dict[str, Any]) -> dict[str, Any]:
     queue_id = queue_id_for(row)
     queue_path = runtime_root / "handoffs" / "codex_queue" / f"{queue_id}.json"
+    queue_priority = CODEX_QUEUE_ROLE_PRIORITY.get(str(row["sourceRole"]), 99)
+    task_priority = codex_task_priority(str(row["taskId"]))
     return {
         "queueId": queue_id,
         "createdAt": now_iso(),
@@ -124,6 +141,8 @@ def build_codex_queue_item(runtime_root: Path, row: dict[str, Any]) -> dict[str,
         "sourceTaskId": row["taskId"],
         "sourceResultPath": row["sourcePath"],
         "queuePath": str(queue_path),
+        "queuePriority": queue_priority,
+        "taskPriority": task_priority,
         "status": "ready_for_codex_review",
         "executionAllowed": False,
         "summary": row["summary"],
@@ -169,6 +188,14 @@ def write_role_envelope(runtime_root: Path, handoff: dict[str, Any]) -> None:
     write_json(Path(handoff["inboxPath"]), envelope)
 
 
+def codex_task_priority(task_id: str) -> int:
+    normalized = task_id.upper()
+    for marker, priority in CODEX_QUEUE_TASK_PRIORITY.items():
+        if marker in normalized:
+            return priority
+    return 50
+
+
 def build_fixture(runtime_root: Path, route_role_inbox: bool) -> dict[str, Any]:
     codex_queue: list[dict[str, Any]] = []
     role_handoffs: list[dict[str, Any]] = []
@@ -199,6 +226,14 @@ def build_fixture(runtime_root: Path, route_role_inbox: bool) -> dict[str, Any]:
         else:
             ignored += 1
 
+    codex_queue.sort(
+        key=lambda item: (
+            int(item["queuePriority"]),
+            int(item["taskPriority"]),
+            str(item["sourceTaskId"]),
+            str(item["queueId"]),
+        )
+    )
     status = "ready_handoffs_registered"
     if blocked:
         status = "review_blocked_handoffs"
@@ -214,6 +249,9 @@ def build_fixture(runtime_root: Path, route_role_inbox: bool) -> dict[str, Any]:
         "summary": {
             "status": status,
             "codexQueueItems": len(codex_queue),
+            "nextCodexQueueId": codex_queue[0]["queueId"] if codex_queue else "",
+            "nextCodexSourceRole": codex_queue[0]["sourceRole"] if codex_queue else "",
+            "nextCodexSourceTaskId": codex_queue[0]["sourceTaskId"] if codex_queue else "",
             "roleHandoffs": len(role_handoffs),
             "blockedHandoffs": len(blocked),
             "ignoredResults": ignored,

@@ -589,6 +589,9 @@ type A2A2AHandoffRouterFixture = {
   summary: {
     status: string;
     codexQueueItems: number;
+    nextCodexQueueId: string;
+    nextCodexSourceRole: string;
+    nextCodexSourceTaskId: string;
     roleHandoffs: number;
     blockedHandoffs: number;
     ignoredResults: number;
@@ -604,6 +607,8 @@ type A2A2AHandoffRouterFixture = {
     sourceTaskId: string;
     sourceResultPath: string;
     queuePath: string;
+    queuePriority: number;
+    taskPriority: number;
     status: string;
     executionAllowed: boolean;
     summary: string;
@@ -871,6 +876,7 @@ type A2A2ACompletionAuditFixture = {
     roles: number;
     codexQueueItems: number;
     handoffRouterStatus: string;
+    nextCodexSourceTaskId: string;
     workerReports: number;
     implementationPacketStatus: string;
   };
@@ -3008,6 +3014,13 @@ export default function App() {
                     <span>Handoff</span>
                     <strong>
                       {a2a2aCompletionAudit.summary.handoffRouterStatus}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Next Task</span>
+                    <strong>
+                      {a2a2aCompletionAudit.summary.nextCodexSourceTaskId ||
+                        "none"}
                     </strong>
                   </div>
                   <div className="practice-kpi">
@@ -5828,6 +5841,19 @@ export default function App() {
                     </strong>
                   </div>
                   <div className="practice-kpi">
+                    <span>Next Source</span>
+                    <strong>
+                      {a2a2aHandoffRouter.summary.nextCodexSourceRole || "none"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Next Task</span>
+                    <strong>
+                      {a2a2aHandoffRouter.summary.nextCodexSourceTaskId ||
+                        "none"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
                     <span>Role Handoffs</span>
                     <strong>{a2a2aHandoffRouter.summary.roleHandoffs}</strong>
                   </div>
@@ -5887,7 +5913,8 @@ export default function App() {
                     {a2a2aHandoffRouter.codexQueue.map((item) => (
                       <div className="practice-artifact-row" key={item.queueId}>
                         <span className="practice-status payload-ready">
-                          {item.sourceRole}
+                          {item.sourceRole} · p{item.queuePriority}/t
+                          {item.taskPriority}
                         </span>
                         <div>
                           <strong>{item.status}</strong>

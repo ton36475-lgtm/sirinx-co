@@ -116,6 +116,11 @@ This reads `outbox/<role>/*.result.json` and writes:
   `apps/mission-control/src/fixtures/a2a2aHandoffRouter.json`
 
 Codex queue items are review-only. They do not permit file edits by themselves.
+The Codex queue is sorted in dependency order: Opus architecture handoffs first,
+then GLM-5.2, DeepSeek, AGY, KOB, and Hermes. Inside the Opus lane, real
+architecture handoffs such as `HERMES-OPUS-NEXT-CODEX-LANE` outrank smoke tasks
+so Codex starts from a buildable handoff instead of a system check.
+
 Role-to-role routing is deliberately separate from runner execution. To enqueue
 safe role handoffs into a local role inbox, pass:
 

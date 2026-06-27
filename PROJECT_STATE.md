@@ -1173,7 +1173,9 @@ Toolkit` tab.
   `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/handoffs/codex_queue/`.
   Current state has 6 Codex queue items, 1 KOB-to-Hermes handoff that is not
   enqueued, 0 blocked handoffs, 0 provider calls, and
-  `executionAllowed=false`.
+  `executionAllowed=false`. The next Codex item is now the Opus architecture
+  handoff `A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001`, with smoke checks sorted
+  behind buildable handoffs.
 - Boundary: this A2A2A state still does not call providers, execute KOB
   commands, clone repos, start Docker, write connectors, push, deploy, read
   secrets, or mutate generated `web-sirinx` assets. Worker reports are inputs

@@ -225,12 +225,15 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertEqual(exit_code, 0)
             fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
             self.assertEqual(fixture["summary"]["codexQueueItems"], 1)
+            self.assertEqual(fixture["summary"]["nextCodexSourceRole"], "opus")
             self.assertEqual(fixture["summary"]["roleHandoffs"], 1)
             self.assertEqual(fixture["summary"]["blockedHandoffs"], 1)
             self.assertEqual(fixture["summary"]["roleInboxWrites"], 0)
             self.assertFalse(fixture["summary"]["executionAllowed"])
             self.assertTrue(Path(fixture["codexQueue"][0]["queuePath"]).exists())
             self.assertIn("TOKEN=<masked>", fixture["codexQueue"][0]["goalPreview"])
+            self.assertEqual(fixture["codexQueue"][0]["queuePriority"], 0)
+            self.assertEqual(fixture["codexQueue"][0]["taskPriority"], 50)
             self.assertEqual(fixture["roleHandoffs"][0]["targetOwner"], "hermes")
             self.assertFalse((runtime / "inbox" / "hermes").exists())
             self.assertEqual(
@@ -238,6 +241,96 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
                 "provider_call_result_requires_review",
             )
             self.assertIn("no_provider_call", fixture["policyBoundary"])
+
+    def test_handoff_router_prioritizes_opus_before_worker_reports_for_codex(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-handoff-order-") as tmp:
+            runtime = Path(tmp) / "runtime"
+            fixture_path = Path(tmp) / "handoffs.json"
+            for role in ["agy", "opus", "glm52"]:
+                outbox = runtime / "outbox" / role
+                outbox.mkdir(parents=True)
+                (outbox / f"{role}.result.json").write_text(
+                    json.dumps(
+                        {
+                            "created_at": "2026-06-27T00:00:00+00:00",
+                            "status": "dry_run_completed",
+                            "provider_call": False,
+                            "role": role,
+                            "task": {"task_id": role.upper(), "goal_preview": f"{role} handoff"},
+                            "output": {
+                                "summary": f"{role} summary",
+                                "handoff": {"next_owner": "codex", "safe_to_dispatch_locally": True},
+                            },
+                        }
+                    ),
+                    encoding="utf-8",
+                )
+
+            exit_code = a2a_handoff_router.main(
+                [
+                    "--runtime-root",
+                    str(runtime),
+                    "--fixture-path",
+                    str(fixture_path),
+                ]
+            )
+
+            self.assertEqual(exit_code, 0)
+            fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+            self.assertEqual(fixture["summary"]["codexQueueItems"], 3)
+            self.assertEqual(fixture["summary"]["nextCodexSourceRole"], "opus")
+            self.assertEqual(fixture["codexQueue"][0]["sourceRole"], "opus")
+            self.assertEqual([item["sourceRole"] for item in fixture["codexQueue"]], ["opus", "glm52", "agy"])
+
+    def test_handoff_router_prioritizes_opus_architecture_lane_before_smoke(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-handoff-opus-priority-") as tmp:
+            runtime = Path(tmp) / "runtime"
+            fixture_path = Path(tmp) / "handoffs.json"
+            outbox = runtime / "outbox" / "opus"
+            outbox.mkdir(parents=True)
+            task_ids = [
+                "A2A2A-DISPATCH-SMOKE-001",
+                "A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001",
+                "A2A2A-RUNNER-SMOKE-001",
+            ]
+            for task_id in task_ids:
+                (outbox / f"{task_id}.result.json").write_text(
+                    json.dumps(
+                        {
+                            "created_at": "2026-06-27T00:00:00+00:00",
+                            "status": "dry_run_completed",
+                            "provider_call": False,
+                            "role": "opus",
+                            "task": {"task_id": task_id, "goal_preview": task_id},
+                            "output": {
+                                "summary": task_id,
+                                "handoff": {"next_owner": "codex", "safe_to_dispatch_locally": True},
+                            },
+                        }
+                    ),
+                    encoding="utf-8",
+                )
+
+            exit_code = a2a_handoff_router.main(
+                [
+                    "--runtime-root",
+                    str(runtime),
+                    "--fixture-path",
+                    str(fixture_path),
+                ]
+            )
+
+            self.assertEqual(exit_code, 0)
+            fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+            self.assertEqual(
+                fixture["summary"]["nextCodexSourceTaskId"],
+                "A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001",
+            )
+            self.assertEqual(
+                fixture["codexQueue"][0]["sourceTaskId"],
+                "A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001",
+            )
+            self.assertEqual(fixture["codexQueue"][0]["taskPriority"], 0)
 
     def test_codex_build_plan_consumes_first_ready_queue_item(self) -> None:
         with tempfile.TemporaryDirectory(prefix="ghostclaw-codex-plan-") as tmp:
@@ -449,6 +542,8 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
                 "summary": {
                     "status": "ready_handoffs_registered",
                     "codexQueueItems": 2,
+                    "nextCodexSourceRole": "opus",
+                    "nextCodexSourceTaskId": "A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001",
                     "blockedHandoffs": 0,
                     "providerCalls": 0,
                     "executionAllowed": False,

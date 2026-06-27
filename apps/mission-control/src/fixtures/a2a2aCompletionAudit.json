@@ -22,9 +22,9 @@
       "status": "pass"
     },
     {
-      "evidence": "status=ready_handoffs_registered; codexQueue=6; blocked=0; executionAllowed=False",
+      "evidence": "status=ready_handoffs_registered; codexQueue=6; nextSource=opus; nextTask=A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001; blocked=0; executionAllowed=False",
       "id": "handoff_router",
-      "label": "Handoff router has review-only Codex queue and no blocked results",
+      "label": "Handoff router has buildable Opus-first review-only Codex queue and no blocked results",
       "nextAction": "Run the handoff router before claiming A2A2A is ready for Codex queue review.",
       "status": "pass"
     },
@@ -85,7 +85,7 @@
     "no_generated_web_sirinx_asset_mutation"
   ],
   "prioritySequence": [
-    "Review a2a2aHandoffRouter.json and pick the first still-relevant Codex queue item.",
+    "Review a2a2aHandoffRouter.json and use the buildable Opus architecture handoff before smoke tasks.",
     "Review a2a2aImplementationLanePacket.json.",
     "Open the first scoped Codex implementation lane from packet priorityWorkItems.",
     "Keep GLM-5.2, DeepSeek, AGY, and KOB report-only until a separate execution lane exists.",
@@ -99,6 +99,7 @@
     "failed": 0,
     "handoffRouterStatus": "ready_handoffs_registered",
     "implementationPacketStatus": "ready_for_codex_scoped_implementation_review",
+    "nextCodexSourceTaskId": "A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001",
     "overallStatus": "ready_for_first_scoped_codex_lane",
     "passed": 10,
     "providerCalls": 0,
@@ -106,5 +107,5 @@
     "roles": 6,
     "workerReports": 3
   },
-  "updatedAt": "2026-06-27T14:21:13+00:00"
+  "updatedAt": "2026-06-27T14:41:50+00:00"
 }

@@ -30,6 +30,7 @@ import a2a2aWorkerFollowupImplementationPacketFixture from "./fixtures/a2a2aWork
 import a2a2aWorkerFollowupPacketValidationFixture from "./fixtures/a2a2aWorkerFollowupPacketValidation.json";
 import a2a2aWorkerFollowupPacketOutcomeFixture from "./fixtures/a2a2aWorkerFollowupPacketOutcome.json";
 import a2a2aTeamCodingStartPacketFixture from "./fixtures/a2a2aTeamCodingStartPacket.json";
+import a2a2aNextScopedCodingPacketFixture from "./fixtures/a2a2aNextScopedCodingPacket.json";
 import a2a2aImplementationLanePacketFixture from "./fixtures/a2a2aImplementationLanePacket.json";
 import a2a2aScopedPathGuardFixture from "./fixtures/a2a2aScopedPathGuard.json";
 import a2a2aCompletionAuditFixture from "./fixtures/a2a2aCompletionAudit.json";
@@ -1012,6 +1013,62 @@ type A2A2ATeamCodingStartPacketFixture = {
   nextSafeActions: string[];
 };
 
+type A2A2ANextScopedCodingPacketFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  summary: {
+    status: string;
+    selectedBacklogId: string;
+    plannedFiles: number;
+    validationCommands: number;
+    workerInputs: number;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    gitAddDotAllowed: boolean;
+    businessLogicEditsAllowed: boolean;
+    executionAllowed: boolean;
+  };
+  selectedBacklogItem: {
+    id: string;
+    priority: number;
+    owner: string;
+    task: string;
+    nextAction: string;
+    source: string;
+  };
+  packet: {
+    packetId: string;
+    sourceStartPacketId: string;
+    selectedBacklogId: string;
+    status: string;
+    owner: string;
+    ownerMode: string;
+    executionAllowed: boolean;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    gitAddDotAllowed: boolean;
+    businessLogicEditsAllowed: boolean;
+    task: string;
+    why: string;
+    acceptance: string;
+    allowedActions: string[];
+    allowedPaths: string[];
+    blockedActions: string[];
+    plannedFiles: string[];
+    validationCommands: string[];
+    workerInputs: {
+      role: string;
+      mode: string;
+      task: string;
+    }[];
+  };
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type A2A2AImplementationLanePacketFixture = {
   updatedAt: string;
   mode: string;
@@ -1581,6 +1638,8 @@ const a2a2aWorkerFollowupPacketOutcome =
   a2a2aWorkerFollowupPacketOutcomeFixture as A2A2AWorkerFollowupPacketOutcomeFixture;
 const a2a2aTeamCodingStartPacket =
   a2a2aTeamCodingStartPacketFixture as A2A2ATeamCodingStartPacketFixture;
+const a2a2aNextScopedCodingPacket =
+  a2a2aNextScopedCodingPacketFixture as A2A2ANextScopedCodingPacketFixture;
 const a2a2aImplementationLanePacket =
   a2a2aImplementationLanePacketFixture as A2A2AImplementationLanePacketFixture;
 const a2a2aScopedPathGuard =
@@ -4686,6 +4745,21 @@ export default function App() {
                         : "PACKET"}
                     </strong>
                   </div>
+                  <div className="practice-kpi">
+                    <span>Scoped Packet</span>
+                    <strong>
+                      {a2a2aNextScopedCodingPacket.summary.status ===
+                      "ready_for_scoped_coding_packet"
+                        ? "READY"
+                        : "BLOCK"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Planned Files</span>
+                    <strong>
+                      {a2a2aNextScopedCodingPacket.summary.plannedFiles}
+                    </strong>
+                  </div>
                 </div>
 
                 <div className="practice-manifest-line">
@@ -4709,6 +4783,10 @@ export default function App() {
                   </code>
                   <span>Runtime</span>
                   <code>{a2a2aTeamCodingStartPacket.runtimeReportPath}</code>
+                  <span>Scoped Packet</span>
+                  <code>{a2a2aNextScopedCodingPacket.packet.packetId}</code>
+                  <span>Packet Runtime</span>
+                  <code>{a2a2aNextScopedCodingPacket.runtimeReportPath}</code>
                 </div>
 
                 <div className="git-fixture-notice">
@@ -4824,6 +4902,73 @@ export default function App() {
                         </p>
                         <code>
                           {a2a2aTeamCodingStartPacket.codexStartPacket.blockedActions.join(
+                            ", ",
+                          )}
+                        </code>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A next scoped coding packet"
+                  >
+                    <div className="git-section-title">
+                      <span>Next Scoped Packet</span>
+                      <span className="approval-badge">
+                        {a2a2aNextScopedCodingPacket.summary.selectedBacklogId}
+                      </span>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span
+                        className={`practice-status ${
+                          a2a2aNextScopedCodingPacket.summary.executionAllowed
+                            ? "payload-ready"
+                            : "payload-blocked"
+                        }`}
+                      >
+                        packet
+                      </span>
+                      <div>
+                        <strong>
+                          {a2a2aNextScopedCodingPacket.packet.task}
+                        </strong>
+                        <p>{a2a2aNextScopedCodingPacket.packet.acceptance}</p>
+                        <code>
+                          {a2a2aNextScopedCodingPacket.packet.plannedFiles.join(
+                            ", ",
+                          )}
+                        </code>
+                      </div>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span className="practice-status payload-warn">
+                        workers
+                      </span>
+                      <div>
+                        <strong>Worker inputs stay report-only</strong>
+                        <p>
+                          GLM-5.2, AGY, and KOB can advise after Codex defines
+                          local evidence.
+                        </p>
+                        <code>
+                          {a2a2aNextScopedCodingPacket.packet.workerInputs
+                            .map((worker) => `${worker.role}:${worker.mode}`)
+                            .join(", ")}
+                        </code>
+                      </div>
+                    </div>
+                    <div className="practice-artifact-row">
+                      <span className="practice-status payload-blocked">
+                        guard
+                      </span>
+                      <div>
+                        <strong>Still blocked</strong>
+                        <p>
+                          No provider, connector, deploy, push, or broad git.
+                        </p>
+                        <code>
+                          {a2a2aNextScopedCodingPacket.packet.blockedActions.join(
                             ", ",
                           )}
                         </code>

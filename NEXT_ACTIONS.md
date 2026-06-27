@@ -883,9 +883,12 @@ configuration lane, then keep future entries concise and source-path based.
       coding slice from a fresh scoped packet.
 - [x] Export the A2A2A team coding start packet at
       `apps/mission-control/src/fixtures/a2a2aTeamCodingStartPacket.json`.
-- [ ] Create the next fresh scoped implementation packet from
+- [x] Create the next fresh scoped implementation packet from
       `a2a2aTeamCodingStartPacket.codexStartPacket`, currently selecting
       `BACKLOG-092` as the next Codex-owned coding candidate.
+- [ ] Implement only the `BACKLOG-092` planned files from
+      `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacket.json`,
+      then run its scoped validation set before staging.
 - [ ] Do not use `git add .`, deploy, push, connector sync, provider calls,
       secret reads, Docker starts, external repo clone/audit, or generated
       `web-sirinx` asset mutation from this lane.
@@ -958,6 +961,15 @@ The team coding start packet is now the "team can begin coding" queue marker.
 candidate, and carries the role map plus the first 8 ready queue items into
 Mission Control. It still blocks business logic edits until Codex creates a
 fresh scoped implementation packet for that selected item.
+
+The next scoped coding packet is now open for the first Codex-owned team coding
+slice. `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacket.json`
+reports `ready_for_scoped_coding_packet`, opens `SCOPED-CODING-420bddf8b5` for
+`BACKLOG-092`, and lists the planned local files for a GLM-5.2 UI review
+benchmark. Use this packet as the next implementation input only; GLM-5.2 and
+AGY stay report-only until a provider lease exists, KOB stays validate-only,
+and provider, connector, deploy, push, generated asset, and external runtime
+lanes stay blocked.
 
 The first Codex-owned slice is now recorded as an outcome fixture. The next
 slice should come from the assignment board `immediateQueue`, while provider,

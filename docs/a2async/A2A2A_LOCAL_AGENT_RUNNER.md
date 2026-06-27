@@ -398,6 +398,35 @@ packet before touching application modules. Provider calls, connector sync,
 deploy, push, secret reads, `git add .`, generated `web-sirinx` asset mutation,
 and worker direct commits remain blocked.
 
+## Next Scoped Coding Packet
+
+Create the first concrete Codex coding packet from the selected team start
+candidate:
+
+```bash
+python3 scripts/a2a/a2a_next_scoped_coding_packet.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This reads:
+
+- `apps/mission-control/src/fixtures/a2a2aTeamCodingStartPacket.json`
+
+It writes:
+
+- a runtime report at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/next_scoped_coding_packets/latest.json`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacket.json`
+
+The packet records the selected backlog item, owner, planned files, validation
+commands, worker inputs, and blocked actions. For the current team start packet
+it selects `BACKLOG-092`, a GLM-5.2 UI review benchmark slice, and limits Codex
+to the packet-listed local files. GLM-5.2 and AGY remain report-only until a
+provider lease exists, KOB remains validate-only, and provider calls, connector
+sync, deploy, push, secret reads, `git add .`, generated `web-sirinx` asset
+mutation, and broad business logic edits stay blocked.
+
 ## Implementation Lane Packet
 
 Create the final review packet that turns the Codex plan and worker reports into

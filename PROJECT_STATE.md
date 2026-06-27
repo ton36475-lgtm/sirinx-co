@@ -1261,3 +1261,12 @@ implement_next_scoped_a2a2a_sync_slice` as `packet_completed` with validation
   direct edits, business logic edits without a fresh packet, and
   `gitAddDotAllowed` blocked. Its runtime report is
   `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/team_coding_start_packets/latest.json`.
+- Current next scoped coding packet evidence:
+  `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacket.json` records
+  `ready_for_scoped_coding_packet` for `BACKLOG-092`. It opens
+  `SCOPED-CODING-420bddf8b5` as the next Codex-owned local packet, lists 7
+  planned files for the GLM-5.2 UI review benchmark slice, defines 5 validation
+  commands, and keeps provider calls, worker direct edits, broad business logic
+  edits, generated `web-sirinx` asset mutation, and `gitAddDotAllowed` blocked.
+  Its runtime report is
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/next_scoped_coding_packets/latest.json`.

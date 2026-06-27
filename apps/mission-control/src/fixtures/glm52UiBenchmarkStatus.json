@@ -1,0 +1,71 @@
+{
+  "benchmark": {
+    "context": "Mission Control is the read-only observer for local A2A2A task state. The current slice asks GLM-5.2 to review UI clarity without changing source code.",
+    "requiredOutput": [
+      "findings",
+      "recommended_ui_changes",
+      "responsive_risks",
+      "accessibility_risks",
+      "implementation_plan",
+      "tests_to_run",
+      "no_code"
+    ],
+    "scoring": {
+      "criteria": [
+        "visual_hierarchy",
+        "layout_practicality",
+        "responsive_constraints",
+        "accessibility_risks",
+        "implementation_specificity",
+        "design_system_consistency",
+        "safety_and_scope_control"
+      ],
+      "passingThreshold": 4.0,
+      "scale": "1-5"
+    },
+    "uiExcerpt": {
+      "description": "A dense operational card shows ready queue counts, role map, selected BACKLOG-092 scoped packet, planned files, report-only worker inputs, and blocked action guards.",
+      "elements": [
+        "team coding status badge",
+        "ready queue and blocked gate KPI cells",
+        "selected backlog and scoped packet manifest line",
+        "priority queue rows",
+        "role map rows",
+        "next scoped packet rows for task, worker inputs, and blocked actions"
+      ],
+      "surface": "Mission Control A2A2A Team Coding Start and Next Scoped Packet panels"
+    }
+  },
+  "generatedBy": "scripts/model_eval/glm52_ui_review_benchmark.py",
+  "mode": "local_only_glm52_ui_review_benchmark",
+  "nextSafeActions": [
+    "Optionally run the generated prompt manually through an approved GLM-5.2 route.",
+    "Paste only summarized model findings into a future report-only worker artifact.",
+    "Codex remains the only repo editor and must validate any local UI change separately."
+  ],
+  "policyBoundary": [
+    "provider_calls_require_command_broker_lease",
+    "manual_playground_or_api_result_must_not_touch_repo",
+    "no_secret_read_or_print",
+    "no_connector_sync",
+    "no_deploy",
+    "no_push",
+    "no_auto_patch_from_model_output",
+    "no_public_benchmark_claim_without_local_evidence"
+  ],
+  "promptPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/model_evals/glm52_ui_review/prompts/mission_control_backlog_092_ui_review.md",
+  "runtimeReportPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/model_evals/glm52_ui_review/reports/glm52_ui_review_benchmark_status.json",
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/model_evals/glm52_ui_review",
+  "summary": {
+    "autoPatchAllowed": false,
+    "criteria": 7,
+    "manualProviderLeaseRequired": true,
+    "promptSections": 6,
+    "providerCallPerformed": false,
+    "publicClaimAllowed": false,
+    "selectedBacklogId": "BACKLOG-092",
+    "sourcePacketId": "SCOPED-CODING-420bddf8b5",
+    "status": "ready_for_manual_glm52_ui_review"
+  },
+  "updatedAt": "2026-06-27T17:29:38+00:00"
+}

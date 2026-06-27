@@ -1270,3 +1270,11 @@ implement_next_scoped_a2a2a_sync_slice` as `packet_completed` with validation
   edits, generated `web-sirinx` asset mutation, and `gitAddDotAllowed` blocked.
   Its runtime report is
   `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/next_scoped_coding_packets/latest.json`.
+- Current GLM-5.2 UI review benchmark evidence:
+  `apps/mission-control/src/fixtures/glm52UiBenchmarkStatus.json` reports
+  `ready_for_manual_glm52_ui_review` for `BACKLOG-092` and source packet
+  `SCOPED-CODING-420bddf8b5`. It creates a local prompt and runtime report
+  under
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/model_evals/glm52_ui_review/`,
+  defines 7 scoring criteria and 6 prompt sections, and records that no provider
+  call, auto-patch, or public benchmark claim has been performed.

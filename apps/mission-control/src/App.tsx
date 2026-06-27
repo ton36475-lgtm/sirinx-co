@@ -31,6 +31,7 @@ import a2a2aWorkerFollowupPacketValidationFixture from "./fixtures/a2a2aWorkerFo
 import a2a2aWorkerFollowupPacketOutcomeFixture from "./fixtures/a2a2aWorkerFollowupPacketOutcome.json";
 import a2a2aTeamCodingStartPacketFixture from "./fixtures/a2a2aTeamCodingStartPacket.json";
 import a2a2aNextScopedCodingPacketFixture from "./fixtures/a2a2aNextScopedCodingPacket.json";
+import glm52UiBenchmarkStatusFixture from "./fixtures/glm52UiBenchmarkStatus.json";
 import a2a2aImplementationLanePacketFixture from "./fixtures/a2a2aImplementationLanePacket.json";
 import a2a2aScopedPathGuardFixture from "./fixtures/a2a2aScopedPathGuard.json";
 import a2a2aCompletionAuditFixture from "./fixtures/a2a2aCompletionAudit.json";
@@ -1069,6 +1070,42 @@ type A2A2ANextScopedCodingPacketFixture = {
   nextSafeActions: string[];
 };
 
+type GLM52UiBenchmarkStatusFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  promptPath: string;
+  summary: {
+    status: string;
+    selectedBacklogId: string;
+    sourcePacketId: string;
+    criteria: number;
+    promptSections: number;
+    providerCallPerformed: boolean;
+    autoPatchAllowed: boolean;
+    publicClaimAllowed: boolean;
+    manualProviderLeaseRequired: boolean;
+  };
+  benchmark: {
+    context: string;
+    uiExcerpt: {
+      surface: string;
+      description: string;
+      elements: string[];
+    };
+    requiredOutput: string[];
+    scoring: {
+      scale: string;
+      passingThreshold: number;
+      criteria: string[];
+    };
+  };
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type A2A2AImplementationLanePacketFixture = {
   updatedAt: string;
   mode: string;
@@ -1640,6 +1677,8 @@ const a2a2aTeamCodingStartPacket =
   a2a2aTeamCodingStartPacketFixture as A2A2ATeamCodingStartPacketFixture;
 const a2a2aNextScopedCodingPacket =
   a2a2aNextScopedCodingPacketFixture as A2A2ANextScopedCodingPacketFixture;
+const glm52UiBenchmarkStatus =
+  glm52UiBenchmarkStatusFixture as GLM52UiBenchmarkStatusFixture;
 const a2a2aImplementationLanePacket =
   a2a2aImplementationLanePacketFixture as A2A2AImplementationLanePacketFixture;
 const a2a2aScopedPathGuard =
@@ -4974,6 +5013,171 @@ export default function App() {
                         </code>
                       </div>
                     </div>
+                  </section>
+                </div>
+              </div>
+
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>GLM-5.2 UI Review Benchmark</span>
+                  <span
+                    className={
+                      glm52UiBenchmarkStatus.summary.status ===
+                      "ready_for_manual_glm52_ui_review"
+                        ? "accent-emerald"
+                        : "accent-rose"
+                    }
+                  >
+                    {glm52UiBenchmarkStatus.summary.status}
+                  </span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Backlog</span>
+                    <strong>
+                      {glm52UiBenchmarkStatus.summary.selectedBacklogId}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Criteria</span>
+                    <strong>{glm52UiBenchmarkStatus.summary.criteria}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Prompt Sections</span>
+                    <strong>
+                      {glm52UiBenchmarkStatus.summary.promptSections}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Threshold</span>
+                    <strong>
+                      {glm52UiBenchmarkStatus.benchmark.scoring.passingThreshold.toFixed(
+                        1,
+                      )}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Provider</span>
+                    <strong>
+                      {glm52UiBenchmarkStatus.summary.providerCallPerformed
+                        ? "CALLED"
+                        : "MANUAL"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Auto Patch</span>
+                    <strong>
+                      {glm52UiBenchmarkStatus.summary.autoPatchAllowed
+                        ? "OPEN"
+                        : "BLOCK"}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Source Packet</span>
+                  <code>{glm52UiBenchmarkStatus.summary.sourcePacketId}</code>
+                  <span>Prompt</span>
+                  <code>{glm52UiBenchmarkStatus.promptPath}</code>
+                  <span>Runtime</span>
+                  <code>{glm52UiBenchmarkStatus.runtimeReportPath}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  {glm52UiBenchmarkStatus.benchmark.uiExcerpt.surface}:{" "}
+                  {glm52UiBenchmarkStatus.benchmark.uiExcerpt.description}
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="GLM 5.2 UI benchmark output contract"
+                  >
+                    <div className="git-section-title">
+                      <span>Required Output</span>
+                      <span className="approval-badge">
+                        {glm52UiBenchmarkStatus.benchmark.requiredOutput.length}
+                      </span>
+                    </div>
+                    {glm52UiBenchmarkStatus.benchmark.requiredOutput.map(
+                      (item) => (
+                        <div className="practice-artifact-row" key={item}>
+                          <span
+                            className={`practice-status ${
+                              item === "no_code"
+                                ? "payload-blocked"
+                                : "payload-ready"
+                            }`}
+                          >
+                            {item === "no_code" ? "guard" : "out"}
+                          </span>
+                          <div>
+                            <strong>{item}</strong>
+                            <p>
+                              Report-only benchmark output. Codex decides any
+                              future local patch separately.
+                            </p>
+                          </div>
+                        </div>
+                      ),
+                    )}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="GLM 5.2 UI benchmark scoring criteria"
+                  >
+                    <div className="git-section-title">
+                      <span>Scoring Criteria</span>
+                      <span className="approval-badge">
+                        {glm52UiBenchmarkStatus.benchmark.scoring.scale}
+                      </span>
+                    </div>
+                    {glm52UiBenchmarkStatus.benchmark.scoring.criteria.map(
+                      (criterion) => (
+                        <div className="practice-artifact-row" key={criterion}>
+                          <span className="practice-status payload-ready">
+                            score
+                          </span>
+                          <div>
+                            <strong>{criterion}</strong>
+                            <p>
+                              Pass only if average score meets the threshold
+                              without unsafe action suggestions.
+                            </p>
+                          </div>
+                        </div>
+                      ),
+                    )}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="GLM 5.2 UI benchmark policy boundary"
+                  >
+                    <div className="git-section-title">
+                      <span>Policy Boundary</span>
+                      <span className="approval-badge">
+                        {glm52UiBenchmarkStatus.policyBoundary.length}
+                      </span>
+                    </div>
+                    {glm52UiBenchmarkStatus.policyBoundary
+                      .slice(0, 6)
+                      .map((rule) => (
+                        <div className="practice-artifact-row" key={rule}>
+                          <span className="practice-status payload-blocked">
+                            gate
+                          </span>
+                          <div>
+                            <strong>{rule}</strong>
+                            <p>
+                              Benchmark artifacts are local evidence, not model
+                              execution proof.
+                            </p>
+                          </div>
+                        </div>
+                      ))}
                   </section>
                 </div>
               </div>

@@ -886,9 +886,14 @@ configuration lane, then keep future entries concise and source-path based.
 - [x] Create the next fresh scoped implementation packet from
       `a2a2aTeamCodingStartPacket.codexStartPacket`, currently selecting
       `BACKLOG-092` as the next Codex-owned coding candidate.
-- [ ] Implement only the `BACKLOG-092` planned files from
-      `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacket.json`,
-      then run its scoped validation set before staging.
+- [x] Implement the local-only `BACKLOG-092` GLM-5.2 UI review benchmark
+      scaffold and expose it through Mission Control without a provider call.
+- [x] Complete the planned local files from
+      `apps/mission-control/src/fixtures/a2a2aNextScopedCodingPacket.json` for
+      the `BACKLOG-092` prompt/status benchmark slice.
+- [ ] If a provider lease is later opened, run the generated GLM-5.2 UI review
+      prompt manually or through a budget-gated route and store only summarized
+      report-only findings.
 - [ ] Do not use `git add .`, deploy, push, connector sync, provider calls,
       secret reads, Docker starts, external repo clone/audit, or generated
       `web-sirinx` asset mutation from this lane.
@@ -970,6 +975,15 @@ benchmark. Use this packet as the next implementation input only; GLM-5.2 and
 AGY stay report-only until a provider lease exists, KOB stays validate-only,
 and provider, connector, deploy, push, generated asset, and external runtime
 lanes stay blocked.
+
+The GLM-5.2 UI review benchmark scaffold is now local-ready.
+`apps/mission-control/src/fixtures/glm52UiBenchmarkStatus.json` reports
+`ready_for_manual_glm52_ui_review` for `BACKLOG-092`, writes the prompt and
+runtime report under
+`/Users/sirinx/SIRINXDev/.ghostclaw_runtime/model_evals/glm52_ui_review/`, and
+records 0 provider calls, 0 auto-patch permission, and no public benchmark
+claim. This is evidence that the prompt/status lane exists, not evidence that
+GLM-5.2 has been called.
 
 The first Codex-owned slice is now recorded as an outcome fixture. The next
 slice should come from the assignment board `immediateQueue`, while provider,

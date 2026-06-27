@@ -141,16 +141,6 @@
   ],
   "dirtyPathSamples": [
     {
-      "matchedRule": "NEXT_ACTIONS.md",
-      "path": "NEXT_ACTIONS.md",
-      "status": "allowed"
-    },
-    {
-      "matchedRule": "PROJECT_STATE.md",
-      "path": "PROJECT_STATE.md",
-      "status": "allowed"
-    },
-    {
       "matchedRule": "",
       "path": "apps/dev-command-center/src/App.tsx",
       "status": "out_of_scope"
@@ -177,12 +167,12 @@
     },
     {
       "matchedRule": "apps/mission-control/src/fixtures/",
-      "path": "apps/mission-control/src/fixtures/a2a2aBacklogPriority.json",
+      "path": "apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json",
       "status": "allowed"
     },
     {
       "matchedRule": "apps/mission-control/src/fixtures/",
-      "path": "apps/mission-control/src/fixtures/a2a2aCodexBuildPlan.json",
+      "path": "apps/mission-control/src/fixtures/a2a2aDependencyReadiness.json",
       "status": "allowed"
     },
     {
@@ -258,6 +248,16 @@
     {
       "matchedRule": "apps/web-sirinx/dist/",
       "path": "apps/web-sirinx/dist/public/assets/Dashboard-D2rB2_pQ.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/DashboardLayout-XxPoPaqr.js",
+      "status": "blocked"
+    },
+    {
+      "matchedRule": "apps/web-sirinx/dist/",
+      "path": "apps/web-sirinx/dist/public/assets/FloatingChatWidget-DmbrfEig.js",
       "status": "blocked"
     }
   ],
@@ -493,7 +493,7 @@
     "allowedPaths": 8,
     "blockedDirty": 248,
     "blockedPaths": 6,
-    "dirtyPaths": 357,
+    "dirtyPaths": 351,
     "gitAddDotAllowed": false,
     "outOfScopeDirty": 342,
     "plannedAllowed": 16,
@@ -502,5 +502,5 @@
     "providerCalls": 0,
     "status": "ready_with_external_dirty_lanes"
   },
-  "updatedAt": "2026-06-27T14:03:50+00:00"
+  "updatedAt": "2026-06-27T14:51:37+00:00"
 }

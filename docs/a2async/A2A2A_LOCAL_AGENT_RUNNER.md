@@ -152,6 +152,12 @@ The board turns runner results into a Codex build queue:
 This is a dependency gate, not a human approval gate. It prevents workers from
 running out of order while keeping all work local and reviewable.
 
+Dependency readiness uses the same task priority rule as the handoff router:
+buildable Opus architecture handoffs, especially
+`A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001`, outrank smoke checks. The Mission
+Control fixture exposes `summary.nextCodexTaskId` and each queue item's
+`taskPriority` so Codex, KOB, and external sidebars select the same next lane.
+
 ## Codex Build Plan
 
 Create a plan-only Codex build artifact from the first ready queue item:

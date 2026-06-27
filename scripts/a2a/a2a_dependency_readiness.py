@@ -25,6 +25,13 @@ SECRET_PATTERNS = [
     re.compile(r"([A-Za-z0-9_]*(?:KEY|TOKEN|SECRET|PASSWORD)[A-Za-z0-9_]*=)([^\s]+)", re.I),
     re.compile(r"(Bearer\s+)([A-Za-z0-9._-]+)", re.I),
 ]
+CODEX_QUEUE_TASK_PRIORITY = {
+    "HERMES-OPUS-NEXT-CODEX-LANE": 0,
+    "CODEX-PLAN": 10,
+    "PLAN-REVIEW": 20,
+    "VALIDATE": 30,
+    "SMOKE": 90,
+}
 
 
 def now_iso() -> str:
@@ -90,6 +97,14 @@ def make_check(check_id: str, label: str, status: str, evidence: str, next_actio
     }
 
 
+def codex_task_priority(task_id: str) -> int:
+    normalized = task_id.upper()
+    for marker, priority in CODEX_QUEUE_TASK_PRIORITY.items():
+        if marker in normalized:
+            return priority
+    return 50
+
+
 def build_codex_queue(results: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
     queue = []
     for result in results:
@@ -104,6 +119,7 @@ def build_codex_queue(results: list[dict[str, Any]], limit: int) -> list[dict[st
                 {
                     "queueId": f"CODEX-BUILD-{result['taskId']}",
                     "taskId": result["taskId"],
+                    "taskPriority": codex_task_priority(str(result["taskId"])),
                     "sourceRole": result["role"],
                     "targetOwner": "codex",
                     "readiness": "ready_for_codex_plan",
@@ -113,6 +129,7 @@ def build_codex_queue(results: list[dict[str, Any]], limit: int) -> list[dict[st
                     "nextAction": "Codex creates a scoped implementation plan from the Opus handoff before editing files.",
                 }
             )
+    queue.sort(key=lambda item: (int(item["taskPriority"]), str(item["taskId"]), str(item["queueId"])))
     return queue[:limit]
 
 
@@ -191,6 +208,7 @@ def build_fixture(runtime_root: Path, limit: int) -> dict[str, Any]:
             "overallStatus": "ready_for_scoped_codex_plan" if codex_queue and not provider_calls else "needs_dependency_work",
             "dependencyChecks": len(checks),
             "codexQueueItems": len(codex_queue),
+            "nextCodexTaskId": codex_queue[0]["taskId"] if codex_queue else "",
             "workerReports": len(worker_reports),
             "kobReports": len(kob_reports),
             "providerCalls": len(provider_calls),

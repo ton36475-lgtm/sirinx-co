@@ -835,6 +835,9 @@ configuration lane, then keep future entries concise and source-path based.
       scoped lane.
 - [x] Enforce Opus-first Codex queue ordering and put the buildable Opus
       architecture handoff before smoke checks.
+- [x] Align dependency readiness with the handoff router so both boards expose
+      `A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001` as the next Codex task before
+      smoke checks.
 - [x] For the first implementation lane, Codex must own all file edits, run
       validation, and stage only the file list from the packet.
 - [x] Keep GLM-5.2, DeepSeek, and AGY report-only until a separate provider
@@ -853,13 +856,14 @@ configuration lane, then keep future entries concise and source-path based.
 
 ### Current Recommended A2A2A Next Action
 
-After the handoff router audit lane is committed, review
-`apps/mission-control/src/fixtures/a2a2aHandoffRouter.json` and use
+After the dependency-readiness alignment lane is committed, use
 `A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001` as the next Codex scoped
-implementation lane source. Completion audit now requires an Opus-first
-handoff router queue and shows 10/10 readiness checks. Keep workers
-report-only, Mission Control fixture-backed, KOB validate-only, and external
-actions blocked until their own scoped lane exists.
+implementation lane source. Both the handoff router and dependency readiness
+fixtures now point to this buildable Opus handoff before smoke checks.
+Completion audit requires the Opus-first handoff router queue and shows 10/10
+readiness checks. Keep workers report-only, Mission Control fixture-backed,
+KOB validate-only, and external actions blocked until their own scoped lane
+exists.
 
 The backlog priority board is now the read-only triage layer for old pending
 work. Use it to confirm that A2A2A P0 items stay ahead of connector sync,

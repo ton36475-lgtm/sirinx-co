@@ -1098,6 +1098,8 @@ Toolkit` tab.
   - worker reports: 3
   - KOB validation reports: 1
   - dependency worst status: ready
+  - dependency next Codex task:
+    `A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001`
   - implementation packet status:
     `ready_for_codex_scoped_implementation_review`
   - implementation packet execution: `false` / review-only

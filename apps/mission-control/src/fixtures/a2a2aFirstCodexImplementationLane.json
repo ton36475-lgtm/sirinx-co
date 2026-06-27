@@ -40,19 +40,22 @@
       "production credentials"
     ],
     "codexFileEditsAllowed": true,
-    "createdAt": "2026-06-27T13:59:09+00:00",
+    "createdAt": "2026-06-27T14:51:37+00:00",
     "gitOwner": "codex",
     "laneId": "CODEX-FIRST-93b325b1e4",
     "objective": "Execute the first Codex-owned implementation lane from the A2A2A packet while keeping workers report-only.",
     "providerCallsAllowed": false,
     "reviewInputs": {
       "completionAudit": {
+        "codexQueueItems": 6,
         "failed": 0,
+        "handoffRouterStatus": "ready_handoffs_registered",
         "implementationPacketStatus": "ready_for_codex_scoped_implementation_review",
+        "nextCodexSourceTaskId": "A2A2A-HERMES-OPUS-NEXT-CODEX-LANE-001",
         "overallStatus": "ready_for_first_scoped_codex_lane",
-        "passed": 9,
+        "passed": 10,
         "providerCalls": 0,
-        "requirements": 9,
+        "requirements": 10,
         "roles": 6,
         "workerReports": 3
       },
@@ -177,5 +180,5 @@
     "validationCommands": 7,
     "workerDirectEditsAllowed": false
   },
-  "updatedAt": "2026-06-27T13:59:09+00:00"
+  "updatedAt": "2026-06-27T14:51:37+00:00"
 }

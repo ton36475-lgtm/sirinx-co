@@ -650,6 +650,7 @@ type A2A2ADependencyReadinessFixture = {
     overallStatus: string;
     dependencyChecks: number;
     codexQueueItems: number;
+    nextCodexTaskId: string;
     workerReports: number;
     kobReports: number;
     providerCalls: number;
@@ -665,6 +666,7 @@ type A2A2ADependencyReadinessFixture = {
   codexBuildQueue: {
     queueId: string;
     taskId: string;
+    taskPriority: number;
     sourceRole: string;
     targetOwner: string;
     readiness: string;
@@ -5990,6 +5992,13 @@ export default function App() {
                     </strong>
                   </div>
                   <div className="practice-kpi">
+                    <span>Next Task</span>
+                    <strong>
+                      {a2a2aDependencyReadiness.summary.nextCodexTaskId ||
+                        "none"}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
                     <span>Workers</span>
                     <strong>
                       {a2a2aDependencyReadiness.summary.workerReports}
@@ -6066,7 +6075,7 @@ export default function App() {
                     {a2a2aDependencyReadiness.codexBuildQueue.map((item) => (
                       <div className="practice-artifact-row" key={item.queueId}>
                         <span className="practice-status payload-ready">
-                          {item.readiness}
+                          {item.readiness} · t{item.taskPriority}
                         </span>
                         <div>
                           <strong>

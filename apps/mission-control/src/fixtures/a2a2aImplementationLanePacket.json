@@ -19,7 +19,7 @@
       "secret_read_or_print",
       "modify_generated_web_sirinx_assets"
     ],
-    "createdAt": "2026-06-27T13:58:53+00:00",
+    "createdAt": "2026-06-27T14:51:37+00:00",
     "dependencyGate": [
       {
         "evidence": "CODEX-PLAN-ec5461ae55",
@@ -275,5 +275,5 @@
     "status": "ready_for_codex_scoped_implementation_review",
     "workerEvidence": 4
   },
-  "updatedAt": "2026-06-27T13:58:53+00:00"
+  "updatedAt": "2026-06-27T14:51:37+00:00"
 }

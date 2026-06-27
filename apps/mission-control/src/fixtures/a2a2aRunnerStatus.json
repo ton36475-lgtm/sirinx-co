@@ -1,5 +1,20 @@
 {
   "generatedBy": "scripts/a2a/a2a_export_runner_status_fixture.py",
+  "lastRunnerSummary": {
+    "createdAt": "2026-06-27T12:32:56+00:00",
+    "cycles": 2,
+    "mode": "dry-run",
+    "processed": 0,
+    "providerCallAllowed": false,
+    "rolesChecked": [
+      "hermes",
+      "opus",
+      "glm52",
+      "deepseek",
+      "kob"
+    ],
+    "watch": true
+  },
   "latestResults": [
     {
       "createdAt": "2026-06-27T12:03:28+00:00",
@@ -154,5 +169,5 @@
     "roles": 5,
     "running": 0
   },
-  "updatedAt": "2026-06-27T12:03:28+00:00"
+  "updatedAt": "2026-06-27T12:33:12+00:00"
 }

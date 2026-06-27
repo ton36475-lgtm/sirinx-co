@@ -53,6 +53,25 @@ python3 scripts/a2a/a2a_export_runner_status_fixture.py \
 The fixture is intentionally static so it can be reviewed, staged, and committed
 as evidence without giving the frontend runtime access to local files.
 
+## Bounded Watch Mode
+
+For a real local mail-runner loop, keep provider calls disabled and run bounded
+polling cycles:
+
+```bash
+python3 ghostclaw_runner/agent_runner.py \
+  --agent all \
+  --watch \
+  --max-cycles 10 \
+  --poll-interval 2 \
+  --dry-run
+```
+
+This checks all role inboxes in role order and writes deterministic local
+results. Use `--max-cycles` during operator-reviewed runs. Continuous watch
+mode is available by leaving `--max-cycles` at `0`, but it still does not call
+providers unless `--execute --allow-provider-call` is explicitly supplied.
+
 ## Dispatch Command
 
 Create a local role task envelope without provider calls:

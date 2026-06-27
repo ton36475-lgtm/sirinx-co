@@ -104,9 +104,23 @@ def load_latest_results(runtime_root: Path, limit: int) -> list[dict[str, Any]]:
     return sorted(results, key=lambda row: (row["createdAt"], row["path"]), reverse=True)[:limit]
 
 
+def load_runner_summary(runtime_root: Path) -> dict[str, Any]:
+    summary = read_json(runtime_root / "logs" / "runner-summary.json") or {}
+    return {
+        "createdAt": str(summary.get("created_at", "")),
+        "mode": str(summary.get("mode", "")),
+        "watch": bool(summary.get("watch", False)),
+        "cycles": int(summary.get("cycles", 0) or 0),
+        "processed": int(summary.get("processed", 0) or 0),
+        "providerCallAllowed": bool(summary.get("provider_call_allowed", False)),
+        "rolesChecked": summary.get("roles_checked", []) if isinstance(summary.get("roles_checked"), list) else [],
+    }
+
+
 def build_fixture(runtime_root: Path, limit: int) -> dict[str, Any]:
     counts = role_counts(runtime_root)
     latest_results = load_latest_results(runtime_root, limit)
+    runner_summary = load_runner_summary(runtime_root)
     status_counts = Counter(row["status"] for row in latest_results)
     provider_calls = sum(1 for row in latest_results if row["providerCall"])
     summary = {
@@ -128,6 +142,7 @@ def build_fixture(runtime_root: Path, limit: int) -> dict[str, Any]:
         "runtimeRoot": str(runtime_root),
         "sourceGlob": str(runtime_root / "outbox" / "*" / "*.result.json"),
         "summary": summary,
+        "lastRunnerSummary": runner_summary,
         "roleCounts": counts,
         "latestResults": latest_results,
         "policyBoundary": [

@@ -16,6 +16,7 @@ import json
 import os
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
@@ -420,6 +421,38 @@ def process_task(
         return result
 
 
+def process_available_tasks(
+    runtime_root: Path,
+    repo_root: Path,
+    brain_root: Path,
+    roles: list[str],
+    mode: str,
+    allow_provider_call: bool,
+    litellm_url: str,
+    model_override: str | None,
+    once: bool,
+) -> list[dict[str, Any]]:
+    processed: list[dict[str, Any]] = []
+    for role in roles:
+        for path in task_files(runtime_root, role):
+            processed.append(
+                process_task(
+                    runtime_root=runtime_root,
+                    repo_root=repo_root,
+                    brain_root=brain_root,
+                    role=role,
+                    path=path,
+                    mode=mode,
+                    allow_provider_call=allow_provider_call,
+                    litellm_url=litellm_url,
+                    model_override=model_override,
+                )
+            )
+            if once:
+                return processed
+    return processed
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run local GHOSTCLAW role inboxes")
     parser.add_argument("--runtime-root", default=os.environ.get("GHOSTCLAW_A2A2A_RUNTIME", DEFAULT_RUNTIME_ROOT))
@@ -433,6 +466,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--allow-provider-call", action="store_true", help="Allow an opt-in LiteLLM provider call.")
     parser.add_argument("--litellm-url", default=os.environ.get("LITELLM_URL", DEFAULT_LITELLM_URL))
     parser.add_argument("--model", default=None, help="Optional model override for provider calls.")
+    parser.add_argument("--watch", action="store_true", help="Poll inboxes repeatedly until stopped or max cycles is reached.")
+    parser.add_argument("--poll-interval", type=float, default=5.0, help="Seconds between watch cycles.")
+    parser.add_argument("--max-cycles", type=int, default=0, help="Maximum watch cycles. 0 means no limit.")
     return parser.parse_args(argv)
 
 
@@ -443,40 +479,47 @@ def main(argv: list[str] | None = None) -> int:
     brain_root = expand_path(args.brain_root or repo_root / "_OBSIDIAN_GHOSTCLAW_BRAIN")
     ensure_runtime(runtime_root)
 
-    if kill_switch_active(runtime_root):
-        append_jsonl(
-            runtime_root / "logs" / "runner-events.jsonl",
-            {"created_at": now_iso(), "event": "blocked", "reason": "kill_switch_active"},
-        )
-        print("blocked: kill switch active")
-        return 2
-
     mode = "execute" if args.execute else "dry-run"
     roles = ROLE_ORDER if args.agent == "all" else [args.agent]
     processed: list[dict[str, Any]] = []
-    for role in roles:
-        for path in task_files(runtime_root, role):
-            processed.append(
-                process_task(
-                    runtime_root=runtime_root,
-                    repo_root=repo_root,
-                    brain_root=brain_root,
-                    role=role,
-                    path=path,
-                    mode=mode,
-                    allow_provider_call=args.allow_provider_call,
-                    litellm_url=args.litellm_url,
-                    model_override=args.model,
-                )
+    cycles = 0
+    while True:
+        if kill_switch_active(runtime_root):
+            append_jsonl(
+                runtime_root / "logs" / "runner-events.jsonl",
+                {"created_at": now_iso(), "event": "blocked", "reason": "kill_switch_active", "cycle": cycles + 1},
             )
-            if args.once:
-                break
+            print("blocked: kill switch active")
+            return 2
+
+        cycles += 1
+        processed.extend(
+            process_available_tasks(
+                runtime_root=runtime_root,
+                repo_root=repo_root,
+                brain_root=brain_root,
+                roles=roles,
+                mode=mode,
+                allow_provider_call=args.allow_provider_call,
+                litellm_url=args.litellm_url,
+                model_override=args.model,
+                once=args.once,
+            )
+        )
+
+        if not args.watch:
+            break
         if args.once and processed:
             break
+        if args.max_cycles > 0 and cycles >= args.max_cycles:
+            break
+        time.sleep(max(0.1, args.poll_interval))
 
     summary = {
         "created_at": now_iso(),
         "mode": mode,
+        "watch": bool(args.watch),
+        "cycles": cycles,
         "provider_call_allowed": bool(args.allow_provider_call),
         "processed": len(processed),
         "roles_checked": roles,

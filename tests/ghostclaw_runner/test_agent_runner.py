@@ -82,6 +82,50 @@ class GhostclawAgentRunnerTest(unittest.TestCase):
             self.assertTrue(log_path.exists())
             self.assertIn("kill_switch_active", log_path.read_text(encoding="utf-8"))
 
+    def test_runner_watch_mode_polls_bounded_cycles_without_provider_call(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-runner-watch-") as tmp:
+            runtime = Path(tmp)
+            inbox = runtime / "inbox" / "deepseek"
+            inbox.mkdir(parents=True)
+            (inbox / "risk-task.json").write_text(
+                json.dumps(
+                    {
+                        "task_id": "A2A2A-WATCH-001",
+                        "from_agent": "codex",
+                        "to_agent": "deepseek",
+                        "goal": "Review a bounded watch-mode task.",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            exit_code = agent_runner.main(
+                [
+                    "--runtime-root",
+                    str(runtime),
+                    "--repo-root",
+                    str(REPO_ROOT),
+                    "--agent",
+                    "deepseek",
+                    "--watch",
+                    "--max-cycles",
+                    "2",
+                    "--poll-interval",
+                    "0.1",
+                    "--dry-run",
+                ]
+            )
+
+            self.assertEqual(exit_code, 0)
+            result_path = runtime / "outbox" / "deepseek" / "A2A2A-WATCH-001.result.json"
+            self.assertTrue(result_path.exists())
+            result = json.loads(result_path.read_text(encoding="utf-8"))
+            self.assertFalse(result["provider_call"])
+            summary = json.loads((runtime / "logs" / "runner-summary.json").read_text(encoding="utf-8"))
+            self.assertTrue(summary["watch"])
+            self.assertEqual(summary["cycles"], 2)
+            self.assertEqual(summary["processed"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

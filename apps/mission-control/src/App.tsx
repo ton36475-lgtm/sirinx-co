@@ -539,6 +539,15 @@ type A2A2ARunnerStatusFixture = {
     dryRunCompleted: number;
     overallStatus: string;
   };
+  lastRunnerSummary: {
+    createdAt: string;
+    mode: string;
+    watch: boolean;
+    cycles: number;
+    processed: number;
+    providerCallAllowed: boolean;
+    rolesChecked: string[];
+  };
   roleCounts: {
     role: string;
     inbox: number;
@@ -4534,6 +4543,25 @@ export default function App() {
                   <code>{a2a2aRunnerStatus.runtimeRoot}</code>
                   <span>Updated</span>
                   <code>{a2a2aRunnerStatus.updatedAt}</code>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Last Runner</span>
+                  <code>{a2a2aRunnerStatus.lastRunnerSummary.mode}</code>
+                  <span>Watch</span>
+                  <code>
+                    {String(a2a2aRunnerStatus.lastRunnerSummary.watch)}
+                  </code>
+                  <span>Cycles</span>
+                  <code>{a2a2aRunnerStatus.lastRunnerSummary.cycles}</code>
+                  <span>Processed</span>
+                  <code>{a2a2aRunnerStatus.lastRunnerSummary.processed}</code>
+                  <span>Provider Allowed</span>
+                  <code>
+                    {String(
+                      a2a2aRunnerStatus.lastRunnerSummary.providerCallAllowed,
+                    )}
+                  </code>
                 </div>
 
                 <div className="git-fixture-notice">

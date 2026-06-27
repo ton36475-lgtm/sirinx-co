@@ -19,6 +19,21 @@ Example dry run:
 python3 ghostclaw_runner/agent_runner.py --agent opus --once --dry-run
 ```
 
+Bounded local watch mode:
+
+```bash
+python3 ghostclaw_runner/agent_runner.py \
+  --agent all \
+  --watch \
+  --max-cycles 10 \
+  --poll-interval 2 \
+  --dry-run
+```
+
+Use `--max-cycles` for operator-reviewed runs. Leaving it at `0` watches until
+the process is stopped, but still writes deterministic local dry-run results by
+default.
+
 Provider calls are opt-in only and still local-router oriented:
 
 ```bash

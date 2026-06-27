@@ -36,6 +36,21 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
                 },
             }
             (outbox / "A2A2A-TEST.result.json").write_text(json.dumps(result), encoding="utf-8")
+            (runtime / "logs").mkdir(parents=True)
+            (runtime / "logs" / "runner-summary.json").write_text(
+                json.dumps(
+                    {
+                        "created_at": "2026-06-27T00:01:00+00:00",
+                        "mode": "dry-run",
+                        "watch": True,
+                        "cycles": 2,
+                        "processed": 1,
+                        "provider_call_allowed": False,
+                        "roles_checked": ["opus"],
+                    }
+                ),
+                encoding="utf-8",
+            )
             fixture_path = Path(tmp) / "fixture.json"
 
             exit_code = a2a_export_runner_status_fixture.main(
@@ -54,6 +69,8 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertEqual(fixture["summary"]["overallStatus"], "ready_local_runner")
             self.assertEqual(fixture["latestResults"][0]["nextOwner"], "codex")
             self.assertIn("no_provider_call_by_default", fixture["policyBoundary"])
+            self.assertTrue(fixture["lastRunnerSummary"]["watch"])
+            self.assertEqual(fixture["lastRunnerSummary"]["cycles"], 2)
 
     def test_dispatch_command_writes_envelope_and_can_run_once(self) -> None:
         with tempfile.TemporaryDirectory(prefix="ghostclaw-runner-dispatch-") as tmp:

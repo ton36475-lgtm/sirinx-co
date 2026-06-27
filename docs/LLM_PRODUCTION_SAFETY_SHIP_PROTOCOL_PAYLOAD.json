@@ -1,0 +1,44 @@
+{
+  "ship_protocol_version": "ghostclaw-article-safety-v1",
+  "task_id": "LLM-SAFETY-ARTICLE-001",
+  "source_request": "Convert an LLM safety analysis draft into a defensive production safety article.",
+  "workflow_stage": "article_review",
+  "assigned_agent": "Content",
+  "review_agent": "Admin",
+  "risk_class": "security_publication",
+  "required_context": {
+    "repo_docs": [
+      "docs/architecture/GHOSTCLAW_MASTER_ARCHITECTURE.md",
+      "docs/architecture/WORKFLOW_MAP.md",
+      "docs/security/LOCAL_FIRST_SECURITY_POLICY.md",
+      "docs/a2async/A2A_TASK_SCHEMA.md"
+    ],
+    "frameworks": [
+      "OWASP Top 10 for LLM Applications 2025",
+      "NIST AI RMF 1.0",
+      "NIST SSDF SP 800-218"
+    ]
+  },
+  "constraints": {
+    "no_jailbreak_prompts": true,
+    "no_bypass_instructions": true,
+    "no_reproducible_attack_steps": true,
+    "risk_surfaces_only": true,
+    "separate_model_and_application_safety": true,
+    "public_publication_safe": true
+  },
+  "output_artifacts": [
+    "docs/LLM_PRODUCTION_SAFETY_ARCHITECTURE.md",
+    "docs/LLM_RISK_SURFACE_TAXONOMY.md",
+    "docs/ARTICLE_SAFETY_QA_CHECKLIST.md",
+    "docs/REFERENCES.md"
+  ],
+  "validation": {
+    "article_structure_complete": true,
+    "unsafe_prompt_examples_removed": true,
+    "references_defensive_only": true,
+    "qa_checklist_required": true
+  },
+  "next_agent": "Admin",
+  "fallback_queue_reason": null
+}

@@ -1073,6 +1073,8 @@ Toolkit` tab.
   - runner completed tasks: 6
   - runner failed tasks: 0
   - provider calls: 0
+  - bounded watch smoke: `watch=true`, `cycles=2`, `processed=0`,
+    `providerCallAllowed=false`
   - worker reports: 2
   - KOB validation reports: 1
   - dependency worst status: ready
@@ -1097,3 +1099,8 @@ Toolkit` tab.
   commands, clone repos, start Docker, write connectors, push, deploy, read
   secrets, or mutate generated `web-sirinx` assets. Worker reports are inputs
   only; they never commit directly.
+- Runner mode: `ghostclaw_runner/agent_runner.py` now supports one-shot mode
+  and bounded watch mode. Operator-reviewed watch runs should use
+  `--watch --max-cycles <N> --poll-interval <seconds> --dry-run` until
+  provider routing, budget caps, and Command Broker leases are explicitly
+  opened.

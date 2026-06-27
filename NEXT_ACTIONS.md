@@ -798,6 +798,8 @@ configuration lane, then keep future entries concise and source-path based.
 - [x] Add worker report digest fixture and Mission Control panel.
 - [x] Add implementation lane packet fixture and Mission Control panel.
 - [x] Keep all A2A2A worker flow local-only with `providerCalls=0`.
+- [x] Add bounded runner watch mode and surface the last runner summary in
+      Mission Control.
 - [ ] Review the implementation packet in
       `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`.
 - [ ] Open the first scoped Codex implementation lane only after confirming the
@@ -823,3 +825,9 @@ task from the `priorityWorkItems` sequence:
 3. GLM-5.2 / DeepSeek / KOB remain report-only inputs.
 4. Codex runs validation commands.
 5. Codex stages and commits only the packet-listed files.
+
+For watch-mode handoff, use bounded polling first:
+
+```bash
+python3 ghostclaw_runner/agent_runner.py --agent all --watch --max-cycles 10 --poll-interval 2 --dry-run
+```

@@ -809,6 +809,8 @@ configuration lane, then keep future entries concise and source-path based.
 - [x] Add A2A2A backlog priority board from `NEXT_ACTIONS.md` so Mission
       Control can show the oldest pending work, P0/P1 queues, owner groups, and
       blocked gates without executing anything.
+- [x] Add A2A2A team assignment board so Mission Control can show the next
+      Codex action, immediate queue, role responsibilities, and edit rights.
 - [ ] Review the implementation packet in
       `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`.
 - [ ] Review
@@ -817,6 +819,9 @@ configuration lane, then keep future entries concise and source-path based.
 - [ ] Review
       `apps/mission-control/src/fixtures/a2a2aBacklogPriority.json` and confirm
       the P0/P1 ordering before opening the next scoped Codex lane.
+- [ ] Review
+      `apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json` and use
+      its `nextCodexAction` as the first coding step for this A2A2A lane.
 - [ ] For the first implementation lane, Codex must own all file edits, run
       validation, and stage only the file list from the packet.
 - [ ] Keep GLM-5.2, DeepSeek, and AGY report-only until a separate provider
@@ -843,6 +848,11 @@ The backlog priority board is now the read-only triage layer for old pending
 work. Use it to confirm that A2A2A P0 items stay ahead of connector sync,
 provider calls, deploy lanes, generated `web-sirinx` asset cleanup, and any
 external action gate.
+
+The team assignment board is now the role/queue handoff layer. Use it to keep
+Hermes as mission commander, Opus as architecture handoff, Codex as sole repo
+editor, GLM-5.2/DeepSeek/AGY as report-only workers, KOB as validate-only, and
+Mission Control as fixture-backed observer.
 
 For watch-mode handoff, use bounded polling first:
 

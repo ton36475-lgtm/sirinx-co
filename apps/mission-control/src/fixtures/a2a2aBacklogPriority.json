@@ -154,7 +154,7 @@
   ],
   "ownerCounts": [
     {
-      "count": 48,
+      "count": 49,
       "owner": "codex"
     },
     {
@@ -194,18 +194,18 @@
   "summary": {
     "blocked": 56,
     "owners": 6,
-    "p0": 7,
+    "p0": 8,
     "p1": 22,
     "p2": 95,
     "p3": 56,
-    "readyForReview": 124,
-    "totalPending": 180
+    "readyForReview": 125,
+    "totalPending": 181
   },
   "topItems": [
     {
       "blockedReason": "",
       "id": "BACKLOG-173",
-      "line": 812,
+      "line": 814,
       "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
       "owner": "codex",
       "priority": 0,
@@ -217,7 +217,7 @@
     {
       "blockedReason": "",
       "id": "BACKLOG-174",
-      "line": 814,
+      "line": 816,
       "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
       "owner": "codex",
       "priority": 0,
@@ -229,7 +229,7 @@
     {
       "blockedReason": "",
       "id": "BACKLOG-175",
-      "line": 817,
+      "line": 819,
       "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
       "owner": "codex",
       "priority": 0,
@@ -241,7 +241,19 @@
     {
       "blockedReason": "",
       "id": "BACKLOG-176",
-      "line": 820,
+      "line": 822,
+      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 0,
+      "section": "A2A2A Team Coding Sync",
+      "status": "ready_for_review",
+      "subsection": "",
+      "task": "Review `apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json` and use its `nextCodexAction` as the first coding step for this A2A2A lane."
+    },
+    {
+      "blockedReason": "",
+      "id": "BACKLOG-177",
+      "line": 825,
       "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
       "owner": "codex",
       "priority": 0,
@@ -252,8 +264,8 @@
     },
     {
       "blockedReason": "",
-      "id": "BACKLOG-177",
-      "line": 822,
+      "id": "BACKLOG-178",
+      "line": 827,
       "nextAction": "Keep model workers report-only until provider/runtime lane opens.",
       "owner": "glm52_deepseek",
       "priority": 0,
@@ -264,8 +276,8 @@
     },
     {
       "blockedReason": "",
-      "id": "BACKLOG-178",
-      "line": 824,
+      "id": "BACKLOG-179",
+      "line": 829,
       "nextAction": "KOB remains validate-only until Command Broker issues a lease.",
       "owner": "kob",
       "priority": 0,
@@ -276,8 +288,8 @@
     },
     {
       "blockedReason": "",
-      "id": "BACKLOG-179",
-      "line": 825,
+      "id": "BACKLOG-180",
+      "line": 830,
       "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
       "owner": "codex",
       "priority": 0,
@@ -333,19 +345,7 @@
       "status": "ready_for_review",
       "subsection": "",
       "task": "Convert old approval packet docs into job manifest / execution lease references or mark them legacy."
-    },
-    {
-      "blockedReason": "",
-      "id": "BACKLOG-092",
-      "line": 314,
-      "nextAction": "Codex may inspect and prepare scoped local edits after validation.",
-      "owner": "codex",
-      "priority": 1,
-      "section": "GLM-5.2 API-First Evaluation",
-      "status": "ready_for_review",
-      "subsection": "",
-      "task": "Run GLM-5.2 frontend/UI review benchmark on a small Mission Control or AGM AUTOGLOW UI excerpt."
     }
   ],
-  "updatedAt": "2026-06-27T13:16:47+00:00"
+  "updatedAt": "2026-06-27T13:27:27+00:00"
 }

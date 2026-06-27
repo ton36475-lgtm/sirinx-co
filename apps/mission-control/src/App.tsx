@@ -27,6 +27,7 @@ import a2a2aImplementationLanePacketFixture from "./fixtures/a2a2aImplementation
 import a2a2aCompletionAuditFixture from "./fixtures/a2a2aCompletionAudit.json";
 import a2a2aFirstCodexImplementationLaneFixture from "./fixtures/a2a2aFirstCodexImplementationLane.json";
 import a2a2aBacklogPriorityFixture from "./fixtures/a2a2aBacklogPriority.json";
+import a2a2aTeamAssignmentBoardFixture from "./fixtures/a2a2aTeamAssignmentBoard.json";
 
 interface Worker {
   name: string;
@@ -866,6 +867,74 @@ type A2A2ABacklogPriorityFixture = {
   nextSafeActions: string[];
 };
 
+type A2A2ATeamAssignmentBoardFixture = {
+  updatedAt: string;
+  mode: string;
+  generatedBy: string;
+  runtimeRoot: string;
+  runtimeReportPath: string;
+  summary: {
+    status: string;
+    roles: number;
+    immediateQueueItems: number;
+    codexReadyTasks: number;
+    reportOnlyWorkerTasks: number;
+    backlogP0: number;
+    backlogP1: number;
+    blockedGates: number;
+    providerCallsAllowed: boolean;
+    workerDirectEditsAllowed: boolean;
+    codexFileEditsAllowed: boolean;
+  };
+  nextCodexAction: {
+    queueId: string;
+    source: string;
+    priority: number;
+    owner: string;
+    status: string;
+    task: string;
+    why: string;
+    acceptance: string;
+  };
+  roles: {
+    role: string;
+    title: string;
+    responsibility: string;
+    currentAction: string;
+    editRights: string;
+  }[];
+  immediateQueue: {
+    queueId: string;
+    source: string;
+    priority: number;
+    owner: string;
+    status: string;
+    task: string;
+    why: string;
+    acceptance: string;
+  }[];
+  dependencyGate: {
+    id: string;
+    status: string;
+    evidence: string;
+  }[];
+  blockedGates: {
+    id: string;
+    priority: number;
+    status: string;
+    owner: string;
+    line: number;
+    section: string;
+    subsection: string;
+    task: string;
+    blockedReason: string;
+    nextAction: string;
+  }[];
+  sourceFixtures: Record<string, string>;
+  policyBoundary: string[];
+  nextSafeActions: string[];
+};
+
 type IgamingPracticeStatusFixture = {
   updatedAt: string;
   mode: string;
@@ -941,6 +1010,8 @@ const a2a2aFirstCodexImplementationLane =
   a2a2aFirstCodexImplementationLaneFixture as A2A2AFirstCodexImplementationLaneFixture;
 const a2a2aBacklogPriority =
   a2a2aBacklogPriorityFixture as A2A2ABacklogPriorityFixture;
+const a2a2aTeamAssignmentBoard =
+  a2a2aTeamAssignmentBoardFixture as A2A2ATeamAssignmentBoardFixture;
 const codexSessionSidebarToolkitStatus =
   codexSessionSidebarToolkitStatusFixture;
 const sessionToolkitAgents = codexSessionSidebarToolkitStatus.agents;
@@ -2872,6 +2943,142 @@ export default function App() {
                         </code>
                       </div>
                     </div>
+                  </section>
+                </div>
+              </div>
+
+              <div className="card practice-card">
+                <div className="card-title">
+                  <span>A2A2A Team Assignment</span>
+                  <span className="accent-cyan">
+                    {a2a2aTeamAssignmentBoard.summary.status}
+                  </span>
+                </div>
+
+                <div className="practice-summary-grid">
+                  <div className="practice-kpi">
+                    <span>Roles</span>
+                    <strong>{a2a2aTeamAssignmentBoard.summary.roles}</strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Queue</span>
+                    <strong>
+                      {a2a2aTeamAssignmentBoard.summary.immediateQueueItems}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Codex Tasks</span>
+                    <strong>
+                      {a2a2aTeamAssignmentBoard.summary.codexReadyTasks}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Report Inputs</span>
+                    <strong>
+                      {a2a2aTeamAssignmentBoard.summary.reportOnlyWorkerTasks}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>P0 / P1</span>
+                    <strong>
+                      {a2a2aTeamAssignmentBoard.summary.backlogP0}/
+                      {a2a2aTeamAssignmentBoard.summary.backlogP1}
+                    </strong>
+                  </div>
+                  <div className="practice-kpi">
+                    <span>Blocked</span>
+                    <strong>
+                      {a2a2aTeamAssignmentBoard.summary.blockedGates}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="practice-manifest-line">
+                  <span>Next Codex</span>
+                  <code>{a2a2aTeamAssignmentBoard.nextCodexAction.task}</code>
+                  <span>Runtime Report</span>
+                  <code>{a2a2aTeamAssignmentBoard.runtimeReportPath}</code>
+                  <span>Updated</span>
+                  <code>{a2a2aTeamAssignmentBoard.updatedAt}</code>
+                </div>
+
+                <div className="git-fixture-notice">
+                  {a2a2aTeamAssignmentBoard.nextCodexAction.why} Acceptance:
+                  {` ${a2a2aTeamAssignmentBoard.nextCodexAction.acceptance}`}
+                </div>
+
+                <div className="practice-grid">
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A team assignment immediate queue"
+                  >
+                    <div className="git-section-title">
+                      <span>Immediate Queue</span>
+                      <span className="approval-badge">
+                        {a2a2aTeamAssignmentBoard.immediateQueue.length}
+                      </span>
+                    </div>
+                    {a2a2aTeamAssignmentBoard.immediateQueue
+                      .slice(0, 8)
+                      .map((item) => (
+                        <div
+                          className="practice-artifact-row"
+                          key={item.queueId}
+                        >
+                          <span
+                            className={`practice-status ${
+                              item.owner === "codex"
+                                ? "payload-ready"
+                                : item.status === "blocked"
+                                  ? "payload-blocked"
+                                  : "payload-warn"
+                            }`}
+                          >
+                            P{item.priority}
+                          </span>
+                          <div>
+                            <strong>
+                              {item.owner}: {item.task}
+                            </strong>
+                            <p>{item.why}</p>
+                            <code>{item.acceptance}</code>
+                          </div>
+                        </div>
+                      ))}
+                  </section>
+
+                  <section
+                    className="practice-artifacts"
+                    aria-label="A2A2A team role map"
+                  >
+                    <div className="git-section-title">
+                      <span>Role Map</span>
+                      <span className="approval-badge">
+                        {a2a2aTeamAssignmentBoard.roles.length}
+                      </span>
+                    </div>
+                    {a2a2aTeamAssignmentBoard.roles.map((role) => (
+                      <div className="practice-artifact-row" key={role.role}>
+                        <span
+                          className={`practice-status ${
+                            role.editRights === "scoped_repo_owner"
+                              ? "payload-ready"
+                              : role.editRights === "read_only_fixture"
+                                ? "payload-ready"
+                                : "payload-warn"
+                          }`}
+                        >
+                          {role.editRights}
+                        </span>
+                        <div>
+                          <strong>
+                            {role.role}: {role.title}
+                          </strong>
+                          <p>{role.responsibility}</p>
+                          <code>{role.currentAction}</code>
+                        </div>
+                      </div>
+                    ))}
                   </section>
                 </div>
               </div>

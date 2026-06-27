@@ -1,0 +1,334 @@
+{
+  "blockedGates": [
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-008",
+      "line": 22,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "Start Claw-Empire local preview only after explicit approval"
+    },
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-009",
+      "line": 24,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "Install or locate OpenCode after explicit approval"
+    },
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-010",
+      "line": 25,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "Run OpenCode `deepseek-v4-flash-free` dummy smoke test after explicit approval"
+    },
+    {
+      "blockedReason": "external_runtime_boundary",
+      "id": "BACKLOG-012",
+      "line": 28,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "Create per-repo install packets for selected GitHub Trending repos"
+    },
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-013",
+      "line": 35,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "Run Headroom MCP dry-run only after explicit approval"
+    },
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-015",
+      "line": 51,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "Prototype Rust evidence-hasher CLI after explicit approval"
+    },
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-026",
+      "line": 64,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "After explicit `APPROVE_IMPLEMENTATION`, implement `packages/oracle-provenance`"
+    },
+    {
+      "blockedReason": "requires_separate_explicit_gate",
+      "id": "BACKLOG-027",
+      "line": 65,
+      "nextAction": "Keep blocked and record the missing gate before revisiting.",
+      "owner": "hermes",
+      "priority": 3,
+      "section": "Uncategorized",
+      "status": "blocked",
+      "subsection": "",
+      "task": "After explicit `APPROVE_IMPLEMENTATION`, implement `packages/timeline-engine`"
+    }
+  ],
+  "dependencyGate": [
+    {
+      "evidence": "CODEX-PLAN-ec5461ae55",
+      "id": "codex_plan_ready",
+      "status": "ready"
+    },
+    {
+      "evidence": "report-only digest present",
+      "id": "glm52_worker_report",
+      "status": "ready"
+    },
+    {
+      "evidence": "report-only digest present",
+      "id": "deepseek_worker_report",
+      "status": "ready"
+    },
+    {
+      "evidence": "report-only digest present",
+      "id": "agy_worker_report",
+      "status": "ready"
+    },
+    {
+      "evidence": "local validator report present",
+      "id": "kob_validation_report",
+      "status": "ready"
+    },
+    {
+      "evidence": "providerCalls=0",
+      "id": "provider_boundary",
+      "status": "ready"
+    }
+  ],
+  "generatedBy": "scripts/a2a/a2a_team_assignment_board.py",
+  "immediateQueue": [
+    {
+      "acceptance": "Implementation scope references the build plan id and worker digest status.",
+      "owner": "codex",
+      "priority": 1,
+      "queueId": "LANE-CODEX-LANE-TASK-01",
+      "source": "first_codex_implementation_lane",
+      "status": "ready_for_codex",
+      "task": "inspect_plan_and_worker_digest",
+      "why": "Codex owns repo state and must read the plan plus worker reports before edits."
+    },
+    {
+      "acceptance": "Scoped git status contains only files listed in the lane packet.",
+      "owner": "codex",
+      "priority": 2,
+      "queueId": "LANE-CODEX-LANE-TASK-02",
+      "source": "first_codex_implementation_lane",
+      "status": "ready_for_codex",
+      "task": "implement_only_allowed_paths",
+      "why": "Dirty lanes exist outside A2A2A; edits must stay inside the plan scope."
+    },
+    {
+      "acceptance": "No worker commits, provider calls, or command execution are required.",
+      "owner": "glm52_deepseek_agy_kob",
+      "priority": 3,
+      "queueId": "LANE-CODEX-LANE-TASK-03",
+      "source": "first_codex_implementation_lane",
+      "status": "report_input",
+      "task": "consume_report_only_feedback",
+      "why": "Worker reports available from: agy, deepseek, glm52, kob."
+    },
+    {
+      "acceptance": "All validation commands pass and results are summarized in final report.",
+      "owner": "codex",
+      "priority": 4,
+      "queueId": "LANE-CODEX-LANE-TASK-04",
+      "source": "first_codex_implementation_lane",
+      "status": "ready_for_codex",
+      "task": "run_validation_commands",
+      "why": "Every implementation lane must prove tests and UI checks before staging."
+    },
+    {
+      "acceptance": "Commit contains only lane files and no generated unrelated assets.",
+      "owner": "codex",
+      "priority": 5,
+      "queueId": "LANE-CODEX-LANE-TASK-05",
+      "source": "first_codex_implementation_lane",
+      "status": "ready_for_codex",
+      "task": "stage_and_commit_scoped_lane",
+      "why": "Only Codex stages and commits after validation; workers never mutate git."
+    },
+    {
+      "acceptance": "Codex may inspect and prepare scoped local edits after validation.",
+      "owner": "codex",
+      "priority": 1,
+      "queueId": "BACKLOG-L16",
+      "source": "next_actions_backlog",
+      "status": "ready_for_review",
+      "task": "Capture Mission Control `Git Evidence` tab screenshot as evidence",
+      "why": "Uncategorized line 16"
+    },
+    {
+      "acceptance": "Hermes should classify the gate and update policy/state docs first.",
+      "owner": "hermes",
+      "priority": 1,
+      "queueId": "BACKLOG-L162",
+      "source": "next_actions_backlog",
+      "status": "ready_for_review",
+      "task": "Add adapter runner registry and preflight artifact writers.",
+      "why": "Full Auto Autopilot Conversion line 162"
+    },
+    {
+      "acceptance": "Hermes should classify the gate and update policy/state docs first.",
+      "owner": "hermes",
+      "priority": 1,
+      "queueId": "BACKLOG-L163",
+      "source": "next_actions_backlog",
+      "status": "ready_for_review",
+      "task": "Run full-auto local setup phase only after scripts enforce policy, kill switch, rate limits, budget caps, and audit logs.",
+      "why": "Full Auto Autopilot Conversion line 163"
+    },
+    {
+      "acceptance": "Hermes should classify the gate and update policy/state docs first.",
+      "owner": "hermes",
+      "priority": 1,
+      "queueId": "BACKLOG-L165",
+      "source": "next_actions_backlog",
+      "status": "ready_for_review",
+      "task": "Convert old approval packet docs into job manifest / execution lease references or mark them legacy.",
+      "why": "Full Auto Autopilot Conversion line 165"
+    }
+  ],
+  "mode": "read_only_a2a2a_team_assignment",
+  "nextCodexAction": {
+    "acceptance": "Implementation scope references the build plan id and worker digest status.",
+    "owner": "codex",
+    "priority": 1,
+    "queueId": "LANE-CODEX-LANE-TASK-01",
+    "source": "first_codex_implementation_lane",
+    "status": "ready_for_codex",
+    "task": "inspect_plan_and_worker_digest",
+    "why": "Codex owns repo state and must read the plan plus worker reports before edits."
+  },
+  "nextSafeActions": [
+    "Codex reviews the nextCodexAction and source fixtures.",
+    "Codex opens the smallest scoped implementation slice from the lane task list.",
+    "Workers remain report-only and KOB remains validate-only until new lanes explicitly change those gates."
+  ],
+  "policyBoundary": [
+    "read_only_assignment_fixture",
+    "codex_only_repo_edits",
+    "workers_report_only",
+    "kob_validate_only",
+    "mission_control_read_only",
+    "no_provider_call",
+    "no_connector_sync",
+    "no_deploy",
+    "no_push",
+    "no_secret_read_or_print",
+    "no_git_add_dot",
+    "no_generated_web_sirinx_asset_mutation"
+  ],
+  "roles": [
+    {
+      "currentAction": "Confirm P0/P1 ordering and keep blocked gates closed.",
+      "editRights": "policy_state_only",
+      "responsibility": "Owns mission order, dependency gates, blocked actions, and policy boundaries.",
+      "role": "hermes",
+      "title": "Supreme Mission Commander"
+    },
+    {
+      "currentAction": "Architecture handoff is already represented by the implementation packet.",
+      "editRights": "report_only",
+      "responsibility": "Produces architecture-first handoff before Codex edits.",
+      "role": "opus",
+      "title": "Chief Architect"
+    },
+    {
+      "currentAction": "Start with inspect_plan_and_worker_digest, then implement only allowed paths.",
+      "editRights": "scoped_repo_owner",
+      "responsibility": "Owns repo edits, validation, scoped staging, and commits.",
+      "role": "codex",
+      "title": "Build Captain"
+    },
+    {
+      "currentAction": "Remain report-only until provider execution lane exists.",
+      "editRights": "report_only",
+      "responsibility": "Reviews structure, code consistency, and long-context implementation risks.",
+      "role": "glm52",
+      "title": "Coding Consistency Worker"
+    },
+    {
+      "currentAction": "Remain report-only until provider execution lane exists.",
+      "editRights": "report_only",
+      "responsibility": "Reviews command/data-flow risks and implementation edge cases.",
+      "role": "deepseek",
+      "title": "Risk and Data-Flow Worker"
+    },
+    {
+      "currentAction": "Remain report-only until provider execution lane exists.",
+      "editRights": "report_only",
+      "responsibility": "Reviews UI/integration scaffold shape and Mission Control readability.",
+      "role": "agy",
+      "title": "UI and Integration Scaffold Worker"
+    },
+    {
+      "currentAction": "Stay validate-only until Command Broker issues an execution lease.",
+      "editRights": "validate_only",
+      "responsibility": "Validates local command plans through Command Broker assumptions.",
+      "role": "kob",
+      "title": "Local Validator"
+    },
+    {
+      "currentAction": "Show assignment, backlog, lane, and blocked-gate state.",
+      "editRights": "read_only_fixture",
+      "responsibility": "Displays generated fixtures; never polls runtime files directly.",
+      "role": "mission_control",
+      "title": "Read-Only Observer"
+    }
+  ],
+  "runtimeReportPath": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/team_assignment/latest.json",
+  "runtimeRoot": "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a",
+  "sourceFixtures": {
+    "backlogPriority": "apps/mission-control/src/fixtures/a2a2aBacklogPriority.json",
+    "firstCodexImplementationLane": "apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json",
+    "implementationLanePacket": "apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json"
+  },
+  "summary": {
+    "backlogP0": 8,
+    "backlogP1": 22,
+    "blockedGates": 56,
+    "codexFileEditsAllowed": true,
+    "codexReadyTasks": 4,
+    "immediateQueueItems": 9,
+    "providerCallsAllowed": false,
+    "reportOnlyWorkerTasks": 1,
+    "roles": 8,
+    "status": "ready_for_codex_assignment",
+    "workerDirectEditsAllowed": false
+  },
+  "updatedAt": "2026-06-27T13:27:27+00:00"
+}

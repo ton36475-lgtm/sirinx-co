@@ -13,6 +13,7 @@ from scripts.a2a import a2a_dependency_readiness
 from scripts.a2a import a2a_codex_build_plan
 from scripts.a2a import a2a2a_completion_audit
 from scripts.a2a import a2a_backlog_priority
+from scripts.a2a import a2a_team_assignment_board
 from scripts.a2a import a2a_implementation_lane_packet
 from scripts.a2a import a2a_codex_first_implementation_lane
 from scripts.a2a import a2a_runner_dispatch_command
@@ -500,6 +501,104 @@ class A2A2ARunnerStatusFixtureTest(unittest.TestCase):
             self.assertIn("TOKEN=<masked>", all_text)
             self.assertNotIn("abc123", all_text)
             self.assertIn("no_provider_call", fixture["policyBoundary"])
+            self.assertTrue(Path(fixture["runtimeReportPath"]).exists())
+
+    def test_team_assignment_board_combines_lane_and_backlog_without_execution(self) -> None:
+        backlog_fixture = {
+            "summary": {"p0": 2, "p1": 1, "blocked": 3},
+            "topItems": [
+                {
+                    "priority": 0,
+                    "owner": "codex",
+                    "status": "ready_for_review",
+                    "line": 10,
+                    "section": "A2A2A Team Coding Sync",
+                    "task": "Review implementation packet.",
+                    "nextAction": "Codex may inspect scoped local edits.",
+                },
+                {
+                    "priority": 1,
+                    "owner": "kob",
+                    "status": "ready_for_review",
+                    "line": 20,
+                    "section": "A2A2A Team Coding Sync",
+                    "task": "Validate command broker lease boundary.",
+                    "nextAction": "KOB remains validate-only.",
+                },
+            ],
+            "blockedGates": [
+                {
+                    "id": "BLOCKED-001",
+                    "priority": 3,
+                    "status": "blocked",
+                    "owner": "hermes",
+                    "line": 30,
+                    "section": "Still Blocked",
+                    "subsection": "",
+                    "task": "Deploy / public tunnel",
+                    "blockedReason": "production_or_public_action_blocked",
+                    "nextAction": "Keep blocked.",
+                }
+            ],
+        }
+        lane_fixture = {
+            "summary": {
+                "status": "open_for_codex_scoped_work",
+                "codexReadyTasks": 2,
+                "reportInputTasks": 1,
+                "providerCallsAllowed": False,
+                "workerDirectEditsAllowed": False,
+                "codexFileEditsAllowed": True,
+            },
+            "lane": {
+                "tasks": [
+                    {
+                        "taskId": "CODEX-LANE-TASK-01",
+                        "priority": 1,
+                        "owner": "codex",
+                        "status": "ready_for_codex",
+                        "name": "inspect_plan_and_worker_digest",
+                        "why": "Codex owns git state.",
+                        "acceptance": "Scope is explicit.",
+                    },
+                    {
+                        "taskId": "CODEX-LANE-TASK-02",
+                        "priority": 2,
+                        "owner": "glm52_deepseek_agy_kob",
+                        "status": "report_input",
+                        "name": "consume_report_only_feedback",
+                        "why": "Workers are inputs only.",
+                        "acceptance": "No worker commits.",
+                    },
+                ]
+            },
+        }
+        packet_fixture = {
+            "summary": {"status": "ready_for_codex_scoped_implementation_review"},
+            "packet": {
+                "dependencyGate": [
+                    {"id": "hermes_commander", "status": "ready", "evidence": "state fixture"},
+                    {"id": "agy_worker_report", "status": "ready", "evidence": "report fixture"},
+                ]
+            },
+        }
+        with tempfile.TemporaryDirectory(prefix="ghostclaw-team-assignment-") as tmp:
+            runtime = Path(tmp) / "runtime"
+
+            fixture = a2a_team_assignment_board.build_assignment(
+                backlog_fixture,
+                lane_fixture,
+                packet_fixture,
+                runtime,
+            )
+
+            self.assertEqual(fixture["summary"]["status"], "ready_for_codex_assignment")
+            self.assertEqual(fixture["nextCodexAction"]["task"], "inspect_plan_and_worker_digest")
+            self.assertFalse(fixture["summary"]["providerCallsAllowed"])
+            self.assertFalse(fixture["summary"]["workerDirectEditsAllowed"])
+            self.assertTrue(fixture["summary"]["codexFileEditsAllowed"])
+            self.assertIn("workers_report_only", fixture["policyBoundary"])
+            self.assertEqual(len(fixture["roles"]), 8)
             self.assertTrue(Path(fixture["runtimeReportPath"]).exists())
 
 

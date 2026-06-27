@@ -273,6 +273,34 @@ keeps blocked gates separate from ready review items. It does not execute KOB,
 call providers, sync connectors, clone repos, deploy, push, or mutate generated
 `web-sirinx` assets.
 
+## Team Assignment Board
+
+Export the current A2A2A assignment board from local Mission Control fixtures:
+
+```bash
+python3 scripts/a2a/a2a_team_assignment_board.py \
+  --runtime-root /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a
+```
+
+This reads:
+
+- `apps/mission-control/src/fixtures/a2a2aBacklogPriority.json`
+- `apps/mission-control/src/fixtures/a2a2aFirstCodexImplementationLane.json`
+- `apps/mission-control/src/fixtures/a2a2aImplementationLanePacket.json`
+
+It writes:
+
+- a runtime report at
+  `/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2a2a/team_assignment/latest.json`
+- a Mission Control fixture at
+  `apps/mission-control/src/fixtures/a2a2aTeamAssignmentBoard.json`
+
+The assignment board is the handoff layer between planning and coding. It makes
+the role map explicit, combines the first Codex implementation lane with P0/P1
+backlog items, and surfaces the next Codex action. It remains read-only: GLM-5.2,
+DeepSeek, AGY, and KOB are report/validation inputs only, while Codex is the only
+scoped repo editor.
+
 ## Next Build Lane
 
 Codex should consume the first `ready_for_codex_plan` item from the dependency

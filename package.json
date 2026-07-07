@@ -1,0 +1,21 @@
+{
+  "name": "sirinx-co",
+  "version": "0.3.0-restore-public-web",
+  "private": true,
+  "description": "Canonical SIRINX monorepo recovery scaffold for restoring the public website source into apps/public-web.",
+  "scripts": {
+    "restore:public-web": "node scripts/restore-public-web-from-sirinx.mjs",
+    "verify:public-web-import": "node scripts/verify-public-web-import.mjs",
+    "web:check": "pnpm --dir apps/public-web check",
+    "web:test": "pnpm --dir apps/public-web test",
+    "web:build": "pnpm --dir apps/public-web build"
+  },
+  "keywords": [
+    "sirinx",
+    "public-web",
+    "source-recovery",
+    "ghostclaw"
+  ],
+  "license": "UNLICENSED",
+  "devDependencies": {}
+}

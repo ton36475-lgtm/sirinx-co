@@ -3,6 +3,11 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const root = process.cwd();
+const appPath = join(root, "client/src/App.tsx");
+const floatingChatWidgetPath = join(
+  root,
+  "client/src/components/FloatingChatWidget.tsx"
+);
 const layoutPath = join(root, "client/src/components/Layout.tsx");
 const lineConfigPath = join(root, "shared/lineOfficial.ts");
 
@@ -37,8 +42,30 @@ describe("footer LINE Official QR CTA", () => {
     expect(source).toContain("lineOfficialConfig.chatUrl");
   });
 
+  it("renders a floating LINE CTA beside the initial AI bot trigger", () => {
+    const source = readFileSync(appPath, "utf8");
+
+    expect(source).toContain("sirinx-floating-contact-dock");
+    expect(source).toContain("floating-line-cta");
+    expect(source).toContain("lineOfficialConfig.addFriendUrl");
+    expect(source).toContain("LINE Official");
+    expect(source).toContain("เปิดแชท SIRINX Solar Assistant");
+  });
+
+  it("keeps the loaded chatbot trigger grouped with the floating LINE CTA", () => {
+    const source = readFileSync(floatingChatWidgetPath, "utf8");
+
+    expect(source).toContain("sirinx-floating-contact-dock");
+    expect(source).toContain("floating-line-cta");
+    expect(source).toContain("lineOfficialConfig.addFriendUrl");
+    expect(source).toContain("line_click");
+    expect(source).toContain("เปิดแชท SIRINX Solar Assistant");
+  });
+
   it("does not introduce webhook, message-send, or customer-storage endpoints", () => {
     const sources = [
+      readFileSync(appPath, "utf8"),
+      readFileSync(floatingChatWidgetPath, "utf8"),
       readFileSync(layoutPath, "utf8"),
       existsSync(lineConfigPath) ? readFileSync(lineConfigPath, "utf8") : "",
     ].join("\n");

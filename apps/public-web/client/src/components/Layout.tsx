@@ -37,6 +37,7 @@ import {
   LANGUAGE_LABELS,
   type Language,
 } from "@/contexts/LanguageContext";
+import { lineOfficialConfig } from "@shared/lineOfficial";
 
 const LOGO_URL = "/assets/optimized/sirinx-logo.jpg";
 const DBD_REGISTERED_URL =
@@ -559,6 +560,65 @@ function Footer() {
                 </span>
               </div>
             </div>
+
+            <section
+              className="footer-line-qr mb-6 grid gap-4 rounded-lg border border-[#06C755]/30 bg-[#04151f]/80 p-4 shadow-lg shadow-[#06C755]/5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
+              aria-labelledby="footer-line-qr-title"
+            >
+              <div className="footer-line-qr__content min-w-0">
+                <p className="footer-line-qr__eyebrow mb-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#06C755]">
+                  LINE Official
+                </p>
+                <h2
+                  id="footer-line-qr-title"
+                  className="footer-line-qr__title font-display text-base font-semibold leading-tight text-foreground"
+                >
+                  ส่งข้อมูลโครงการผ่าน LINE
+                </h2>
+                <p className="footer-line-qr__text mt-2 text-sm leading-relaxed text-text-muted">
+                  ส่งบิลค่าไฟ รูปพื้นที่ หรือคำถามโครงการผ่าน LINE Official:{" "}
+                  <strong className="font-semibold text-foreground">
+                    {lineOfficialConfig.basicId}
+                  </strong>
+                </p>
+                <div
+                  className="footer-line-qr__actions mt-3 flex flex-col gap-2 sm:flex-row"
+                  aria-label="ช่องทาง LINE Official"
+                >
+                  <a
+                    className="footer-line-qr__button footer-line-qr__button--primary inline-flex min-h-11 items-center justify-center rounded-lg bg-[#047A35] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#03662c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06C755] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    href={lineOfficialConfig.shortLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="เพิ่มเพื่อน LINE Official SIRINX"
+                  >
+                    เพิ่มเพื่อน LINE
+                  </a>
+                  <a
+                    className="footer-line-qr__button footer-line-qr__button--secondary inline-flex min-h-11 items-center justify-center rounded-lg border border-border-subtle px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:border-[#06C755]/50 hover:text-[#06C755] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06C755] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    href={lineOfficialConfig.chatUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="แชทกับ SIRINX ผ่าน LINE"
+                  >
+                    แชท LINE
+                  </a>
+                </div>
+              </div>
+
+              <figure className="footer-line-qr__media m-0 grid justify-items-start gap-2 text-left text-[0.72rem] leading-snug text-text-muted sm:justify-items-center sm:text-center">
+                <img
+                  src={lineOfficialConfig.qrImageUrl}
+                  alt={lineOfficialConfig.qrAltText}
+                  width={168}
+                  height={168}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-28 w-28 rounded-lg bg-white p-1.5 shadow-md shadow-black/20"
+                />
+                <figcaption>สแกน QR เพื่อเพิ่มเพื่อน LINE Official</figcaption>
+              </figure>
+            </section>
 
             {/* Social */}
             <div className="flex gap-3">

@@ -1,0 +1,53 @@
+{
+  "packet_id": "P091T_FOOTER_LINE_QR_CTA_INSTALL",
+  "mission_id": "GHOSTCLAW-P091T-FOOTER-LINE-QR-CTA-20260707",
+  "status": "P091T_FOOTER_LINE_QR_CTA_READY_FOR_REVIEW",
+  "mode": "SCOPED_LOCAL_PATCH_NO_DEPLOY",
+  "target": [
+    "sirinx.co footer",
+    "contact us section",
+    "existing Solar Carport page structure"
+  ],
+  "changed_files": [
+    "apps/public-web/client/src/components/Layout.tsx",
+    "apps/public-web/shared/lineOfficial.ts",
+    "apps/public-web/client/src/test/footerLineCta.test.ts",
+    "reports/mission/A2A2A_P091T_FOOTER_LINE_QR_CTA_20260707.md",
+    "reports/review/p091t/footer_line_qr_cta_receipt.json"
+  ],
+  "line_data_reused": {
+    "basic_id": "@304zrttj",
+    "short_link": "https://lin.ee/S97R6nj",
+    "add_friend_url": "https://line.me/R/ti/p/%40304zrttj",
+    "chat_url": "https://line.me/R/oaMessage/%40304zrttj",
+    "qr_image_url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr"
+  },
+  "validation": {
+    "tdd_red_static_check": "passed_expected_fail_before_patch",
+    "static_regression_check": "passed",
+    "scoped_diff_check": "passed",
+    "scoped_secret_pattern_scan": "passed_no_findings",
+    "targeted_vitest_temp_copy": "passed_3_tests",
+    "production_mode_package_tests_temp_copy": "passed_7_files_42_tests",
+    "package_check_temp_copy": "passed",
+    "package_build_temp_copy": "passed",
+    "built_dist_line_cta_tokens": "passed_footer_class_line_id_qr_short_link_chat_url_present",
+    "current_worktree_package_commands": "unavailable_missing_node_modules_no_install_performed",
+    "dev_mode_full_test_note": "unrelated_lightmarkdown_vite_data_loc_snapshot_mismatch_seen_before_production_mode_pass"
+  },
+  "blocked_actions_confirmed": {
+    "production_deploy": true,
+    "preview_deploy": true,
+    "git_push": true,
+    "cloudflare_dns_r2_d1_kv_mutation": true,
+    "line_webhook_activation": true,
+    "crm_customer_storage_write": true,
+    "live_send": true,
+    "provider_model_call": true,
+    "secret_read_print": true,
+    "full_page_rewrite": true,
+    "full_repo_cleanup": true,
+    "git_add_all": true
+  },
+  "next_gate": "P091T_OPENCODE_REVIEW_FOOTER_LINE_QR_CTA"
+}

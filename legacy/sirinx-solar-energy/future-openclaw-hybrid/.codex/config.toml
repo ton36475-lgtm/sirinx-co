@@ -1,0 +1,73 @@
+# Codex Configuration — Future Multi Agentic
+# ไฟล์นี้กำหนดพฤติกรรมของ Codex CLI/VS Code ใน project นี้
+
+[model]
+default = "codex-1"
+fallback = "gpt-4o"
+context_length = 128000
+
+[behavior]
+# รอรับคำสั่งจาก OpenClaw เสมอ — ห้าม autonomous execution
+require_task_file = true
+task_file_path = "state/jobs/{job_id}/tasks.yaml"
+auto_commit = false        # ไม่ auto-commit — ต้องผ่าน quality check ก่อน
+auto_push = false          # ไม่ push เด็ดขาด
+single_writer = true       # ใช้ lock mechanism
+
+[worktree]
+enabled = true
+base_path = ".worktrees"
+naming_pattern = "job-{job_id}"
+auto_cleanup = false       # ไม่ cleanup อัตโนมัติ — ให้ Orchestrator จัดการ
+lock_file = ".openclaw.lock"
+
+[quality]
+run_lint_before_commit = true
+run_typecheck_before_commit = true
+lint_command = "npm run lint"
+typecheck_command = "npm run typecheck"
+test_command = "npm test -- --coverage"
+coverage_threshold = 70
+fail_on_lint_error = true
+fail_on_typecheck_error = true
+
+[commits]
+require_conventional = true
+sign = false
+max_files_per_commit = 50
+no_direct_to_protected = true
+protected_branches = ["main", "master", "production", "release/*"]
+
+[skills]
+directory = ".codex/skills"
+auto_load = true
+active = [
+  "repo-map",
+  "targeted-test-fix",
+  "pr-review",
+  "docs-from-code"
+]
+
+[prompts]
+directory = ".codex/prompts"
+implement = "implement.md"
+test_fix = "test_fix.md"
+review = "review.md"
+
+[network]
+policy_file = ".openclaw/execution/network_policy.yaml"
+profile = "codex_local"
+
+[artifacts]
+output_root = "state/jobs"
+change_summary_template = "state/template_handoff.md"
+
+[logging]
+level = "info"
+log_file = "state/logs/codex.log"
+audit_file = "state/audit.jsonl"
+
+[notifications]
+telegram_on_complete = true
+telegram_on_error = true
+telegram_channel = "@sirinx_warroom"

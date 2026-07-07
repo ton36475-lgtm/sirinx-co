@@ -1,0 +1,30 @@
+{
+  "mcpServers": {
+    "SLayerDemo": {
+      "command": "/Users/sirinx/SIRINXDev/_external_repos/slayer/.venv/bin/slayer",
+      "args": [
+        "mcp",
+        "--storage",
+        "/Users/sirinx/SIRINXDev/_external_repos/slayer/.local-demo/slayer_data"
+      ],
+      "env": {
+        "SLAYER_LOCAL_ONLY": "true"
+      }
+    }
+  },
+  "notes": {
+    "purpose": "Local-only SLayer MCP config for the verified demo DuckDB semantic-layer storage.",
+    "sourceRepo": "/Users/sirinx/SIRINXDev/_external_repos/slayer",
+    "storage": "/Users/sirinx/SIRINXDev/_external_repos/slayer/.local-demo/slayer_data",
+    "activation": "Copy or merge mcpServers.SLayerDemo into the target MCP client config only after a separate local activation gate.",
+    "blockedWithoutSeparateApproval": [
+      "production database credentials",
+      "public network bind",
+      "provider calls",
+      "global MCP client mutation",
+      "deploy",
+      "push",
+      "publish"
+    ]
+  }
+}

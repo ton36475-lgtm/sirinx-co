@@ -1,0 +1,61 @@
+{
+  "manifest_id": "SIRINX_PUBLIC_WEB_IMPORT_20260707",
+  "status": "RECOVERY_BRANCH_READY",
+  "production_url": "https://www.sirinx.co/",
+  "source": {
+    "repository": "ton36475-lgtm/sirinx",
+    "branch": "main",
+    "latest_verified_commit": "9d2e081fc037fad0b0153c2ad33751a36a54f3cf",
+    "role": "current_complete_public_website_source"
+  },
+  "target": {
+    "repository": "ton36475-lgtm/sirinx-co",
+    "branch": "codex/restore-public-web-source-20260707",
+    "target_path": "apps/public-web/",
+    "role": "canonical_monorepo_public_website_source"
+  },
+  "verified_production_match": {
+    "file": "client/src/components/HeroSlideshow.tsx",
+    "hero_badge": "Solar Carport",
+    "hero_headline": "เปลี่ยนที่จอดรถ",
+    "hero_highlight": "เป็นโรงไฟฟ้าพลังงานแสงอาทิตย์",
+    "primary_cta": "ขอใบเสนอราคา Solar Carport",
+    "secondary_cta": "ดูผลงานจริง"
+  },
+  "import_paths": [
+    "package.json",
+    "pnpm-lock.yaml",
+    "vite.config.ts",
+    "tsconfig.json",
+    "components.json",
+    "drizzle.config.ts",
+    "client/",
+    "server/",
+    "shared/",
+    "brands/",
+    "drizzle/",
+    "patches/",
+    "attached_assets/"
+  ],
+  "target_root_scripts": {
+    "restore:public-web": "node scripts/restore-public-web-from-sirinx.mjs",
+    "verify:public-web-import": "node scripts/verify-public-web-import.mjs",
+    "web:check": "pnpm --config.verify-deps-before-run=false --dir apps/public-web check",
+    "web:test": "pnpm --config.verify-deps-before-run=false --dir apps/public-web test",
+    "web:build": "pnpm --config.verify-deps-before-run=false --dir apps/public-web build"
+  },
+  "validation": [
+    "node scripts/verify-public-web-import.mjs",
+    "pnpm --dir apps/public-web install --ignore-scripts",
+    "pnpm --config.verify-deps-before-run=false --dir apps/public-web check",
+    "pnpm --config.verify-deps-before-run=false --dir apps/public-web build"
+  ],
+  "hard_denies": [
+    "deploy",
+    "git_push_without_human_gate",
+    "dns_mutation",
+    "cloudflare_mutation",
+    "secret_read_print",
+    "live_line_telegram_email_send"
+  ]
+}

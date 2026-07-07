@@ -13,6 +13,7 @@ import {
   createSmartChatbotReply,
   type ChatbotMessage,
 } from "@shared/chatbotIntelligence";
+import { lineOfficialConfig } from "@shared/lineOfficial";
 import LightMarkdown from "./LightMarkdown";
 
 // ===== LINE SVG Icon =====
@@ -31,7 +32,7 @@ const BotAvatar = () => (
 
 type ChatMessage = ChatbotMessage;
 
-const LINE_OA_URL_DEFAULT = "https://line.me/R/ti/p/@sirinx";
+const LINE_OA_URL_DEFAULT = lineOfficialConfig.addFriendUrl;
 
 type FloatingChatWidgetProps = {
   initialOpen?: boolean;
@@ -180,7 +181,7 @@ function FloatingChatWidgetInner({
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            className="fixed bottom-6 right-6 z-[60] flex flex-col items-end gap-3"
+            className="fixed bottom-4 right-3 z-[60] flex flex-col items-end gap-3 sm:bottom-6 sm:right-6"
           >
             {/* Bubble Message */}
             <AnimatePresence>
@@ -216,35 +217,53 @@ function FloatingChatWidgetInner({
               )}
             </AnimatePresence>
 
-            {/* Main Floating Button */}
-            <motion.button
-              onClick={handleOpen}
-              aria-label="เปิดแชท SIRINX Solar Assistant"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              className="sirinx-live-avatar-trigger relative w-16 h-16 rounded-full shadow-2xl flex items-center justify-center overflow-hidden group"
-              style={{
-                background:
-                  "linear-gradient(135deg, #06b6d4 0%, #0d9488 50%, #00C300 100%)",
-              }}
-            >
-              {/* Pulse ring */}
-              <span className="absolute inset-0 rounded-full animate-ping opacity-20 bg-cyan-400" />
-              <span className="sirinx-live-avatar-orbit sirinx-live-avatar-orbit-a" />
-              <span className="sirinx-live-avatar-orbit sirinx-live-avatar-orbit-b" />
-              <span className="sirinx-live-avatar-trail sirinx-live-avatar-trail-a" />
-              <span className="sirinx-live-avatar-trail sirinx-live-avatar-trail-b" />
-              {/* Inner glow */}
-              <span className="absolute inset-1 rounded-full bg-gradient-to-br from-cyan-400/30 to-green-400/30 group-hover:from-cyan-400/50 group-hover:to-green-400/50 transition-all" />
-              {/* Icon */}
-              <div className="sirinx-live-avatar-core relative flex items-center justify-center">
-                <AILiveAvatarMark className="w-14 h-14 drop-shadow-md" />
-              </div>
-              {/* LINE badge */}
-              <div className="absolute -top-0.5 -right-0.5 z-10 w-5 h-5 rounded-full bg-[#00C300] border-2 border-white flex items-center justify-center shadow-md">
-                <LINEIcon className="w-3 h-3 text-white" />
-              </div>
-            </motion.button>
+            {/* Floating contact dock: LINE + AI bot grouped in one row */}
+            <div className="sirinx-floating-contact-dock flex items-center gap-2 rounded-full border border-white/10 bg-slate-950/60 p-1.5 shadow-2xl shadow-cyan-950/30 backdrop-blur-xl sm:gap-3 sm:p-2">
+              <a
+                href={lineOaUrl || lineOfficialConfig.addFriendUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="เปิด LINE Official ของ SIRINX"
+                title="LINE Official"
+                onClick={() =>
+                  trackEvent("line_click", "line_oa_open", {
+                    label: "floating_contact_dock",
+                  })
+                }
+                className="floating-line-cta group flex h-12 min-w-12 items-center justify-center gap-2 rounded-full bg-[#00C300] px-3 font-display text-[11px] font-bold uppercase tracking-[0.06em] text-white shadow-xl shadow-[#00C300]/25 transition-transform hover:-translate-y-0.5 hover:bg-[#00B300] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00C300] sm:h-14 sm:min-w-14 sm:px-4 sm:text-xs sm:tracking-[0.08em]"
+              >
+                <LINEIcon className="h-5 w-5" />
+                <span className="hidden sm:inline">LINE</span>
+              </a>
+              <motion.button
+                onClick={handleOpen}
+                aria-label="เปิดแชท SIRINX Solar Assistant"
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.95 }}
+                className="sirinx-live-avatar-trigger group relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full shadow-2xl sm:h-16 sm:w-16"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #06b6d4 0%, #0d9488 50%, #00C300 100%)",
+                }}
+              >
+                {/* Pulse ring */}
+                <span className="absolute inset-0 rounded-full animate-ping bg-cyan-400 opacity-20" />
+                <span className="sirinx-live-avatar-orbit sirinx-live-avatar-orbit-a" />
+                <span className="sirinx-live-avatar-orbit sirinx-live-avatar-orbit-b" />
+                <span className="sirinx-live-avatar-trail sirinx-live-avatar-trail-a" />
+                <span className="sirinx-live-avatar-trail sirinx-live-avatar-trail-b" />
+                {/* Inner glow */}
+                <span className="absolute inset-1 rounded-full bg-gradient-to-br from-cyan-400/30 to-green-400/30 transition-all group-hover:from-cyan-400/50 group-hover:to-green-400/50" />
+                {/* Icon */}
+                <div className="sirinx-live-avatar-core relative flex items-center justify-center">
+                  <AILiveAvatarMark className="h-12 w-12 drop-shadow-md sm:h-14 sm:w-14" />
+                </div>
+                {/* AI badge */}
+                <div className="absolute -top-0.5 -right-0.5 z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-[#00C300] text-[9px] font-bold text-white shadow-md">
+                  AI
+                </div>
+              </motion.button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

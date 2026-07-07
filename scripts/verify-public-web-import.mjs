@@ -27,6 +27,7 @@ const REQUIRED_PATHS = [
   "server/_core/index.ts",
   "server/staticSeoBuild.ts",
   "shared",
+  "brands/sirinx/config.ts",
 ];
 
 const REQUIRED_HERO_STRINGS = [
@@ -73,8 +74,9 @@ function main() {
   }
 
   assertFileContains(path.join(targetRoot, "client/src/components/HeroSlideshow.tsx"), REQUIRED_HERO_STRINGS, failures);
-  assertFileContains(path.join(targetRoot, "client/src/App.tsx"), ["isInternalHost", "dev.sirinx.co", "<PublicRouter />"], failures);
+  assertFileContains(path.join(targetRoot, "client/src/App.tsx"), ["isInternalHost", "dev.sirinx.co", "function PublicRouter", "component={PublicRouter}"], failures);
   assertFileContains(path.join(targetRoot, "client/src/lib/seo.ts"), ["https://www.sirinx.co", "Solar Carport"], failures);
+  assertFileContains(path.join(targetRoot, "brands/sirinx/config.ts"), ["id: \"sirinx\"", "Solar Carport", "lineUrl"], failures);
 
   const rootPackagePath = path.join(rootDir, "package.json");
   assertFileContains(rootPackagePath, ["restore:public-web", "verify:public-web-import", "web:build"], failures);
@@ -87,7 +89,9 @@ function main() {
 
   console.log("SIRINX public web import verification passed");
   console.log(`target: ${args.target}`);
-  console.log("next validation: pnpm --dir apps/public-web check && pnpm --dir apps/public-web build");
+  console.log("next validation: pnpm --dir apps/public-web install --ignore-scripts");
+  console.log("next validation: pnpm --config.verify-deps-before-run=false --dir apps/public-web check");
+  console.log("next validation: pnpm --config.verify-deps-before-run=false --dir apps/public-web build");
 }
 
 try {

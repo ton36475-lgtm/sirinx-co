@@ -18,6 +18,7 @@ const IMPORT_PATHS = [
   "client",
   "server",
   "shared",
+  "brands",
   "drizzle",
   "patches",
   "attached_assets",
@@ -89,9 +90,9 @@ function writeRootPackageScripts(rootDir, dryRun) {
     ...(pkg.scripts || {}),
     "restore:public-web": "node scripts/restore-public-web-from-sirinx.mjs",
     "verify:public-web-import": "node scripts/verify-public-web-import.mjs",
-    "web:check": "pnpm --dir apps/public-web check",
-    "web:test": "pnpm --dir apps/public-web test",
-    "web:build": "pnpm --dir apps/public-web build",
+    "web:check": "pnpm --config.verify-deps-before-run=false --dir apps/public-web check",
+    "web:test": "pnpm --config.verify-deps-before-run=false --dir apps/public-web test",
+    "web:build": "pnpm --config.verify-deps-before-run=false --dir apps/public-web build",
   };
 
   console.log("update root package.json recovery scripts");
@@ -129,8 +130,9 @@ function writeReceipt(rootDir, details, dryRun) {
     "",
     "Required validation:",
     "- node scripts/verify-public-web-import.mjs",
-    "- pnpm --dir apps/public-web check",
-    "- pnpm --dir apps/public-web build",
+    "- pnpm --dir apps/public-web install --ignore-scripts",
+    "- pnpm --config.verify-deps-before-run=false --dir apps/public-web check",
+    "- pnpm --config.verify-deps-before-run=false --dir apps/public-web build",
     "",
     "Safety: no deploy, no Cloudflare mutation, no secret read/print, no live-send.",
     "",
@@ -180,7 +182,9 @@ async function main() {
 
   console.log("restore complete");
   console.log("next: node scripts/verify-public-web-import.mjs");
-  console.log("next: pnpm --dir apps/public-web check && pnpm --dir apps/public-web build");
+  console.log("next: pnpm --dir apps/public-web install --ignore-scripts");
+  console.log("next: pnpm --config.verify-deps-before-run=false --dir apps/public-web check");
+  console.log("next: pnpm --config.verify-deps-before-run=false --dir apps/public-web build");
 }
 
 main().catch(error => {

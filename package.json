@@ -6,9 +6,9 @@
   "scripts": {
     "restore:public-web": "node scripts/restore-public-web-from-sirinx.mjs",
     "verify:public-web-import": "node scripts/verify-public-web-import.mjs",
-    "web:check": "pnpm --dir apps/public-web check",
-    "web:test": "pnpm --dir apps/public-web test",
-    "web:build": "pnpm --dir apps/public-web build"
+    "web:check": "pnpm --config.verify-deps-before-run=false --dir apps/public-web check",
+    "web:test": "pnpm --config.verify-deps-before-run=false --dir apps/public-web test",
+    "web:build": "pnpm --config.verify-deps-before-run=false --dir apps/public-web build"
   },
   "keywords": [
     "sirinx",

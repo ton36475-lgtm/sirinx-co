@@ -1,9 +1,9 @@
 # SIRINX Public Web Source Recovery
 
-Status: READY_FOR_LOCAL_RUN_OR_CI_REVIEW  
-Date: 2026-07-07  
-Source: `ton36475-lgtm/sirinx@main`  
-Target: `ton36475-lgtm/sirinx-co@codex/restore-public-web-source-20260707`  
+Status: READY_FOR_LOCAL_RUN_OR_CI_REVIEW
+Date: 2026-07-07
+Source: `ton36475-lgtm/sirinx@main`
+Target: `ton36475-lgtm/sirinx-co@codex/restore-public-web-source-20260707`
 Target path: `apps/public-web/`
 
 ## Finding

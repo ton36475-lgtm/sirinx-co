@@ -59,6 +59,25 @@ function isNonEmptyDirectory(dir) {
   return fs.existsSync(dir) && fs.statSync(dir).isDirectory() && fs.readdirSync(dir).length > 0;
 }
 
+function resolveSafeTarget(rootDir, targetArg) {
+  if (path.isAbsolute(targetArg)) {
+    throw new Error("--target must be relative to the repository root");
+  }
+
+  const targetRoot = path.resolve(rootDir, targetArg);
+  const publicWebRoot = path.join(rootDir, "apps", "public-web");
+  const relativeToPublicWeb = path.relative(publicWebRoot, targetRoot);
+  const isPublicWebOrChild =
+    relativeToPublicWeb === "" ||
+    (!relativeToPublicWeb.startsWith("..") && !path.isAbsolute(relativeToPublicWeb));
+
+  if (!isPublicWebOrChild) {
+    throw new Error("--target must stay under apps/public-web");
+  }
+
+  return targetRoot;
+}
+
 function copyPath(sourceRoot, targetRoot, relativePath, dryRun) {
   const source = path.join(sourceRoot, relativePath);
   const target = path.join(targetRoot, relativePath);
@@ -148,7 +167,7 @@ function writeReceipt(rootDir, details, dryRun) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const rootDir = process.cwd();
-  const targetRoot = path.resolve(rootDir, args.target);
+  const targetRoot = resolveSafeTarget(rootDir, args.target);
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sirinx-public-web-"));
   const sourceDir = path.join(tempDir, "source");
 

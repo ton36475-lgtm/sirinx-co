@@ -1,0 +1,55 @@
+{
+  "metrics": {
+    "botExists": true,
+    "botInViewport": true,
+    "botRect": {
+      "bottom": 821,
+      "height": 56,
+      "left": 309,
+      "right": 365,
+      "top": 765,
+      "width": 56,
+      "x": 309,
+      "y": 765
+    },
+    "clientWidth": 384,
+    "ctaOverlap": false,
+    "dockExists": true,
+    "dockInViewport": true,
+    "dockRect": {
+      "bottom": 828,
+      "height": 70,
+      "left": 231.75,
+      "right": 372,
+      "top": 758,
+      "width": 140.25,
+      "x": 231.75,
+      "y": 758
+    },
+    "dockText": "LINEOfficialAI",
+    "fixedPosition": "fixed",
+    "heroHasSolarCarport": true,
+    "href": "https://line.me/R/ti/p/%40304zrttj",
+    "innerHeight": 844,
+    "innerWidth": 390,
+    "lineExists": true,
+    "lineInViewport": true,
+    "lineRect": {
+      "bottom": 817,
+      "height": 48,
+      "left": 238.75,
+      "right": 301,
+      "top": 769,
+      "width": 62.25,
+      "x": 238.75,
+      "y": 769
+    },
+    "noHorizontalOverflow": true,
+    "sameRow": true,
+    "scrollWidth": 384,
+    "title": "SIRINX | Solar Carport ลดค่าไฟองค์กร พร้อม EV Charger, BESS และ AI Energy",
+    "url": "https://www.sirinx.co/",
+    "zIndex": "50"
+  },
+  "errors": []
+}

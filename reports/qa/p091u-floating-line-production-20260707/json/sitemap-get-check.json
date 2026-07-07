@@ -1,0 +1,479 @@
+{
+  "run_at": "2026-07-07T18:03:06+0700",
+  "method": "GET only, no form submit, no live send",
+  "sitemap_url_count": 94,
+  "ok_count": 94,
+  "non_200": [],
+  "results": [
+    {
+      "url": "https://www.sirinx.co/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/"
+    },
+    {
+      "url": "https://www.sirinx.co/home-solution/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/home-solution/"
+    },
+    {
+      "url": "https://www.sirinx.co/about/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/about/"
+    },
+    {
+      "url": "https://www.sirinx.co/solutions/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solutions/"
+    },
+    {
+      "url": "https://www.sirinx.co/industries/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/industries/"
+    },
+    {
+      "url": "https://www.sirinx.co/investment/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/investment/"
+    },
+    {
+      "url": "https://www.sirinx.co/projects/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/projects/"
+    },
+    {
+      "url": "https://www.sirinx.co/strategy/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/strategy/"
+    },
+    {
+      "url": "https://www.sirinx.co/blog/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/blog/"
+    },
+    {
+      "url": "https://www.sirinx.co/contact/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/contact/"
+    },
+    {
+      "url": "https://www.sirinx.co/assessment/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/assessment/"
+    },
+    {
+      "url": "https://www.sirinx.co/pricing/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/pricing/"
+    },
+    {
+      "url": "https://www.sirinx.co/partner/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/partner/"
+    },
+    {
+      "url": "https://www.sirinx.co/privacy/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/privacy/"
+    },
+    {
+      "url": "https://www.sirinx.co/terms/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/terms/"
+    },
+    {
+      "url": "https://www.sirinx.co/cookies/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/cookies/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/bangkok/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/bangkok/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/amnat-charoen/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/amnat-charoen/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/ang-thong/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/ang-thong/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/bueng-kan/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/bueng-kan/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/buriram/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/buriram/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/chachoengsao/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/chachoengsao/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/chai-nat/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/chai-nat/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/chaiyaphum/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/chaiyaphum/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/chanthaburi/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/chanthaburi/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/chiang-mai/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/chiang-mai/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/chiang-rai/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/chiang-rai/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/chonburi/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/chonburi/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/chumphon/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/chumphon/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/kalasin/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/kalasin/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/kamphaeng-phet/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/kamphaeng-phet/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/kanchanaburi/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/kanchanaburi/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/khon-kaen/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/khon-kaen/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/krabi/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/krabi/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/lampang/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/lampang/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/lamphun/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/lamphun/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/loei/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/loei/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/lopburi/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/lopburi/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/mae-hong-son/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/mae-hong-son/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/maha-sarakham/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/maha-sarakham/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/mukdahan/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/mukdahan/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/nakhon-nayok/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/nakhon-nayok/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/nakhon-pathom/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/nakhon-pathom/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/nakhon-phanom/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/nakhon-phanom/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/nakhon-ratchasima/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/nakhon-ratchasima/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/nakhon-sawan/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/nakhon-sawan/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/nakhon-si-thammarat/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/nakhon-si-thammarat/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/nan/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/nan/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/narathiwat/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/narathiwat/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/nong-bua-lamphu/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/nong-bua-lamphu/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/nong-khai/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/nong-khai/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/nonthaburi/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/nonthaburi/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/pathum-thani/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/pathum-thani/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/pattani/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/pattani/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/phang-nga/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/phang-nga/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/phatthalung/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/phatthalung/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/phayao/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/phayao/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/phetchabun/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/phetchabun/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/phetchaburi/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/phetchaburi/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/phichit/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/phichit/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/phitsanulok/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/phitsanulok/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/phra-nakhon-si-ayutthaya/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/phra-nakhon-si-ayutthaya/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/phrae/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/phrae/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/phuket/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/phuket/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/prachinburi/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/prachinburi/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/prachuap-khiri-khan/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/prachuap-khiri-khan/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/ranong/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/ranong/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/ratchaburi/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/ratchaburi/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/rayong/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/rayong/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/roi-et/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/roi-et/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/sa-kaeo/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/sa-kaeo/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/sakon-nakhon/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/sakon-nakhon/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/samut-prakan/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/samut-prakan/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/samut-sakhon/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/samut-sakhon/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/samut-songkhram/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/samut-songkhram/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/saraburi/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/saraburi/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/satun/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/satun/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/sing-buri/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/sing-buri/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/sisaket/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/sisaket/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/songkhla/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/songkhla/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/sukhothai/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/sukhothai/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/suphan-buri/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/suphan-buri/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/surat-thani/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/surat-thani/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/surin/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/surin/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/tak/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/tak/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/trang/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/trang/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/trat/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/trat/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/ubon-ratchathani/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/ubon-ratchathani/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/udon-thani/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/udon-thani/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/uthai-thani/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/uthai-thani/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/uttaradit/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/uttaradit/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/yala/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/yala/"
+    },
+    {
+      "url": "https://www.sirinx.co/solar-carport/yasothon/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/solar-carport/yasothon/"
+    }
+  ]
+}

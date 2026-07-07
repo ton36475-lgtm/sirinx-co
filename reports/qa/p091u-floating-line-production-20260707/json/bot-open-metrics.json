@@ -1,0 +1,9 @@
+{
+  "botTriggerCount": 0,
+  "closeButtonVisible": true,
+  "inputVisible": true,
+  "note": "Opened chat UI only; no message typed or sent.",
+  "panelText": true,
+  "sendButtonVisible": true,
+  "submitPerformed": false
+}

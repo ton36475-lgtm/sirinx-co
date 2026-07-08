@@ -156,6 +156,8 @@ Reason: local package-level check/test/build and `/goal` HTTP smoke passed after
 - Preview deploy command runbook added at
   `docs/runbooks/PUBLIC_WEB_PREVIEW_DEPLOY_GATE_RUNBOOK_20260708.md`; it records
   candidate command shapes only and does not authorize deployment.
+- Local preview deploy preflight passed for `apps/public-web` check/test/build;
+  see `docs/receipts/PUBLIC_WEB_PREVIEW_DEPLOY_PREFLIGHT_20260708_1700.md`.
 - PR/merge approval still required.
 - Any next push after new local commits requires a new exact push gate.
 - LINE webhook approval still required.

@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-08T12:25:00+07:00",
+  "mode": "LOCAL_ONLY_DISCOVERY",
+  "scanPolicy": {
+    "secretRead": false,
+    "externalWrite": false,
+    "providerCall": false,
+    "push": false,
+    "deploy": false
+  },
+  "projects": [
+    {
+      "id": "SIRINX_SOLAR",
+      "status": "candidate_source_found",
+      "candidatePaths": [
+        {
+          "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/apps/public-web",
+          "kind": "current_public_web_app",
+          "evidence": "package.json and public-web verification scripts exist"
+        },
+        {
+          "path": "/Users/sirinx/sirinx-os/apps/sirinx-site",
+          "kind": "adjacent_legacy_or_release_site_candidate",
+          "evidence": "sirinx-os app path exists for prior site release lanes"
+        }
+      ],
+      "nextSafeAction": "human_confirm_authoritative_source_before_implementation"
+    },
+    {
+      "id": "POCKET_HATCHERY",
+      "status": "candidate_source_found",
+      "candidatePaths": [
+        {
+          "path": "/Users/sirinx/sirinx-os/apps/pocket-hatchery",
+          "kind": "local_app_spec_surface",
+          "evidence": "web, contracts, schemas, and ops folders exist"
+        },
+        {
+          "path": "/Users/sirinx/Documents/Codex/2026-05-28-ai-company-n-n-l7-interface/products/pocket-hatchery",
+          "kind": "historical_product_spec_reference",
+          "evidence": "product, frontend, contract, memory, test, and release specs exist"
+        }
+      ],
+      "nextSafeAction": "human_confirm_authoritative_source_before_implementation"
+    },
+    {
+      "id": "AGM_CREATIVE",
+      "status": "candidate_source_found",
+      "candidatePaths": [
+        {
+          "path": "/Users/sirinx/sirinx-os/apps/agm-site",
+          "kind": "local_site_app",
+          "evidence": "package.json exists with build, check, and smoke scripts"
+        },
+        {
+          "path": "/Users/sirinx/sirinx-os/apps/agm-autoglow-dashboard",
+          "kind": "local_dashboard_app",
+          "evidence": "package.json exists with verify and test scripts"
+        }
+      ],
+      "nextSafeAction": "human_confirm_authoritative_source_before_implementation"
+    },
+    {
+      "id": "ADS_ANDROMEDA",
+      "status": "candidate_source_found",
+      "candidatePaths": [
+        {
+          "path": "/Users/sirinx/sirinx-os/packages/asset-registry/ads-andromeda",
+          "kind": "local_asset_registry",
+          "evidence": "text-locks.json exists"
+        },
+        {
+          "path": "/Users/sirinx/sirinx-os/prompts/ads-andromeda",
+          "kind": "local_prompt_pack",
+          "evidence": "README.md and templates.json exist"
+        },
+        {
+          "path": "/Users/sirinx/project-hermes/brands/ads-andromeda",
+          "kind": "brand_reference_pack",
+          "evidence": "brand, design, voice, offer, and prompt template docs exist"
+        }
+      ],
+      "nextSafeAction": "human_confirm_authoritative_source_before_implementation"
+    },
+    {
+      "id": "PHITSANULOK_NEWS",
+      "status": "candidate_source_found",
+      "candidatePaths": [
+        {
+          "path": "/Users/sirinx/sirinx-os/apps/phitsanulok-news",
+          "kind": "local_news_app",
+          "evidence": "package.json exists with build and check scripts"
+        },
+        {
+          "path": "/Users/sirinx/sirinx-os/packages/types/phitsanulok-news",
+          "kind": "local_types_package_candidate",
+          "evidence": "typed package path exists"
+        }
+      ],
+      "nextSafeAction": "human_confirm_authoritative_source_before_implementation"
+    },
+    {
+      "id": "GHOSTCLAW_OS",
+      "status": "candidate_source_found",
+      "candidatePaths": [
+        {
+          "path": "/Users/sirinx/sirinx-os",
+          "kind": "primary_governance_runtime_repo_candidate",
+          "evidence": "root package.json, pnpm-workspace.yaml, apps, packages, docs, and schemas exist"
+        },
+        {
+          "path": "/Users/sirinx/sirinx-os/crates/ghostclaw_migration_core",
+          "kind": "local_rust_migration_core_candidate",
+          "evidence": "Cargo.toml and migration core docs exist"
+        },
+        {
+          "path": "/Users/sirinx/sirinx-os/docs/ghostclaw",
+          "kind": "local_governance_docs_candidate",
+          "evidence": "GhostClaw control-plane and gate docs exist"
+        }
+      ],
+      "nextSafeAction": "human_confirm_authoritative_source_before_implementation"
+    },
+    {
+      "id": "SIRINXDEV_AGENT_NATIVE_MONOREPO",
+      "status": "candidate_source_found",
+      "candidatePaths": [
+        {
+          "path": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os",
+          "kind": "current_agent_native_monorepo",
+          "evidence": "current branch, root package.json, governance docs, scripts, and public-web app exist"
+        }
+      ],
+      "nextSafeAction": "human_confirm_authoritative_source_before_implementation"
+    }
+  ]
+}

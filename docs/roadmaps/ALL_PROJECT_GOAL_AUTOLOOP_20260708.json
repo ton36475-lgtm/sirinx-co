@@ -1,0 +1,313 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-08T16:12:00+07:00",
+  "mode": "LOCAL_ONLY_GOAL_AUTOLOOP",
+  "authority": "SIRINXDev Agent-Native Governed Monorepo",
+  "purpose": "Machine-checkable local autoloop state for all SIRINX/GHOSTCLAW project lanes.",
+  "sourceOfTruth": [
+    "docs/roadmaps/ALL_PROJECT_AGENT_NATIVE_INTEGRATION_LEDGER_20260708.json",
+    "docs/roadmaps/ALL_PROJECT_EXECUTION_BACKLOG_20260708.json",
+    "docs/roadmaps/ALL_PROJECT_SOURCE_DISCOVERY_20260708.json",
+    "docs/specs/all-projects/PROJECT_CONTEXT_PACKS_20260708.md",
+    "docs/specs/all-projects/PER_PROJECT_SPEC_SKELETONS_20260708.md"
+  ],
+  "globalPolicy": {
+    "localOnly": true,
+    "dryRunDefault": true,
+    "externalWriteDefault": false,
+    "pushDefault": false,
+    "deployDefault": false,
+    "providerCallDefault": false,
+    "secretReadDefault": false,
+    "customerDataStorageDefault": false,
+    "liveSendDefault": false,
+    "broadApprovalAliasesNotGates": [
+      "approve_all",
+      "full_auto",
+      "godmode",
+      "max_auto_permission",
+      "auto_approve"
+    ]
+  },
+  "safeLocalActionAllowlist": [
+    "review_local_diff",
+    "rerun_local_verification",
+    "update_local_evidence",
+    "draft_context_pack",
+    "draft_spec_pack",
+    "draft_uat_plan",
+    "prepare_review_notes",
+    "draft_gate_request",
+    "run_read_only_inventory",
+    "draft_governance_doc",
+    "draft_offline_copy_matrix",
+    "draft_editorial_policy",
+    "update_task_dependency_map",
+    "draft_rollback_plan"
+  ],
+  "requiredExactGateActions": [
+    "git_push",
+    "pr_creation_or_merge",
+    "deploy",
+    "webhook_activation",
+    "production_analytics_mutation",
+    "crm_customer_data_storage",
+    "paid_provider_call",
+    "customer_or_social_live_send",
+    "secret_read_or_print"
+  ],
+  "projects": [
+    {
+      "id": "SIRINX_SOLAR",
+      "phase": "review_after_feature_branch_push",
+      "ledgerState": "local_validated_remote_branch_pushed_review_pending",
+      "sourceState": "candidate_source_found",
+      "nextSafeGate": "human_review_or_exact_pr_deploy_gate_after_push",
+      "allowedAutoloopActions": [
+        "review_local_diff",
+        "rerun_local_verification",
+        "update_local_evidence",
+        "draft_uat_plan",
+        "prepare_review_notes",
+        "draft_gate_request"
+      ],
+      "hardStops": [
+        "exact_gate_required",
+        "manual_browser_uat_required",
+        "real_device_line_qr_scan_required",
+        "existing_bot_manual_confirmation_required"
+      ],
+      "controls": {
+        "requiresExactGateFor": [
+          "git_push",
+          "pr_creation_or_merge",
+          "deploy",
+          "webhook_activation",
+          "production_analytics_mutation",
+          "crm_customer_data_storage",
+          "paid_provider_call",
+          "customer_or_social_live_send",
+          "secret_read_or_print"
+        ]
+      },
+      "evidenceRequired": [
+        "vault/evidence/sirinx-web-line-trust-v1/EVIDENCE.md",
+        "docs/receipts/PUBLIC_WEB_PUSH_GATE_SUCCEEDED_20260708_1604.md"
+      ]
+    },
+    {
+      "id": "POCKET_HATCHERY",
+      "phase": "source_confirmation_before_spec",
+      "ledgerState": "context_spec_pack_required_before_implementation",
+      "sourceState": "candidate_source_found",
+      "nextSafeGate": "create_project_context_pack_after_source_confirmation",
+      "allowedAutoloopActions": [
+        "run_read_only_inventory",
+        "draft_context_pack",
+        "draft_spec_pack",
+        "draft_uat_plan",
+        "draft_rollback_plan"
+      ],
+      "hardStops": [
+        "source_confirmation_required",
+        "exact_gate_required"
+      ],
+      "controls": {
+        "requiresExactGateFor": [
+          "git_push",
+          "pr_creation_or_merge",
+          "deploy",
+          "webhook_activation",
+          "production_analytics_mutation",
+          "crm_customer_data_storage",
+          "paid_provider_call",
+          "customer_or_social_live_send",
+          "secret_read_or_print"
+        ]
+      },
+      "evidenceRequired": [
+        "docs/roadmaps/ALL_PROJECT_AGENT_NATIVE_INTEGRATION_LEDGER_20260708.json",
+        "docs/roadmaps/ALL_PROJECT_SOURCE_DISCOVERY_20260708.json"
+      ]
+    },
+    {
+      "id": "AGM_CREATIVE",
+      "phase": "source_confirmation_before_brand_workflow_spec",
+      "ledgerState": "context_spec_pack_required_before_implementation",
+      "sourceState": "candidate_source_found",
+      "nextSafeGate": "create_brand_content_context_pack_without_social_automation",
+      "allowedAutoloopActions": [
+        "run_read_only_inventory",
+        "draft_context_pack",
+        "draft_spec_pack",
+        "draft_offline_copy_matrix",
+        "draft_rollback_plan"
+      ],
+      "hardStops": [
+        "source_confirmation_required",
+        "exact_gate_required"
+      ],
+      "controls": {
+        "requiresExactGateFor": [
+          "git_push",
+          "pr_creation_or_merge",
+          "deploy",
+          "webhook_activation",
+          "production_analytics_mutation",
+          "crm_customer_data_storage",
+          "paid_provider_call",
+          "customer_or_social_live_send",
+          "secret_read_or_print"
+        ]
+      },
+      "evidenceRequired": [
+        "docs/roadmaps/ALL_PROJECT_AGENT_NATIVE_INTEGRATION_LEDGER_20260708.json",
+        "docs/roadmaps/ALL_PROJECT_SOURCE_DISCOVERY_20260708.json"
+      ]
+    },
+    {
+      "id": "ADS_ANDROMEDA",
+      "phase": "ads_governance_without_provider_execution",
+      "ledgerState": "paid_provider_gate_required_before_execution",
+      "sourceState": "candidate_source_found",
+      "nextSafeGate": "create_ads_governance_spec_without_paid_provider_calls",
+      "allowedAutoloopActions": [
+        "run_read_only_inventory",
+        "draft_context_pack",
+        "draft_spec_pack",
+        "draft_offline_copy_matrix",
+        "draft_gate_request"
+      ],
+      "hardStops": [
+        "paid_provider_gate_required",
+        "exact_gate_required"
+      ],
+      "controls": {
+        "requiresExactGateFor": [
+          "git_push",
+          "pr_creation_or_merge",
+          "deploy",
+          "webhook_activation",
+          "production_analytics_mutation",
+          "crm_customer_data_storage",
+          "paid_provider_call",
+          "customer_or_social_live_send",
+          "secret_read_or_print"
+        ]
+      },
+      "evidenceRequired": [
+        "docs/roadmaps/ALL_PROJECT_AGENT_NATIVE_INTEGRATION_LEDGER_20260708.json",
+        "docs/roadmaps/ALL_PROJECT_SOURCE_DISCOVERY_20260708.json"
+      ]
+    },
+    {
+      "id": "PHITSANULOK_NEWS",
+      "phase": "editorial_governance_before_publish",
+      "ledgerState": "editorial_governance_spec_required_before_publish",
+      "sourceState": "candidate_source_found",
+      "nextSafeGate": "create_editorial_seo_governance_pack_without_publish",
+      "allowedAutoloopActions": [
+        "run_read_only_inventory",
+        "draft_context_pack",
+        "draft_spec_pack",
+        "draft_editorial_policy",
+        "draft_rollback_plan"
+      ],
+      "hardStops": [
+        "publish_gate_required",
+        "source_confirmation_required",
+        "exact_gate_required"
+      ],
+      "controls": {
+        "requiresExactGateFor": [
+          "git_push",
+          "pr_creation_or_merge",
+          "deploy",
+          "webhook_activation",
+          "production_analytics_mutation",
+          "crm_customer_data_storage",
+          "paid_provider_call",
+          "customer_or_social_live_send",
+          "secret_read_or_print"
+        ]
+      },
+      "evidenceRequired": [
+        "docs/roadmaps/ALL_PROJECT_AGENT_NATIVE_INTEGRATION_LEDGER_20260708.json",
+        "docs/roadmaps/ALL_PROJECT_SOURCE_DISCOVERY_20260708.json"
+      ]
+    },
+    {
+      "id": "GHOSTCLAW_OS",
+      "phase": "local_control_plane_governance",
+      "ledgerState": "local_governance_docs_and_verifiers_only",
+      "sourceState": "candidate_source_found",
+      "nextSafeGate": "continue_local_verifier_and_agent_governance_without_runtime_mutation",
+      "allowedAutoloopActions": [
+        "review_local_diff",
+        "rerun_local_verification",
+        "update_local_evidence",
+        "draft_governance_doc",
+        "update_task_dependency_map",
+        "draft_gate_request"
+      ],
+      "hardStops": [
+        "runtime_mutation_gate_required",
+        "exact_gate_required"
+      ],
+      "controls": {
+        "requiresExactGateFor": [
+          "git_push",
+          "pr_creation_or_merge",
+          "deploy",
+          "webhook_activation",
+          "production_analytics_mutation",
+          "crm_customer_data_storage",
+          "paid_provider_call",
+          "customer_or_social_live_send",
+          "secret_read_or_print"
+        ]
+      },
+      "evidenceRequired": [
+        "docs/NEXT_PHASE_EXECUTION_PLAN.md",
+        "docs/PIPELINE_AUDIT_RUNBOOK.md",
+        "docs/TELEGRAM_CONTROL_PLANE.md"
+      ]
+    },
+    {
+      "id": "SIRINXDEV_AGENT_NATIVE_MONOREPO",
+      "phase": "local_governance_after_feature_branch_push",
+      "ledgerState": "feature_branch_pushed_local_governance_updates_allowed",
+      "sourceState": "candidate_source_found",
+      "nextSafeGate": "keep_local_receipts_verifiers_and_task_dependency_maps_current",
+      "allowedAutoloopActions": [
+        "review_local_diff",
+        "rerun_local_verification",
+        "update_local_evidence",
+        "draft_governance_doc",
+        "update_task_dependency_map",
+        "prepare_review_notes"
+      ],
+      "hardStops": [
+        "next_remote_write_gate_required",
+        "exact_gate_required"
+      ],
+      "controls": {
+        "requiresExactGateFor": [
+          "git_push",
+          "pr_creation_or_merge",
+          "deploy",
+          "webhook_activation",
+          "production_analytics_mutation",
+          "crm_customer_data_storage",
+          "paid_provider_call",
+          "customer_or_social_live_send",
+          "secret_read_or_print"
+        ]
+      },
+      "evidenceRequired": [
+        "docs/receipts/PUBLIC_WEB_PUSH_GATE_SUCCEEDED_20260708_1604.md",
+        "docs/roadmaps/ALL_PROJECT_AGENT_NATIVE_INTEGRATION_LEDGER_20260708.json"
+      ]
+    }
+  ]
+}

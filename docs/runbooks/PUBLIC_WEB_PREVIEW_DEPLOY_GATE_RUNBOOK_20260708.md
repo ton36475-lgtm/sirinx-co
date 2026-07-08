@@ -13,6 +13,9 @@ Scope: `apps/public-web` preview deploy gate only
 - `apps/public-web/package.json` has no deploy script.
 - Local CLI discovery did not find `wrangler`, `vercel`, `netlify`,
   `firebase`, or `flyctl` on `PATH`.
+- Public DNS/HTTP discovery indicates the live site is behind Cloudflare and
+  `https://sirinx-co.pages.dev/` returns HTTP `200`, but the authenticated
+  Cloudflare Pages project target still needs owner/provider confirmation.
 - No deploy, PR/merge, webhook activation, production analytics mutation,
   CRM/customer storage, or production action is authorized by this runbook.
 
@@ -48,6 +51,16 @@ APPROVE_DEPLOY_WEB_SIRINX_PREVIEW_20260708
 Allowed command: pnpm --dir apps/public-web build && wrangler pages deploy apps/public-web/dist/public --project-name <confirmed-cloudflare-pages-project> --branch feat/sirinx-web-line-trust-v1
 ```
 
+If the owner confirms that the Cloudflare Pages project is `sirinx-co` and
+Wrangler is installed/authenticated, the likely exact gate would be:
+
+```text
+APPROVE_DEPLOY_WEB_SIRINX_PREVIEW_20260708
+Allowed command: pnpm --dir apps/public-web build && wrangler pages deploy apps/public-web/dist/public --project-name sirinx-co --branch feat/sirinx-web-line-trust-v1
+```
+
+Do not run this until the owner sends it as the exact approved command.
+
 Vercel:
 
 ```text
@@ -81,3 +94,10 @@ Stop if:
 
 Owner chooses the real preview provider and sends a new exact gate with a full
 command. Until then, continue local validation and manual review only.
+
+## References
+
+- Cloudflare Pages Wrangler commands:
+  `https://developers.cloudflare.com/workers/wrangler/commands/#pages`
+- Cloudflare Pages direct upload:
+  `https://developers.cloudflare.com/pages/get-started/direct-upload/`

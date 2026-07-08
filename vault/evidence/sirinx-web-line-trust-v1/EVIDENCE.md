@@ -158,6 +158,10 @@ Reason: local package-level check/test/build and `/goal` HTTP smoke passed after
   candidate command shapes only and does not authorize deployment.
 - Local preview deploy preflight passed for `apps/public-web` check/test/build;
   see `docs/receipts/PUBLIC_WEB_PREVIEW_DEPLOY_PREFLIGHT_20260708_1700.md`.
+- Read-only public hosting discovery found Cloudflare/Pages signals and a
+  likely `sirinx-co` Pages target, but deploy is still blocked until Wrangler
+  install/auth/project confirmation and an exact executable command; see
+  `docs/receipts/PUBLIC_WEB_HOSTING_DISCOVERY_20260708_1703.md`.
 - PR/merge approval still required.
 - Any next push after new local commits requires a new exact push gate.
 - LINE webhook approval still required.

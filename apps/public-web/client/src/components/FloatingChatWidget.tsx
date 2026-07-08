@@ -6,9 +6,9 @@ import { cn } from "@/lib/utils";
 import { trpc } from "@/lib/trpc";
 import { TrpcProvider } from "@/lib/trpc-provider";
 import { useEventTracking } from "@/hooks/useAnalytics";
+import { useLanguage } from "@/contexts/LanguageContext";
 import AILiveAvatarMark from "@/components/AILiveAvatarMark";
 import {
-  CHATBOT_QUICK_REPLIES,
   analyzeChatbotConversation,
   createSmartChatbotReply,
   type ChatbotMessage,
@@ -38,9 +38,18 @@ type FloatingChatWidgetProps = {
   initialOpen?: boolean;
 };
 
+const quickReplyKeyPairs = [
+  ["chat.quickQuoteLabel", "chat.quickQuoteMessage"],
+  ["chat.quickSavingsLabel", "chat.quickSavingsMessage"],
+  ["chat.quickRooftopCarportLabel", "chat.quickRooftopCarportMessage"],
+  ["chat.quickBessEvLabel", "chat.quickBessEvMessage"],
+  ["chat.quickSurveyLabel", "chat.quickSurveyMessage"],
+] as const;
+
 function FloatingChatWidgetInner({
   initialOpen = false,
 }: FloatingChatWidgetProps) {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(initialOpen);
   const [showBubble, setShowBubble] = useState(false);
   const [bubbleDismissed, setBubbleDismissed] = useState(initialOpen);
@@ -201,15 +210,15 @@ function FloatingChatWidgetInner({
                       setShowBubble(false);
                     }}
                     className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-gray-400 dark:bg-slate-600 text-white flex items-center justify-center text-xs hover:bg-gray-500 transition-colors"
-                    aria-label="ปิดข้อความแนะนำ"
+                    aria-label={t("chat.dismissBubbleAria")}
                   >
                     <X className="w-3 h-3" />
                   </button>
                   <p className="text-sm text-gray-800 dark:text-gray-200 font-medium leading-snug">
-                    สนใจโซลาร์เซลล์ไหมครับ?
+                    {t("chat.bubbleTitle")}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    พิมพ์ถามได้เลย หรือแอดไลน์คุยกัน
+                    {t("chat.bubbleDesc")}
                   </p>
                   {/* Triangle pointer */}
                   <div className="absolute -bottom-2 right-6 w-4 h-4 bg-white dark:bg-slate-800 border-r border-b border-gray-200 dark:border-slate-700 rotate-45" />
@@ -223,8 +232,8 @@ function FloatingChatWidgetInner({
                 href={lineOaUrl || lineOfficialConfig.addFriendUrl}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="เปิด LINE Official ของ SIRINX"
-                title="LINE Official"
+                aria-label={t("floating.lineAria")}
+                title={t("footer.lineEyebrow")}
                 onClick={() =>
                   trackEvent("line_click", "line_oa_open", {
                     label: "floating_contact_dock",
@@ -237,7 +246,7 @@ function FloatingChatWidgetInner({
               </a>
               <motion.button
                 onClick={handleOpen}
-                aria-label="เปิดแชท SIRINX Solar Assistant"
+                aria-label={t("floating.botAria")}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
                 className="sirinx-live-avatar-trigger group relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full shadow-2xl sm:h-16 sm:w-16"
@@ -295,14 +304,14 @@ function FloatingChatWidgetInner({
                       SIRINX Assistant
                     </h3>
                     <p className="text-xs text-cyan-400/80">
-                      ออนไลน์ พร้อมให้บริการ
+                      {t("chat.statusOnline")}
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={handleClose}
                   className="w-8 h-8 rounded-full hover:bg-slate-700/50 flex items-center justify-center transition-colors"
-                  aria-label="ปิด SIRINX Assistant"
+                  aria-label={t("chat.closeAria")}
                 >
                   <X className="w-4 h-4 text-slate-400" />
                 </button>
@@ -321,27 +330,31 @@ function FloatingChatWidgetInner({
                       <Zap className="w-7 h-7 text-cyan-400" />
                     </div>
                     <h4 className="font-semibold text-white text-base mb-1.5">
-                      สวัสดีครับ! ยินดีให้บริการ
+                      {t("chat.welcomeTitle")}
                     </h4>
                     <p className="text-xs text-slate-400 leading-relaxed">
-                      สอบถามเรื่องโซลาร์เซลล์ BESS แบตเตอรี่
-                      หรือนัดสำรวจหน้างานได้เลยครับ
+                      {t("chat.welcomeDesc")}
                     </p>
                   </div>
 
                   {/* Quick Replies */}
                   <div className="w-full space-y-2">
-                    {CHATBOT_QUICK_REPLIES.map(qr => (
+                    {quickReplyKeyPairs.map(([labelKey, messageKey]) => {
+                      const label = t(labelKey);
+                      const message = t(messageKey);
+
+                      return (
                       <button
-                        key={qr.label}
-                        onClick={() => handleSend(qr.message)}
+                        key={labelKey}
+                        onClick={() => handleSend(message)}
                         disabled={isReplyPending}
                         className="w-full text-left px-3.5 py-2.5 rounded-xl border border-slate-700/60 hover:border-cyan-500/40 hover:bg-cyan-500/5 transition-all text-sm text-slate-300 hover:text-cyan-300 disabled:opacity-50 flex items-center justify-between group"
                       >
-                        <span>{qr.label}</span>
+                        <span>{label}</span>
                         <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-cyan-400" />
                       </button>
-                    ))}
+                    );
+                    })}
                   </div>
 
                   {/* LINE CTA */}
@@ -350,7 +363,7 @@ function FloatingChatWidgetInner({
                     className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#00C300] hover:bg-[#00B300] text-white font-medium text-sm transition-colors shadow-lg shadow-green-500/20"
                   >
                     <LINEIcon className="w-5 h-5" />
-                    <span>แอดไลน์ @sirinx</span>
+                    <span>{t("chat.addLine")}</span>
                   </button>
                 </div>
               ) : (
@@ -411,17 +424,17 @@ function FloatingChatWidgetInner({
                       <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-400/20 bg-cyan-400/5 text-cyan-200 text-xs font-medium">
                         <Zap className="w-3.5 h-3.5" />
                         <span>
-                          ข้อมูลประเมิน {leadAnalysis.knownFields.length}/
+                          {t("chat.knownFields")} {leadAnalysis.knownFields.length}/
                           {leadAnalysis.fieldCount}
                         </span>
                       </div>
                       <button
                         onClick={handleLineClick}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#00C300]/10 border border-[#00C300]/30 text-[#00C300] text-xs font-medium hover:bg-[#00C300]/20 transition-colors"
-                        aria-label="ต่อสายผ่าน LINE"
+                        aria-label={t("chat.transferLineAria")}
                       >
                         <LINEIcon className="w-3.5 h-3.5" />
-                        ต่อสายผ่าน LINE
+                        {t("chat.transferLine")}
                       </button>
                     </div>
                   )}
@@ -443,8 +456,8 @@ function FloatingChatWidgetInner({
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  aria-label="พิมพ์ข้อความถึง SIRINX Assistant"
-                  placeholder="พิมพ์ข้อความ..."
+                  aria-label={t("chat.inputAria")}
+                  placeholder={t("chat.inputPlaceholder")}
                   rows={1}
                   className="flex-1 bg-slate-800/80 border border-slate-700/50 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 resize-none max-h-24 min-h-[38px]"
                 />
@@ -452,7 +465,7 @@ function FloatingChatWidgetInner({
                   type="submit"
                   size="icon"
                   disabled={!input.trim() || isReplyPending}
-                  aria-label="ส่งข้อความ"
+                  aria-label={t("chat.sendAria")}
                   className="shrink-0 h-[38px] w-[38px] rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white disabled:opacity-30"
                 >
                   {isReplyPending ? (
@@ -463,7 +476,7 @@ function FloatingChatWidgetInner({
                 </Button>
               </form>
               <p className="text-[10px] text-slate-600 text-center mt-1.5">
-                AI อาจตอบไม่ถูกต้อง 100% กรุณายืนยันข้อมูลกับทีมงาน
+                {t("chat.aiDisclaimer")}
               </p>
             </div>
           </motion.div>

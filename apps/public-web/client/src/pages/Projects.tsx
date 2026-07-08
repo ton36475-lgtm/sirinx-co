@@ -445,10 +445,10 @@ export default function Projects() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {galleryPhotos.map((src, i) => (
               <motion.button
-                key={i}
-                initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i % 4}
+	                key={i}
+	                initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i % 4}
 	                onClick={() => setLightboxIdx(i)}
-	                aria-label={`เปิดรูปผลงาน SIRINX ลำดับที่ ${i + 1}`}
+	                aria-label={`${t("galleryOpenAria")} ${i + 1}`}
 	                className={`rounded-lg overflow-hidden border border-border-subtle hover:border-border-accent transition-all hover:scale-[1.02] ${
 	                  i % 3 === 0 ? "aspect-[4/3]" : "aspect-square"
 	                }`}
@@ -476,20 +476,20 @@ export default function Projects() {
             className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
             onClick={() => setLightboxIdx(null)}
           >
-	            <button onClick={() => setLightboxIdx(null)} className="absolute top-4 right-4 text-white/80 hover:text-white z-10" aria-label="ปิดรูปผลงาน">
+	            <button onClick={() => setLightboxIdx(null)} className="absolute top-4 right-4 text-white/80 hover:text-white z-10" aria-label={t("lightboxCloseAria")}>
 	              <X className="w-8 h-8" />
 	            </button>
 	            <button
 	              onClick={(e) => { e.stopPropagation(); setLightboxIdx((lightboxIdx - 1 + galleryPhotos.length) % galleryPhotos.length); }}
 	              className="absolute left-4 text-white/80 hover:text-white z-10"
-	              aria-label="รูปผลงานก่อนหน้า"
+	              aria-label={t("lightboxPrevAria")}
 	            >
 	              <ChevronLeft className="w-10 h-10" />
 	            </button>
 	            <button
 	              onClick={(e) => { e.stopPropagation(); setLightboxIdx((lightboxIdx + 1) % galleryPhotos.length); }}
 	              className="absolute right-4 text-white/80 hover:text-white z-10"
-	              aria-label="รูปผลงานถัดไป"
+	              aria-label={t("lightboxNextAria")}
 	            >
               <ChevronRight className="w-10 h-10" />
             </button>

@@ -1,39 +1,43 @@
 import LegalPage from "@/components/LegalPage";
+import { usePageTranslation } from "@/i18n";
+import "@/i18n/pages/legal";
 
 export default function Cookies() {
+  const { t } = usePageTranslation("legal");
+
   return (
     <LegalPage
-      eyebrow="Cookie Policy"
-      title="นโยบายคุกกี้"
-      updatedAt="16 พฤษภาคม 2026"
-      intro="เว็บไซต์ SIRINX อาจใช้คุกกี้และเทคโนโลยีคล้ายกันเพื่อให้เว็บไซต์ทำงานได้ดี วิเคราะห์การใช้งาน และปรับปรุงบริการออนไลน์"
+      eyebrow={t("legal.cookies.eyebrow")}
+      title={t("legal.cookies.title")}
+      updatedAt={t("legal.updatedAtDate")}
+      intro={t("legal.cookies.intro")}
       sections={[
         {
-          title: "คุกกี้ที่จำเป็น",
+          title: t("legal.cookies.essential.title"),
           body: [
-            "คุกกี้บางประเภทจำเป็นต่อการทำงานพื้นฐานของเว็บไซต์ เช่น การตั้งค่าภาษา ธีม การรักษาความปลอดภัย และการแสดงผลที่ถูกต้อง",
-            "หากปิดคุกกี้เหล่านี้ บางฟังก์ชันอาจทำงานไม่สมบูรณ์",
+            t("legal.cookies.essential.body1"),
+            t("legal.cookies.essential.body2"),
           ],
         },
         {
-          title: "คุกกี้วิเคราะห์การใช้งาน",
+          title: t("legal.cookies.analytics.title"),
           body: [
-            "เราอาจใช้ข้อมูลการเข้าชมแบบรวมเพื่อดูว่าหน้าใดมีผู้ใช้งานมากที่สุด เส้นทางใดทำให้ผู้ใช้ติดต่อเรา และจุดใดควรปรับปรุง",
-            "ข้อมูลนี้ช่วยให้เราปรับปรุงเนื้อหา Solar Carport, BESS, EV Charger และบริการพลังงานให้ตรงกับความต้องการของผู้ใช้",
+            t("legal.cookies.analytics.body1"),
+            t("legal.cookies.analytics.body2"),
           ],
         },
         {
-          title: "การจัดการคุกกี้",
+          title: t("legal.cookies.management.title"),
           body: [
-            "คุณสามารถตั้งค่าเบราว์เซอร์เพื่อปฏิเสธหรือลบคุกกี้ได้ตลอดเวลา",
-            "การปิดคุกกี้บางส่วนอาจทำให้ประสบการณ์ใช้งานลดลง แต่ยังสามารถเข้าถึงข้อมูลหลักของเว็บไซต์ได้",
+            t("legal.cookies.management.body1"),
+            t("legal.cookies.management.body2"),
           ],
         },
         {
-          title: "การเปลี่ยนแปลงนโยบาย",
+          title: t("legal.cookies.changes.title"),
           body: [
-            "เราอาจปรับปรุงนโยบายคุกกี้ตามการเปลี่ยนแปลงของระบบ เว็บไซต์ หรือข้อกำหนดทางกฎหมาย",
-            "วันที่อัปเดตล่าสุดจะแสดงบนหน้านี้เพื่อให้ผู้ใช้งานตรวจสอบได้ง่าย",
+            t("legal.cookies.changes.body1"),
+            t("legal.cookies.changes.body2"),
           ],
         },
       ]}

@@ -15,7 +15,7 @@ describe("LightMarkdown", () => {
     );
 
     expect(html).toContain("<h3");
-    expect(html).toContain("<strong>Ready</strong>");
+    expect(html).toMatch(/<strong[^>]*>Ready<\/strong>/);
     expect(html).toContain("SERVER-READY HOLD MODE");
     expect(html).toContain('href="/contact"');
   });

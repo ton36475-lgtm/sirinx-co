@@ -1,39 +1,43 @@
 import LegalPage from "@/components/LegalPage";
+import { usePageTranslation } from "@/i18n";
+import "@/i18n/pages/legal";
 
 export default function Terms() {
+  const { t } = usePageTranslation("legal");
+
   return (
     <LegalPage
-      eyebrow="Terms of Use"
-      title="เงื่อนไขการใช้งาน"
-      updatedAt="16 พฤษภาคม 2026"
-      intro="การใช้งานเว็บไซต์ SIRINX ถือว่าคุณยอมรับเงื่อนไขนี้ ข้อมูลบนเว็บไซต์มีไว้เพื่อการศึกษา การประเมินเบื้องต้น และการติดต่อขอข้อเสนอทางธุรกิจ"
+      eyebrow={t("legal.terms.eyebrow")}
+      title={t("legal.terms.title")}
+      updatedAt={t("legal.updatedAtDate")}
+      intro={t("legal.terms.intro")}
       sections={[
         {
-          title: "ข้อมูลบริการและการประเมิน",
+          title: t("legal.terms.assessment.title"),
           body: [
-            "ตัวเลขค่าไฟ ผลประหยัด ขนาดระบบ ระยะคืนทุน และผลตอบแทนที่แสดงบนเว็บไซต์เป็นการประเมินเบื้องต้นเท่านั้น",
-            "ข้อเสนอจริงขึ้นอยู่กับข้อมูลหน้างาน โครงสร้างพื้นที่ เงื่อนไขการเชื่อมต่อไฟฟ้า ราคาอุปกรณ์ และการตรวจสอบโดยทีมวิศวกร",
+            t("legal.terms.assessment.body1"),
+            t("legal.terms.assessment.body2"),
           ],
         },
         {
-          title: "การใช้งานเว็บไซต์",
+          title: t("legal.terms.usage.title"),
           body: [
-            "ผู้ใช้งานต้องไม่ใช้เว็บไซต์เพื่อส่งข้อมูลเท็จ รบกวนระบบ ทดลองโจมตี หรือดำเนินการใดที่กระทบต่อความปลอดภัยและการให้บริการ",
-            "เราขอสงวนสิทธิ์ในการปรับปรุง เปลี่ยนแปลง หรือหยุดให้บริการบางส่วนของเว็บไซต์โดยไม่ต้องแจ้งล่วงหน้า",
+            t("legal.terms.usage.body1"),
+            t("legal.terms.usage.body2"),
           ],
         },
         {
-          title: "ทรัพย์สินทางปัญญา",
+          title: t("legal.terms.ip.title"),
           body: [
-            "ข้อความ ภาพประกอบ โครงสร้างหน้าเว็บ เครื่องหมายการค้า และองค์ประกอบแบรนด์ของ SIRINX เป็นทรัพย์สินของบริษัทหรือผู้ให้สิทธิ์ที่เกี่ยวข้อง",
-            "ห้ามคัดลอก ดัดแปลง เผยแพร่ หรือใช้เพื่อการค้าโดยไม่ได้รับอนุญาตเป็นลายลักษณ์อักษร",
+            t("legal.terms.ip.body1"),
+            t("legal.terms.ip.body2"),
           ],
         },
         {
-          title: "ข้อจำกัดความรับผิด",
+          title: t("legal.terms.liability.title"),
           body: [
-            "SIRINX จะใช้ความพยายามอย่างเหมาะสมในการให้ข้อมูลที่ถูกต้อง แต่ไม่รับประกันว่าข้อมูลทุกส่วนจะครบถ้วนหรือเหมาะกับทุกสถานการณ์",
-            "ผู้ใช้งานควรปรึกษาทีมวิศวกรหรือผู้เชี่ยวชาญก่อนตัดสินใจลงทุนหรือติดตั้งระบบพลังงาน",
+            t("legal.terms.liability.body1"),
+            t("legal.terms.liability.body2"),
           ],
         },
       ]}

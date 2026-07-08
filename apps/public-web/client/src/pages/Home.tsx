@@ -657,7 +657,7 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="text-xs font-bold text-gradient-accent">
-                      ตามไซต์
+                      {t("home.projects.node1.siteSpecific")}
                     </div>
                     <div className="text-[9px] text-text-muted">
                       {t("home.projects.node1.reduceBill")}

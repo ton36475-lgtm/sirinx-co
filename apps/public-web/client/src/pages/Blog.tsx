@@ -16,7 +16,9 @@ import {
   Zap,
 } from "lucide-react";
 import { toast } from "sonner";
-import { blogPosts } from "@/lib/blogData";
+import { blogPosts, getLocalizedBlogPosts } from "@/lib/blogData";
+import { usePageTranslation } from "@/i18n";
+import "@/i18n/pages/blog";
 
 // Re-export for backward compatibility with BlogPost.tsx
 export type { BlogPostMeta } from "@/lib/blogData";
@@ -32,19 +34,29 @@ const fadeUp = {
 };
 
 const categories = [
-  { key: "all", label: "ทั้งหมด", icon: BookOpen },
-  { key: "solar-tech", label: "Solar Technology", icon: Zap },
-  { key: "energy-mgmt", label: "Energy Management", icon: TrendingUp },
-  { key: "investment", label: "Investment & Tax", icon: TrendingUp },
-  { key: "industry", label: "Industry Insights", icon: BookOpen },
-  { key: "esg", label: "ESG & Sustainability", icon: BookOpen },
+  { key: "all", labelKey: "blog.category.all", icon: BookOpen },
+  { key: "solar-tech", labelKey: "blog.category.solarTech", icon: Zap },
+  {
+    key: "energy-mgmt",
+    labelKey: "blog.category.energyMgmt",
+    icon: TrendingUp,
+  },
+  {
+    key: "investment",
+    labelKey: "blog.category.investment",
+    icon: TrendingUp,
+  },
+  { key: "industry", labelKey: "blog.category.industry", icon: BookOpen },
+  { key: "esg", labelKey: "blog.category.esg", icon: BookOpen },
 ];
 
 export default function Blog() {
+  const { lang, t } = usePageTranslation("blog");
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const localizedPosts = getLocalizedBlogPosts(lang);
 
-  const filteredPosts = blogPosts.filter(post => {
+  const filteredPosts = localizedPosts.filter(post => {
     const matchCategory =
       activeCategory === "all" || post.categoryKey === activeCategory;
     const matchSearch =
@@ -57,6 +69,31 @@ export default function Blog() {
 
   const featured = filteredPosts.filter(p => p.featured);
   const regular = filteredPosts.filter(p => !p.featured);
+  const activeCategoryLabelKey = categories.find(
+    c => c.key === activeCategory
+  )?.labelKey;
+  const calculatorMetrics = [
+    {
+      label: t("blog.metric.savings.label"),
+      value: t("blog.metric.savings.value"),
+      sub: t("blog.metric.savings.sub"),
+    },
+    {
+      label: t("blog.metric.payback.label"),
+      value: t("blog.metric.payback.value"),
+      sub: t("blog.metric.payback.sub"),
+    },
+    {
+      label: t("blog.metric.lifespan.label"),
+      value: t("blog.metric.lifespan.value"),
+      sub: t("blog.metric.lifespan.sub"),
+    },
+    {
+      label: t("blog.metric.co2.label"),
+      value: t("blog.metric.co2.value"),
+      sub: t("blog.metric.co2.sub"),
+    },
+  ];
 
   return (
     <div>
@@ -71,15 +108,16 @@ export default function Blog() {
               custom={0}
             >
               <span className="text-xs font-medium text-accent-secondary tracking-widest uppercase mb-3 block">
-                Blog & Insights
+                {t("blog.hero.eyebrow")}
               </span>
               <h1 className="font-display text-4xl lg:text-5xl font-bold text-foreground mb-4">
-                บทความ
-                <span className="text-gradient-accent">และข้อมูลเชิงลึก</span>
+                {t("blog.hero.titleLead")}
+                <span className="text-gradient-accent">
+                  {t("blog.hero.titleAccent")}
+                </span>
               </h1>
               <p className="text-lg text-text-secondary leading-relaxed">
-                ความรู้ด้านพลังงานสะอาด เทคโนโลยี กลยุทธ์ทางธุรกิจ และข้อมูลตลาด
-                จากทีมวิศวกรและที่ปรึกษาของ SIRINX
+                {t("blog.hero.desc")}
               </p>
             </motion.div>
             <motion.div
@@ -94,7 +132,7 @@ export default function Blog() {
                   type="text"
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  placeholder="ค้นหาบทความ... (เช่น ROI, BESS, ESG)"
+                  placeholder={t("blog.search.placeholder")}
                   className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-border-subtle bg-surface-elevated text-foreground placeholder:text-text-muted focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary/30 transition-all"
                 />
               </div>
@@ -118,7 +156,7 @@ export default function Blog() {
                 }`}
               >
                 <cat.icon className="w-3.5 h-3.5" />
-                {cat.label}
+                {t(cat.labelKey)}
               </button>
             ))}
           </div>
@@ -130,7 +168,7 @@ export default function Blog() {
         <section className="py-16 lg:py-20 bg-background">
           <div className="container">
             <h2 className="font-display text-xl font-bold text-foreground mb-8">
-              บทความแนะนำ
+              {t("blog.featured.title")}
             </h2>
             <div className="grid lg:grid-cols-2 gap-6">
               {featured.map((post, i) => (
@@ -202,12 +240,13 @@ export default function Blog() {
           <div className="flex items-center justify-between mb-8">
             <h2 className="font-display text-xl font-bold text-foreground">
               {activeCategory === "all"
-                ? "บทความทั้งหมด"
-                : categories.find(c => c.key === activeCategory)?.label ||
-                  "บทความ"}
+                ? t("blog.all.title")
+                : activeCategoryLabelKey
+                  ? t(activeCategoryLabelKey)
+                  : t("blog.all.fallback")}
             </h2>
             <span className="text-sm text-text-muted">
-              {filteredPosts.length} บทความ
+              {filteredPosts.length} {t("blog.all.countSuffix")}
             </span>
           </div>
           <AnimatePresence mode="wait">
@@ -284,7 +323,7 @@ export default function Blog() {
                 className="text-center py-16"
               >
                 <Search className="w-12 h-12 text-text-muted mx-auto mb-4" />
-                <p className="text-text-muted">ไม่พบบทความที่ตรงกับคำค้นหา</p>
+                <p className="text-text-muted">{t("blog.empty")}</p>
               </motion.div>
             )}
           </AnimatePresence>
@@ -297,42 +336,24 @@ export default function Blog() {
           <div className="grid lg:grid-cols-2 gap-8 items-center max-w-4xl mx-auto">
             <div>
               <span className="text-xs font-medium text-accent-secondary tracking-widest uppercase mb-3 block">
-                เครื่องมือฟรี
+                {t("blog.calculator.eyebrow")}
               </span>
               <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-3">
-                คำนวณระบบโซลาร์ + BESS ของคุณ
+                {t("blog.calculator.title")}
               </h2>
               <p className="text-text-secondary mb-6 leading-relaxed">
-                ใช้เครื่องมือคำนวณขั้นสูงของ SIRINX ประเมินขนาดระบบ ผลตอบแทน
-                และระยะเวลาคืนทุน ฟรี ไม่ต้องลงทะเบียน
+                {t("blog.calculator.desc")}
               </p>
               <Link
                 href="/assessment"
                 className="inline-flex items-center gap-2 px-6 py-3 font-display font-semibold btn-accent rounded-lg"
               >
-                เริ่มคำนวณเลย <ArrowRight className="w-4 h-4" />
+                {t("blog.calculator.cta")} <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
             <div className="p-6 rounded-xl glass-card">
               <div className="grid grid-cols-2 gap-4 text-center">
-                {[
-                  {
-                    label: "ค่าไฟที่ประหยัดได้",
-                    value: "รายไซต์",
-                    sub: "Solar + BESS",
-                  },
-                  {
-                    label: "คืนทุนเฉลี่ย",
-                    value: "ประเมิน",
-                    sub: "ตามข้อมูลจริง",
-                  },
-                  {
-                    label: "อายุระบบ",
-                    value: "25+ ปี",
-                    sub: "รับประกันผลผลิต",
-                  },
-                  { label: "ลด CO₂", value: "40+ ตัน", sub: "ต่อ MW ต่อปี" },
-                ].map(item => (
+                {calculatorMetrics.map(item => (
                   <div key={item.label} className="p-3">
                     <div className="font-display text-2xl font-bold text-gradient-accent">
                       {item.value}
@@ -356,23 +377,20 @@ export default function Blog() {
         <div className="container">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="font-display text-2xl font-bold text-foreground mb-3">
-              รับข้อมูลเชิงลึกด้านพลังงาน
+              {t("blog.newsletter.title")}
             </h2>
             <p className="text-text-secondary mb-6">
-              สมัครรับจดหมายข่าวเพื่อรับบทความ ข้อมูลอุตสาหกรรม และข่าวสารจาก
-              SIRINX ทุกสัปดาห์
+              {t("blog.newsletter.desc")}
             </p>
             <form
               onSubmit={e => {
                 e.preventDefault();
                 const input = e.currentTarget.querySelector("input");
                 if (input && input.value) {
-                  toast.success(
-                    "ขอบคุณที่สมัครรับข่าวสาร! ระบบจะเปิดให้บริการเร็ว ๆ นี้"
-                  );
+                  toast.success(t("blog.newsletter.success"));
                   input.value = "";
                 } else {
-                  toast.error("กรุณากรอกอีเมล");
+                  toast.error(t("blog.newsletter.error"));
                 }
               }}
               className="flex gap-3 max-w-md mx-auto"
@@ -380,18 +398,18 @@ export default function Blog() {
               <input
                 type="email"
                 required
-                placeholder="อีเมลของคุณ"
+                placeholder={t("blog.newsletter.placeholder")}
                 className="flex-1 px-4 py-3 rounded-lg border border-border-subtle bg-surface-elevated text-foreground placeholder:text-text-muted focus:outline-none focus:border-accent-primary"
               />
               <button
                 type="submit"
                 className="px-6 py-3 font-display font-semibold btn-accent rounded-lg whitespace-nowrap"
               >
-                สมัครรับข่าว
+                {t("blog.newsletter.submit")}
               </button>
             </form>
             <p className="text-xs text-text-muted mt-3">
-              ไม่มีสแปม ยกเลิกได้ทุกเมื่อ
+              {t("blog.newsletter.note")}
             </p>
           </div>
         </div>

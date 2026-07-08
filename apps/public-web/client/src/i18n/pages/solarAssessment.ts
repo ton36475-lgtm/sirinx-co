@@ -201,6 +201,7 @@ const dict: TranslationDict = {
   "sa.r.tabFinancial": { th: "การเงิน", en: "Financial", cn: "财务" },
   "sa.r.tabTechnical": { th: "เทคนิค", en: "Technical", cn: "技术" },
   "sa.r.tabProjection": { th: "ประมาณการ 25 ปี", en: "25-Year Projection", cn: "25年预测" },
+  "sa.r.showTab": { th: "แสดงผลลัพธ์แท็บ", en: "Show results tab", cn: "显示结果标签" },
 
   /* ── Overview Tab ── */
   "sa.r.sizeComparison": { th: "ตารางเปรียบเทียบขนาดระบบ", en: "System Size Comparison Table", cn: "系统规模对比表" },
@@ -339,6 +340,7 @@ const dict: TranslationDict = {
   },
 
   /* ── Navigation Buttons ── */
+  "sa.nav.step": { th: "ขั้นตอนที่", en: "Step", cn: "步骤" },
   "sa.nav.back": { th: "ย้อนกลับ", en: "Back", cn: "返回" },
   "sa.nav.next": { th: "ถัดไป", en: "Next", cn: "下一步" },
   "sa.nav.viewResults": { th: "ดูผลวิเคราะห์", en: "View Results", cn: "查看结果" },

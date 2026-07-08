@@ -34,7 +34,58 @@ const dict: TranslationDict = {
   },
   "sc.hero.stat.bill": { th: "ลดค่าไฟ", en: "Bill Reduction", cn: "电费减少" },
   "sc.hero.stat.roi": { th: "คืนทุน", en: "ROI Period", cn: "回本周期" },
+  "sc.hero.stat.roiValue": { th: "3-5 ปี", en: "3-5 years", cn: "3-5年" },
   "sc.hero.stat.life": { th: "อายุระบบ", en: "System Life", cn: "系统寿命" },
+  "sc.province.heroTitle2": {
+    th: "ที่จอดรถผลิตไฟฟ้าสำหรับธุรกิจ",
+    en: "Power-generating parking for business",
+    cn: "为企业发电的停车空间",
+  },
+  "sc.province.localLabel": {
+    th: "Local Solar Carport Planning",
+    en: "Local Solar Carport Planning",
+    cn: "本地 Solar Carport 规划",
+  },
+  "sc.province.titlePrefix": {
+    th: "ออกแบบ Solar Carport สำหรับพื้นที่",
+    en: "Solar Carport planning for",
+    cn: "Solar Carport 规划地区：",
+  },
+  "sc.province.descPrefix": {
+    th: "SIRINX วางแผนระบบ Solar Carport สำหรับโรงงาน โรงแรม อาคารพาณิชย์ ศูนย์กระจายสินค้า สถานศึกษา และองค์กรใน",
+    en: "SIRINX plans Solar Carport systems for factories, hotels, commercial buildings, distribution centers, schools, and organizations in",
+    cn: "SIRINX 为工厂、酒店、商业建筑、配送中心、学校及机构规划 Solar Carport，覆盖地区：",
+  },
+  "sc.province.descSuffix": {
+    th: "โดยประเมินจากพื้นที่จอดรถ ค่าไฟจริง load profile โครงสร้างหน้างาน EV Charger, BESS และรูปแบบการลงทุน ก่อนสรุปแบบวิศวกรรมและใบเสนอราคา",
+    en: "using parking area, real electricity bills, load profile, site structure, EV Charger, BESS, and investment model before finalizing engineering design and quotation.",
+    cn: "并根据停车面积、真实电费、负载曲线、现场结构、EV Charger、BESS及投资模式，再形成工程设计与报价。",
+  },
+  "sc.province.checkTitle": {
+    th: "สิ่งที่ประเมินให้ก่อนติดตั้ง",
+    en: "What we assess before installation",
+    cn: "安装前评估内容",
+  },
+  "sc.province.item1Prefix": {
+    th: "ศักยภาพพื้นที่จอดรถใน",
+    en: "Parking-area potential in",
+    cn: "停车区域潜力：",
+  },
+  "sc.province.item2": {
+    th: "ขนาดระบบ kWp ที่เหมาะกับค่าไฟและ load profile",
+    en: "kWp system size matched to electricity bills and load profile",
+    cn: "匹配电费与负载曲线的 kWp 系统规模",
+  },
+  "sc.province.item3": {
+    th: "EV Charger, BESS และ AI Energy Management ที่ควรใช้",
+    en: "EV Charger, BESS, and AI Energy Management options to consider",
+    cn: "建议配置的 EV Charger、BESS 与 AI Energy Management",
+  },
+  "sc.province.item4": {
+    th: "กรอบผลประหยัด 30-100% และคืนทุนเฉลี่ย 3-5 ปีตามข้อมูลไซต์จริง",
+    en: "Estimated 30-100% savings and 3-5 year average payback based on real site data",
+    cn: "基于真实现场数据预估节省30-100%，平均3-5年回本",
+  },
 
   // Benefits
   "sc.benefits.label": { th: "Benefits", en: "Benefits", cn: "优势" },
@@ -455,6 +506,21 @@ const dict: TranslationDict = {
     th: "Solar Carport ติดตั้งจริง",
     en: "Solar Carport real installation",
     cn: "Solar Carport实际安装",
+  },
+  "sc.gallery.closeAria": {
+    th: "ปิดแกลเลอรี Solar Carport",
+    en: "Close Solar Carport gallery",
+    cn: "关闭 Solar Carport 图库",
+  },
+  "sc.gallery.prevAria": {
+    th: "รูปก่อนหน้า",
+    en: "Previous image",
+    cn: "上一张图片",
+  },
+  "sc.gallery.nextAria": {
+    th: "รูปถัดไป",
+    en: "Next image",
+    cn: "下一张图片",
   },
 
   // FAQ

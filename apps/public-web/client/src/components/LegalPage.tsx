@@ -1,5 +1,7 @@
 import { Link } from "wouter";
 import { ArrowRight, Mail, Phone } from "lucide-react";
+import { usePageTranslation } from "@/i18n";
+import "@/i18n/pages/legal";
 
 type LegalSection = {
   title: string;
@@ -15,6 +17,8 @@ type LegalPageProps = {
 };
 
 export default function LegalPage({ eyebrow, title, updatedAt, intro, sections }: LegalPageProps) {
+  const { t } = usePageTranslation("legal");
+
   return (
     <section className="pt-28 pb-16 lg:pt-36 lg:pb-24 bg-background">
       <div className="container max-w-4xl">
@@ -25,7 +29,9 @@ export default function LegalPage({ eyebrow, title, updatedAt, intro, sections }
           <h1 className="font-display text-3xl lg:text-5xl font-bold text-foreground mt-3 mb-4">
             {title}
           </h1>
-          <p className="text-sm text-text-muted mb-5">อัปเดตล่าสุด: {updatedAt}</p>
+          <p className="text-sm text-text-muted mb-5">
+            {t("legal.updatedAt")}: {updatedAt}
+          </p>
           <p className="text-text-secondary leading-relaxed text-lg">{intro}</p>
         </div>
 
@@ -48,7 +54,7 @@ export default function LegalPage({ eyebrow, title, updatedAt, intro, sections }
 
         <div className="mt-12 rounded-xl border border-border-subtle bg-surface-elevated p-6">
           <h2 className="font-display text-lg font-semibold text-foreground mb-3">
-            ติดต่อเรื่องเอกสารและข้อมูลส่วนบุคคล
+            {t("legal.contactTitle")}
           </h2>
           <div className="grid sm:grid-cols-2 gap-3 text-sm text-text-secondary mb-5">
             <a href="tel:+66819723969" className="inline-flex items-center gap-2 hover:text-accent-primary">
@@ -59,7 +65,7 @@ export default function LegalPage({ eyebrow, title, updatedAt, intro, sections }
             </a>
           </div>
           <Link href="/contact" className="inline-flex items-center gap-2 btn-accent px-5 py-3 rounded-lg font-display font-semibold">
-            ติดต่อ SIRINX <ArrowRight className="w-4 h-4" />
+            {t("legal.contactCta")} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>

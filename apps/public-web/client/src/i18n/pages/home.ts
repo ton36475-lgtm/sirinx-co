@@ -318,6 +318,11 @@ const dict: TranslationDict = {
     en: "Reduce Electricity",
     cn: "降低电费",
   },
+  "home.projects.node1.siteSpecific": {
+    th: "ตามไซต์",
+    en: "Site-based",
+    cn: "按现场评估",
+  },
   "home.projects.node1.energyMgmt": {
     th: "บริหารพลังงาน",
     en: "Energy Management",

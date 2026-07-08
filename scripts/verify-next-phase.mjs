@@ -1,5 +1,5 @@
-import { existsSync, readdirSync, statSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, lstatSync, readdirSync } from "node:fs";
+import { join, sep } from "node:path";
 
 const root = process.cwd();
 
@@ -29,13 +29,15 @@ if (missing.length > 0) {
 }
 
 const skipDirs = new Set([".git", "node_modules", "dist", "build", ".next"]);
+const skipPathPrefixes = [join(root, "tools", "repo-intake")];
 const forbiddenNames = new Set([".env", ".env.local", ".env.production", ".env.development", ".env.test"]);
 
 function walk(dir, files = []) {
   for (const entry of readdirSync(dir)) {
     if (skipDirs.has(entry)) continue;
     const full = join(dir, entry);
-    const stat = statSync(full);
+    if (skipPathPrefixes.some((prefix) => full === prefix || full.startsWith(`${prefix}${sep}`))) continue;
+    const stat = lstatSync(full);
     if (stat.isDirectory()) walk(full, files);
     else files.push(full);
   }

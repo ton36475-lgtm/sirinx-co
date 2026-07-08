@@ -26,12 +26,8 @@ interface HeroSlide {
     sizes: string;
     width: number;
   };
-  badge: string;
-  headline: string;
-  highlightLine: string;
-  description: string;
-  cta: { label: string; href: string };
-  secondaryCta?: { label: string; href: string };
+  cta: { href: string };
+  secondaryCta?: { href: string };
 }
 
 const responsiveHeroWidths = [640, 960, 1280] as const;
@@ -59,151 +55,80 @@ const ALL_SLIDES: HeroSlide[] = [
       sizes: heroImageSizes,
       width: 1280,
     },
-    badge: "Solar Carport",
-    headline: "เปลี่ยนที่จอดรถ",
-    highlightLine: "เป็นโรงไฟฟ้าพลังงานแสงอาทิตย์",
-    description:
-      "ผลิตไฟฟ้า ให้ร่มเงา รองรับ EV Charger ลดค่าไฟ 30-100% คืนทุน 3-5 ปีโดยประมาณตามข้อมูลไซต์จริง",
-    cta: {
-      label: "ขอใบเสนอราคา Solar Carport",
-      href: "/contact?interest=solar-carport",
-    },
-    secondaryCta: { label: "ดูผลงานจริง", href: "/projects" },
+    cta: { href: "/contact?interest=solar-carport" },
+    secondaryCta: { href: "/projects" },
   },
   {
     id: "carport-ground",
     category: "solar-carport",
     image:
       "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-02-carport-ground_724c7ad7.jpg",
-    badge: "Solar Carport",
-    headline: "โครงสร้างเหล็กมาตรฐาน",
-    highlightLine: "แผงโซลาร์เซลล์คุณภาพ Tier-1",
-    description:
-      "ออกแบบเฉพาะทาง รับน้ำหนักลม-ฝน ตามมาตรฐานวิศวกรรม อายุใช้งาน 25+ ปี",
-    cta: {
-      label: "นัดสำรวจหน้างานฟรี",
-      href: "/contact?interest=solar-carport",
-    },
-    secondaryCta: { label: "ดูโซลูชันทั้งหมด", href: "/solutions" },
+    cta: { href: "/contact?interest=solar-carport" },
+    secondaryCta: { href: "/solutions" },
   },
   {
     id: "rooftop-factory",
     category: "rooftop-solar",
     image:
       "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-03-rooftop-factory_7c52b0c3.jpg",
-    badge: "Rooftop Solar",
-    headline: "โซลาร์บนหลังคาโรงงาน",
-    highlightLine: "ลดต้นทุนพลังงานการผลิต",
-    description:
-      "ใช้พื้นที่หลังคาให้เกิดประโยชน์สูงสุด ลดค่าไฟ 30-100% โดยประมาณตาม load profile จริง",
-    cta: {
-      label: "ขอใบเสนอราคา Rooftop Solar",
-      href: "/contact?interest=rooftop-solar",
-    },
-    secondaryCta: { label: "ดูอุตสาหกรรมที่เหมาะ", href: "/industries" },
+    cta: { href: "/contact?interest=rooftop-solar" },
+    secondaryCta: { href: "/industries" },
   },
   {
     id: "floating-solar",
     category: "floating-solar",
     image:
       "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-04-floating-solar_1d083f09.jpg",
-    badge: "Floating Solar",
-    headline: "โซลาร์ลอยน้ำ",
-    highlightLine: "ใช้พื้นที่ผิวน้ำให้เกิดประโยชน์",
-    description:
-      "เหมาะกับอ่างเก็บน้ำ บ่อน้ำอุตสาหกรรม ลดการระเหยของน้ำ เพิ่มประสิทธิภาพแผง",
-    cta: {
-      label: "ขอใบเสนอราคา Floating Solar",
-      href: "/contact?interest=floating-solar",
-    },
-    secondaryCta: { label: "ดูผลงานจริง", href: "/projects" },
+    cta: { href: "/contact?interest=floating-solar" },
+    secondaryCta: { href: "/projects" },
   },
   {
     id: "carport-ev",
     category: "solar-carport",
     image:
       "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-05-carport-ev_993f529d.jpg",
-    badge: "Solar Carport + EV Charging",
-    headline: "Solar Carport",
-    highlightLine: "พร้อม EV Charging Station",
-    description:
-      "รองรับรถยนต์ไฟฟ้าในอนาคต ชาร์จจากพลังงานแสงอาทิตย์โดยตรง ลดต้นทุนพลังงาน",
-    cta: { label: "ขอใบเสนอราคา", href: "/contact?interest=solar-carport" },
-    secondaryCta: {
-      label: "ดูรายละเอียด Solar Carport",
-      href: "/solar-carport",
-    },
+    cta: { href: "/contact?interest=solar-carport" },
+    secondaryCta: { href: "/solar-carport" },
   },
   {
     id: "bess-realistic",
     category: "bess",
     image:
       "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-06-bess-realistic_884e849f.jpg",
-    badge: "BESS / ESS",
-    headline: "ระบบกักเก็บพลังงาน",
-    highlightLine: "ใช้ไฟฟ้าได้แม้ไม่มีแสงแดด",
-    description:
-      "Battery Energy Storage System ลด demand charge ใช้ไฟในช่วง peak สำรองไฟยามฉุกเฉิน",
-    cta: { label: "ขอใบเสนอราคา BESS", href: "/contact?interest=bess" },
-    secondaryCta: { label: "ดูโซลูชันทั้งหมด", href: "/solutions" },
+    cta: { href: "/contact?interest=bess" },
+    secondaryCta: { href: "/solutions" },
   },
   {
     id: "hotel-resort",
     category: "hospitality",
     image:
       "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-07-hotel-resort_947837b6.jpg",
-    badge: "โรงแรม & รีสอร์ท",
-    headline: "พลังงานสะอาด",
-    highlightLine: "สำหรับธุรกิจโรงแรม",
-    description:
-      "ลดค่าไฟ เสริมภาพลักษณ์ Green Hotel ดึงดูดนักท่องเที่ยวที่ใส่ใจสิ่งแวดล้อม",
-    cta: {
-      label: "ปรึกษาโซลูชันโรงแรม",
-      href: "/contact?interest=hospitality",
-    },
-    secondaryCta: { label: "ดูอุตสาหกรรมทั้งหมด", href: "/industries" },
+    cta: { href: "/contact?interest=hospitality" },
+    secondaryCta: { href: "/industries" },
   },
   {
     id: "carport-realistic",
     category: "solar-carport",
     image:
       "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-08-carport-realistic_a75f7b0e.jpg",
-    badge: "Solar Carport",
-    headline: "ติดตั้งจริง",
-    highlightLine: "ผลงาน Solar Carport สำนักงาน",
-    description:
-      "โครงสร้างเหล็กชุบกัลวาไนซ์ แผง Tier-1 ติดตั้งโดยทีมวิศวกรมืออาชีพ",
-    cta: { label: "ขอใบเสนอราคา", href: "/contact?interest=solar-carport" },
-    secondaryCta: { label: "ดูผลงานทั้งหมด", href: "/projects" },
+    cta: { href: "/contact?interest=solar-carport" },
+    secondaryCta: { href: "/projects" },
   },
   {
     id: "ai-monitoring",
     category: "ai-energy",
     image:
       "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-09-ai-monitoring_814e9276.jpg",
-    badge: "AI Energy Management",
-    headline: "ระบบ AI",
-    highlightLine: "บริหารพลังงานอัจฉริยะ",
-    description:
-      "ตรวจสอบ วิเคราะห์ และเพิ่มประสิทธิภาพการผลิตไฟฟ้าแบบ real-time ตลอด 24/7",
-    cta: { label: "ปรึกษาระบบ AI", href: "/contact?interest=ai-energy" },
-    secondaryCta: { label: "ดูโซลูชัน AI", href: "/solutions#ai-energy" },
+    cta: { href: "/contact?interest=ai-energy" },
+    secondaryCta: { href: "/solutions#ai-energy" },
   },
   {
     id: "carport-mall",
     category: "solar-carport",
     image:
       "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-10-carport-mall-realistic_4b322654.jpg",
-    badge: "Solar Carport",
-    headline: "Solar Carport ขนาดใหญ่",
-    highlightLine: "สำหรับห้างสรรพสินค้า & โรงงาน",
-    description:
-      "รองรับพื้นที่จอดรถขนาดใหญ่ ผลิตไฟฟ้าได้มากกว่า ลดค่าไฟทั้งอาคาร",
-    cta: { label: "ขอใบเสนอราคา", href: "/contact?interest=solar-carport" },
-    secondaryCta: {
-      label: "ดูรายละเอียด Solar Carport",
-      href: "/solar-carport",
-    },
+    cta: { href: "/contact?interest=solar-carport" },
+    secondaryCta: { href: "/solar-carport" },
   },
 ];
 
@@ -325,6 +250,14 @@ export default function HeroSlideshow() {
   }, [isPaused, next]);
 
   const slide = slides[current];
+  const slideText = {
+    badge: t(`hero.${slide.id}.badge`),
+    headline: t(`hero.${slide.id}.headline`),
+    highlight: t(`hero.${slide.id}.highlight`),
+    desc: t(`hero.${slide.id}.desc`),
+    cta: t(`hero.${slide.id}.cta`),
+    secondaryCta: t(`hero.${slide.id}.cta2`),
+  };
 
   return (
     <section
@@ -353,7 +286,7 @@ export default function HeroSlideshow() {
                 src={slide.imageSet.fallback}
                 srcSet={slide.imageSet.jpgSrcSet}
                 sizes={slide.imageSet.sizes}
-                alt={slide.badge}
+                alt={slideText.badge}
                 width={slide.imageSet.width}
                 height={slide.imageSet.height}
                 className="h-full w-full object-cover"
@@ -365,7 +298,7 @@ export default function HeroSlideshow() {
           ) : (
             <img
               src={slide.image}
-              alt={slide.badge}
+              alt={slideText.badge}
               width={1500}
               height={838}
               className="w-full h-full object-cover"
@@ -393,29 +326,20 @@ export default function HeroSlideshow() {
             >
               {/* Badge */}
               <span className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-accent-primary bg-accent-glow border border-border-accent rounded-full mb-6">
-                {t(`hero.${slide.id}.badge`) !== `hero.${slide.id}.badge`
-                  ? t(`hero.${slide.id}.badge`)
-                  : slide.badge}
+                {slideText.badge}
               </span>
 
               {/* Headline */}
               <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground leading-[1.1] mb-2">
-                {t(`hero.${slide.id}.headline`) !== `hero.${slide.id}.headline`
-                  ? t(`hero.${slide.id}.headline`)
-                  : slide.headline}
+                {slideText.headline}
               </h1>
               <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gradient-accent leading-[1.1] mb-6">
-                {t(`hero.${slide.id}.highlight`) !==
-                `hero.${slide.id}.highlight`
-                  ? t(`hero.${slide.id}.highlight`)
-                  : slide.highlightLine}
+                {slideText.highlight}
               </h2>
 
               {/* Description */}
               <p className="text-lg sm:text-xl text-text-secondary leading-relaxed mb-8 max-w-xl">
-                {t(`hero.${slide.id}.desc`) !== `hero.${slide.id}.desc`
-                  ? t(`hero.${slide.id}.desc`)
-                  : slide.description}
+                {slideText.desc}
               </p>
 
               {/* CTAs */}
@@ -424,9 +348,7 @@ export default function HeroSlideshow() {
                   href={slide.cta.href}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3.5 font-display font-semibold btn-accent rounded-lg"
                 >
-                  {t(`hero.${slide.id}.cta`) !== `hero.${slide.id}.cta`
-                    ? t(`hero.${slide.id}.cta`)
-                    : slide.cta.label}{" "}
+                  {slideText.cta}{" "}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 {slide.secondaryCta && (
@@ -434,9 +356,7 @@ export default function HeroSlideshow() {
                     href={slide.secondaryCta.href}
                     className="inline-flex items-center justify-center gap-2 px-6 py-3.5 font-display font-semibold btn-accent-outline rounded-lg"
                   >
-                    {t(`hero.${slide.id}.cta2`) !== `hero.${slide.id}.cta2`
-                      ? t(`hero.${slide.id}.cta2`)
-                      : slide.secondaryCta.label}
+                    {slideText.secondaryCta}
                   </Link>
                 )}
               </div>

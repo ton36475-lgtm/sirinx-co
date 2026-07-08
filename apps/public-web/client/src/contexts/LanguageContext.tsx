@@ -40,6 +40,11 @@ const translations: Record<string, Record<Language, string>> = {
     en: "Solar Assessment",
     cn: "太阳能评估",
   },
+  "nav.assessmentDesc": {
+    th: "คำนวณค่าไฟที่ประหยัดได้",
+    en: "Calculate your savings",
+    cn: "计算您的节省",
+  },
   "nav.getQuote": { th: "ขอใบเสนอราคา", en: "Get a Quote", cn: "获取报价" },
   "nav.blog": { th: "บทความ", en: "Blog", cn: "博客" },
   "nav.strategy": { th: "กลยุทธ์", en: "Strategy", cn: "战略" },
@@ -118,6 +123,231 @@ const translations: Record<string, Record<Language, string>> = {
     th: "จ.น่าน ประเทศไทย",
     en: "Nan Province, Thailand",
     cn: "泰国南府",
+  },
+  "footer.lineEyebrow": {
+    th: "LINE Official",
+    en: "LINE Official",
+    cn: "LINE 官方账号",
+  },
+  "footer.lineTitle": {
+    th: "ส่งข้อมูลโครงการผ่าน LINE",
+    en: "Send project details via LINE",
+    cn: "通过 LINE 发送项目资料",
+  },
+  "footer.lineDesc": {
+    th: "ส่งบิลค่าไฟ รูปพื้นที่ หรือคำถามโครงการผ่าน LINE Official",
+    en: "Send electricity bills, site photos, or project questions through LINE Official",
+    cn: "通过 LINE 官方账号发送电费账单、现场照片或项目问题",
+  },
+  "footer.lineActionsAria": {
+    th: "ช่องทาง LINE Official",
+    en: "LINE Official contact channels",
+    cn: "LINE 官方账号联系方式",
+  },
+  "footer.lineAddAria": {
+    th: "เพิ่มเพื่อน LINE Official SIRINX",
+    en: "Add SIRINX LINE Official",
+    cn: "添加 SIRINX LINE 官方账号",
+  },
+  "footer.lineAdd": {
+    th: "เพิ่มเพื่อน LINE",
+    en: "Add LINE",
+    cn: "添加 LINE",
+  },
+  "footer.lineChatAria": {
+    th: "แชทกับ SIRINX ผ่าน LINE",
+    en: "Chat with SIRINX on LINE",
+    cn: "通过 LINE 与 SIRINX 聊天",
+  },
+  "footer.lineChat": {
+    th: "แชท LINE",
+    en: "LINE Chat",
+    cn: "LINE 聊天",
+  },
+  "footer.lineQrCaption": {
+    th: "สแกน QR เพื่อเพิ่มเพื่อน LINE Official",
+    en: "Scan the QR code to add LINE Official",
+    cn: "扫描二维码添加 LINE 官方账号",
+  },
+  "footer.certifiedTrusted": {
+    th: "Certified & Trusted",
+    en: "Certified & Trusted",
+    cn: "认证与信任",
+  },
+  "footer.dbdTitle": {
+    th: "DBD Registered — กรมพัฒนาธุรกิจการค้า",
+    en: "DBD Registered — Department of Business Development",
+    cn: "DBD 注册 — 泰国商业发展厅",
+  },
+  "footer.boiTitle": {
+    th: "BOI Promoted — สำนักงานคณะกรรมการส่งเสริมการลงทุน",
+    en: "BOI Promoted — Thailand Board of Investment",
+    cn: "BOI 促进 — 泰国投资促进委员会",
+  },
+  "footer.privacy": {
+    th: "นโยบายความเป็นส่วนตัว",
+    en: "Privacy Policy",
+    cn: "隐私政策",
+  },
+  "footer.terms": {
+    th: "เงื่อนไขการใช้งาน",
+    en: "Terms of Use",
+    cn: "使用条款",
+  },
+  "footer.cookies": {
+    th: "นโยบายคุกกี้",
+    en: "Cookie Policy",
+    cn: "Cookie 政策",
+  },
+  "notFound.title": {
+    th: "ไม่พบหน้าที่คุณต้องการ",
+    en: "Page Not Found",
+    cn: "未找到页面",
+  },
+  "notFound.desc": {
+    th: "หน้านี้อาจถูกย้ายหรือลบไปแล้ว กรุณากลับไปหน้าหลัก",
+    en: "This page may have moved or been removed. Please return to the homepage.",
+    cn: "此页面可能已移动或删除。请返回首页。",
+  },
+  "notFound.home": {
+    th: "กลับหน้าหลัก",
+    en: "Back to Home",
+    cn: "返回首页",
+  },
+  "floating.lineAria": {
+    th: "เปิด LINE Official ของ SIRINX",
+    en: "Open SIRINX LINE Official",
+    cn: "打开 SIRINX LINE 官方账号",
+  },
+  "floating.botAria": {
+    th: "เปิดแชท SIRINX Solar Assistant",
+    en: "Open SIRINX Solar Assistant chat",
+    cn: "打开 SIRINX Solar Assistant 聊天",
+  },
+  "chat.dismissBubbleAria": {
+    th: "ปิดข้อความแนะนำ",
+    en: "Dismiss suggestion",
+    cn: "关闭提示",
+  },
+  "chat.bubbleTitle": {
+    th: "สนใจโซลาร์เซลล์ไหมครับ?",
+    en: "Interested in solar?",
+    cn: "对太阳能感兴趣吗？",
+  },
+  "chat.bubbleDesc": {
+    th: "พิมพ์ถามได้เลย หรือแอดไลน์คุยกัน",
+    en: "Ask here or add LINE to talk with the team.",
+    cn: "可直接提问，或添加 LINE 与团队沟通。",
+  },
+  "chat.statusOnline": {
+    th: "ออนไลน์ พร้อมให้บริการ",
+    en: "Online and ready to help",
+    cn: "在线，可随时协助",
+  },
+  "chat.closeAria": {
+    th: "ปิด SIRINX Assistant",
+    en: "Close SIRINX Assistant",
+    cn: "关闭 SIRINX Assistant",
+  },
+  "chat.welcomeTitle": {
+    th: "สวัสดีครับ! ยินดีให้บริการ",
+    en: "Hello. How can we help?",
+    cn: "您好，很高兴为您服务",
+  },
+  "chat.welcomeDesc": {
+    th: "สอบถามเรื่องโซลาร์เซลล์ BESS แบตเตอรี่ หรือนัดสำรวจหน้างานได้เลยครับ",
+    en: "Ask about solar, BESS, battery storage, or scheduling a site survey.",
+    cn: "可咨询太阳能、BESS、电池储能，或预约现场勘察。",
+  },
+  "chat.quickQuoteLabel": {
+    th: "ขอใบเสนอราคา Solar Carport",
+    en: "Request a Solar Carport quote",
+    cn: "索取 Solar Carport 报价",
+  },
+  "chat.quickQuoteMessage": {
+    th: "ต้องการขอใบเสนอราคา Solar Carport สำหรับองค์กร",
+    en: "I would like a Solar Carport quote for my organization.",
+    cn: "我想为机构索取 Solar Carport 报价。",
+  },
+  "chat.quickSavingsLabel": {
+    th: "คำนวณลดค่าไฟเบื้องต้น",
+    en: "Estimate electricity savings",
+    cn: "初步估算节省电费",
+  },
+  "chat.quickSavingsMessage": {
+    th: "ช่วยประเมินเบื้องต้นว่าระบบโซลาร์จะลดค่าไฟได้อย่างไร",
+    en: "Please help estimate how a solar system could reduce electricity costs.",
+    cn: "请帮助初步评估太阳能系统如何降低电费。",
+  },
+  "chat.quickRooftopCarportLabel": {
+    th: "Rooftop หรือ Carport ดี",
+    en: "Rooftop or Carport?",
+    cn: "屋顶光伏还是车棚？",
+  },
+  "chat.quickRooftopCarportMessage": {
+    th: "ควรเลือก Rooftop Solar หรือ Solar Carport สำหรับพื้นที่ของเรา",
+    en: "Should we choose Rooftop Solar or Solar Carport for our site?",
+    cn: "我们的场地适合屋顶光伏还是 Solar Carport？",
+  },
+  "chat.quickBessEvLabel": {
+    th: "BESS / EV Charger",
+    en: "BESS / EV Charger",
+    cn: "BESS / EV 充电",
+  },
+  "chat.quickBessEvMessage": {
+    th: "อยากทราบการใช้ BESS และ EV Charger ร่วมกับระบบโซลาร์",
+    en: "I want to understand BESS and EV Charger use with solar.",
+    cn: "我想了解 BESS 和 EV 充电如何与太阳能配合使用。",
+  },
+  "chat.quickSurveyLabel": {
+    th: "นัดสำรวจหน้างาน",
+    en: "Schedule a site survey",
+    cn: "预约现场勘察",
+  },
+  "chat.quickSurveyMessage": {
+    th: "ต้องการนัดทีมวิศวกรมาสำรวจหน้างาน",
+    en: "I would like to schedule an engineering site survey.",
+    cn: "我想预约工程团队现场勘察。",
+  },
+  "chat.addLine": {
+    th: "แอดไลน์ @sirinx",
+    en: "Add LINE @sirinx",
+    cn: "添加 LINE @sirinx",
+  },
+  "chat.knownFields": {
+    th: "ข้อมูลประเมิน",
+    en: "Assessment data",
+    cn: "评估资料",
+  },
+  "chat.transferLineAria": {
+    th: "ต่อสายผ่าน LINE",
+    en: "Continue via LINE",
+    cn: "通过 LINE 继续",
+  },
+  "chat.transferLine": {
+    th: "ต่อสายผ่าน LINE",
+    en: "Continue via LINE",
+    cn: "通过 LINE 继续",
+  },
+  "chat.inputAria": {
+    th: "พิมพ์ข้อความถึง SIRINX Assistant",
+    en: "Type a message to SIRINX Assistant",
+    cn: "输入消息给 SIRINX Assistant",
+  },
+  "chat.inputPlaceholder": {
+    th: "พิมพ์ข้อความ...",
+    en: "Type a message...",
+    cn: "输入消息...",
+  },
+  "chat.sendAria": {
+    th: "ส่งข้อความ",
+    en: "Send message",
+    cn: "发送消息",
+  },
+  "chat.aiDisclaimer": {
+    th: "AI อาจตอบไม่ถูกต้อง 100% กรุณายืนยันข้อมูลกับทีมงาน",
+    en: "AI responses may need confirmation from the SIRINX team.",
+    cn: "AI 回复可能需要 SIRINX 团队确认。",
   },
 
   // Home page

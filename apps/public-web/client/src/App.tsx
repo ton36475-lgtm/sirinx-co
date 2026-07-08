@@ -2,7 +2,7 @@ import { Route, Switch } from "wouter";
 import { Suspense, lazy, useEffect, useState } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import { LanguageProvider } from "./contexts/LanguageContext";
+import { LanguageProvider, useLanguage } from "./contexts/LanguageContext";
 import Layout from "./components/Layout";
 import RouteSeo from "./components/RouteSeo";
 import { usePageViewTracking } from "@/hooks/useAnalytics";
@@ -57,6 +57,7 @@ function RouteFallback() {
 
 function DeferredFloatingChatWidget() {
   const [shouldLoad, setShouldLoad] = useState(false);
+  const { t } = useLanguage();
 
   if (!shouldLoad) {
     return (
@@ -65,8 +66,8 @@ function DeferredFloatingChatWidget() {
           href={lineOfficialConfig.addFriendUrl}
           target="_blank"
           rel="noreferrer"
-          aria-label="เปิด LINE Official ของ SIRINX"
-          title="LINE Official"
+          aria-label={t("floating.lineAria")}
+          title={t("footer.lineEyebrow")}
           className="floating-line-cta group flex h-12 min-w-12 items-center justify-center gap-2 rounded-full bg-[#00C300] px-3 font-display text-[11px] font-bold uppercase tracking-[0.06em] text-white shadow-xl shadow-[#00C300]/25 transition-transform hover:-translate-y-0.5 hover:bg-[#00B300] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00C300] sm:h-14 sm:min-w-14 sm:px-4 sm:text-xs sm:tracking-[0.08em]"
         >
           <span className="text-base leading-none">LINE</span>
@@ -76,7 +77,7 @@ function DeferredFloatingChatWidget() {
         </a>
         <button
           type="button"
-          aria-label="เปิดแชท SIRINX Solar Assistant"
+          aria-label={t("floating.botAria")}
           className="sirinx-live-avatar-trigger relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full shadow-2xl sm:h-16 sm:w-16"
           style={{
             background:

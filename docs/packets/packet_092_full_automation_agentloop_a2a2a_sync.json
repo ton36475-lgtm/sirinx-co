@@ -1,0 +1,36 @@
+{
+  "packet_id": "packet_092_full_automation_agentloop_a2a2a_sync",
+  "protocol": "A2A2A v2.0",
+  "safe_execution": "safe_execution_v3",
+  "status": "READY_FOR_COMMANDHERMES_INTAKE",
+  "architecture": {
+    "workflow_layer": "ai-auto-work",
+    "executor": "OpenCode/Claude",
+    "reviewer": "codex-mcp-server",
+    "line_operator": "@line/line-bot-mcp-server manual-only",
+    "line_production_endpoint": "/api/line/webhook"
+  },
+  "approved_tools": [
+    "local filesystem",
+    "unit checks",
+    "smoke checks",
+    "build checks",
+    "synthetic webhook dry-run",
+    "codex review approval-mode never",
+    "receipt writing"
+  ],
+  "required_locks": {
+    "SIRINX_LINE_MODE": "dry-run",
+    "SIRINX_LINE_AUTO_REPLY_APPROVED": "false"
+  },
+  "blocked_actions": [
+    "secret read or print",
+    "uncontrolled LINE broadcast",
+    "production auto-send",
+    "cloud mutation",
+    "force push",
+    "destructive git operation",
+    "production-live label without deploy evidence"
+  ],
+  "expected_receipt": "docs/receipts/SIRINX_LINE_OA_GATE_P092_AUTO_LOOP_SYNC_20260708.md"
+}

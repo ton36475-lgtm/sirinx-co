@@ -164,7 +164,7 @@ export default function SolarCarport() {
               {province ? `Solar Carport ${province.nameTh}` : t("sc.hero.title1")}
               <br />
               <span className="text-gradient-accent">
-                {province ? "ที่จอดรถผลิตไฟฟ้าสำหรับธุรกิจ" : t("sc.hero.title2")}
+                {province ? t("sc.province.heroTitle2") : t("sc.hero.title2")}
               </span>
             </motion.h1>
             <motion.p
@@ -205,7 +205,7 @@ export default function SolarCarport() {
             >
               {[
                 { value: "30-100%", labelKey: "sc.hero.stat.bill" },
-                { value: "3-5 ปี", labelKey: "sc.hero.stat.roi" },
+                { value: t("sc.hero.stat.roiValue"), labelKey: "sc.hero.stat.roi" },
                 { value: "25+", labelKey: "sc.hero.stat.life" },
                 { value: "24/7", labelKey: "sc.hero.stat.bill" },
               ].map((item, i) => (
@@ -229,28 +229,25 @@ export default function SolarCarport() {
             <div className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr] items-start">
               <div className="rounded-2xl border border-border-subtle bg-surface-elevated p-6 lg:p-8">
                 <span className="text-xs font-medium text-accent-secondary tracking-widest uppercase mb-3 block">
-                  Local Solar Carport Planning
+                  {t("sc.province.localLabel")}
                 </span>
                 <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-3">
-                  ออกแบบ Solar Carport สำหรับพื้นที่{province.nameTh}
+                  {t("sc.province.titlePrefix")} {province.nameTh}
                 </h2>
                 <p className="text-sm text-text-secondary leading-relaxed">
-                  SIRINX วางแผนระบบ Solar Carport สำหรับโรงงาน โรงแรม อาคารพาณิชย์
-                  ศูนย์กระจายสินค้า สถานศึกษา และองค์กรใน{province.nameTh}
-                  โดยประเมินจากพื้นที่จอดรถ ค่าไฟจริง load profile โครงสร้างหน้างาน
-                  EV Charger, BESS และรูปแบบการลงทุน ก่อนสรุปแบบวิศวกรรมและใบเสนอราคา
+                  {t("sc.province.descPrefix")} {province.nameTh} {t("sc.province.descSuffix")}
                 </p>
               </div>
               <div className="rounded-2xl border border-border-accent bg-accent-glow p-6 lg:p-8">
                 <h3 className="font-display text-lg font-bold text-foreground mb-4">
-                  สิ่งที่ประเมินให้ก่อนติดตั้ง
+                  {t("sc.province.checkTitle")}
                 </h3>
                 <ul className="space-y-3 text-sm text-text-secondary">
                   {[
-                    `ศักยภาพพื้นที่จอดรถใน${province.nameTh}`,
-                    "ขนาดระบบ kWp ที่เหมาะกับค่าไฟและ load profile",
-                    "EV Charger, BESS และ AI Energy Management ที่ควรใช้",
-                    "กรอบผลประหยัด 30-100% และคืนทุนเฉลี่ย 3-5 ปีตามข้อมูลไซต์จริง",
+                    `${t("sc.province.item1Prefix")} ${province.nameTh}`,
+                    t("sc.province.item2"),
+                    t("sc.province.item3"),
+                    t("sc.province.item4"),
                   ].map(item => (
                     <li key={item} className="flex gap-3">
                       <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent-primary" />
@@ -732,13 +729,13 @@ export default function SolarCarport() {
 	          <button
 	            className="absolute top-4 right-4 text-white/70 hover:text-white z-50"
 	            onClick={() => setLightboxIdx(null)}
-	            aria-label="ปิดแกลเลอรี Solar Carport"
+	            aria-label={t("sc.gallery.closeAria")}
 	          >
             <X className="w-8 h-8" />
           </button>
 	          <button
 	            className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white z-50"
-	            aria-label="รูปก่อนหน้า"
+	            aria-label={t("sc.gallery.prevAria")}
 	            onClick={e => {
               e.stopPropagation();
               setLightboxIdx(
@@ -751,7 +748,7 @@ export default function SolarCarport() {
           </button>
 	          <button
 	            className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white z-50"
-	            aria-label="รูปถัดไป"
+	            aria-label={t("sc.gallery.nextAria")}
 	            onClick={e => {
               e.stopPropagation();
               setLightboxIdx((lightboxIdx + 1) % IMG_CARPORT_GALLERY.length);

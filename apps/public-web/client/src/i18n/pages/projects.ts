@@ -298,6 +298,26 @@ const dict: TranslationDict = {
     en: "Photos from the actual installation at Ruenphae Royal Park Hotel",
     cn: "Ruenphae Royal Park 酒店实际安装照片",
   },
+  galleryOpenAria: {
+    th: "เปิดรูปผลงาน SIRINX ลำดับที่",
+    en: "Open SIRINX project photo number",
+    cn: "打开 SIRINX 项目照片编号",
+  },
+  lightboxCloseAria: {
+    th: "ปิดรูปผลงาน",
+    en: "Close project photo",
+    cn: "关闭项目照片",
+  },
+  lightboxPrevAria: {
+    th: "รูปผลงานก่อนหน้า",
+    en: "Previous project photo",
+    cn: "上一张项目照片",
+  },
+  lightboxNextAria: {
+    th: "รูปผลงานถัดไป",
+    en: "Next project photo",
+    cn: "下一张项目照片",
+  },
 
   /* ─── Final CTA ─── */
   ctaFinalTitle: {

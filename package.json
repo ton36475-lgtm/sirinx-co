@@ -14,6 +14,10 @@
     "telegram:bot:dry-run": "node services/telegram-command-bot/src/index.mjs --dry-run",
     "restore:public-web": "node scripts/restore-public-web-from-sirinx.mjs",
     "verify:public-web-import": "node scripts/verify-public-web-import.mjs",
+    "verify:public-web-line-i18n": "node scripts/verify-public-web-line-i18n.mjs",
+    "verify:public-web-language-switch": "node scripts/verify-public-web-language-switch.mjs",
+    "verify:public-web-deps": "node scripts/verify-public-web-dependency-layout.mjs",
+    "verify:p092-agentloop": "node scripts/verify-p092-agentloop-gates.mjs",
     "web:check": "pnpm --config.verify-deps-before-run=false --dir apps/public-web check",
     "web:test": "pnpm --config.verify-deps-before-run=false --dir apps/public-web test",
     "web:build": "pnpm --config.verify-deps-before-run=false --dir apps/public-web build"

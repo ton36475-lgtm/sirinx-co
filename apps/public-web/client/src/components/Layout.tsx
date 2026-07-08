@@ -298,11 +298,7 @@ function Navbar() {
                     {t("nav.assessment")}
                   </div>
                   <div className="text-xs text-text-muted mt-0.5">
-                    {lang === "en"
-                      ? "Calculate your savings"
-                      : lang === "cn"
-                        ? "计算您的节省"
-                        : "คำนวณค่าไฟที่ประหยัดได้"}
+                    {t("nav.assessmentDesc")}
                   </div>
                 </div>
                 <ChevronRight className="w-4 h-4 text-accent-primary group-hover:translate-x-0.5 transition-transform" />
@@ -567,41 +563,41 @@ function Footer() {
             >
               <div className="footer-line-qr__content min-w-0">
                 <p className="footer-line-qr__eyebrow mb-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#06C755]">
-                  LINE Official
+                  {t("footer.lineEyebrow")}
                 </p>
                 <h2
                   id="footer-line-qr-title"
                   className="footer-line-qr__title font-display text-base font-semibold leading-tight text-foreground"
                 >
-                  ส่งข้อมูลโครงการผ่าน LINE
+                  {t("footer.lineTitle")}
                 </h2>
                 <p className="footer-line-qr__text mt-2 text-sm leading-relaxed text-text-muted">
-                  ส่งบิลค่าไฟ รูปพื้นที่ หรือคำถามโครงการผ่าน LINE Official:{" "}
+                  {t("footer.lineDesc")}:{" "}
                   <strong className="font-semibold text-foreground">
                     {lineOfficialConfig.basicId}
                   </strong>
                 </p>
                 <div
                   className="footer-line-qr__actions mt-3 flex flex-col gap-2 sm:flex-row"
-                  aria-label="ช่องทาง LINE Official"
+                  aria-label={t("footer.lineActionsAria")}
                 >
                   <a
                     className="footer-line-qr__button footer-line-qr__button--primary inline-flex min-h-11 items-center justify-center rounded-lg bg-[#047A35] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#03662c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06C755] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                     href={lineOfficialConfig.shortLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="เพิ่มเพื่อน LINE Official SIRINX"
+                    aria-label={t("footer.lineAddAria")}
                   >
-                    เพิ่มเพื่อน LINE
+                    {t("footer.lineAdd")}
                   </a>
                   <a
                     className="footer-line-qr__button footer-line-qr__button--secondary inline-flex min-h-11 items-center justify-center rounded-lg border border-border-subtle px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:border-[#06C755]/50 hover:text-[#06C755] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06C755] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                     href={lineOfficialConfig.chatUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="แชทกับ SIRINX ผ่าน LINE"
+                    aria-label={t("footer.lineChatAria")}
                   >
-                    แชท LINE
+                    {t("footer.lineChat")}
                   </a>
                 </div>
               </div>
@@ -616,7 +612,7 @@ function Footer() {
                   decoding="async"
                   className="h-28 w-28 rounded-lg bg-white p-1.5 shadow-md shadow-black/20"
                 />
-                <figcaption>สแกน QR เพื่อเพิ่มเพื่อน LINE Official</figcaption>
+                <figcaption>{t("footer.lineQrCaption")}</figcaption>
               </figure>
             </section>
 
@@ -670,7 +666,7 @@ function Footer() {
         <div className="mt-8 pt-6 border-t border-border-subtle">
           <div className="flex flex-col items-center gap-4 mb-8">
             <p className="text-xs text-text-muted tracking-wider uppercase font-medium">
-              Certified & Trusted
+              {t("footer.certifiedTrusted")}
             </p>
             <div className="flex flex-wrap items-center justify-center gap-6">
               {/* DBD Registered */}
@@ -679,7 +675,7 @@ function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-border-subtle hover:border-border-accent transition-all group"
-                title="DBD Registered — กรมพัฒนาธุรกิจการค้า"
+                title={t("footer.dbdTitle")}
               >
                 <img
                   src={DBD_REGISTERED_URL}
@@ -748,7 +744,7 @@ function Footer() {
               {/* BOI Badge */}
               <div
                 className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-border-subtle"
-                title="BOI Promoted — สำนักงานคณะกรรมการส่งเสริมการลงทุน"
+                title={t("footer.boiTitle")}
               >
                 <div className="w-8 h-8 rounded-full border-2 border-accent-secondary flex items-center justify-center">
                   <span className="text-[8px] font-bold text-accent-secondary leading-none">
@@ -775,19 +771,19 @@ function Footer() {
               href="/privacy"
               className="hover:text-accent-primary transition-colors"
             >
-              นโยบายความเป็นส่วนตัว
+              {t("footer.privacy")}
             </a>
             <a
               href="/terms"
               className="hover:text-accent-primary transition-colors"
             >
-              เงื่อนไขการใช้งาน
+              {t("footer.terms")}
             </a>
             <a
               href="/cookies"
               className="hover:text-accent-primary transition-colors"
             >
-              Cookie Policy
+              {t("footer.cookies")}
             </a>
           </div>
         </div>

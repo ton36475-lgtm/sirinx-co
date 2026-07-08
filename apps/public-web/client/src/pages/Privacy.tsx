@@ -1,39 +1,43 @@
 import LegalPage from "@/components/LegalPage";
+import { usePageTranslation } from "@/i18n";
+import "@/i18n/pages/legal";
 
 export default function Privacy() {
+  const { t } = usePageTranslation("legal");
+
   return (
     <LegalPage
-      eyebrow="Privacy Policy"
-      title="นโยบายความเป็นส่วนตัว"
-      updatedAt="16 พฤษภาคม 2026"
-      intro="SIRINX ให้ความสำคัญกับข้อมูลของลูกค้า ผู้สนใจบริการ และพันธมิตรที่ติดต่อผ่านเว็บไซต์นี้ นโยบายนี้อธิบายข้อมูลที่เราเก็บ วิธีใช้ และสิทธิของคุณ"
+      eyebrow={t("legal.privacy.eyebrow")}
+      title={t("legal.privacy.title")}
+      updatedAt={t("legal.updatedAtDate")}
+      intro={t("legal.privacy.intro")}
       sections={[
         {
-          title: "ข้อมูลที่เราเก็บ",
+          title: t("legal.privacy.data.title"),
           body: [
-            "เราอาจเก็บข้อมูลที่คุณกรอกผ่านแบบฟอร์ม เช่น ชื่อ บริษัท อีเมล เบอร์โทร ประเภทธุรกิจ ค่าไฟโดยประมาณ พื้นที่ติดตั้ง และรายละเอียดโครงการ",
-            "เว็บไซต์อาจเก็บข้อมูลเชิงเทคนิค เช่น หน้าเว็บที่เข้าชม อุปกรณ์ เบราว์เซอร์ และข้อมูลการใช้งานเพื่อปรับปรุงประสบการณ์และความปลอดภัย",
+            t("legal.privacy.data.body1"),
+            t("legal.privacy.data.body2"),
           ],
         },
         {
-          title: "วัตถุประสงค์การใช้ข้อมูล",
+          title: t("legal.privacy.purpose.title"),
           body: [
-            "เราใช้ข้อมูลเพื่อประเมินระบบ Solar Carport, Rooftop Solar, BESS, EV Charger หรือบริการพลังงานที่เกี่ยวข้อง และเพื่อติดต่อกลับตามคำขอของคุณ",
-            "ข้อมูลเชิงสถิติใช้เพื่อปรับปรุงเว็บไซต์ วิเคราะห์ความสนใจของผู้ใช้งาน และวางแผนบริการให้เหมาะสมกับลูกค้าธุรกิจ",
+            t("legal.privacy.purpose.body1"),
+            t("legal.privacy.purpose.body2"),
           ],
         },
         {
-          title: "การเปิดเผยข้อมูล",
+          title: t("legal.privacy.disclosure.title"),
           body: [
-            "เราไม่ขายข้อมูลส่วนบุคคลของคุณให้บุคคลภายนอก",
-            "ในบางกรณี เราอาจแบ่งปันข้อมูลที่จำเป็นกับทีมวิศวกร ผู้ให้บริการระบบ หรือพันธมิตรที่เกี่ยวข้องกับการประเมินและนำเสนอโครงการ โดยจำกัดตามวัตถุประสงค์เท่านั้น",
+            t("legal.privacy.disclosure.body1"),
+            t("legal.privacy.disclosure.body2"),
           ],
         },
         {
-          title: "สิทธิของคุณ",
+          title: t("legal.privacy.rights.title"),
           body: [
-            "คุณสามารถขอเข้าถึง แก้ไข หรือลบข้อมูลที่ส่งให้เราได้ตามกฎหมายที่เกี่ยวข้อง",
-            "หากต้องการถอนความยินยอมในการติดต่อหรือการใช้ข้อมูลบางประเภท กรุณาติดต่อเราตามข้อมูลด้านล่าง",
+            t("legal.privacy.rights.body1"),
+            t("legal.privacy.rights.body2"),
           ],
         },
       ]}

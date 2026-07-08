@@ -14,7 +14,16 @@ import {
   BookOpen,
   User,
 } from "lucide-react";
-import { blogPosts } from "./Blog";
+import {
+  getLocalizedBlogPost,
+  getLocalizedBlogPosts,
+} from "@/lib/blogData";
+import {
+  getLocalizedArticleContent,
+  type BlogArticleContent,
+} from "@/lib/blogArticleContent";
+import { usePageTranslation } from "@/i18n";
+import "@/i18n/pages/blogPost";
 import { toast } from "sonner";
 
 const fadeUp = {
@@ -27,10 +36,7 @@ const fadeUp = {
 };
 
 /* Full article content keyed by slug */
-const articleContent: Record<
-  string,
-  { sections: { heading: string; body: string }[]; keyTakeaways: string[] }
-> = {
+const articleContent: Record<string, BlogArticleContent> = {
   "rooftop-solar-roi-2025": {
     sections: [
       {
@@ -204,33 +210,35 @@ const articleContent: Record<
 };
 
 export default function BlogPost() {
+  const { lang, t } = usePageTranslation("blogPost");
   const params = useParams<{ slug: string }>();
   const slug = params.slug || "";
-  const post = blogPosts.find(p => p.slug === slug);
-  const content = articleContent[slug];
+  const post = getLocalizedBlogPost(slug, lang);
+  const content = getLocalizedArticleContent(slug, lang, articleContent[slug]);
+  const localizedPosts = getLocalizedBlogPosts(lang);
 
   if (!post) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
           <h1 className="font-display text-3xl font-bold text-foreground mb-4">
-            ไม่พบบทความ
+            {t("blogPost.notFound.title")}
           </h1>
           <p className="text-text-secondary mb-6">
-            บทความที่คุณค้นหาอาจถูกย้ายหรือลบแล้ว
+            {t("blogPost.notFound.desc")}
           </p>
           <Link
             href="/blog"
             className="inline-flex items-center gap-2 px-6 py-3 btn-accent rounded-lg font-display font-semibold"
           >
-            <ArrowLeft className="w-4 h-4" /> กลับไปหน้าบทความ
+            <ArrowLeft className="w-4 h-4" /> {t("blogPost.back")}
           </Link>
         </div>
       </div>
     );
   }
 
-  const related = blogPosts
+  const related = localizedPosts
     .filter(p => p.categoryKey === post.categoryKey && p.slug !== slug)
     .slice(0, 3);
 
@@ -249,7 +257,7 @@ export default function BlogPost() {
               href="/blog"
               className="inline-flex items-center gap-1.5 text-sm text-accent-primary hover:underline mb-6"
             >
-              <ArrowLeft className="w-4 h-4" /> กลับไปหน้าบทความ
+              <ArrowLeft className="w-4 h-4" /> {t("blogPost.back")}
             </Link>
           </motion.div>
           <motion.div
@@ -299,11 +307,12 @@ export default function BlogPost() {
             <button
               onClick={() => {
                 navigator.clipboard?.writeText(window.location.href);
-                toast.success("คัดลอกลิงก์แล้ว");
+                toast.success(t("blogPost.shareCopied"));
               }}
+              aria-label={t("blogPost.shareAria")}
               className="flex items-center gap-1.5 text-sm text-text-muted hover:text-accent-primary transition-colors"
             >
-              <Share2 className="w-4 h-4" /> แชร์
+              <Share2 className="w-4 h-4" /> {t("blogPost.share")}
             </button>
           </motion.div>
         </div>
@@ -358,8 +367,7 @@ export default function BlogPost() {
               ) : (
                 <div className="p-6 rounded-xl border border-border-subtle bg-surface-elevated">
                   <p className="text-text-secondary">
-                    เนื้อหาบทความนี้กำลังอยู่ระหว่างการจัดทำ
-                    กรุณากลับมาอ่านอีกครั้งในเร็ว ๆ นี้
+                    {t("blogPost.draft")}
                   </p>
                 </div>
               )}
@@ -367,24 +375,24 @@ export default function BlogPost() {
               {/* CTA in article */}
               <div className="mt-12 p-6 rounded-xl glass-card">
                 <h3 className="font-display font-semibold text-foreground mb-2">
-                  สนใจระบบโซลาร์สำหรับธุรกิจ?
+                  {t("blogPost.articleCta.title")}
                 </h3>
                 <p className="text-sm text-text-secondary mb-4">
-                  ใช้เครื่องมือคำนวณของ SIRINX
-                  เพื่อประเมินขนาดระบบและผลตอบแทนเบื้องต้น ฟรี
+                  {t("blogPost.articleCta.desc")}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Link
                     href="/assessment"
                     className="inline-flex items-center justify-center gap-2 px-5 py-2.5 btn-accent rounded-lg text-sm font-display font-semibold"
                   >
-                    คำนวณระบบโซลาร์ <ArrowRight className="w-4 h-4" />
+                    {t("blogPost.articleCta.calculate")}{" "}
+                    <ArrowRight className="w-4 h-4" />
                   </Link>
                   <Link
                     href="/contact"
                     className="inline-flex items-center justify-center gap-2 px-5 py-2.5 btn-accent-outline rounded-lg text-sm font-display font-semibold"
                   >
-                    นัดสำรวจหน้างานฟรี
+                    {t("blogPost.articleCta.survey")}
                   </Link>
                 </div>
               </div>
@@ -409,7 +417,7 @@ export default function BlogPost() {
                 <div className="sticky top-24 p-5 rounded-xl border border-border-subtle bg-surface-elevated">
                   <h3 className="font-display font-semibold text-foreground mb-4 flex items-center gap-2">
                     <BookOpen className="w-4 h-4 text-accent-primary" />{" "}
-                    สรุปประเด็นสำคัญ
+                    {t("blogPost.takeaways")}
                   </h3>
                   <ul className="space-y-3">
                     {content.keyTakeaways.map((item, i) => (
@@ -436,7 +444,7 @@ export default function BlogPost() {
         <section className="py-16 lg:py-20 section-alt">
           <div className="container">
             <h2 className="font-display text-xl font-bold text-foreground mb-8">
-              บทความที่เกี่ยวข้อง
+              {t("blogPost.related")}
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
               {related.map((rp, i) => (
@@ -486,24 +494,23 @@ export default function BlogPost() {
       <section className="py-16 lg:py-20 bg-background">
         <div className="container text-center">
           <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-3">
-            พร้อมเริ่มต้นลดค่าพลังงาน?
+            {t("blogPost.final.title")}
           </h2>
           <p className="text-text-secondary mb-6 max-w-lg mx-auto">
-            นัดสำรวจหน้างานฟรี ไม่มีข้อผูกมัด
-            รับข้อเสนอที่ออกแบบเฉพาะสำหรับธุรกิจของคุณ
+            {t("blogPost.final.desc")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/contact"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 btn-accent rounded-lg font-display font-semibold"
             >
-              นัดสำรวจหน้างานฟรี <ArrowRight className="w-4 h-4" />
+              {t("blogPost.final.survey")} <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/assessment"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 btn-accent-outline rounded-lg font-display font-semibold"
             >
-              ประเมินความคุ้มค่าเบื้องต้น
+              {t("blogPost.final.assessment")}
             </Link>
           </div>
         </div>

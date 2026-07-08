@@ -1,5 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "wouter";
+import { usePageTranslation } from "@/i18n";
+import "@/i18n/pages/homeSolution";
 import {
   ArrowRight,
   BatteryCharging,
@@ -41,182 +43,191 @@ const HERO_IMAGE_RESPONSIVE = {
 const GALLERY_IMAGES = [
   {
     name: "home-solution-village-oblique",
-    alt: "มุมโดรนโครงการบ้านจัดสรรระดับพรีเมียมพร้อม rooftop solar หลายหลัง",
-    label: "Village-scale solar planning",
+    altKey: "hs.gallery.village.alt",
+    labelKey: "hs.gallery.village.label",
   },
   {
     name: "home-solution-rooftop-detail",
-    alt: "มุมสูงหลังคาบ้านใหญ่พร้อมแผงโซลาร์ carport EV charger และ battery cabinet",
-    label: "Rooftop + carport detail",
+    altKey: "hs.gallery.detail.alt",
+    labelKey: "hs.gallery.detail.label",
   },
   {
     name: "home-solution-estate-topdown",
-    alt: "มุม top-down โครงการหมู่บ้านจัดสรรพร้อมบ้านหลายหลังติดตั้งโซลาร์",
-    label: "Estate rollout view",
+    altKey: "hs.gallery.estate.alt",
+    labelKey: "hs.gallery.estate.label",
   },
 ];
 
 const highLoadSignals = [
-  "ค่าไฟบ้านใหญ่หรือโฮมออฟฟิศระดับ 35,000-250,000+ บาทต่อเดือน",
-  "แอร์หลายโซน, ห้องประชุม, server/network, CCTV, pool pump, kitchen load",
-  "มี EV หรือเตรียมติดตั้ง EV Charger หลายจุด",
-  "ต้องการ backup บางโหลดสำคัญด้วย Hybrid Inverter + BESS",
+  "hs.signal.bill",
+  "hs.signal.loads",
+  "hs.signal.ev",
+  "hs.signal.backup",
 ];
 
 const solutionStack = [
   {
     icon: Sun,
-    title: "Rooftop Solar",
-    body: "ออกแบบกำลังผลิตตามหลังคาจริง ทิศแดด เงาบัง และ load profile ไม่ใช่ขายจากขนาดแผงอย่างเดียว",
+    titleKey: "hs.stack.rooftop.title",
+    bodyKey: "hs.stack.rooftop.body",
   },
   {
     icon: Home,
-    title: "Solar Carport",
-    body: "เปลี่ยนพื้นที่จอดรถของบ้านใหญ่หรือ home office เป็นหลังคาผลิตไฟ พร้อมเพิ่มร่มเงาและภาพลักษณ์พรีเมียม",
+    titleKey: "hs.stack.carport.title",
+    bodyKey: "hs.stack.carport.body",
   },
   {
     icon: BatteryCharging,
-    title: "Hybrid + BESS",
-    body: "วางระบบแบตเตอรี่สำหรับโหลดสำคัญ ช่วง peak หรือ backup เฉพาะส่วน โดยแยกสิ่งที่ควรสำรองกับสิ่งที่ไม่ควรสำรอง",
+    titleKey: "hs.stack.bess.title",
+    bodyKey: "hs.stack.bess.body",
   },
   {
     icon: PlugZap,
-    title: "EV Charging",
-    body: "รองรับ EV Charger พร้อม logic การใช้ไฟจาก solar ก่อน ลดการดึงไฟจาก grid ในช่วงที่ไม่จำเป็น",
+    titleKey: "hs.stack.ev.title",
+    bodyKey: "hs.stack.ev.body",
   },
   {
     icon: Gauge,
-    title: "AI Energy Monitor",
-    body: "ติดตาม production, consumption, import/export, alarm และ performance เพื่อให้เจ้าของบ้านเห็นระบบทำงานจริง",
+    titleKey: "hs.stack.monitor.title",
+    bodyKey: "hs.stack.monitor.body",
   },
   {
     icon: Wrench,
-    title: "O&M หลังติดตั้ง",
-    body: "มี checklist commissioning, monitoring, cleaning plan, alarm response และเอกสารส่งมอบที่ตรวจสอบย้อนกลับได้",
+    titleKey: "hs.stack.om.title",
+    bodyKey: "hs.stack.om.body",
   },
 ];
 
 const trustChecks = [
-  "สำรวจหน้างานก่อนเสนอแบบ ไม่ใช้ template เดียวกับทุกบ้าน",
-  "ทำ single-line diagram, BOQ, equipment spec และ payment milestone ให้ตรวจได้",
-  "มี commissioning record และภาพถ่ายงานติดตั้งก่อนส่งมอบ",
-  "ติดตามผลผลิตไฟและ alarm หลังเปิดระบบ ไม่จบแค่ติดตั้งเสร็จ",
-  "ใช้ reference จากระบบที่ใช้งานจริงในโรงแรมและธุรกิจในเครือเป็นหลักฐานประกอบการออกแบบ",
-  "ตัวเลขประหยัดและคืนทุนแสดงเป็น scenario ตามข้อมูลหน้างาน ไม่ใช้เป็นคำรับประกันแบบเหมารวม",
+  "hs.trust.survey",
+  "hs.trust.docs",
+  "hs.trust.commissioning",
+  "hs.trust.monitor",
+  "hs.trust.reference",
+  "hs.trust.scenario",
 ];
 
 const processSteps = [
   {
-    title: "1. เก็บข้อมูลโหลดจริง",
-    body: "ดูบิลไฟ, TOU, load ช่วงกลางวัน, EV plan, backup need และข้อจำกัดของบ้านหรือโฮมออฟฟิศ",
+    titleKey: "hs.step.load.title",
+    bodyKey: "hs.step.load.body",
   },
   {
-    title: "2. Drone / Roof / Electrical Survey",
-    body: "สำรวจหลังคา, carport, MDB, inverter location, cable route, safety disconnect และจุดติดตั้ง battery",
+    titleKey: "hs.step.survey.title",
+    bodyKey: "hs.step.survey.body",
   },
   {
-    title: "3. Engineering Proposal",
-    body: "ส่งแบบระบบ, ขนาด kWp, inverter/BESS, EV Charger, monitoring plan และสมมติฐานประหยัดไฟ",
+    titleKey: "hs.step.proposal.title",
+    bodyKey: "hs.step.proposal.body",
   },
   {
-    title: "4. Install + Commissioning",
-    body: "ติดตั้ง, ทดสอบ, ส่งมอบ evidence และเปิด dashboard ให้ตรวจ production จริงหลังเริ่มใช้งาน",
+    titleKey: "hs.step.install.title",
+    bodyKey: "hs.step.install.body",
   },
 ];
 
 const faqs = [
   {
-    q: "Home Solution ของ SIRINX เหมาะกับบ้านแบบไหน?",
-    a: "เหมาะกับบ้านขนาดใหญ่ โฮมออฟฟิศ บ้านพักผู้บริหาร บ้านที่มี EV หลายคัน หรือบ้านที่มีโหลดไฟสูง เช่น แอร์หลายโซน ห้องทำงาน server ห้องประชุม สระว่ายน้ำ และระบบรักษาความปลอดภัย",
+    qKey: "hs.faq.fit.q",
+    aKey: "hs.faq.fit.a",
   },
   {
-    q: "ทำไมไม่ควรซื้อระบบจากราคาต่อกิโลวัตต์อย่างเดียว?",
-    a: "เพราะบ้านใหญ่มีข้อจำกัดเฉพาะ เช่น เงาบัง ทิศหลังคา MDB เดิม backup load และ EV charging behavior ระบบที่คุ้มจริงต้องออกแบบจากข้อมูลโหลดและหน้างาน ไม่ใช่ใช้ราคาแผงเป็นตัวตัดสินอย่างเดียว",
+    qKey: "hs.faq.price.q",
+    aKey: "hs.faq.price.a",
   },
   {
-    q: "SIRINX ช่วยลดความเสี่ยงเรื่องงานติดตั้งไม่ได้มาตรฐานอย่างไร?",
-    a: "ใช้กระบวนการสำรวจ ออกแบบเอกสารวิศวกรรม BOQ ชัดเจน payment milestone commissioning record และ monitoring หลังส่งมอบ เพื่อให้ลูกค้าตรวจสอบได้ทุกช่วง ไม่ใช่รอเชื่อคำขายอย่างเดียว",
+    qKey: "hs.faq.risk.q",
+    aKey: "hs.faq.risk.a",
   },
   {
-    q: "สามารถใช้ร่วมกับ EV Charger และ Battery ได้หรือไม่?",
-    a: "ได้ โดยออกแบบเป็นระบบเดียวกันตั้งแต่ต้นเพื่อจัดลำดับการใช้ไฟจาก solar, grid, battery และ EV charger ตามพฤติกรรมของบ้านและข้อจำกัดของอุปกรณ์",
+    qKey: "hs.faq.ev.q",
+    aKey: "hs.faq.ev.a",
   },
 ];
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Service",
-      "@id": "https://www.sirinx.co/home-solution#service",
-      name: "SIRINX Home Solar Solution",
-      serviceType:
-        "Solar rooftop, solar carport, BESS, EV Charger, and AI energy monitoring for large homes and home offices",
-      provider: {
-        "@type": "Organization",
-        name: "SIRINX",
-        url: "https://www.sirinx.co",
-      },
-      areaServed: {
-        "@type": "Country",
-        name: "Thailand",
-      },
-      audience: {
-        "@type": "Audience",
-        audienceType:
-          "Large private residences, home offices, executive homes, premium housing estates",
-      },
-      description:
-        "Home solar solution for large homes and home offices with high electricity demand, combining rooftop solar, solar carport, EV Charger, BESS, AI monitoring, and commissioning evidence.",
-    },
-    {
-      "@type": "FAQPage",
-      mainEntity: faqs.map(faq => ({
-        "@type": "Question",
-        name: faq.q,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: faq.a,
-        },
-      })),
-    },
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "หน้าแรก",
-          item: "https://www.sirinx.co",
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Home Solar Solution",
-          item: "https://www.sirinx.co/home-solution",
-        },
-      ],
-    },
-  ],
-};
-
 export default function HomeSolution() {
+  const { t } = usePageTranslation("homeSolution");
+  const localizedFaqs = faqs.map(faq => ({
+    q: t(faq.qKey),
+    a: t(faq.aKey),
+  }));
+  const statCards = [
+    [t("hs.stat.highLoad.value"), t("hs.stat.highLoad.label")],
+    [t("hs.stat.commissioning.value"), t("hs.stat.commissioning.label")],
+    [t("hs.stat.monitoring.value"), t("hs.stat.monitoring.label")],
+  ];
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Service",
+        "@id": "https://www.sirinx.co/home-solution#service",
+        name: "SIRINX Home Solar Solution",
+        serviceType:
+          "Solar rooftop, solar carport, BESS, EV Charger, and AI energy monitoring for large homes and home offices",
+        provider: {
+          "@type": "Organization",
+          name: "SIRINX",
+          url: "https://www.sirinx.co",
+        },
+        areaServed: {
+          "@type": "Country",
+          name: "Thailand",
+        },
+        audience: {
+          "@type": "Audience",
+          audienceType:
+            "Large private residences, home offices, executive homes, premium housing estates",
+        },
+        description: t("hs.meta.desc"),
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: localizedFaqs.map(faq => ({
+          "@type": "Question",
+          name: faq.q,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.a,
+          },
+        })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: t("hs.breadcrumb.home"),
+            item: "https://www.sirinx.co",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Home Solar Solution",
+            item: "https://www.sirinx.co/home-solution",
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <div className="bg-background text-foreground">
       <Helmet>
-        <title>Home Solar Solution บ้านใหญ่และโฮมออฟฟิศ | SIRINX</title>
+        <title>{t("hs.meta.title")}</title>
         <meta
           name="description"
-          content="SIRINX Home Solar Solution สำหรับบ้านขนาดใหญ่ โฮมออฟฟิศ และโครงการหมู่บ้านพรีเมียมที่ใช้ไฟสูง พร้อม Rooftop Solar, Solar Carport, BESS, EV Charger และ AI Energy Monitoring"
+          content={t("hs.meta.desc")}
         />
         <link rel="canonical" href="https://www.sirinx.co/home-solution/" />
         <meta
           property="og:title"
-          content="Home Solar Solution บ้านใหญ่และโฮมออฟฟิศ | SIRINX"
+          content={t("hs.meta.title")}
         />
         <meta
           property="og:description"
-          content="ระบบโซลาร์สำหรับบ้านใหญ่ โฮมออฟฟิศ และโครงการพรีเมียมที่ใช้ไฟสูง พร้อมหลักฐาน commissioning, monitoring และ reference site จริง"
+          content={t("hs.meta.ogDesc")}
         />
         <meta
           property="og:image"
@@ -236,7 +247,7 @@ export default function HomeSolution() {
             src={HERO_IMAGE_RESPONSIVE.fallback}
             srcSet={HERO_IMAGE_RESPONSIVE.jpgSrcSet}
             sizes={HERO_IMAGE_SIZES}
-            alt="มุมโดรนโครงการบ้านขนาดใหญ่และโฮมออฟฟิศพร้อมระบบโซลาร์ SIRINX"
+            alt={t("hs.hero.imageAlt")}
             className="h-full w-full object-cover"
             width={1280}
             height={720}
@@ -250,32 +261,29 @@ export default function HomeSolution() {
           <div className="max-w-3xl">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border-accent bg-accent-glow px-3 py-1.5 text-xs font-semibold text-accent-primary">
               <MapPinned className="h-3.5 w-3.5" />
-              Home Solution for high-load residences
+              {t("hs.hero.eyebrow")}
             </div>
             <h1 className="mb-6 font-display text-3xl font-bold leading-[1.1] text-foreground sm:text-5xl lg:text-6xl">
-              Solar สำหรับบ้านใหญ่
+              {t("hs.hero.title1")}
               <span className="block text-gradient-accent">
-                และโฮมออฟฟิศที่ใช้ไฟสูง
+                {t("hs.hero.title2")}
               </span>
             </h1>
             <p className="mb-8 max-w-2xl text-sm leading-7 text-text-secondary sm:text-lg sm:leading-relaxed">
               <span className="block sm:hidden">
-                <span className="block">SIRINX ออกแบบโซลาร์บ้านใหญ่</span>
-                <span className="block">ครอบคลุมหลังคา คาร์พอร์ต</span>
-                <span className="block">จุดชาร์จ EV แบตเตอรี่</span>
-                <span className="block">และระบบติดตามพลังงาน</span>
-                <span className="mt-1 block">สำหรับบ้านพรีเมียม โฮมออฟฟิศ</span>
-                <span className="block">และหมู่บ้านจัดสรรที่ต้องการ</span>
-                <span className="block">ระบบที่ตรวจสอบได้จริง</span>
+                <span className="block">{t("hs.hero.mobile1")}</span>
+                <span className="block">{t("hs.hero.mobile2")}</span>
+                <span className="block">{t("hs.hero.mobile3")}</span>
+                <span className="block">{t("hs.hero.mobile4")}</span>
+                <span className="mt-1 block">{t("hs.hero.mobile5")}</span>
+                <span className="block">{t("hs.hero.mobile6")}</span>
+                <span className="block">{t("hs.hero.mobile7")}</span>
               </span>
               <span className="hidden sm:block">
-                SIRINX ออกแบบระบบโซลาร์บ้านใหญ่แบบครบวงจร ครอบคลุมหลังคา
-                คาร์พอร์ต จุดชาร์จ EV แบตเตอรี่ และระบบติดตามพลังงาน
+                {t("hs.hero.desc1")}
               </span>
               <span className="mt-1 hidden sm:block">
-                เหมาะกับบ้านพักระดับพรีเมียม โฮมออฟฟิศ
-                และโครงการหมู่บ้านจัดสรรที่ต้องการระบบที่ตรวจสอบได้จริง
-                ตั้งแต่แบบวิศวกรรมจนถึงหลังส่งมอบ
+                {t("hs.hero.desc2")}
               </span>
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
@@ -283,22 +291,18 @@ export default function HomeSolution() {
                 href="/contact?interest=home-solution"
                 className="inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3.5 font-display font-semibold btn-accent"
               >
-                นัดประเมินบ้าน / โฮมออฟฟิศ <ArrowRight className="h-4 w-4" />
+                {t("hs.hero.ctaPrimary")} <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/assessment"
                 className="inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline"
               >
                 <Calculator className="h-4 w-4" />
-                ประเมินค่าไฟเบื้องต้น
+                {t("hs.hero.ctaSecondary")}
               </Link>
             </div>
             <div className="mt-8 grid gap-3 sm:grid-cols-3">
-              {[
-                ["High Load", "ออกแบบจากการใช้ไฟจริง"],
-                ["Commissioning", "มีหลักฐานส่งมอบระบบ"],
-                ["Monitoring", "เห็น production และ alarm"],
-              ].map(([value, label]) => (
+              {statCards.map(([value, label]) => (
                 <div
                   key={value}
                   className="rounded-lg border border-border-subtle bg-surface-overlay p-4 backdrop-blur"
@@ -319,16 +323,13 @@ export default function HomeSolution() {
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
             <div>
               <span className="mb-3 inline-flex text-sm font-semibold text-accent-primary">
-                เหมาะกับใคร
+                {t("hs.fit.eyebrow")}
               </span>
               <h2 className="mb-4 font-display text-2xl font-bold leading-tight sm:text-4xl">
-                บ้านที่ค่าไฟสูงต้องการระบบที่ออกแบบเหมือนงาน commercial
+                {t("hs.fit.title")}
               </h2>
               <p className="text-text-secondary leading-relaxed">
-                บ้านใหญ่และโฮมออฟฟิศจำนวนมากมีโหลดไฟซับซ้อนกว่าอาคารขนาดเล็ก:
-                มีทั้งแอร์หลายโซน EV ห้องทำงาน server ระบบน้ำ สระว่ายน้ำ
-                และอุปกรณ์รักษาความปลอดภัย การติดโซลาร์ให้คุ้มจึงต้องเริ่มจาก
-                load profile และแบบไฟฟ้า ไม่ใช่เริ่มจากราคาแผง
+                {t("hs.fit.desc")}
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -339,7 +340,7 @@ export default function HomeSolution() {
                 >
                   <CheckCircle2 className="mb-4 h-5 w-5 text-accent-primary" />
                   <p className="text-sm leading-relaxed text-text-secondary">
-                    {item}
+                    {t(item)}
                   </p>
                 </div>
               ))}
@@ -352,16 +353,13 @@ export default function HomeSolution() {
         <div className="container">
           <div className="mb-10 max-w-3xl">
             <span className="mb-3 inline-flex text-sm font-semibold text-accent-primary">
-              System stack
+              {t("hs.stack.eyebrow")}
             </span>
             <h2 className="mb-4 font-display text-2xl font-bold leading-tight sm:text-4xl">
-              หนึ่งหน้าเดียวครบ: rooftop, carport, battery, EV และ AI monitoring
+              {t("hs.stack.title")}
             </h2>
             <p className="text-text-secondary leading-relaxed">
-              หน้า Home Solution นี้ออกแบบเพื่อให้ลูกค้า AEO/search
-              เห็นคำตอบชัดเจนว่า SIRINX ไม่ได้ขายแค่แผงโซลาร์
-              แต่ทำระบบพลังงานสำหรับบ้านที่มี consumption
-              สูงและต้องการความน่าเชื่อถือแบบโครงการจริง
+              {t("hs.stack.desc")}
             </p>
           </div>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -369,15 +367,15 @@ export default function HomeSolution() {
               const Icon = item.icon;
               return (
                 <article
-                  key={item.title}
+                  key={item.titleKey}
                   className="rounded-xl border border-border-subtle bg-surface-elevated p-6"
                 >
                   <Icon className="mb-5 h-7 w-7 text-accent-primary" />
                   <h3 className="mb-3 font-display text-lg font-bold">
-                    {item.title}
+                    {t(item.titleKey)}
                   </h3>
                   <p className="text-sm leading-relaxed text-text-secondary">
-                    {item.body}
+                    {t(item.bodyKey)}
                   </p>
                 </article>
               );
@@ -405,7 +403,7 @@ export default function HomeSolution() {
                       src={imageSrc(image.name, 960, "jpg")}
                       srcSet={imageSrcSet(image.name, "jpg")}
                       sizes="(min-width: 1024px) 54vw, 100vw"
-                      alt={image.alt}
+                      alt={t(image.altKey)}
                       width={1280}
                       height={720}
                       loading="lazy"
@@ -414,24 +412,20 @@ export default function HomeSolution() {
                     />
                   </picture>
                   <figcaption className="px-4 py-3 text-xs text-text-muted">
-                    {image.label}
+                    {t(image.labelKey)}
                   </figcaption>
                 </figure>
               ))}
             </div>
             <div>
               <span className="mb-3 inline-flex text-sm font-semibold text-accent-primary">
-                Proof over promise
+                {t("hs.proof.eyebrow")}
               </span>
               <h2 className="mb-4 font-display text-2xl font-bold leading-tight sm:text-4xl">
-                ลดความเสี่ยงงานหลอกลวงด้วยหลักฐานที่ตรวจสอบได้
+                {t("hs.proof.title")}
               </h2>
               <p className="mb-6 text-text-secondary leading-relaxed">
-                สำหรับบ้านราคาสูงและโฮมออฟฟิศ
-                ลูกค้าไม่ควรต้องวัดใจจากคำพูดขายอย่างเดียว SIRINX
-                วางระบบให้ตรวจสอบได้ตั้งแต่ก่อนติดตั้ง ระหว่างติดตั้ง
-                และหลังเปิดระบบ โดยใช้ reference
-                จากระบบที่ใช้งานจริงในโรงแรมและธุรกิจในเครือเป็นข้อมูลประกอบการออกแบบ
+                {t("hs.proof.desc")}
               </p>
               <div className="grid gap-3">
                 {trustChecks.map(item => (
@@ -441,15 +435,13 @@ export default function HomeSolution() {
                   >
                     <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-accent-primary" />
                     <p className="text-sm leading-relaxed text-text-secondary">
-                      {item}
+                      {t(item)}
                     </p>
                   </div>
                 ))}
               </div>
               <p className="mt-5 rounded-lg border border-border-accent bg-accent-glow p-4 text-xs leading-relaxed text-text-secondary">
-                หมายเหตุ: ตัวเลขผลประหยัดและระยะคืนทุนต้องประเมินจากบิลไฟ
-                พฤติกรรมโหลด พื้นที่ติดตั้ง และเงื่อนไขหน้างานจริง
-                ไม่ใช้เป็นคำรับประกันแบบเดียวกันทุกบ้าน
+                {t("hs.proof.note")}
               </p>
             </div>
           </div>
@@ -460,24 +452,24 @@ export default function HomeSolution() {
         <div className="container">
           <div className="mb-10 max-w-3xl">
             <span className="mb-3 inline-flex text-sm font-semibold text-accent-primary">
-              Implementation process
+              {t("hs.process.eyebrow")}
             </span>
             <h2 className="mb-4 font-display text-2xl font-bold leading-tight sm:text-4xl">
-              ขั้นตอนที่ทำให้ระบบบ้านใหญ่ใช้งานได้จริง
+              {t("hs.process.title")}
             </h2>
           </div>
           <div className="grid gap-4 lg:grid-cols-4">
             {processSteps.map(step => (
               <article
-                key={step.title}
+                key={step.titleKey}
                 className="rounded-xl border border-border-subtle bg-surface-elevated p-6"
               >
                 <ClipboardCheck className="mb-5 h-6 w-6 text-accent-primary" />
                 <h3 className="mb-3 font-display text-base font-bold">
-                  {step.title}
+                  {t(step.titleKey)}
                 </h3>
                 <p className="text-sm leading-relaxed text-text-secondary">
-                  {step.body}
+                  {t(step.bodyKey)}
                 </p>
               </article>
             ))}
@@ -490,19 +482,17 @@ export default function HomeSolution() {
           <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
             <div>
               <span className="mb-3 inline-flex text-sm font-semibold text-accent-primary">
-                AEO answers
+                {t("hs.faq.eyebrow")}
               </span>
               <h2 className="mb-4 font-display text-2xl font-bold leading-tight sm:text-4xl">
-                คำตอบที่เจ้าของบ้านและผู้บริหารมักถามก่อนตัดสินใจ
+                {t("hs.faq.title")}
               </h2>
               <p className="text-text-secondary leading-relaxed">
-                เนื้อหาส่วนนี้ออกแบบให้ตอบคำถาม search และ AI answer engine
-                ได้ตรงเจตนา: ใครเหมาะกับระบบนี้ ทำไมต้องสำรวจจริง
-                ลดความเสี่ยงอย่างไร และต่อยอด EV/BESS ได้แค่ไหน
+                {t("hs.faq.desc")}
               </p>
             </div>
             <div className="grid gap-4">
-              {faqs.map(faq => (
+              {localizedFaqs.map(faq => (
                 <article
                   key={faq.q}
                   className="rounded-xl border border-border-subtle bg-surface-elevated p-6"
@@ -526,16 +516,13 @@ export default function HomeSolution() {
             <div>
               <div className="mb-3 inline-flex items-center gap-2 text-sm font-semibold text-accent-primary">
                 <Building2 className="h-4 w-4" />
-                Home Office / Private Estate / Premium Village
+                {t("hs.final.eyebrow")}
               </div>
               <h2 className="mb-3 font-display text-2xl font-bold leading-tight sm:text-4xl">
-                ส่งบิลไฟและภาพหลังคาให้ทีม SIRINX ประเมินระบบเบื้องต้น
+                {t("hs.final.title")}
               </h2>
               <p className="max-w-3xl text-sm leading-relaxed text-text-secondary sm:text-base">
-                เริ่มจากข้อมูลจริง: ค่าไฟ 6-12 เดือน, พื้นที่หลังคา, จำนวน EV,
-                โหลดที่อยากสำรอง, และเป้าหมายของบ้านหรือโฮมออฟฟิศ
-                ทีมจะช่วยประเมินว่าควรเริ่มจาก rooftop, carport, battery หรือ EV
-                ก่อน
+                {t("hs.final.desc")}
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
@@ -543,13 +530,13 @@ export default function HomeSolution() {
                 href="/contact?interest=home-solution"
                 className="inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3.5 font-display font-semibold btn-accent"
               >
-                ขอทีมประเมิน <ArrowRight className="h-4 w-4" />
+                {t("hs.final.primary")} <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/projects"
                 className="inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline"
               >
-                ดูผลงานจริง
+                {t("hs.final.projects")}
               </Link>
             </div>
           </div>

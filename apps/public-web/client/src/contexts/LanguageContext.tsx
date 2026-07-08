@@ -164,6 +164,11 @@ const translations: Record<string, Record<Language, string>> = {
     en: "LINE Chat",
     cn: "LINE 聊天",
   },
+  "footer.linePage": {
+    th: "หน้าติดต่อ LINE",
+    en: "LINE Page",
+    cn: "LINE 页面",
+  },
   "footer.lineQrCaption": {
     th: "สแกน QR เพื่อเพิ่มเพื่อน LINE Official",
     en: "Scan the QR code to add LINE Official",

@@ -21,6 +21,7 @@ const Projects = lazy(() => import("./pages/Projects"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const Contact = lazy(() => import("./pages/Contact"));
+const Line = lazy(() => import("./pages/Line"));
 const SolarAssessment = lazy(() => import("./pages/SolarAssessment"));
 const Partner = lazy(() => import("./pages/Partner"));
 const Strategy = lazy(() => import("./pages/Strategy"));
@@ -160,6 +161,7 @@ function PublicRouter() {
         <Route path="/strategy" component={Strategy} />
         <Route path="/blog" component={Blog} />
         <Route path="/blog/:slug" component={BlogPost} />
+        <Route path="/line" component={Line} />
         <Route path="/contact" component={Contact} />
         <Route path="/assessment" component={SolarAssessment} />
         <Route path="/partner" component={Partner} />

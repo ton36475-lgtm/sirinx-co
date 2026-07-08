@@ -90,6 +90,7 @@ const routeChunkPrefixes = new Map<string, string[]>([
   ["/home-solution", ["HomeSolution-"]],
   ["/industries", ["Industries-"]],
   ["/investment", ["InvestmentTaxHub-"]],
+  ["/line", ["Line-"]],
   ["/partner", ["Partner-"]],
   ["/pricing", ["Pricing-"]],
   ["/privacy", ["Privacy-"]],

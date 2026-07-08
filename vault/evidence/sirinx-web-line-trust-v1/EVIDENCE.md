@@ -3,7 +3,7 @@
 Status: `LOCAL_VALIDATED_INTERNAL_GOAL_READY_BRANCH_PUSHED_REVIEW_PENDING`
 
 Generated: `2026-07-08 04:51 +0700`
-Updated: `2026-07-08 16:04 +0700`
+Updated: `2026-07-08 18:10 +0700`
 
 ## Branch
 
@@ -104,7 +104,8 @@ fatal: could not read Username for 'https://github.com': Device not configured
 ## Manual UAT Status
 
 - Homepage: not rerun in browser during this patch.
-- `/line`: not rerun in browser during this patch.
+- `/line`: preview browser UAT confirmed the dedicated LINE landing page renders
+  at `https://aae25828.sirinx-co.pages.dev/line`.
 - `/about`: static language-switch guard passed.
 - `/privacy`, `/terms`, `/cookies`: static language-switch guard passed.
 - `/partner`: static language-switch guard passed.
@@ -116,28 +117,34 @@ fatal: could not read Username for 'https://github.com': Device not configured
 - `/blog/:slug`: static language-switch guard passed for BlogPost UI chrome, localized metadata usage, and English/Chinese article body overlays.
 - `/home-solution`: static language-switch guard passed for visible copy, image alt text, metadata, FAQ JSON-LD content, proof/process sections, stat cards, and final CTA.
 - `/goal`: static route/test/build validation passed and local HTTP smoke returned HTTP `200`. Rendered browser UAT remains blocked by local browser automation tooling. The route is internal-only by host gate.
-- Floating bot: source-level preservation checks passed for LINE/bot i18n path; manual bot behavior still needs real browser confirmation.
-- LINE QR: source-level config guard passed; real-device QR scan still requires human review.
+- Floating bot: source-level preservation checks passed for LINE/bot i18n path;
+  the trigger is visible beside the LINE CTA on preview. Manual bot click
+  behavior still needs real browser confirmation.
+- LINE QR: preview render and QR endpoint checks passed; real-device QR scan
+  still requires human review.
 - Mobile: not rerun in browser during this patch.
 
 ## Security
 
 - Secrets touched: no.
 - Production data touched: no.
-- External writes: GitHub branch push only, using the exact approved command.
-- Deploy: no.
+- External writes: GitHub branch push and Cloudflare Pages preview deploy only,
+  both using approved gates.
+- Deploy: Cloudflare Pages preview deploy completed; production/custom-domain
+  deploy not performed.
 - Push: exact approved push command succeeded after GitHub CLI browser authentication.
 - PR creation/merge: no.
 - LINE webhook: no.
 - Production analytics activation: no.
 - CRM/customer data storage: no.
-- Package install: no.
+- Package install: Wrangler `4.108.0` added only as an `apps/public-web` dev
+  dependency after explicit approval.
 
 ## Risk
 
 Medium.
 
-Reason: local package-level check/test/build and `/goal` HTTP smoke passed after dependency/layout repair and the internal `/goal` route, and the feature branch was pushed. `InvestmentTaxHub.tsx`, `Strategy.tsx`, and `/assessment` dynamic warnings still need separate i18n refactors for full language-switch parity. BlogPost keeps Thai article body as canonical Thai fallback while EN/CN content renders from localized overlays. Manual browser UAT, real-device QR scan, rendered `/goal` browser smoke, existing bot behavior confirmation, PR/merge, and deploy remain human-review gates.
+Reason: local package-level check/test/build and `/goal` HTTP smoke passed after dependency/layout repair and the internal `/goal` route, the feature branch was pushed, and the latest Cloudflare Pages preview deploy passed route smoke and browser UAT. `InvestmentTaxHub.tsx`, `Strategy.tsx`, and `/assessment` dynamic warnings still need separate i18n refactors for full language-switch parity. BlogPost keeps Thai article body as canonical Thai fallback while EN/CN content renders from localized overlays. Real-device QR scan, PR/merge, any next push, and production/custom-domain deploy remain human-review gates.
 
 ## Rollback
 
@@ -149,7 +156,8 @@ Reason: local package-level check/test/build and `/goal` HTTP smoke passed after
 
 ## Approval Gate
 
-- Deploy approval still required.
+- Production/custom-domain deploy approval still required. The approved
+  Cloudflare Pages preview deploy was completed.
 - Latest preview deploy gate was blocked because `Allowed command` was the
   placeholder `<exact deploy command>`; see
   `docs/receipts/PUBLIC_WEB_DEPLOY_GATE_BLOCKED_PLACEHOLDER_20260708_1634.md`.
@@ -168,19 +176,51 @@ Reason: local package-level check/test/build and `/goal` HTTP smoke passed after
 - Follow-up Wrangler availability check found no local Wrangler binary or
   dependency; see
   `docs/receipts/PUBLIC_WEB_WRANGLER_AVAILABILITY_CHECK_20260708_1708.md`.
+- Continuation deploy-gate audit reran the safe `apps/public-web` build
+  preflight successfully, confirmed the current gate text still contains a
+  placeholder instead of a complete executable deploy command, and reconfirmed
+  Wrangler is unavailable locally; see
+  `docs/receipts/PUBLIC_WEB_PREVIEW_DEPLOY_CONTINUATION_AUDIT_20260708_1712.md`.
+- A complete preview deploy command was then approved and run exactly:
+  `pnpm --dir apps/public-web build && wrangler pages deploy apps/public-web/dist/public --project-name sirinx-co --branch feat/sirinx-web-line-trust-v1`.
+  The build step passed, but the Cloudflare Pages deploy step did not start
+  because `wrangler` is not installed or available on `PATH`; see
+  `docs/receipts/PUBLIC_WEB_PREVIEW_DEPLOY_APPROVED_ATTEMPT_WRANGLER_MISSING_20260708_1719.md`.
+- Wrangler install/auth was then explicitly approved. Wrangler `4.108.0` was
+  added as an `apps/public-web` dev dependency, the existing Cloudflare OAuth
+  session was verified, and the preview deploy completed successfully to
+  Cloudflare Pages. Preview URLs:
+  `https://80952e8f.sirinx-co.pages.dev` and
+  `https://feat-sirinx-web-line-trust-v.sirinx-co.pages.dev`; see
+  `docs/receipts/PUBLIC_WEB_PREVIEW_DEPLOY_SUCCEEDED_20260708_1730.md`.
 - PR/merge approval still required.
-- Any next push after new local commits requires a new exact push gate.
+- Any next push after these new local changes requires a new exact push gate.
 - LINE webhook approval still required.
 - Production analytics approval still required.
 - CRM/customer data storage approval still required.
-- Package install/dependency-layout repair is not part of this update; no package install was performed.
+- Follow-up `/line` route and desktop language-switch fix were validated after
+  deploy. Fresh checks passed:
+  `pnpm --config.verify-deps-before-run=false --dir apps/public-web test`
+  (8 files / 48 tests), `pnpm --config.verify-deps-before-run=false --dir
+  apps/public-web check`, `pnpm --config.verify-deps-before-run=false --dir
+  apps/public-web build`, `git diff --check`, and preview smoke for 102 routes.
+  Current preview URL: `https://aae25828.sirinx-co.pages.dev`; branch alias:
+  `https://feat-sirinx-web-line-trust-v.sirinx-co.pages.dev`. See
+  `docs/receipts/PUBLIC_WEB_PREVIEW_LINE_LANGUAGE_UAT_20260708_1747.md`.
+- Latest preview deploy after CSP and language-menu hardening completed at
+  `https://d46819ee.sirinx-co.pages.dev`; branch alias remains
+  `https://feat-sirinx-web-line-trust-v.sirinx-co.pages.dev`. Fresh checks
+  passed: `apps/public-web` test (8 files / 49 tests), check, build, preview
+  route smoke (113 routes / 0 failures), and browser UAT (74 / 74 checks,
+  0 console errors, 0 page errors). Desktop and mobile bot open behavior passed
+  on the preview. See
+  `docs/receipts/PUBLIC_WEB_PREVIEW_D46819EE_FULL_UAT_20260708_1810.md`.
 
 ## Next Safe Actions
 
 1. Human/GitHub review of `origin/feat/sirinx-web-line-trust-v1`.
-2. Run local browser smoke for `/goal` on localhost to confirm the internal-only readiness page renders correctly.
-3. Browser UAT TH/EN/CN language switching across homepage, `/blog`, `/home-solution`, `/about`, legal pages, `/partner`, and `/assessment`.
-4. Human real-device scan of LINE QR.
-5. Manual confirmation that the existing website bot still opens and behaves correctly.
-6. Convert `/assessment` dynamic warnings/recommendations to localized codes in a separate safe refactor.
-7. Provide a real deploy command and target only after review evidence is settled.
+2. Human visual review of the latest preview:
+   `https://d46819ee.sirinx-co.pages.dev`.
+3. Human real-device scan of LINE QR.
+4. Convert `/assessment` dynamic warnings/recommendations to localized codes in a separate safe refactor.
+5. Provide exact gates for any next push, PR/merge, or production/custom-domain promotion.

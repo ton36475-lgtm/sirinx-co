@@ -83,6 +83,13 @@ const metaByPath: Record<string, SeoMeta> = {
     description:
       "ติดต่อทีม SIRINX เพื่อขอใบเสนอราคา นัดสำรวจหน้างาน หรือปรึกษา Solar Carport, BESS, EV Charger และระบบลดค่าไฟองค์กร",
   },
+  "/line": {
+    path: "/line",
+    title:
+      "ติดต่อ SIRINX ผ่าน LINE Official | Solar Carport, Rooftop Solar, BESS, EV Charger",
+    description:
+      "เพิ่มเพื่อน LINE Official ของ SIRINX เพื่อส่งบิลค่าไฟ รูปพื้นที่ และขอประเมินระบบ Solar Carport, Rooftop Solar, BESS และ EV Charger เบื้องต้น",
+  },
   "/assessment": {
     path: "/assessment",
     title: "ประเมิน Solar และคำนวณลดค่าไฟเบื้องต้น | SIRINX",

@@ -174,10 +174,21 @@ function Navbar() {
           {/* Language Switcher */}
           <div
             className="relative"
-            onMouseEnter={() => setLangMenuOpen(true)}
-            onMouseLeave={() => setLangMenuOpen(false)}
+            onKeyDown={event => {
+              if (event.key === "Escape") setLangMenuOpen(false);
+            }}
+            onBlur={event => {
+              if (!event.currentTarget.contains(event.relatedTarget)) {
+                setLangMenuOpen(false);
+              }
+            }}
           >
             <button
+              type="button"
+              onClick={() => setLangMenuOpen(open => !open)}
+              aria-haspopup="menu"
+              aria-expanded={langMenuOpen}
+              aria-label="Change language"
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium text-text-secondary hover:text-foreground hover:bg-accent-glow transition-colors border border-border-subtle"
               title="Change language"
             >
@@ -189,11 +200,15 @@ function Navbar() {
               <motion.div
                 initial={{ opacity: 0, y: 4 }}
                 animate={{ opacity: 1, y: 0 }}
+                role="menu"
                 className="absolute top-full right-0 mt-1 w-32 py-1 rounded-xl glass-card shadow-xl z-50"
               >
                 {languages.map(l => (
                   <button
                     key={l}
+                    type="button"
+                    role="menuitemradio"
+                    aria-checked={lang === l}
                     onClick={() => {
                       setLang(l);
                       setLangMenuOpen(false);
@@ -599,6 +614,12 @@ function Footer() {
                   >
                     {t("footer.lineChat")}
                   </a>
+                  <Link
+                    className="footer-line-qr__button inline-flex min-h-11 items-center justify-center rounded-lg border border-border-subtle px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:border-[#06C755]/50 hover:text-[#06C755] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06C755] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    href="/line"
+                  >
+                    {t("footer.linePage")}
+                  </Link>
                 </div>
               </div>
 

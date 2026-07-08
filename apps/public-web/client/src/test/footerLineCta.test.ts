@@ -8,9 +8,12 @@ const floatingChatWidgetPath = join(
   root,
   "client/src/components/FloatingChatWidget.tsx"
 );
+const clientIndexPath = join(root, "client/index.html");
 const layoutPath = join(root, "client/src/components/Layout.tsx");
 const languageContextPath = join(root, "client/src/contexts/LanguageContext.tsx");
 const lineConfigPath = join(root, "shared/lineOfficial.ts");
+const contactPath = join(root, "client/src/pages/Contact.tsx");
+const linePagePath = join(root, "client/src/pages/Line.tsx");
 
 describe("footer LINE Official QR CTA", () => {
   it("keeps canonical LINE Official data in a local shared config", () => {
@@ -38,6 +41,7 @@ describe("footer LINE Official QR CTA", () => {
     expect(source).toContain('t("footer.lineDesc")');
     expect(source).toContain('t("footer.lineAdd")');
     expect(source).toContain('t("footer.lineChat")');
+    expect(source).toContain('t("footer.linePage")');
     expect(source).toContain('t("footer.lineQrCaption")');
     expect(source).toContain("lineOfficialConfig.qrImageUrl");
     expect(source).toContain("lineOfficialConfig.shortLink");
@@ -55,16 +59,48 @@ describe("footer LINE Official QR CTA", () => {
     expect(languageSource).toContain("扫描二维码添加 LINE 官方账号");
   });
 
+  it("registers a dedicated /line landing page using canonical LINE config", () => {
+    const appSource = readFileSync(appPath, "utf8");
+    const linePageSource = readFileSync(linePagePath, "utf8");
+    const contactSource = readFileSync(contactPath, "utf8");
+
+    expect(appSource).toContain('const Line = lazy(() => import("./pages/Line"))');
+    expect(appSource).toContain('<Route path="/line" component={Line} />');
+    expect(linePageSource).toContain("lineOfficialConfig.qrImageUrl");
+    expect(linePageSource).toContain("lineOfficialConfig.shortLink");
+    expect(linePageSource).toContain("lineOfficialConfig.chatUrl");
+    expect(linePageSource).toContain("lineOfficialConfig.basicId");
+    expect(contactSource).toContain("lineOfficialConfig.shortLink");
+    expect(contactSource).not.toContain("https://lin.ee/sirinx");
+  });
+
   it("renders a floating LINE CTA beside the initial AI bot trigger", () => {
     const source = readFileSync(appPath, "utf8");
 
     expect(source).toContain("sirinx-floating-contact-dock");
     expect(source).toContain("floating-line-cta");
+    expect(source).toContain("const FloatingChatWidget = lazy(");
+    expect(source).toContain("const [shouldLoad, setShouldLoad] = useState(false)");
+    expect(source).toContain("onClick={() => setShouldLoad(true)}");
+    expect(source).toContain("<FloatingChatWidget initialOpen />");
     expect(source).toContain("lineOfficialConfig.addFriendUrl");
     expect(source).toContain('t("floating.lineAria")');
     expect(source).toContain('t("floating.botAria")');
     expect(source).not.toContain("เปิด LINE Official ของ SIRINX");
     expect(source).not.toContain("เปิดแชท SIRINX Solar Assistant");
+  });
+
+  it("keeps the desktop language switcher clickable and keyboard accessible", () => {
+    const source = readFileSync(layoutPath, "utf8");
+
+    expect(source).toContain("onClick={() => setLangMenuOpen(open => !open)}");
+    expect(source).toContain('aria-haspopup="menu"');
+    expect(source).toContain("aria-expanded={langMenuOpen}");
+    expect(source).toContain('role="menu"');
+    expect(source).toContain('role="menuitemradio"');
+    expect(source).toContain('event.key === "Escape"');
+    expect(source).toContain("event.currentTarget.contains(event.relatedTarget)");
+    expect(source).not.toContain("onMouseLeave={() => setLangMenuOpen(false)}");
   });
 
   it("keeps the loaded chatbot trigger grouped with the floating LINE CTA", () => {
@@ -111,5 +147,13 @@ describe("footer LINE Official QR CTA", () => {
     expect(sources).not.toMatch(/\/messages/i);
     expect(sources).not.toMatch(/send\s*email/i);
     expect(sources).not.toMatch(/crm/i);
+  });
+
+  it("keeps the HTML entry compatible with the deployed CSP", () => {
+    const source = readFileSync(clientIndexPath, "utf8");
+
+    expect(source).not.toMatch(/\son[a-z]+=/i);
+    expect(source).not.toContain("javascript:");
+    expect(source).toContain('rel="stylesheet"');
   });
 });

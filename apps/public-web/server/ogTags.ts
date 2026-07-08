@@ -130,6 +130,12 @@ const routeMetaMap: Record<string, PageMeta> = {
     description:
       "ปรึกษาฟรี! นัดทีมวิศวกร SIRINX สำรวจหน้างาน ประเมินค่าไฟ ออกแบบระบบโซลาร์เซลล์เฉพาะอาคารของคุณ พร้อมใบเสนอราคาภายใน 3 วัน โทร, LINE หรือกรอกแบบฟอร์ม",
   },
+  "/line": {
+    title:
+      "ติดต่อ SIRINX ผ่าน LINE Official | Solar Carport, Rooftop Solar, BESS, EV Charger",
+    description:
+      "เพิ่มเพื่อน LINE Official ของ SIRINX เพื่อส่งบิลค่าไฟ รูปพื้นที่ และขอประเมินระบบ Solar Carport, Rooftop Solar, BESS และ EV Charger เบื้องต้น",
+  },
   "/assessment": {
     title:
       "คำนวณค่าไฟที่ประหยัดได้ | ประเมินความคุ้มค่าโซลาร์เซลล์ฟรี | SIRINX",

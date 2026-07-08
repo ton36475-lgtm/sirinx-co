@@ -23,13 +23,16 @@ import {
   buildLeadFallbackSummary,
   isLeadTransportFallbackError,
 } from "@/lib/leadFallback";
+import { lineOfficialConfig } from "@shared/lineOfficial";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.5 } }),
 };
 
-const LINE_OA_URL = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_LINE_OA_URL) || "https://lin.ee/sirinx";
+const LINE_OA_URL =
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_LINE_OA_URL) ||
+  lineOfficialConfig.shortLink;
 
 function ContactInner() {
   const { t } = usePageTranslation("contact");

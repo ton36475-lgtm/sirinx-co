@@ -1,9 +1,9 @@
 # SIRINX Web LINE Trust v1 Evidence
 
-Status: `LOCAL_VALIDATED_PUSH_BLOCKED_BY_GITHUB_CREDENTIAL`
+Status: `LOCAL_VALIDATED_INTERNAL_GOAL_READY_PUSH_BLOCKED_BY_GATE`
 
 Generated: `2026-07-08 04:51 +0700`
-Updated: `2026-07-08 12:08 +0700`
+Updated: `2026-07-08 14:04 +0700`
 
 ## Branch
 
@@ -14,6 +14,13 @@ Updated: `2026-07-08 12:08 +0700`
 - `c75c9ef7` - `feat(public-web): add LINE trust and verification gates`
 - `4103d3ef` - `docs(public-web): add competitor SWOT and AEO backlog`
 - `8b4cea48` - `docs(public-web): record blocked push gate`
+- `27ce23b2` - `docs(public-web): update goal dependency gate evidence`
+- `c77e901b` - `docs(governance): add all-project integration ledger`
+- `1a419ada` - `docs(governance): add all-project spec pack foundation`
+- `f5e5cb68` - `docs(governance): add all-project source discovery`
+- `1030dfd7` - `docs(governance): add all-project execution backlog`
+- `d061e330` - `docs(governance): add all-project spec skeleton matrix`
+- `5761005` - `feat(public-web): add internal goal dependency layout`
 
 ## Scope
 
@@ -39,6 +46,8 @@ Updated: `2026-07-08 12:08 +0700`
 - `/blog/:slug` article pages now switch not-found/share/CTA/sidebar/related/final CTA chrome through `blogPost` translations and switch English/Chinese article body through localized article content overlays.
 - `/home-solution` visible copy, image alt text, metadata, Open Graph text, FAQ JSON-LD content, proof/process sections, final CTA, and stat cards now use the `homeSolution` dictionary.
 - Added local verification scripts for LINE i18n, language-switch coverage, and dependency-layout preflight.
+- Added an internal-only `/goal` readiness surface behind the existing `internalRoutesEnabled` gate for localhost, `dev.sirinx.co`, and LAN hosts.
+- Added a regression test that verifies `/goal` remains static, local, gate-focused, and free of API calls, mutations, beacon calls, or browser storage.
 
 ## Verification
 
@@ -57,6 +66,14 @@ Updated: `2026-07-08 12:08 +0700`
 - `npm run verify:p092-agentloop`: PASS.
 - `npm run verify:public-web-deps`: PASS after dependency/layout repair.
 - `git diff --check`: PASS.
+- `apps/public-web`: `corepack pnpm run test`: PASS, 8 test files / 46 tests after `/goal` readiness guard.
+- `apps/public-web`: `corepack pnpm run check`: PASS after `/goal` route.
+- `apps/public-web`: `corepack pnpm run build`: PASS after `/goal` route; Vite build, static SEO generation, and server bundle passed.
+- `npm run verify:public-web-deps`: PASS after `/goal` route.
+- `npm run verify:public-web-line-i18n`: PASS after `/goal` route.
+- `npm run verify:public-web-language-switch`: PASS after `/goal` route.
+- `npm run check`: PASS after `/goal` route.
+- `git diff --check`: PASS after `/goal` route.
 
 ## Push Gate Status
 
@@ -69,6 +86,7 @@ fatal: could not read Username for 'https://github.com': Device not configured
 ```
 
 - Receipt: `docs/receipts/PUBLIC_WEB_PUSH_GATE_BLOCKED_20260708.md`.
+- Current `/goal` commit was not pushed during this update. Push still needs a working GitHub credential and an exact executable gate for the current branch head.
 
 ## Manual UAT Status
 
@@ -84,6 +102,7 @@ fatal: could not read Username for 'https://github.com': Device not configured
 - `/blog`: static language-switch guard passed for Blog index UI chrome, search/category labels, calculator CTA, newsletter copy, and localized metadata.
 - `/blog/:slug`: static language-switch guard passed for BlogPost UI chrome, localized metadata usage, and English/Chinese article body overlays.
 - `/home-solution`: static language-switch guard passed for visible copy, image alt text, metadata, FAQ JSON-LD content, proof/process sections, stat cards, and final CTA.
+- `/goal`: static route/test/build validation passed; browser UAT was not run in this update. The route is internal-only by host gate.
 - Floating bot: source-level preservation checks passed for LINE/bot i18n path; manual bot behavior still needs real browser confirmation.
 - LINE QR: source-level config guard passed; real-device QR scan still requires human review.
 - Mobile: not rerun in browser during this patch.
@@ -95,6 +114,7 @@ fatal: could not read Username for 'https://github.com': Device not configured
 - External writes: no.
 - Deploy: no.
 - Push: exact approved push command attempted; no remote update occurred because GitHub credential was unavailable.
+- Push in `/goal` update: not attempted.
 - LINE webhook: no.
 - Production analytics activation: no.
 - CRM/customer data storage: no.
@@ -104,11 +124,12 @@ fatal: could not read Username for 'https://github.com': Device not configured
 
 Medium.
 
-Reason: local package-level check/test/build now pass after dependency/layout repair, but remote push is blocked by the host GitHub credential state. `InvestmentTaxHub.tsx`, `Strategy.tsx`, and `/assessment` dynamic warnings still need separate i18n refactors for full language-switch parity. BlogPost keeps Thai article body as canonical Thai fallback while EN/CN content renders from localized overlays. Manual browser UAT, real-device QR scan, and existing bot behavior confirmation remain human-review gates.
+Reason: local package-level check/test/build now pass after dependency/layout repair and the internal `/goal` route, but remote push is still blocked by credential/gate state. `InvestmentTaxHub.tsx`, `Strategy.tsx`, and `/assessment` dynamic warnings still need separate i18n refactors for full language-switch parity. BlogPost keeps Thai article body as canonical Thai fallback while EN/CN content renders from localized overlays. Manual browser UAT, real-device QR scan, `/goal` browser smoke, and existing bot behavior confirmation remain human-review gates.
 
 ## Rollback
 
-- Revert local commits `8b4cea48`, `4103d3ef`, and `c75c9ef7` if this packet must be rolled back before push.
+- Revert local commit `5761005` to remove the internal `/goal` readiness surface.
+- Revert local commits `8b4cea48`, `4103d3ef`, and `c75c9ef7` if the LINE/i18n packet must be rolled back before push.
 - Remove the newly added public-web i18n verifier scripts if they are not desired.
 - Restore affected public page/components to their previous hardcoded-copy implementation.
 - Remove the `/partner` and `/assessment` additions from `verify-public-web-language-switch.mjs`.
@@ -120,13 +141,14 @@ Reason: local package-level check/test/build now pass after dependency/layout re
 - LINE webhook approval still required.
 - Production analytics approval still required.
 - CRM/customer data storage approval still required.
-- Package install/dependency-layout repair approval still required before package-level build/check/test can be rerun.
+- Package install/dependency-layout repair is not part of this update; no package install was performed.
 
 ## Next Safe Actions
 
-1. Repair local GitHub credentials or provide a new exact remote/auth gate, then rerun `git push origin feat/sirinx-web-line-trust-v1`.
-2. Browser UAT TH/EN/CN language switching across homepage, `/blog`, `/home-solution`, `/about`, legal pages, `/partner`, and `/assessment`.
-3. Human real-device scan of LINE QR.
-4. Manual confirmation that the existing website bot still opens and behaves correctly.
-5. Convert `/assessment` dynamic warnings/recommendations to localized codes in a separate safe refactor.
-6. Provide a real deploy command and target only after push/review evidence is settled.
+1. Run local browser smoke for `/goal` on localhost to confirm the internal-only readiness page renders correctly.
+2. Repair local GitHub credentials or provide a new exact remote/auth gate, then rerun `git push origin feat/sirinx-web-line-trust-v1`.
+3. Browser UAT TH/EN/CN language switching across homepage, `/blog`, `/home-solution`, `/about`, legal pages, `/partner`, and `/assessment`.
+4. Human real-device scan of LINE QR.
+5. Manual confirmation that the existing website bot still opens and behaves correctly.
+6. Convert `/assessment` dynamic warnings/recommendations to localized codes in a separate safe refactor.
+7. Provide a real deploy command and target only after push/review evidence is settled.

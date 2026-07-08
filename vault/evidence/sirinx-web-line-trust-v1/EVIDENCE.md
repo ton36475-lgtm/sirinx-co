@@ -74,6 +74,8 @@ Updated: `2026-07-08 14:04 +0700`
 - `npm run verify:public-web-language-switch`: PASS after `/goal` route.
 - `npm run check`: PASS after `/goal` route.
 - `git diff --check`: PASS after `/goal` route.
+- `/goal` local HTTP smoke: PASS for `http://127.0.0.1:3107/goal` with HTTP `200`; receipt `docs/receipts/PUBLIC_WEB_GOAL_LOCAL_SMOKE_20260708_1556.md`.
+- `/goal` rendered browser smoke: BLOCKED because local Chrome headless timed out and Playwright was not available without installing packages.
 
 ## Push Gate Status
 
@@ -102,7 +104,7 @@ fatal: could not read Username for 'https://github.com': Device not configured
 - `/blog`: static language-switch guard passed for Blog index UI chrome, search/category labels, calculator CTA, newsletter copy, and localized metadata.
 - `/blog/:slug`: static language-switch guard passed for BlogPost UI chrome, localized metadata usage, and English/Chinese article body overlays.
 - `/home-solution`: static language-switch guard passed for visible copy, image alt text, metadata, FAQ JSON-LD content, proof/process sections, stat cards, and final CTA.
-- `/goal`: static route/test/build validation passed; browser UAT was not run in this update. The route is internal-only by host gate.
+- `/goal`: static route/test/build validation passed and local HTTP smoke returned HTTP `200`. Rendered browser UAT remains blocked by local browser automation tooling. The route is internal-only by host gate.
 - Floating bot: source-level preservation checks passed for LINE/bot i18n path; manual bot behavior still needs real browser confirmation.
 - LINE QR: source-level config guard passed; real-device QR scan still requires human review.
 - Mobile: not rerun in browser during this patch.
@@ -124,7 +126,7 @@ fatal: could not read Username for 'https://github.com': Device not configured
 
 Medium.
 
-Reason: local package-level check/test/build now pass after dependency/layout repair and the internal `/goal` route, but remote push is still blocked by credential/gate state. `InvestmentTaxHub.tsx`, `Strategy.tsx`, and `/assessment` dynamic warnings still need separate i18n refactors for full language-switch parity. BlogPost keeps Thai article body as canonical Thai fallback while EN/CN content renders from localized overlays. Manual browser UAT, real-device QR scan, `/goal` browser smoke, and existing bot behavior confirmation remain human-review gates.
+Reason: local package-level check/test/build and `/goal` HTTP smoke now pass after dependency/layout repair and the internal `/goal` route, but remote push is still blocked by credential/gate state. `InvestmentTaxHub.tsx`, `Strategy.tsx`, and `/assessment` dynamic warnings still need separate i18n refactors for full language-switch parity. BlogPost keeps Thai article body as canonical Thai fallback while EN/CN content renders from localized overlays. Manual browser UAT, real-device QR scan, rendered `/goal` browser smoke, and existing bot behavior confirmation remain human-review gates.
 
 ## Rollback
 

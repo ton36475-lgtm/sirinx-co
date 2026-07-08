@@ -165,6 +165,9 @@ Reason: local package-level check/test/build and `/goal` HTTP smoke passed after
 - Exact preview deploy command was attempted after approval; local build passed
   but deploy did not run because `wrangler` is not installed on `PATH`; see
   `docs/receipts/PUBLIC_WEB_PREVIEW_DEPLOY_ATTEMPT_BLOCKED_WRANGLER_20260708_1706.md`.
+- Follow-up Wrangler availability check found no local Wrangler binary or
+  dependency; see
+  `docs/receipts/PUBLIC_WEB_WRANGLER_AVAILABILITY_CHECK_20260708_1708.md`.
 - PR/merge approval still required.
 - Any next push after new local commits requires a new exact push gate.
 - LINE webhook approval still required.

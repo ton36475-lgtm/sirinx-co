@@ -38,6 +38,7 @@ const AdminContactSubmissions = lazy(
 );
 const AdminAnalytics = lazy(() => import("./pages/admin/Analytics"));
 const AdminAgentMonitor = lazy(() => import("./pages/admin/AgentMonitor"));
+const GoalDependencyLayout = lazy(() => import("./pages/GoalDependencyLayout"));
 const FloatingChatWidget = lazy(
   () => import("./components/FloatingChatWidget")
 );
@@ -215,6 +216,9 @@ function Router() {
       ) : null}
       {internalRoutesEnabled ? (
         <Route path="/admin" component={AdminRouter} />
+      ) : null}
+      {internalRoutesEnabled ? (
+        <Route path="/goal" component={GoalDependencyLayout} />
       ) : null}
       {!internalRoutesEnabled ? (
         <Route path="/admin/:rest*" component={NotFound} />

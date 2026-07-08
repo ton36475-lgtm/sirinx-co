@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-08T12:32:00+07:00",
+  "mode": "LOCAL_ONLY_BACKLOG",
+  "sourceOfTruth": [
+    "docs/roadmaps/ALL_PROJECT_AGENT_NATIVE_INTEGRATION_LEDGER_20260708.json",
+    "docs/specs/all-projects/PROJECT_CONTEXT_PACKS_20260708.md",
+    "docs/roadmaps/ALL_PROJECT_SOURCE_DISCOVERY_20260708.json"
+  ],
+  "projects": [
+    {
+      "id": "SIRINX_SOLAR",
+      "tasks": [
+        { "id": "source_confirmation", "status": "pending_human_confirmation", "allowedMode": "local_only", "blockedUntil": "human_confirms_authoritative_source", "evidenceRequired": "record authoritative source path and owner confirmation" },
+        { "id": "brd", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "BRD document with business goals and approval gates" },
+        { "id": "frd", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "FRD document with feature requirements and non-goals" },
+        { "id": "data_contract", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "crm_customer_data_storage_approval_for_live_storage", "evidenceRequired": "data contract that keeps live customer storage blocked" },
+        { "id": "ui_flow", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "UI flow for quote, ROI, LINE, and contact paths" },
+        { "id": "test_cases", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "local test cases and UAT checklist" },
+        { "id": "rollback_plan", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "rollback plan for website changes and gates" },
+        { "id": "local_verification", "status": "ready_for_local_run", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "root and public-web verification command output" },
+        { "id": "evidence_packet", "status": "ready_for_local_update", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "evidence packet updated with current state" },
+        { "id": "exact_gate_review", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "github_credential_or_exact_remote_auth_gate", "evidenceRequired": "exact push/deploy/webhook/analytics/CRM approvals when requested" }
+      ]
+    },
+    {
+      "id": "POCKET_HATCHERY",
+      "tasks": [
+        { "id": "source_confirmation", "status": "pending_human_confirmation", "allowedMode": "local_only", "blockedUntil": "human_confirms_authoritative_source", "evidenceRequired": "record authoritative source path and owner confirmation" },
+        { "id": "brd", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "BRD document with product goals and release boundaries" },
+        { "id": "frd", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "FRD document with wallet, viewer, contract, and schema requirements" },
+        { "id": "data_contract", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "data contract for creature/catalog/state without live customer storage" },
+        { "id": "ui_flow", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "wallet and viewer UI flow" },
+        { "id": "test_cases", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "local tests and release gate checklist" },
+        { "id": "rollback_plan", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "rollback and chain/customer-data safety plan" },
+        { "id": "local_verification", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "local verification commands for confirmed source" },
+        { "id": "evidence_packet", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "project evidence packet path" },
+        { "id": "exact_gate_review", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "exact_push_deploy_or_customer_data_gate", "evidenceRequired": "exact gate text if any remote/customer action is requested" }
+      ]
+    },
+    {
+      "id": "AGM_CREATIVE",
+      "tasks": [
+        { "id": "source_confirmation", "status": "pending_human_confirmation", "allowedMode": "local_only", "blockedUntil": "human_confirms_authoritative_source", "evidenceRequired": "record authoritative source path and owner confirmation" },
+        { "id": "brd", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "BRD for creative site/dashboard and brand operations" },
+        { "id": "frd", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "FRD for content workflow and dashboard actions" },
+        { "id": "data_contract", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "data contract with social/live-send blocked" },
+        { "id": "ui_flow", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "site/dashboard UI flow" },
+        { "id": "test_cases", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "local check/build/smoke test cases" },
+        { "id": "rollback_plan", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "rollback plan for creative surfaces" },
+        { "id": "local_verification", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "local verification commands for confirmed source" },
+        { "id": "evidence_packet", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "project evidence packet path" },
+        { "id": "exact_gate_review", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "exact_push_deploy_or_social_gate", "evidenceRequired": "exact gate text before push/deploy/social automation" }
+      ]
+    },
+    {
+      "id": "ADS_ANDROMEDA",
+      "tasks": [
+        { "id": "source_confirmation", "status": "pending_human_confirmation", "allowedMode": "local_only", "blockedUntil": "human_confirms_authoritative_source", "evidenceRequired": "record authoritative source path and owner confirmation" },
+        { "id": "brd", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "BRD for ad strategy and campaign governance" },
+        { "id": "frd", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "FRD for prompt, asset, and campaign workflows" },
+        { "id": "data_contract", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "data contract with paid provider and analytics gates blocked" },
+        { "id": "ui_flow", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "offline campaign review UI/process flow" },
+        { "id": "test_cases", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "local validation for prompt and asset registry artifacts" },
+        { "id": "rollback_plan", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "rollback plan for campaign assets and prompt packs" },
+        { "id": "local_verification", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "local verification commands for confirmed source" },
+        { "id": "evidence_packet", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "project evidence packet path" },
+        { "id": "exact_gate_review", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "exact_paid_provider_or_publish_gate", "evidenceRequired": "exact gate text before provider, push, deploy, analytics, or social action" }
+      ]
+    },
+    {
+      "id": "PHITSANULOK_NEWS",
+      "tasks": [
+        { "id": "source_confirmation", "status": "pending_human_confirmation", "allowedMode": "local_only", "blockedUntil": "human_confirms_authoritative_source", "evidenceRequired": "record authoritative source path and owner confirmation" },
+        { "id": "brd", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "BRD for editorial, SEO, and publishing governance" },
+        { "id": "frd", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "FRD for news app and content workflows" },
+        { "id": "data_contract", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "data contract for editorial content with publish gate blocked" },
+        { "id": "ui_flow", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "editorial review and publishing UI/process flow" },
+        { "id": "test_cases", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "local build/check and editorial QA cases" },
+        { "id": "rollback_plan", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "rollback/correction plan for published content" },
+        { "id": "local_verification", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "local verification commands for confirmed source" },
+        { "id": "evidence_packet", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "source_confirmation", "evidenceRequired": "project evidence packet path" },
+        { "id": "exact_gate_review", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "exact_publish_or_deploy_gate", "evidenceRequired": "exact gate text before push/deploy/publish/social action" }
+      ]
+    },
+    {
+      "id": "GHOSTCLAW_OS",
+      "tasks": [
+        { "id": "source_confirmation", "status": "pending_human_confirmation", "allowedMode": "local_only", "blockedUntil": "human_confirms_authoritative_source", "evidenceRequired": "record authoritative source path and owner confirmation" },
+        { "id": "brd", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "BRD for control-plane governance and runtime safety" },
+        { "id": "frd", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "FRD for local verifiers, receipts, and dry-run operations" },
+        { "id": "data_contract", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "data contract for receipts and control-plane status without cloud mutation" },
+        { "id": "ui_flow", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "control-plane and operator UI/process flow" },
+        { "id": "test_cases", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "local verifier and dry-run test cases" },
+        { "id": "rollback_plan", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "rollback plan for governance artifacts" },
+        { "id": "local_verification", "status": "ready_for_local_run", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "local check/verifier output for governance artifacts" },
+        { "id": "evidence_packet", "status": "ready_for_local_update", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "local receipt/evidence packet" },
+        { "id": "exact_gate_review", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "exact_runtime_cloud_or_send_gate", "evidenceRequired": "exact gate text before runtime/cloud/telegram/live action" }
+      ]
+    },
+    {
+      "id": "SIRINXDEV_AGENT_NATIVE_MONOREPO",
+      "tasks": [
+        { "id": "source_confirmation", "status": "confirmed_current_workspace", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "current workspace path and branch status" },
+        { "id": "brd", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "BRD for governed monorepo operations" },
+        { "id": "frd", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "FRD for verifiers, ledgers, evidence, and gates" },
+        { "id": "data_contract", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "data contract for governance artifacts" },
+        { "id": "ui_flow", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "operator workflow for local-first gates" },
+        { "id": "test_cases", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "root verifier and artifact coverage cases" },
+        { "id": "rollback_plan", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "rollback plan for governance commits" },
+        { "id": "local_verification", "status": "ready_for_local_run", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "npm run check and focused verifier output" },
+        { "id": "evidence_packet", "status": "ready_for_local_update", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "updated local evidence and Obsidian pulse" },
+        { "id": "exact_gate_review", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "github_credential_or_exact_remote_auth_gate", "evidenceRequired": "exact gate text before push/deploy/provider/cloud action" }
+      ]
+    }
+  ]
+}

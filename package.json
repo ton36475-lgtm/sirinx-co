@@ -4,7 +4,7 @@
   "private": true,
   "description": "Canonical SIRINX OS monorepo governance scaffold with AdaptiveSync, PC node, Telegram dry-run control, and public-web source recovery.",
   "scripts": {
-    "check": "node --check scripts/verify-pr-mono-001.mjs && node --check scripts/adaptive-sync-plan.mjs && node --check scripts/telegram-notify-preview.mjs && node --check scripts/windows-drive-d-handoff.mjs && node --check scripts/verify-next-phase.mjs && node --check scripts/verify-all-project-governance-ledger.mjs && node --check scripts/verify-all-project-spec-packs.mjs && node --check scripts/verify-all-project-source-discovery.mjs && node --check scripts/verify-all-project-execution-backlog.mjs && node --check services/telegram-command-bot/src/index.mjs && node scripts/verify-pr-mono-001.mjs && node scripts/verify-next-phase.mjs && node scripts/verify-all-project-governance-ledger.mjs && node scripts/verify-all-project-spec-packs.mjs && node scripts/verify-all-project-source-discovery.mjs && node scripts/verify-all-project-execution-backlog.mjs",
+    "check": "node --check scripts/verify-pr-mono-001.mjs && node --check scripts/adaptive-sync-plan.mjs && node --check scripts/telegram-notify-preview.mjs && node --check scripts/windows-drive-d-handoff.mjs && node --check scripts/verify-next-phase.mjs && node --check scripts/verify-all-project-governance-ledger.mjs && node --check scripts/verify-all-project-spec-packs.mjs && node --check scripts/verify-all-project-source-discovery.mjs && node --check scripts/verify-all-project-execution-backlog.mjs && node --check scripts/verify-all-project-spec-skeletons.mjs && node --check services/telegram-command-bot/src/index.mjs && node scripts/verify-pr-mono-001.mjs && node scripts/verify-next-phase.mjs && node scripts/verify-all-project-governance-ledger.mjs && node scripts/verify-all-project-spec-packs.mjs && node scripts/verify-all-project-source-discovery.mjs && node scripts/verify-all-project-execution-backlog.mjs && node scripts/verify-all-project-spec-skeletons.mjs",
     "verify:mono-001": "node scripts/verify-pr-mono-001.mjs",
     "verify:next-phase": "node scripts/verify-next-phase.mjs",
     "pipeline:audit": "node scripts/pipeline-audit.mjs",
@@ -22,6 +22,7 @@
     "verify:all-project-specs": "node scripts/verify-all-project-spec-packs.mjs",
     "verify:all-project-source-discovery": "node scripts/verify-all-project-source-discovery.mjs",
     "verify:all-project-backlog": "node scripts/verify-all-project-execution-backlog.mjs",
+    "verify:all-project-spec-skeletons": "node scripts/verify-all-project-spec-skeletons.mjs",
     "web:check": "pnpm --config.verify-deps-before-run=false --dir apps/public-web check",
     "web:test": "pnpm --config.verify-deps-before-run=false --dir apps/public-web test",
     "web:build": "pnpm --config.verify-deps-before-run=false --dir apps/public-web build"

@@ -1,0 +1,274 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-08T12:12:00+07:00",
+  "mode": "LOCAL_ONLY",
+  "authority": "SIRINXDev Agent-Native Governed Monorepo",
+  "globalBlockedActions": [
+    "push_without_exact_gate",
+    "deploy_without_exact_command",
+    "line_webhook_activation_without_approval",
+    "production_analytics_mutation_without_approval",
+    "crm_customer_data_storage_without_approval",
+    "secret_read_or_print",
+    "paid_provider_call_without_approval",
+    "customer_or_social_live_send_without_approval"
+  ],
+  "projects": [
+    {
+      "id": "SIRINX_SOLAR",
+      "displayName": "SIRINX Solar / sirinx.co",
+      "laneOwner": "Codex Builder local worker",
+      "surface": "apps/public-web",
+      "currentState": "local_validated_push_blocked_by_github_credential",
+      "evidence": [
+        "vault/evidence/sirinx-web-line-trust-v1/EVIDENCE.md",
+        "docs/receipts/PUBLIC_WEB_PUSH_GATE_BLOCKED_20260708.md",
+        "docs/roadmaps/PUBLIC_WEB_GOAL_DEPENDENCY_LAYOUT_NEXT_GATE_20260708.md"
+      ],
+      "nextSafeGate": {
+        "gate": "repair_github_credential_or_new_exact_remote_auth_gate",
+        "allowedLocalActions": [
+          "review_committed_diff",
+          "rerun_local_verification",
+          "browser_uat_local_preview"
+        ],
+        "requiresApprovalBefore": [
+          "push_retry",
+          "deploy",
+          "line_webhook_activation",
+          "production_analytics",
+          "crm_customer_data_storage"
+        ]
+      },
+      "blockedActions": [
+        "deploy",
+        "line_webhook_activation",
+        "production_analytics_mutation",
+        "crm_customer_data_storage",
+        "customer_live_send",
+        "paid_provider_call",
+        "secret_read_or_print"
+      ]
+    },
+    {
+      "id": "POCKET_HATCHERY",
+      "displayName": "Pocket Hatchery",
+      "laneOwner": "Hermes Commander routes, Codex writes after spec gate",
+      "surface": "project context pending",
+      "currentState": "context_spec_pack_required_before_implementation",
+      "evidence": [
+        "docs/roadmaps/PUBLIC_WEB_GOAL_DEPENDENCY_LAYOUT_NEXT_GATE_20260708.md",
+        "docs/NEXT_PHASE_EXECUTION_PLAN.md"
+      ],
+      "nextSafeGate": {
+        "gate": "create_project_context_pack_after_source_confirmation",
+        "allowedLocalActions": [
+          "repo_inventory",
+          "context_pack_draft",
+          "spec_pack_draft"
+        ],
+        "requiresApprovalBefore": [
+          "push_retry",
+          "deploy",
+          "production_analytics",
+          "crm_customer_data_storage",
+          "customer_or_social_live_send"
+        ]
+      },
+      "blockedActions": [
+        "push",
+        "deploy",
+        "production_analytics_mutation",
+        "crm_customer_data_storage",
+        "customer_live_send",
+        "paid_provider_call",
+        "secret_read_or_print"
+      ]
+    },
+    {
+      "id": "AGM_CREATIVE",
+      "displayName": "AGM Creative",
+      "laneOwner": "Hermes Commander routes, Codex writes after spec gate",
+      "surface": "project context pending",
+      "currentState": "context_spec_pack_required_before_implementation",
+      "evidence": [
+        "docs/roadmaps/PUBLIC_WEB_GOAL_DEPENDENCY_LAYOUT_NEXT_GATE_20260708.md",
+        "docs/NEXT_PHASE_EXECUTION_PLAN.md"
+      ],
+      "nextSafeGate": {
+        "gate": "create_brand_content_context_pack_without_social_automation",
+        "allowedLocalActions": [
+          "repo_inventory",
+          "brand_context_draft",
+          "content_workflow_spec_draft"
+        ],
+        "requiresApprovalBefore": [
+          "push_retry",
+          "deploy",
+          "production_analytics",
+          "crm_customer_data_storage",
+          "customer_or_social_live_send"
+        ]
+      },
+      "blockedActions": [
+        "push",
+        "deploy",
+        "production_analytics_mutation",
+        "crm_customer_data_storage",
+        "customer_live_send",
+        "social_live_send",
+        "paid_provider_call",
+        "secret_read_or_print"
+      ]
+    },
+    {
+      "id": "ADS_ANDROMEDA",
+      "displayName": "Ads Andromeda",
+      "laneOwner": "Hermes Commander routes, Codex writes after spec gate",
+      "surface": "project context pending",
+      "currentState": "paid_provider_gate_required_before_execution",
+      "evidence": [
+        "docs/roadmaps/PUBLIC_WEB_GOAL_DEPENDENCY_LAYOUT_NEXT_GATE_20260708.md",
+        "docs/NEXT_PHASE_EXECUTION_PLAN.md"
+      ],
+      "nextSafeGate": {
+        "gate": "create_ads_governance_spec_without_paid_provider_calls",
+        "allowedLocalActions": [
+          "repo_inventory",
+          "campaign_guardrail_spec_draft",
+          "offline_copy_matrix_draft"
+        ],
+        "requiresApprovalBefore": [
+          "push_retry",
+          "deploy",
+          "production_analytics",
+          "crm_customer_data_storage",
+          "paid_provider_call",
+          "customer_or_social_live_send"
+        ]
+      },
+      "blockedActions": [
+        "push",
+        "deploy",
+        "production_analytics_mutation",
+        "crm_customer_data_storage",
+        "customer_live_send",
+        "social_live_send",
+        "paid_provider_call",
+        "secret_read_or_print"
+      ]
+    },
+    {
+      "id": "PHITSANULOK_NEWS",
+      "displayName": "Phitsanulok News",
+      "laneOwner": "Hermes Commander routes, Codex writes after spec gate",
+      "surface": "project context pending",
+      "currentState": "editorial_governance_spec_required_before_publish",
+      "evidence": [
+        "docs/roadmaps/PUBLIC_WEB_GOAL_DEPENDENCY_LAYOUT_NEXT_GATE_20260708.md",
+        "docs/NEXT_PHASE_EXECUTION_PLAN.md"
+      ],
+      "nextSafeGate": {
+        "gate": "create_editorial_seo_governance_pack_without_publish",
+        "allowedLocalActions": [
+          "repo_inventory",
+          "editorial_policy_draft",
+          "local_seo_schema_review"
+        ],
+        "requiresApprovalBefore": [
+          "push_retry",
+          "deploy",
+          "publish",
+          "production_analytics",
+          "customer_or_social_live_send"
+        ]
+      },
+      "blockedActions": [
+        "push",
+        "deploy",
+        "publish",
+        "production_analytics_mutation",
+        "crm_customer_data_storage",
+        "customer_live_send",
+        "social_live_send",
+        "paid_provider_call",
+        "secret_read_or_print"
+      ]
+    },
+    {
+      "id": "GHOSTCLAW_OS",
+      "displayName": "GhostClaw OS",
+      "laneOwner": "Hermes Commander controls, Codex local worker verifies",
+      "surface": "governance and runtime docs",
+      "currentState": "local_governance_docs_and_verifiers_only",
+      "evidence": [
+        "docs/NEXT_PHASE_EXECUTION_PLAN.md",
+        "docs/PIPELINE_AUDIT_RUNBOOK.md",
+        "docs/TELEGRAM_CONTROL_PLANE.md"
+      ],
+      "nextSafeGate": {
+        "gate": "continue_local_verifier_and_agent_governance_without_runtime_mutation",
+        "allowedLocalActions": [
+          "local_verifier_patch",
+          "dry_run_receipt",
+          "governance_doc_update"
+        ],
+        "requiresApprovalBefore": [
+          "push_retry",
+          "deploy",
+          "telegram_live_send",
+          "cloud_or_runtime_mutation",
+          "production_analytics",
+          "secret_read_or_print"
+        ]
+      },
+      "blockedActions": [
+        "push",
+        "deploy",
+        "cloud_or_runtime_mutation",
+        "telegram_live_send",
+        "production_analytics_mutation",
+        "crm_customer_data_storage",
+        "paid_provider_call",
+        "secret_read_or_print"
+      ]
+    },
+    {
+      "id": "SIRINXDEV_AGENT_NATIVE_MONOREPO",
+      "displayName": "SIRINXDev Agent-Native Monorepo",
+      "laneOwner": "Hermes Commander governs, Codex Builder mutates local files",
+      "surface": "root governance scaffold",
+      "currentState": "local_governed_branch_ahead_push_blocked",
+      "evidence": [
+        "docs/NEXT_PHASE_EXECUTION_PLAN.md",
+        "docs/VIBECODING_READY_MONOREPO.md",
+        "docs/receipts/ROOT_VERIFICATION_REPAIR_20260708.md"
+      ],
+      "nextSafeGate": {
+        "gate": "keep_local_receipts_verifiers_and_task_dependency_maps_current",
+        "allowedLocalActions": [
+          "local_doc_update",
+          "local_verifier_update",
+          "local_commit_after_verification"
+        ],
+        "requiresApprovalBefore": [
+          "push_retry",
+          "deploy",
+          "provider_call",
+          "cloud_or_runtime_mutation",
+          "production_analytics",
+          "secret_read_or_print"
+        ]
+      },
+      "blockedActions": [
+        "push",
+        "deploy",
+        "cloud_or_runtime_mutation",
+        "production_analytics_mutation",
+        "crm_customer_data_storage",
+        "paid_provider_call",
+        "secret_read_or_print"
+      ]
+    }
+  ]
+}

@@ -150,6 +150,12 @@ Reason: local package-level check/test/build and `/goal` HTTP smoke passed after
 ## Approval Gate
 
 - Deploy approval still required.
+- Latest preview deploy gate was blocked because `Allowed command` was the
+  placeholder `<exact deploy command>`; see
+  `docs/receipts/PUBLIC_WEB_DEPLOY_GATE_BLOCKED_PLACEHOLDER_20260708_1634.md`.
+- Preview deploy command runbook added at
+  `docs/runbooks/PUBLIC_WEB_PREVIEW_DEPLOY_GATE_RUNBOOK_20260708.md`; it records
+  candidate command shapes only and does not authorize deployment.
 - PR/merge approval still required.
 - Any next push after new local commits requires a new exact push gate.
 - LINE webhook approval still required.

@@ -1,6 +1,6 @@
 # Public Web Goal Dependency Layout - Next Gate
 
-Status: `LOCAL_VALIDATED_PUSH_BLOCKED`
+Status: `REMOTE_PUSHED_DEPLOY_GATE_BLOCKED`
 Date: 2026-07-08
 Owner lane: Codex Builder local worker
 
@@ -17,7 +17,8 @@ configuration, webhook state, analytics, CRM, or customer data storage.
 | `apps/public-web` dependency layout | locally repaired | `docs/receipts/PUBLIC_WEB_DEPENDENCY_LAYOUT_REPAIR_20260708.md` |
 | LINE/i18n/trust bundle | locally committed | `c75c9ef7` |
 | Competitor SWOT/AEO backlog | locally committed | `4103d3ef` |
-| Push gate | blocked by GitHub HTTPS credential | `docs/receipts/PUBLIC_WEB_PUSH_GATE_BLOCKED_20260708.md` |
+| Push gate | completed; local HEAD matches `origin/feat/sirinx-web-line-trust-v1` at `f8ae622f232f51b1e1542599d54cf1e1b8b0b270` | `docs/receipts/PUBLIC_WEB_PUSH_GATE_SUCCEEDED_20260708_1604.md` |
+| Preview deploy gate | blocked; approval text used `<exact deploy command>` placeholder | `docs/receipts/PUBLIC_WEB_DEPLOY_GATE_BLOCKED_PLACEHOLDER_20260708_1634.md` |
 | Evidence packet | updated to current gate | `vault/evidence/sirinx-web-line-trust-v1/EVIDENCE.md` |
 
 ## Dependency Graph
@@ -44,26 +45,19 @@ flowchart TD
 
 ## Required Gate Order
 
-1. Keep the current local branch intact and review the three local commits.
-2. Repair GitHub credentials or provide a new exact remote/auth gate.
-3. Retry only the approved push command:
-
-```bash
-git push origin feat/sirinx-web-line-trust-v1
-```
-
-4. Review GitHub branch/PR evidence after the push.
-5. Approve preview deploy with a real target and exact command.
-6. Run browser UAT and real-device LINE QR scan.
-7. Approve production deploy only after preview evidence.
-8. Keep webhook, analytics, CRM, and customer storage blocked until separate
+1. Keep the current pushed branch intact and review the pushed commits on GitHub.
+2. Review GitHub branch/PR evidence after the push.
+3. Approve preview deploy with a real target and exact command.
+4. Run browser UAT and real-device LINE QR scan.
+5. Approve production deploy only after preview evidence.
+6. Keep webhook, analytics, CRM, and customer storage blocked until separate
    exact gates exist.
 
 ## All-Project Rollout Dependency Layout
 
 | Project | Next Safe Local Work | Blocked Until |
 | --- | --- | --- |
-| SIRINX_SOLAR / sirinx.co | Push blocked local public-web bundle after credential repair; continue browser UAT | GitHub credential and exact push retry |
+| SIRINX_SOLAR / sirinx.co | Review pushed public-web branch; continue browser UAT planning | Preview deploy target and exact deploy command |
 | POCKET_HATCHERY | Create context/spec pack only; no deploy or data mutation | Project owner confirms active repo/source |
 | AGM_CREATIVE | Create context/spec pack only; no social automation | Project owner confirms active repo/source |
 | ADS_ANDROMEDA | Create context/spec pack only; no paid provider calls | Paid ad/provider gate |
@@ -97,6 +91,7 @@ Stop and request a narrower gate if any of these occur:
 
 ## Next Safe Action
 
-Resolve GitHub credential outside the repo or provide an exact remote/auth gate,
-then retry the already-approved push command. Do not deploy until the push and
-review evidence are settled.
+Provide a real preview deploy target and exact deploy command after human/GitHub
+review. The placeholder gate `Allowed command: <exact deploy command>` is not
+executable and does not authorize deploy, merge, webhook activation, production
+analytics, CRM/customer storage, or any production action.

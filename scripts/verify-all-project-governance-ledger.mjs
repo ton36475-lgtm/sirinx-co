@@ -117,14 +117,14 @@ for (const project of ledger.projects) {
 }
 
 const solar = ledger.projects.find((project) => project.id === "SIRINX_SOLAR");
-if (solar.currentState !== "local_validated_push_blocked_by_github_credential") {
-  fail("SIRINX_SOLAR currentState must preserve GitHub credential blocker");
+if (solar.currentState !== "local_validated_remote_branch_pushed_review_pending") {
+  fail("SIRINX_SOLAR currentState must record pushed branch review state");
 }
-if (!solar.nextSafeGate.requiresApprovalBefore.includes("push_retry")) {
-  fail("SIRINX_SOLAR must require approval before push_retry");
+if (!solar.nextSafeGate.requiresApprovalBefore.includes("pr_creation_or_merge")) {
+  fail("SIRINX_SOLAR must require approval before PR creation or merge");
 }
-if (!solar.evidence.includes("docs/receipts/PUBLIC_WEB_PUSH_GATE_BLOCKED_20260708.md")) {
-  fail("SIRINX_SOLAR must reference blocked push receipt");
+if (!solar.evidence.includes("docs/receipts/PUBLIC_WEB_PUSH_GATE_SUCCEEDED_20260708_1604.md")) {
+  fail("SIRINX_SOLAR must reference successful push receipt");
 }
 
 console.log("All-project governance ledger verification passed.");

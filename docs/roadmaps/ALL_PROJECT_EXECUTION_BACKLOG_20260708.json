@@ -20,7 +20,7 @@
         { "id": "rollback_plan", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "rollback plan for website changes and gates" },
         { "id": "local_verification", "status": "ready_for_local_run", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "root and public-web verification command output" },
         { "id": "evidence_packet", "status": "ready_for_local_update", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "evidence packet updated with current state" },
-        { "id": "exact_gate_review", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "github_credential_or_exact_remote_auth_gate", "evidenceRequired": "exact push/deploy/webhook/analytics/CRM approvals when requested" }
+        { "id": "exact_gate_review", "status": "push_gate_completed_deploy_gate_blocked", "allowedMode": "local_only", "blockedUntil": "exact_deploy_webhook_analytics_or_crm_gate", "evidenceRequired": "pushed branch receipt plus exact deploy/webhook/analytics/CRM approvals when requested" }
       ]
     },
     {
@@ -110,7 +110,7 @@
         { "id": "rollback_plan", "status": "ready_for_local_draft", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "rollback plan for governance commits" },
         { "id": "local_verification", "status": "ready_for_local_run", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "npm run check and focused verifier output" },
         { "id": "evidence_packet", "status": "ready_for_local_update", "allowedMode": "local_only", "blockedUntil": "none", "evidenceRequired": "updated local evidence and Obsidian pulse" },
-        { "id": "exact_gate_review", "status": "blocked", "allowedMode": "local_only", "blockedUntil": "github_credential_or_exact_remote_auth_gate", "evidenceRequired": "exact gate text before push/deploy/provider/cloud action" }
+        { "id": "exact_gate_review", "status": "push_gate_completed_next_remote_gate_blocked", "allowedMode": "local_only", "blockedUntil": "exact_next_push_deploy_provider_or_cloud_gate", "evidenceRequired": "pushed branch receipt plus exact gate text before any next push/deploy/provider/cloud action" }
       ]
     }
   ]

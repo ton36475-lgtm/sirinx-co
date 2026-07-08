@@ -22,6 +22,7 @@ Make `sirinx.co` the public trust, SEO/AEO, LINE Official, quote-readiness, and 
 Current evidence:
 - `vault/evidence/sirinx-web-line-trust-v1/EVIDENCE.md`
 - `docs/receipts/PUBLIC_WEB_PUSH_GATE_BLOCKED_20260708.md`
+- `docs/receipts/PUBLIC_WEB_PUSH_GATE_SUCCEEDED_20260708_1604.md`
 - `docs/roadmaps/PUBLIC_WEB_GOAL_DEPENDENCY_LAYOUT_NEXT_GATE_20260708.md`
 
 Allowed local actions:
@@ -38,7 +39,7 @@ Blocked actions:
 - No secret read or secret print.
 
 Next safe gate:
-Repair GitHub credential or approve a new exact remote/auth path, then retry the exact push command for `feat/sirinx-web-line-trust-v1`.
+Human/GitHub review of `origin/feat/sirinx-web-line-trust-v1`, then an exact PR, merge, or deploy gate if the review approves the next remote action.
 
 ## POCKET_HATCHERY
 
@@ -196,7 +197,7 @@ Allowed local actions:
 - Commit local changes after verification.
 
 Blocked actions:
-- No push while GitHub credential is blocked.
+- No next push without an exact push gate.
 - No deploy.
 - No cloud/runtime mutation.
 - No production analytics mutation.
@@ -205,4 +206,4 @@ Blocked actions:
 - No secret read or secret print.
 
 Next safe gate:
-Keep local verification and evidence current; retry push only after GitHub credential repair or a new exact remote/auth gate.
+Keep local verification and evidence current; open only exact next gates for PR, merge, deploy, provider calls, cloud/runtime mutation, production analytics, or secret-handling work.

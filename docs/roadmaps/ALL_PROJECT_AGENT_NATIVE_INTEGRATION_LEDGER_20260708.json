@@ -19,21 +19,23 @@
       "displayName": "SIRINX Solar / sirinx.co",
       "laneOwner": "Codex Builder local worker",
       "surface": "apps/public-web",
-      "currentState": "local_validated_push_blocked_by_github_credential",
+      "currentState": "local_validated_remote_branch_pushed_review_pending",
       "evidence": [
         "vault/evidence/sirinx-web-line-trust-v1/EVIDENCE.md",
         "docs/receipts/PUBLIC_WEB_PUSH_GATE_BLOCKED_20260708.md",
+        "docs/receipts/PUBLIC_WEB_PUSH_GATE_SUCCEEDED_20260708_1604.md",
         "docs/roadmaps/PUBLIC_WEB_GOAL_DEPENDENCY_LAYOUT_NEXT_GATE_20260708.md"
       ],
       "nextSafeGate": {
-        "gate": "repair_github_credential_or_new_exact_remote_auth_gate",
+        "gate": "human_review_or_exact_pr_deploy_gate_after_push",
         "allowedLocalActions": [
           "review_committed_diff",
           "rerun_local_verification",
-          "browser_uat_local_preview"
+          "browser_uat_local_preview",
+          "prepare_review_notes"
         ],
         "requiresApprovalBefore": [
-          "push_retry",
+          "pr_creation_or_merge",
           "deploy",
           "line_webhook_activation",
           "production_analytics",
@@ -238,11 +240,12 @@
       "displayName": "SIRINXDev Agent-Native Monorepo",
       "laneOwner": "Hermes Commander governs, Codex Builder mutates local files",
       "surface": "root governance scaffold",
-      "currentState": "local_governed_branch_ahead_push_blocked",
+      "currentState": "feature_branch_pushed_local_governance_updates_allowed",
       "evidence": [
         "docs/NEXT_PHASE_EXECUTION_PLAN.md",
         "docs/VIBECODING_READY_MONOREPO.md",
-        "docs/receipts/ROOT_VERIFICATION_REPAIR_20260708.md"
+        "docs/receipts/ROOT_VERIFICATION_REPAIR_20260708.md",
+        "docs/receipts/PUBLIC_WEB_PUSH_GATE_SUCCEEDED_20260708_1604.md"
       ],
       "nextSafeGate": {
         "gate": "keep_local_receipts_verifiers_and_task_dependency_maps_current",
@@ -252,7 +255,7 @@
           "local_commit_after_verification"
         ],
         "requiresApprovalBefore": [
-          "push_retry",
+          "next_push",
           "deploy",
           "provider_call",
           "cloud_or_runtime_mutation",

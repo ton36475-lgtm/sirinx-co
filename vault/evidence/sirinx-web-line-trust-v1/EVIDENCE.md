@@ -1,9 +1,9 @@
 # SIRINX Web LINE Trust v1 Evidence
 
-Status: `LOCAL_VALIDATED_INTERNAL_GOAL_READY_PUSH_BLOCKED_BY_GATE`
+Status: `LOCAL_VALIDATED_INTERNAL_GOAL_READY_BRANCH_PUSHED_REVIEW_PENDING`
 
 Generated: `2026-07-08 04:51 +0700`
-Updated: `2026-07-08 14:04 +0700`
+Updated: `2026-07-08 16:04 +0700`
 
 ## Branch
 
@@ -21,6 +21,9 @@ Updated: `2026-07-08 14:04 +0700`
 - `1030dfd7` - `docs(governance): add all-project execution backlog`
 - `d061e330` - `docs(governance): add all-project spec skeleton matrix`
 - `5761005` - `feat(public-web): add internal goal dependency layout`
+- `e4cd7983` - `docs(public-web): update goal readiness evidence`
+- `a08c4cb0` - `docs(public-web): record push retry blocker`
+- `dc5b1e62` - `docs(public-web): record goal local smoke`
 
 ## Scope
 
@@ -80,15 +83,23 @@ Updated: `2026-07-08 14:04 +0700`
 ## Push Gate Status
 
 - Approved command attempted: `git push origin feat/sirinx-web-line-trust-v1`.
-- Result: BLOCKED before remote update by local GitHub HTTPS credential state.
-- Error evidence:
+- Initial result: BLOCKED before remote update by local GitHub HTTPS credential state.
+- Initial error evidence:
 
 ```text
 fatal: could not read Username for 'https://github.com': Device not configured
 ```
 
-- Receipt: `docs/receipts/PUBLIC_WEB_PUSH_GATE_BLOCKED_20260708.md`.
-- Current `/goal` commit was not pushed during this update. Push still needs a working GitHub credential and an exact executable gate for the current branch head.
+- Blocked receipt: `docs/receipts/PUBLIC_WEB_PUSH_GATE_BLOCKED_20260708.md`.
+- Final result after GitHub CLI browser authentication: PASS.
+- Successful push receipt: `docs/receipts/PUBLIC_WEB_PUSH_GATE_SUCCEEDED_20260708_1604.md`.
+- Remote update:
+
+```text
+310134e5..dc5b1e62  feat/sirinx-web-line-trust-v1 -> feat/sirinx-web-line-trust-v1
+```
+
+- Verified state: local `HEAD` and `origin/feat/sirinx-web-line-trust-v1` both pointed at `dc5b1e6276d6c3ccb5402f2f150aa5c8c040d41b`.
 
 ## Manual UAT Status
 
@@ -113,10 +124,10 @@ fatal: could not read Username for 'https://github.com': Device not configured
 
 - Secrets touched: no.
 - Production data touched: no.
-- External writes: no.
+- External writes: GitHub branch push only, using the exact approved command.
 - Deploy: no.
-- Push: exact approved push command attempted; no remote update occurred because GitHub credential was unavailable.
-- Push in `/goal` update: not attempted.
+- Push: exact approved push command succeeded after GitHub CLI browser authentication.
+- PR creation/merge: no.
 - LINE webhook: no.
 - Production analytics activation: no.
 - CRM/customer data storage: no.
@@ -126,7 +137,7 @@ fatal: could not read Username for 'https://github.com': Device not configured
 
 Medium.
 
-Reason: local package-level check/test/build and `/goal` HTTP smoke now pass after dependency/layout repair and the internal `/goal` route, but remote push is still blocked by credential/gate state. `InvestmentTaxHub.tsx`, `Strategy.tsx`, and `/assessment` dynamic warnings still need separate i18n refactors for full language-switch parity. BlogPost keeps Thai article body as canonical Thai fallback while EN/CN content renders from localized overlays. Manual browser UAT, real-device QR scan, rendered `/goal` browser smoke, and existing bot behavior confirmation remain human-review gates.
+Reason: local package-level check/test/build and `/goal` HTTP smoke passed after dependency/layout repair and the internal `/goal` route, and the feature branch was pushed. `InvestmentTaxHub.tsx`, `Strategy.tsx`, and `/assessment` dynamic warnings still need separate i18n refactors for full language-switch parity. BlogPost keeps Thai article body as canonical Thai fallback while EN/CN content renders from localized overlays. Manual browser UAT, real-device QR scan, rendered `/goal` browser smoke, existing bot behavior confirmation, PR/merge, and deploy remain human-review gates.
 
 ## Rollback
 
@@ -139,7 +150,8 @@ Reason: local package-level check/test/build and `/goal` HTTP smoke now pass aft
 ## Approval Gate
 
 - Deploy approval still required.
-- Push/merge approval still requires a working GitHub credential or a new exact remote/auth gate before retry.
+- PR/merge approval still required.
+- Any next push after new local commits requires a new exact push gate.
 - LINE webhook approval still required.
 - Production analytics approval still required.
 - CRM/customer data storage approval still required.
@@ -147,10 +159,10 @@ Reason: local package-level check/test/build and `/goal` HTTP smoke now pass aft
 
 ## Next Safe Actions
 
-1. Run local browser smoke for `/goal` on localhost to confirm the internal-only readiness page renders correctly.
-2. Repair local GitHub credentials or provide a new exact remote/auth gate, then rerun `git push origin feat/sirinx-web-line-trust-v1`.
+1. Human/GitHub review of `origin/feat/sirinx-web-line-trust-v1`.
+2. Run local browser smoke for `/goal` on localhost to confirm the internal-only readiness page renders correctly.
 3. Browser UAT TH/EN/CN language switching across homepage, `/blog`, `/home-solution`, `/about`, legal pages, `/partner`, and `/assessment`.
 4. Human real-device scan of LINE QR.
 5. Manual confirmation that the existing website bot still opens and behaves correctly.
 6. Convert `/assessment` dynamic warnings/recommendations to localized codes in a separate safe refactor.
-7. Provide a real deploy command and target only after push/review evidence is settled.
+7. Provide a real deploy command and target only after review evidence is settled.

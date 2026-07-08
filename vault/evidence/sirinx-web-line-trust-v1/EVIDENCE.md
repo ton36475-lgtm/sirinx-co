@@ -162,6 +162,9 @@ Reason: local package-level check/test/build and `/goal` HTTP smoke passed after
   likely `sirinx-co` Pages target, but deploy is still blocked until Wrangler
   install/auth/project confirmation and an exact executable command; see
   `docs/receipts/PUBLIC_WEB_HOSTING_DISCOVERY_20260708_1703.md`.
+- Exact preview deploy command was attempted after approval; local build passed
+  but deploy did not run because `wrangler` is not installed on `PATH`; see
+  `docs/receipts/PUBLIC_WEB_PREVIEW_DEPLOY_ATTEMPT_BLOCKED_WRANGLER_20260708_1706.md`.
 - PR/merge approval still required.
 - Any next push after new local commits requires a new exact push gate.
 - LINE webhook approval still required.

@@ -49,3 +49,15 @@ See `REPO_AUDIT_AND_MERGE_MAP.md`.
 ## Release Gates
 
 See `RELEASE_GATE.md`.
+
+## SIRINX Obsidian Brain Sync
+
+After meaningful local setup, architecture, runtime, deploy, recovery, or
+automation work, append one concise pulse with
+`scripts/a2a/a2a_obsidian_sync.py`. Run `--check` first when configuration is
+uncertain and use `--dry-run` to preview. KOB may propose pulses but may not
+write them; Codex is the local memory writer after verification.
+
+Never write secrets, `.env` values, private keys, browser cookies, raw tokens,
+or large raw logs to Obsidian. Keep detailed evidence in repo/runtime folders
+and link its path from the digest. Do not rewrite existing notes or frontmatter.

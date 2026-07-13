@@ -1,0 +1,39 @@
+version: ghostclaw-obsidian-brain-sync-v2
+mode:
+  name: local_first_brain_sync
+  enabled: true
+  provider_calls_required: false
+  cloud_sync_required: false
+paths:
+  vault_root: /Users/sirinx/Documents/Obsidian Vault/SIRINX
+  digest_note: /Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md
+  runtime_jsonl: /Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/memory/obsidian_sync.jsonl
+  canonical_script: scripts/a2a/a2a_obsidian_sync.py
+workers:
+  kob:
+    role: planner_router_context_compressor_memory_summarizer
+    config_pointer: /Users/sirinx/.kob-cli/obsidian-brain-sync.json
+    may_write_digest: false
+    may_propose_digest_entry: true
+    may_read_secret_files: false
+  codex:
+    role: local_repo_executor_and_memory_writer
+    config_pointer: /Users/sirinx/.codex/obsidian-brain-sync.json
+    may_write_digest: true
+    may_propose_digest_entry: true
+    may_read_secret_files: false
+write_policy:
+  digest_append: true
+  max_title_chars: 160
+  max_summary_chars: 1200
+  include_source_paths: true
+  include_raw_logs: false
+  include_secrets: false
+  mutate_frontmatter: false
+  rewrite_existing_notes: false
+  concurrent_append_lock: true
+required_fields:
+  - title
+  - summary
+  - source
+  - next_action

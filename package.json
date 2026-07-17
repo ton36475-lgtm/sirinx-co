@@ -16,7 +16,10 @@
     "verify:public-web-import": "node scripts/verify-public-web-import.mjs",
     "web:check": "pnpm --config.verify-deps-before-run=false --dir apps/public-web check",
     "web:test": "pnpm --config.verify-deps-before-run=false --dir apps/public-web test",
-    "web:build": "pnpm --config.verify-deps-before-run=false --dir apps/public-web build"
+    "web:build": "pnpm --config.verify-deps-before-run=false --dir apps/public-web build",
+    "rust:build": "cargo build --workspace",
+    "rust:test": "cargo test --workspace",
+    "rust:serve": "cargo run -p sirinx-web"
   },
   "keywords": [
     "sirinx",

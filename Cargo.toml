@@ -1,0 +1,36 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/sirinx-core",
+    "crates/sirinx-roi",
+    "crates/sirinx-agents",
+    "crates/sirinx-autoloop",
+    "crates/sirinx-web",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "UNLICENSED"
+repository = "https://github.com/ton36475-lgtm/sirinx-co"
+authors = ["SIRINX Engineering"]
+
+[workspace.dependencies]
+sirinx-core = { path = "crates/sirinx-core" }
+sirinx-roi = { path = "crates/sirinx-roi" }
+sirinx-agents = { path = "crates/sirinx-agents" }
+sirinx-autoloop = { path = "crates/sirinx-autoloop" }
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "1"
+uuid = { version = "1", features = ["v4", "serde"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "signal", "time"] }
+axum = "0.7"
+tower = { version = "0.4", features = ["util"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[profile.release]
+lto = "thin"
+strip = true

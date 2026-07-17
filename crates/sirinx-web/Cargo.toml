@@ -1,0 +1,22 @@
+[package]
+name = "sirinx-web"
+description = "www.sirinx.co Rust web service: landing pages, lead intake API, ROI estimator"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+sirinx-core = { workspace = true }
+sirinx-roi = { workspace = true }
+axum = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+uuid = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+[dev-dependencies]
+tower = { workspace = true }

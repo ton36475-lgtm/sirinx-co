@@ -4,10 +4,12 @@ import "./globals.css";
 const title = "GHOSTCLAW · Hermes V3 Command Center";
 const description =
   "A bilingual, read-only owner briefing for the evidence-gated 47 Ronin work lane.";
-// Replaced with the exact owner-only Sites production origin after the first
-// saved deployment reveals it. Keeping this fixed prevents forwarded-header
-// poisoning and malformed-origin render failures.
-const metadataOrigin = new URL("https://ghostclaw-hermes-command-center.invalid");
+// Fixed to the exact owner-only Sites production origin. Keeping this
+// allowlisted prevents forwarded-header poisoning and malformed-origin
+// render failures.
+const metadataOrigin = new URL(
+  "https://ghostclaw-hermes-command-center.e-galli.chatgpt.site",
+);
 
 export function generateMetadata(): Metadata {
   const socialImage = new URL("/og.png", metadataOrigin).toString();

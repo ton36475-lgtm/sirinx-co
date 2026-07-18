@@ -52,7 +52,7 @@ test("server-renders the bilingual read-only command-center briefing", async () 
   assert.match(html, /Human decides last/);
   assert.match(
     html,
-    /property=["']og:image["'][^>]+https:\/\/ghostclaw-hermes-command-center\.invalid\/og\.png/i,
+    /property=["']og:image["'][^>]+https:\/\/ghostclaw-hermes-command-center\.e-galli\.chatgpt\.site\/og\.png/i,
   );
   assert.match(html, /name=["']twitter:card["'][^>]+summary_large_image/i);
 });
@@ -86,7 +86,7 @@ test("rendered HTML exposes no operational, network, or sensitive surface", asyn
   assert.ok(absoluteUrls.length >= 2);
   assert.deepEqual(
     new Set(absoluteUrls),
-    new Set(["https://ghostclaw-hermes-command-center.invalid/og.png"]),
+    new Set(["https://ghostclaw-hermes-command-center.e-galli.chatgpt.site/og.png"]),
   );
 });
 
@@ -118,7 +118,7 @@ test("source stays static, system-font-only, and storage-free", async () => {
   assert.doesNotMatch(page, /\bfetch\s*\(|URLSearchParams|<button\b|<form\b/i);
   assert.doesNotMatch(layout, /next\/font|codex-preview|_sites-preview/i);
   assert.match(layout, /new URL\("\/og\.png", metadataOrigin\)/);
-  assert.match(layout, /ghostclaw-hermes-command-center\.invalid/);
+  assert.match(layout, /ghostclaw-hermes-command-center\.e-galli\.chatgpt\.site/);
   assert.doesNotMatch(layout, /next\/headers|x-forwarded-host|x-forwarded-proto/);
   assert.doesNotMatch(css, /@import\s+url|fonts\.googleapis|font-face/i);
   assert.doesNotMatch(packageText, /react-loading-skeleton|drizzle/i);

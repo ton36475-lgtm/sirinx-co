@@ -26,6 +26,7 @@ with knowledge, work, and routing shared through one backbone.**
 | A12 | PR #6 merged to main | GitHub |
 | A13 | **Durable release gates**: typed core model + `web_control_gates` + Store-backed control hydration/write-through | migration 0003; memory/store/reload tests |
 | A14 | **Self-learning recovery loop**: bounded failure events + deduplicated structured lessons + gate-preserving retries | migration 0004; failure→lesson→guided retry and budget tests |
+| A15 | **GHOSTCLAW · Hermes V3 Command Center**: bilingual, read-only, owner-only Sites briefing deployed | Sites version `appgver_f10b41d7f3cc81918b9f95889a8aa2cd`; PR #8; go-live receipt #7 |
 
 ## B. QUEUED — engineering (in priority order)
 

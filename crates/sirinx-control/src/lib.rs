@@ -371,11 +371,13 @@ async fn health() -> Json<serde_json::Value> {
 async fn metrics(
     State(state): State<ControlState>,
 ) -> Result<([(&'static str, &'static str); 1], String), StatusCode> {
-    let _decision_guard = state.gate_decisions.lock().await;
-    let gates = state.refresh_gate_snapshot().await.map_err(|err| {
-        tracing::error!(error = %err, "gate metrics refresh failed");
-        StatusCode::SERVICE_UNAVAILABLE
-    })?;
+    let gates = {
+        let _decision_guard = state.gate_decisions.lock().await;
+        state.refresh_gate_snapshot().await.map_err(|err| {
+            tracing::error!(error = %err, "gate metrics refresh failed");
+            StatusCode::SERVICE_UNAVAILABLE
+        })?
+    };
     let mut out = String::new();
     let _ = writeln!(
         out,
@@ -660,12 +662,14 @@ async fn a2a_route(
 #[cfg(test)]
 mod tests {
     use std::sync::atomic::{AtomicBool, Ordering};
+    use std::time::Duration;
 
     use super::*;
     use async_trait::async_trait;
     use axum::body::Body;
     use axum::http::{header, Request};
     use sirinx_core::{AnalyticsEvent, Lead, LeadStatus};
+    use tokio::sync::Notify;
     use tower::ServiceExt;
     use uuid::Uuid;
 
@@ -673,6 +677,70 @@ mod tests {
     struct FailingGateStore {
         inner: MemoryStore,
         fail_gate_writes: AtomicBool,
+    }
+
+    #[derive(Default)]
+    struct BlockingPendingCountStore {
+        inner: MemoryStore,
+        count_started: Notify,
+        release_count: Notify,
+    }
+
+    #[async_trait]
+    impl Store for BlockingPendingCountStore {
+        async fn insert_lead(&self, lead: &Lead) -> Result<(), StoreError> {
+            self.inner.insert_lead(lead).await
+        }
+
+        async fn get_lead(&self, id: Uuid) -> Result<Option<Lead>, StoreError> {
+            self.inner.get_lead(id).await
+        }
+
+        async fn update_lead_status(&self, id: Uuid, next: LeadStatus) -> Result<Lead, StoreError> {
+            self.inner.update_lead_status(id, next).await
+        }
+
+        async fn delete_lead(&self, id: Uuid) -> Result<bool, StoreError> {
+            self.inner.delete_lead(id).await
+        }
+
+        async fn count_leads(&self) -> Result<u64, StoreError> {
+            self.inner.count_leads().await
+        }
+
+        async fn insert_event(&self, event: &AnalyticsEvent) -> Result<(), StoreError> {
+            self.inner.insert_event(event).await
+        }
+
+        async fn count_events(&self) -> Result<u64, StoreError> {
+            self.inner.count_events().await
+        }
+
+        async fn insert_pending_work(&self, item: &PendingWork) -> Result<(), StoreError> {
+            self.inner.insert_pending_work(item).await
+        }
+
+        async fn list_pending_work(&self) -> Result<Vec<PendingWork>, StoreError> {
+            self.inner.list_pending_work().await
+        }
+
+        async fn count_pending_work(&self) -> Result<u64, StoreError> {
+            self.count_started.notify_one();
+            self.release_count.notified().await;
+            self.inner.count_pending_work().await
+        }
+
+        async fn upsert_gate(&self, gate: &Gate) -> Result<(), StoreError> {
+            self.inner.upsert_gate(gate).await
+        }
+
+        async fn list_gates(&self) -> Result<Vec<Gate>, StoreError> {
+            self.inner.list_gates().await
+        }
+
+        async fn get_gate(&self, name: &str) -> Result<Option<Gate>, StoreError> {
+            self.inner.get_gate(name).await
+        }
     }
 
     #[async_trait]
@@ -1025,6 +1093,51 @@ mod tests {
         assert!(body_text(metrics_response)
             .await
             .contains("sirinx_control_gate_open{gate=\"deploy\"} 0"));
+    }
+
+    #[tokio::test]
+    async fn slow_metrics_queue_count_does_not_block_emergency_hold() {
+        let store = Arc::new(BlockingPendingCountStore::default());
+        let state = ControlState::load(store.clone(), None, default_self_card())
+            .await
+            .unwrap();
+        let app = router(state);
+
+        let opened = app
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                "/api/gates/deploy/decision",
+                serde_json::json!({ "state": "open", "ticket": "GO-LIVE-METRICS-001" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(opened.status(), StatusCode::OK);
+
+        let metrics_app = app.clone();
+        let metrics_task = tokio::spawn(async move {
+            metrics_app
+                .oneshot(Request::get("/metrics").body(Body::empty()).unwrap())
+                .await
+                .unwrap()
+        });
+        store.count_started.notified().await;
+
+        let held = tokio::time::timeout(
+            Duration::from_secs(1),
+            app.oneshot(json_request(
+                "POST",
+                "/api/gates/deploy/decision",
+                serde_json::json!({ "state": "hold" }),
+            )),
+        )
+        .await
+        .expect("emergency hold must not wait for queue-depth metrics")
+        .unwrap();
+        assert_eq!(held.status(), StatusCode::OK);
+
+        store.release_count.notify_one();
+        assert_eq!(metrics_task.await.unwrap().status(), StatusCode::OK);
     }
 
     #[tokio::test]

@@ -54,6 +54,10 @@ impl AppState {
     pub async fn accepted_event_count(&self) -> u64 {
         self.store.count_events().await.unwrap_or(0)
     }
+
+    pub async fn pending_work_count(&self) -> u64 {
+        self.store.count_pending_work().await.unwrap_or(0)
+    }
 }
 
 #[derive(Debug, Serialize)]
@@ -147,6 +151,21 @@ async fn create_lead(
         .await
         .map_err(store_error_response)?;
     tracing::info!(lead_id = %lead.id, "lead created");
+
+    // 47 Ronin pipeline: L1 intake → L2 ROI scoring → L3 follow-up
+    // decision → L4 work order, auto-enqueued on the shared queue.
+    // Best-effort: a pipeline failure must never lose the lead itself.
+    match sirinx_agents::run_lead_pipeline(&lead) {
+        Ok(work) => {
+            if let Err(err) = state.store.insert_pending_work(&work).await {
+                tracing::error!(lead_id = %lead.id, error = %err, "failed to enqueue follow-up work");
+            } else {
+                tracing::info!(lead_id = %lead.id, work_id = %work.id, "follow-up work enqueued");
+            }
+        }
+        Err(err) => tracing::error!(lead_id = %lead.id, error = %err, "lead pipeline failed"),
+    }
+
     Ok((StatusCode::CREATED, Json(lead)))
 }
 

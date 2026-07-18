@@ -92,6 +92,26 @@ Routing rule: candidate must hold every required capability; ties break
 by fewest surplus capabilities (specialist wins), then priority desc,
 then id asc — fully deterministic.
 
+## 4b. Brain @ Edge (Cloudflare D1 `sirinx-unified-db`, region APAC)
+
+Schema: `infra/cloudflare/brain-sync-worker/schema.sql` (applied live).
+
+- `brain_notes` — id uuid pk · path unique · title · content · tags json ·
+  source (`obsidian`/`hermes`/`agent:*`) · content_hash · updated_at ·
+  deleted tombstone · `meta` json (Hermes brain.mjs extras: summary,
+  headings, links, tasks{open,done,total}, obsidianUrl)
+- `brain_notes_fts` — FTS5 (title, content), maintained on upsert
+- `brain_sync_log` — node_id, pushed, pulled, synced_at
+- `a2a_agent_cards` — edge replica of the OmniRoute card registry
+
+Worker API (`sirinx-brain-sync`, Bearer `BRAIN_SYNC_TOKEN` on `/api/*`):
+`GET /health` · `POST /api/brain/sync` `{node, since, notes[]}` →
+`{node, changed[], peerAgents[], pushed}` (last-write-wins by
+updatedAt) · `GET /api/brain/search?q=` · `GET /api/brain/notes?path=`.
+
+Postman: collection **SIRINX Platform API** (`e6b5fcae-c224-48fb-92e4-ed6e0626076d`)
+covers web + control + a2a + brain surfaces with variables.
+
 ## 5. Environment contract
 
 | Var | Service | Effect |

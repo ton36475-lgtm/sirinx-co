@@ -4,14 +4,14 @@ Built from an L1 Perception scan of actual files on disk/GitHub
 (2026-07-18). Each row is a real system with its verified location and
 its connection point into the mesh.
 
-## Connection backbone (already live)
+## Connection backbone (implemented, partial, and externally unverified)
 
-| Layer | Mechanism |
-| --- | --- |
-| Work queue | Supabase `web_pending_work` + pg_notify → `sirinx-control /api/a2a/sync` |
-| Capability routing | OmniRoute (`/api/a2a/route`) — capabilities auto-loaded from 49 skills |
-| Knowledge | D1 `sirinx-unified-db` (APAC/SIN) → `brain-sync-worker` (`/api/brain/sync|search|notes`) |
-| API contract | Postman collection **"SIRINX Platform API"** (workspace `549f0d6b…`, collection `e6b5fcae…`) |
+| Layer | Mechanism | Evidence status |
+| --- | --- | --- |
+| Work queue | `web_pending_work` + `sirinx-control /api/a2a/sync`; `pg_notify` is emitted by storage migrations | Server-side schema/endpoints implemented; peer polling client and NOTIFY listener remain B5 |
+| Capability routing | OmniRoute (`/api/a2a/route`) — capabilities discovered from 50 skill directories | Implemented and locally tested; cross-node live smoke **UNVERIFIED** |
+| Knowledge | D1 schema + `brain-sync-worker` source (`/api/brain/sync\|search\|notes`) | Source present; current live D1/deployment state **UNVERIFIED** |
+| API contract | Postman collection **"SIRINX Platform API"** (workspace `549f0d6b…`, collection `e6b5fcae…`) | External workspace reference recorded; not re-verified from this repo |
 
 ## System inventory → connection points
 
@@ -52,15 +52,18 @@ bridge = its card registered into OmniRoute via `POST /api/a2a/sync`.
 
 ### 4. Already-connected systems (recap)
 
-Supabase SIRINX (3 web tables, RLS) ↔ sirinx-web/control · Hermes
+Supabase SIRINX schema (3 web tables, RLS) ↔ sirinx-web/control · Hermes
 dashboard 8710 → control API 8711 (Node long-tail + Rust core) ·
-47 Ronin sub-agents (`.claude/agents/`) · 49 skills (`.claude/skills/`)
-→ OmniRoute capabilities · mux launcher (`scripts/agents-mux.sh`).
+47-slot Ronin plan/schema/role roster, currently backed by 6 agent files
+and 4 coded Rust lead agents · 50 skill directories (`.claude/skills/`)
+→ OmniRoute capability discovery · mux launcher (`scripts/agents-mux.sh`).
 
 ## Gaps intentionally left gated
 
-- brain-sync-worker is **written and D1 schema is live**, but
-  `wrangler deploy` waits for the `deploy` gate + `BRAIN_SYNC_TOKEN`.
+- brain-sync-worker and its D1 schema source are **written**; a schema
+  header records an apply date, but current live D1 state is
+  **UNVERIFIED**. `wrangler deploy` waits for the `deploy` gate +
+  `BRAIN_SYNC_TOKEN`.
 - GhostClaw implementation waits for its quarantine review
   (`REPO_AUDIT_AND_MERGE_MAP.md` risk process) + keystore rotation.
 - ChromaDB embeddings stay local-only (no provider calls) per

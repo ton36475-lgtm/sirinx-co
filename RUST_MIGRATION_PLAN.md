@@ -69,12 +69,13 @@ Still open for R2 parity: importing the remaining routes from
   `POST /api/a2a/sync` (peer registers its card, receives missing
   pending-work + all known cards), `POST /api/a2a/route`
   (capability-based routing, e.g. `["skill:sirinx-seo-77-provinces"]`).
-- Node capabilities auto-load from `.claude/skills/` (49 skills), so
+- Node capabilities auto-load from `.claude/skills/` (50 skill directories), so
   routing follows what each node can actually do; identity via
   `A2A_NODE_ID` / `A2A_ENDPOINT` / `A2A_PRIORITY`.
-- Backbone: peers poll `/api/a2a/sync` or react to the Postgres
-  `web_pending_work` NOTIFY channel — eventual consistency across
-  Mac mini, PC node, and cloud workers.
+- Backbone contract: peers can poll `/api/a2a/sync` or react to the
+  Postgres `web_pending_work` NOTIFY channel. The server-side contract
+  exists, but this repo does not yet implement the peer polling client
+  or NOTIFY listener required for cross-node eventual consistency (B5).
 
 ## Phase R4 — Web consolidation
 

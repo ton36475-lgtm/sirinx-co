@@ -17,10 +17,10 @@ with knowledge, work, and routing shared through one backbone.**
 | A3 | Supabase persistence: web_leads / web_analytics_events / web_pending_work (+pg_notify), RLS | migrations 0001-0002, live |
 | A4 | Hermes Command Center imported + 120 Node tests green from root | `apps/dev-dashboard`, `services/dev-control-api` |
 | A5 | Release gates hold-by-default + ticket opening + bearer auth + /metrics | `sirinx-control` |
-| A6 | A2A mesh + OmniRoute, capabilities from 49 skills | `sirinx-a2a`, live smoke |
-| A7 | Brain @ Edge: D1 schema live (APAC) + brain-sync worker written | `infra/cloudflare/brain-sync-worker` |
+| A6 | A2A card/sync contracts + OmniRoute endpoint implemented; capabilities discovered from 50 skill directories. Cross-node client loop and external live smoke remain unverified (B5). | `sirinx-a2a`, `sirinx-control` code + tests; external live smoke **UNVERIFIED** |
+| A7 | Brain @ Edge D1 schema + brain-sync worker source written; the schema header records an apply date, but current live D1/deploy state is not independently evidenced in this repo. | `infra/cloudflare/brain-sync-worker`; live state **UNVERIFIED** |
 | A8 | CI workflow + disposable Postgres migration lane; Docker deploy path (gated) | `.github/workflows/ci.yml`, `Dockerfile` |
-| A9 | 47 Ronin sub-agents + 49 skills consolidated + MIT license | `.claude/`, `LICENSE` |
+| A9 | 47-slot Ronin architecture encoded as plan/schema/role descriptors; current implementation is 6 agent definition files and 4 coded Rust lead agents. 50 skill directories are centralized; directory presence does not imply executable readiness. MIT license included. | `AGENT_TEAM_PLAN.md`, `.claude/agents/`, `.claude/skills/`, `crates/sirinx-agents`, `services/dev-control-api/src/agent-team.mjs`, `LICENSE` |
 | A10 | **Ronin lead pipeline live**: lead POST → L1→L2 ROI scoring→L3 decision→L4 auto-enqueues follow-up work | `sirinx-agents::ronin`, web test |
 | A11 | Postman collection "SIRINX Platform API" (all 4 surfaces) | collection `e6b5fcae…` |
 | A12 | PR #6 merged to main | GitHub |

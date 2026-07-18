@@ -1321,6 +1321,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "sirinx-a2a"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "sirinx-core",
+ "uuid",
+]
+
+[[package]]
 name = "sirinx-agents"
 version = "0.1.0"
 dependencies = [
@@ -1346,6 +1356,7 @@ dependencies = [
  "axum",
  "serde",
  "serde_json",
+ "sirinx-a2a",
  "sirinx-core",
  "sirinx-store",
  "tokio",

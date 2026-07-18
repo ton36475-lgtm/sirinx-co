@@ -59,6 +59,23 @@ Still open for R2 parity: importing the remaining routes from
 | `sirinx-godmode` | orchestration presets | `sirinx-autoloop` planners | open |
 | `ghost-claw-os` | ops agents | `sirinx-autoloop` tools | open |
 
+## Phase R3.5 — A2A mesh + OmniRoute (landed)
+
+- `sirinx-a2a` crate: A2A agent cards, delta-sync protocol, and the
+  OmniRoute capability router (Rust successor to the Node
+  `openrouter-fusion-router` hybrid routing and the hermes-os A2A
+  coordinator on :9000).
+- `sirinx-control` endpoints: `GET /api/a2a/card`,
+  `POST /api/a2a/sync` (peer registers its card, receives missing
+  pending-work + all known cards), `POST /api/a2a/route`
+  (capability-based routing, e.g. `["skill:sirinx-seo-77-provinces"]`).
+- Node capabilities auto-load from `.claude/skills/` (49 skills), so
+  routing follows what each node can actually do; identity via
+  `A2A_NODE_ID` / `A2A_ENDPOINT` / `A2A_PRIORITY`.
+- Backbone: peers poll `/api/a2a/sync` or react to the Postgres
+  `web_pending_work` NOTIFY channel — eventual consistency across
+  Mac mini, PC node, and cloud workers.
+
 ## Phase R4 — Web consolidation
 
 | Source repo | What moves | Rust target |

@@ -10,6 +10,7 @@ authors.workspace = true
 [dependencies]
 sirinx-core = { workspace = true }
 sirinx-store = { workspace = true }
+sirinx-a2a = { workspace = true }
 axum = { workspace = true }
 tokio = { workspace = true }
 serde = { workspace = true }

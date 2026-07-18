@@ -1,0 +1,14 @@
+[package]
+name = "sirinx-a2a"
+description = "Agent-to-agent sync protocol and OmniRoute capability router for cross-node coordination"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+sirinx-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+uuid = { workspace = true }

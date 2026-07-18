@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use sirinx_control::{router, ControlState};
+use sirinx_control::{router, self_card_from_env, ControlState};
 use sirinx_store::{MemoryStore, PostgresStore, Store};
 
 #[tokio::main]
@@ -43,7 +43,17 @@ async fn main() {
         .unwrap_or(8711);
     let addr = std::net::SocketAddr::from(([127, 0, 0, 1], port));
 
-    let app = router(ControlState::new(store, token));
+    // A2A identity: node id/endpoint from env, capabilities from the
+    // installed skill set (SKILLS_DIR, default .claude/skills).
+    let skills_dir = std::env::var("SKILLS_DIR").unwrap_or_else(|_| ".claude/skills".into());
+    let card = self_card_from_env(std::path::Path::new(&skills_dir));
+    tracing::info!(
+        node = %card.id,
+        capabilities = card.capabilities.len(),
+        "a2a card ready"
+    );
+
+    let app = router(ControlState::new(store, token, card));
     let listener = tokio::net::TcpListener::bind(addr)
         .await
         .expect("failed to bind control port");

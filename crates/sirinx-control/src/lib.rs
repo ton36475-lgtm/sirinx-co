@@ -32,6 +32,7 @@ use axum::routing::{get, post};
 use axum::{Json, Router};
 use serde::{Deserialize, Serialize};
 
+use sirinx_a2a::{diff_work, AgentCard, OmniRoute, SyncRequest, SyncResponse};
 use sirinx_core::PendingWork;
 use sirinx_store::{MemoryStore, Store};
 
@@ -66,14 +67,18 @@ pub struct ControlState {
     store: Arc<dyn Store>,
     /// Bearer token required on /api/* when set.
     api_token: Option<Arc<str>>,
+    /// This node's A2A card; capabilities come from installed skills.
+    self_card: AgentCard,
+    /// Every agent card this node knows (peers register via /api/a2a/sync).
+    omniroute: Arc<RwLock<OmniRoute>>,
 }
 
 impl ControlState {
     pub fn with_default_gates() -> Self {
-        Self::new(Arc::new(MemoryStore::default()), None)
+        Self::new(Arc::new(MemoryStore::default()), None, default_self_card())
     }
 
-    pub fn new(store: Arc<dyn Store>, api_token: Option<String>) -> Self {
+    pub fn new(store: Arc<dyn Store>, api_token: Option<String>, self_card: AgentCard) -> Self {
         let gates = DEFAULT_GATES
             .iter()
             .map(|name| {
@@ -87,10 +92,14 @@ impl ControlState {
                 )
             })
             .collect();
+        let mut omniroute = OmniRoute::new();
+        omniroute.register(self_card.clone());
         Self {
             gates: Arc::new(RwLock::new(gates)),
             store,
             api_token: api_token.map(Into::into),
+            self_card,
+            omniroute: Arc::new(RwLock::new(omniroute)),
         }
     }
 
@@ -100,6 +109,46 @@ impl ControlState {
             .expect("gate lock poisoned")
             .get(name)
             .map(|g| g.state)
+    }
+}
+
+/// Fallback card for local dev/tests.
+pub fn default_self_card() -> AgentCard {
+    AgentCard {
+        id: "sirinx-control-local".into(),
+        name: "SIRINX Control (local)".into(),
+        capabilities: vec!["gates".into(), "pending-work".into()],
+        endpoint: "http://127.0.0.1:8711".into(),
+        priority: 0,
+    }
+}
+
+/// Build this node's card from env + the installed skill set: every
+/// directory in `skills_dir` becomes a routable capability, so OmniRoute
+/// can send work to the node that actually has the skill.
+pub fn self_card_from_env(skills_dir: &std::path::Path) -> AgentCard {
+    let mut capabilities = vec!["gates".into(), "pending-work".into()];
+    if let Ok(entries) = std::fs::read_dir(skills_dir) {
+        let mut skills: Vec<String> = entries
+            .filter_map(|e| e.ok())
+            .filter(|e| e.path().is_dir())
+            .filter_map(|e| e.file_name().into_string().ok())
+            .map(|name| format!("skill:{name}"))
+            .collect();
+        skills.sort();
+        capabilities.extend(skills);
+    }
+    let id = std::env::var("A2A_NODE_ID").unwrap_or_else(|_| "sirinx-control-local".into());
+    let endpoint = std::env::var("A2A_ENDPOINT").unwrap_or_else(|_| "http://127.0.0.1:8711".into());
+    AgentCard {
+        name: format!("SIRINX Control ({id})"),
+        id,
+        capabilities,
+        endpoint,
+        priority: std::env::var("A2A_PRIORITY")
+            .ok()
+            .and_then(|p| p.parse().ok())
+            .unwrap_or(0),
     }
 }
 
@@ -130,6 +179,9 @@ pub fn router(state: ControlState) -> Router {
         .route("/api/gates/:name/decision", post(decide_gate))
         .route("/api/pending-work", get(list_pending).post(add_pending))
         .route("/api/actions", post(run_action))
+        .route("/api/a2a/card", get(a2a_card))
+        .route("/api/a2a/sync", post(a2a_sync))
+        .route("/api/a2a/route", post(a2a_route))
         .layer(middleware::from_fn_with_state(
             state.clone(),
             require_bearer,
@@ -285,6 +337,70 @@ async fn run_action(
     }
 }
 
+async fn a2a_card(State(state): State<ControlState>) -> Json<AgentCard> {
+    Json(state.self_card.clone())
+}
+
+/// Delta sync: register the peer's card, return the pending work the
+/// peer is missing plus every card this node knows.
+async fn a2a_sync(
+    State(state): State<ControlState>,
+    Json(req): Json<SyncRequest>,
+) -> Result<Json<SyncResponse>, (StatusCode, Json<serde_json::Value>)> {
+    state
+        .omniroute
+        .write()
+        .expect("omniroute lock poisoned")
+        .register(req.node.clone());
+    tracing::info!(peer = %req.node.id, "a2a peer registered/refreshed");
+
+    let local = state.store.list_pending_work().await.map_err(|err| {
+        tracing::error!(error = %err, "a2a sync backend failure");
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(serde_json::json!({ "error": "storage backend failure" })),
+        )
+    })?;
+    let missing_work = diff_work(&req.known_work_ids, &local);
+    let peer_agents = state
+        .omniroute
+        .read()
+        .expect("omniroute lock poisoned")
+        .cards();
+
+    Ok(Json(SyncResponse {
+        node: state.self_card.clone(),
+        missing_work,
+        peer_agents,
+    }))
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct RouteRequest {
+    capabilities: Vec<String>,
+}
+
+/// OmniRoute: pick the best known agent card for the required
+/// capabilities (e.g. `["skill:sirinx-seo-77-provinces"]`).
+async fn a2a_route(
+    State(state): State<ControlState>,
+    Json(req): Json<RouteRequest>,
+) -> Result<Json<AgentCard>, (StatusCode, Json<serde_json::Value>)> {
+    let omniroute = state.omniroute.read().expect("omniroute lock poisoned");
+    omniroute
+        .route(&req.capabilities)
+        .cloned()
+        .map(Json)
+        .ok_or((
+            StatusCode::NOT_FOUND,
+            Json(serde_json::json!({
+                "error": "no agent offers the required capabilities",
+                "required": req.capabilities,
+            })),
+        ))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -430,6 +546,7 @@ mod tests {
         let state = ControlState::new(
             Arc::new(MemoryStore::default()),
             Some("secret-token".into()),
+            default_self_card(),
         );
         let app = router(state);
 
@@ -475,6 +592,87 @@ mod tests {
             .await
             .unwrap();
         assert_eq!(ok.status(), StatusCode::OK);
+    }
+
+    #[tokio::test]
+    async fn a2a_card_endpoint_serves_self_identity() {
+        let app = router(ControlState::with_default_gates());
+        let res = app
+            .oneshot(Request::get("/api/a2a/card").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(res.status(), StatusCode::OK);
+        let card = body_json(res).await;
+        assert_eq!(card["id"], "sirinx-control-local");
+        assert!(card["capabilities"].as_array().unwrap().len() >= 2);
+    }
+
+    #[tokio::test]
+    async fn a2a_sync_registers_peer_and_returns_missing_work() {
+        let app = router(ControlState::with_default_gates());
+
+        // Local node has one work item the peer doesn't know about.
+        let created = app
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                "/api/pending-work",
+                serde_json::json!({ "source": "local", "title": "port sirinx-godmode presets" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(created.status(), StatusCode::CREATED);
+
+        // Peer (mac-mini-m2) syncs with an empty known set.
+        let res = app
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                "/api/a2a/sync",
+                serde_json::json!({
+                    "node": {
+                        "id": "mac-mini-m2",
+                        "name": "Mac mini M2",
+                        "capabilities": ["skill:start-run-debug", "rust-build"],
+                        "endpoint": "http://192.168.50.20:8711",
+                        "priority": 1
+                    },
+                    "knownWorkIds": []
+                }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(res.status(), StatusCode::OK);
+        let body = body_json(res).await;
+        assert_eq!(body["missingWork"].as_array().unwrap().len(), 1);
+        // Both the local node and the freshly registered peer are known.
+        assert_eq!(body["peerAgents"].as_array().unwrap().len(), 2);
+
+        // After sync, OmniRoute can route to the peer by its skill.
+        let routed = app
+            .oneshot(json_request(
+                "POST",
+                "/api/a2a/route",
+                serde_json::json!({ "capabilities": ["skill:start-run-debug"] }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(routed.status(), StatusCode::OK);
+        assert_eq!(body_json(routed).await["id"], "mac-mini-m2");
+    }
+
+    #[tokio::test]
+    async fn a2a_route_404_when_no_agent_capable() {
+        let app = router(ControlState::with_default_gates());
+        let res = app
+            .oneshot(json_request(
+                "POST",
+                "/api/a2a/route",
+                serde_json::json!({ "capabilities": ["skill:nonexistent"] }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(res.status(), StatusCode::NOT_FOUND);
     }
 
     #[tokio::test]

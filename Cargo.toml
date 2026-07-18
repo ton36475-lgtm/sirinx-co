@@ -8,6 +8,7 @@ members = [
     "crates/sirinx-store",
     "crates/sirinx-web",
     "crates/sirinx-control",
+    "crates/sirinx-a2a",
 ]
 
 [workspace.package]
@@ -23,6 +24,7 @@ sirinx-roi = { path = "crates/sirinx-roi" }
 sirinx-agents = { path = "crates/sirinx-agents" }
 sirinx-autoloop = { path = "crates/sirinx-autoloop" }
 sirinx-store = { path = "crates/sirinx-store" }
+sirinx-a2a = { path = "crates/sirinx-a2a" }
 async-trait = "0.1"
 sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio", "tls-rustls", "postgres", "uuid", "json", "migrate", "macros"] }
 

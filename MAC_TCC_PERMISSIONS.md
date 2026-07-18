@@ -81,4 +81,8 @@ Revoke (end of build window) — either:
 
 | Node | App granted | Scope | Granted | Revoked | Approved by |
 | --- | --- | --- | --- | --- | --- |
-| mac-mini-m2 | (fill in) | Full Disk Access — temporary, build window only | | pending | |
+| mac-mini-m2 | (fill in) | Full Disk Access — temporary, build window only | | **REVOKE DUE** — build window closed 2026-07-18; run `scripts/mac-revoke-tcc.sh` on the Mac, then record the date here | operator |
+
+> Revoke must be executed on the Mac itself (`./scripts/mac-revoke-tcc.sh`,
+> then restart the host apps and verify a prompt reappears). A remote
+> session cannot change TCC state.

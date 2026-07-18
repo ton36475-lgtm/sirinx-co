@@ -1,0 +1,15 @@
+target/
+node_modules/
+apps/
+services/
+docs/
+exports/
+reports/
+memory/
+scripts/
+public/
+infra/
+*.md
+.git/
+.github/
+.env*

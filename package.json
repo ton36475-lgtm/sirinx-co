@@ -17,6 +17,7 @@
     "web:check": "pnpm --config.verify-deps-before-run=false --dir apps/public-web check",
     "web:test": "pnpm --config.verify-deps-before-run=false --dir apps/public-web test",
     "web:build": "pnpm --config.verify-deps-before-run=false --dir apps/public-web build",
+    "control:test": "vitest run services/dev-control-api/src --exclude services/dev-control-api/src/hermes-spec-first-swarm.test.mjs",
     "rust:build": "cargo build --workspace",
     "rust:test": "cargo test --workspace",
     "rust:serve": "cargo run -p sirinx-web"
@@ -32,5 +33,7 @@
     "ghostclaw"
   ],
   "license": "UNLICENSED",
-  "devDependencies": {}
+  "devDependencies": {
+    "vitest": "^2.1.9"
+  }
 }

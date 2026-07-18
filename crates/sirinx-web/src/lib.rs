@@ -87,6 +87,7 @@ pub fn router(state: AppState) -> Router {
         .route("/", get(|| async { Html(HOME_HTML) }))
         .route("/thaimart-sirinx", get(|| async { Html(THAIMART_HTML) }))
         .route("/health", get(health))
+        .route("/metrics", get(metrics))
         .route("/api/packages", get(packages))
         .route("/api/roi", post(roi))
         .route("/api/leads", post(create_lead))
@@ -98,6 +99,17 @@ pub fn router(state: AppState) -> Router {
 
 async fn health() -> Json<serde_json::Value> {
     Json(serde_json::json!({ "status": "ok", "service": "sirinx-web" }))
+}
+
+/// Prometheus text exposition, dependency-free.
+async fn metrics(State(state): State<AppState>) -> ([(&'static str, &'static str); 1], String) {
+    let leads = state.lead_count().await;
+    let events = state.accepted_event_count().await;
+    let body = format!(
+        "# HELP sirinx_web_leads Leads stored.\n# TYPE sirinx_web_leads gauge\nsirinx_web_leads {leads}\n\
+         # HELP sirinx_web_analytics_events Consent-accepted analytics events stored.\n# TYPE sirinx_web_analytics_events gauge\nsirinx_web_analytics_events {events}\n"
+    );
+    ([("content-type", "text/plain; version=0.0.4")], body)
 }
 
 async fn packages() -> Json<serde_json::Value> {
@@ -112,7 +124,10 @@ async fn roi(
             "estimate": out,
             "notice": "ผลลัพธ์นี้เป็น scenario สำหรับคัดกรองเบื้องต้น ไม่ใช่ใบเสนอราคา และควรสำรวจหน้างานก่อนสรุประบบจริง"
         }))),
-        Err(err) => Err((StatusCode::UNPROCESSABLE_ENTITY, ApiError::new(err.to_string()))),
+        Err(err) => Err((
+            StatusCode::UNPROCESSABLE_ENTITY,
+            ApiError::new(err.to_string()),
+        )),
     }
 }
 
@@ -120,8 +135,12 @@ async fn create_lead(
     State(state): State<AppState>,
     Json(draft): Json<LeadDraft>,
 ) -> Result<(StatusCode, Json<Lead>), (StatusCode, Json<ApiError>)> {
-    let lead = Lead::from_draft(draft)
-        .map_err(|err| (StatusCode::UNPROCESSABLE_ENTITY, ApiError::new(err.to_string())))?;
+    let lead = Lead::from_draft(draft).map_err(|err| {
+        (
+            StatusCode::UNPROCESSABLE_ENTITY,
+            ApiError::new(err.to_string()),
+        )
+    })?;
     state
         .store
         .insert_lead(&lead)
@@ -177,7 +196,10 @@ async fn ingest_event(
             .insert_event(&event)
             .await
             .map_err(store_error_response)?;
-        Ok((StatusCode::ACCEPTED, Json(serde_json::json!({ "stored": true }))))
+        Ok((
+            StatusCode::ACCEPTED,
+            Json(serde_json::json!({ "stored": true })),
+        ))
     } else {
         Ok((StatusCode::OK, Json(serde_json::json!({ "stored": false }))))
     }

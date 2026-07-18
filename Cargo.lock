@@ -1346,6 +1346,8 @@ dependencies = [
  "axum",
  "serde",
  "serde_json",
+ "sirinx-core",
+ "sirinx-store",
  "tokio",
  "tower 0.4.13",
  "tracing",

@@ -68,7 +68,11 @@ impl Dispatcher {
     /// Run one agent and, if it publishes, route the follow-up event to
     /// every registered agent in the next layer. Returns each produced
     /// output in execution order.
-    pub fn run(&self, start: AgentId, input: AgentInput) -> Result<Vec<AgentOutput>, DispatchError> {
+    pub fn run(
+        &self,
+        start: AgentId,
+        input: AgentInput,
+    ) -> Result<Vec<AgentOutput>, DispatchError> {
         let mut outputs = Vec::new();
         let mut queue = vec![(start, input)];
 
@@ -131,8 +135,14 @@ mod tests {
     #[test]
     fn l1_output_flows_to_l2() {
         let mut dispatcher = Dispatcher::new();
-        dispatcher.register(Box::new(Probe { id: AgentId(1), forward: true })); // L1
-        dispatcher.register(Box::new(Probe { id: AgentId(17), forward: false })); // L2
+        dispatcher.register(Box::new(Probe {
+            id: AgentId(1),
+            forward: true,
+        })); // L1
+        dispatcher.register(Box::new(Probe {
+            id: AgentId(17),
+            forward: false,
+        })); // L2
 
         let outputs = dispatcher.run(AgentId(1), input()).unwrap();
         assert_eq!(outputs.len(), 2);
@@ -160,7 +170,10 @@ mod tests {
     #[test]
     fn l4_is_the_end_of_the_chain() {
         let mut dispatcher = Dispatcher::new();
-        dispatcher.register(Box::new(Probe { id: AgentId(36), forward: true })); // L4
+        dispatcher.register(Box::new(Probe {
+            id: AgentId(36),
+            forward: true,
+        })); // L4
         let outputs = dispatcher.run(AgentId(36), input()).unwrap();
         // Publishes, but there is no next layer, so nothing is routed.
         assert_eq!(outputs.len(), 1);

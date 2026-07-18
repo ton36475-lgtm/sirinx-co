@@ -150,7 +150,10 @@ mod tests {
     fn loop_completes_when_planner_is_done() {
         let registry = registry();
         let auto = AutoLoop::new(&registry, LoopConfig::default());
-        let mut planner = FixedPlanner { remaining: 3, tool: "count" };
+        let mut planner = FixedPlanner {
+            remaining: 3,
+            tool: "count",
+        };
         let (outcome, history) = auto.run(&mut planner).unwrap();
         assert_eq!(outcome, LoopOutcome::Completed);
         assert_eq!(history.len(), 3);
@@ -167,7 +170,10 @@ mod tests {
             },
         );
         // A planner that never finishes.
-        let mut planner = FixedPlanner { remaining: usize::MAX, tool: "count" };
+        let mut planner = FixedPlanner {
+            remaining: usize::MAX,
+            tool: "count",
+        };
         let (outcome, history) = auto.run(&mut planner).unwrap();
         assert_eq!(outcome, LoopOutcome::BudgetExhausted);
         assert_eq!(history.len(), 5);
@@ -177,7 +183,10 @@ mod tests {
     fn dry_run_records_plans_instead_of_side_effects() {
         let registry = registry();
         let auto = AutoLoop::new(&registry, LoopConfig::default());
-        let mut planner = FixedPlanner { remaining: 1, tool: "send_campaign" };
+        let mut planner = FixedPlanner {
+            remaining: 1,
+            tool: "send_campaign",
+        };
         let (_, history) = auto.run(&mut planner).unwrap();
         assert!(matches!(history[0].result, ToolResult::Planned { .. }));
     }
@@ -192,7 +201,10 @@ mod tests {
                 gate: ApprovalGate::approved("OPS-TICKET-42"),
             },
         );
-        let mut planner = FixedPlanner { remaining: 1, tool: "send_campaign" };
+        let mut planner = FixedPlanner {
+            remaining: 1,
+            tool: "send_campaign",
+        };
         let (_, history) = auto.run(&mut planner).unwrap();
         assert_eq!(
             history[0].result,

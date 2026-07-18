@@ -17,7 +17,9 @@
 pub mod analytics;
 pub mod lead;
 pub mod package;
+pub mod work;
 
 pub use analytics::{AnalyticsEvent, Consent, ALLOWED_EVENTS};
 pub use lead::{BusinessType, Interest, Lead, LeadDraft, LeadStatus, ValidationError};
-pub use package::{EnergyPackage, default_packages};
+pub use package::{default_packages, EnergyPackage};
+pub use work::PendingWork;

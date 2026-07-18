@@ -22,6 +22,6 @@ pub mod layer;
 pub mod roster;
 
 pub use agent::{Agent, AgentError, AgentInput, AgentOutput};
-pub use bus::{Dispatcher, DispatchError, Envelope};
+pub use bus::{DispatchError, Dispatcher, Envelope};
 pub use layer::Layer;
 pub use roster::{AgentId, Roster};

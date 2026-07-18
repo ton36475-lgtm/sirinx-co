@@ -59,14 +59,24 @@ async fn health_and_pages_are_served() {
 async fn thaimart_page_keeps_brand_safe_guards() {
     let app = router(AppState::default());
     let page = app
-        .oneshot(Request::get("/thaimart-sirinx").body(Body::empty()).unwrap())
+        .oneshot(
+            Request::get("/thaimart-sirinx")
+                .body(Body::empty())
+                .unwrap(),
+        )
         .await
         .unwrap();
-    let bytes = axum::body::to_bytes(page.into_body(), usize::MAX).await.unwrap();
+    let bytes = axum::body::to_bytes(page.into_body(), usize::MAX)
+        .await
+        .unwrap();
     let html = String::from_utf8(bytes.to_vec()).unwrap();
 
     // Exactly one H1 (validation gate from the taste spec).
-    assert_eq!(html.matches("<h1").count(), 1, "landing page must have exactly one H1");
+    assert_eq!(
+        html.matches("<h1").count(),
+        1,
+        "landing page must have exactly one H1"
+    );
     // Brand-safe copy retained; no formal partner claim.
     assert!(html.contains("SIRINX on Thaimart Marketplace"));
     assert!(!html.to_lowercase().contains("official partner"));

@@ -3,7 +3,7 @@ use sqlx::postgres::{PgPool, PgPoolOptions};
 use sqlx::Row;
 use uuid::Uuid;
 
-use sirinx_core::{AnalyticsEvent, Lead, LeadStatus};
+use sirinx_core::{AnalyticsEvent, Lead, LeadStatus, PendingWork};
 
 use crate::{Store, StoreError};
 
@@ -140,6 +140,46 @@ impl Store for PostgresStore {
         let row = sqlx::query("select count(*) as n from web_analytics_events")
             .fetch_one(&self.pool)
             .await?;
+        Ok(row.try_get::<i64, _>("n").map_err(StoreError::from)? as u64)
+    }
+
+    async fn insert_pending_work(&self, item: &PendingWork) -> Result<(), StoreError> {
+        sqlx::query(
+            r#"insert into web_pending_work (id, source, title, detail)
+               values ($1, $2, $3, $4)"#,
+        )
+        .bind(item.id)
+        .bind(&item.source)
+        .bind(&item.title)
+        .bind(&item.detail)
+        .execute(&self.pool)
+        .await?;
+        Ok(())
+    }
+
+    async fn list_pending_work(&self) -> Result<Vec<PendingWork>, StoreError> {
+        let rows = sqlx::query(
+            "select id, source, title, detail from web_pending_work where status = 'pending' order by created_at",
+        )
+        .fetch_all(&self.pool)
+        .await?;
+        rows.iter()
+            .map(|row| {
+                Ok(PendingWork {
+                    id: row.try_get("id").map_err(StoreError::from)?,
+                    source: row.try_get("source").map_err(StoreError::from)?,
+                    title: row.try_get("title").map_err(StoreError::from)?,
+                    detail: row.try_get("detail").map_err(StoreError::from)?,
+                })
+            })
+            .collect()
+    }
+
+    async fn count_pending_work(&self) -> Result<u64, StoreError> {
+        let row =
+            sqlx::query("select count(*) as n from web_pending_work where status = 'pending'")
+                .fetch_one(&self.pool)
+                .await?;
         Ok(row.try_get::<i64, _>("n").map_err(StoreError::from)? as u64)
     }
 }

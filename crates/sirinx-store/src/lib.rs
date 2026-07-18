@@ -14,7 +14,7 @@ pub mod postgres;
 use async_trait::async_trait;
 use uuid::Uuid;
 
-use sirinx_core::{AnalyticsEvent, Lead, LeadStatus, ValidationError};
+use sirinx_core::{AnalyticsEvent, Lead, LeadStatus, PendingWork, ValidationError};
 
 #[derive(Debug, thiserror::Error)]
 pub enum StoreError {
@@ -53,6 +53,14 @@ pub trait Store: Send + Sync {
     async fn insert_event(&self, event: &AnalyticsEvent) -> Result<(), StoreError>;
 
     async fn count_events(&self) -> Result<u64, StoreError>;
+
+    /// Register a work item on the shared queue. On Postgres this also
+    /// fires `pg_notify('web_pending_work', id)` via trigger.
+    async fn insert_pending_work(&self, item: &PendingWork) -> Result<(), StoreError>;
+
+    async fn list_pending_work(&self) -> Result<Vec<PendingWork>, StoreError>;
+
+    async fn count_pending_work(&self) -> Result<u64, StoreError>;
 }
 
 pub use memory::MemoryStore;

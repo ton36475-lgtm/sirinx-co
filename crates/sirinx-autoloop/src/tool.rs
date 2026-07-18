@@ -9,24 +9,26 @@ use serde::{Deserialize, Serialize};
 /// `Allowlist` is the scoped middle ground: the operator pre-approves a
 /// named set of tools (with a ticket), everything else stays dry-run —
 /// never a blanket auto-approve.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", tag = "mode")]
 pub enum ApprovalGate {
+    #[default]
     DryRun,
-    Approved { ticket: String },
-    Allowlist { ticket: String, tools: BTreeSet<String> },
-}
-
-impl Default for ApprovalGate {
-    fn default() -> Self {
-        ApprovalGate::DryRun
-    }
+    Approved {
+        ticket: String,
+    },
+    Allowlist {
+        ticket: String,
+        tools: BTreeSet<String>,
+    },
 }
 
 impl ApprovalGate {
     /// Convenience constructor for full approval.
     pub fn approved(ticket: impl Into<String>) -> Self {
-        ApprovalGate::Approved { ticket: ticket.into() }
+        ApprovalGate::Approved {
+            ticket: ticket.into(),
+        }
     }
 
     /// Convenience constructor for a scoped allowlist.

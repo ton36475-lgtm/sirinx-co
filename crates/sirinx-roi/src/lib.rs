@@ -78,9 +78,7 @@ pub fn estimate(input: RoiInput) -> Result<RoiEstimate, RoiError> {
     let bill = input.monthly_bill_thb;
     let usage = input.usage.factor();
 
-    let possible_kw = (input.available_area_sqm / 6.0)
-        .min(bill / 900.0)
-        .max(1.0);
+    let possible_kw = (input.available_area_sqm / 6.0).min(bill / 900.0).max(1.0);
     // Round to one decimal like `possibleKw.toFixed(1)` in the page script.
     let estimated_kw = (possible_kw * 10.0).round() / 10.0;
 

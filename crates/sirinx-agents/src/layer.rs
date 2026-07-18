@@ -69,7 +69,10 @@ mod tests {
     fn operational_chain_is_l1_to_l4() {
         assert_eq!(Layer::Perception.next_operational(), Some(Layer::Analysis));
         assert_eq!(Layer::Analysis.next_operational(), Some(Layer::Decision));
-        assert_eq!(Layer::Decision.next_operational(), Some(Layer::Coordination));
+        assert_eq!(
+            Layer::Decision.next_operational(),
+            Some(Layer::Coordination)
+        );
         assert_eq!(Layer::Coordination.next_operational(), None);
         assert_eq!(Layer::Research.next_operational(), None);
     }

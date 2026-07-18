@@ -4,7 +4,7 @@ use std::sync::RwLock;
 use async_trait::async_trait;
 use uuid::Uuid;
 
-use sirinx_core::{AnalyticsEvent, Lead, LeadStatus};
+use sirinx_core::{AnalyticsEvent, Lead, LeadStatus, PendingWork};
 
 use crate::{Store, StoreError};
 
@@ -13,6 +13,7 @@ use crate::{Store, StoreError};
 pub struct MemoryStore {
     leads: RwLock<HashMap<Uuid, Lead>>,
     events: RwLock<Vec<AnalyticsEvent>>,
+    pending: RwLock<Vec<PendingWork>>,
 }
 
 #[async_trait]
@@ -26,7 +27,12 @@ impl Store for MemoryStore {
     }
 
     async fn get_lead(&self, id: Uuid) -> Result<Option<Lead>, StoreError> {
-        Ok(self.leads.read().expect("lead store poisoned").get(&id).cloned())
+        Ok(self
+            .leads
+            .read()
+            .expect("lead store poisoned")
+            .get(&id)
+            .cloned())
     }
 
     async fn update_lead_status(&self, id: Uuid, next: LeadStatus) -> Result<Lead, StoreError> {
@@ -59,6 +65,22 @@ impl Store for MemoryStore {
 
     async fn count_events(&self) -> Result<u64, StoreError> {
         Ok(self.events.read().expect("event store poisoned").len() as u64)
+    }
+
+    async fn insert_pending_work(&self, item: &PendingWork) -> Result<(), StoreError> {
+        self.pending
+            .write()
+            .expect("pending store poisoned")
+            .push(item.clone());
+        Ok(())
+    }
+
+    async fn list_pending_work(&self) -> Result<Vec<PendingWork>, StoreError> {
+        Ok(self.pending.read().expect("pending store poisoned").clone())
+    }
+
+    async fn count_pending_work(&self) -> Result<u64, StoreError> {
+        Ok(self.pending.read().expect("pending store poisoned").len() as u64)
     }
 }
 

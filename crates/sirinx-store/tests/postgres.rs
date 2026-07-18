@@ -27,7 +27,9 @@ async fn lead_lifecycle_against_real_postgres() {
         return;
     };
 
-    let store = PostgresStore::connect(&url).await.expect("connect + migrate");
+    let store = PostgresStore::connect(&url)
+        .await
+        .expect("connect + migrate");
     let lead = test_lead();
 
     store.insert_lead(&lead).await.unwrap();

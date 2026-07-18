@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node server.mjs",
-    "verify": "node --check server.mjs && node --check src/gates.mjs"
+    "verify": "node --check server.mjs && node --check src/gates.mjs",
+    "test": "cd ../.. && npm run control:test"
   }
 }

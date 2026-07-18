@@ -50,14 +50,14 @@ sirinx-co/
 Still open for R2 parity: importing the remaining routes from
 `automation-system-backend` and `sirinx` (api-gateway) into `sirinx-web`.
 
-## Phase R3 — Agent runtime
+## Phase R3 — Agent runtime (control plane landed)
 
-| Source repo | What moves | Rust target |
-| --- | --- | --- |
-| `sirinx-solar-energy` (`src/agents/`) | 47 Ronin TypeScript agents | `sirinx-agents` implementations per layer |
-| `sirinx-godmode` | orchestration presets | `sirinx-autoloop` planners |
-| `hermes-os` / `sirinx-os` | control API + dashboard gates | `sirinx-control` (new crate) with the same dry-run gates |
-| `ghost-claw-os` | ops agents | `sirinx-autoloop` tools |
+| Source repo | What moves | Rust target | Status |
+| --- | --- | --- | --- |
+| `sirinx-os` | Hermes dashboard + control API | imported as `apps/dev-dashboard` + `services/dev-control-api`; core gates ported to `crates/sirinx-control` (same port 8711, hold-by-default, ticket-gated opening) | landed |
+| `sirinx-solar-energy` (`src/agents/`) | 47 Ronin TypeScript agents | `sirinx-agents` implementations per layer | open |
+| `sirinx-godmode` | orchestration presets | `sirinx-autoloop` planners | open |
+| `ghost-claw-os` | ops agents | `sirinx-autoloop` tools | open |
 
 ## Phase R4 — Web consolidation
 

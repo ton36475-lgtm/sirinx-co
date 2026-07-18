@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  SIRINX worker-node PPPC template.
+  Replace the two REPLACE_ME values using:  codesign -dr - /path/to/Host.app
+  Deploy via MDM only — Full Disk Access payloads are ignored when
+  installed manually. See MAC_TCC_PERMISSIONS.md.
+-->
+<plist version="1.0">
+<dict>
+  <key>PayloadContent</key>
+  <array>
+    <dict>
+      <key>PayloadType</key>
+      <string>com.apple.TCC.configuration-profile-policy</string>
+      <key>PayloadIdentifier</key>
+      <string>co.sirinx.node.pppc</string>
+      <key>PayloadUUID</key>
+      <string>7E2B7C51-6E2A-4D3B-9A0C-SIRINXPPPC01</string>
+      <key>PayloadVersion</key>
+      <integer>1</integer>
+      <key>PayloadDisplayName</key>
+      <string>SIRINX Node Privacy Preferences</string>
+      <key>Services</key>
+      <dict>
+        <key>SystemPolicyAllFiles</key>
+        <array>
+          <dict>
+            <key>Identifier</key>
+            <string>REPLACE_ME_BUNDLE_ID (e.g. com.googlecode.iterm2)</string>
+            <key>IdentifierType</key>
+            <string>bundleID</string>
+            <key>CodeRequirement</key>
+            <string>REPLACE_ME_DESIGNATED_REQUIREMENT</string>
+            <key>Allowed</key>
+            <true/>
+            <key>Comment</key>
+            <string>Full Disk Access for the SIRINX agent host app</string>
+          </dict>
+        </array>
+      </dict>
+    </dict>
+  </array>
+  <key>PayloadDisplayName</key>
+  <string>SIRINX Worker Node — TCC Pre-Approval</string>
+  <key>PayloadIdentifier</key>
+  <string>co.sirinx.node.profile</string>
+  <key>PayloadScope</key>
+  <string>System</string>
+  <key>PayloadType</key>
+  <string>Configuration</string>
+  <key>PayloadUUID</key>
+  <string>A41F09D2-3C55-4B7E-8D21-SIRINXPPPC00</string>
+  <key>PayloadVersion</key>
+  <integer>1</integer>
+</dict>
+</plist>

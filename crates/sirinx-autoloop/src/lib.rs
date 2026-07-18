@@ -15,5 +15,8 @@
 pub mod loop_runner;
 pub mod tool;
 
-pub use loop_runner::{AutoLoop, LoopConfig, LoopError, LoopOutcome, StepRecord};
+pub use loop_runner::{
+    AutoLoop, LoopConfig, LoopError, LoopOutcome, Planner, RecoveryConfig, RecoveryError,
+    RecoveryRun, StepRecord,
+};
 pub use tool::{ApprovalGate, Tool, ToolError, ToolInvocation, ToolRegistry, ToolResult};

@@ -15,11 +15,18 @@
 //! ```
 
 pub mod analytics;
+pub mod gate;
 pub mod lead;
 pub mod package;
+pub mod recovery;
 pub mod work;
 
 pub use analytics::{AnalyticsEvent, Consent, ALLOWED_EVENTS};
+pub use gate::{Gate, GateState};
 pub use lead::{BusinessType, Interest, Lead, LeadDraft, LeadStatus, ValidationError};
 pub use package::{default_packages, EnergyPackage};
+pub use recovery::{
+    bounded_recovery_tool_name, FailureEvent, FailureKind, Lesson, LessonGuidance,
+    MAX_RECOVERY_TOOL_NAME_CHARS,
+};
 pub use work::PendingWork;

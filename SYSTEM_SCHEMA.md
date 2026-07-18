@@ -32,7 +32,29 @@ id uuid pk · source text · title text · detail jsonb · status text
 (default `pending`) · claimed_by/claimed_at · created_at.
 Trigger `web_pending_work_notify` → `pg_notify('web_pending_work', id)`.
 
-All three tables: RLS enabled, zero public policies (server-only).
+### `public.web_control_gates`
+
+name text pk · state text (`hold` | `open`) · ticket text nullable ·
+updated_at timestamptz. The database requires `ticket is null` on hold
+and a non-blank ticket on open. Migration 0003 seeds the five canonical
+gates on hold with `on conflict do nothing`, preserving prior decisions.
+
+### `public.web_failure_events`
+
+id uuid pk · run_id uuid · tool_name text (1–128 characters) ·
+error_kind text (`bad_args` | `failed` | `unknown`) · attempt integer ·
+created_at timestamptz. Failure records contain no invocation arguments and
+no raw error-message text.
+
+### `public.web_lessons`
+
+id uuid pk · tool_name text (1–128 characters) · error_kind text ·
+guidance_kind text (`validate_arguments` | `retry_transient_failure` |
+`verify_tool_availability`) · occurrences bigint · created_at / updated_at.
+The unique key `(tool_name, error_kind, guidance_kind)` makes lesson upserts
+atomic and increments occurrences instead of duplicating guidance.
+
+All six tables: RLS enabled, zero public policies (server-only).
 
 ## 2. Enumerations
 
@@ -46,6 +68,9 @@ All three tables: RLS enabled, zero public policies (server-only).
   `roi_calculator_submit` `line_add_friend_click` `contact_form_submit`
 - **Gates**: `deploy` `cloudflare_dns` `telegram_send`
   `customer_messaging` `adaptive_sync` (states `hold` | `open`+ticket)
+- **FailureKind**: `bad_args` `failed` `unknown`
+- **LessonGuidance**: `validate_arguments` `retry_transient_failure`
+  `verify_tool_availability` (closed, non-executable planner guidance)
 
 ## 3. HTTP APIs
 
@@ -116,7 +141,7 @@ covers web + control + a2a + brain surfaces with variables.
 
 | Var | Service | Effect |
 | --- | --- | --- |
-| DATABASE_URL | web, control | Postgres backend + migrations; empty ⇒ in-memory |
+| DATABASE_URL | web, control | Postgres backend + migrations; empty ⇒ in-memory (gate decisions are process-local) |
 | CONTROL_API_TOKEN | control | bearer auth on `/api/*` |
 | A2A_NODE_ID / A2A_ENDPOINT / A2A_PRIORITY | control | node identity |
 | SKILLS_DIR | control | capability autoload (default `.claude/skills`) |

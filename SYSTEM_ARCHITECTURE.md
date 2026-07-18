@@ -21,7 +21,7 @@ flowchart LR
         N[dev-control-api Node long-tail]
     end
     subgraph Data [Supabase Postgres]
-        DB[(web_leads / web_analytics_events / web_pending_work)]
+        DB[(web_leads / web_analytics_events / web_pending_work / web_control_gates / web_failure_events / web_lessons)]
     end
     C --> CF --> W
     O --> CFA --> K
@@ -40,12 +40,12 @@ flowchart TD
     roi[sirinx-roi\nROI estimator]
     agents[sirinx-agents\n47 Ronin runtime]
     autoloop[sirinx-autoloop\nloop + ApprovalGate]
-    store[sirinx-store\nStore trait: Memory | Postgres]
+    store[sirinx-store\nStore trait: Memory | Postgres\nincluding durable gates]
     a2a[sirinx-a2a\ncards + OmniRoute + sync]
     web[sirinx-web\naxum :8080]
     control[sirinx-control\naxum :8711]
 
-    autoloop --> agents
+    autoloop --> agents & core & store
     store --> core
     a2a --> core
     web --> core & roi & store
@@ -97,18 +97,41 @@ sequenceDiagram
 
 | Layer | Mechanism | Where |
 | --- | --- | --- |
-| Release gates | 5 gates hold-by-default, ticket to open | `sirinx-control` |
+| Release gates | 5 fixed gates hold-by-default; persisted open requires ticket | `sirinx-core` + `sirinx-store` + `sirinx-control` |
 | Tool gating | ApprovalGate DryRun / Allowlist / Approved | `sirinx-autoloop` |
 | Loop bounds | hard `max_steps` per autonomous run | `sirinx-autoloop` |
+| Recovery bounds | safe failure kinds, structured lessons, capped retry/backoff | `sirinx-core` + `sirinx-store` + `sirinx-autoloop` |
 | Layer discipline | no layer skipping, enforced at dispatch | `sirinx-agents` |
 | AuthN | bearer token on control `/api/*` | `sirinx-control` |
 | Data | RLS on all tables, no public policies | Supabase |
 | Consent | analytics allowlist + consent flag | `sirinx-core` |
 | Process | Human ตัดสินใจสุดท้าย | `GO_LIVE_GATE_CHECKLIST.md` |
 
+At startup, `sirinx-control` creates the fixed five-gate safe-hold map
+and overlays only known, valid decisions loaded from `Store`. Each gate
+decision is serialized with an async mutex, written to Store first, and
+only then applied to the runtime cache; persistence failure returns a
+generic 500 and leaves runtime state unchanged for an `open`. A restrictive
+`hold` applies locally first; if its write fails, a local emergency override
+keeps that node held until a later successful decision. Before any action is
+authorized, the node reads that gate from Store again and repairs its local
+cache; a missing, invalid, or failed authoritative read cannot reuse a stale
+open decision. Operator gate listings and metrics also refresh the complete
+snapshot from Store; they fail unavailable instead of reporting a stale open.
+
+`AutoLoop::run_with_recovery` loads lessons before every tool attempt.
+Failures persist only the bounded tool name and a closed error kind; planners
+derive closed, non-executable guidance that is deduplicated in Store. Only
+`bad_args` and `failed` on tools that explicitly declare themselves retry-safe
+may retry, with both a per-step retry cap and the original global `max_steps`
+budget. Side-effecting tools are non-retryable by default, preventing duplicate
+sends or deployments after an ambiguous failure. Every retry re-enters
+`ToolRegistry::invoke`, so the same `ApprovalGate` is enforced each time;
+`unknown` always stops immediately.
+
 ## 6. Quality pipeline
 
-`cargo fmt` → `clippy -D warnings` → `cargo test --workspace` (58) →
+`cargo fmt` → `clippy -D warnings` → `cargo test --workspace` →
 `npm run check` (governance) → `npm run control:test` (120) → CI
 (`.github/workflows/ci.yml`) → PR review → merge → (gated) deploy via
 distroless Docker images (`DEPLOY_RUST.md`).

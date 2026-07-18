@@ -12,18 +12,20 @@ async fn main() {
         )
         .init();
 
-    // Shared queue backend: Postgres when DATABASE_URL is set, so every
-    // node sees the same pending-work; otherwise process-local memory.
+    // Shared control backend: Postgres when DATABASE_URL is set, so every
+    // node sees the same pending work and gates; otherwise process-local memory.
     let store: Arc<dyn Store> = match std::env::var("DATABASE_URL") {
         Ok(url) if !url.trim().is_empty() => {
             let store = PostgresStore::connect(&url)
                 .await
                 .expect("failed to connect to Postgres / run migrations");
-            tracing::info!("control queue backend: postgres (shared across nodes)");
+            tracing::info!("control backend: postgres (shared queue and durable gates)");
             Arc::new(store)
         }
         _ => {
-            tracing::warn!("DATABASE_URL not set — control queue is process-local");
+            tracing::warn!(
+                "DATABASE_URL not set — control queue and gate decisions are process-local"
+            );
             Arc::new(MemoryStore::default())
         }
     };
@@ -53,11 +55,14 @@ async fn main() {
         "a2a card ready"
     );
 
-    let app = router(ControlState::new(store, token, card));
+    let state = ControlState::load(store, token, card)
+        .await
+        .expect("failed to load persisted control gates");
+    let app = router(state);
     let listener = tokio::net::TcpListener::bind(addr)
         .await
         .expect("failed to bind control port");
-    tracing::info!(%addr, "sirinx-control listening (all gates on hold)");
+    tracing::info!(%addr, "sirinx-control listening (gate state loaded)");
     axum::serve(listener, app)
         .with_graceful_shutdown(async {
             let _ = tokio::signal::ctrl_c().await;

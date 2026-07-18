@@ -18,9 +18,10 @@
 //! When a bearer token is configured, every `/api/*` route requires
 //! `Authorization: Bearer <token>`. Pending work persists through
 //! `sirinx_store::Store`, so with `DATABASE_URL` set all nodes share
-//! one queue and Postgres notifies listeners on every insert.
+//! one queue and durable gate decisions. Postgres notifies listeners on
+//! every pending-work insert.
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Write as _;
 use std::sync::{Arc, RwLock};
 
@@ -30,11 +31,15 @@ use axum::middleware::{self, Next};
 use axum::response::Response;
 use axum::routing::{get, post};
 use axum::{Json, Router};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
 use sirinx_a2a::{diff_work, AgentCard, OmniRoute, SyncRequest, SyncResponse};
 use sirinx_core::PendingWork;
-use sirinx_store::{MemoryStore, Store};
+use sirinx_store::{MemoryStore, Store, StoreError};
+
+// Preserve the original sirinx-control public API while keeping domain
+// types canonical in sirinx-core for persistence and other consumers.
+pub use sirinx_core::{Gate, GateState};
 
 /// The release gates carried over from RELEASE_GATE.md / NEXT_ACTIONS.md.
 /// Everything ships in `hold`.
@@ -46,25 +51,15 @@ pub const DEFAULT_GATES: &[&str] = &[
     "adaptive_sync",
 ];
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub enum GateState {
-    Hold,
-    Open,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Gate {
-    pub name: String,
-    pub state: GateState,
-    /// Ticket recorded when an operator opened the gate.
-    pub ticket: Option<String>,
-}
-
 #[derive(Clone)]
 pub struct ControlState {
     gates: Arc<RwLock<BTreeMap<String, Gate>>>,
     store: Arc<dyn Store>,
+    /// Gate decisions are persisted and cached as one ordered operation.
+    gate_decisions: Arc<tokio::sync::Mutex<()>>,
+    /// A restrictive decision that could not be persisted must still win on
+    /// this node. It is cleared only after a later successful decision.
+    local_hold_overrides: Arc<RwLock<BTreeSet<String>>>,
     /// Bearer token required on /api/* when set.
     api_token: Option<Arc<str>>,
     /// This node's A2A card; capabilities come from installed skills.
@@ -97,10 +92,58 @@ impl ControlState {
         Self {
             gates: Arc::new(RwLock::new(gates)),
             store,
+            gate_decisions: Arc::new(tokio::sync::Mutex::new(())),
+            local_hold_overrides: Arc::new(RwLock::new(BTreeSet::new())),
             api_token: api_token.map(Into::into),
             self_card,
             omniroute: Arc::new(RwLock::new(omniroute)),
         }
+    }
+
+    /// Build a safe hold-by-default state and overlay durable decisions.
+    /// Unknown or invalid stored rows cannot create or open runtime gates.
+    pub async fn load(
+        store: Arc<dyn Store>,
+        api_token: Option<String>,
+        self_card: AgentCard,
+    ) -> Result<Self, StoreError> {
+        let state = Self::new(store, api_token, self_card);
+        let persisted = state.store.list_gates().await?;
+        let stored = persisted.len();
+        let mut applied = 0usize;
+        let mut ignored = 0usize;
+
+        {
+            let mut gates = state.gates.write().expect("gate lock poisoned");
+            for mut gate in persisted {
+                let Some(slot) = gates.get_mut(&gate.name) else {
+                    ignored += 1;
+                    tracing::warn!(gate = %gate.name, "ignoring unknown persisted gate");
+                    continue;
+                };
+
+                match gate.state {
+                    GateState::Hold => {
+                        gate.ticket = None;
+                    }
+                    GateState::Open if gate.ticket.as_deref().unwrap_or("").trim().is_empty() => {
+                        ignored += 1;
+                        tracing::error!(
+                            gate = %gate.name,
+                            "ignoring invalid persisted open gate without a ticket"
+                        );
+                        continue;
+                    }
+                    GateState::Open => {}
+                }
+
+                *slot = gate;
+                applied += 1;
+            }
+        }
+
+        tracing::info!(stored, applied, ignored, "control gate state loaded");
+        Ok(state)
     }
 
     pub fn gate_state(&self, name: &str) -> Option<GateState> {
@@ -109,6 +152,137 @@ impl ControlState {
             .expect("gate lock poisoned")
             .get(name)
             .map(|g| g.state)
+    }
+
+    /// Resolve one gate from the shared Store before authorizing an action.
+    /// The runtime cache is only a view: a missing, malformed, or failed
+    /// authoritative read can never preserve a stale open decision.
+    async fn authoritative_gate(&self, name: &str) -> Result<Option<Gate>, StoreError> {
+        if !self
+            .gates
+            .read()
+            .expect("gate lock poisoned")
+            .contains_key(name)
+        {
+            return Ok(None);
+        }
+
+        if self
+            .local_hold_overrides
+            .read()
+            .expect("local hold override lock poisoned")
+            .contains(name)
+        {
+            let gate = Gate {
+                name: name.to_owned(),
+                state: GateState::Hold,
+                ticket: None,
+            };
+            self.gates
+                .write()
+                .expect("gate lock poisoned")
+                .insert(name.to_owned(), gate.clone());
+            return Ok(Some(gate));
+        }
+
+        let persisted = self.store.get_gate(name).await?;
+        let gate = match persisted {
+            Some(mut gate) if gate.name == name => match gate.state {
+                GateState::Hold => {
+                    gate.ticket = None;
+                    gate
+                }
+                GateState::Open if gate.ticket.as_deref().unwrap_or("").trim().is_empty() => {
+                    tracing::error!(
+                        gate = %name,
+                        "authoritative open gate has no ticket; forcing hold"
+                    );
+                    Gate {
+                        name: name.to_owned(),
+                        state: GateState::Hold,
+                        ticket: None,
+                    }
+                }
+                GateState::Open => gate,
+            },
+            Some(gate) => {
+                tracing::error!(
+                    requested_gate = %name,
+                    stored_gate = %gate.name,
+                    "authoritative gate lookup returned the wrong gate; forcing hold"
+                );
+                Gate {
+                    name: name.to_owned(),
+                    state: GateState::Hold,
+                    ticket: None,
+                }
+            }
+            None => Gate {
+                name: name.to_owned(),
+                state: GateState::Hold,
+                ticket: None,
+            },
+        };
+
+        self.gates
+            .write()
+            .expect("gate lock poisoned")
+            .insert(name.to_owned(), gate.clone());
+        Ok(Some(gate))
+    }
+
+    /// Refresh the complete operator-visible snapshot from Store. Missing or
+    /// invalid rows become safe holds, and local emergency holds always win.
+    async fn refresh_gate_snapshot(&self) -> Result<Vec<Gate>, StoreError> {
+        let persisted = self.store.list_gates().await?;
+        let mut refreshed: BTreeMap<String, Gate> = DEFAULT_GATES
+            .iter()
+            .map(|name| {
+                (
+                    (*name).to_owned(),
+                    Gate {
+                        name: (*name).to_owned(),
+                        state: GateState::Hold,
+                        ticket: None,
+                    },
+                )
+            })
+            .collect();
+
+        for mut gate in persisted {
+            let Some(slot) = refreshed.get_mut(&gate.name) else {
+                tracing::warn!(gate = %gate.name, "ignoring unknown persisted gate");
+                continue;
+            };
+            match gate.state {
+                GateState::Hold => gate.ticket = None,
+                GateState::Open if gate.ticket.as_deref().unwrap_or("").trim().is_empty() => {
+                    tracing::error!(
+                        gate = %gate.name,
+                        "invalid persisted open gate in snapshot; forcing hold"
+                    );
+                    continue;
+                }
+                GateState::Open => {}
+            }
+            *slot = gate;
+        }
+
+        for name in self
+            .local_hold_overrides
+            .read()
+            .expect("local hold override lock poisoned")
+            .iter()
+        {
+            if let Some(gate) = refreshed.get_mut(name) {
+                gate.state = GateState::Hold;
+                gate.ticket = None;
+            }
+        }
+
+        let snapshot = refreshed.values().cloned().collect();
+        *self.gates.write().expect("gate lock poisoned") = refreshed;
+        Ok(snapshot)
     }
 }
 
@@ -194,13 +368,20 @@ async fn health() -> Json<serde_json::Value> {
 }
 
 /// Prometheus text exposition, dependency-free.
-async fn metrics(State(state): State<ControlState>) -> ([(&'static str, &'static str); 1], String) {
+async fn metrics(
+    State(state): State<ControlState>,
+) -> Result<([(&'static str, &'static str); 1], String), StatusCode> {
+    let _decision_guard = state.gate_decisions.lock().await;
+    let gates = state.refresh_gate_snapshot().await.map_err(|err| {
+        tracing::error!(error = %err, "gate metrics refresh failed");
+        StatusCode::SERVICE_UNAVAILABLE
+    })?;
     let mut out = String::new();
     let _ = writeln!(
         out,
         "# HELP sirinx_control_gate_open 1 when the gate is open, 0 on hold.\n# TYPE sirinx_control_gate_open gauge"
     );
-    for gate in state.gates.read().expect("gate lock poisoned").values() {
+    for gate in &gates {
         let _ = writeln!(
             out,
             "sirinx_control_gate_open{{gate=\"{}\"}} {}",
@@ -213,18 +394,21 @@ async fn metrics(State(state): State<ControlState>) -> ([(&'static str, &'static
         out,
         "# HELP sirinx_control_pending_work Pending work items on the shared queue.\n# TYPE sirinx_control_pending_work gauge\nsirinx_control_pending_work {pending}"
     );
-    ([("content-type", "text/plain; version=0.0.4")], out)
+    Ok(([("content-type", "text/plain; version=0.0.4")], out))
 }
 
-async fn list_gates(State(state): State<ControlState>) -> Json<serde_json::Value> {
-    let gates: Vec<Gate> = state
-        .gates
-        .read()
-        .expect("gate lock poisoned")
-        .values()
-        .cloned()
-        .collect();
-    Json(serde_json::json!({ "gates": gates }))
+async fn list_gates(
+    State(state): State<ControlState>,
+) -> Result<Json<serde_json::Value>, (StatusCode, Json<serde_json::Value>)> {
+    let _decision_guard = state.gate_decisions.lock().await;
+    let gates = state.refresh_gate_snapshot().await.map_err(|err| {
+        tracing::error!(error = %err, "gate snapshot refresh failed");
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(serde_json::json!({ "error": "storage backend failure" })),
+        )
+    })?;
+    Ok(Json(serde_json::json!({ "gates": gates })))
 }
 
 #[derive(Debug, Deserialize)]
@@ -247,18 +431,71 @@ async fn decide_gate(
             Json(serde_json::json!({ "error": "opening a gate requires a ticket" })),
         ));
     }
-    let mut gates = state.gates.write().expect("gate lock poisoned");
-    let gate = gates.get_mut(&name).ok_or((
-        StatusCode::NOT_FOUND,
-        Json(serde_json::json!({ "error": "unknown gate" })),
-    ))?;
-    gate.state = decision.state;
-    gate.ticket = match decision.state {
-        GateState::Open => decision.ticket,
-        GateState::Hold => None,
+    let _decision_guard = state.gate_decisions.lock().await;
+    if !state
+        .gates
+        .read()
+        .expect("gate lock poisoned")
+        .contains_key(&name)
+    {
+        return Err((
+            StatusCode::NOT_FOUND,
+            Json(serde_json::json!({ "error": "unknown gate" })),
+        ));
+    }
+
+    let gate = Gate {
+        name: name.clone(),
+        state: decision.state,
+        ticket: match decision.state {
+            GateState::Open => decision.ticket,
+            GateState::Hold => None,
+        },
     };
-    tracing::info!(gate = %name, state = ?gate.state, "gate decision recorded");
-    Ok(Json(gate.clone()))
+
+    if gate.state == GateState::Hold {
+        // Restrictive decisions apply locally first. If persistence fails,
+        // the override remains and action authorization cannot read a stale
+        // open decision back from Store on this node.
+        state
+            .local_hold_overrides
+            .write()
+            .expect("local hold override lock poisoned")
+            .insert(name.clone());
+        state
+            .gates
+            .write()
+            .expect("gate lock poisoned")
+            .insert(name.clone(), gate.clone());
+    }
+
+    state.store.upsert_gate(&gate).await.map_err(|err| {
+        tracing::error!(
+            gate = %name,
+            state = ?gate.state,
+            error = %err,
+            restrictive_override = gate.state == GateState::Hold,
+            "gate decision persistence failed"
+        );
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(serde_json::json!({ "error": "storage backend failure" })),
+        )
+    })?;
+
+    state
+        .local_hold_overrides
+        .write()
+        .expect("local hold override lock poisoned")
+        .remove(&name);
+
+    state
+        .gates
+        .write()
+        .expect("gate lock poisoned")
+        .insert(name.clone(), gate.clone());
+    tracing::info!(gate = %name, state = ?gate.state, "gate decision persisted and applied");
+    Ok(Json(gate))
 }
 
 async fn list_pending(
@@ -318,10 +555,29 @@ async fn run_action(
     State(state): State<ControlState>,
     Json(req): Json<ActionRequest>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, Json<serde_json::Value>)> {
-    let gate_state = state.gate_state(&req.gate).ok_or((
-        StatusCode::NOT_FOUND,
-        Json(serde_json::json!({ "error": "unknown gate" })),
-    ))?;
+    // Serialize local decisions with authorization and always re-read the
+    // shared Store. This prevents a previously-open cache on another node
+    // from authorizing after a hold decision has been persisted elsewhere.
+    let _decision_guard = state.gate_decisions.lock().await;
+    let gate_state = state
+        .authoritative_gate(&req.gate)
+        .await
+        .map_err(|err| {
+            tracing::error!(
+                gate = %req.gate,
+                error = %err,
+                "authoritative gate read failed; action denied"
+            );
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(serde_json::json!({ "error": "storage backend failure" })),
+            )
+        })?
+        .ok_or((
+            StatusCode::NOT_FOUND,
+            Json(serde_json::json!({ "error": "unknown gate" })),
+        ))?
+        .state;
     match gate_state {
         GateState::Hold => Ok(Json(serde_json::json!({
             "executed": false,
@@ -403,10 +659,83 @@ async fn a2a_route(
 
 #[cfg(test)]
 mod tests {
+    use std::sync::atomic::{AtomicBool, Ordering};
+
     use super::*;
+    use async_trait::async_trait;
     use axum::body::Body;
     use axum::http::{header, Request};
+    use sirinx_core::{AnalyticsEvent, Lead, LeadStatus};
     use tower::ServiceExt;
+    use uuid::Uuid;
+
+    #[derive(Default)]
+    struct FailingGateStore {
+        inner: MemoryStore,
+        fail_gate_writes: AtomicBool,
+    }
+
+    #[async_trait]
+    impl Store for FailingGateStore {
+        async fn insert_lead(&self, _lead: &Lead) -> Result<(), StoreError> {
+            unreachable!("lead storage is unused in gate failure tests")
+        }
+
+        async fn get_lead(&self, _id: Uuid) -> Result<Option<Lead>, StoreError> {
+            unreachable!("lead storage is unused in gate failure tests")
+        }
+
+        async fn update_lead_status(
+            &self,
+            _id: Uuid,
+            _next: LeadStatus,
+        ) -> Result<Lead, StoreError> {
+            unreachable!("lead storage is unused in gate failure tests")
+        }
+
+        async fn delete_lead(&self, _id: Uuid) -> Result<bool, StoreError> {
+            unreachable!("lead storage is unused in gate failure tests")
+        }
+
+        async fn count_leads(&self) -> Result<u64, StoreError> {
+            unreachable!("lead storage is unused in gate failure tests")
+        }
+
+        async fn insert_event(&self, _event: &AnalyticsEvent) -> Result<(), StoreError> {
+            unreachable!("analytics storage is unused in gate failure tests")
+        }
+
+        async fn count_events(&self) -> Result<u64, StoreError> {
+            unreachable!("analytics storage is unused in gate failure tests")
+        }
+
+        async fn insert_pending_work(&self, _item: &PendingWork) -> Result<(), StoreError> {
+            unreachable!("pending work is unused in gate failure tests")
+        }
+
+        async fn list_pending_work(&self) -> Result<Vec<PendingWork>, StoreError> {
+            unreachable!("pending work is unused in gate failure tests")
+        }
+
+        async fn count_pending_work(&self) -> Result<u64, StoreError> {
+            unreachable!("pending work is unused in gate failure tests")
+        }
+
+        async fn upsert_gate(&self, gate: &Gate) -> Result<(), StoreError> {
+            if self.fail_gate_writes.load(Ordering::SeqCst) {
+                return Err(StoreError::Backend("injected gate write failure".into()));
+            }
+            self.inner.upsert_gate(gate).await
+        }
+
+        async fn list_gates(&self) -> Result<Vec<Gate>, StoreError> {
+            self.inner.list_gates().await
+        }
+
+        async fn get_gate(&self, name: &str) -> Result<Option<Gate>, StoreError> {
+            self.inner.get_gate(name).await
+        }
+    }
 
     fn json_request(method: &str, uri: &str, body: serde_json::Value) -> Request<Body> {
         Request::builder()
@@ -495,6 +824,282 @@ mod tests {
             .await
             .unwrap();
         assert_eq!(body_json(res).await["executed"], true);
+    }
+
+    #[tokio::test]
+    async fn persisted_gate_survives_control_state_reload() {
+        let store = Arc::new(MemoryStore::default());
+        let first = ControlState::load(store.clone(), None, default_self_card())
+            .await
+            .unwrap();
+        let app = router(first);
+
+        let opened = app
+            .oneshot(json_request(
+                "POST",
+                "/api/gates/deploy/decision",
+                serde_json::json!({ "state": "open", "ticket": "GO-LIVE-RELOAD-001" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(opened.status(), StatusCode::OK);
+
+        let reloaded = ControlState::load(store, None, default_self_card())
+            .await
+            .unwrap();
+        assert_eq!(reloaded.gate_state("deploy"), Some(GateState::Open));
+
+        let listed = router(reloaded)
+            .oneshot(Request::get("/api/gates").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        let body = body_json(listed).await;
+        let deploy = body["gates"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|gate| gate["name"] == "deploy")
+            .unwrap();
+        assert_eq!(deploy["state"], "open");
+        assert_eq!(deploy["ticket"], "GO-LIVE-RELOAD-001");
+    }
+
+    #[tokio::test]
+    async fn load_ignores_unknown_and_invalid_open_gates() {
+        let store = Arc::new(MemoryStore::default());
+        store
+            .upsert_gate(&Gate {
+                name: "future_gate".into(),
+                state: GateState::Open,
+                ticket: Some("FUTURE-001".into()),
+            })
+            .await
+            .unwrap();
+        store
+            .upsert_gate(&Gate {
+                name: "deploy".into(),
+                state: GateState::Open,
+                ticket: None,
+            })
+            .await
+            .unwrap();
+
+        let state = ControlState::load(store, None, default_self_card())
+            .await
+            .unwrap();
+        assert_eq!(state.gate_state("future_gate"), None);
+        assert_eq!(state.gate_state("deploy"), Some(GateState::Hold));
+    }
+
+    #[tokio::test]
+    async fn actions_refresh_gate_decisions_shared_across_control_nodes() {
+        let store = Arc::new(MemoryStore::default());
+        let node_a = ControlState::load(store.clone(), None, default_self_card())
+            .await
+            .unwrap();
+        let node_b = ControlState::load(store, None, default_self_card())
+            .await
+            .unwrap();
+        let app_a = router(node_a);
+        let app_b = router(node_b.clone());
+
+        let opened = app_a
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                "/api/gates/deploy/decision",
+                serde_json::json!({ "state": "open", "ticket": "GO-LIVE-SHARED-001" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(opened.status(), StatusCode::OK);
+
+        let allowed = app_b
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                "/api/actions",
+                serde_json::json!({ "gate": "deploy", "action": "prepare_release" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(body_json(allowed).await["executed"], true);
+        assert_eq!(node_b.gate_state("deploy"), Some(GateState::Open));
+
+        let held = app_a
+            .oneshot(json_request(
+                "POST",
+                "/api/gates/deploy/decision",
+                serde_json::json!({ "state": "hold" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(held.status(), StatusCode::OK);
+
+        // Node B still has Open in its cache here. The action path must read
+        // through Store, observe Hold, deny execution, and repair its cache.
+        assert_eq!(node_b.gate_state("deploy"), Some(GateState::Open));
+        let denied = app_b
+            .oneshot(json_request(
+                "POST",
+                "/api/actions",
+                serde_json::json!({ "gate": "deploy", "action": "prepare_release" }),
+            ))
+            .await
+            .unwrap();
+        let denied_body = body_json(denied).await;
+        assert_eq!(denied_body["executed"], false);
+        assert_eq!(denied_body["dryRun"], true);
+        assert_eq!(node_b.gate_state("deploy"), Some(GateState::Hold));
+    }
+
+    #[tokio::test]
+    async fn gate_observability_refreshes_across_control_nodes() {
+        let store = Arc::new(MemoryStore::default());
+        let node_a = ControlState::load(store.clone(), None, default_self_card())
+            .await
+            .unwrap();
+        let node_b = ControlState::load(store, None, default_self_card())
+            .await
+            .unwrap();
+        let app_a = router(node_a);
+        let app_b = router(node_b.clone());
+
+        app_a
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                "/api/gates/deploy/decision",
+                serde_json::json!({ "state": "open", "ticket": "GO-LIVE-OBSERVE-001" }),
+            ))
+            .await
+            .unwrap();
+        let open_snapshot = app_b
+            .clone()
+            .oneshot(Request::get("/api/gates").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        let open_body = body_json(open_snapshot).await;
+        assert_eq!(
+            open_body["gates"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|gate| gate["name"] == "deploy")
+                .unwrap()["state"],
+            "open"
+        );
+
+        app_a
+            .oneshot(json_request(
+                "POST",
+                "/api/gates/deploy/decision",
+                serde_json::json!({ "state": "hold" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(node_b.gate_state("deploy"), Some(GateState::Open));
+
+        let held_snapshot = app_b
+            .clone()
+            .oneshot(Request::get("/api/gates").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        let held_body = body_json(held_snapshot).await;
+        assert_eq!(
+            held_body["gates"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|gate| gate["name"] == "deploy")
+                .unwrap()["state"],
+            "hold"
+        );
+        assert_eq!(node_b.gate_state("deploy"), Some(GateState::Hold));
+
+        let metrics_response = app_b
+            .oneshot(Request::get("/metrics").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(metrics_response.status(), StatusCode::OK);
+        assert!(body_text(metrics_response)
+            .await
+            .contains("sirinx_control_gate_open{gate=\"deploy\"} 0"));
+    }
+
+    #[tokio::test]
+    async fn failed_emergency_hold_stays_local_and_fail_closed() {
+        let store = Arc::new(FailingGateStore::default());
+        let state = ControlState::load(store.clone(), None, default_self_card())
+            .await
+            .unwrap();
+        let app = router(state.clone());
+
+        let opened = app
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                "/api/gates/deploy/decision",
+                serde_json::json!({ "state": "open", "ticket": "GO-LIVE-FAILURE-001" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(opened.status(), StatusCode::OK);
+
+        store.fail_gate_writes.store(true, Ordering::SeqCst);
+        let failed_hold = app
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                "/api/gates/deploy/decision",
+                serde_json::json!({ "state": "hold" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(failed_hold.status(), StatusCode::INTERNAL_SERVER_ERROR);
+        assert_eq!(state.gate_state("deploy"), Some(GateState::Hold));
+
+        // The backing store still contains Open, but the emergency override
+        // must prevent read-through from reopening this node.
+        assert_eq!(
+            store.inner.get_gate("deploy").await.unwrap().unwrap().state,
+            GateState::Open
+        );
+        let denied = app
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                "/api/actions",
+                serde_json::json!({ "gate": "deploy", "action": "prepare_release" }),
+            ))
+            .await
+            .unwrap();
+        let denied_body = body_json(denied).await;
+        assert_eq!(denied_body["executed"], false);
+        assert_eq!(denied_body["dryRun"], true);
+
+        // A later successful explicit Open is the only operation that clears
+        // the local emergency hold override.
+        store.fail_gate_writes.store(false, Ordering::SeqCst);
+        let reopened = app
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                "/api/gates/deploy/decision",
+                serde_json::json!({ "state": "open", "ticket": "GO-LIVE-FAILURE-002" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(reopened.status(), StatusCode::OK);
+        let allowed = app
+            .oneshot(json_request(
+                "POST",
+                "/api/actions",
+                serde_json::json!({ "gate": "deploy", "action": "prepare_release" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(body_json(allowed).await["executed"], true);
     }
 
     #[tokio::test]

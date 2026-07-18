@@ -1,9 +1,13 @@
 use async_trait::async_trait;
+use serde::de::DeserializeOwned;
 use sqlx::postgres::{PgPool, PgPoolOptions};
 use sqlx::Row;
 use uuid::Uuid;
 
-use sirinx_core::{AnalyticsEvent, Lead, LeadStatus, PendingWork};
+use sirinx_core::{
+    bounded_recovery_tool_name, AnalyticsEvent, FailureEvent, Gate, Lead, LeadStatus, Lesson,
+    PendingWork,
+};
 
 use crate::{Store, StoreError};
 
@@ -58,6 +62,46 @@ fn row_to_lead(row: &sqlx::postgres::PgRow) -> Result<Lead, StoreError> {
         "consent": row.try_get::<serde_json::Value, _>("consent").map_err(StoreError::from)?,
     });
     serde_json::from_value(value).map_err(|e| StoreError::Backend(e.to_string()))
+}
+
+fn row_to_gate(row: &sqlx::postgres::PgRow) -> Result<Gate, StoreError> {
+    let value = serde_json::json!({
+        "name": row.try_get::<String, _>("name").map_err(StoreError::from)?,
+        "state": row.try_get::<String, _>("state").map_err(StoreError::from)?,
+        "ticket": row.try_get::<Option<String>, _>("ticket").map_err(StoreError::from)?,
+    });
+    serde_json::from_value(value).map_err(|err| StoreError::Backend(err.to_string()))
+}
+
+fn enum_from_string<T: DeserializeOwned>(value: String) -> Result<T, StoreError> {
+    serde_json::from_value(serde_json::Value::String(value))
+        .map_err(|err| StoreError::Backend(err.to_string()))
+}
+
+fn row_to_failure(row: &sqlx::postgres::PgRow) -> Result<FailureEvent, StoreError> {
+    let attempt = row.try_get::<i32, _>("attempt").map_err(StoreError::from)?;
+    Ok(FailureEvent {
+        id: row.try_get("id").map_err(StoreError::from)?,
+        run_id: row.try_get("run_id").map_err(StoreError::from)?,
+        tool: row.try_get("tool_name").map_err(StoreError::from)?,
+        error_kind: enum_from_string(row.try_get("error_kind").map_err(StoreError::from)?)?,
+        attempt: u32::try_from(attempt)
+            .map_err(|_| StoreError::Backend("invalid failure attempt".into()))?,
+    })
+}
+
+fn row_to_lesson(row: &sqlx::postgres::PgRow) -> Result<Lesson, StoreError> {
+    let occurrences = row
+        .try_get::<i64, _>("occurrences")
+        .map_err(StoreError::from)?;
+    Ok(Lesson {
+        id: row.try_get("id").map_err(StoreError::from)?,
+        tool: row.try_get("tool_name").map_err(StoreError::from)?,
+        error_kind: enum_from_string(row.try_get("error_kind").map_err(StoreError::from)?)?,
+        guidance: enum_from_string(row.try_get("guidance_kind").map_err(StoreError::from)?)?,
+        occurrences: u64::try_from(occurrences)
+            .map_err(|_| StoreError::Backend("invalid lesson occurrence count".into()))?,
+    })
 }
 
 #[async_trait]
@@ -181,5 +225,105 @@ impl Store for PostgresStore {
                 .fetch_one(&self.pool)
                 .await?;
         Ok(row.try_get::<i64, _>("n").map_err(StoreError::from)? as u64)
+    }
+
+    async fn upsert_gate(&self, gate: &Gate) -> Result<(), StoreError> {
+        sqlx::query(
+            r#"insert into web_control_gates (name, state, ticket)
+               values ($1, $2, $3)
+               on conflict (name) do update
+               set state = excluded.state,
+                   ticket = excluded.ticket,
+                   updated_at = now()"#,
+        )
+        .bind(&gate.name)
+        .bind(enum_str(&gate.state)?)
+        .bind(&gate.ticket)
+        .execute(&self.pool)
+        .await?;
+        Ok(())
+    }
+
+    async fn list_gates(&self) -> Result<Vec<Gate>, StoreError> {
+        let rows = sqlx::query("select name, state, ticket from web_control_gates order by name")
+            .fetch_all(&self.pool)
+            .await?;
+        rows.iter().map(row_to_gate).collect()
+    }
+
+    async fn get_gate(&self, name: &str) -> Result<Option<Gate>, StoreError> {
+        let row = sqlx::query("select name, state, ticket from web_control_gates where name = $1")
+            .bind(name)
+            .fetch_optional(&self.pool)
+            .await?;
+        row.as_ref().map(row_to_gate).transpose()
+    }
+
+    async fn record_failure(&self, event: &FailureEvent) -> Result<(), StoreError> {
+        sqlx::query(
+            r#"insert into web_failure_events
+               (id, run_id, tool_name, error_kind, attempt)
+               values ($1, $2, $3, $4, $5)"#,
+        )
+        .bind(event.id)
+        .bind(event.run_id)
+        .bind(bounded_recovery_tool_name(&event.tool))
+        .bind(enum_str(&event.error_kind)?)
+        .bind(
+            i32::try_from(event.attempt.max(1))
+                .map_err(|_| StoreError::Backend("failure attempt exceeds storage range".into()))?,
+        )
+        .execute(&self.pool)
+        .await?;
+        Ok(())
+    }
+
+    async fn failure_events_for_run(&self, run_id: Uuid) -> Result<Vec<FailureEvent>, StoreError> {
+        let rows = sqlx::query(
+            r#"select id, run_id, tool_name, error_kind, attempt
+               from web_failure_events
+               where run_id = $1
+               order by attempt, id"#,
+        )
+        .bind(run_id)
+        .fetch_all(&self.pool)
+        .await?;
+        rows.iter().map(row_to_failure).collect()
+    }
+
+    async fn upsert_lesson(&self, lesson: &Lesson) -> Result<Lesson, StoreError> {
+        let row = sqlx::query(
+            r#"insert into web_lessons
+               (id, tool_name, error_kind, guidance_kind, occurrences)
+               values ($1, $2, $3, $4, 1)
+               on conflict (tool_name, error_kind, guidance_kind) do update
+               set occurrences = case
+                       when web_lessons.occurrences = 9223372036854775807
+                           then web_lessons.occurrences
+                       else web_lessons.occurrences + 1
+                   end,
+                   updated_at = now()
+               returning id, tool_name, error_kind, guidance_kind, occurrences"#,
+        )
+        .bind(lesson.id)
+        .bind(bounded_recovery_tool_name(&lesson.tool))
+        .bind(enum_str(&lesson.error_kind)?)
+        .bind(enum_str(&lesson.guidance)?)
+        .fetch_one(&self.pool)
+        .await?;
+        row_to_lesson(&row)
+    }
+
+    async fn lessons_for_tool(&self, tool: &str) -> Result<Vec<Lesson>, StoreError> {
+        let rows = sqlx::query(
+            r#"select id, tool_name, error_kind, guidance_kind, occurrences
+               from web_lessons
+               where tool_name = $1
+               order by occurrences desc, updated_at desc, id"#,
+        )
+        .bind(bounded_recovery_tool_name(tool))
+        .fetch_all(&self.pool)
+        .await?;
+        rows.iter().map(row_to_lesson).collect()
     }
 }

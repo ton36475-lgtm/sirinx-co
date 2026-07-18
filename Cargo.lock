@@ -1348,13 +1348,18 @@ dependencies = [
  "serde",
  "serde_json",
  "sirinx-agents",
+ "sirinx-core",
+ "sirinx-store",
  "thiserror 1.0.69",
+ "tokio",
+ "uuid",
 ]
 
 [[package]]
 name = "sirinx-control"
 version = "0.1.0"
 dependencies = [
+ "async-trait",
  "axum",
  "serde",
  "serde_json",

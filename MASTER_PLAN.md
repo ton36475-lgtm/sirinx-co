@@ -24,13 +24,13 @@ with knowledge, work, and routing shared through one backbone.**
 | A10 | **Ronin lead pipeline live**: lead POST → L1→L2 ROI scoring→L3 decision→L4 auto-enqueues follow-up work | `sirinx-agents::ronin`, web test |
 | A11 | Postman collection "SIRINX Platform API" (all 4 surfaces) | collection `e6b5fcae…` |
 | A12 | PR #6 merged to main | GitHub |
+| A13 | **Durable release gates**: typed core model + `web_control_gates` + Store-backed control hydration/write-through | migration 0003; memory/store/reload tests |
+| A14 | **Self-learning recovery loop**: bounded failure events + deduplicated structured lessons + gate-preserving retries | migration 0004; failure→lesson→guided retry and budget tests |
 
 ## B. QUEUED — engineering (in priority order)
 
 | # | Work item | Definition of done |
 | --- | --- | --- |
-| B1 | Gate persistence: `web_control_gates` migration + Store methods + control write-through | gates survive restart; test proves reload |
-| B2 | Self-learning loop: `web_failure_events` + `web_lessons` tables; autoloop `run_with_recovery` consults lessons, records failures, retries with backoff (bounded) | failure→lesson→guided-retry covered by tests |
 | B3 | R2-parity: port remaining routes from `automation-system-backend` + `sirinx` api-gateway into `sirinx-web` | route inventory diff = empty |
 | B4 | Ronin roster expansion: more L1 scanners (FB group, LINE events) + L2 scorers feeding the same pipeline | each agent tested |
 | B5 | Node bridge: register hermes-os A2A (:9000) card into OmniRoute; Obsidian vault sync client script for the Mac node | cards visible via /api/a2a/route; notes flow to D1 |

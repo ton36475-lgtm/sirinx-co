@@ -4,7 +4,7 @@
   "private": true,
   "description": "Canonical SIRINX OS monorepo governance scaffold with AdaptiveSync, PC node, Telegram dry-run control, and public-web source recovery.",
   "scripts": {
-    "check": "node --check scripts/verify-pr-mono-001.mjs && node --check scripts/adaptive-sync-plan.mjs && node --check scripts/telegram-notify-preview.mjs && node --check scripts/windows-drive-d-handoff.mjs && node --check scripts/verify-next-phase.mjs && node --check services/telegram-command-bot/src/index.mjs && node scripts/verify-pr-mono-001.mjs && node scripts/verify-next-phase.mjs",
+    "check": "node --check scripts/verify-pr-mono-001.mjs && node --check scripts/adaptive-sync-plan.mjs && node --check scripts/telegram-notify-preview.mjs && node --check scripts/windows-drive-d-handoff.mjs && node --check scripts/verify-next-phase.mjs && node --check services/telegram-command-bot/src/config.mjs && node --check services/telegram-command-bot/src/index.mjs && node scripts/verify-pr-mono-001.mjs && node scripts/verify-next-phase.mjs",
     "verify:mono-001": "node scripts/verify-pr-mono-001.mjs",
     "verify:next-phase": "node scripts/verify-next-phase.mjs",
     "pipeline:audit": "node scripts/pipeline-audit.mjs",
@@ -12,6 +12,8 @@
     "sync:handoff": "node scripts/windows-drive-d-handoff.mjs",
     "telegram:preview": "node scripts/telegram-notify-preview.mjs --dry-run",
     "telegram:bot:dry-run": "node services/telegram-command-bot/src/index.mjs --dry-run",
+    "telegram:config": "node services/telegram-command-bot/src/index.mjs --config",
+    "telegram:test": "vitest run services/telegram-command-bot",
     "restore:public-web": "node scripts/restore-public-web-from-sirinx.mjs",
     "verify:public-web-import": "node scripts/verify-public-web-import.mjs",
     "web:check": "pnpm --config.verify-deps-before-run=false --dir apps/public-web check",

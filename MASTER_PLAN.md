@@ -17,10 +17,10 @@ with knowledge, work, and routing shared through one backbone.**
 | A3 | Supabase persistence: web_leads / web_analytics_events / web_pending_work (+pg_notify), RLS | migrations 0001-0002, live |
 | A4 | Hermes Command Center imported + 120 Node tests green from root | `apps/dev-dashboard`, `services/dev-control-api` |
 | A5 | Release gates hold-by-default + ticket opening + bearer auth + /metrics | `sirinx-control` |
-| A6 | A2A mesh + OmniRoute, capabilities from 49 skills | `sirinx-a2a`, live smoke |
+| A6 | A2A mesh + OmniRoute, capabilities from 50 skills | `sirinx-a2a`, live smoke |
 | A7 | Brain @ Edge: D1 schema live (APAC) + brain-sync worker written | `infra/cloudflare/brain-sync-worker` |
 | A8 | CI workflow + governance phase advance; Docker deploy path (gated) | `.github/workflows/ci.yml`, `Dockerfile` |
-| A9 | 47 Ronin sub-agents + 49 skills consolidated + MIT license | `.claude/`, `LICENSE` |
+| A9 | Ronin org consolidated: 6 lead sub-agent files (L1–L5 + Kai) + 47-role roster (schema + JS descriptors) + 4 coded Rust agents + 50 skills + MIT license | `.claude/`, `crates/sirinx-agents`, `LICENSE` |
 | A10 | **Ronin lead pipeline live**: lead POST → L1→L2 ROI scoring→L3 decision→L4 auto-enqueues follow-up work | `sirinx-agents::ronin`, web test |
 | A11 | Postman collection "SIRINX Platform API" (all 4 surfaces) | collection `e6b5fcae…` |
 | A12 | PR #6 merged to main | GitHub |

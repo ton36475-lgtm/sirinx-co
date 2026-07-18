@@ -3,7 +3,9 @@ use sqlx::postgres::{PgPool, PgPoolOptions};
 use sqlx::Row;
 use uuid::Uuid;
 
-use sirinx_core::{AnalyticsEvent, Lead, LeadStatus, PendingWork};
+use sirinx_core::{
+    AnalyticsEvent, FailureRecord, GateRecord, Lead, LeadStatus, Lesson, PendingWork,
+};
 
 use crate::{Store, StoreError};
 
@@ -181,5 +183,86 @@ impl Store for PostgresStore {
                 .fetch_one(&self.pool)
                 .await?;
         Ok(row.try_get::<i64, _>("n").map_err(StoreError::from)? as u64)
+    }
+
+    async fn load_gates(&self) -> Result<Vec<GateRecord>, StoreError> {
+        let rows = sqlx::query("select name, state, ticket from web_control_gates order by name")
+            .fetch_all(&self.pool)
+            .await?;
+        rows.iter()
+            .map(|row| {
+                Ok(GateRecord {
+                    name: row.try_get("name").map_err(StoreError::from)?,
+                    state: row.try_get("state").map_err(StoreError::from)?,
+                    ticket: row.try_get("ticket").map_err(StoreError::from)?,
+                })
+            })
+            .collect()
+    }
+
+    async fn upsert_gate(&self, gate: &GateRecord) -> Result<(), StoreError> {
+        sqlx::query(
+            r#"insert into web_control_gates (name, state, ticket, updated_at)
+               values ($1, $2, $3, now())
+               on conflict (name) do update set
+                 state = excluded.state, ticket = excluded.ticket, updated_at = now()"#,
+        )
+        .bind(&gate.name)
+        .bind(&gate.state)
+        .bind(&gate.ticket)
+        .execute(&self.pool)
+        .await?;
+        Ok(())
+    }
+
+    async fn record_failure(&self, failure: &FailureRecord) -> Result<(), StoreError> {
+        sqlx::query(
+            "insert into web_failure_events (component, error, context) values ($1, $2, $3)",
+        )
+        .bind(&failure.component)
+        .bind(&failure.error)
+        .bind(&failure.context)
+        .execute(&self.pool)
+        .await?;
+        Ok(())
+    }
+
+    async fn count_failures(&self) -> Result<u64, StoreError> {
+        let row = sqlx::query("select count(*) as n from web_failure_events")
+            .fetch_one(&self.pool)
+            .await?;
+        Ok(row.try_get::<i64, _>("n").map_err(StoreError::from)? as u64)
+    }
+
+    async fn upsert_lesson(&self, lesson: &Lesson) -> Result<(), StoreError> {
+        sqlx::query(
+            r#"insert into web_lessons (pattern, resolution, hits, updated_at)
+               values ($1, $2, 0, now())
+               on conflict (pattern) do update set
+                 resolution = excluded.resolution,
+                 hits = web_lessons.hits + 1,
+                 updated_at = now()"#,
+        )
+        .bind(&lesson.pattern)
+        .bind(&lesson.resolution)
+        .execute(&self.pool)
+        .await?;
+        Ok(())
+    }
+
+    async fn list_lessons(&self) -> Result<Vec<Lesson>, StoreError> {
+        let rows =
+            sqlx::query("select pattern, resolution, hits from web_lessons order by pattern")
+                .fetch_all(&self.pool)
+                .await?;
+        rows.iter()
+            .map(|row| {
+                Ok(Lesson {
+                    pattern: row.try_get("pattern").map_err(StoreError::from)?,
+                    resolution: row.try_get("resolution").map_err(StoreError::from)?,
+                    hits: row.try_get::<i64, _>("hits").map_err(StoreError::from)? as u64,
+                })
+            })
+            .collect()
     }
 }

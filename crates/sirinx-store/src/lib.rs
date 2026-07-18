@@ -14,7 +14,10 @@ pub mod postgres;
 use async_trait::async_trait;
 use uuid::Uuid;
 
-use sirinx_core::{AnalyticsEvent, Lead, LeadStatus, PendingWork, ValidationError};
+use sirinx_core::{
+    AnalyticsEvent, FailureRecord, GateRecord, Lead, LeadStatus, Lesson, PendingWork,
+    ValidationError,
+};
 
 #[derive(Debug, thiserror::Error)]
 pub enum StoreError {
@@ -61,6 +64,22 @@ pub trait Store: Send + Sync {
     async fn list_pending_work(&self) -> Result<Vec<PendingWork>, StoreError>;
 
     async fn count_pending_work(&self) -> Result<u64, StoreError>;
+
+    /// B1 — durable release gates.
+    async fn load_gates(&self) -> Result<Vec<GateRecord>, StoreError>;
+
+    async fn upsert_gate(&self, gate: &GateRecord) -> Result<(), StoreError>;
+
+    /// B2 — self-learning loop.
+    async fn record_failure(&self, failure: &FailureRecord) -> Result<(), StoreError>;
+
+    async fn count_failures(&self) -> Result<u64, StoreError>;
+
+    /// Insert a lesson or, when the pattern exists, bump its hit count
+    /// and refresh the resolution.
+    async fn upsert_lesson(&self, lesson: &Lesson) -> Result<(), StoreError>;
+
+    async fn list_lessons(&self) -> Result<Vec<Lesson>, StoreError>;
 }
 
 pub use memory::MemoryStore;

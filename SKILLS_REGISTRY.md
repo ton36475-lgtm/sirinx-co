@@ -1,7 +1,7 @@
 # Skills Registry — Monorepo Consolidation
 
 All Claude Code skills from the github.com/ton36475-lgtm system now live
-in this repo under `.claude/skills/` (49 total), so every session and
+in this repo under `.claude/skills/` (50 total), so every session and
 sub-agent on the monorepo sees one skill set.
 
 | Source repo | Skills | Notes |

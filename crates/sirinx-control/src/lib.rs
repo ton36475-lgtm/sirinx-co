@@ -103,12 +103,44 @@ impl ControlState {
         }
     }
 
+    /// B1 — durable gates: start from defaults, overlay whatever the
+    /// store remembers, so an opened gate survives restarts.
+    pub async fn load(
+        store: Arc<dyn Store>,
+        api_token: Option<String>,
+        self_card: AgentCard,
+    ) -> Result<Self, sirinx_store::StoreError> {
+        let state = Self::new(store.clone(), api_token, self_card);
+        let records = store.load_gates().await?;
+        {
+            let mut gates = state.gates.write().expect("gate lock poisoned");
+            for record in records {
+                if let Some(gate) = gates.get_mut(&record.name) {
+                    gate.state = if record.state == "open" {
+                        GateState::Open
+                    } else {
+                        GateState::Hold
+                    };
+                    gate.ticket = record.ticket;
+                }
+            }
+        }
+        Ok(state)
+    }
+
     pub fn gate_state(&self, name: &str) -> Option<GateState> {
         self.gates
             .read()
             .expect("gate lock poisoned")
             .get(name)
             .map(|g| g.state)
+    }
+}
+
+fn gate_state_str(state: GateState) -> &'static str {
+    match state {
+        GateState::Hold => "hold",
+        GateState::Open => "open",
     }
 }
 
@@ -247,17 +279,46 @@ async fn decide_gate(
             Json(serde_json::json!({ "error": "opening a gate requires a ticket" })),
         ));
     }
-    let mut gates = state.gates.write().expect("gate lock poisoned");
-    let gate = gates.get_mut(&name).ok_or((
-        StatusCode::NOT_FOUND,
-        Json(serde_json::json!({ "error": "unknown gate" })),
-    ))?;
-    gate.state = decision.state;
-    gate.ticket = match decision.state {
+    if !state
+        .gates
+        .read()
+        .expect("gate lock poisoned")
+        .contains_key(&name)
+    {
+        return Err((
+            StatusCode::NOT_FOUND,
+            Json(serde_json::json!({ "error": "unknown gate" })),
+        ));
+    }
+
+    let ticket = match decision.state {
         GateState::Open => decision.ticket,
         GateState::Hold => None,
     };
-    tracing::info!(gate = %name, state = ?gate.state, "gate decision recorded");
+
+    // Persist first — a decision that cannot be made durable is not a
+    // decision (B1: gates must survive restarts).
+    state
+        .store
+        .upsert_gate(&sirinx_core::GateRecord {
+            name: name.clone(),
+            state: gate_state_str(decision.state).to_owned(),
+            ticket: ticket.clone(),
+        })
+        .await
+        .map_err(|err| {
+            tracing::error!(gate = %name, error = %err, "failed to persist gate decision");
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(serde_json::json!({ "error": "storage backend failure" })),
+            )
+        })?;
+
+    let mut gates = state.gates.write().expect("gate lock poisoned");
+    let gate = gates.get_mut(&name).expect("existence checked above");
+    gate.state = decision.state;
+    gate.ticket = ticket;
+    tracing::info!(gate = %name, state = ?gate.state, "gate decision recorded (durable)");
     Ok(Json(gate.clone()))
 }
 
@@ -592,6 +653,33 @@ mod tests {
             .await
             .unwrap();
         assert_eq!(ok.status(), StatusCode::OK);
+    }
+
+    #[tokio::test]
+    async fn gate_decisions_survive_restart() {
+        // One shared store = the database; two ControlStates = two
+        // process lifetimes.
+        let store: Arc<MemoryStore> = Arc::new(MemoryStore::default());
+
+        let first = ControlState::new(store.clone(), None, default_self_card());
+        let app = router(first);
+        let opened = app
+            .oneshot(json_request(
+                "POST",
+                "/api/gates/deploy/decision",
+                serde_json::json!({ "state": "open", "ticket": "GO-LIVE-DEPLOY-001" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(opened.status(), StatusCode::OK);
+
+        // "Restart": load a fresh state from the same store.
+        let second = ControlState::load(store, None, default_self_card())
+            .await
+            .unwrap();
+        assert_eq!(second.gate_state("deploy"), Some(GateState::Open));
+        // Untouched gates stay on their default hold.
+        assert_eq!(second.gate_state("telegram_send"), Some(GateState::Hold));
     }
 
     #[tokio::test]

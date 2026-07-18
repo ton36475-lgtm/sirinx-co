@@ -4,7 +4,9 @@ use std::sync::RwLock;
 use async_trait::async_trait;
 use uuid::Uuid;
 
-use sirinx_core::{AnalyticsEvent, Lead, LeadStatus, PendingWork};
+use sirinx_core::{
+    AnalyticsEvent, FailureRecord, GateRecord, Lead, LeadStatus, Lesson, PendingWork,
+};
 
 use crate::{Store, StoreError};
 
@@ -14,6 +16,9 @@ pub struct MemoryStore {
     leads: RwLock<HashMap<Uuid, Lead>>,
     events: RwLock<Vec<AnalyticsEvent>>,
     pending: RwLock<Vec<PendingWork>>,
+    gates: RwLock<HashMap<String, GateRecord>>,
+    failures: RwLock<Vec<FailureRecord>>,
+    lessons: RwLock<HashMap<String, Lesson>>,
 }
 
 #[async_trait]
@@ -81,6 +86,62 @@ impl Store for MemoryStore {
 
     async fn count_pending_work(&self) -> Result<u64, StoreError> {
         Ok(self.pending.read().expect("pending store poisoned").len() as u64)
+    }
+
+    async fn load_gates(&self) -> Result<Vec<GateRecord>, StoreError> {
+        let mut gates: Vec<GateRecord> = self
+            .gates
+            .read()
+            .expect("gate store poisoned")
+            .values()
+            .cloned()
+            .collect();
+        gates.sort_by(|a, b| a.name.cmp(&b.name));
+        Ok(gates)
+    }
+
+    async fn upsert_gate(&self, gate: &GateRecord) -> Result<(), StoreError> {
+        self.gates
+            .write()
+            .expect("gate store poisoned")
+            .insert(gate.name.clone(), gate.clone());
+        Ok(())
+    }
+
+    async fn record_failure(&self, failure: &FailureRecord) -> Result<(), StoreError> {
+        self.failures
+            .write()
+            .expect("failure store poisoned")
+            .push(failure.clone());
+        Ok(())
+    }
+
+    async fn count_failures(&self) -> Result<u64, StoreError> {
+        Ok(self.failures.read().expect("failure store poisoned").len() as u64)
+    }
+
+    async fn upsert_lesson(&self, lesson: &Lesson) -> Result<(), StoreError> {
+        let mut lessons = self.lessons.write().expect("lesson store poisoned");
+        lessons
+            .entry(lesson.pattern.clone())
+            .and_modify(|existing| {
+                existing.resolution = lesson.resolution.clone();
+                existing.hits += 1;
+            })
+            .or_insert_with(|| lesson.clone());
+        Ok(())
+    }
+
+    async fn list_lessons(&self) -> Result<Vec<Lesson>, StoreError> {
+        let mut lessons: Vec<Lesson> = self
+            .lessons
+            .read()
+            .expect("lesson store poisoned")
+            .values()
+            .cloned()
+            .collect();
+        lessons.sort_by(|a, b| a.pattern.cmp(&b.pattern));
+        Ok(lessons)
     }
 }
 

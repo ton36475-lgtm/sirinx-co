@@ -9,7 +9,7 @@ its connection point into the mesh.
 | Layer | Mechanism |
 | --- | --- |
 | Work queue | Supabase `web_pending_work` + pg_notify → `sirinx-control /api/a2a/sync` |
-| Capability routing | OmniRoute (`/api/a2a/route`) — capabilities auto-loaded from 49 skills |
+| Capability routing | OmniRoute (`/api/a2a/route`) — capabilities auto-loaded from 50 skills |
 | Knowledge | D1 `sirinx-unified-db` (APAC/SIN) → `brain-sync-worker` (`/api/brain/sync|search|notes`) |
 | API contract | Postman collection **"SIRINX Platform API"** (workspace `549f0d6b…`, collection `e6b5fcae…`) |
 
@@ -54,7 +54,7 @@ bridge = its card registered into OmniRoute via `POST /api/a2a/sync`.
 
 Supabase SIRINX (3 web tables, RLS) ↔ sirinx-web/control · Hermes
 dashboard 8710 → control API 8711 (Node long-tail + Rust core) ·
-47 Ronin sub-agents (`.claude/agents/`) · 49 skills (`.claude/skills/`)
+47 Ronin sub-agents (`.claude/agents/`) · 50 skills (`.claude/skills/`)
 → OmniRoute capabilities · mux launcher (`scripts/agents-mux.sh`).
 
 ## Gaps intentionally left gated

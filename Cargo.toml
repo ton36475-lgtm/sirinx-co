@@ -5,6 +5,7 @@ members = [
     "crates/sirinx-roi",
     "crates/sirinx-agents",
     "crates/sirinx-autoloop",
+    "crates/sirinx-store",
     "crates/sirinx-web",
 ]
 
@@ -20,6 +21,9 @@ sirinx-core = { path = "crates/sirinx-core" }
 sirinx-roi = { path = "crates/sirinx-roi" }
 sirinx-agents = { path = "crates/sirinx-agents" }
 sirinx-autoloop = { path = "crates/sirinx-autoloop" }
+sirinx-store = { path = "crates/sirinx-store" }
+async-trait = "0.1"
+sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio", "tls-rustls", "postgres", "uuid", "json", "migrate", "macros"] }
 
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

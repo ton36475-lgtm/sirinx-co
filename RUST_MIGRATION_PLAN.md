@@ -34,16 +34,21 @@ sirinx-co/
 - 47 Ronin layer rules enforced in code: L1→L2→L3→L4 only, token budgets per layer.
 - Autonomous loop with hard step budgets and DryRun-by-default approval gates.
 
-## Phase R2 — Persistence and API parity
+## Phase R2 — Persistence (landed)
 
-| Source repo | What moves | Rust target |
-| --- | --- | --- |
-| `automation-system-backend` | lead/workflow API | `sirinx-web` handlers + `sirinx-core` |
-| `sirinx` (api-gateway) | gateway routes | `sirinx-web` |
-| Supabase schema | leads, events tables | `sirinx-store` (new crate, sqlx/postgres) |
+- `sirinx-store` crate: `Store` trait with `MemoryStore` (default) and
+  `PostgresStore` (sqlx, embedded migrations under
+  `crates/sirinx-store/migrations/`).
+- `sirinx-web` handlers talk only to the trait; `DATABASE_URL` selects
+  the backend at startup, empty/unset falls back to in-memory.
+- Supabase project `SIRINX` (`frmpnjxynvpdsnoaqtnz`) carries the schema:
+  `public.web_leads` and `public.web_analytics_events`, RLS enabled with
+  no public policies (server-only access; PostgREST/anon cannot read).
+- Status transitions run transactionally (`select ... for update`).
+- Postgres integration test is env-gated on `TEST_DATABASE_URL`.
 
-The in-memory store in `sirinx-web::AppState` is already isolated so the
-swap to Postgres/Supabase does not touch handler code.
+Still open for R2 parity: importing the remaining routes from
+`automation-system-backend` and `sirinx` (api-gateway) into `sirinx-web`.
 
 ## Phase R3 — Agent runtime
 

@@ -109,7 +109,7 @@ async fn lead_lifecycle_create_patch_delete() {
     let lead = body_json(created).await;
     let id = lead["id"].as_str().unwrap().to_owned();
     assert_eq!(lead["status"], "new");
-    assert_eq!(state.lead_count(), 1);
+    assert_eq!(state.lead_count().await, 1);
 
     // Legal transition new -> contacted.
     let patched = app
@@ -146,7 +146,7 @@ async fn lead_lifecycle_create_patch_delete() {
         .await
         .unwrap();
     assert_eq!(deleted.status(), StatusCode::NO_CONTENT);
-    assert_eq!(state.lead_count(), 0);
+    assert_eq!(state.lead_count().await, 0);
 }
 
 #[tokio::test]
@@ -182,7 +182,7 @@ async fn analytics_respects_consent_and_allowlist() {
         .await
         .unwrap();
     assert_eq!(ok.status(), StatusCode::ACCEPTED);
-    assert_eq!(state.accepted_event_count(), 1);
+    assert_eq!(state.accepted_event_count().await, 1);
 
     // No consent → acknowledged, not stored.
     let no_consent = app
@@ -200,5 +200,5 @@ async fn analytics_respects_consent_and_allowlist() {
         .await
         .unwrap();
     assert_eq!(no_consent.status(), StatusCode::OK);
-    assert_eq!(state.accepted_event_count(), 1);
+    assert_eq!(state.accepted_event_count().await, 1);
 }

@@ -56,7 +56,7 @@ impl LeadStatus {
 }
 
 /// Incoming lead payload, camelCase on the wire to match the landing spec.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LeadDraft {
     pub business_type: BusinessType,
@@ -100,7 +100,7 @@ impl LeadDraft {
 }
 
 /// A persisted lead.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Lead {
     pub id: Uuid,

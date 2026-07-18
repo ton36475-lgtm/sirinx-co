@@ -10,9 +10,11 @@
 //! - `PATCH /api/leads/:id/status`  — advance lead status
 //! - `DELETE /api/leads/:id`        — remove internal draft lead
 //! - `POST /api/events`             — consent-gated analytics intake
+//!
+//! Persistence goes through `sirinx_store::Store`: `MemoryStore` by
+//! default, `PostgresStore` (Supabase) when `DATABASE_URL` is set.
 
-use std::collections::HashMap;
-use std::sync::{Arc, RwLock};
+use std::sync::Arc;
 
 use axum::extract::{Path, State};
 use axum::http::StatusCode;
@@ -22,29 +24,35 @@ use axum::{Json, Router};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use sirinx_core::{
-    default_packages, AnalyticsEvent, Lead, LeadDraft, LeadStatus, ValidationError,
-};
+use sirinx_core::{default_packages, AnalyticsEvent, Lead, LeadDraft, LeadStatus};
 use sirinx_roi::{estimate, RoiInput};
+use sirinx_store::{MemoryStore, Store, StoreError};
 
 const HOME_HTML: &str = include_str!("../static/index.html");
 const THAIMART_HTML: &str = include_str!("../static/thaimart-sirinx.html");
 
-/// In-memory store. Swappable for Supabase/Postgres in a later phase
-/// without touching handler code.
-#[derive(Clone, Default)]
+#[derive(Clone)]
 pub struct AppState {
-    leads: Arc<RwLock<HashMap<Uuid, Lead>>>,
-    events: Arc<RwLock<Vec<AnalyticsEvent>>>,
+    store: Arc<dyn Store>,
+}
+
+impl Default for AppState {
+    fn default() -> Self {
+        Self::new(Arc::new(MemoryStore::default()))
+    }
 }
 
 impl AppState {
-    pub fn lead_count(&self) -> usize {
-        self.leads.read().expect("lead store poisoned").len()
+    pub fn new(store: Arc<dyn Store>) -> Self {
+        Self { store }
     }
 
-    pub fn accepted_event_count(&self) -> usize {
-        self.events.read().expect("event store poisoned").len()
+    pub async fn lead_count(&self) -> u64 {
+        self.store.count_leads().await.unwrap_or(0)
+    }
+
+    pub async fn accepted_event_count(&self) -> u64 {
+        self.store.count_events().await.unwrap_or(0)
     }
 }
 
@@ -57,6 +65,21 @@ impl ApiError {
     fn new(msg: impl Into<String>) -> Json<Self> {
         Json(Self { error: msg.into() })
     }
+}
+
+/// Map storage errors onto API status codes: missing rows are 404,
+/// illegal transitions are 409, backend failures are 500.
+fn store_error_response(err: StoreError) -> (StatusCode, Json<ApiError>) {
+    let status = match &err {
+        StoreError::NotFound => StatusCode::NOT_FOUND,
+        StoreError::Validation(_) => StatusCode::CONFLICT,
+        StoreError::Backend(_) => StatusCode::INTERNAL_SERVER_ERROR,
+    };
+    if status == StatusCode::INTERNAL_SERVER_ERROR {
+        tracing::error!(error = %err, "storage backend failure");
+        return (status, ApiError::new("storage backend failure"));
+    }
+    (status, ApiError::new(err.to_string()))
 }
 
 pub fn router(state: AppState) -> Router {
@@ -100,10 +123,10 @@ async fn create_lead(
     let lead = Lead::from_draft(draft)
         .map_err(|err| (StatusCode::UNPROCESSABLE_ENTITY, ApiError::new(err.to_string())))?;
     state
-        .leads
-        .write()
-        .expect("lead store poisoned")
-        .insert(lead.id, lead.clone());
+        .store
+        .insert_lead(&lead)
+        .await
+        .map_err(store_error_response)?;
     tracing::info!(lead_id = %lead.id, "lead created");
     Ok((StatusCode::CREATED, Json(lead)))
 }
@@ -118,17 +141,12 @@ async fn update_lead_status(
     Path(id): Path<Uuid>,
     Json(patch): Json<StatusPatch>,
 ) -> Result<Json<Lead>, (StatusCode, Json<ApiError>)> {
-    let mut leads = state.leads.write().expect("lead store poisoned");
-    let lead = leads
-        .get_mut(&id)
-        .ok_or_else(|| (StatusCode::NOT_FOUND, ApiError::new("lead not found")))?;
-    lead.transition(patch.status).map_err(|err| match err {
-        ValidationError::InvalidTransition { .. } => {
-            (StatusCode::CONFLICT, ApiError::new(err.to_string()))
-        }
-        _ => (StatusCode::UNPROCESSABLE_ENTITY, ApiError::new(err.to_string())),
-    })?;
-    Ok(Json(lead.clone()))
+    let lead = state
+        .store
+        .update_lead_status(id, patch.status)
+        .await
+        .map_err(store_error_response)?;
+    Ok(Json(lead))
 }
 
 async fn delete_lead(
@@ -136,13 +154,14 @@ async fn delete_lead(
     Path(id): Path<Uuid>,
 ) -> Result<StatusCode, (StatusCode, Json<ApiError>)> {
     let removed = state
-        .leads
-        .write()
-        .expect("lead store poisoned")
-        .remove(&id);
-    match removed {
-        Some(_) => Ok(StatusCode::NO_CONTENT),
-        None => Err((StatusCode::NOT_FOUND, ApiError::new("lead not found"))),
+        .store
+        .delete_lead(id)
+        .await
+        .map_err(store_error_response)?;
+    if removed {
+        Ok(StatusCode::NO_CONTENT)
+    } else {
+        Err((StatusCode::NOT_FOUND, ApiError::new("lead not found")))
     }
 }
 
@@ -151,15 +170,15 @@ async fn delete_lead(
 async fn ingest_event(
     State(state): State<AppState>,
     Json(event): Json<AnalyticsEvent>,
-) -> (StatusCode, Json<serde_json::Value>) {
+) -> Result<(StatusCode, Json<serde_json::Value>), (StatusCode, Json<ApiError>)> {
     if event.is_accepted() {
         state
-            .events
-            .write()
-            .expect("event store poisoned")
-            .push(event);
-        (StatusCode::ACCEPTED, Json(serde_json::json!({ "stored": true })))
+            .store
+            .insert_event(&event)
+            .await
+            .map_err(store_error_response)?;
+        Ok((StatusCode::ACCEPTED, Json(serde_json::json!({ "stored": true }))))
     } else {
-        (StatusCode::OK, Json(serde_json::json!({ "stored": false })))
+        Ok((StatusCode::OK, Json(serde_json::json!({ "stored": false }))))
     }
 }

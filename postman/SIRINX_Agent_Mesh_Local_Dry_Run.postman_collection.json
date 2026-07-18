@@ -1,0 +1,728 @@
+{
+  "info": {
+    "_postman_id": "0479fc41-cf86-41db-b210-c2c9ad275acf",
+    "name": "SIRINX Agent Mesh - Local Dry Run",
+    "description": "Strictly loopback-only readiness, read, pure-compute, and explicit dry-run requests for the local SIRINX agent mesh. The collection never starts services and contains no mutation request.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const baseKeys = ['web_base_url', 'rust_control_base_url', 'node_control_base_url', 'brain_base_url'];",
+          "const basePattern = /^http:\\/\\/(?:127\\.0\\.0\\.1|localhost|\\[::1\\])(?::\\d+)?$/i;",
+          "const requestPattern = /^http:\\/\\/(?:127\\.0\\.0\\.1|localhost|\\[::1\\])(?::\\d+)?(?:\\/|$)/i;",
+          "const unsafeBases = baseKeys.filter((key) => !basePattern.test(String(pm.environment.get(key) || '')));",
+          "const resolvedUrl = pm.variables.replaceIn(pm.request.url.toString());",
+          "if (unsafeBases.length > 0 || !requestPattern.test(resolvedUrl)) {",
+          "  console.error('SIRINX local guard skipped a non-loopback or incomplete request.');",
+          "  pm.execution.skipRequest();",
+          "}",
+          "pm.request.headers.remove('Authorization');",
+          "const authTargets = [",
+          "  ['rust_control_base_url', 'control_token'],",
+          "  ['brain_base_url', 'brain_token']",
+          "];",
+          "authTargets.forEach(([baseKey, tokenKey]) => {",
+          "  const base = String(pm.environment.get(baseKey) || '');",
+          "  const token = String(pm.environment.get(tokenKey) || '');",
+          "  if (base && token && (resolvedUrl === base || resolvedUrl.startsWith(base + '/'))) {",
+          "    pm.request.headers.upsert({ key: 'Authorization', value: 'Bearer ' + token });",
+          "  }",
+          "});"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test('HTTP status is successful', () => pm.expect(pm.response.code).to.be.within(200, 299));",
+          "let responseBody = null;",
+          "try { responseBody = pm.response.json(); } catch (_) {}",
+          "pm.test('Response is JSON object', () => {",
+          "  pm.expect(String(pm.response.headers.get('content-type') || '')).to.match(/^application\\/json\\b/i);",
+          "  pm.expect(responseBody).to.be.an('object').and.not.equal(null);",
+          "});",
+          "const baseKeys = ['web_base_url', 'rust_control_base_url', 'node_control_base_url', 'brain_base_url'];",
+          "const loopbackBase = /^http:\\/\\/(?:127\\.0\\.0\\.1|localhost|\\[::1\\])(?::\\d+)?$/i;",
+          "pm.test('All base URLs are loopback-only', () => {",
+          "  baseKeys.forEach((key) => pm.expect(String(pm.environment.get(key) || ''), key).to.match(loopbackBase));",
+          "});",
+          "const secretBearingKeys = new Set([",
+          "  'password', 'passwd', 'token', 'accesstoken', 'refreshtoken', 'apikey',",
+          "  'secret', 'clientsecret', 'privatekey', 'authorization', 'cookie', 'setcookie'",
+          "]);",
+          "const mustRemainFalse = new Set([",
+          "  'externalwrites', 'cancallprovider', 'commandexecuted', 'providercalled',",
+          "  'cancallpaidapi', 'canexecuteexternally', 'canreadsecrets', 'secretsread',",
+          "  'keyvalueprinted', 'canrunmcp', 'canstartmcp', 'caninstallpackages',",
+          "  'cansendmessages', 'candeploy', 'canpush', 'canpublish',",
+          "  'canautostartagents', 'canmodifysource', 'canexecutenow',",
+          "  'canstartgateways', 'canstarthermesteam', 'canrunantigravitycli'",
+          "]);",
+          "const exposedSecretFields = [];",
+          "const unsafeFlags = [];",
+          "function inspect(value, path) {",
+          "  if (Array.isArray(value)) { value.forEach((entry, index) => inspect(entry, path + '[' + index + ']')); return; }",
+          "  if (!value || typeof value !== 'object') return;",
+          "  Object.keys(value).forEach((key) => {",
+          "    const normalized = key.replace(/[-_]/g, '').toLowerCase();",
+          "    const nextPath = path + '.' + key;",
+          "    if (secretBearingKeys.has(normalized)) exposedSecretFields.push(nextPath);",
+          "    if (mustRemainFalse.has(normalized) && value[key] !== false) unsafeFlags.push(nextPath + '=' + String(value[key]));",
+          "    inspect(value[key], nextPath);",
+          "  });",
+          "}",
+          "inspect(responseBody, '$');",
+          "pm.test('Response has no secret-bearing fields', () => pm.expect(exposedSecretFields).to.eql([]));",
+          "pm.test('Safety capability fields remain false when present', () => pm.expect(unsafeFlags).to.eql([]));"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Runtime readiness",
+      "description": "Read-only liveness checks. These requests observe already-running local services and never start them.",
+      "item": [
+        {
+          "name": "sirinx-web readiness",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{web_base_url}}/health",
+              "host": [
+                "{{web_base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Read-only liveness for sirinx-web on port 8080."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('sirinx-web health schema', () => {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "  pm.expect(body.status).to.equal('ok');",
+                  "  pm.expect(body.service).to.equal('sirinx-web');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Rust control readiness",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{rust_control_base_url}}/health",
+              "host": [
+                "{{rust_control_base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Open liveness endpoint for the Rust control core on port 8711."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('Rust control health schema', () => {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "  pm.expect(body.status).to.equal('ok');",
+                  "  pm.expect(body.service).to.equal('sirinx-control');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Node long-tail readiness (target 8712)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{node_control_base_url}}/health",
+              "host": [
+                "{{node_control_base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Read-only liveness for the Node long-tail target split on port 8712."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('Node long-tail health schema and locks', () => {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "  pm.expect(body.status).to.equal('ok');",
+                  "  pm.expect(body.service).to.equal('sirinx-dev-control-api');",
+                  "  pm.expect(body.dryRunOnly).to.equal(true);",
+                  "  pm.expect(body.externalWrites).to.equal(false);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Optional Brain readiness",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{brain_base_url}}/health",
+              "host": [
+                "{{brain_base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Optional local Brain health only. The collection makes no sync or search request."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('Brain health schema', () => {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "  pm.expect(body).to.be.an('object');",
+                  "  pm.expect(body.status).to.be.a('string').and.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sirinx-web read and pure compute",
+      "description": "Read-only catalog plus deterministic ROI calculation. The ROI POST does not persist state.",
+      "item": [
+        {
+          "name": "List energy packages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{web_base_url}}/api/packages",
+              "host": [
+                "{{web_base_url}}"
+              ],
+              "path": [
+                "api",
+                "packages"
+              ]
+            },
+            "description": "Read-only energy package catalog."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('Package catalog schema', () => {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "  pm.expect(body.packages).to.be.an('array').that.is.not.empty;",
+                  "  body.packages.forEach((entry) => {",
+                  "    pm.expect(entry.slug).to.be.a('string').and.not.empty;",
+                  "    pm.expect(entry.nameTh).to.be.a('string').and.not.empty;",
+                  "    pm.expect(entry.nameEn).to.be.a('string').and.not.empty;",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Calculate ROI scenario (pure)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monthlyBillThb\": 45000,\n  \"availableAreaSqm\": 300,\n  \"usage\": \"medium_daytime\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{web_base_url}}/api/roi",
+              "host": [
+                "{{web_base_url}}"
+              ],
+              "path": [
+                "api",
+                "roi"
+              ]
+            },
+            "description": "Pure server-side pre-screen calculation; no lead, event, or database write."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('ROI result schema and deterministic example', () => {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "  pm.expect(body.estimate).to.be.an('object');",
+                  "  pm.expect(body.estimate.estimatedKw).to.equal(50);",
+                  "  pm.expect(body.estimate.savingLowThb).to.equal(7812);",
+                  "  pm.expect(body.estimate.savingHighThb).to.equal(13392);",
+                  "  pm.expect(body.notice).to.be.a('string').and.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Rust control read and pure route",
+      "description": "Authenticated when control_token is set. Contains reads plus capability selection; it excludes decisions and action execution.",
+      "item": [
+        {
+          "name": "List held release gates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{rust_control_base_url}}/api/gates",
+              "host": [
+                "{{rust_control_base_url}}"
+              ],
+              "path": [
+                "api",
+                "gates"
+              ]
+            },
+            "description": "Read the authoritative gate snapshot. Test fails if any gate is open."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('Gate schema and hold invariant', () => {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "  pm.expect(body.gates).to.be.an('array').that.is.not.empty;",
+                  "  body.gates.forEach((gate) => {",
+                  "    pm.expect(gate.name).to.be.a('string').and.not.empty;",
+                  "    pm.expect(gate.state, gate.name).to.equal('hold');",
+                  "    pm.expect(gate.ticket, gate.name).to.equal(null);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List pending work",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{rust_control_base_url}}/api/pending-work",
+              "host": [
+                "{{rust_control_base_url}}"
+              ],
+              "path": [
+                "api",
+                "pending-work"
+              ]
+            },
+            "description": "Read-only pending work snapshot."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('Pending work schema', () => {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "  pm.expect(body.pendingWork).to.be.an('array');",
+                  "  body.pendingWork.forEach((entry) => {",
+                  "    pm.expect(entry.id).to.be.a('string').and.not.empty;",
+                  "    pm.expect(entry.source).to.be.a('string');",
+                  "    pm.expect(entry.title).to.be.a('string');",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get local A2A agent card",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{rust_control_base_url}}/api/a2a/card",
+              "host": [
+                "{{rust_control_base_url}}"
+              ],
+              "path": [
+                "api",
+                "a2a",
+                "card"
+              ]
+            },
+            "description": "Read-only identity and capability card."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('A2A card schema and loopback endpoint', () => {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "  pm.expect(body.id).to.be.a('string').and.not.empty;",
+                  "  pm.expect(body.name).to.be.a('string').and.not.empty;",
+                  "  pm.expect(body.capabilities).to.be.an('array');",
+                  "  pm.expect(body.endpoint).to.match(/^http:\\/\\/(?:127\\.0\\.0\\.1|localhost|\\[::1\\])(?::\\d+)?(?:\\/|$)/i);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Select route for gates capability (pure POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"capabilities\": [\"gates\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{rust_control_base_url}}/api/a2a/route",
+              "host": [
+                "{{rust_control_base_url}}"
+              ],
+              "path": [
+                "api",
+                "a2a",
+                "route"
+              ]
+            },
+            "description": "Pure deterministic selection over known cards; no peer registration or work write."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('A2A route result schema', () => {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "  pm.expect(body.id).to.be.a('string').and.not.empty;",
+                  "  pm.expect(body.capabilities).to.be.an('array').that.includes('gates');",
+                  "  pm.expect(body.endpoint).to.match(/^http:\\/\\/(?:127\\.0\\.0\\.1|localhost|\\[::1\\])(?::\\d+)?(?:\\/|$)/i);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Node long-tail local contracts (target 8712)",
+      "description": "Local readiness metadata and one explicit plan/dry-run endpoint. No provider or command execution route is included.",
+      "item": [
+        {
+          "name": "Get truth protocol",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{node_control_base_url}}/api/truth-protocol",
+              "host": [
+                "{{node_control_base_url}}"
+              ],
+              "path": [
+                "api",
+                "truth-protocol"
+              ]
+            },
+            "description": "Read local truth-claim rules and stop point."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('Truth protocol schema and local locks', () => {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "  pm.expect(body.status).to.equal('local-truth-protocol-ready');",
+                  "  pm.expect(body.mode).to.equal('local-only-reporting-contract');",
+                  "  pm.expect(body.claimStates).to.include.members(['observed', 'template', 'blocked', 'not_run']);",
+                  "  pm.expect(body.reportRules).to.be.an('array').that.is.not.empty;",
+                  "  pm.expect(body.externalWrites).to.equal(false);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get team runtime bridge",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{node_control_base_url}}/api/team-runtime-bridge",
+              "host": [
+                "{{node_control_base_url}}"
+              ],
+              "path": [
+                "api",
+                "team-runtime-bridge"
+              ]
+            },
+            "description": "Read local runtime/model lane metadata; all external capabilities must remain denied."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('Team runtime schema and denial state', () => {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "  pm.expect(body.status).to.equal('team-runtime-bridge-ready-local-only');",
+                  "  pm.expect(body.runtimeLanes).to.be.an('array').that.is.not.empty;",
+                  "  pm.expect(body.modelLanes).to.be.an('array').that.is.not.empty;",
+                  "  pm.expect(body.externalWrites).to.equal(false);",
+                  "  pm.expect(body.commandExecuted).to.equal(false);",
+                  "  pm.expect(body.canCallPaidApi).to.equal(false);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get OpenRouter Fusion readiness metadata",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{node_control_base_url}}/api/openrouter-fusion-router",
+              "host": [
+                "{{node_control_base_url}}"
+              ],
+              "path": [
+                "api",
+                "openrouter-fusion-router"
+              ]
+            },
+            "description": "Read local-only fusion configuration metadata. This is not a provider request."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('Fusion readiness schema and provider lock', () => {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "  pm.expect(body.status).to.equal('openrouter-fusion-router-ready-local-only');",
+                  "  pm.expect(body.mode).to.equal('request-preview-and-approval-only');",
+                  "  pm.expect(body.panel).to.be.an('object');",
+                  "  pm.expect(body.panel.models).to.be.an('array').that.is.not.empty;",
+                  "  pm.expect(body.providerCalled).to.equal(false);",
+                  "  pm.expect(body.commandExecuted).to.equal(false);",
+                  "  pm.expect(body.canCallPaidApi).to.equal(false);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Hermes spec-first status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{node_control_base_url}}/api/hermes-spec-first-swarm",
+              "host": [
+                "{{node_control_base_url}}"
+              ],
+              "path": [
+                "api",
+                "hermes-spec-first-swarm"
+              ]
+            },
+            "description": "Read the live local spec-first phase and approval gate."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('Hermes spec-first status schema and gate', () => {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "  pm.expect(body.status).to.equal('hermes-spec-first-swarm-ready-live-local-state');",
+                  "  pm.expect(body.phaseMachine).to.be.an('array').that.is.not.empty;",
+                  "  pm.expect(body.requiredFiles).to.be.an('array');",
+                  "  pm.expect(String(body.approvalStatus || '').toUpperCase()).to.not.equal('APPROVED');",
+                  "  pm.expect(body.implementationStarted).to.be.a('boolean');",
+                  "  pm.expect(body.commandExecuted).to.equal(false);",
+                  "  pm.expect(body.canModifySource).to.equal(false);",
+                  "  pm.expect(body.canCallProvider).to.equal(false);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Plan Hermes spec-first phase (dry-run)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requestId\": \"postman-local-spec-plan\",\n  \"goal\": \"confirm requirements, constraints, and QA checklist for a local-only plan\",\n  \"phase\": \"SPEC_WRITING\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{node_control_base_url}}/api/hermes-spec-first-swarm/plan/dry-run",
+              "host": [
+                "{{node_control_base_url}}"
+              ],
+              "path": [
+                "api",
+                "hermes-spec-first-swarm",
+                "plan",
+                "dry-run"
+              ]
+            },
+            "description": "Local plan construction only. The response must confirm that no command, source change, provider call, or external write occurred."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('Hermes plan dry-run schema and locks', () => {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "  pm.expect(body.status).to.equal('dry-run-hermes-spec-first-swarm-ready');",
+                  "  pm.expect(body.mode).to.equal('local-only-dry-run');",
+                  "  pm.expect(body.selectedPhase).to.equal('SPEC_WRITING');",
+                  "  pm.expect(body.nextAllowedActions).to.be.an('array').that.is.not.empty;",
+                  "  pm.expect(body.externalWrites).to.equal(false);",
+                  "  pm.expect(body.commandExecuted).to.equal(false);",
+                  "  pm.expect(body.canModifySource).to.equal(false);",
+                  "  pm.expect(body.canCallProvider).to.equal(false);",
+                  "  pm.expect(body.evidencePacket.didWriteFromApi).to.equal(false);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

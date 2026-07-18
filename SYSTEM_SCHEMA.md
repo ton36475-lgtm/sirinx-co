@@ -136,10 +136,14 @@ Worker API (`sirinx-brain-sync`, Bearer `BRAIN_SYNC_TOKEN` on `/api/*`):
 `{node, changed[], peerAgents[], pushed}` (last-write-wins by
 updatedAt) · `GET /api/brain/search?q=` · `GET /api/brain/notes?path=`.
 
-Postman: an external collection reference named **SIRINX Platform API**
-(`e6b5fcae-c224-48fb-92e4-ed6e0626076d`) is recorded for web + control +
-a2a + brain surfaces. No local collection artifact or current external-access
-receipt is stored in this repo.
+Postman: `postman/SIRINX_Agent_Mesh_Local_Dry_Run.postman_collection.json`
+and its environment are the versioned loopback-only, non-mutating contract for
+web, control, A2A routing, Node planning, and optional Brain health. The
+collection contains no lead/event/work/card-sync mutation, gate decision,
+action execution, live messaging, provider, billing, merge, Cloudflare
+mutation, or deploy request. The older external **SIRINX Platform API** collection reference
+(`e6b5fcae-c224-48fb-92e4-ed6e0626076d`) remains unverified; neither reference
+is proof of a live service or external execution.
 
 ## 5. Environment contract
 

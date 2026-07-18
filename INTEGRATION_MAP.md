@@ -11,7 +11,7 @@ its connection point into the mesh.
 | Work queue | `web_pending_work` + `sirinx-control /api/a2a/sync`; `pg_notify` is emitted by storage migrations | Server-side schema/endpoints implemented; peer polling client and NOTIFY listener remain B5 |
 | Capability routing | OmniRoute (`/api/a2a/route`) — capabilities discovered from 50 skill directories | Implemented and locally tested; cross-node live smoke **UNVERIFIED** |
 | Knowledge | D1 schema + `brain-sync-worker` source (`/api/brain/sync\|search\|notes`) | Source present; current live D1/deployment state **UNVERIFIED** |
-| API contract | Postman collection **"SIRINX Platform API"** (workspace `549f0d6b…`, collection `e6b5fcae…`) | External workspace reference recorded; not re-verified from this repo |
+| API contract | Versioned local Postman v2.1 dry-run collection in `postman/`; legacy external workspace `549f0d6b…` / collection `e6b5fcae…` | Local artifact statically validated and loopback-only by default; full runtime run and external workspace accessibility **UNVERIFIED** |
 
 ## System inventory → connection points
 

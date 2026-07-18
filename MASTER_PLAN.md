@@ -19,14 +19,15 @@ with knowledge, work, and routing shared through one backbone.**
 | A5 | Release gates hold-by-default + ticket opening + bearer auth + /metrics | `sirinx-control` |
 | A6 | A2A mesh + OmniRoute, capabilities from 49 skills | `sirinx-a2a`, live smoke |
 | A7 | Brain @ Edge: D1 schema live (APAC) + brain-sync worker written | `infra/cloudflare/brain-sync-worker` |
-| A8 | CI workflow + governance phase advance; Docker deploy path (gated) | `.github/workflows/ci.yml`, `Dockerfile` |
+| A8 | CI workflow + disposable Postgres migration lane; Docker deploy path (gated) | `.github/workflows/ci.yml`, `Dockerfile` |
 | A9 | 47 Ronin sub-agents + 49 skills consolidated + MIT license | `.claude/`, `LICENSE` |
 | A10 | **Ronin lead pipeline live**: lead POST → L1→L2 ROI scoring→L3 decision→L4 auto-enqueues follow-up work | `sirinx-agents::ronin`, web test |
 | A11 | Postman collection "SIRINX Platform API" (all 4 surfaces) | collection `e6b5fcae…` |
 | A12 | PR #6 merged to main | GitHub |
-| A13 | **Durable release gates**: typed core model + `web_control_gates` + Store-backed control hydration/write-through | migration 0003; memory/store/reload tests |
-| A14 | **Self-learning recovery loop**: bounded failure events + deduplicated structured lessons + gate-preserving retries | migration 0004; failure→lesson→guided retry and budget tests |
+| A13 | **Durable release gates**: typed core model + `web_control_gates` + Store-backed control hydration/write-through | migration 0003; memory/store/reload + disposable-Postgres tests |
+| A14 | **Self-learning recovery loop**: bounded failure events + deduplicated structured lessons + gate-preserving retries | migration 0004; failure→lesson→guided retry, budget + disposable-Postgres tests |
 | A15 | **GHOSTCLAW · Hermes V3 Command Center**: bilingual, read-only, owner-only Sites briefing deployed | Sites version `appgver_f10b41d7f3cc81918b9f95889a8aa2cd`; PR #8; go-live receipt #7 |
+| A16 | **Fail-closed release evidence preflight**: ordered exact-SHA evidence checks with separate web/control deploy packets; no execution authority | `scripts/release/`; CI test lane |
 
 ## B. QUEUED — engineering (in priority order)
 

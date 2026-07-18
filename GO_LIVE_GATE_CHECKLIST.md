@@ -20,13 +20,17 @@ Re-hold at any time with `{"state":"hold"}`. Gate state is visible at
 ## 1. `deploy` — publish sirinx-web to production
 
 Ready when ALL of:
-- [ ] CI green on the merge commit (fmt, clippy, 49 Rust + 120 Node tests)
+- [ ] CI green on the merge commit (fmt, clippy, all Rust tests including
+      disposable Postgres migrations, 120 Node tests, Command Center checks)
 - [ ] Docker images built from that commit (`DEPLOY_RUST.md`)
-- [ ] `DATABASE_URL` + `CONTROL_API_TOKEN` provisioned in the host's
-      secret store (never in repo)
+- [ ] `DATABASE_URL` + `CONTROL_API_TOKEN` provisioned in the host's secret
+      store, and a peer-reachable `A2A_ENDPOINT` selected (never put secrets
+      in the repo)
 - [ ] TCC revoke on mac-mini-m2 completed (`MAC_TCC_PERMISSIONS.md`)
-- [ ] Rollback command tested: previous image tag kept warm
-- Ticket prefix: `GO-LIVE-DEPLOY-…`
+- [ ] Separate immutable image digests, exact targets, and rollback commands
+      tested for `sirinx-web` and private `sirinx-control`
+- Ticket prefixes: `GO-LIVE-DEPLOY-WEB-…` and
+  `GO-LIVE-DEPLOY-CONTROL-…`; one ticket must not authorize both services
 
 ## 2. `cloudflare_dns` — route www.sirinx.co / dev.sirinx.co
 

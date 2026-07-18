@@ -20,6 +20,7 @@
     "web:test": "pnpm --config.verify-deps-before-run=false --dir apps/public-web test",
     "web:build": "pnpm --config.verify-deps-before-run=false --dir apps/public-web build",
     "control:test": "vitest run services/dev-control-api/src --exclude services/dev-control-api/src/hermes-spec-first-swarm.test.mjs",
+    "release:preflight:test": "node --check scripts/release/release-conductor.mjs && node --test scripts/release/release-conductor.test.mjs",
     "rust:build": "cargo build --workspace",
     "rust:test": "cargo test --workspace",
     "rust:serve": "cargo run -p sirinx-web"

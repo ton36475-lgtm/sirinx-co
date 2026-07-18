@@ -143,6 +143,7 @@ covers web + control + a2a + brain surfaces with variables.
 | --- | --- | --- |
 | DATABASE_URL | web, control | Postgres backend + migrations; empty ⇒ in-memory (gate decisions are process-local) |
 | CONTROL_API_TOKEN | control | bearer auth on `/api/*` |
-| A2A_NODE_ID / A2A_ENDPOINT / A2A_PRIORITY | control | node identity |
+| A2A_NODE_ID / A2A_ENDPOINT / A2A_PRIORITY | control | node identity; deployed endpoint must be peer-reachable |
 | SKILLS_DIR | control | capability autoload (default `.claude/skills`) |
 | PORT / CONTROL_PORT | web / control | listen ports (8080 / 8711) |
+| CONTROL_BIND_ADDR | control | listen IP (default `127.0.0.1`; container deploy opts in to `0.0.0.0`) |

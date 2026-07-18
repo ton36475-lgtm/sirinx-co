@@ -117,9 +117,11 @@ Routing rule: candidate must hold every required capability; ties break
 by fewest surplus capabilities (specialist wins), then priority desc,
 then id asc — fully deterministic.
 
-## 4b. Brain @ Edge (Cloudflare D1 `sirinx-unified-db`, region APAC)
+## 4b. Brain @ Edge (Cloudflare D1 target `sirinx-unified-db`, region APAC)
 
-Schema: `infra/cloudflare/brain-sync-worker/schema.sql` (applied live).
+Schema: `infra/cloudflare/brain-sync-worker/schema.sql`. Its header records an
+apply date, but current live D1 state and worker deployment are **UNVERIFIED**
+from this repo.
 
 - `brain_notes` — id uuid pk · path unique · title · content · tags json ·
   source (`obsidian`/`hermes`/`agent:*`) · content_hash · updated_at ·
@@ -134,8 +136,10 @@ Worker API (`sirinx-brain-sync`, Bearer `BRAIN_SYNC_TOKEN` on `/api/*`):
 `{node, changed[], peerAgents[], pushed}` (last-write-wins by
 updatedAt) · `GET /api/brain/search?q=` · `GET /api/brain/notes?path=`.
 
-Postman: collection **SIRINX Platform API** (`e6b5fcae-c224-48fb-92e4-ed6e0626076d`)
-covers web + control + a2a + brain surfaces with variables.
+Postman: an external collection reference named **SIRINX Platform API**
+(`e6b5fcae-c224-48fb-92e4-ed6e0626076d`) is recorded for web + control +
+a2a + brain surfaces. No local collection artifact or current external-access
+receipt is stored in this repo.
 
 ## 5. Environment contract
 

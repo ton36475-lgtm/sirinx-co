@@ -29,7 +29,7 @@ flowchart LR
     W --> DB
     K --> DB
     D --> N
-    DB -- pg_notify --> K
+    DB -. pg_notify emitted; listener pending B5 .-> K
 ```
 
 ## 2. Crate graph (Rust workspace, 8 crates)
@@ -71,14 +71,19 @@ flowchart LR
     KAI[Kai chatbot] --- CUST[Customers]
 ```
 
-The same structure exists as Claude Code sub-agents (`.claude/agents/`)
-and as process rules (`AGENT_TEAM_PLAN.md`).
+The complete 47-slot structure exists as a plan, Rust roster schema, and
+JavaScript role descriptors. Claude Code currently has six lead/customer
+agent definition files in `.claude/agents/`, while Rust has four coded
+operational lead agents. `AGENT_TEAM_PLAN.md` remains the process authority.
 
-## 4. A2A mesh + OmniRoute
+## 4. A2A mesh + OmniRoute (server contract implemented; client loop pending)
 
-Every node runs `sirinx-control` and publishes an agent card whose
-capabilities auto-load from its installed skills (`.claude/skills/` →
-`skill:<name>` tags).
+Target participating nodes run `sirinx-control` and publish an agent card
+whose capabilities auto-load from installed skill directories
+(`.claude/skills/` → `skill:<name>` tags). The server endpoints and routing
+logic are implemented and locally tested; this repo does not yet contain the
+peer polling client or Postgres NOTIFY listener required for a live
+cross-node mesh (B5).
 
 ```mermaid
 sequenceDiagram
@@ -90,7 +95,7 @@ sequenceDiagram
     S->>DB: list pending work
     S-->>M: {missing_work, peer_agents}
     Note over M,S: either node can now POST /api/a2a/route<br/>{"capabilities":["skill:..."]} → best card
-    DB--)S: pg_notify web_pending_work
+    DB--)S: target B5 listener for pg_notify web_pending_work
 ```
 
 ## 5. Safety architecture (defense in depth)

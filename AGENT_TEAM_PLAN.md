@@ -22,9 +22,10 @@ The 47 Ronin architecture now exists at three reinforcing levels:
 | Customer | `kai-customer-liaison` (Kai) | — | drafts to customers | drafts only |
 
 Work flows L1 → L2 → L3 → L4 only (ห้ามข้ามชั้น); L5 advises any
-department; Kai never touches operations. Cross-node work is registered
-on the shared queue (`POST /api/pending-work` → `web_pending_work`,
-Postgres NOTIFY fan-out).
+department; Kai never touches operations. The cross-node contract registers
+work on the shared queue (`POST /api/pending-work` → `web_pending_work`),
+whose migration emits Postgres NOTIFY. The polling client and NOTIFY consumer
+needed for live cross-node fan-out remain B5.
 
 ## Standard operating procedure (ทวนคำสั่งก่อนดำเนินการ)
 
@@ -36,15 +37,15 @@ Verify → Review → the human decides anything gated.
 
 | # | Order (as given) | Status |
 | --- | --- | --- |
-| 1 | Refactor/migrate all repos to Rust, one monorepo, target www.sirinx.co, full auto agentic systems | Phases R1–R3 landed in `sirinx-co`; R-phases tracked in `RUST_MIGRATION_PLAN.md` |
+| 1 | Refactor/migrate all repos to Rust, one monorepo, target www.sirinx.co, full auto agentic systems | Rust foundation/persistence/control contracts landed; agent expansion and remaining repo migration stay queued in `RUST_MIGRATION_PLAN.md` |
 | 2 | Thaimart x SIRINX landing per taste-governed spec (brand-safe, one H1, consent-safe analytics) | served at `/thaimart-sirinx`, guards asserted by tests |
-| 3 | Phase R2: Supabase/Postgres instead of in-memory | `sirinx-store`, schema live on project SIRINX, RLS on |
+| 3 | Phase R2: Supabase/Postgres instead of in-memory | `sirinx-store` + migrations/RLS implemented; current production schema state is external and not re-verified here |
 | 4 | Auto-approve requests on Mac mini M2 | blanket auto-click declined; scoped alternatives delivered (settings allowlist, `ApprovalGate::Allowlist`, TCC runbook) |
 | 5 | macOS TCC grants temporary — revoke after build window | `MAC_TCC_PERMISSIONS.md`, revoke marked **pending** |
 | 6 | All agents run in one mux session | `scripts/agents-mux.sh` (tmux-compatible, MUX_BIN switch) |
 | 7 | Sweep all work, intake from every agent incl. Hermes Command Center, run the last migration | `WORK_INTAKE_REPORT.md`; dashboard + control API imported; `sirinx-control` crate |
 | 8 | Extend architecture end-to-end (premium full-stack): CI, auth, metrics, shared queue, Docker | this change set (see `DEPLOY_RUST.md`, `.github/workflows/ci.yml`) |
-| 9 | 47 Ronin as sub-agent virtual company with department heads, recap all orders before real execution | this document + `.claude/agents/` |
+| 9 | 47-slot Ronin virtual-company architecture with department heads, recap all orders before real execution | plan/schema/role descriptors; 6 current agent files + 4 coded Rust leads |
 
 ## Permanent guardrails (apply to every department)
 

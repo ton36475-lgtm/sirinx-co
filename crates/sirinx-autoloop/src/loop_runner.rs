@@ -189,7 +189,7 @@ mod tests {
             &registry,
             LoopConfig {
                 max_steps: 2,
-                gate: ApprovalGate::Approved("OPS-TICKET-42".into()),
+                gate: ApprovalGate::approved("OPS-TICKET-42"),
             },
         );
         let mut planner = FixedPlanner { remaining: 1, tool: "send_campaign" };

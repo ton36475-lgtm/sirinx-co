@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use serde::{Deserialize, Serialize};
 
@@ -6,16 +6,48 @@ use serde::{Deserialize, Serialize};
 ///
 /// `DryRun` is the default everywhere. `Approved` carries the operator's
 /// ticket reference so every real execution is attributable.
+/// `Allowlist` is the scoped middle ground: the operator pre-approves a
+/// named set of tools (with a ticket), everything else stays dry-run —
+/// never a blanket auto-approve.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case", tag = "mode", content = "ticket")]
+#[serde(rename_all = "snake_case", tag = "mode")]
 pub enum ApprovalGate {
     DryRun,
-    Approved(String),
+    Approved { ticket: String },
+    Allowlist { ticket: String, tools: BTreeSet<String> },
 }
 
 impl Default for ApprovalGate {
     fn default() -> Self {
         ApprovalGate::DryRun
+    }
+}
+
+impl ApprovalGate {
+    /// Convenience constructor for full approval.
+    pub fn approved(ticket: impl Into<String>) -> Self {
+        ApprovalGate::Approved { ticket: ticket.into() }
+    }
+
+    /// Convenience constructor for a scoped allowlist.
+    pub fn allowlist<I, S>(ticket: impl Into<String>, tools: I) -> Self
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<String>,
+    {
+        ApprovalGate::Allowlist {
+            ticket: ticket.into(),
+            tools: tools.into_iter().map(Into::into).collect(),
+        }
+    }
+
+    /// Whether this gate lets the named side-effecting tool execute.
+    pub fn permits(&self, tool_name: &str) -> bool {
+        match self {
+            ApprovalGate::DryRun => false,
+            ApprovalGate::Approved { .. } => true,
+            ApprovalGate::Allowlist { tools, .. } => tools.contains(tool_name),
+        }
     }
 }
 
@@ -89,7 +121,7 @@ impl ToolRegistry {
             .get(invocation.tool.as_str())
             .ok_or_else(|| ToolError::Unknown(invocation.tool.clone()))?;
 
-        if tool.is_side_effecting() && *gate == ApprovalGate::DryRun {
+        if tool.is_side_effecting() && !gate.permits(tool.name()) {
             return Ok(ToolResult::Planned {
                 description: tool.plan(&invocation.args),
             });
@@ -184,7 +216,7 @@ mod tests {
                     tool: "deploy".into(),
                     args: serde_json::json!({}),
                 },
-                &ApprovalGate::Approved("PR-MONO-011".into()),
+                &ApprovalGate::approved("PR-MONO-011"),
             )
             .unwrap();
         assert_eq!(
@@ -193,6 +225,45 @@ mod tests {
                 output: serde_json::json!({ "deployed": true })
             }
         );
+    }
+
+    #[test]
+    fn allowlist_permits_only_named_tools() {
+        let gate = ApprovalGate::allowlist("NODE-CONNECT-OK", ["deploy"]);
+        let reg = registry();
+
+        // Allowlisted side-effecting tool runs.
+        let allowed = reg
+            .invoke(
+                &ToolInvocation {
+                    tool: "deploy".into(),
+                    args: serde_json::json!({}),
+                },
+                &gate,
+            )
+            .unwrap();
+        assert!(matches!(allowed, ToolResult::Executed { .. }));
+
+        // A different side-effecting tool would still be dry-run: prove
+        // via the gate check directly.
+        assert!(!gate.permits("send_campaign"));
+        assert!(!gate.permits("rm_rf"));
+    }
+
+    #[test]
+    fn allowlist_never_widens_by_default() {
+        // An empty allowlist behaves exactly like DryRun.
+        let gate = ApprovalGate::allowlist("EMPTY", Vec::<String>::new());
+        let result = registry()
+            .invoke(
+                &ToolInvocation {
+                    tool: "deploy".into(),
+                    args: serde_json::json!({}),
+                },
+                &gate,
+            )
+            .unwrap();
+        assert!(matches!(result, ToolResult::Planned { .. }));
     }
 
     #[test]

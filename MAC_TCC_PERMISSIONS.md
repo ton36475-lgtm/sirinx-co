@@ -41,6 +41,36 @@ Steps:
 3. Deploy through your MDM (Full Disk Access via PPPC only applies on
    MDM-enrolled devices; it cannot be sideloaded by double-click).
 
+## Temporary grant lifecycle (build window)
+
+Chosen mode for mac-mini-m2: grant Full Disk Access only for the system
+build window, then revoke when the build is done.
+
+Enable (start of build window):
+
+1. System Settings → Privacy & Security → Full Disk Access → toggle ON
+   for the agent host app. Restart that app.
+2. Record the grant in the table below with the date.
+
+Revoke (end of build window) — either:
+
+- System Settings → Privacy & Security → Full Disk Access → toggle OFF
+  (keeps the entry listed, permission denied), or
+- reset from Terminal so the entry disappears entirely and macOS will
+  prompt again next time:
+
+  ```bash
+  # per app (example: iTerm2)
+  tccutil reset SystemPolicyAllFiles com.googlecode.iterm2
+  # Terminal.app
+  tccutil reset SystemPolicyAllFiles com.apple.Terminal
+  # VS Code
+  tccutil reset SystemPolicyAllFiles com.microsoft.VSCode
+  ```
+
+3. Restart the app, verify a file prompt appears again, and mark the
+   grant as revoked in the table below.
+
 ## Rules
 
 - Grant to the narrowest host that needs it, not to `bash`/`sh`.
@@ -49,6 +79,6 @@ Steps:
 
 ## Current grants
 
-| Node | App granted | Scope | Date | Approved by |
-| --- | --- | --- | --- | --- |
-| mac-mini-m2 | (fill in) | Full Disk Access | | |
+| Node | App granted | Scope | Granted | Revoked | Approved by |
+| --- | --- | --- | --- | --- | --- |
+| mac-mini-m2 | (fill in) | Full Disk Access — temporary, build window only | | pending | |

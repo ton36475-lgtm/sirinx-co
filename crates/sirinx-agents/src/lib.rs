@@ -18,9 +18,14 @@
 
 pub mod agent;
 pub mod bus;
+pub mod fb_group;
 pub mod layer;
+pub mod line_events;
+pub mod partner_referral;
 pub mod ronin;
 pub mod roster;
+pub mod scorer_round_the_clock;
+pub mod scorer_sme;
 
 pub use agent::{Agent, AgentError, AgentInput, AgentOutput};
 pub use bus::{DispatchError, Dispatcher, Envelope};

@@ -27,13 +27,13 @@ with knowledge, work, and routing shared through one backbone.**
 | A13 | **Durable release gates**: typed core model + `web_control_gates` + Store-backed control hydration/write-through | migration 0003; memory/store/reload tests |
 | A14 | **Self-learning recovery loop**: bounded failure events + deduplicated structured lessons + gate-preserving retries | migration 0004; failure→lesson→guided retry and budget tests |
 | A15 | **GHOSTCLAW · Hermes V3 Command Center**: bilingual, read-only, owner-only Sites briefing deployed | Sites version `appgver_f10b41d7f3cc81918b9f95889a8aa2cd`; PR #8; go-live receipt #7 |
+| A16 | **B4 done — Ronin roster expansion**: 3 new L1 scanners (FB group 02, LINE OA 03, partner referral 04) + 2 new L2 scorers (SME 18, 24/7 ops 19) feeding the same pipeline; PDPA-conservative consent defaults | `sirinx-agents::{fb_group,line_events,partner_referral,scorer_sme,scorer_round_the_clock}`; 31 new tests; full chain green 2026-07-19 |
 
 ## B. QUEUED — engineering (in priority order)
 
 | # | Work item | Definition of done |
 | --- | --- | --- |
 | B3 | R2-parity: port remaining routes from `automation-system-backend` + `sirinx` api-gateway into `sirinx-web` | route inventory diff = empty |
-| B4 | Ronin roster expansion: more L1 scanners (FB group, LINE events) + L2 scorers feeding the same pipeline | each agent tested |
 | B5 | Node bridge: register hermes-os A2A (:9000) card into OmniRoute; Obsidian vault sync client script for the Mac node | cards visible via /api/a2a/route; notes flow to D1 |
 | B6 | R4 web consolidation (marketing/chokma/dashboard apps onto sirinx-web API) | per-app cutover |
 | B7 | GhostClaw implementation (contract-first per INTEGRATION_MAP) — **blocked: rotate+purge committed Android keystore first** | quarantine review passed |

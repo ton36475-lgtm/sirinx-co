@@ -3,6 +3,19 @@
 How any external worker (Codex, Hermes executor, another Claude
 session) picks up SIRINX work. Same plan, same rules, one queue.
 
+## 0. Port topology (read this or the handshake WILL 404)
+
+| Port | Service | Has A2A endpoints? |
+| --- | --- | --- |
+| **8711** | **Rust `sirinx-control`** (`cargo run -p sirinx-control`) | ✅ `/api/a2a/sync`, `/api/a2a/route`, `/api/pending-work`, `/api/gates` |
+| 8712 | Node `dev-control-api` (long-tail Hermes routes) — start with `DEV_CONTROL_API_PORT=8712` | ❌ no A2A routes; probing it gives 404 |
+| 8710 | Hermes dashboard | — |
+
+There is no `/api/handshake` anywhere — the handshake IS
+`POST /api/a2a/sync` (use `scripts/a2a-handshake.sh`). If :8711 answers
+`/health` but 404s `/api/a2a/*`, the wrong service holds the port: stop
+it, start the Rust control there, move the Node API to 8712.
+
 ## 1. Onboard (once per session)
 
 1. Read `AGENTS.md` → `MASTER_PLAN.md` → the doc your task links to.

@@ -44,6 +44,19 @@ Expo app template — server routers are TODO stubs, DB has only a
 | Mobile app template + Gemma4 client (`localhost:8000`) | `ghost-claw-os/{app,lib/gemma4-client.ts}` | mobile talks to `sirinx-web` API like other apps |
 | ⚠ Android keystore committed in repo | `ghost-claw-os` (eas build assets) | **security follow-up: rotate + purge before that repo is imported** |
 
+**Independent corroboration (2026-07-19, external Truth Protocol audit):**
+a second, independently-produced audit of `ghost-claw-os` reached the
+same P0 findings without access to this doc — cross-source agreement,
+not new information. Confirmed: `android-release.keystore` and tracked
+`node_modules` in the public repo, documentation claiming
+"Production Ready" against an implementation that is 3 of 11 planned
+modules with TODO backend stubs, MySQL/Drizzle in code vs. PostgreSQL
+in docs, and no CI evidence. Adds to B7's blocker: keystore rotation
+must assume the key was used (not proven dummy) until checked, and the
+rotation must cover git history + forks + release artifacts, not just
+the current tree. B7 status unchanged (still blocked on this), but now
+has independent confirmation instead of single-source evidence.
+
 ### 3. Hermes A2A (Python, port 9000)
 
 `hermes-os` A2A team coordinator (`a2a_team_coordinator.py`, Antigravity2

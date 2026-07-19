@@ -26,6 +26,8 @@ with knowledge, work, and routing shared through one backbone.**
 | A12 | PR #6 merged to main | GitHub |
 | A13 | **B1 done** — durable gates: `web_control_gates` (migration 0003, applied live), decisions persist-first, `ControlState::load` overlays store state | `gate_decisions_survive_restart` test |
 | A14 | **B2 done** — self-learning loop: `web_failure_events` + `web_lessons` (live), `RecoveryLoop` records failures, consults lessons for bounded guided retries, proposes new lessons from unknown failures | 4 recovery tests incl. cross-run learning |
+| A15 | **B9 done** — Telegram commander center reads live gate state via `gate-status.mjs` (`GET /api/gates`, bearer auth), fails closed (assumes hold) on any unreachable/error case instead of hardcoding a string | `gate-status.test.mjs` (7 tests) |
+| A16 | Model routing skill for the 47 Ronin mesh: `sonnet5` (default) / `glm52` (cointh.com proxy) / `cf-workers-ai` lanes, wired via existing `AgentCard`/OmniRoute capability tags — no new dispatcher, no key ever written to repo, non-default lanes gated on operator-signed approval doc | `.claude/skills/ronin-model-routing/SKILL.md`, `docs/approvals/MODEL_ROUTING_RONIN_TEAM.md` |
 
 ## B. QUEUED — engineering (in priority order)
 
@@ -37,8 +39,8 @@ with knowledge, work, and routing shared through one backbone.**
 | B6 | R4 web consolidation (marketing/chokma/dashboard apps onto sirinx-web API) | per-app cutover |
 | B7 | GhostClaw implementation (contract-first per INTEGRATION_MAP) — **blocked: rotate+purge committed Android keystore first** | quarantine review passed |
 | B8 | R5 long tail: mobile apps on central API, archive legacy repos | REPO_AUDIT map all "done" |
-| B9 | Telegram bot reads the durable gate (audit 2026-07-19: `services/telegram-command-bot` hardcodes hold and ignores `web_control_gates`) | bot honors DB gate state; dry-run stays default |
 | B10 | Skill hygiene (audit 2026-07-19: of 50 skills — 24 stubs, 3 reference dead paths) | every skill either completed, fixed, or marked stub in SKILLS_REGISTRY |
+| B11 | Ronin model-lane rollout: get operator sign-off on `MODEL_ROUTING_RONIN_TEAM.md`, rotate the GLM-5.2 key that was pasted in chat 2026-07-19 before it's used anywhere, then register the first Ronin on a non-default lane | approval block filled + key rotated + one `AgentCard` live on `model:glm52` or `model:cf-workers-ai` |
 
 ## C. QUEUED — operator decisions (only the human can do these)
 

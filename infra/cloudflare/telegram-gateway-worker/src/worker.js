@@ -28,11 +28,16 @@ function unauthorized() {
   return json({ error: "missing or invalid bearer token" }, 401);
 }
 
-/** Extract the leading `/command` token from a Telegram message update. */
+/** Extract the leading `/command` token from a Telegram message update.
+ *  In group chats Telegram appends the bot's username (`/gates@MyBot`);
+ *  strip that suffix so the command still matches the allowlist. */
 function parseCommand(update) {
   const text = update?.message?.text || "";
-  const [command] = text.trim().split(/\s+/);
-  return command || null;
+  const [rawToken] = text.trim().split(/\s+/);
+  if (!rawToken) return null;
+  // `/gates@SirinxBot` -> `/gates`; a plain `/gates` is unaffected.
+  const atIndex = rawToken.indexOf("@");
+  return atIndex === -1 ? rawToken : rawToken.slice(0, atIndex);
 }
 
 async function ensureOutboxTable(db) {

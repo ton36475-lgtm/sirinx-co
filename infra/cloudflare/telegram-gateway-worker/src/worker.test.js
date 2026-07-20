@@ -58,6 +58,33 @@ describe("parseCommand", () => {
   it("returns null when there is no message text", () => {
     expect(parseCommand({})).toBeNull();
   });
+
+  it("strips the @botname suffix Telegram adds in group chats", () => {
+    // Regression: group-chat commands arrive as `/gates@SirinxBot` and
+    // must still resolve to `/gates` to match the allowlist.
+    expect(parseCommand({ message: { text: "/gates@SirinxBot" } })).toBe("/gates");
+    expect(parseCommand({ message: { text: "/status@SirinxBot extra args" } })).toBe("/status");
+  });
+});
+
+describe("handleWebhook group-chat command", () => {
+  it("queues a reply for an @botname-suffixed command", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: true,
+        json: async () => ({ gates: [{ name: "deploy", state: "hold", ticket: null }] }),
+      }))
+    );
+    const db = createMockD1();
+    const request = webhookRequest({ message: { text: "/gates@SirinxBot", chat: { id: 7 } } });
+    const response = await handleWebhook(request, { TELEGRAM_DB: db, CONTROL_URL: "http://x" });
+
+    expect(response.status).toBe(200);
+    expect(await readJson(response)).toMatchObject({ ok: true, queued: true });
+    expect(db.rows).toHaveLength(1);
+    expect(db.rows[0].command).toBe("/gates");
+  });
 });
 
 describe("replyFor", () => {

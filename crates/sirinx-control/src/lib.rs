@@ -398,6 +398,10 @@ async fn complete_pending(
                 StatusCode::NOT_FOUND,
                 Json(serde_json::json!({ "error": "work item not found" })),
             ),
+            StoreError::Conflict(msg) => (
+                StatusCode::CONFLICT,
+                Json(serde_json::json!({ "error": msg })),
+            ),
             other => {
                 tracing::error!(error = %other, "pending-work completion failed");
                 (
@@ -693,6 +697,54 @@ mod tests {
             .unwrap();
         let listed_body = body_json(listed).await;
         assert_eq!(listed_body["pendingWork"].as_array().unwrap().len(), 0);
+    }
+
+    #[tokio::test]
+    async fn completing_already_completed_work_conflicts() {
+        // 2026-07-20 QA finding: a second /complete call on the same
+        // item must not silently overwrite who completed it first.
+        let app = router(ControlState::with_default_gates());
+        let created = app
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                "/api/pending-work",
+                serde_json::json!({
+                    "source": "qa",
+                    "title": "double-complete race",
+                    "detail": {}
+                }),
+            ))
+            .await
+            .unwrap();
+        let created_body = body_json(created).await;
+        let id = created_body["id"].as_str().unwrap();
+
+        let first = app
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                &format!("/api/pending-work/{id}/complete"),
+                serde_json::json!({ "completedBy": "agent:first" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(first.status(), StatusCode::OK);
+
+        let second = app
+            .oneshot(json_request(
+                "POST",
+                &format!("/api/pending-work/{id}/complete"),
+                serde_json::json!({ "completedBy": "agent:second" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(second.status(), StatusCode::CONFLICT);
+        let second_body = body_json(second).await;
+        assert!(second_body["error"]
+            .as_str()
+            .unwrap()
+            .contains("agent:first"));
     }
 
     #[tokio::test]

@@ -135,6 +135,12 @@ impl Store for MemoryStore {
             .iter_mut()
             .find(|item| item.id == id)
             .ok_or(StoreError::NotFound)?;
+        if item.status == "completed" {
+            return Err(StoreError::Conflict(format!(
+                "work item {id} was already completed by {}",
+                item.completed_by.as_deref().unwrap_or("unknown")
+            )));
+        }
         item.status = "completed".to_owned();
         // MemoryStore is for tests/local dev only; PostgresStore's
         // `now()` is the timestamp of record in production.
@@ -310,5 +316,31 @@ mod tests {
             .await
             .unwrap_err();
         assert!(matches!(err, StoreError::NotFound));
+    }
+
+    #[tokio::test]
+    async fn completing_already_completed_work_conflicts_instead_of_overwriting() {
+        // 2026-07-20 QA finding: a second completion used to silently
+        // overwrite completed_by, losing who actually finished it first.
+        let store = MemoryStore::default();
+        let item = PendingWork::new("agent:kuranosuke-01", "scan leads", serde_json::json!({}));
+        store.insert_pending_work(&item).await.unwrap();
+        store
+            .complete_pending_work(item.id, "agent:first")
+            .await
+            .unwrap();
+
+        let err = store
+            .complete_pending_work(item.id, "agent:second")
+            .await
+            .unwrap_err();
+        match err {
+            StoreError::Conflict(msg) => {
+                // The first completion's attribution must be reported
+                // back, not silently replaced by the second caller.
+                assert!(msg.contains("agent:first"));
+            }
+            other => panic!("expected Conflict, got {other:?}"),
+        }
     }
 }

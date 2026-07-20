@@ -28,6 +28,13 @@ pub enum StoreError {
     Validation(#[from] ValidationError),
     #[error("storage backend error: {0}")]
     Backend(String),
+    /// The requested state transition conflicts with the current state
+    /// (e.g. completing a work item that's already completed) — found
+    /// during a 2026-07-20 QA pass: completion used to silently
+    /// overwrite `completedBy`/`completedAt` on a second call, losing
+    /// the audit trail of who actually finished it first.
+    #[error("conflict: {0}")]
+    Conflict(String),
 }
 
 impl From<sqlx::Error> for StoreError {

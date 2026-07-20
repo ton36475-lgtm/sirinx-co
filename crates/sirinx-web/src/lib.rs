@@ -78,7 +78,7 @@ impl ApiError {
 fn store_error_response(err: StoreError) -> (StatusCode, Json<ApiError>) {
     let status = match &err {
         StoreError::NotFound => StatusCode::NOT_FOUND,
-        StoreError::Validation(_) => StatusCode::CONFLICT,
+        StoreError::Validation(_) | StoreError::Conflict(_) => StatusCode::CONFLICT,
         StoreError::Backend(_) => StatusCode::INTERNAL_SERVER_ERROR,
     };
     if status == StatusCode::INTERNAL_SERVER_ERROR {

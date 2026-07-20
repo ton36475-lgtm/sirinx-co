@@ -215,6 +215,26 @@ impl Store for PostgresStore {
         id: Uuid,
         completed_by: &str,
     ) -> Result<PendingWork, StoreError> {
+        // Row-lock first (same pattern as update_lead_status) so two
+        // concurrent completions of the same item can't both "win" —
+        // the loser sees the already-completed status and conflicts
+        // instead of silently overwriting who completed it first.
+        let mut tx = self.pool.begin().await?;
+        let existing = sqlx::query(
+            "select status, completed_by from web_pending_work where id = $1 for update",
+        )
+        .bind(id)
+        .fetch_optional(&mut *tx)
+        .await?
+        .ok_or(StoreError::NotFound)?;
+        let status: String = existing.try_get("status").map_err(StoreError::from)?;
+        if status == "completed" {
+            let by: Option<String> = existing.try_get("completed_by").map_err(StoreError::from)?;
+            return Err(StoreError::Conflict(format!(
+                "work item {id} was already completed by {}",
+                by.as_deref().unwrap_or("unknown")
+            )));
+        }
         let row = sqlx::query(
             r#"update web_pending_work
                set status = 'completed', completed_at = now(), completed_by = $2
@@ -223,9 +243,9 @@ impl Store for PostgresStore {
         )
         .bind(id)
         .bind(completed_by)
-        .fetch_optional(&self.pool)
-        .await?
-        .ok_or(StoreError::NotFound)?;
+        .fetch_one(&mut *tx)
+        .await?;
+        tx.commit().await?;
         row_to_pending_work(&row)
     }
 

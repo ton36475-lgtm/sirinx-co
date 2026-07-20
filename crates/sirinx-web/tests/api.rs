@@ -120,6 +120,9 @@ async fn lead_lifecycle_create_patch_delete() {
     let id = lead["id"].as_str().unwrap().to_owned();
     assert_eq!(lead["status"], "new");
     assert_eq!(state.lead_count().await, 1);
+    // The Ronin pipeline auto-enqueued a follow-up work order
+    // (45K THB bill → warm → nurture_call).
+    assert_eq!(state.pending_work_count().await, 1);
 
     // Legal transition new -> contacted.
     let patched = app
@@ -211,4 +214,41 @@ async fn analytics_respects_consent_and_allowlist() {
         .unwrap();
     assert_eq!(no_consent.status(), StatusCode::OK);
     assert_eq!(state.accepted_event_count().await, 1);
+}
+
+#[tokio::test]
+async fn recent_events_list_is_readable_and_newest_first() {
+    let state = AppState::default();
+    let app = router(state.clone());
+
+    for event_name in ["roi_calculator_start", "roi_calculator_submit"] {
+        app.clone()
+            .oneshot(json_request(
+                "POST",
+                "/api/events",
+                serde_json::json!({
+                    "event": event_name,
+                    "payload": {},
+                    "page": "thaimart_sirinx_landing",
+                    "consent": { "analytics": true, "marketingContact": false }
+                }),
+            ))
+            .await
+            .unwrap();
+    }
+
+    let listed = app
+        .oneshot(
+            Request::get("/api/events?limit=1")
+                .body(Body::empty())
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+    assert_eq!(listed.status(), StatusCode::OK);
+    let body = body_json(listed).await;
+    let events = body["events"].as_array().unwrap();
+    // limit=1 respected, and it's the most recently inserted event.
+    assert_eq!(events.len(), 1);
+    assert_eq!(events[0]["event"], "roi_calculator_submit");
 }

@@ -19,9 +19,11 @@
 pub mod agent;
 pub mod bus;
 pub mod layer;
+pub mod ronin;
 pub mod roster;
 
 pub use agent::{Agent, AgentError, AgentInput, AgentOutput};
 pub use bus::{DispatchError, Dispatcher, Envelope};
 pub use layer::Layer;
+pub use ronin::{run_lead_pipeline, FollowUp, LeadTemperature};
 pub use roster::{AgentId, Roster};

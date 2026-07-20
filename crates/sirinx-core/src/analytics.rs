@@ -39,6 +39,18 @@ impl AnalyticsEvent {
     }
 }
 
+/// Read-side view of a stored event (B3 port of `automation-system-backend`'s
+/// `GET /events`). Deliberately excludes `payload`/`consent` — this is a
+/// lightweight recent-activity list, not a full export.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct EventSummary {
+    pub id: i64,
+    pub event: String,
+    pub page: String,
+    pub created_at: String,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

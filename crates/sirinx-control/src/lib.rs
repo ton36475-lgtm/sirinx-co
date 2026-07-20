@@ -13,6 +13,7 @@
 //! - `POST /api/gates/:name/decision`      — open/hold with ticket
 //! - `GET  /api/pending-work`              — shared work queue (Store)
 //! - `POST /api/pending-work`              — register work item
+//! - `POST /api/pending-work/:id/complete` — mark done, server stamps time
 //! - `POST /api/actions`                   — execute-or-dry-run by gate
 //!
 //! When a bearer token is configured, every `/api/*` route requires
@@ -34,7 +35,8 @@ use serde::{Deserialize, Serialize};
 
 use sirinx_a2a::{diff_work, AgentCard, OmniRoute, SyncRequest, SyncResponse};
 use sirinx_core::PendingWork;
-use sirinx_store::{MemoryStore, Store};
+use sirinx_store::{MemoryStore, Store, StoreError};
+use uuid::Uuid;
 
 /// The release gates carried over from RELEASE_GATE.md / NEXT_ACTIONS.md.
 /// Everything ships in `hold`.
@@ -103,12 +105,53 @@ impl ControlState {
         }
     }
 
+    /// B1 — durable gates: start from defaults, overlay whatever the
+    /// store remembers, so an opened gate survives restarts.
+    /// B15 — same treatment for the A2A peer registry: OmniRoute used to
+    /// be in-memory only, so every registered node vanished on restart.
+    pub async fn load(
+        store: Arc<dyn Store>,
+        api_token: Option<String>,
+        self_card: AgentCard,
+    ) -> Result<Self, sirinx_store::StoreError> {
+        let state = Self::new(store.clone(), api_token, self_card);
+        let records = store.load_gates().await?;
+        {
+            let mut gates = state.gates.write().expect("gate lock poisoned");
+            for record in records {
+                if let Some(gate) = gates.get_mut(&record.name) {
+                    gate.state = if record.state == "open" {
+                        GateState::Open
+                    } else {
+                        GateState::Hold
+                    };
+                    gate.ticket = record.ticket;
+                }
+            }
+        }
+        let cards = store.load_agent_cards().await?;
+        {
+            let mut omniroute = state.omniroute.write().expect("omniroute lock poisoned");
+            for card in cards {
+                omniroute.register(card);
+            }
+        }
+        Ok(state)
+    }
+
     pub fn gate_state(&self, name: &str) -> Option<GateState> {
         self.gates
             .read()
             .expect("gate lock poisoned")
             .get(name)
             .map(|g| g.state)
+    }
+}
+
+fn gate_state_str(state: GateState) -> &'static str {
+    match state {
+        GateState::Hold => "hold",
+        GateState::Open => "open",
     }
 }
 
@@ -178,6 +221,7 @@ pub fn router(state: ControlState) -> Router {
         .route("/api/gates", get(list_gates))
         .route("/api/gates/:name/decision", post(decide_gate))
         .route("/api/pending-work", get(list_pending).post(add_pending))
+        .route("/api/pending-work/:id/complete", post(complete_pending))
         .route("/api/actions", post(run_action))
         .route("/api/a2a/card", get(a2a_card))
         .route("/api/a2a/sync", post(a2a_sync))
@@ -247,17 +291,46 @@ async fn decide_gate(
             Json(serde_json::json!({ "error": "opening a gate requires a ticket" })),
         ));
     }
-    let mut gates = state.gates.write().expect("gate lock poisoned");
-    let gate = gates.get_mut(&name).ok_or((
-        StatusCode::NOT_FOUND,
-        Json(serde_json::json!({ "error": "unknown gate" })),
-    ))?;
-    gate.state = decision.state;
-    gate.ticket = match decision.state {
+    if !state
+        .gates
+        .read()
+        .expect("gate lock poisoned")
+        .contains_key(&name)
+    {
+        return Err((
+            StatusCode::NOT_FOUND,
+            Json(serde_json::json!({ "error": "unknown gate" })),
+        ));
+    }
+
+    let ticket = match decision.state {
         GateState::Open => decision.ticket,
         GateState::Hold => None,
     };
-    tracing::info!(gate = %name, state = ?gate.state, "gate decision recorded");
+
+    // Persist first — a decision that cannot be made durable is not a
+    // decision (B1: gates must survive restarts).
+    state
+        .store
+        .upsert_gate(&sirinx_core::GateRecord {
+            name: name.clone(),
+            state: gate_state_str(decision.state).to_owned(),
+            ticket: ticket.clone(),
+        })
+        .await
+        .map_err(|err| {
+            tracing::error!(gate = %name, error = %err, "failed to persist gate decision");
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(serde_json::json!({ "error": "storage backend failure" })),
+            )
+        })?;
+
+    let mut gates = state.gates.write().expect("gate lock poisoned");
+    let gate = gates.get_mut(&name).expect("existence checked above");
+    gate.state = decision.state;
+    gate.ticket = ticket;
+    tracing::info!(gate = %name, state = ?gate.state, "gate decision recorded (durable)");
     Ok(Json(gate.clone()))
 }
 
@@ -300,6 +373,45 @@ async fn add_pending(
             )
         })?;
     Ok((StatusCode::CREATED, Json(item)))
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct CompleteWork {
+    completed_by: String,
+}
+
+/// B12 — the store stamps completion time itself (server clock), so
+/// every A2A node reading `web_pending_work` sees the same trusted
+/// "done at" value instead of a caller-supplied one.
+async fn complete_pending(
+    State(state): State<ControlState>,
+    Path(id): Path<Uuid>,
+    Json(body): Json<CompleteWork>,
+) -> Result<Json<PendingWork>, (StatusCode, Json<serde_json::Value>)> {
+    let item = state
+        .store
+        .complete_pending_work(id, &body.completed_by)
+        .await
+        .map_err(|err| match err {
+            StoreError::NotFound => (
+                StatusCode::NOT_FOUND,
+                Json(serde_json::json!({ "error": "work item not found" })),
+            ),
+            StoreError::Conflict(msg) => (
+                StatusCode::CONFLICT,
+                Json(serde_json::json!({ "error": msg })),
+            ),
+            other => {
+                tracing::error!(error = %other, "pending-work completion failed");
+                (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    Json(serde_json::json!({ "error": "storage backend failure" })),
+                )
+            }
+        })?;
+    tracing::info!(id = %id, completed_by = %body.completed_by, "work item completed (durable)");
+    Ok(Json(item))
 }
 
 #[derive(Debug, Deserialize)]
@@ -347,12 +459,25 @@ async fn a2a_sync(
     State(state): State<ControlState>,
     Json(req): Json<SyncRequest>,
 ) -> Result<Json<SyncResponse>, (StatusCode, Json<serde_json::Value>)> {
+    // B15: persist first, same fail-safe ordering as gate decisions — a
+    // registration that isn't durable doesn't survive the next restart.
+    state
+        .store
+        .upsert_agent_card(&req.node)
+        .await
+        .map_err(|err| {
+            tracing::error!(peer = %req.node.id, error = %err, "failed to persist agent card");
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(serde_json::json!({ "error": "storage backend failure" })),
+            )
+        })?;
     state
         .omniroute
         .write()
         .expect("omniroute lock poisoned")
         .register(req.node.clone());
-    tracing::info!(peer = %req.node.id, "a2a peer registered/refreshed");
+    tracing::info!(peer = %req.node.id, "a2a peer registered/refreshed (durable)");
 
     let local = state.store.list_pending_work().await.map_err(|err| {
         tracing::error!(error = %err, "a2a sync backend failure");
@@ -528,6 +653,115 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn completing_work_stamps_it_and_drains_the_queue() {
+        let app = router(ControlState::with_default_gates());
+        let created = app
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                "/api/pending-work",
+                serde_json::json!({
+                    "source": "agent:kuranosuke-01",
+                    "title": "scan FB group leads",
+                    "detail": {}
+                }),
+            ))
+            .await
+            .unwrap();
+        let created_body = body_json(created).await;
+        let id = created_body["id"].as_str().unwrap();
+
+        let completed = app
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                &format!("/api/pending-work/{id}/complete"),
+                serde_json::json!({ "completedBy": "agent:gengo-35" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(completed.status(), StatusCode::OK);
+        let completed_body = body_json(completed).await;
+        assert_eq!(completed_body["status"], "completed");
+        assert_eq!(completed_body["completedBy"], "agent:gengo-35");
+        assert!(!completed_body["completedAt"].is_null());
+
+        // Completed work drops off the live queue.
+        let listed = app
+            .oneshot(
+                Request::get("/api/pending-work")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        let listed_body = body_json(listed).await;
+        assert_eq!(listed_body["pendingWork"].as_array().unwrap().len(), 0);
+    }
+
+    #[tokio::test]
+    async fn completing_already_completed_work_conflicts() {
+        // 2026-07-20 QA finding: a second /complete call on the same
+        // item must not silently overwrite who completed it first.
+        let app = router(ControlState::with_default_gates());
+        let created = app
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                "/api/pending-work",
+                serde_json::json!({
+                    "source": "qa",
+                    "title": "double-complete race",
+                    "detail": {}
+                }),
+            ))
+            .await
+            .unwrap();
+        let created_body = body_json(created).await;
+        let id = created_body["id"].as_str().unwrap();
+
+        let first = app
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                &format!("/api/pending-work/{id}/complete"),
+                serde_json::json!({ "completedBy": "agent:first" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(first.status(), StatusCode::OK);
+
+        let second = app
+            .oneshot(json_request(
+                "POST",
+                &format!("/api/pending-work/{id}/complete"),
+                serde_json::json!({ "completedBy": "agent:second" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(second.status(), StatusCode::CONFLICT);
+        let second_body = body_json(second).await;
+        assert!(second_body["error"]
+            .as_str()
+            .unwrap()
+            .contains("agent:first"));
+    }
+
+    #[tokio::test]
+    async fn completing_unknown_work_is_not_found() {
+        let app = router(ControlState::with_default_gates());
+        let res = app
+            .oneshot(json_request(
+                "POST",
+                &format!("/api/pending-work/{}/complete", Uuid::new_v4()),
+                serde_json::json!({ "completedBy": "agent:gengo-35" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(res.status(), StatusCode::NOT_FOUND);
+    }
+
+    #[tokio::test]
     async fn unknown_gate_is_not_found() {
         let app = router(ControlState::with_default_gates());
         let res = app
@@ -592,6 +826,75 @@ mod tests {
             .await
             .unwrap();
         assert_eq!(ok.status(), StatusCode::OK);
+    }
+
+    #[tokio::test]
+    async fn gate_decisions_survive_restart() {
+        // One shared store = the database; two ControlStates = two
+        // process lifetimes.
+        let store: Arc<MemoryStore> = Arc::new(MemoryStore::default());
+
+        let first = ControlState::new(store.clone(), None, default_self_card());
+        let app = router(first);
+        let opened = app
+            .oneshot(json_request(
+                "POST",
+                "/api/gates/deploy/decision",
+                serde_json::json!({ "state": "open", "ticket": "GO-LIVE-DEPLOY-001" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(opened.status(), StatusCode::OK);
+
+        // "Restart": load a fresh state from the same store.
+        let second = ControlState::load(store, None, default_self_card())
+            .await
+            .unwrap();
+        assert_eq!(second.gate_state("deploy"), Some(GateState::Open));
+        // Untouched gates stay on their default hold.
+        assert_eq!(second.gate_state("telegram_send"), Some(GateState::Hold));
+    }
+
+    #[tokio::test]
+    async fn agent_cards_survive_restart() {
+        // B15 — same pattern as gate_decisions_survive_restart: one
+        // shared store, two ControlState lifetimes.
+        let store: Arc<MemoryStore> = Arc::new(MemoryStore::default());
+
+        let first = ControlState::new(store.clone(), None, default_self_card());
+        let app = router(first);
+        let synced = app
+            .oneshot(json_request(
+                "POST",
+                "/api/a2a/sync",
+                serde_json::json!({
+                    "node": {
+                        "id": "agent:codex-worker",
+                        "name": "Codex worker",
+                        "capabilities": ["coding"],
+                        "endpoint": "",
+                        "priority": 0
+                    },
+                    "knownWorkIds": []
+                }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(synced.status(), StatusCode::OK);
+
+        // "Restart": load a fresh state from the same store.
+        let second = ControlState::load(store, None, default_self_card())
+            .await
+            .unwrap();
+        let cards: Vec<String> = second
+            .omniroute
+            .read()
+            .expect("omniroute lock poisoned")
+            .cards()
+            .into_iter()
+            .map(|c| c.id)
+            .collect();
+        assert!(cards.contains(&"agent:codex-worker".to_string()));
     }
 
     #[tokio::test]

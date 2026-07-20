@@ -10,13 +10,15 @@
 //! - `PATCH /api/leads/:id/status`  — advance lead status
 //! - `DELETE /api/leads/:id`        — remove internal draft lead
 //! - `POST /api/events`             — consent-gated analytics intake
+//! - `GET  /api/events`             — recent event summaries
+//!   (B3 port of automation-system-backend's GET /events)
 //!
 //! Persistence goes through `sirinx_store::Store`: `MemoryStore` by
 //! default, `PostgresStore` (Supabase) when `DATABASE_URL` is set.
 
 use std::sync::Arc;
 
-use axum::extract::{Path, State};
+use axum::extract::{Path, Query, State};
 use axum::http::StatusCode;
 use axum::response::Html;
 use axum::routing::{delete, get, patch, post};
@@ -54,6 +56,10 @@ impl AppState {
     pub async fn accepted_event_count(&self) -> u64 {
         self.store.count_events().await.unwrap_or(0)
     }
+
+    pub async fn pending_work_count(&self) -> u64 {
+        self.store.count_pending_work().await.unwrap_or(0)
+    }
 }
 
 #[derive(Debug, Serialize)]
@@ -72,7 +78,7 @@ impl ApiError {
 fn store_error_response(err: StoreError) -> (StatusCode, Json<ApiError>) {
     let status = match &err {
         StoreError::NotFound => StatusCode::NOT_FOUND,
-        StoreError::Validation(_) => StatusCode::CONFLICT,
+        StoreError::Validation(_) | StoreError::Conflict(_) => StatusCode::CONFLICT,
         StoreError::Backend(_) => StatusCode::INTERNAL_SERVER_ERROR,
     };
     if status == StatusCode::INTERNAL_SERVER_ERROR {
@@ -93,7 +99,7 @@ pub fn router(state: AppState) -> Router {
         .route("/api/leads", post(create_lead))
         .route("/api/leads/:id/status", patch(update_lead_status))
         .route("/api/leads/:id", delete(delete_lead))
-        .route("/api/events", post(ingest_event))
+        .route("/api/events", post(ingest_event).get(list_events))
         .with_state(state)
 }
 
@@ -147,6 +153,21 @@ async fn create_lead(
         .await
         .map_err(store_error_response)?;
     tracing::info!(lead_id = %lead.id, "lead created");
+
+    // 47 Ronin pipeline: L1 intake → L2 ROI scoring → L3 follow-up
+    // decision → L4 work order, auto-enqueued on the shared queue.
+    // Best-effort: a pipeline failure must never lose the lead itself.
+    match sirinx_agents::run_lead_pipeline(&lead) {
+        Ok(work) => {
+            if let Err(err) = state.store.insert_pending_work(&work).await {
+                tracing::error!(lead_id = %lead.id, error = %err, "failed to enqueue follow-up work");
+            } else {
+                tracing::info!(lead_id = %lead.id, work_id = %work.id, "follow-up work enqueued");
+            }
+        }
+        Err(err) => tracing::error!(lead_id = %lead.id, error = %err, "lead pipeline failed"),
+    }
+
     Ok((StatusCode::CREATED, Json(lead)))
 }
 
@@ -203,4 +224,31 @@ async fn ingest_event(
     } else {
         Ok((StatusCode::OK, Json(serde_json::json!({ "stored": false }))))
     }
+}
+
+#[derive(Debug, Deserialize)]
+struct ListEventsQuery {
+    limit: Option<u32>,
+}
+
+const MAX_EVENTS_LIMIT: u32 = 200;
+const DEFAULT_EVENTS_LIMIT: u32 = 50;
+
+/// B3 port of `automation-system-backend`'s `GET /events`: recent event
+/// summaries only (no payload/consent) — a read-only activity list, not
+/// a full export.
+async fn list_events(
+    State(state): State<AppState>,
+    Query(query): Query<ListEventsQuery>,
+) -> Result<Json<serde_json::Value>, (StatusCode, Json<ApiError>)> {
+    let limit = query
+        .limit
+        .unwrap_or(DEFAULT_EVENTS_LIMIT)
+        .min(MAX_EVENTS_LIMIT);
+    let events = state
+        .store
+        .list_recent_events(limit)
+        .await
+        .map_err(store_error_response)?;
+    Ok(Json(serde_json::json!({ "events": events })))
 }

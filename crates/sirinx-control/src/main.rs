@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use sirinx_control::{router, self_card_from_env, ControlState};
+
 use sirinx_store::{MemoryStore, PostgresStore, Store};
 
 #[tokio::main]
@@ -53,7 +54,10 @@ async fn main() {
         "a2a card ready"
     );
 
-    let app = router(ControlState::new(store, token, card));
+    let state = ControlState::load(store, token, card)
+        .await
+        .expect("failed to load durable gate state");
+    let app = router(state);
     let listener = tokio::net::TcpListener::bind(addr)
         .await
         .expect("failed to bind control port");

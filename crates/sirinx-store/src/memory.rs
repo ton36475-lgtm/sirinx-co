@@ -81,11 +81,46 @@ impl Store for MemoryStore {
     }
 
     async fn list_pending_work(&self) -> Result<Vec<PendingWork>, StoreError> {
-        Ok(self.pending.read().expect("pending store poisoned").clone())
+        Ok(self
+            .pending
+            .read()
+            .expect("pending store poisoned")
+            .iter()
+            .filter(|item| item.status == "pending")
+            .cloned()
+            .collect())
     }
 
     async fn count_pending_work(&self) -> Result<u64, StoreError> {
-        Ok(self.pending.read().expect("pending store poisoned").len() as u64)
+        Ok(self
+            .pending
+            .read()
+            .expect("pending store poisoned")
+            .iter()
+            .filter(|item| item.status == "pending")
+            .count() as u64)
+    }
+
+    async fn complete_pending_work(
+        &self,
+        id: Uuid,
+        completed_by: &str,
+    ) -> Result<PendingWork, StoreError> {
+        let mut pending = self.pending.write().expect("pending store poisoned");
+        let item = pending
+            .iter_mut()
+            .find(|item| item.id == id)
+            .ok_or(StoreError::NotFound)?;
+        item.status = "completed".to_owned();
+        // MemoryStore is for tests/local dev only; PostgresStore's
+        // `now()` is the timestamp of record in production.
+        let secs = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.as_secs())
+            .unwrap_or(0);
+        item.completed_at = Some(format!("epoch:{secs}"));
+        item.completed_by = Some(completed_by.to_owned());
+        Ok(item.clone())
     }
 
     async fn load_gates(&self) -> Result<Vec<GateRecord>, StoreError> {
@@ -198,6 +233,36 @@ mod tests {
         let store = MemoryStore::default();
         let err = store
             .update_lead_status(Uuid::new_v4(), LeadStatus::Contacted)
+            .await
+            .unwrap_err();
+        assert!(matches!(err, StoreError::NotFound));
+    }
+
+    #[tokio::test]
+    async fn completing_pending_work_stamps_it_and_drains_the_queue() {
+        let store = MemoryStore::default();
+        let item = PendingWork::new("agent:kuranosuke-01", "scan leads", serde_json::json!({}));
+        store.insert_pending_work(&item).await.unwrap();
+        assert_eq!(store.count_pending_work().await.unwrap(), 1);
+
+        let completed = store
+            .complete_pending_work(item.id, "agent:gengo-35")
+            .await
+            .unwrap();
+        assert_eq!(completed.status, "completed");
+        assert_eq!(completed.completed_by.as_deref(), Some("agent:gengo-35"));
+        assert!(completed.completed_at.is_some());
+
+        // Completed work drops off the live queue, same as Postgres.
+        assert_eq!(store.count_pending_work().await.unwrap(), 0);
+        assert!(store.list_pending_work().await.unwrap().is_empty());
+    }
+
+    #[tokio::test]
+    async fn completing_unknown_work_is_not_found() {
+        let store = MemoryStore::default();
+        let err = store
+            .complete_pending_work(Uuid::new_v4(), "agent:gengo-35")
             .await
             .unwrap_err();
         assert!(matches!(err, StoreError::NotFound));

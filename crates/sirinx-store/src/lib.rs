@@ -65,6 +65,15 @@ pub trait Store: Send + Sync {
 
     async fn count_pending_work(&self) -> Result<u64, StoreError>;
 
+    /// B12 — mark a work item done. The store stamps the completion
+    /// time itself (server clock, not caller-supplied) and the item
+    /// drops out of `list_pending_work`/`count_pending_work`.
+    async fn complete_pending_work(
+        &self,
+        id: Uuid,
+        completed_by: &str,
+    ) -> Result<PendingWork, StoreError>;
+
     /// B1 — durable release gates.
     async fn load_gates(&self) -> Result<Vec<GateRecord>, StoreError>;
 

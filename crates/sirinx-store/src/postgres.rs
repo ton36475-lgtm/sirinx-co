@@ -48,6 +48,18 @@ fn enum_str<T: serde::Serialize>(value: &T) -> Result<String, StoreError> {
     }
 }
 
+fn row_to_pending_work(row: &sqlx::postgres::PgRow) -> Result<PendingWork, StoreError> {
+    Ok(PendingWork {
+        id: row.try_get("id").map_err(StoreError::from)?,
+        source: row.try_get("source").map_err(StoreError::from)?,
+        title: row.try_get("title").map_err(StoreError::from)?,
+        detail: row.try_get("detail").map_err(StoreError::from)?,
+        status: row.try_get("status").map_err(StoreError::from)?,
+        completed_at: row.try_get("completed_at").map_err(StoreError::from)?,
+        completed_by: row.try_get("completed_by").map_err(StoreError::from)?,
+    })
+}
+
 fn row_to_lead(row: &sqlx::postgres::PgRow) -> Result<Lead, StoreError> {
     let value = serde_json::json!({
         "id": row.try_get::<Uuid, _>("id").map_err(StoreError::from)?,
@@ -161,20 +173,12 @@ impl Store for PostgresStore {
 
     async fn list_pending_work(&self) -> Result<Vec<PendingWork>, StoreError> {
         let rows = sqlx::query(
-            "select id, source, title, detail from web_pending_work where status = 'pending' order by created_at",
+            "select id, source, title, detail, status, completed_at::text as completed_at, completed_by \
+             from web_pending_work where status = 'pending' order by created_at",
         )
         .fetch_all(&self.pool)
         .await?;
-        rows.iter()
-            .map(|row| {
-                Ok(PendingWork {
-                    id: row.try_get("id").map_err(StoreError::from)?,
-                    source: row.try_get("source").map_err(StoreError::from)?,
-                    title: row.try_get("title").map_err(StoreError::from)?,
-                    detail: row.try_get("detail").map_err(StoreError::from)?,
-                })
-            })
-            .collect()
+        rows.iter().map(row_to_pending_work).collect()
     }
 
     async fn count_pending_work(&self) -> Result<u64, StoreError> {
@@ -183,6 +187,25 @@ impl Store for PostgresStore {
                 .fetch_one(&self.pool)
                 .await?;
         Ok(row.try_get::<i64, _>("n").map_err(StoreError::from)? as u64)
+    }
+
+    async fn complete_pending_work(
+        &self,
+        id: Uuid,
+        completed_by: &str,
+    ) -> Result<PendingWork, StoreError> {
+        let row = sqlx::query(
+            r#"update web_pending_work
+               set status = 'completed', completed_at = now(), completed_by = $2
+               where id = $1
+               returning id, source, title, detail, status, completed_at::text as completed_at, completed_by"#,
+        )
+        .bind(id)
+        .bind(completed_by)
+        .fetch_optional(&self.pool)
+        .await?
+        .ok_or(StoreError::NotFound)?;
+        row_to_pending_work(&row)
     }
 
     async fn load_gates(&self) -> Result<Vec<GateRecord>, StoreError> {

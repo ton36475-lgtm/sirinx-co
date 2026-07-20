@@ -1,0 +1,22 @@
+{
+  // Deployment stays behind the `deploy` gate (GO_LIVE_GATE_CHECKLIST.md).
+  // Run `wrangler deploy` only after an operator opens that gate with a
+  // ticket. Before first deploy, set:
+  //   wrangler secret put TELEGRAM_WEBHOOK_SECRET
+  //   wrangler secret put CONTROL_API_TOKEN
+  //   wrangler secret put GATEWAY_API_TOKEN
+  "name": "sirinx-telegram-gateway",
+  "main": "./src/worker.js",
+  "compatibility_date": "2026-07-20",
+  "send_metrics": false,
+  "vars": {
+    "CONTROL_URL": "http://127.0.0.1:8711"
+  },
+  "d1_databases": [
+    {
+      "binding": "TELEGRAM_DB",
+      "database_name": "sirinx-unified-db",
+      "database_id": "3d1da4d2-3f50-4ec8-ac2f-5be50f86bd2e"
+    }
+  ]
+}

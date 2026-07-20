@@ -13,6 +13,7 @@
 //! - `POST /api/gates/:name/decision`      — open/hold with ticket
 //! - `GET  /api/pending-work`              — shared work queue (Store)
 //! - `POST /api/pending-work`              — register work item
+//! - `POST /api/pending-work/:id/complete` — mark done, server stamps time
 //! - `POST /api/actions`                   — execute-or-dry-run by gate
 //!
 //! When a bearer token is configured, every `/api/*` route requires
@@ -34,7 +35,8 @@ use serde::{Deserialize, Serialize};
 
 use sirinx_a2a::{diff_work, AgentCard, OmniRoute, SyncRequest, SyncResponse};
 use sirinx_core::PendingWork;
-use sirinx_store::{MemoryStore, Store};
+use sirinx_store::{MemoryStore, Store, StoreError};
+use uuid::Uuid;
 
 /// The release gates carried over from RELEASE_GATE.md / NEXT_ACTIONS.md.
 /// Everything ships in `hold`.
@@ -210,6 +212,7 @@ pub fn router(state: ControlState) -> Router {
         .route("/api/gates", get(list_gates))
         .route("/api/gates/:name/decision", post(decide_gate))
         .route("/api/pending-work", get(list_pending).post(add_pending))
+        .route("/api/pending-work/:id/complete", post(complete_pending))
         .route("/api/actions", post(run_action))
         .route("/api/a2a/card", get(a2a_card))
         .route("/api/a2a/sync", post(a2a_sync))
@@ -361,6 +364,41 @@ async fn add_pending(
             )
         })?;
     Ok((StatusCode::CREATED, Json(item)))
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct CompleteWork {
+    completed_by: String,
+}
+
+/// B12 — the store stamps completion time itself (server clock), so
+/// every A2A node reading `web_pending_work` sees the same trusted
+/// "done at" value instead of a caller-supplied one.
+async fn complete_pending(
+    State(state): State<ControlState>,
+    Path(id): Path<Uuid>,
+    Json(body): Json<CompleteWork>,
+) -> Result<Json<PendingWork>, (StatusCode, Json<serde_json::Value>)> {
+    let item = state
+        .store
+        .complete_pending_work(id, &body.completed_by)
+        .await
+        .map_err(|err| match err {
+            StoreError::NotFound => (
+                StatusCode::NOT_FOUND,
+                Json(serde_json::json!({ "error": "work item not found" })),
+            ),
+            other => {
+                tracing::error!(error = %other, "pending-work completion failed");
+                (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    Json(serde_json::json!({ "error": "storage backend failure" })),
+                )
+            }
+        })?;
+    tracing::info!(id = %id, completed_by = %body.completed_by, "work item completed (durable)");
+    Ok(Json(item))
 }
 
 #[derive(Debug, Deserialize)]
@@ -586,6 +624,67 @@ mod tests {
             .unwrap();
         let body = body_json(listed).await;
         assert_eq!(body["pendingWork"].as_array().unwrap().len(), 1);
+    }
+
+    #[tokio::test]
+    async fn completing_work_stamps_it_and_drains_the_queue() {
+        let app = router(ControlState::with_default_gates());
+        let created = app
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                "/api/pending-work",
+                serde_json::json!({
+                    "source": "agent:kuranosuke-01",
+                    "title": "scan FB group leads",
+                    "detail": {}
+                }),
+            ))
+            .await
+            .unwrap();
+        let created_body = body_json(created).await;
+        let id = created_body["id"].as_str().unwrap();
+
+        let completed = app
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                &format!("/api/pending-work/{id}/complete"),
+                serde_json::json!({ "completedBy": "agent:gengo-35" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(completed.status(), StatusCode::OK);
+        let completed_body = body_json(completed).await;
+        assert_eq!(completed_body["status"], "completed");
+        assert_eq!(completed_body["completedBy"], "agent:gengo-35");
+        assert!(!completed_body["completedAt"].is_null());
+
+        // Completed work drops off the live queue.
+        let listed = app
+            .oneshot(
+                Request::get("/api/pending-work")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        let listed_body = body_json(listed).await;
+        assert_eq!(listed_body["pendingWork"].as_array().unwrap().len(), 0);
+    }
+
+    #[tokio::test]
+    async fn completing_unknown_work_is_not_found() {
+        let app = router(ControlState::with_default_gates());
+        let res = app
+            .oneshot(json_request(
+                "POST",
+                &format!("/api/pending-work/{}/complete", Uuid::new_v4()),
+                serde_json::json!({ "completedBy": "agent:gengo-35" }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(res.status(), StatusCode::NOT_FOUND);
     }
 
     #[tokio::test]

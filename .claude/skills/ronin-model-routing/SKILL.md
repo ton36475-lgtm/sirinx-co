@@ -56,6 +56,32 @@ curl -s -X POST $CONTROL/api/a2a/sync \
   -d '{"node":{"id":"agent:junai-17","name":"Junai L2 scorer","capabilities":["coding","model:glm52"],"endpoint":"","priority":1},"knownWorkIds":[]}'
 ```
 
+## Failover order (what happens when a lane errors or hits a limit)
+
+A real company doesn't stop working because one vendor is down; it has a
+documented fallback, not a silent guess. Same here — when the active
+lane returns an error, a rate limit, or a usage-window reset, the next
+step is deterministic, not improvised:
+
+1. **`sonnet5`** (default, everyday work) — if this errors/limits, retry
+   is bounded by `sirinx-autoloop::RecoveryLoop` (existing step budget),
+   not an unbounded loop.
+2. **`opus-4-8`** — hard-coding / complex-reasoning tasks route here
+   first, per operator preference, before falling back further.
+3. **`fable-5`** — used for QA/verification passes, and as the
+   "session reset" lane: when a usage window resets, resume with Fable 5
+   first (cheapest verification pass) before returning to Opus for the
+   next hard-coding task.
+4. **`glm52` / `cf-workers-ai`** — last resort only, and only if already
+   approved per `docs/approvals/MODEL_ROUTING_RONIN_TEAM.md`. A lane
+   that isn't approved does not get silently tried as a fallback.
+
+This is a policy for *this CLI session's own model picker* (`/model`)
+plus the AgentCard `modelLane` tag for other Ronin — it is not a new
+retry engine. The actual bounded-retry mechanics stay exactly
+`RecoveryLoop` from `sirinx-autoloop`; this section only fixes the
+*order* agents/operators should reach for next.
+
 ## Rules (unchanged from every other worker in the mesh)
 
 - Default lane is `sonnet5` (already authenticated in this session) —

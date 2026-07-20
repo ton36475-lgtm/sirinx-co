@@ -27,7 +27,10 @@ with knowledge, work, and routing shared through one backbone.**
 | A13 | **B1 done** — durable gates: `web_control_gates` (migration 0003, applied live), decisions persist-first, `ControlState::load` overlays store state | `gate_decisions_survive_restart` test |
 | A14 | **B2 done** — self-learning loop: `web_failure_events` + `web_lessons` (live), `RecoveryLoop` records failures, consults lessons for bounded guided retries, proposes new lessons from unknown failures | 4 recovery tests incl. cross-run learning |
 | A15 | **B9 done** — Telegram commander center reads live gate state via `gate-status.mjs` (`GET /api/gates`, bearer auth), fails closed (assumes hold) on any unreachable/error case instead of hardcoding a string | `gate-status.test.mjs` (7 tests) |
-| A16 | Model routing skill for the 47 Ronin mesh: `sonnet5` (default) / `glm52` (cointh.com proxy) / `cf-workers-ai` lanes, wired via existing `AgentCard`/OmniRoute capability tags — no new dispatcher, no key ever written to repo, non-default lanes gated on operator-signed approval doc | `.claude/skills/ronin-model-routing/SKILL.md`, `docs/approvals/MODEL_ROUTING_RONIN_TEAM.md` |
+| A16 | Model routing skill for the 47 Ronin mesh: `sonnet5` (default) / `glm52` (cointh.com proxy) / `cf-workers-ai` lanes, wired via existing `AgentCard`/OmniRoute capability tags — no new dispatcher, no key ever written to repo, non-default lanes gated on operator-signed approval doc; failover order documented (sonnet5 → opus-4-8 hard-coding → fable-5 QA/reset → approved-only glm52/cf-workers-ai) | `.claude/skills/ronin-model-routing/SKILL.md`, `docs/approvals/MODEL_ROUTING_RONIN_TEAM.md` |
+| A17 | **B12 done** — shared work queue records real completion timestamps: `web_pending_work` migration 0004 (`completed_at`/`completed_by`), `Store::complete_pending_work` (server clock, not caller-supplied), `POST /api/pending-work/:id/complete`, completed items drop off the live queue in both backends | 2 `sirinx-store` tests + 2 `sirinx-control` route tests |
+| A18 | Cloudflare Telegram gateway worker scaffold: receives Telegram webhooks, live-queries gate state (same fail-closed contract as B9), queues the computed reply into D1 (`telegram_outbox`) — never calls Telegram's sendMessage, `telegram_send` stays hold. Not deployed (no CF credentials in this session; deploy stays gated) | `infra/cloudflare/telegram-gateway-worker/` (10 vitest tests) |
+| A19 | `ghostclaw-manager` consolidated index skill — cross-references (does not duplicate) the master plan/architecture/model-routing/telegram-gateway docs above; explicitly notes this is a skill name only, not a company rebrand (declined 2026-07-20) | `.claude/skills/ghostclaw-manager/SKILL.md` |
 
 ## B. QUEUED — engineering (in priority order)
 
@@ -41,6 +44,7 @@ with knowledge, work, and routing shared through one backbone.**
 | B8 | R5 long tail: mobile apps on central API, archive legacy repos | REPO_AUDIT map all "done" |
 | B10 | Skill hygiene (audit 2026-07-19: of 50 skills — 24 stubs, 3 reference dead paths) | every skill either completed, fixed, or marked stub in SKILLS_REGISTRY |
 | B11 | Ronin model-lane rollout: get operator sign-off on `MODEL_ROUTING_RONIN_TEAM.md`, rotate the GLM-5.2 key that was pasted in chat 2026-07-19 before it's used anywhere, then register the first Ronin on a non-default lane | approval block filled + key rotated + one `AgentCard` live on `model:glm52` or `model:cf-workers-ai` |
+| B13 | Wire a real Telegram bot token + `wrangler deploy` for `telegram-gateway-worker`, then build the actual send path once `telegram_send` is opened — until then replies only ever land in `telegram_outbox` | webhook registered with Telegram, gate open with ticket, first real send reviewed |
 
 ## C. QUEUED — operator decisions (only the human can do these)
 

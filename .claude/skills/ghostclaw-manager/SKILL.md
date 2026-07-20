@@ -41,7 +41,7 @@ Read that skill for *how* to work. This skill is for *what exists*.
 | Architecture / crate graph | `SYSTEM_ARCHITECTURE.md` | 8 Rust crates, see below |
 | Data shapes / APIs / env vars | `SYSTEM_SCHEMA.md` | includes the 5 release gates |
 | Repo → monorepo mapping | `RUST_MIGRATION_PLAN.md` | 16 repos tracked |
-| Team / departments | `AGENT_TEAM_PLAN.md`, `.claude/agents/` | 6 dept-head sub-agents + 4 coded Ronin (1 per layer L1–L4: Kuranosuke/Junai/Kihei/Gengo) |
+| Team / departments | `AGENT_TEAM_PLAN.md`, `.claude/agents/`, `docs/RONIN_ROSTER.md` | 6 dept-head sub-agents + 4 coded Ronin (1 per layer L1–L4: Kuranosuke/Junai/Kihei/Gengo); full 48-slot roster with honest coded/placeholder status in `RONIN_ROSTER.md` |
 | A2A peer registry | `sirinx-a2a::OmniRoute` + `web_agent_cards` | durable since B15 (2026-07-20) — was in-memory-only before, lost on every restart |
 | Go-live gate criteria | `GO_LIVE_GATE_CHECKLIST.md` | deploy → cloudflare_dns → telegram_send → customer_messaging |
 | Model lanes for the 47 Ronin | `ronin-model-routing` skill | sonnet5 default, glm52/cf-workers-ai gated |

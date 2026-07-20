@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { handleOutbox, handleWebhook, parseCommand, replyFor } from "./worker.js";
+import worker, { handleOutbox, handleWebhook, parseCommand, replyFor } from "./worker.js";
 
 function createMockD1() {
   const rows = [];
@@ -34,12 +34,26 @@ function createMockD1() {
   };
 }
 
-function webhookRequest(body, headers = {}) {
+const WEBHOOK_SECRET = "test-webhook-secret";
+
+// Requests default to carrying the valid Telegram secret header, since
+// the worker now fails closed without it; pass `{ noSecret: true }` or a
+// custom header to exercise the rejection paths.
+function webhookRequest(body, { headers = {}, noSecret = false } = {}) {
+  const finalHeaders = noSecret
+    ? headers
+    : { "x-telegram-bot-api-secret-token": WEBHOOK_SECRET, ...headers };
   return new Request("https://gateway.example/telegram/webhook", {
     method: "POST",
-    headers,
+    headers: finalHeaders,
     body: JSON.stringify(body),
   });
+}
+
+// Env that includes the configured webhook secret; merge in TELEGRAM_DB,
+// CONTROL_URL, etc. per test.
+function webhookEnv(overrides = {}) {
+  return { TELEGRAM_WEBHOOK_SECRET: WEBHOOK_SECRET, ...overrides };
 }
 
 async function readJson(response) {
@@ -78,7 +92,7 @@ describe("handleWebhook group-chat command", () => {
     );
     const db = createMockD1();
     const request = webhookRequest({ message: { text: "/gates@SirinxBot", chat: { id: 7 } } });
-    const response = await handleWebhook(request, { TELEGRAM_DB: db, CONTROL_URL: "http://x" });
+    const response = await handleWebhook(request, webhookEnv({ TELEGRAM_DB: db, CONTROL_URL: "http://x" }));
 
     expect(response.status).toBe(200);
     expect(await readJson(response)).toMatchObject({ ok: true, queued: true });
@@ -114,15 +128,30 @@ describe("replyFor", () => {
 });
 
 describe("handleWebhook", () => {
+  it("fails closed with 503 when no webhook secret is configured", async () => {
+    // Regression: previously accepted any POST when the secret was unset.
+    const db = createMockD1();
+    const request = webhookRequest(
+      { message: { text: "/gates", chat: { id: 1 } } },
+      { noSecret: true }
+    );
+    const response = await handleWebhook(request, { TELEGRAM_DB: db });
+    expect(response.status).toBe(503);
+    expect(await readJson(response)).toMatchObject({
+      error: expect.stringContaining("TELEGRAM_WEBHOOK_SECRET"),
+    });
+    expect(db.rows).toHaveLength(0);
+  });
+
   it("rejects a request with the wrong Telegram secret token", async () => {
     const request = webhookRequest(
       { message: { text: "/gates", chat: { id: 1 } } },
-      { "x-telegram-bot-api-secret-token": "wrong" }
+      { headers: { "x-telegram-bot-api-secret-token": "wrong" } }
     );
-    const response = await handleWebhook(request, {
-      TELEGRAM_WEBHOOK_SECRET: "correct-secret",
-      TELEGRAM_DB: createMockD1(),
-    });
+    const response = await handleWebhook(
+      request,
+      webhookEnv({ TELEGRAM_DB: createMockD1() })
+    );
     expect(response.status).toBe(401);
   });
 
@@ -136,7 +165,7 @@ describe("handleWebhook", () => {
     );
     const db = createMockD1();
     const request = webhookRequest({ message: { text: "/gates", chat: { id: 42 } } });
-    const response = await handleWebhook(request, { TELEGRAM_DB: db, CONTROL_URL: "http://x" });
+    const response = await handleWebhook(request, webhookEnv({ TELEGRAM_DB: db, CONTROL_URL: "http://x" }));
 
     expect(response.status).toBe(200);
     const body = await readJson(response);
@@ -149,7 +178,7 @@ describe("handleWebhook", () => {
   it("acknowledges but does not queue an unsupported command", async () => {
     const db = createMockD1();
     const request = webhookRequest({ message: { text: "/rm -rf", chat: { id: 1 } } });
-    const response = await handleWebhook(request, { TELEGRAM_DB: db });
+    const response = await handleWebhook(request, webhookEnv({ TELEGRAM_DB: db }));
 
     expect(response.status).toBe(200);
     expect(await readJson(response)).toMatchObject({ ok: true, queued: false });
@@ -158,7 +187,7 @@ describe("handleWebhook", () => {
 
   it("acknowledges without fabricating a reply when TELEGRAM_DB is missing", async () => {
     const request = webhookRequest({ message: { text: "/gates", chat: { id: 1 } } });
-    const response = await handleWebhook(request, {});
+    const response = await handleWebhook(request, webhookEnv());
     expect(response.status).toBe(200);
     expect(await readJson(response)).toMatchObject({ ok: true, queued: false });
   });
@@ -184,5 +213,35 @@ describe("handleOutbox", () => {
   it("returns 503 when TELEGRAM_DB is not configured", async () => {
     const response = await handleOutbox({});
     expect(response.status).toBe(503);
+  });
+});
+
+describe("outbox route authentication (fetch handler)", () => {
+  function outboxRequest(headers = {}) {
+    return new Request("https://gateway.example/telegram/outbox", { method: "GET", headers });
+  }
+
+  it("fails closed with 401 when no GATEWAY_API_TOKEN is configured", async () => {
+    // Regression: previously served the outbox (chat ids + reply text)
+    // to anyone when the token was unset.
+    const response = await worker.fetch(outboxRequest(), { TELEGRAM_DB: createMockD1() });
+    expect(response.status).toBe(401);
+  });
+
+  it("rejects a wrong bearer token", async () => {
+    const response = await worker.fetch(
+      outboxRequest({ authorization: "Bearer nope" }),
+      { GATEWAY_API_TOKEN: "real-token", TELEGRAM_DB: createMockD1() }
+    );
+    expect(response.status).toBe(401);
+  });
+
+  it("serves the outbox with the correct bearer token", async () => {
+    const response = await worker.fetch(
+      outboxRequest({ authorization: "Bearer real-token" }),
+      { GATEWAY_API_TOKEN: "real-token", TELEGRAM_DB: createMockD1() }
+    );
+    expect(response.status).toBe(200);
+    expect(await readJson(response)).toHaveProperty("outbox");
   });
 });

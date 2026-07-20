@@ -1,10 +1,12 @@
 {
   // Deployment stays behind the `deploy` gate (GO_LIVE_GATE_CHECKLIST.md).
   // Run `wrangler deploy` only after an operator opens that gate with a
-  // ticket. Before first deploy, set:
-  //   wrangler secret put TELEGRAM_WEBHOOK_SECRET
-  //   wrangler secret put CONTROL_API_TOKEN
-  //   wrangler secret put GATEWAY_API_TOKEN
+  // ticket. These secrets are REQUIRED — the worker fails closed without
+  // them (webhook 503s without TELEGRAM_WEBHOOK_SECRET; outbox 401s
+  // without GATEWAY_API_TOKEN):
+  //   wrangler secret put TELEGRAM_WEBHOOK_SECRET  # verify webhook is from Telegram
+  //   wrangler secret put GATEWAY_API_TOKEN        # protect the outbox read endpoint
+  //   wrangler secret put CONTROL_API_TOKEN        # bearer for sirinx-control /api/gates
   "name": "sirinx-telegram-gateway",
   "main": "./src/worker.js",
   "compatibility_date": "2026-07-20",

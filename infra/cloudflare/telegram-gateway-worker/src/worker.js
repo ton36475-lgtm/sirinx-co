@@ -13,6 +13,13 @@
  *   POST /telegram/webhook   Telegram update -> queued reply, never sent
  *   GET  /telegram/outbox    bearer-protected: list queued replies
  *   GET  /health             open
+ *
+ * Fail-closed posture (matches the rest of SIRINX): both authenticated
+ * routes REFUSE when their secret is unconfigured rather than running
+ * wide open. A missing `TELEGRAM_WEBHOOK_SECRET` means the worker cannot
+ * prove a POST is really from Telegram, so it rejects it; a missing
+ * `GATEWAY_API_TOKEN` means the outbox (chat ids + reply text) has no
+ * protection, so it refuses to serve.
  */
 
 const ALLOWED_COMMANDS = new Set(["/status", "/gates", "/sync-plan", "/stop"]);
@@ -101,12 +108,19 @@ async function replyFor(command, env) {
 }
 
 async function handleWebhook(request, env) {
+  // Fail closed: with no configured secret the worker cannot verify a
+  // POST actually came from Telegram, so it refuses rather than trust
+  // any caller who found the URL.
   const configuredSecret = env.TELEGRAM_WEBHOOK_SECRET;
-  if (configuredSecret) {
-    const provided = request.headers.get("x-telegram-bot-api-secret-token");
-    if (provided !== configuredSecret) {
-      return unauthorized();
-    }
+  if (!configuredSecret) {
+    return json(
+      { error: "TELEGRAM_WEBHOOK_SECRET not configured; refusing unverified webhook" },
+      503
+    );
+  }
+  const provided = request.headers.get("x-telegram-bot-api-secret-token");
+  if (provided !== configuredSecret) {
+    return unauthorized();
   }
 
   let update;
@@ -157,7 +171,9 @@ async function handleOutbox(env) {
 }
 
 function hasValidBearer(request, env) {
-  if (!env.GATEWAY_API_TOKEN) return true;
+  // Fail closed: no configured token means the outbox has no protection,
+  // so deny rather than expose queued chat ids / reply text to anyone.
+  if (!env.GATEWAY_API_TOKEN) return false;
   const auth = request.headers.get("authorization") || "";
   const token = auth.startsWith("Bearer ") ? auth.slice(7) : null;
   return token === env.GATEWAY_API_TOKEN;

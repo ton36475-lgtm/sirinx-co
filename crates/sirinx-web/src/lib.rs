@@ -10,13 +10,15 @@
 //! - `PATCH /api/leads/:id/status`  — advance lead status
 //! - `DELETE /api/leads/:id`        — remove internal draft lead
 //! - `POST /api/events`             — consent-gated analytics intake
+//! - `GET  /api/events`             — recent event summaries
+//!   (B3 port of automation-system-backend's GET /events)
 //!
 //! Persistence goes through `sirinx_store::Store`: `MemoryStore` by
 //! default, `PostgresStore` (Supabase) when `DATABASE_URL` is set.
 
 use std::sync::Arc;
 
-use axum::extract::{Path, State};
+use axum::extract::{Path, Query, State};
 use axum::http::StatusCode;
 use axum::response::Html;
 use axum::routing::{delete, get, patch, post};
@@ -97,7 +99,7 @@ pub fn router(state: AppState) -> Router {
         .route("/api/leads", post(create_lead))
         .route("/api/leads/:id/status", patch(update_lead_status))
         .route("/api/leads/:id", delete(delete_lead))
-        .route("/api/events", post(ingest_event))
+        .route("/api/events", post(ingest_event).get(list_events))
         .with_state(state)
 }
 
@@ -222,4 +224,31 @@ async fn ingest_event(
     } else {
         Ok((StatusCode::OK, Json(serde_json::json!({ "stored": false }))))
     }
+}
+
+#[derive(Debug, Deserialize)]
+struct ListEventsQuery {
+    limit: Option<u32>,
+}
+
+const MAX_EVENTS_LIMIT: u32 = 200;
+const DEFAULT_EVENTS_LIMIT: u32 = 50;
+
+/// B3 port of `automation-system-backend`'s `GET /events`: recent event
+/// summaries only (no payload/consent) — a read-only activity list, not
+/// a full export.
+async fn list_events(
+    State(state): State<AppState>,
+    Query(query): Query<ListEventsQuery>,
+) -> Result<Json<serde_json::Value>, (StatusCode, Json<ApiError>)> {
+    let limit = query
+        .limit
+        .unwrap_or(DEFAULT_EVENTS_LIMIT)
+        .min(MAX_EVENTS_LIMIT);
+    let events = state
+        .store
+        .list_recent_events(limit)
+        .await
+        .map_err(store_error_response)?;
+    Ok(Json(serde_json::json!({ "events": events })))
 }

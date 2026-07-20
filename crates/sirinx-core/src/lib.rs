@@ -20,7 +20,7 @@ pub mod lead;
 pub mod package;
 pub mod work;
 
-pub use analytics::{AnalyticsEvent, Consent, ALLOWED_EVENTS};
+pub use analytics::{AnalyticsEvent, Consent, EventSummary, ALLOWED_EVENTS};
 pub use control::{FailureRecord, GateRecord, Lesson};
 pub use lead::{BusinessType, Interest, Lead, LeadDraft, LeadStatus, ValidationError};
 pub use package::{default_packages, EnergyPackage};

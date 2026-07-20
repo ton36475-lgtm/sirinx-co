@@ -5,7 +5,7 @@ use uuid::Uuid;
 
 use sirinx_a2a::AgentCard;
 use sirinx_core::{
-    AnalyticsEvent, FailureRecord, GateRecord, Lead, LeadStatus, Lesson, PendingWork,
+    AnalyticsEvent, EventSummary, FailureRecord, GateRecord, Lead, LeadStatus, Lesson, PendingWork,
 };
 
 use crate::{Store, StoreError};
@@ -156,6 +156,26 @@ impl Store for PostgresStore {
             .fetch_one(&self.pool)
             .await?;
         Ok(row.try_get::<i64, _>("n").map_err(StoreError::from)? as u64)
+    }
+
+    async fn list_recent_events(&self, limit: u32) -> Result<Vec<EventSummary>, StoreError> {
+        let rows = sqlx::query(
+            "select id, event, page, created_at::text as created_at \
+             from web_analytics_events order by created_at desc limit $1",
+        )
+        .bind(i64::from(limit))
+        .fetch_all(&self.pool)
+        .await?;
+        rows.iter()
+            .map(|row| {
+                Ok(EventSummary {
+                    id: row.try_get("id").map_err(StoreError::from)?,
+                    event: row.try_get("event").map_err(StoreError::from)?,
+                    page: row.try_get("page").map_err(StoreError::from)?,
+                    created_at: row.try_get("created_at").map_err(StoreError::from)?,
+                })
+            })
+            .collect()
     }
 
     async fn insert_pending_work(&self, item: &PendingWork) -> Result<(), StoreError> {

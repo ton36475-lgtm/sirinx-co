@@ -16,7 +16,7 @@ use uuid::Uuid;
 
 use sirinx_a2a::AgentCard;
 use sirinx_core::{
-    AnalyticsEvent, FailureRecord, GateRecord, Lead, LeadStatus, Lesson, PendingWork,
+    AnalyticsEvent, EventSummary, FailureRecord, GateRecord, Lead, LeadStatus, Lesson, PendingWork,
     ValidationError,
 };
 
@@ -57,6 +57,10 @@ pub trait Store: Send + Sync {
     async fn insert_event(&self, event: &AnalyticsEvent) -> Result<(), StoreError>;
 
     async fn count_events(&self) -> Result<u64, StoreError>;
+
+    /// B3 (partial) — read-side port of `automation-system-backend`'s
+    /// `GET /events`: most recent accepted events, newest first.
+    async fn list_recent_events(&self, limit: u32) -> Result<Vec<EventSummary>, StoreError>;
 
     /// Register a work item on the shared queue. On Postgres this also
     /// fires `pg_notify('web_pending_work', id)` via trigger.

@@ -6,7 +6,7 @@ use uuid::Uuid;
 
 use sirinx_a2a::AgentCard;
 use sirinx_core::{
-    AnalyticsEvent, FailureRecord, GateRecord, Lead, LeadStatus, Lesson, PendingWork,
+    AnalyticsEvent, EventSummary, FailureRecord, GateRecord, Lead, LeadStatus, Lesson, PendingWork,
 };
 
 use crate::{Store, StoreError};
@@ -72,6 +72,28 @@ impl Store for MemoryStore {
 
     async fn count_events(&self) -> Result<u64, StoreError> {
         Ok(self.events.read().expect("event store poisoned").len() as u64)
+    }
+
+    async fn list_recent_events(&self, limit: u32) -> Result<Vec<EventSummary>, StoreError> {
+        let events = self.events.read().expect("event store poisoned");
+        // MemoryStore is test/dev-only; PostgresStore's real timestamptz
+        // is the source of truth in production (same convention as B12).
+        let secs = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.as_secs())
+            .unwrap_or(0);
+        Ok(events
+            .iter()
+            .enumerate()
+            .rev()
+            .take(limit as usize)
+            .map(|(i, e)| EventSummary {
+                id: (i + 1) as i64,
+                event: e.event.clone(),
+                page: e.page.clone(),
+                created_at: format!("epoch:{secs}"),
+            })
+            .collect())
     }
 
     async fn insert_pending_work(&self, item: &PendingWork) -> Result<(), StoreError> {

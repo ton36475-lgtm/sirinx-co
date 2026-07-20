@@ -61,4 +61,6 @@ lane is actually implemented, add it here **and** to
 
 ## Status
 
-🚧 **Stub** — Registry defined, ต้องการ automated benchmark pipeline
+✅ **Current** (as of 2026-07-20, B10 skill hygiene audit) — Model registry and lane
+mapping reflect `ronin-model-routing`'s live config. Only the automated benchmark
+pipeline (auto-run on new model release → recommendation report) remains unbuilt.

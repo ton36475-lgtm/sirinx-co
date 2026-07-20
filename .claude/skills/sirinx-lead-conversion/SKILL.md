@@ -89,7 +89,7 @@ Trigger: Re-engage on score change
 - **L1 #09 Kanroku:** Monitor LINE for inquiries
 - **L2 #17 Jūnai:** Score + classify leads
 - **L3 #26 Kihei:** Decide pricing + proposal
-- **L4 #35 Gengo:** Orchestrate follow-up sequence
+- **L4 #36 Gengo:** Orchestrate follow-up sequence
 - **Kai Chatbot:** First response + qualification
 
 ## Rules

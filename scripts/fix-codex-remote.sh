@@ -27,10 +27,25 @@ echo "origin url : $current_url"
 echo "branch     : $(git branch --show-current)"
 
 if [ "${1:-}" = "--check" ]; then
-    git fetch origin "$WORK_BRANCH" 2>/dev/null || echo "fetch failed — check network/auth"
-    echo "ahead/behind vs origin/$WORK_BRANCH:"
-    git rev-list --left-right --count "origin/$WORK_BRANCH...HEAD" 2>/dev/null \
-        || echo "  (branch not tracked yet)"
+    # Surface a wrong/old origin here too — this IS the "remote connect,
+    # old service lost" symptom, and --check used to stay silent about it.
+    if [ "$current_url" != "$CANONICAL_URL" ]; then
+        echo "⚠️  origin does NOT match canonical:"
+        echo "      expected: $CANONICAL_URL"
+        echo "      actual:   $current_url"
+        echo "    run without --check to reset it, then re-run --check."
+    fi
+    # Only trust ahead/behind if the fetch actually succeeded. Otherwise
+    # a stale remote-tracking ref would report a bogus "0 0 in sync" and
+    # mask the dead remote — the exact false-positive this fixes.
+    if git fetch origin "$WORK_BRANCH" 2>/dev/null; then
+        echo "ahead/behind (behind<TAB>ahead) vs origin/$WORK_BRANCH:"
+        git rev-list --left-right --count "origin/$WORK_BRANCH...HEAD" 2>/dev/null \
+            || echo "  (branch not tracked yet)"
+    else
+        echo "fetch failed — dead remote, network, or auth."
+        echo "ahead/behind: UNKNOWN (ignore any cached value; the remote is unreachable)."
+    fi
     exit 0
 fi
 
@@ -50,13 +65,27 @@ if [ "$(git branch --show-current)" != "$WORK_BRANCH" ]; then
     git checkout "$WORK_BRANCH" 2>/dev/null || git checkout -b "$WORK_BRANCH" "origin/$WORK_BRANCH"
 fi
 
+# Guard a dirty tree BEFORE rebasing. A worker running this repair mid-task
+# usually has uncommitted changes; git rebase would then abort with
+# "cannot rebase: You have unstaged changes" and the old code mislabeled
+# that as a merge CONFLICT. Stop early with the correct instruction.
+if [ -n "$(git status --porcelain)" ]; then
+    echo
+    echo "working tree is dirty — commit or stash before repairing the remote:"
+    echo "    git stash -u        # set aside local edits"
+    echo "    ./scripts/fix-codex-remote.sh"
+    echo "    git stash pop       # bring them back after the rebase"
+    exit 1
+fi
+
 echo "rebasing local commits onto origin/$WORK_BRANCH ..."
 if git rebase "origin/$WORK_BRANCH"; then
     echo "rebase clean."
 else
     echo
-    echo "CONFLICT — resolve per file, prefer origin's MASTER_PLAN.md"
-    echo "(it already contains the audit fixes), then: git rebase --continue"
+    echo "rebase hit a real merge CONFLICT — resolve per file, prefer origin's"
+    echo "MASTER_PLAN.md (it already contains the audit fixes), then:"
+    echo "    git rebase --continue"
     exit 1
 fi
 

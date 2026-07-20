@@ -1394,6 +1394,7 @@ dependencies = [
  "async-trait",
  "serde",
  "serde_json",
+ "sirinx-a2a",
  "sirinx-core",
  "sqlx",
  "thiserror 1.0.69",

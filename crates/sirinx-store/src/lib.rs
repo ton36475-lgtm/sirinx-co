@@ -14,6 +14,7 @@ pub mod postgres;
 use async_trait::async_trait;
 use uuid::Uuid;
 
+use sirinx_a2a::AgentCard;
 use sirinx_core::{
     AnalyticsEvent, FailureRecord, GateRecord, Lead, LeadStatus, Lesson, PendingWork,
     ValidationError,
@@ -89,6 +90,13 @@ pub trait Store: Send + Sync {
     async fn upsert_lesson(&self, lesson: &Lesson) -> Result<(), StoreError>;
 
     async fn list_lessons(&self) -> Result<Vec<Lesson>, StoreError>;
+
+    /// B15 — durable A2A peer registry: gates (B1) already survive
+    /// restarts; this closes the same gap for OmniRoute's card map.
+    async fn load_agent_cards(&self) -> Result<Vec<AgentCard>, StoreError>;
+
+    /// Register or refresh a card (idempotent by id).
+    async fn upsert_agent_card(&self, card: &AgentCard) -> Result<(), StoreError>;
 }
 
 pub use memory::MemoryStore;

@@ -37,11 +37,12 @@ Read that skill for *how* to work. This skill is for *what exists*.
 
 | Layer | Where | Status |
 | --- | --- | --- |
-| Plan / backlog | `MASTER_PLAN.md` | A1–A16 done, B3/B7/B10/B11 queued, C1–C3 operator-only |
+| Plan / backlog | `MASTER_PLAN.md` | A1–A20 done, B3–B17 queued, C1–C3 operator-only |
 | Architecture / crate graph | `SYSTEM_ARCHITECTURE.md` | 8 Rust crates, see below |
 | Data shapes / APIs / env vars | `SYSTEM_SCHEMA.md` | includes the 5 release gates |
 | Repo → monorepo mapping | `RUST_MIGRATION_PLAN.md` | 16 repos tracked |
-| Team / departments | `AGENT_TEAM_PLAN.md`, `.claude/agents/` | 6 dept-head sub-agents + 4 coded Ronin |
+| Team / departments | `AGENT_TEAM_PLAN.md`, `.claude/agents/` | 6 dept-head sub-agents + 4 coded Ronin (1 per layer L1–L4: Kuranosuke/Junai/Kihei/Gengo) |
+| A2A peer registry | `sirinx-a2a::OmniRoute` + `web_agent_cards` | durable since B15 (2026-07-20) — was in-memory-only before, lost on every restart |
 | Go-live gate criteria | `GO_LIVE_GATE_CHECKLIST.md` | deploy → cloudflare_dns → telegram_send → customer_messaging |
 | Model lanes for the 47 Ronin | `ronin-model-routing` skill | sonnet5 default, glm52/cf-workers-ai gated |
 | Telegram commander center | `services/telegram-command-bot/`, `infra/cloudflare/telegram-gateway-worker/` | reads live gates (B9); replies queued, never sent (telegram_send holds) |

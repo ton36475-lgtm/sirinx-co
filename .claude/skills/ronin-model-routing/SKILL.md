@@ -14,8 +14,17 @@ parallel orchestrator). Every lane needs an env-provided credential;
 | Lane | Provider | Model id | Best for |
 | --- | --- | --- | --- |
 | `sonnet5` | Anthropic (native, this CLI) | `claude-sonnet-5` | default — everything Claude already does in-session |
+| `opus-4-8` | Anthropic (native, this CLI, `/model`) | `claude-opus-4-8` | hard-coding / complex-reasoning tasks — no approval needed, same auth as `sonnet5` |
+| `fable-5` | Anthropic (native, this CLI, `/model`) | `claude-fable-5` | QA/verification passes, and the first lane to reach for right after a usage-window reset |
 | `glm52` | cointh.com proxy (Anthropic-messages compatible) | `glm-5.2` | long-context batch work, cost-sensitive lanes |
 | `cf-workers-ai` | Cloudflare Workers AI | `@cf/meta/llama-3.1-8b-instruct` (swap per task) | free-tier deep research / high-volume L1 scanning, no local resource cost |
+
+`opus-4-8` and `fable-5` are native Anthropic models selectable via this
+CLI's own `/model` command — same session auth as `sonnet5`, no
+`AgentCard` capability tag or approval doc needed (unlike `glm52`/
+`cf-workers-ai`, which are third-party and gated). The failover section
+below assumed this; it's made explicit here after an L2 (Jūnai) review
+caught the two lanes being referenced without being formally listed.
 
 ## Required env vars (operator-provisioned, never in repo)
 

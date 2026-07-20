@@ -3,6 +3,7 @@ use sqlx::postgres::{PgPool, PgPoolOptions};
 use sqlx::Row;
 use uuid::Uuid;
 
+use sirinx_a2a::AgentCard;
 use sirinx_core::{
     AnalyticsEvent, FailureRecord, GateRecord, Lead, LeadStatus, Lesson, PendingWork,
 };
@@ -287,5 +288,50 @@ impl Store for PostgresStore {
                 })
             })
             .collect()
+    }
+
+    async fn load_agent_cards(&self) -> Result<Vec<AgentCard>, StoreError> {
+        let rows = sqlx::query(
+            "select id, name, capabilities, endpoint, priority from web_agent_cards order by id",
+        )
+        .fetch_all(&self.pool)
+        .await?;
+        rows.iter()
+            .map(|row| {
+                let capabilities: serde_json::Value =
+                    row.try_get("capabilities").map_err(StoreError::from)?;
+                Ok(AgentCard {
+                    id: row.try_get("id").map_err(StoreError::from)?,
+                    name: row.try_get("name").map_err(StoreError::from)?,
+                    capabilities: serde_json::from_value(capabilities)
+                        .map_err(|e| StoreError::Backend(e.to_string()))?,
+                    endpoint: row.try_get("endpoint").map_err(StoreError::from)?,
+                    priority: row.try_get("priority").map_err(StoreError::from)?,
+                })
+            })
+            .collect()
+    }
+
+    async fn upsert_agent_card(&self, card: &AgentCard) -> Result<(), StoreError> {
+        let capabilities = serde_json::to_value(&card.capabilities)
+            .map_err(|e| StoreError::Backend(e.to_string()))?;
+        sqlx::query(
+            r#"insert into web_agent_cards (id, name, capabilities, endpoint, priority, updated_at)
+               values ($1, $2, $3, $4, $5, now())
+               on conflict (id) do update set
+                 name = excluded.name,
+                 capabilities = excluded.capabilities,
+                 endpoint = excluded.endpoint,
+                 priority = excluded.priority,
+                 updated_at = now()"#,
+        )
+        .bind(&card.id)
+        .bind(&card.name)
+        .bind(capabilities)
+        .bind(&card.endpoint)
+        .bind(card.priority)
+        .execute(&self.pool)
+        .await?;
+        Ok(())
     }
 }

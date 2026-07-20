@@ -107,6 +107,8 @@ impl ControlState {
 
     /// B1 — durable gates: start from defaults, overlay whatever the
     /// store remembers, so an opened gate survives restarts.
+    /// B15 — same treatment for the A2A peer registry: OmniRoute used to
+    /// be in-memory only, so every registered node vanished on restart.
     pub async fn load(
         store: Arc<dyn Store>,
         api_token: Option<String>,
@@ -125,6 +127,13 @@ impl ControlState {
                     };
                     gate.ticket = record.ticket;
                 }
+            }
+        }
+        let cards = store.load_agent_cards().await?;
+        {
+            let mut omniroute = state.omniroute.write().expect("omniroute lock poisoned");
+            for card in cards {
+                omniroute.register(card);
             }
         }
         Ok(state)
@@ -446,12 +455,25 @@ async fn a2a_sync(
     State(state): State<ControlState>,
     Json(req): Json<SyncRequest>,
 ) -> Result<Json<SyncResponse>, (StatusCode, Json<serde_json::Value>)> {
+    // B15: persist first, same fail-safe ordering as gate decisions — a
+    // registration that isn't durable doesn't survive the next restart.
+    state
+        .store
+        .upsert_agent_card(&req.node)
+        .await
+        .map_err(|err| {
+            tracing::error!(peer = %req.node.id, error = %err, "failed to persist agent card");
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(serde_json::json!({ "error": "storage backend failure" })),
+            )
+        })?;
     state
         .omniroute
         .write()
         .expect("omniroute lock poisoned")
         .register(req.node.clone());
-    tracing::info!(peer = %req.node.id, "a2a peer registered/refreshed");
+    tracing::info!(peer = %req.node.id, "a2a peer registered/refreshed (durable)");
 
     let local = state.store.list_pending_work().await.map_err(|err| {
         tracing::error!(error = %err, "a2a sync backend failure");
@@ -779,6 +801,48 @@ mod tests {
         assert_eq!(second.gate_state("deploy"), Some(GateState::Open));
         // Untouched gates stay on their default hold.
         assert_eq!(second.gate_state("telegram_send"), Some(GateState::Hold));
+    }
+
+    #[tokio::test]
+    async fn agent_cards_survive_restart() {
+        // B15 — same pattern as gate_decisions_survive_restart: one
+        // shared store, two ControlState lifetimes.
+        let store: Arc<MemoryStore> = Arc::new(MemoryStore::default());
+
+        let first = ControlState::new(store.clone(), None, default_self_card());
+        let app = router(first);
+        let synced = app
+            .oneshot(json_request(
+                "POST",
+                "/api/a2a/sync",
+                serde_json::json!({
+                    "node": {
+                        "id": "agent:codex-worker",
+                        "name": "Codex worker",
+                        "capabilities": ["coding"],
+                        "endpoint": "",
+                        "priority": 0
+                    },
+                    "knownWorkIds": []
+                }),
+            ))
+            .await
+            .unwrap();
+        assert_eq!(synced.status(), StatusCode::OK);
+
+        // "Restart": load a fresh state from the same store.
+        let second = ControlState::load(store, None, default_self_card())
+            .await
+            .unwrap();
+        let cards: Vec<String> = second
+            .omniroute
+            .read()
+            .expect("omniroute lock poisoned")
+            .cards()
+            .into_iter()
+            .map(|c| c.id)
+            .collect();
+        assert!(cards.contains(&"agent:codex-worker".to_string()));
     }
 
     #[tokio::test]

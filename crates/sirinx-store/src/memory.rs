@@ -4,6 +4,7 @@ use std::sync::RwLock;
 use async_trait::async_trait;
 use uuid::Uuid;
 
+use sirinx_a2a::AgentCard;
 use sirinx_core::{
     AnalyticsEvent, FailureRecord, GateRecord, Lead, LeadStatus, Lesson, PendingWork,
 };
@@ -19,6 +20,7 @@ pub struct MemoryStore {
     gates: RwLock<HashMap<String, GateRecord>>,
     failures: RwLock<Vec<FailureRecord>>,
     lessons: RwLock<HashMap<String, Lesson>>,
+    agent_cards: RwLock<HashMap<String, AgentCard>>,
 }
 
 #[async_trait]
@@ -177,6 +179,26 @@ impl Store for MemoryStore {
             .collect();
         lessons.sort_by(|a, b| a.pattern.cmp(&b.pattern));
         Ok(lessons)
+    }
+
+    async fn load_agent_cards(&self) -> Result<Vec<AgentCard>, StoreError> {
+        let mut cards: Vec<AgentCard> = self
+            .agent_cards
+            .read()
+            .expect("agent card store poisoned")
+            .values()
+            .cloned()
+            .collect();
+        cards.sort_by(|a, b| a.id.cmp(&b.id));
+        Ok(cards)
+    }
+
+    async fn upsert_agent_card(&self, card: &AgentCard) -> Result<(), StoreError> {
+        self.agent_cards
+            .write()
+            .expect("agent card store poisoned")
+            .insert(card.id.clone(), card.clone());
+        Ok(())
     }
 }
 

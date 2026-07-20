@@ -58,7 +58,7 @@ with knowledge, work, and routing shared through one backbone.**
 
 | # | Action | Where |
 | --- | --- | --- |
-| C1 | Enable GitHub Actions (Settings/Billing) → CI turns green | github.com |
+| C1 | Enable GitHub Actions billing/minutes (Settings → Billing → Plans and usage, or Settings → Actions) → CI turns green. **Confirmed 2026-07-20 via PR #9**: workflow runs *are* created (Actions itself isn't disabled) but every job sits in `queued` indefinitely with no runner ever assigned — classic minutes/billing block, not a code issue. 6 runs on record, 0 have ever completed successfully | github.com, PR #9 |
 | C2 | Run `scripts/mac-revoke-tcc.sh` on mac-mini-m2; record date | `MAC_TCC_PERMISSIONS.md` |
 | C3 | Provision `DATABASE_URL`, `CONTROL_API_TOKEN`, `BRAIN_SYNC_TOKEN` in host secret stores | never in repo |
 | C4 | Choose Cloudflare tunnel strategy; rotate ghost-claw-os keystore | `NEXT_ACTIONS.md`, `INTEGRATION_MAP.md` |

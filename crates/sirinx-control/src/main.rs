@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use sirinx_control::{router, self_card_from_env, ControlState};
+use sirinx_control::{router, self_card_from_env, ControlState, GatePersistence};
 use sirinx_store::{MemoryStore, PostgresStore, Store};
 
 #[tokio::main]
@@ -14,21 +14,22 @@ async fn main() {
 
     // Shared control backend: Postgres when DATABASE_URL is set, so every
     // node sees the same pending work and gates; otherwise process-local memory.
-    let store: Arc<dyn Store> = match std::env::var("DATABASE_URL") {
-        Ok(url) if !url.trim().is_empty() => {
-            let store = PostgresStore::connect(&url)
-                .await
-                .expect("failed to connect to Postgres / run migrations");
-            tracing::info!("control backend: postgres (shared queue and durable gates)");
-            Arc::new(store)
-        }
-        _ => {
-            tracing::warn!(
-                "DATABASE_URL not set — control queue and gate decisions are process-local"
-            );
-            Arc::new(MemoryStore::default())
-        }
-    };
+    let (store, gate_persistence): (Arc<dyn Store>, GatePersistence) =
+        match std::env::var("DATABASE_URL") {
+            Ok(url) if !url.trim().is_empty() => {
+                let store = PostgresStore::connect(&url)
+                    .await
+                    .expect("failed to connect to pre-migrated Postgres");
+                tracing::info!("control backend: postgres (shared queue and durable gates)");
+                (Arc::new(store), GatePersistence::Postgres)
+            }
+            _ => {
+                tracing::warn!(
+                    "DATABASE_URL not set — control queue and gate decisions are process-local"
+                );
+                (Arc::new(MemoryStore::default()), GatePersistence::Memory)
+            }
+        };
 
     // Bearer token for /api/*; /health and /metrics stay open.
     let token = std::env::var("CONTROL_API_TOKEN")
@@ -38,7 +39,8 @@ async fn main() {
         tracing::warn!("CONTROL_API_TOKEN not set — /api/* is unauthenticated (local dev only)");
     }
 
-    // 8711 matches the Hermes dev-control-api port so dashboards keep working.
+    // Rust remains the durable gate authority on 8711. The imported Node
+    // long-tail API uses 8790, avoiding authority/runtime port ambiguity.
     let port: u16 = std::env::var("CONTROL_PORT")
         .ok()
         .and_then(|p| p.parse().ok())
@@ -55,7 +57,7 @@ async fn main() {
         "a2a card ready"
     );
 
-    let state = ControlState::load(store, token, card)
+    let state = ControlState::load_with_persistence(store, token, card, gate_persistence)
         .await
         .expect("failed to load persisted control gates");
     let app = router(state);

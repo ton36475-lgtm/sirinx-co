@@ -8,6 +8,7 @@
 //! imported Node service; this crate owns the safety-critical core:
 //!
 //! - `GET  /health`                        — open (no auth)
+//! - `GET  /ready`                         — redacted operational readiness
 //! - `GET  /metrics`                       — open, Prometheus text format
 //! - `GET  /api/gates`                     — all gates with state
 //! - `POST /api/gates/:name/decision`      — open/hold with ticket
@@ -24,6 +25,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Write as _;
 use std::sync::{Arc, RwLock};
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::extract::{Path, Request, State};
 use axum::http::StatusCode;
@@ -31,7 +33,7 @@ use axum::middleware::{self, Next};
 use axum::response::Response;
 use axum::routing::{get, post};
 use axum::{Json, Router};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use sirinx_a2a::{diff_work, AgentCard, OmniRoute, SyncRequest, SyncResponse};
 use sirinx_core::PendingWork;
@@ -51,10 +53,103 @@ pub const DEFAULT_GATES: &[&str] = &[
     "adaptive_sync",
 ];
 
+const TELEGRAM_SEND_GATE: &str = "telegram_send";
+const TELEGRAM_TICKET_PREFIX: &str = "OPS-TG-";
+
+fn open_ticket_is_valid(gate_name: &str, ticket: Option<&str>) -> bool {
+    let Some(ticket) = ticket else {
+        return false;
+    };
+    if ticket.trim().is_empty() {
+        return false;
+    }
+    if gate_name != TELEGRAM_SEND_GATE {
+        return true;
+    }
+
+    ticket
+        .strip_prefix(TELEGRAM_TICKET_PREFIX)
+        .is_some_and(|suffix| !suffix.trim().is_empty())
+}
+
+fn invalid_open_ticket_message(gate_name: &str, ticket: Option<&str>) -> Option<&'static str> {
+    if ticket.is_none_or(|ticket| ticket.trim().is_empty()) {
+        return Some("opening a gate requires a ticket");
+    }
+    if gate_name == TELEGRAM_SEND_GATE && !open_ticket_is_valid(gate_name, ticket) {
+        return Some("opening telegram_send requires an OPS-TG- ticket");
+    }
+    None
+}
+
+/// The persistence authority selected for control-gate decisions.
+///
+/// `durable` is derived from this enum rather than accepted as an independent
+/// boolean, so the API cannot accidentally advertise process-local memory as
+/// durable. Production selects this value alongside the concrete Store.
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "lowercase")]
+pub enum GatePersistence {
+    Memory,
+    Postgres,
+}
+
+impl GatePersistence {
+    pub const fn durable(self) -> bool {
+        matches!(self, Self::Postgres)
+    }
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+struct GatePersistenceEvidence {
+    backend: GatePersistence,
+    durable: bool,
+    /// Unix epoch milliseconds observed after the authoritative Store read.
+    observed_at: u64,
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+struct ReadinessAuthEvidence {
+    configured: bool,
+    api_routes_protected: bool,
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+struct ReadinessPersistenceEvidence {
+    backend: GatePersistence,
+    durable: bool,
+    available: bool,
+    observed_at: Option<u64>,
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+struct TelegramAdmissionReadiness {
+    live_admission_ready: bool,
+    gate_state: GateState,
+    ticket_policy_satisfied: bool,
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+struct ControlReadiness {
+    status: &'static str,
+    service: &'static str,
+    operational_ready: bool,
+    auth: ReadinessAuthEvidence,
+    persistence: ReadinessPersistenceEvidence,
+    telegram: TelegramAdmissionReadiness,
+    reasons: Vec<&'static str>,
+}
+
 #[derive(Clone)]
 pub struct ControlState {
     gates: Arc<RwLock<BTreeMap<String, Gate>>>,
     store: Arc<dyn Store>,
+    gate_persistence: GatePersistence,
     /// Gate decisions are persisted and cached as one ordered operation.
     gate_decisions: Arc<tokio::sync::Mutex<()>>,
     /// A restrictive decision that could not be persisted must still win on
@@ -74,6 +169,19 @@ impl ControlState {
     }
 
     pub fn new(store: Arc<dyn Store>, api_token: Option<String>, self_card: AgentCard) -> Self {
+        Self::new_with_persistence(store, api_token, self_card, GatePersistence::Memory)
+    }
+
+    /// Construct a state with explicit persistence evidence.
+    ///
+    /// Callers that do not select an authority explicitly remain compatible
+    /// with `new` and safely report process-local memory.
+    pub fn new_with_persistence(
+        store: Arc<dyn Store>,
+        api_token: Option<String>,
+        self_card: AgentCard,
+        gate_persistence: GatePersistence,
+    ) -> Self {
         let gates = DEFAULT_GATES
             .iter()
             .map(|name| {
@@ -92,6 +200,7 @@ impl ControlState {
         Self {
             gates: Arc::new(RwLock::new(gates)),
             store,
+            gate_persistence,
             gate_decisions: Arc::new(tokio::sync::Mutex::new(())),
             local_hold_overrides: Arc::new(RwLock::new(BTreeSet::new())),
             api_token: api_token.map(Into::into),
@@ -107,7 +216,18 @@ impl ControlState {
         api_token: Option<String>,
         self_card: AgentCard,
     ) -> Result<Self, StoreError> {
-        let state = Self::new(store, api_token, self_card);
+        Self::load_with_persistence(store, api_token, self_card, GatePersistence::Memory).await
+    }
+
+    /// Build a safe state, overlay stored decisions, and retain explicit
+    /// persistence evidence for operator and downstream admission checks.
+    pub async fn load_with_persistence(
+        store: Arc<dyn Store>,
+        api_token: Option<String>,
+        self_card: AgentCard,
+        gate_persistence: GatePersistence,
+    ) -> Result<Self, StoreError> {
+        let state = Self::new_with_persistence(store, api_token, self_card, gate_persistence);
         let persisted = state.store.list_gates().await?;
         let stored = persisted.len();
         let mut applied = 0usize;
@@ -126,11 +246,13 @@ impl ControlState {
                     GateState::Hold => {
                         gate.ticket = None;
                     }
-                    GateState::Open if gate.ticket.as_deref().unwrap_or("").trim().is_empty() => {
+                    GateState::Open
+                        if !open_ticket_is_valid(&gate.name, gate.ticket.as_deref()) =>
+                    {
                         ignored += 1;
                         tracing::error!(
                             gate = %gate.name,
-                            "ignoring invalid persisted open gate without a ticket"
+                            "ignoring persisted open gate with invalid ticket policy"
                         );
                         continue;
                     }
@@ -192,10 +314,10 @@ impl ControlState {
                     gate.ticket = None;
                     gate
                 }
-                GateState::Open if gate.ticket.as_deref().unwrap_or("").trim().is_empty() => {
+                GateState::Open if !open_ticket_is_valid(name, gate.ticket.as_deref()) => {
                     tracing::error!(
                         gate = %name,
-                        "authoritative open gate has no ticket; forcing hold"
+                        "authoritative open gate has invalid ticket policy; forcing hold"
                     );
                     Gate {
                         name: name.to_owned(),
@@ -256,10 +378,10 @@ impl ControlState {
             };
             match gate.state {
                 GateState::Hold => gate.ticket = None,
-                GateState::Open if gate.ticket.as_deref().unwrap_or("").trim().is_empty() => {
+                GateState::Open if !open_ticket_is_valid(&gate.name, gate.ticket.as_deref()) => {
                     tracing::error!(
                         gate = %gate.name,
-                        "invalid persisted open gate in snapshot; forcing hold"
+                        "persisted open gate has invalid ticket policy; forcing hold"
                     );
                     continue;
                 }
@@ -348,6 +470,7 @@ async fn require_bearer(
 pub fn router(state: ControlState) -> Router {
     Router::new()
         .route("/health", get(health))
+        .route("/ready", get(readiness))
         .route("/metrics", get(metrics))
         .route("/api/gates", get(list_gates))
         .route("/api/gates/:name/decision", post(decide_gate))
@@ -365,6 +488,100 @@ pub fn router(state: ControlState) -> Router {
 
 async fn health() -> Json<serde_json::Value> {
     Json(serde_json::json!({ "status": "ok", "service": "sirinx-control" }))
+}
+
+fn observed_at_ms() -> u64 {
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_millis()
+        .try_into()
+        .unwrap_or(u64::MAX)
+}
+
+async fn readiness(State(state): State<ControlState>) -> (StatusCode, Json<ControlReadiness>) {
+    let auth_configured = state
+        .api_token
+        .as_deref()
+        .is_some_and(|token| !token.trim().is_empty());
+    let persistence_durable = state.gate_persistence.durable();
+    let refreshed = {
+        let _decision_guard = state.gate_decisions.lock().await;
+        state.refresh_gate_snapshot().await
+    };
+    let (persistence_available, observed_at, telegram_gate) = match refreshed {
+        Ok(gates) => (
+            true,
+            Some(observed_at_ms()),
+            gates
+                .into_iter()
+                .find(|gate| gate.name == TELEGRAM_SEND_GATE),
+        ),
+        Err(err) => {
+            tracing::error!(error = %err, "control readiness gate refresh failed");
+            (false, None, None)
+        }
+    };
+
+    let telegram_gate_state = telegram_gate
+        .as_ref()
+        .map_or(GateState::Hold, |gate| gate.state);
+    let ticket_policy_satisfied = telegram_gate.as_ref().is_some_and(|gate| {
+        gate.state == GateState::Open
+            && open_ticket_is_valid(TELEGRAM_SEND_GATE, gate.ticket.as_deref())
+    });
+    let operational_ready = auth_configured && persistence_durable && persistence_available;
+    let live_admission_ready =
+        operational_ready && telegram_gate_state == GateState::Open && ticket_policy_satisfied;
+
+    let mut reasons = Vec::new();
+    if !auth_configured {
+        reasons.push("auth_not_configured");
+    }
+    if !persistence_durable {
+        reasons.push("persistence_not_durable");
+    }
+    if !persistence_available {
+        reasons.push("persistence_unavailable");
+    }
+    if telegram_gate_state != GateState::Open {
+        reasons.push("telegram_gate_held");
+    }
+    if telegram_gate_state == GateState::Open && !ticket_policy_satisfied {
+        reasons.push("telegram_ticket_policy_unsatisfied");
+    }
+
+    let status = if operational_ready {
+        StatusCode::OK
+    } else {
+        StatusCode::SERVICE_UNAVAILABLE
+    };
+    let body = ControlReadiness {
+        status: if operational_ready {
+            "ready"
+        } else {
+            "not_ready"
+        },
+        service: "sirinx-control",
+        operational_ready,
+        auth: ReadinessAuthEvidence {
+            configured: auth_configured,
+            api_routes_protected: auth_configured,
+        },
+        persistence: ReadinessPersistenceEvidence {
+            backend: state.gate_persistence,
+            durable: persistence_durable,
+            available: persistence_available,
+            observed_at,
+        },
+        telegram: TelegramAdmissionReadiness {
+            live_admission_ready,
+            gate_state: telegram_gate_state,
+            ticket_policy_satisfied,
+        },
+        reasons,
+    };
+    (status, Json(body))
 }
 
 /// Prometheus text exposition, dependency-free.
@@ -410,7 +627,14 @@ async fn list_gates(
             Json(serde_json::json!({ "error": "storage backend failure" })),
         )
     })?;
-    Ok(Json(serde_json::json!({ "gates": gates })))
+    let persistence = GatePersistenceEvidence {
+        backend: state.gate_persistence,
+        durable: state.gate_persistence.durable(),
+        observed_at: observed_at_ms(),
+    };
+    Ok(Json(
+        serde_json::json!({ "gates": gates, "persistence": persistence }),
+    ))
 }
 
 #[derive(Debug, Deserialize)]
@@ -425,13 +649,13 @@ async fn decide_gate(
     Path(name): Path<String>,
     Json(decision): Json<GateDecision>,
 ) -> Result<Json<Gate>, (StatusCode, Json<serde_json::Value>)> {
-    if decision.state == GateState::Open
-        && decision.ticket.as_deref().unwrap_or("").trim().is_empty()
-    {
-        return Err((
-            StatusCode::UNPROCESSABLE_ENTITY,
-            Json(serde_json::json!({ "error": "opening a gate requires a ticket" })),
-        ));
+    if decision.state == GateState::Open {
+        if let Some(message) = invalid_open_ticket_message(&name, decision.ticket.as_deref()) {
+            return Err((
+                StatusCode::UNPROCESSABLE_ENTITY,
+                Json(serde_json::json!({ "error": message })),
+            ));
+        }
     }
     let _decision_guard = state.gate_decisions.lock().await;
     if !state
@@ -676,6 +900,7 @@ mod tests {
     #[derive(Default)]
     struct FailingGateStore {
         inner: MemoryStore,
+        fail_gate_reads: AtomicBool,
         fail_gate_writes: AtomicBool,
     }
 
@@ -797,10 +1022,16 @@ mod tests {
         }
 
         async fn list_gates(&self) -> Result<Vec<Gate>, StoreError> {
+            if self.fail_gate_reads.load(Ordering::SeqCst) {
+                return Err(StoreError::Backend("injected gate read failure".into()));
+            }
             self.inner.list_gates().await
         }
 
         async fn get_gate(&self, name: &str) -> Result<Option<Gate>, StoreError> {
+            if self.fail_gate_reads.load(Ordering::SeqCst) {
+                return Err(StoreError::Backend("injected gate read failure".into()));
+            }
             self.inner.get_gate(name).await
         }
     }
@@ -839,6 +1070,239 @@ mod tests {
         let gates = body["gates"].as_array().unwrap();
         assert_eq!(gates.len(), DEFAULT_GATES.len());
         assert!(gates.iter().all(|g| g["state"] == "hold"));
+        assert_eq!(body["persistence"]["backend"], "memory");
+        assert_eq!(body["persistence"]["durable"], false);
+        assert!(body["persistence"]["observedAt"].as_u64().unwrap() > 0);
+    }
+
+    #[tokio::test]
+    async fn postgres_persistence_evidence_is_explicit_and_durable() {
+        let store = Arc::new(MemoryStore::default());
+        store
+            .upsert_gate(&Gate {
+                name: "telegram_send".into(),
+                state: GateState::Open,
+                ticket: Some("OPS-TG-TEST-POSTGRES".into()),
+            })
+            .await
+            .unwrap();
+        let state = ControlState::load_with_persistence(
+            store,
+            None,
+            default_self_card(),
+            GatePersistence::Postgres,
+        )
+        .await
+        .unwrap();
+
+        let response = router(state)
+            .oneshot(Request::get("/api/gates").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        let body = body_json(response).await;
+        let telegram = body["gates"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|gate| gate["name"] == "telegram_send")
+            .unwrap();
+
+        assert_eq!(telegram["state"], "open");
+        assert_eq!(body["persistence"]["backend"], "postgres");
+        assert_eq!(body["persistence"]["durable"], true);
+        assert!(body["persistence"]["observedAt"].as_u64().unwrap() > 0);
+    }
+
+    #[tokio::test]
+    async fn health_stays_live_when_operational_readiness_is_unavailable() {
+        let app = router(ControlState::with_default_gates());
+        let health = app
+            .clone()
+            .oneshot(Request::get("/health").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        let ready = app
+            .oneshot(Request::get("/ready").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+
+        assert_eq!(health.status(), StatusCode::OK);
+        assert_eq!(ready.status(), StatusCode::SERVICE_UNAVAILABLE);
+        assert_eq!(body_json(ready).await["operationalReady"], false);
+    }
+
+    #[tokio::test]
+    async fn readiness_requires_auth_and_durable_persistence_but_not_an_open_telegram_gate() {
+        let state = ControlState::new_with_persistence(
+            Arc::new(MemoryStore::default()),
+            Some("test-control-token".into()),
+            default_self_card(),
+            GatePersistence::Postgres,
+        );
+        let response = router(state)
+            .oneshot(Request::get("/ready").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        let status = response.status();
+        let body = body_json(response).await;
+
+        assert_eq!(status, StatusCode::OK);
+        assert_eq!(body["operationalReady"], true);
+        assert_eq!(body["telegram"]["liveAdmissionReady"], false);
+        assert_eq!(body["telegram"]["gateState"], "hold");
+    }
+
+    #[tokio::test]
+    async fn readiness_admits_live_telegram_only_with_every_requirement_and_redacts_evidence() {
+        let store = Arc::new(MemoryStore::default());
+        store
+            .upsert_gate(&Gate {
+                name: TELEGRAM_SEND_GATE.into(),
+                state: GateState::Open,
+                ticket: Some("OPS-TG-SENSITIVE-123".into()),
+            })
+            .await
+            .unwrap();
+        let state = ControlState::load_with_persistence(
+            store,
+            Some("sensitive-control-token".into()),
+            default_self_card(),
+            GatePersistence::Postgres,
+        )
+        .await
+        .unwrap();
+
+        let response = router(state)
+            .oneshot(Request::get("/ready").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        let status = response.status();
+        let body = body_json(response).await;
+        let rendered = body.to_string();
+
+        assert_eq!(status, StatusCode::OK);
+        assert_eq!(body["telegram"]["liveAdmissionReady"], true);
+        assert_eq!(body["telegram"]["ticketPolicySatisfied"], true);
+        assert!(!rendered.contains("SENSITIVE") && !rendered.contains("sensitive-control-token"));
+    }
+
+    #[tokio::test]
+    async fn readiness_fails_closed_when_gate_store_is_unavailable() {
+        let store = Arc::new(FailingGateStore::default());
+        store.fail_gate_reads.store(true, Ordering::SeqCst);
+        let state = ControlState::new_with_persistence(
+            store,
+            Some("test-control-token".into()),
+            default_self_card(),
+            GatePersistence::Postgres,
+        );
+
+        let response = router(state)
+            .oneshot(Request::get("/ready").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        let status = response.status();
+        let body = body_json(response).await;
+
+        assert_eq!(status, StatusCode::SERVICE_UNAVAILABLE);
+        assert_eq!(body["persistence"]["available"], false);
+        assert_eq!(body["telegram"]["liveAdmissionReady"], false);
+    }
+
+    #[tokio::test]
+    async fn telegram_send_rejects_a_non_ops_ticket_without_changing_state() {
+        let app = router(ControlState::with_default_gates());
+        let response = app
+            .clone()
+            .oneshot(json_request(
+                "POST",
+                "/api/gates/telegram_send/decision",
+                serde_json::json!({ "state": "open", "ticket": "GO-LIVE-001" }),
+            ))
+            .await
+            .unwrap();
+        let status = response.status();
+        let body = body_json(response).await;
+        let listed = app
+            .oneshot(Request::get("/api/gates").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        let listed = body_json(listed).await;
+        let telegram = listed["gates"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|gate| gate["name"] == TELEGRAM_SEND_GATE)
+            .unwrap();
+
+        assert_eq!(status, StatusCode::UNPROCESSABLE_ENTITY);
+        assert_eq!(
+            body["error"],
+            "opening telegram_send requires an OPS-TG- ticket"
+        );
+        assert_eq!(telegram["state"], "hold");
+    }
+
+    #[tokio::test]
+    async fn telegram_send_accepts_an_ops_ticket() {
+        let app = router(ControlState::with_default_gates());
+        let response = app
+            .oneshot(json_request(
+                "POST",
+                "/api/gates/telegram_send/decision",
+                serde_json::json!({ "state": "open", "ticket": "OPS-TG-001" }),
+            ))
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::OK);
+        assert_eq!(body_json(response).await["state"], "open");
+    }
+
+    #[tokio::test]
+    async fn persisted_telegram_open_with_a_non_ops_ticket_loads_as_hold() {
+        let store = Arc::new(MemoryStore::default());
+        store
+            .upsert_gate(&Gate {
+                name: TELEGRAM_SEND_GATE.into(),
+                state: GateState::Open,
+                ticket: Some("GO-LIVE-001".into()),
+            })
+            .await
+            .unwrap();
+
+        let state = ControlState::load(store, None, default_self_card())
+            .await
+            .unwrap();
+
+        assert_eq!(state.gate_state(TELEGRAM_SEND_GATE), Some(GateState::Hold));
+    }
+
+    #[tokio::test]
+    async fn authoritative_action_denies_a_telegram_row_with_a_non_ops_ticket() {
+        let store = Arc::new(MemoryStore::default());
+        let state = ControlState::load(store.clone(), None, default_self_card())
+            .await
+            .unwrap();
+        store
+            .upsert_gate(&Gate {
+                name: TELEGRAM_SEND_GATE.into(),
+                state: GateState::Open,
+                ticket: Some("GO-LIVE-001".into()),
+            })
+            .await
+            .unwrap();
+
+        let response = router(state)
+            .oneshot(json_request(
+                "POST",
+                "/api/actions",
+                serde_json::json!({ "gate": TELEGRAM_SEND_GATE, "action": "send_alert" }),
+            ))
+            .await
+            .unwrap();
+
+        assert_eq!(body_json(response).await["executed"], false);
     }
 
     #[tokio::test]

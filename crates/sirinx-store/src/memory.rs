@@ -10,6 +10,7 @@ use sirinx_core::{
     Lesson, LessonGuidance, PendingWork,
 };
 
+use crate::agent_runtime::AgentRuntimeMemory;
 use crate::{Store, StoreError};
 
 /// In-memory backend for tests and local development.
@@ -21,6 +22,7 @@ pub struct MemoryStore {
     gates: RwLock<BTreeMap<String, Gate>>,
     failures: RwLock<Vec<FailureEvent>>,
     lessons: RwLock<BTreeMap<(String, FailureKind, LessonGuidance), Lesson>>,
+    pub(crate) agent_runtime: AgentRuntimeMemory,
 }
 
 #[async_trait]

@@ -22,6 +22,7 @@ pub mod fb_group;
 pub mod layer;
 pub mod line_events;
 pub mod partner_referral;
+pub mod role_registry;
 pub mod ronin;
 pub mod roster;
 pub mod scorer_round_the_clock;
@@ -30,5 +31,10 @@ pub mod scorer_sme;
 pub use agent::{Agent, AgentError, AgentInput, AgentOutput};
 pub use bus::{DispatchError, Dispatcher, Envelope};
 pub use layer::Layer;
+pub use role_registry::{
+    embedded_role_registry, ActionClass, DepartmentDefinition, DepartmentId, ImplementationStatus,
+    RegistryAuthority, RegistryStatus, RoleRegistryError, RoninRoleCard, RoninRoleRegistry,
+    RuntimePrincipal, RuntimePrincipalBoundary,
+};
 pub use ronin::{run_lead_pipeline, FollowUp, LeadTemperature};
 pub use roster::{AgentId, Roster};

@@ -6,6 +6,11 @@ edition.workspace = true
 license.workspace = true
 repository.workspace = true
 authors.workspace = true
+publish = false
+include = [
+    "src/**",
+    "data/ronin-role-registry.v1.json",
+]
 
 [dependencies]
 sirinx-core = { workspace = true }

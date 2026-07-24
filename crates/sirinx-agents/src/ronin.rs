@@ -36,7 +36,7 @@ pub enum FollowUp {
     DripCampaign,
 }
 
-/// L1 Kuranosuke — intake: validate shape, strip noise, forward.
+/// L1 Kuranosuke — intake: validate the lead, strip noise, forward.
 pub struct Kuranosuke;
 
 impl Agent for Kuranosuke {
@@ -45,13 +45,18 @@ impl Agent for Kuranosuke {
     }
 
     fn process(&self, input: AgentInput) -> Result<AgentOutput, AgentError> {
-        let lead: Lead = serde_json::from_value(input.payload.clone())
+        let lead: Lead = serde_json::from_value(input.payload)
             .map_err(|e| AgentError::BadPayload(e.to_string()))?;
+        lead.draft
+            .validate()
+            .map_err(|e| AgentError::BadPayload(e.to_string()))?;
+        let normalized_payload =
+            serde_json::to_value(&lead).map_err(|e| AgentError::BadPayload(e.to_string()))?;
         Ok(AgentOutput {
             summary: format!("lead {} scanned from {}", lead.id, lead.draft.source),
             publish: Some(AgentInput {
                 event: "lead-scanned".into(),
-                payload: input.payload,
+                payload: normalized_payload,
             }),
         })
     }
@@ -247,5 +252,43 @@ mod tests {
             .unwrap();
         assert_eq!(outputs.len(), 2);
         assert!(outputs[1].summary.contains("scored Hot"));
+    }
+
+    #[test]
+    fn kuranosuke_removes_unknown_fields_from_normalized_lead() {
+        let lead = lead(60_000.0);
+        let expected = serde_json::to_value(&lead).unwrap();
+        let mut raw_payload = expected.clone();
+        raw_payload["irrelevantNoise"] = serde_json::json!({ "ignored": true });
+
+        let published = Kuranosuke
+            .process(AgentInput {
+                event: "lead-created".into(),
+                payload: raw_payload,
+            })
+            .unwrap()
+            .publish
+            .unwrap();
+
+        assert_eq!(published.payload, expected);
+    }
+
+    #[test]
+    fn kuranosuke_rejects_invalid_lead_before_publish() {
+        let mut invalid_payload = serde_json::to_value(lead(60_000.0)).unwrap();
+        invalid_payload["monthlyElectricBill"] = serde_json::json!(-1.0);
+
+        let error = Kuranosuke
+            .process(AgentInput {
+                event: "lead-created".into(),
+                payload: invalid_payload,
+            })
+            .unwrap_err();
+
+        assert!(matches!(
+            error,
+            AgentError::BadPayload(message)
+                if message == "monthlyElectricBill must be greater than zero"
+        ));
     }
 }

@@ -8,6 +8,7 @@
 //! - [`MemoryStore`] — default for tests and local dev without a database.
 //! - [`PostgresStore`] — sqlx/Postgres, pointed at Supabase via `DATABASE_URL`.
 
+pub mod agent_runtime;
 pub mod memory;
 pub mod postgres;
 
@@ -116,5 +117,6 @@ pub trait Store: Send + Sync {
     }
 }
 
+pub use agent_runtime::{verify_receipt_hash, AgentRuntimeStore, AgentRuntimeStoreError};
 pub use memory::MemoryStore;
-pub use postgres::PostgresStore;
+pub use postgres::{migrate_postgres_once, AgentRuntimePostgresStore, PostgresStore};

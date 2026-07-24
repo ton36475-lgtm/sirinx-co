@@ -41,3 +41,25 @@ jobs:
         # control:test excludes the swarm-contract suite: it validates the
         # operator machine's .hermes/state.json, which never exists in CI.
         run: npm run control:test
+
+  command-center-site:
+    name: Private Command Center source
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sites/ghostclaw-hermes-v3-command-center
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+          cache: npm
+          cache-dependency-path: sites/ghostclaw-hermes-v3-command-center/package-lock.json
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Build deployable output
+        run: npm run build
+      - name: Verify rendering, auth, and leak boundaries
+        run: npm test
+      - name: Lint and typecheck
+        run: npm run lint && npm run typecheck

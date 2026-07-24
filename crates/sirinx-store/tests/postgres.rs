@@ -1,6 +1,6 @@
-//! Postgres integration test — runs only when TEST_DATABASE_URL is set
-//! (e.g. a Supabase connection string or local Postgres). Skips silently
-//! otherwise so CI without a database stays green.
+//! Legacy-store Postgres integration test — runs only when TEST_DATABASE_URL
+//! points to an already migrated disposable database. Schema migration is a
+//! separate fixture step and is never performed by the runtime constructor.
 
 use sirinx_core::{BusinessType, Consent, Interest, Lead, LeadDraft, LeadStatus};
 use sirinx_store::{PostgresStore, Store, StoreError};
@@ -29,7 +29,7 @@ async fn lead_lifecycle_against_real_postgres() {
 
     let store = PostgresStore::connect(&url)
         .await
-        .expect("connect + migrate");
+        .expect("connect to pre-migrated disposable Postgres");
     let lead = test_lead();
 
     store.insert_lead(&lead).await.unwrap();

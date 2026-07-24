@@ -14,12 +14,31 @@
 //! }
 //! ```
 
+pub mod agent_runtime;
 pub mod analytics;
+pub mod effect_authority;
+pub mod gate;
 pub mod lead;
 pub mod package;
+pub mod recovery;
 pub mod work;
 
+pub use agent_runtime::{
+    canonical_receipt_bytes, ActionClass, AgentRun, AgentRuntimeError, AgentTask, LeaseState,
+    ReceiptResult, RunReceipt, RunReceiptDraft, RuntimeState, StageLease, StateTransition,
+    UnixMillis,
+};
 pub use analytics::{AnalyticsEvent, Consent, ALLOWED_EVENTS};
+pub use effect_authority::{
+    approval_contract_bytes_v2, approval_contract_digest_v2, preview_effect_authority_contract,
+    review_pinned_effect_authority_manifest_digest, ApprovalReceiptV2Plan,
+    EffectAuthorityContractError, EffectAuthorityPreviewV1,
+};
+pub use gate::{Gate, GateState};
 pub use lead::{BusinessType, Interest, Lead, LeadDraft, LeadStatus, ValidationError};
 pub use package::{default_packages, EnergyPackage};
+pub use recovery::{
+    bounded_recovery_tool_name, FailureEvent, FailureKind, Lesson, LessonGuidance,
+    MAX_RECOVERY_TOOL_NAME_CHARS,
+};
 pub use work::PendingWork;

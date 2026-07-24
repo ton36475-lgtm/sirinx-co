@@ -27,7 +27,8 @@ describe("Agent Launch Gate registry", () => {
       "pi"
     ]);
     expect(status.agents).toHaveLength(9);
-    expect(status.agents.every((agent) => agent.command.startsWith("ollama launch "))).toBe(true);
+    expect(status.agents.find((agent) => agent.id === "opencode")?.command).toBe("opencode");
+    expect(status.agents.filter((agent) => agent.id !== "opencode").every((agent) => agent.command.startsWith("ollama launch "))).toBe(true);
     expect(status.agents.every((agent) => agent.allowedMode === "manual_only")).toBe(true);
     expect(status.agents.every((agent) => agent.autoExecute === false)).toBe(true);
     expect(status.agents.every((agent) => agent.canLaunchAutomatically === false)).toBe(true);

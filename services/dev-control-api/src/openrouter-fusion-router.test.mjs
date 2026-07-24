@@ -22,6 +22,8 @@ describe("OpenRouter Fusion Router policy", () => {
     expect(status.panel.count).toBeGreaterThan(0);
     expect(status.panel.count).toBeLessThanOrEqual(8);
     expect(status.judge.model).toBe("~openai/gpt-latest");
+    expect(status.panel.models).toContain("moonshotai/kimi-k3");
+    expect(status.panel.models).not.toContain("~moonshotai/kimi-latest");
     expect(status.parameters.max_tool_calls).toBe(8);
     expect(status.providerCalled).toBe(false);
     expect(status.secretsRead).toBe(false);

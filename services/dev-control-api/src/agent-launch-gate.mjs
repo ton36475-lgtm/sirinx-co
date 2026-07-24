@@ -24,7 +24,7 @@ const launchDefinitions = [
   ["codex-app", "Codex App", "OpenAI app agent delegation surface", "ollama launch codex-app", "local-codex-app-smoke", "low"],
   ["hermes-agent", "Hermes Agent", "Nous Research self-improving agent", "ollama launch hermes", "hermes-tui-review", "high"],
   ["openclaw", "OpenClaw", "Personal AI with 100+ skills", "ollama launch openclaw", "skill-heavy-local-assistant", "medium"],
-  ["opencode", "OpenCode", "Open-source coding agent", "ollama launch opencode", "open-source-coding-agent", "medium"],
+  ["opencode", "OpenCode", "Open-source coding agent", "opencode", "open-source-coding-agent", "medium"],
   ["codex", "Codex", "OpenAI coding agent CLI", "ollama launch codex", "local-codex-cli-smoke", "low"],
   ["copilot-cli", "Copilot CLI", "GitHub terminal coding agent", "ollama launch copilot", "github-cli-review", "medium"],
   ["droid", "Droid", "Factory coding agent across terminal and IDEs", "ollama launch droid", "ide-terminal-agent", "medium"],

@@ -92,7 +92,7 @@ function nowIso(options) {
 }
 
 function makeProfileIndex(agentTeam) {
-  return new Map(agentTeam.activeProfiles.map((profile) => [profile.name, profile]));
+  return new Map(agentTeam.profileDefinitions.map((profile) => [profile.name, profile]));
 }
 
 function pickPrimaryProfile(role, profileIndex) {
@@ -103,7 +103,7 @@ function pickPrimaryProfile(role, profileIndex) {
 function pickReviewRuntime(role) {
   if (["risk", "quality", "release"].includes(role.lane)) return "gemini-review-manual";
   if (["memory", "ops", "messaging"].includes(role.lane)) return "a2a2loopsync-evidence";
-  if (role.runtime === "active-profile") return "hermes-tui-manual";
+  if (role.runtime === "profile-definition") return "hermes-tui-manual";
   return "codex-control";
 }
 
@@ -187,7 +187,8 @@ export async function getAiTeamPairingStatus(options = {}) {
   ]);
   const profileIndex = makeProfileIndex(agentTeam);
   const pairings = agentTeam.roleRoster.map((role) => makePairing(role, profileIndex));
-  const activeProfiles = pairings.filter((pairing) => pairing.runtime === "active-profile").length;
+  const profileDefinitions = pairings.filter((pairing) => pairing.runtime === "profile-definition").length;
+  const activeProfiles = agentTeam.summary.activeProfiles;
   const telegram = messagingGate(evidence);
 
   return {
@@ -206,8 +207,9 @@ export async function getAiTeamPairingStatus(options = {}) {
     summary: {
       rolesTotal: pairings.length,
       pairedRoles: pairings.length,
+      profileDefinitions,
       activeProfiles,
-      virtualRoles: pairings.length - activeProfiles,
+      virtualRoles: pairings.length,
       handoffPackets: makeHandoffPackets(pairings).length,
       executableExternalActions: 0,
       telegramReady: false,

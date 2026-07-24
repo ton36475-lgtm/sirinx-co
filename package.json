@@ -4,14 +4,24 @@
   "private": true,
   "description": "Canonical SIRINX OS monorepo governance scaffold with AdaptiveSync, PC node, Telegram dry-run control, and public-web source recovery.",
   "scripts": {
-    "check": "node --check scripts/verify-pr-mono-001.mjs && node --check scripts/adaptive-sync-plan.mjs && node --check scripts/telegram-notify-preview.mjs && node --check scripts/windows-drive-d-handoff.mjs && node --check scripts/verify-next-phase.mjs && node --check services/telegram-command-bot/src/index.mjs && node scripts/verify-pr-mono-001.mjs && node scripts/verify-next-phase.mjs",
+    "check": "node --check scripts/verify-pr-mono-001.mjs && node --check scripts/adaptive-sync-plan.mjs && node --check scripts/telegram-notify-preview.mjs && node --check scripts/telegram-operator-preflight.mjs && node --check scripts/telegram-stack-manager.mjs && node --check scripts/windows-drive-d-handoff.mjs && node --check scripts/verify-next-phase.mjs && node --check services/telegram-command-bot/src/control-auth.mjs && node --check services/telegram-command-bot/src/control-gate.mjs && node --check services/telegram-command-bot/src/config.mjs && node --check services/telegram-command-bot/src/sender.mjs && node --check services/telegram-command-bot/src/index.mjs && node --check services/dev-control-api/src/a2a-sync.mjs && node --check services/dev-control-api/src/a2a-omniroute.mjs && node --check services/dev-control-api/src/centerbrain-hub.mjs && node --check services/dev-control-api/server.mjs && node scripts/verify-pr-mono-001.mjs && node scripts/verify-next-phase.mjs",
     "verify:mono-001": "node scripts/verify-pr-mono-001.mjs",
     "verify:next-phase": "node scripts/verify-next-phase.mjs",
+    "external-intake:validate": "node scripts/validate-external-component-intake.mjs",
+    "external-intake:test": "node --test scripts/validate-external-component-intake.test.mjs",
+    "existing-provenance:validate": "node scripts/validate-existing-component-provenance.mjs",
+    "existing-provenance:test": "node --test scripts/validate-existing-component-provenance.test.mjs",
     "pipeline:audit": "node scripts/pipeline-audit.mjs",
     "sync:plan": "node scripts/adaptive-sync-plan.mjs",
     "sync:handoff": "node scripts/windows-drive-d-handoff.mjs",
     "telegram:preview": "node scripts/telegram-notify-preview.mjs --dry-run",
+    "telegram:preflight": "node scripts/telegram-operator-preflight.mjs",
+    "telegram:stack": "node scripts/telegram-stack-manager.mjs",
     "telegram:bot:dry-run": "node services/telegram-command-bot/src/index.mjs --dry-run",
+    "telegram:config": "node services/telegram-command-bot/src/index.mjs --config",
+    "telegram:bot:start": "node services/telegram-command-bot/src/index.mjs",
+    "telegram:bot:check": "node --check services/telegram-command-bot/src/index.mjs",
+    "telegram:test": "vitest run services/telegram-command-bot",
     "restore:public-web": "node scripts/restore-public-web-from-sirinx.mjs",
     "verify:public-web-import": "node scripts/verify-public-web-import.mjs",
     "web:check": "pnpm --config.verify-deps-before-run=false --dir apps/public-web check",
@@ -32,8 +42,10 @@
     "source-recovery",
     "ghostclaw"
   ],
-  "license": "UNLICENSED",
+  "license": "MIT",
   "devDependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
     "vitest": "^2.1.9"
   }
 }

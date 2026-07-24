@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/effect-authority-preview.v1.schema.json",
+  "title": "EffectAuthorityPreviewV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "status", "mode", "manifestDigest", "contractDigest",
+    "ticketId", "grantId", "actionKind", "circuitName", "effectProfile",
+    "effectState", "validation", "readOnly", "authorityValidated",
+    "databaseAuthorityValidated", "circuitOpen", "grantActive",
+    "approvalConsumed", "replayProtectionAvailable", "effectClaimed",
+    "outboxPrepared", "requestingPersisted", "canPrepare", "canClaim",
+    "canExecute", "canConnect", "canEmitA2a", "canSend", "canCallProvider",
+    "canMutate", "canDeploy", "ioPerformed", "networkCalls", "databaseWrites",
+    "externalWrites", "messagesSent", "providerCalled", "commandExecuted",
+    "blockers", "stopPoint"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0-plan" },
+    "status": { "const": "CONTRACT_VALIDATED_NOT_AUTHORIZED" },
+    "mode": { "const": "rust-pure-hold-only-preview" },
+    "manifestDigest": { "const": "b2421996825817400d31f88757843225403ed2080541812c4db889e1ffe3cbb0" },
+    "contractDigest": { "$ref": "#/$defs/sha256" },
+    "ticketId": { "type": "string", "pattern": "^TKT-[A-Za-z0-9._-]+$" },
+    "grantId": { "type": "string", "pattern": "^GRANT-[A-Za-z0-9._-]+$" },
+    "actionKind": {
+      "enum": [
+        "INSTALL", "RESOURCE_CLEANUP", "CONNECTOR_ACTIVATION", "PROVIDER_CALL",
+        "QUEUE_MUTATION", "A2A_EGRESS", "LIVE_SEND", "PUSH", "MERGE",
+        "PRODUCTION_MIGRATION", "CLOUDFLARE_MUTATION", "DEPLOY"
+      ]
+    },
+    "circuitName": {
+      "enum": [
+        "install", "resource_cleanup", "connector_activation", "provider_call",
+        "queue_mutation", "a2a_egress", "telegram_send", "customer_messaging",
+        "push", "merge", "production_migration", "cloudflare_mutation", "deploy"
+      ]
+    },
+    "effectProfile": {
+      "enum": [
+        "INSTALL", "RESOURCE_CLEANUP", "CONNECTOR_ACTIVATION", "PROVIDER_CALL",
+        "QUEUE_MUTATION", "A2A_EGRESS", "TELEGRAM", "CUSTOMER_MESSAGING", "PUSH",
+        "MERGE", "PRODUCTION_MIGRATION", "CLOUDFLARE_MUTATION", "DEPLOY"
+      ]
+    },
+    "effectState": { "const": "PREPARED" },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifestDigestConsistent", "actionCircuitBindingConsistent",
+        "approvalContractDigestConsistent", "principalSeparationConsistent",
+        "connectionEvidenceShapeConsistent", "candidateClockWindowConsistent",
+        "scopeArtifactValidated", "attestationAuthorityValidated",
+        "clockAuthorityValidated"
+      ],
+      "properties": {
+        "manifestDigestConsistent": { "const": true },
+        "actionCircuitBindingConsistent": { "const": true },
+        "approvalContractDigestConsistent": { "const": true },
+        "principalSeparationConsistent": { "const": true },
+        "connectionEvidenceShapeConsistent": { "const": true },
+        "candidateClockWindowConsistent": { "const": true },
+        "scopeArtifactValidated": { "const": false },
+        "attestationAuthorityValidated": { "const": false },
+        "clockAuthorityValidated": { "const": false }
+      }
+    },
+    "readOnly": { "const": true },
+    "authorityValidated": { "const": false },
+    "databaseAuthorityValidated": { "const": false },
+    "circuitOpen": { "const": false },
+    "grantActive": { "const": false },
+    "approvalConsumed": { "const": false },
+    "replayProtectionAvailable": { "const": false },
+    "effectClaimed": { "const": false },
+    "outboxPrepared": { "const": false },
+    "requestingPersisted": { "const": false },
+    "canPrepare": { "const": false },
+    "canClaim": { "const": false },
+    "canExecute": { "const": false },
+    "canConnect": { "const": false },
+    "canEmitA2a": { "const": false },
+    "canSend": { "const": false },
+    "canCallProvider": { "const": false },
+    "canMutate": { "const": false },
+    "canDeploy": { "const": false },
+    "ioPerformed": { "const": false },
+    "networkCalls": { "const": false },
+    "databaseWrites": { "const": false },
+    "externalWrites": { "const": false },
+    "messagesSent": { "const": false },
+    "providerCalled": { "const": false },
+    "commandExecuted": { "const": false },
+    "blockers": {
+      "const": [
+        "approval_is_structural_plan_only",
+        "attestation_authority_unavailable",
+        "candidate_clock_is_caller_supplied",
+        "durable_authority_kernel_unavailable",
+        "effect_circuit_hold",
+        "migration_0007_deferred",
+        "replay_ledger_unavailable",
+        "scope_artifact_not_validated"
+      ]
+    },
+    "stopPoint": {
+      "const": "EFFECT AUTHORITY CONTRACT VALIDATED - NO AUTHORITY, CLAIM, EXECUTOR, OR EFFECT"
+    }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        { "$ref": "#/$defs/installBinding" },
+        { "$ref": "#/$defs/cleanupBinding" },
+        { "$ref": "#/$defs/connectorBinding" },
+        { "$ref": "#/$defs/providerBinding" },
+        { "$ref": "#/$defs/queueBinding" },
+        { "$ref": "#/$defs/a2aBinding" },
+        { "$ref": "#/$defs/telegramBinding" },
+        { "$ref": "#/$defs/customerBinding" },
+        { "$ref": "#/$defs/pushBinding" },
+        { "$ref": "#/$defs/mergeBinding" },
+        { "$ref": "#/$defs/migrationBinding" },
+        { "$ref": "#/$defs/cloudflareBinding" },
+        { "$ref": "#/$defs/deployBinding" }
+      ]
+    },
+    {
+      "if": { "properties": { "effectProfile": { "const": "CUSTOMER_MESSAGING" } } },
+      "then": false
+    }
+  ],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "installBinding": { "type": "object", "properties": { "actionKind": { "const": "INSTALL" }, "circuitName": { "const": "install" }, "effectProfile": { "const": "INSTALL" } } },
+    "cleanupBinding": { "type": "object", "properties": { "actionKind": { "const": "RESOURCE_CLEANUP" }, "circuitName": { "const": "resource_cleanup" }, "effectProfile": { "const": "RESOURCE_CLEANUP" } } },
+    "connectorBinding": { "type": "object", "properties": { "actionKind": { "const": "CONNECTOR_ACTIVATION" }, "circuitName": { "const": "connector_activation" }, "effectProfile": { "const": "CONNECTOR_ACTIVATION" } } },
+    "providerBinding": { "type": "object", "properties": { "actionKind": { "const": "PROVIDER_CALL" }, "circuitName": { "const": "provider_call" }, "effectProfile": { "const": "PROVIDER_CALL" } } },
+    "queueBinding": { "type": "object", "properties": { "actionKind": { "const": "QUEUE_MUTATION" }, "circuitName": { "const": "queue_mutation" }, "effectProfile": { "const": "QUEUE_MUTATION" } } },
+    "a2aBinding": { "type": "object", "properties": { "actionKind": { "const": "A2A_EGRESS" }, "circuitName": { "const": "a2a_egress" }, "effectProfile": { "const": "A2A_EGRESS" } } },
+    "telegramBinding": { "type": "object", "properties": { "actionKind": { "const": "LIVE_SEND" }, "circuitName": { "const": "telegram_send" }, "effectProfile": { "const": "TELEGRAM" } } },
+    "customerBinding": { "type": "object", "properties": { "actionKind": { "const": "LIVE_SEND" }, "circuitName": { "const": "customer_messaging" }, "effectProfile": { "const": "CUSTOMER_MESSAGING" } } },
+    "pushBinding": { "type": "object", "properties": { "actionKind": { "const": "PUSH" }, "circuitName": { "const": "push" }, "effectProfile": { "const": "PUSH" } } },
+    "mergeBinding": { "type": "object", "properties": { "actionKind": { "const": "MERGE" }, "circuitName": { "const": "merge" }, "effectProfile": { "const": "MERGE" } } },
+    "migrationBinding": { "type": "object", "properties": { "actionKind": { "const": "PRODUCTION_MIGRATION" }, "circuitName": { "const": "production_migration" }, "effectProfile": { "const": "PRODUCTION_MIGRATION" } } },
+    "cloudflareBinding": { "type": "object", "properties": { "actionKind": { "const": "CLOUDFLARE_MUTATION" }, "circuitName": { "const": "cloudflare_mutation" }, "effectProfile": { "const": "CLOUDFLARE_MUTATION" } } },
+    "deployBinding": { "type": "object", "properties": { "actionKind": { "const": "DEPLOY" }, "circuitName": { "const": "deploy" }, "effectProfile": { "const": "DEPLOY" } } }
+  }
+}

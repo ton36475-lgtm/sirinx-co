@@ -120,6 +120,9 @@ async fn lead_lifecycle_create_patch_delete() {
     let id = lead["id"].as_str().unwrap().to_owned();
     assert_eq!(lead["status"], "new");
     assert_eq!(state.lead_count().await, 1);
+    // The Ronin pipeline auto-enqueued a follow-up work order
+    // (45K THB bill → warm → nurture_call).
+    assert_eq!(state.pending_work_count().await, 1);
 
     // Legal transition new -> contacted.
     let patched = app

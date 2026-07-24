@@ -15,6 +15,7 @@ describe("CenterBrain Hub contract", () => {
     expect(status.canRunMcp).toBe(false);
     expect(status.canReadSecrets).toBe(false);
     expect(status.canSendMessages).toBe(false);
+    expect(status.canSendTelegram).toBe(false);
     expect(status.canDeploy).toBe(false);
     expect(status.summary).toMatchObject({
       aiNodes: 9,
@@ -48,6 +49,56 @@ describe("CenterBrain Hub contract", () => {
     expect(status.agentDriver.summary.commandExecuted).toBe(0);
   });
 
+  it("makes top-level send readiness agree with fresh durable A2A gate evidence", async () => {
+    const status = await getCenterBrainHubStatus({
+      now: fixedNow,
+      env: {
+        TELEGRAM_BOT_TOKEN: "test-bot-token",
+        TELEGRAM_CHAT_ID: "10001",
+        TELEGRAM_OWNER_IDS: "10001",
+        SIRINX_TELEGRAM_CONFIRM: "SEND",
+        CONTROL_API_TOKEN: "test-control-token"
+      },
+      gate: { state: "open", ticket: "OPS-TG-TEST-001" }
+    });
+
+    expect(status.status).toBe("centerbrain-hub-telegram-live-ready");
+    expect(status.canSendMessages).toBe(true);
+    expect(status.canSendTelegram).toBe(true);
+    expect(status.externalWrites).toBe(false);
+    expect(status.summary.a2aSyncLiveTelegram).toBe(true);
+    expect(status.a2aSync).toMatchObject({
+      status: "a2a-sync-live-ready",
+      summary: { liveTelegramReady: true },
+      telegramLane: {
+        liveSendReady: true,
+        canSend: true,
+        gateAuthoritative: true,
+        gateFresh: true,
+        ticketPrefixValid: true
+      }
+    });
+  });
+
+  it("does not report live when the durable gate ticket is invalid", async () => {
+    const status = await getCenterBrainHubStatus({
+      now: fixedNow,
+      env: {
+        TELEGRAM_BOT_TOKEN: "test-bot-token",
+        TELEGRAM_CHAT_ID: "10001",
+        TELEGRAM_OWNER_IDS: "10001",
+        SIRINX_TELEGRAM_CONFIRM: "SEND",
+        CONTROL_API_TOKEN: "test-control-token"
+      },
+      gate: { state: "open", ticket: "NOT-AN-OPS-TICKET" }
+    });
+
+    expect(status.status).toBe("centerbrain-hub-ready-local-only");
+    expect(status.canSendMessages).toBe(false);
+    expect(status.canSendTelegram).toBe(false);
+    expect(status.summary.a2aSyncLiveTelegram).toBe(false);
+  });
+
   it("returns a safe adaptive sync dry-run packet for all nodes", async () => {
     const dryRun = await createCenterBrainSyncDryRun(
       {
@@ -75,7 +126,7 @@ describe("CenterBrain Hub contract", () => {
       "approval",
       "manual-activation"
     ]);
-    expect(dryRun.nextRecommendedAction).toBe("Build Next.js/Tailwind shell only after local dashboard contract remains green.");
+    expect(dryRun.nextRecommendedAction).toContain("durable telegram_send gate");
   });
 
   it("blocks dangerous sync goals", async () => {

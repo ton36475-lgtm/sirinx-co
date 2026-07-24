@@ -128,7 +128,7 @@ function parseRepoUrl(repoUrl) {
     };
   }
 
-  if (!["https:", "http:"].includes(parsed.protocol)) {
+  if (parsed.protocol !== "https:") {
     return {
       ok: false,
       classification: "invalid_repo_url",

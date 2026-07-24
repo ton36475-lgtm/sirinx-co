@@ -1,0 +1,398 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/route-parity/b3-route-inventory.v1.schema.json",
+  "title": "SIRINX B3 static route parity inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaRef",
+    "schemaVersion",
+    "status",
+    "authority",
+    "planPin",
+    "snapshots",
+    "sourceTruth",
+    "expectedCounts",
+    "targetRegistrations",
+    "operations",
+    "selectedSlice",
+    "completion"
+  ],
+  "properties": {
+    "schemaRef": { "const": "schemas/route-parity/b3-route-inventory.v1.schema.json" },
+    "schemaVersion": { "const": "1.0" },
+    "status": { "const": "STATIC_INVENTORY_ONLY" },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canExecute", "canConnect", "canMutate", "canSend", "canDeploy", "canAuthorize", "canClaimCompletion"],
+      "properties": {
+        "canExecute": { "const": false },
+        "canConnect": { "const": false },
+        "canMutate": { "const": false },
+        "canSend": { "const": false },
+        "canDeploy": { "const": false },
+        "canAuthorize": { "const": false },
+        "canClaimCompletion": { "const": false }
+      }
+    },
+    "planPin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "const": "docs/agent-runtime/B3_ROUTE_PARITY_PLAN.md" },
+        "sha256": { "const": "d6db48ffbb11acf5942493776a80e5a40c6c9178a9c7902516036ba1d975a95f" }
+      }
+    },
+    "snapshots": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "automationGateway", "sirinx"],
+      "properties": {
+        "target": { "$ref": "#/$defs/snapshot" },
+        "automationGateway": { "$ref": "#/$defs/snapshot" },
+        "sirinx": { "$ref": "#/$defs/snapshot" }
+      }
+    },
+    "sourceTruth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["automationGatewayDeclarationsAreRuntimeProof", "automationProxyDeclarations", "automationProvenDownstreamPathMatches", "sirinxObservedBytesEqualCanonical", "sirinxOperationSetOnlyMatch", "targetRepositoryClean", "targetScope", "targetRuntimeSurfaceProven"],
+      "properties": {
+        "automationGatewayDeclarationsAreRuntimeProof": { "const": false },
+        "automationProxyDeclarations": { "const": 22 },
+        "automationProvenDownstreamPathMatches": { "const": 0 },
+        "sirinxObservedBytesEqualCanonical": { "const": false },
+        "sirinxOperationSetOnlyMatch": { "const": true },
+        "targetRepositoryClean": { "const": false },
+        "targetScope": { "const": "LIB_RS_REGISTRATIONS_ONLY" },
+        "targetRuntimeSurfaceProven": { "const": false }
+      }
+    },
+    "expectedCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["automationGateway", "sirinxApi", "sourceTotal", "targetRegistrations", "targetApiProbeRoutes", "exactParity", "implementedSourceOperations", "safeReplacementOperations", "overlapOnly", "holdAuthData", "holdEffect", "holdSecurity", "holdPrivacy"],
+      "properties": {
+        "automationGateway": { "const": 25 },
+        "sirinxApi": { "const": 29 },
+        "sourceTotal": { "const": 54 },
+        "targetRegistrations": { "const": 10 },
+        "targetApiProbeRoutes": { "const": 8 },
+        "exactParity": { "const": 0 },
+        "implementedSourceOperations": { "const": 0 },
+        "safeReplacementOperations": { "const": 2 },
+        "overlapOnly": { "const": 7 },
+        "holdAuthData": { "const": 34 },
+        "holdEffect": { "const": 7 },
+        "holdSecurity": { "const": 3 },
+        "holdPrivacy": { "const": 1 }
+      }
+    },
+    "targetRegistrations": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "uniqueItems": true,
+      "prefixItems": [
+        { "type": "object", "$ref": "#/$defs/targetRegistration", "properties": { "id": { "const": "T01" } } },
+        { "type": "object", "$ref": "#/$defs/targetRegistration", "properties": { "id": { "const": "T02" } } },
+        { "type": "object", "$ref": "#/$defs/targetRegistration", "properties": { "id": { "const": "T03" } } },
+        { "type": "object", "$ref": "#/$defs/targetRegistration", "properties": { "id": { "const": "T04" } } },
+        { "type": "object", "$ref": "#/$defs/targetRegistration", "properties": { "id": { "const": "T05" } } },
+        { "type": "object", "$ref": "#/$defs/targetRegistration", "properties": { "id": { "const": "T06" } } },
+        { "type": "object", "$ref": "#/$defs/targetRegistration", "properties": { "id": { "const": "T07" } } },
+        { "type": "object", "$ref": "#/$defs/targetRegistration", "properties": { "id": { "const": "T08" } } },
+        { "type": "object", "$ref": "#/$defs/targetRegistration", "properties": { "id": { "const": "T09" } } },
+        { "type": "object", "$ref": "#/$defs/targetRegistration", "properties": { "id": { "const": "T10" } } }
+      ],
+      "items": false
+    },
+    "operations": {
+      "type": "array",
+      "minItems": 54,
+      "maxItems": 54,
+      "uniqueItems": true,
+      "prefixItems": [
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A01" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A02" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A03" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A04" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A05" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A06" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A07" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A08" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A09" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A10" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A11" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A12" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A13" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A14" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A15" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A16" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A17" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A18" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A19" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A20" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A21" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A22" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A23" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A24" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "A25" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S01" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S02" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S03" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S04" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S05" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S06" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S07" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S08" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S09" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S10" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S11" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S12" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S13" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S14" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S15" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S16" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S17" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S18" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S19" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S20" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S21" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S22" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S23" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S24" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S25" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S26" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S27" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S28" } } },
+        { "type": "object", "$ref": "#/$defs/operation", "properties": { "id": { "const": "S29" } } }
+      ],
+      "items": false
+    },
+    "selectedSlice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "sourceOperationIds", "plannedTargetRoutes", "requiresResourceAdmission", "requiresMigrationOrderingFreeze", "reservedMigration", "parityOutcomeIfImplemented", "authorizesImplementation", "authorizesMigration", "authorizesExternalEffects"],
+      "properties": {
+        "id": { "const": "B3.1" },
+        "status": { "const": "PLANNED_NOT_IMPLEMENTED" },
+        "sourceOperationIds": { "const": ["S11", "S12"] },
+        "plannedTargetRoutes": { "const": ["GET /api/blog", "GET /api/blog/:slug"] },
+        "requiresResourceAdmission": { "const": true },
+        "requiresMigrationOrderingFreeze": { "const": true },
+        "reservedMigration": { "const": "0007_EFFECT_AUTHORITY_DO_NOT_USE" },
+        "parityOutcomeIfImplemented": { "const": "SAFE_REPLACEMENT_NO_EXACT_CREDIT" },
+        "authorizesImplementation": { "const": false },
+        "authorizesMigration": { "const": false },
+        "authorizesExternalEffects": { "const": false }
+      }
+    },
+    "completion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inventoryAccounted", "routeInventoryDiffEmpty", "exactParityCount", "semanticParityProven", "b3Complete", "productionReady", "claim"],
+      "properties": {
+        "inventoryAccounted": { "const": true },
+        "routeInventoryDiffEmpty": { "const": false },
+        "exactParityCount": { "const": 0 },
+        "semanticParityProven": { "const": false },
+        "b3Complete": { "const": false },
+        "productionReady": { "const": false },
+        "claim": { "const": "STATIC_ACCOUNTING_ONLY" }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "gitCommit": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repoPath", "canonicalAuditCommit", "observedHead", "relation", "files"],
+      "properties": {
+        "repoPath": { "type": "string", "minLength": 1 },
+        "canonicalAuditCommit": { "$ref": "#/$defs/gitCommit" },
+        "observedHead": { "$ref": "#/$defs/gitCommit" },
+        "relation": { "enum": ["EXACT_BYTES_AT_OBSERVED_HEAD", "OPERATION_SET_ONLY_MATCH", "ROUTE_SET_ONLY_MATCH"] },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "canonicalSha256", "observedSha256"],
+            "properties": {
+              "path": { "type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*\\.\\.).+$" },
+              "canonicalSha256": { "$ref": "#/$defs/sha256" },
+              "observedSha256": { "$ref": "#/$defs/sha256" }
+            }
+          }
+        }
+      }
+    },
+    "targetRegistration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "method", "route", "class"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^T(0[1-9]|10)$" },
+        "method": { "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+        "route": { "type": "string", "pattern": "^/" },
+        "class": { "enum": ["PAGE", "API_PROBE", "API"] }
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "source", "protocol", "method", "pathOrProcedure", "access", "effect", "disposition", "targetIds", "reasonCodes", "exactParity", "implemented"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^(A(0[1-9]|1[0-9]|2[0-5])|S(0[1-9]|1[0-9]|2[0-9]))$" },
+        "source": { "enum": ["AUTOMATION_GATEWAY", "SIRINX_API"] },
+        "protocol": { "enum": ["HTTP", "TRPC"] },
+        "method": { "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "QUERY", "MUTATION"] },
+        "pathOrProcedure": { "type": "string", "minLength": 1 },
+        "access": { "enum": ["PUBLIC", "AUTHENTICATED", "ADMIN"] },
+        "effect": { "enum": ["NONE", "LOCAL_READ", "LOCAL_WRITE", "EXTERNAL_EFFECT", "SECURITY_RISK", "PRIVACY_RISK"] },
+        "disposition": { "enum": ["OVERLAP_ONLY", "SAFE_REPLACEMENT_PLANNED", "HOLD_AUTH_DATA", "HOLD_EFFECT", "HOLD_SECURITY", "HOLD_PRIVACY"] },
+        "targetIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^T(0[1-9]|10)$" }
+        },
+        "reasonCodes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "RESPONSE_CONTRACT_DIFF",
+              "LEGACY_AUTH_REDESIGN_REQUIRED",
+              "AUTH_CONTRACT_ABSENT",
+              "DATA_CONTRACT_ABSENT",
+              "DURABLE_EFFECT_AUTHORITY_ABSENT",
+              "CALLER_SQL_QUARANTINED",
+              "DTO_PROTOCOL_DIFF",
+              "PUBLIC_READINESS_REDESIGN_REQUIRED",
+              "PUBLIC_READ_SLICE_SELECTED",
+              "PUBLIC_READ_CONTRACT_ABSENT",
+              "CONSENT_CONTRACT_CONFLICT",
+              "PROVIDER_AUTHORITY_ABSENT",
+              "OAUTH_CONNECTOR_AUTHORITY_ABSENT"
+            ]
+          }
+        },
+        "exactParity": { "const": false },
+        "implemented": { "const": false }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "id": { "type": "string", "pattern": "^A" } }, "required": ["id"] },
+          "then": {
+            "properties": {
+              "source": { "const": "AUTOMATION_GATEWAY" },
+              "protocol": { "const": "HTTP" },
+              "method": { "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+              "pathOrProcedure": { "type": "string", "pattern": "^/" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "id": { "type": "string", "pattern": "^S(0[1-9]|1[0-9]|2[0-8])$" } }, "required": ["id"] },
+          "then": {
+            "properties": {
+              "source": { "const": "SIRINX_API" },
+              "protocol": { "const": "TRPC" },
+              "method": { "enum": ["QUERY", "MUTATION"] },
+              "pathOrProcedure": { "type": "string", "pattern": "^[a-z][A-Za-z0-9]*\\.[a-z][A-Za-z0-9]*$" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "id": { "const": "S29" } }, "required": ["id"] },
+          "then": {
+            "properties": {
+              "source": { "const": "SIRINX_API" },
+              "protocol": { "const": "HTTP" },
+              "method": { "const": "GET" },
+              "pathOrProcedure": { "const": "/api/oauth/callback" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "disposition": { "const": "OVERLAP_ONLY" } }, "required": ["disposition"] },
+          "then": { "properties": { "targetIds": { "type": "array", "minItems": 1 } } }
+        },
+        {
+          "if": { "properties": { "disposition": { "const": "SAFE_REPLACEMENT_PLANNED" } }, "required": ["disposition"] },
+          "then": {
+            "properties": {
+              "id": { "enum": ["S11", "S12"] },
+              "access": { "const": "PUBLIC" },
+              "effect": { "const": "LOCAL_READ" },
+              "method": { "const": "QUERY" },
+              "targetIds": { "type": "array", "maxItems": 0 }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "id": { "enum": ["A01", "A12", "S01", "S06", "S09", "S10", "S24"] } }, "required": ["id"] },
+          "then": { "properties": { "disposition": { "const": "OVERLAP_ONLY" } } }
+        },
+        {
+          "if": { "properties": { "id": { "enum": ["S11", "S12"] } }, "required": ["id"] },
+          "then": { "properties": { "disposition": { "const": "SAFE_REPLACEMENT_PLANNED" } } }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "enum": [
+                  "A03", "A04", "A05", "A06", "A07", "A08", "A10", "A11", "A14",
+                  "A15", "A16", "A17", "A18", "A19", "A20", "A22", "A25", "S04",
+                  "S05", "S07", "S08", "S13", "S14", "S15", "S16", "S17", "S18",
+                  "S19", "S20", "S21", "S22", "S25", "S26", "S28"
+                ]
+              }
+            },
+            "required": ["id"]
+          },
+          "then": { "properties": { "disposition": { "const": "HOLD_AUTH_DATA" } } }
+        },
+        {
+          "if": { "properties": { "id": { "enum": ["A09", "A21", "A23", "A24", "S03", "S27", "S29"] } }, "required": ["id"] },
+          "then": { "properties": { "disposition": { "const": "HOLD_EFFECT" } } }
+        },
+        {
+          "if": { "properties": { "id": { "enum": ["A02", "A13", "S02"] } }, "required": ["id"] },
+          "then": { "properties": { "disposition": { "const": "HOLD_SECURITY" } } }
+        },
+        {
+          "if": { "properties": { "id": { "const": "S23" } }, "required": ["id"] },
+          "then": { "properties": { "disposition": { "const": "HOLD_PRIVACY" } } }
+        },
+        {
+          "if": { "properties": { "effect": { "const": "EXTERNAL_EFFECT" } }, "required": ["effect"] },
+          "then": { "properties": { "disposition": { "const": "HOLD_EFFECT" } } }
+        },
+        {
+          "if": { "properties": { "effect": { "const": "SECURITY_RISK" } }, "required": ["effect"] },
+          "then": { "properties": { "disposition": { "const": "HOLD_SECURITY" } } }
+        },
+        {
+          "if": { "properties": { "effect": { "const": "PRIVACY_RISK" } }, "required": ["effect"] },
+          "then": { "properties": { "disposition": { "const": "HOLD_PRIVACY" } } }
+        }
+      ]
+    }
+  }
+}

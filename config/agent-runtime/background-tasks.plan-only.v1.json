@@ -1,0 +1,176 @@
+{
+  "schemaVersion": "1.1",
+  "status": "PLAN_ONLY",
+  "enabled": false,
+  "maxConcurrentTasks": 1,
+  "tasks": [
+    {
+      "id": "runtime-admission-observation",
+      "enabled": false,
+      "mode": "READ_ONLY",
+      "purpose": "Index already-approved read-only health, queue, lease, and receipt observations as an admission input; do not collect new machine metrics or change resources.",
+      "roleAssignments": [
+        {
+          "roleId": 13,
+          "cardId": "ronin-13-runtime-queue-observer",
+          "functionalRoleId": "perception.runtime-queue-observer",
+          "contributionOutputs": ["runtime-queue-observation", "stale-or-conflicting-state-list"],
+          "cadence": "Every 60 seconds while an approved mission is active."
+        }
+      ],
+      "cadence": "Every 60 seconds while an approved mission is active.",
+      "maxRuntimeSeconds": 30,
+      "maxSteps": 8,
+      "outputs": ["RuntimeAdmissionObservationV1"],
+      "prohibitedActions": ["new-metric-probe", "cleanup", "install", "process-signal", "quota-change"],
+      "activationGate": "APPROVE_BACKGROUND_TASK runtime-admission-observation <plan-hash>",
+      "stopConditions": ["resource-floor-failed", "interactive-work-waiting", "unknown-metric-source"]
+    },
+    {
+      "id": "runtime-route-drift",
+      "enabled": false,
+      "mode": "READ_ONLY",
+      "purpose": "Compare approved router/API-boundary evidence with redacted runtime identity observations; do not scan ports or initiate network traffic.",
+      "roleAssignments": [
+        {
+          "roleId": 6,
+          "cardId": "ronin-06-web-api-route-observer",
+          "functionalRoleId": "perception.web-api-route-observer",
+          "contributionOutputs": ["route-observation", "surface-parity-diff"],
+          "cadence": "On router or API contract change."
+        },
+        {
+          "roleId": 13,
+          "cardId": "ronin-13-runtime-queue-observer",
+          "functionalRoleId": "perception.runtime-queue-observer",
+          "contributionOutputs": ["runtime-queue-observation"],
+          "cadence": "Every 60 seconds while an approved mission is active."
+        }
+      ],
+      "cadence": "On router or API contract change; runtime observation only while an approved mission is active.",
+      "maxRuntimeSeconds": 30,
+      "maxSteps": 10,
+      "outputs": ["RuntimeRouteDriftObservationV1"],
+      "prohibitedActions": ["port-scan", "network-request", "start", "stop", "restart", "signal", "firewall-change", "tunnel-change"],
+      "activationGate": "APPROVE_BACKGROUND_TASK runtime-route-drift <plan-hash>",
+      "stopConditions": ["identity-mismatch", "public-bind-detected", "protected-path-required"]
+    },
+    {
+      "id": "gate-evidence-index",
+      "enabled": false,
+      "mode": "PROPOSAL_ONLY",
+      "purpose": "Draft a release-or-rollback packet from existing SHA-bound gate and receipt evidence without creating, rewriting, promoting, or redriving any transition.",
+      "roleAssignments": [
+        {
+          "roleId": 43,
+          "cardId": "ronin-43-yasoemon-system-receipt-coordinator",
+          "functionalRoleId": "coordination.system-receipt-rollback",
+          "contributionOutputs": ["release-or-rollback-packet"],
+          "cadence": "At every promotion, external transition, rollback, and daily receipt audit."
+        }
+      ],
+      "cadence": "At every promotion, external transition, rollback, and daily receipt audit.",
+      "maxRuntimeSeconds": 45,
+      "maxSteps": 12,
+      "outputs": ["GateEvidenceIndexProposalV1"],
+      "prohibitedActions": ["gate-open", "receipt-create", "receipt-rewrite", "task-promotion", "external-redrive"],
+      "activationGate": "APPROVE_BACKGROUND_TASK gate-evidence-index <plan-hash>",
+      "stopConditions": ["missing-receipt", "tampered-digest", "superseded-sha"]
+    },
+    {
+      "id": "a2a-telegram-readiness",
+      "enabled": false,
+      "mode": "PROPOSAL_ONLY",
+      "purpose": "Derive an A2A/Telegram integration decision and test proposal from existing readiness observations; never activate a peer or send a message.",
+      "roleAssignments": [
+        {
+          "roleId": 34,
+          "cardId": "ronin-34-a2a-telegram-integration-authority",
+          "functionalRoleId": "decision.a2a-telegram-integration",
+          "contributionOutputs": ["A2A-Telegram-decision", "integration-test-plan"],
+          "cadence": "On protocol, card, bot, route, or gate change."
+        }
+      ],
+      "cadence": "On protocol, card, bot, route, or gate change.",
+      "maxRuntimeSeconds": 45,
+      "maxSteps": 12,
+      "outputs": ["A2ATelegramReadinessProposalV1"],
+      "prohibitedActions": ["peer-activation", "queue-mutation", "telegram-send", "credential-read"],
+      "activationGate": "APPROVE_BACKGROUND_TASK a2a-telegram-readiness <plan-hash>",
+      "stopConditions": ["live-action-requested", "unknown-peer", "destination-drift"]
+    },
+    {
+      "id": "candidate-smoke-proposal",
+      "enabled": false,
+      "mode": "PROPOSAL_ONLY",
+      "purpose": "Derive independent QA and test-gap requirements for an exact candidate; do not execute tests, start fixtures, or edit the candidate.",
+      "roleAssignments": [
+        {
+          "roleId": 22,
+          "cardId": "ronin-22-independent-qa-analyst",
+          "functionalRoleId": "analysis.independent-qa",
+          "contributionOutputs": ["independent-QA-analysis", "test-gap-register"],
+          "cadence": "For every proposed implementation or release candidate."
+        }
+      ],
+      "cadence": "For every proposed implementation or release candidate.",
+      "maxRuntimeSeconds": 60,
+      "maxSteps": 15,
+      "outputs": ["CandidateSmokeProposalV1"],
+      "prohibitedActions": ["test-execution", "browser-launch", "database-start", "candidate-edit"],
+      "activationGate": "APPROVE_BACKGROUND_TASK candidate-smoke-proposal <candidate-sha> <plan-hash>",
+      "stopConditions": ["missing-candidate-sha", "dirty-ownership-unknown", "resource-floor-failed"]
+    },
+    {
+      "id": "oss-license-refresh",
+      "enabled": false,
+      "mode": "READ_ONLY",
+      "purpose": "Refresh source-linked repository, license, standards, and provenance observations from an exact allowlisted public source without cloning or executing it.",
+      "roleAssignments": [
+        {
+          "roleId": 14,
+          "cardId": "ronin-14-external-repo-license-scout",
+          "functionalRoleId": "perception.external-repo-license-scout",
+          "contributionOutputs": ["repository-intake-observation", "license-observation"],
+          "cadence": "On each new external-repository request."
+        },
+        {
+          "roleId": 47,
+          "cardId": "ronin-47-terasaka-oss-standards-researcher",
+          "functionalRoleId": "research.oss-standards-provenance",
+          "contributionOutputs": ["OSS-standards-research-advisory", "provenance-drift-register"],
+          "cadence": "Weekly drift review and on each external intake."
+        }
+      ],
+      "cadence": "On each new external-repository request and in a separately approved weekly drift review.",
+      "maxRuntimeSeconds": 180,
+      "maxSteps": 20,
+      "outputs": ["OSSLicenseProvenanceRefreshV1"],
+      "prohibitedActions": ["clone", "install", "execute", "credential-read"],
+      "activationGate": "APPROVE_BACKGROUND_TASK oss-license-refresh <source-allowlist-hash>",
+      "stopConditions": ["ambiguous-license", "untrusted-source", "network-policy-block"]
+    },
+    {
+      "id": "model-route-plan-refresh",
+      "enabled": false,
+      "mode": "PROPOSAL_ONLY",
+      "purpose": "Refresh a bounded route and cost-cap proposal from an already verified model catalog; do not research through a provider, call a model, or download one.",
+      "roleAssignments": [
+        {
+          "roleId": 29,
+          "cardId": "ronin-29-model-route-cost-planner",
+          "functionalRoleId": "decision.model-route-cost-planner",
+          "contributionOutputs": ["model-route-plan", "cost-cap-plan"],
+          "cadence": "Before every inference stage and on catalog drift."
+        }
+      ],
+      "cadence": "Before every inference stage and on catalog drift.",
+      "maxRuntimeSeconds": 180,
+      "maxSteps": 20,
+      "outputs": ["ModelRouteRefreshProposalV1"],
+      "prohibitedActions": ["model-download", "provider-call", "daemon-start", "unverified-alias"],
+      "activationGate": "APPROVE_BACKGROUND_TASK model-route-plan-refresh <verified-catalog-hash> <plan-hash>",
+      "stopConditions": ["catalog-unverified", "publisher-unverified", "license-unknown", "paid-call-required"]
+    }
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/resource-cleanup-approval.v2.schema.json",
+  "title": "ResourceCleanupApprovalV2PlanContract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "ticketId",
+    "grantId",
+    "taskId",
+    "action",
+    "circuit",
+    "target",
+    "repository",
+    "hashes",
+    "principals",
+    "approval",
+    "targetManifest",
+    "operation",
+    "recovery",
+    "exclusions",
+    "limits",
+    "issuedAt",
+    "expiresAt",
+    "status"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "2.0-plan" },
+    "ticketId": { "type": "string", "pattern": "^TKT-[A-Za-z0-9._-]+$" },
+    "grantId": { "type": "string", "pattern": "^GRANT-[A-Za-z0-9._-]+$" },
+    "taskId": { "type": "string", "pattern": "^TASK-[A-Za-z0-9._-]+$" },
+    "action": { "const": "RESOURCE_CLEANUP" },
+    "circuit": { "const": "resource_cleanup" },
+    "target": { "$ref": "#/$defs/target" },
+    "repository": { "$ref": "#/$defs/repository" },
+    "hashes": { "$ref": "#/$defs/hashes" },
+    "principals": { "$ref": "#/$defs/principals" },
+    "approval": { "$ref": "#/$defs/approval" },
+    "targetManifest": { "$ref": "#/$defs/targetManifest" },
+    "operation": { "$ref": "#/$defs/operation" },
+    "recovery": { "$ref": "#/$defs/recovery" },
+    "exclusions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^/", "minLength": 2 }
+    },
+    "limits": { "$ref": "#/$defs/limits" },
+    "issuedAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "status": { "const": "ISSUED" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["absolutePath", "class", "deviceId", "inode"],
+      "properties": {
+        "absolutePath": { "type": "string", "pattern": "^/", "minLength": 2 },
+        "class": { "const": "GENERATED_BUILD_OUTPUT" },
+        "deviceId": { "type": "integer", "minimum": 0 },
+        "inode": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "branch",
+        "commitSha",
+        "worktreeSnapshotVersion",
+        "worktreeSnapshotDigest"
+      ],
+      "properties": {
+        "path": { "type": "string", "pattern": "^/", "minLength": 2 },
+        "branch": { "type": "string", "minLength": 1 },
+        "commitSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "worktreeSnapshotVersion": { "const": "1.0" },
+        "worktreeSnapshotDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["planHash", "scopeHash", "actionDigest", "processEvidenceDigest"],
+      "properties": {
+        "planHash": { "$ref": "#/$defs/sha256" },
+        "scopeHash": { "$ref": "#/$defs/sha256" },
+        "actionDigest": { "$ref": "#/$defs/sha256" },
+        "processEvidenceDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "principals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approver", "maker", "checker", "executor"],
+      "properties": {
+        "approver": { "type": "string", "minLength": 1 },
+        "maker": { "type": "string", "minLength": 1 },
+        "checker": { "type": "string", "minLength": 1 },
+        "executor": { "type": "string", "minLength": 1 }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approverAssertionRef", "issuerAttestationDigest", "nonceDigest"],
+      "properties": {
+        "approverAssertionRef": { "type": "string", "minLength": 1 },
+        "issuerAttestationDigest": { "$ref": "#/$defs/sha256" },
+        "nonceDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "targetManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "manifestId",
+        "entriesDigest",
+        "manifestDigest",
+        "entryCount",
+        "totalSizeBytes",
+        "containsSpecialFiles",
+        "containsEscapingSymlinks",
+        "incompleteHardlinkSets"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "1.0" },
+        "manifestId": { "type": "string", "pattern": "^TM-[A-Za-z0-9._-]+$" },
+        "entriesDigest": { "$ref": "#/$defs/sha256" },
+        "manifestDigest": { "$ref": "#/$defs/sha256" },
+        "entryCount": { "type": "integer", "minimum": 1 },
+        "totalSizeBytes": { "type": "integer", "minimum": 0 },
+        "containsSpecialFiles": { "const": false },
+        "containsEscapingSymlinks": { "const": false },
+        "incompleteHardlinkSets": { "const": false }
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "toolId", "parametersDigest", "destinationDeviceId"],
+      "properties": {
+        "kind": { "const": "TOOL_NATIVE_CLEAN" },
+        "toolId": { "const": "cargo-clean" },
+        "parametersDigest": { "$ref": "#/$defs/sha256" },
+        "destinationDeviceId": { "const": null }
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceRef",
+        "procedureRef",
+        "networkRequired",
+        "installRequired",
+        "supportingTicketIds"
+      ],
+      "properties": {
+        "sourceRef": { "type": "string", "minLength": 1 },
+        "procedureRef": { "type": "string", "minLength": 1 },
+        "networkRequired": { "type": "boolean" },
+        "installRequired": { "type": "boolean" },
+        "supportingTicketIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^TKT-[A-Za-z0-9._-]+$" }
+        }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxCalls",
+        "maxCostUsd",
+        "maxRuntimeSeconds",
+        "maxEvidenceAgeSeconds",
+        "maxAffectedKiB",
+        "minReclaimKiB",
+        "emergencyFloorKiB",
+        "worstCaseCleanupGrowthKiB",
+        "requiredPostFreeKiB"
+      ],
+      "properties": {
+        "maxCalls": { "const": 1 },
+        "maxCostUsd": { "const": 0 },
+        "maxRuntimeSeconds": { "type": "integer", "minimum": 1, "maximum": 3600 },
+        "maxEvidenceAgeSeconds": { "const": 60 },
+        "maxAffectedKiB": { "type": "integer", "minimum": 1 },
+        "minReclaimKiB": { "type": "integer", "minimum": 1 },
+        "emergencyFloorKiB": { "const": 5242880 },
+        "worstCaseCleanupGrowthKiB": { "type": "integer", "minimum": 0 },
+        "requiredPostFreeKiB": { "type": "integer", "minimum": 20971520 }
+      }
+    }
+  }
+}

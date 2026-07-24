@@ -32,6 +32,34 @@ docker run -p 8711:8711 \
 `DATABASE_URL` and `CONTROL_API_TOKEN` come from the operator's secret
 store — never from the repo.
 
+The commands above describe the existing web/control compatibility path. They
+do not activate the durable 47-role runtime. That runtime has a separate
+least-privilege database contract in
+[`docs/agent-runtime/POSTGRES_RUNTIME_AUTHORITY.md`](docs/agent-runtime/POSTGRES_RUNTIME_AUTHORITY.md)
+and must use a dedicated `AGENT_RUNTIME_DATABASE_URL`; it must never reuse the
+Postgres owner, migration credential, Supabase `postgres`, or Supabase
+`service_role`.
+
+## Database authority rollout (held)
+
+The database rollout is split into separately receipted actions. A generic
+deploy approval does not authorize any of them.
+
+1. A bootstrap ticket creates the two non-login group roles and an
+   environment-specific runtime login in the database/host secret store. No
+   password or connection URL is written to the repository or report.
+2. A production-migration ticket supplies a direct administrative connection
+   only to the migration job and applies the reviewed migration set.
+3. A secret-provisioning ticket supplies only the non-owner runtime connection
+   to the future agent-runtime service.
+4. Runtime startup attests role attributes, ownership, RLS, policies, exact
+   grants, and forbidden capabilities before accepting work.
+5. A deploy ticket may be considered only after the disposable empty/prior
+   migration suite and rollback drill pass against the same candidate SHA.
+
+Migration authority and runtime authority must not share a pool or credential.
+Application startup is not accepted as production migration evidence.
+
 ## Production topology (planned, behind held gates)
 
 ```

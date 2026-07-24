@@ -114,6 +114,22 @@ describe("Repo Intake Gate contract", () => {
     expect(dryRun.commandExecuted).toBe(false);
     expect(dryRun.canExecuteCode).toBe(false);
   });
+
+  it("rejects plaintext HTTP repository URLs", () => {
+    const dryRun = createRepoIntakeReviewDryRun(
+      {
+        repoUrl: "http://github.com/example/tool",
+        purpose: "review only"
+      },
+      { now: fixedNow }
+    );
+
+    expect(dryRun.status).toBe("blocked-repo-intake-review");
+    expect(dryRun.classification).toBe("invalid_repo_url");
+    expect(dryRun.blockedReasons).toContain("unsupported_repo_url_protocol");
+    expect(dryRun.commandExecuted).toBe(false);
+    expect(dryRun.externalNetworkCall).toBe(false);
+  });
 });
 
 describe("Repo Intake Gate API routes", () => {

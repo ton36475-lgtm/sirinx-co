@@ -1,0 +1,203 @@
+{
+  "schemaRef": "schemas/route-parity/b3-route-inventory.v1.schema.json",
+  "schemaVersion": "1.0",
+  "status": "STATIC_INVENTORY_ONLY",
+  "authority": {
+    "canExecute": false,
+    "canConnect": false,
+    "canMutate": false,
+    "canSend": false,
+    "canDeploy": false,
+    "canAuthorize": false,
+    "canClaimCompletion": false
+  },
+  "planPin": {
+    "path": "docs/agent-runtime/B3_ROUTE_PARITY_PLAN.md",
+    "sha256": "d6db48ffbb11acf5942493776a80e5a40c6c9178a9c7902516036ba1d975a95f"
+  },
+  "snapshots": {
+    "target": {
+      "repoPath": "/Users/sirinx/SIRINXDev/sirinx-co",
+      "canonicalAuditCommit": "1f05814c3e9d173e525234d69b3ce7f2d1b01a57",
+      "observedHead": "1f05814c3e9d173e525234d69b3ce7f2d1b01a57",
+      "relation": "ROUTE_SET_ONLY_MATCH",
+      "files": [
+        {
+          "path": "crates/sirinx-web/src/lib.rs",
+          "canonicalSha256": "321638a84620b47881c8da17013f697a7fe1b9867ce199b933aa03e878dc71ac",
+          "observedSha256": "321638a84620b47881c8da17013f697a7fe1b9867ce199b933aa03e878dc71ac"
+        },
+        {
+          "path": "crates/sirinx-web/src/main.rs",
+          "canonicalSha256": "1ec8a03d921deb01adb54f1c835e8a756fef3493a813112e21858379d11e5902",
+          "observedSha256": "cd90c7e5db7de78b0fa2e5316ae3eab229954a01a3d95a3014eeec50654f9a36"
+        }
+      ]
+    },
+    "automationGateway": {
+      "repoPath": "/Users/sirinx/restore-sources/github-audit/automation-system-backend",
+      "canonicalAuditCommit": "2e3dae794cd0d09978972d3c8df0420d55d15ce0",
+      "observedHead": "2e3dae794cd0d09978972d3c8df0420d55d15ce0",
+      "relation": "EXACT_BYTES_AT_OBSERVED_HEAD",
+      "files": [
+        {
+          "path": "backend/api-gateway.js",
+          "canonicalSha256": "37e9c8100b0444319a30c79bc01697c54d30ea2ce7e0a739d9fe96f7ecd067cc",
+          "observedSha256": "37e9c8100b0444319a30c79bc01697c54d30ea2ce7e0a739d9fe96f7ecd067cc"
+        }
+      ]
+    },
+    "sirinx": {
+      "repoPath": "/Users/sirinx/restore-sources/github-audit/sirinx",
+      "canonicalAuditCommit": "48a93d375815e13671899329dcfa9dc7c6b9c3e9",
+      "observedHead": "41dced72faae5536269f097c25626ffe004374a2",
+      "relation": "OPERATION_SET_ONLY_MATCH",
+      "files": [
+        {
+          "path": "server/routers.ts",
+          "canonicalSha256": "282dd4ba90b6accd16095c1b19551ea0157b2f1d66cc65c05ab25eedc684983a",
+          "observedSha256": "bfd3aa2e65ed0da407c1974835a2dbee651af5f1021fa99d49bed700dee9ad65"
+        },
+        {
+          "path": "server/_core/systemRouter.ts",
+          "canonicalSha256": "b3e2dae253ee35e4b29aadefe06865c5acf35ef69d7d99bca6bb27310cc717f4",
+          "observedSha256": "b3e2dae253ee35e4b29aadefe06865c5acf35ef69d7d99bca6bb27310cc717f4"
+        },
+        {
+          "path": "server/_core/oauth.ts",
+          "canonicalSha256": "d2e2fe4532ec9d142e8d4d448b2c1d8cc9eddd45a1433ad843c07afa5c13efc1",
+          "observedSha256": "d2e2fe4532ec9d142e8d4d448b2c1d8cc9eddd45a1433ad843c07afa5c13efc1"
+        },
+        {
+          "path": "server/_core/index.ts",
+          "canonicalSha256": "873c0e9f7b542031b69afed1a063fe692e58f5fe4f86696972b10d018ddf3525",
+          "observedSha256": "873c0e9f7b542031b69afed1a063fe692e58f5fe4f86696972b10d018ddf3525"
+        },
+        {
+          "path": "server/_core/trpc.ts",
+          "canonicalSha256": "95679492e0478938f9bab6e3388ba6a95d3ab3329e6ff2eb9686e638cd07d98e",
+          "observedSha256": "95679492e0478938f9bab6e3388ba6a95d3ab3329e6ff2eb9686e638cd07d98e"
+        }
+      ]
+    }
+  },
+  "sourceTruth": {
+    "automationGatewayDeclarationsAreRuntimeProof": false,
+    "automationProxyDeclarations": 22,
+    "automationProvenDownstreamPathMatches": 0,
+    "sirinxObservedBytesEqualCanonical": false,
+    "sirinxOperationSetOnlyMatch": true,
+    "targetRepositoryClean": false,
+    "targetScope": "LIB_RS_REGISTRATIONS_ONLY",
+    "targetRuntimeSurfaceProven": false
+  },
+  "expectedCounts": {
+    "automationGateway": 25,
+    "sirinxApi": 29,
+    "sourceTotal": 54,
+    "targetRegistrations": 10,
+    "targetApiProbeRoutes": 8,
+    "exactParity": 0,
+    "implementedSourceOperations": 0,
+    "safeReplacementOperations": 2,
+    "overlapOnly": 7,
+    "holdAuthData": 34,
+    "holdEffect": 7,
+    "holdSecurity": 3,
+    "holdPrivacy": 1
+  },
+  "targetRegistrations": [
+    { "id": "T01", "method": "GET", "route": "/", "class": "PAGE" },
+    { "id": "T02", "method": "GET", "route": "/thaimart-sirinx", "class": "PAGE" },
+    { "id": "T03", "method": "GET", "route": "/health", "class": "API_PROBE" },
+    { "id": "T04", "method": "GET", "route": "/metrics", "class": "API_PROBE" },
+    { "id": "T05", "method": "GET", "route": "/api/packages", "class": "API" },
+    { "id": "T06", "method": "POST", "route": "/api/roi", "class": "API" },
+    { "id": "T07", "method": "POST", "route": "/api/leads", "class": "API" },
+    { "id": "T08", "method": "PATCH", "route": "/api/leads/:id/status", "class": "API" },
+    { "id": "T09", "method": "DELETE", "route": "/api/leads/:id", "class": "API" },
+    { "id": "T10", "method": "POST", "route": "/api/events", "class": "API" }
+  ],
+  "operations": [
+    { "id": "A01", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "GET", "pathOrProcedure": "/health", "access": "PUBLIC", "effect": "NONE", "disposition": "OVERLAP_ONLY", "targetIds": ["T03"], "reasonCodes": ["RESPONSE_CONTRACT_DIFF"], "exactParity": false, "implemented": false },
+    { "id": "A02", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "POST", "pathOrProcedure": "/api/v1/auth/login", "access": "PUBLIC", "effect": "SECURITY_RISK", "disposition": "HOLD_SECURITY", "targetIds": [], "reasonCodes": ["LEGACY_AUTH_REDESIGN_REQUIRED"], "exactParity": false, "implemented": false },
+    { "id": "A03", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "POST", "pathOrProcedure": "/api/v1/auth/logout", "access": "AUTHENTICATED", "effect": "LOCAL_WRITE", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A04", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "POST", "pathOrProcedure": "/api/v1/workflows", "access": "AUTHENTICATED", "effect": "LOCAL_WRITE", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A05", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "GET", "pathOrProcedure": "/api/v1/workflows", "access": "AUTHENTICATED", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A06", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "GET", "pathOrProcedure": "/api/v1/workflows/:id", "access": "AUTHENTICATED", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A07", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "PUT", "pathOrProcedure": "/api/v1/workflows/:id", "access": "AUTHENTICATED", "effect": "LOCAL_WRITE", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A08", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "DELETE", "pathOrProcedure": "/api/v1/workflows/:id", "access": "AUTHENTICATED", "effect": "LOCAL_WRITE", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A09", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "POST", "pathOrProcedure": "/api/v1/workflows/:id/execute", "access": "AUTHENTICATED", "effect": "EXTERNAL_EFFECT", "disposition": "HOLD_EFFECT", "targetIds": [], "reasonCodes": ["DURABLE_EFFECT_AUTHORITY_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A10", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "GET", "pathOrProcedure": "/api/v1/executions", "access": "AUTHENTICATED", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A11", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "GET", "pathOrProcedure": "/api/v1/executions/:id", "access": "AUTHENTICATED", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A12", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "GET", "pathOrProcedure": "/api/v1/analytics/metrics", "access": "AUTHENTICATED", "effect": "LOCAL_READ", "disposition": "OVERLAP_ONLY", "targetIds": ["T04"], "reasonCodes": ["RESPONSE_CONTRACT_DIFF"], "exactParity": false, "implemented": false },
+    { "id": "A13", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "POST", "pathOrProcedure": "/api/v1/analytics/query", "access": "AUTHENTICATED", "effect": "SECURITY_RISK", "disposition": "HOLD_SECURITY", "targetIds": [], "reasonCodes": ["CALLER_SQL_QUARANTINED"], "exactParity": false, "implemented": false },
+    { "id": "A14", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "GET", "pathOrProcedure": "/api/v1/analytics/events", "access": "AUTHENTICATED", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A15", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "GET", "pathOrProcedure": "/api/v1/analytics/trends", "access": "AUTHENTICATED", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A16", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "POST", "pathOrProcedure": "/api/v1/dashboards", "access": "AUTHENTICATED", "effect": "LOCAL_WRITE", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A17", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "GET", "pathOrProcedure": "/api/v1/dashboards", "access": "AUTHENTICATED", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A18", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "GET", "pathOrProcedure": "/api/v1/dashboards/:id", "access": "AUTHENTICATED", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A19", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "PUT", "pathOrProcedure": "/api/v1/dashboards/:id", "access": "AUTHENTICATED", "effect": "LOCAL_WRITE", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A20", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "DELETE", "pathOrProcedure": "/api/v1/dashboards/:id", "access": "AUTHENTICATED", "effect": "LOCAL_WRITE", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A21", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "POST", "pathOrProcedure": "/api/v1/integrations/github", "access": "AUTHENTICATED", "effect": "EXTERNAL_EFFECT", "disposition": "HOLD_EFFECT", "targetIds": [], "reasonCodes": ["DURABLE_EFFECT_AUTHORITY_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A22", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "GET", "pathOrProcedure": "/api/v1/integrations/github", "access": "AUTHENTICATED", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A23", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "DELETE", "pathOrProcedure": "/api/v1/integrations/github", "access": "AUTHENTICATED", "effect": "EXTERNAL_EFFECT", "disposition": "HOLD_EFFECT", "targetIds": [], "reasonCodes": ["DURABLE_EFFECT_AUTHORITY_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A24", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "POST", "pathOrProcedure": "/api/v1/integrations/api", "access": "AUTHENTICATED", "effect": "EXTERNAL_EFFECT", "disposition": "HOLD_EFFECT", "targetIds": [], "reasonCodes": ["DURABLE_EFFECT_AUTHORITY_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "A25", "source": "AUTOMATION_GATEWAY", "protocol": "HTTP", "method": "GET", "pathOrProcedure": "/api/v1/integrations/api", "access": "AUTHENTICATED", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+
+    { "id": "S01", "source": "SIRINX_API", "protocol": "TRPC", "method": "QUERY", "pathOrProcedure": "system.health", "access": "PUBLIC", "effect": "NONE", "disposition": "OVERLAP_ONLY", "targetIds": ["T03"], "reasonCodes": ["RESPONSE_CONTRACT_DIFF"], "exactParity": false, "implemented": false },
+    { "id": "S02", "source": "SIRINX_API", "protocol": "TRPC", "method": "QUERY", "pathOrProcedure": "system.integrationHealth", "access": "PUBLIC", "effect": "LOCAL_READ", "disposition": "HOLD_SECURITY", "targetIds": [], "reasonCodes": ["PUBLIC_READINESS_REDESIGN_REQUIRED"], "exactParity": false, "implemented": false },
+    { "id": "S03", "source": "SIRINX_API", "protocol": "TRPC", "method": "MUTATION", "pathOrProcedure": "system.notifyOwner", "access": "ADMIN", "effect": "EXTERNAL_EFFECT", "disposition": "HOLD_EFFECT", "targetIds": [], "reasonCodes": ["DURABLE_EFFECT_AUTHORITY_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S04", "source": "SIRINX_API", "protocol": "TRPC", "method": "QUERY", "pathOrProcedure": "auth.me", "access": "PUBLIC", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S05", "source": "SIRINX_API", "protocol": "TRPC", "method": "MUTATION", "pathOrProcedure": "auth.logout", "access": "PUBLIC", "effect": "LOCAL_WRITE", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S06", "source": "SIRINX_API", "protocol": "TRPC", "method": "MUTATION", "pathOrProcedure": "lead.submit", "access": "PUBLIC", "effect": "LOCAL_WRITE", "disposition": "OVERLAP_ONLY", "targetIds": ["T07"], "reasonCodes": ["DTO_PROTOCOL_DIFF"], "exactParity": false, "implemented": false },
+    { "id": "S07", "source": "SIRINX_API", "protocol": "TRPC", "method": "QUERY", "pathOrProcedure": "lead.list", "access": "ADMIN", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S08", "source": "SIRINX_API", "protocol": "TRPC", "method": "QUERY", "pathOrProcedure": "lead.getById", "access": "ADMIN", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S09", "source": "SIRINX_API", "protocol": "TRPC", "method": "MUTATION", "pathOrProcedure": "lead.update", "access": "ADMIN", "effect": "LOCAL_WRITE", "disposition": "OVERLAP_ONLY", "targetIds": ["T08"], "reasonCodes": ["DTO_PROTOCOL_DIFF"], "exactParity": false, "implemented": false },
+    { "id": "S10", "source": "SIRINX_API", "protocol": "TRPC", "method": "QUERY", "pathOrProcedure": "lead.stats", "access": "ADMIN", "effect": "LOCAL_READ", "disposition": "OVERLAP_ONLY", "targetIds": ["T04"], "reasonCodes": ["RESPONSE_CONTRACT_DIFF"], "exactParity": false, "implemented": false },
+    { "id": "S11", "source": "SIRINX_API", "protocol": "TRPC", "method": "QUERY", "pathOrProcedure": "blog.list", "access": "PUBLIC", "effect": "LOCAL_READ", "disposition": "SAFE_REPLACEMENT_PLANNED", "targetIds": [], "reasonCodes": ["PUBLIC_READ_SLICE_SELECTED"], "exactParity": false, "implemented": false },
+    { "id": "S12", "source": "SIRINX_API", "protocol": "TRPC", "method": "QUERY", "pathOrProcedure": "blog.getBySlug", "access": "PUBLIC", "effect": "LOCAL_READ", "disposition": "SAFE_REPLACEMENT_PLANNED", "targetIds": [], "reasonCodes": ["PUBLIC_READ_SLICE_SELECTED"], "exactParity": false, "implemented": false },
+    { "id": "S13", "source": "SIRINX_API", "protocol": "TRPC", "method": "QUERY", "pathOrProcedure": "blog.adminList", "access": "ADMIN", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S14", "source": "SIRINX_API", "protocol": "TRPC", "method": "QUERY", "pathOrProcedure": "blog.getById", "access": "ADMIN", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S15", "source": "SIRINX_API", "protocol": "TRPC", "method": "MUTATION", "pathOrProcedure": "blog.create", "access": "ADMIN", "effect": "LOCAL_WRITE", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S16", "source": "SIRINX_API", "protocol": "TRPC", "method": "MUTATION", "pathOrProcedure": "blog.update", "access": "ADMIN", "effect": "LOCAL_WRITE", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S17", "source": "SIRINX_API", "protocol": "TRPC", "method": "MUTATION", "pathOrProcedure": "blog.delete", "access": "ADMIN", "effect": "LOCAL_WRITE", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S18", "source": "SIRINX_API", "protocol": "TRPC", "method": "QUERY", "pathOrProcedure": "project.list", "access": "PUBLIC", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["PUBLIC_READ_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S19", "source": "SIRINX_API", "protocol": "TRPC", "method": "QUERY", "pathOrProcedure": "project.adminList", "access": "ADMIN", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S20", "source": "SIRINX_API", "protocol": "TRPC", "method": "MUTATION", "pathOrProcedure": "project.create", "access": "ADMIN", "effect": "LOCAL_WRITE", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S21", "source": "SIRINX_API", "protocol": "TRPC", "method": "MUTATION", "pathOrProcedure": "project.update", "access": "ADMIN", "effect": "LOCAL_WRITE", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S22", "source": "SIRINX_API", "protocol": "TRPC", "method": "MUTATION", "pathOrProcedure": "project.delete", "access": "ADMIN", "effect": "LOCAL_WRITE", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S23", "source": "SIRINX_API", "protocol": "TRPC", "method": "MUTATION", "pathOrProcedure": "analytics.trackPageView", "access": "PUBLIC", "effect": "PRIVACY_RISK", "disposition": "HOLD_PRIVACY", "targetIds": [], "reasonCodes": ["CONSENT_CONTRACT_CONFLICT"], "exactParity": false, "implemented": false },
+    { "id": "S24", "source": "SIRINX_API", "protocol": "TRPC", "method": "MUTATION", "pathOrProcedure": "analytics.trackEvent", "access": "PUBLIC", "effect": "LOCAL_WRITE", "disposition": "OVERLAP_ONLY", "targetIds": ["T10"], "reasonCodes": ["DTO_PROTOCOL_DIFF", "CONSENT_CONTRACT_CONFLICT"], "exactParity": false, "implemented": false },
+    { "id": "S25", "source": "SIRINX_API", "protocol": "TRPC", "method": "QUERY", "pathOrProcedure": "analytics.pageViews", "access": "ADMIN", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S26", "source": "SIRINX_API", "protocol": "TRPC", "method": "QUERY", "pathOrProcedure": "analytics.events", "access": "ADMIN", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S27", "source": "SIRINX_API", "protocol": "TRPC", "method": "MUTATION", "pathOrProcedure": "chatbot.chat", "access": "PUBLIC", "effect": "EXTERNAL_EFFECT", "disposition": "HOLD_EFFECT", "targetIds": [], "reasonCodes": ["PROVIDER_AUTHORITY_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S28", "source": "SIRINX_API", "protocol": "TRPC", "method": "QUERY", "pathOrProcedure": "contact.list", "access": "ADMIN", "effect": "LOCAL_READ", "disposition": "HOLD_AUTH_DATA", "targetIds": [], "reasonCodes": ["AUTH_CONTRACT_ABSENT", "DATA_CONTRACT_ABSENT"], "exactParity": false, "implemented": false },
+    { "id": "S29", "source": "SIRINX_API", "protocol": "HTTP", "method": "GET", "pathOrProcedure": "/api/oauth/callback", "access": "PUBLIC", "effect": "EXTERNAL_EFFECT", "disposition": "HOLD_EFFECT", "targetIds": [], "reasonCodes": ["OAUTH_CONNECTOR_AUTHORITY_ABSENT"], "exactParity": false, "implemented": false }
+  ],
+  "selectedSlice": {
+    "id": "B3.1",
+    "status": "PLANNED_NOT_IMPLEMENTED",
+    "sourceOperationIds": ["S11", "S12"],
+    "plannedTargetRoutes": [
+      "GET /api/blog",
+      "GET /api/blog/:slug"
+    ],
+    "requiresResourceAdmission": true,
+    "requiresMigrationOrderingFreeze": true,
+    "reservedMigration": "0007_EFFECT_AUTHORITY_DO_NOT_USE",
+    "parityOutcomeIfImplemented": "SAFE_REPLACEMENT_NO_EXACT_CREDIT",
+    "authorizesImplementation": false,
+    "authorizesMigration": false,
+    "authorizesExternalEffects": false
+  },
+  "completion": {
+    "inventoryAccounted": true,
+    "routeInventoryDiffEmpty": false,
+    "exactParityCount": 0,
+    "semanticParityProven": false,
+    "b3Complete": false,
+    "productionReady": false,
+    "claim": "STATIC_ACCOUNTING_ONLY"
+  }
+}

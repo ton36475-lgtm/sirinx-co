@@ -1,0 +1,610 @@
+{
+  "schemaVersion": "1.0",
+  "status": "READ_ONLY_PROVENANCE_CAPTURED / NOT_ADMITTED / RESOURCE_HOLD",
+  "generatedAt": "2026-07-20T20:21:28Z",
+  "baseline": {
+    "repository": "/Users/sirinx/SIRINXDev/sirinx-co",
+    "branch": "agent/b1-b2-command-center",
+    "headSha": "1f05814c3e9d173e525234d69b3ce7f2d1b01a57",
+    "workingTree": "DIRTY_USER_OWNED_CANDIDATE",
+    "cargoLockPath": "Cargo.lock",
+    "cargoLockSha256": "b1f0cddffa71d8189a7e40a87a169d98eb407a2da39b2b21d1ddfece8473185b",
+    "host": "Mac14,3",
+    "memoryGiB": 8,
+    "logicalCpuCount": 8,
+    "resourceReceipt": {
+      "capturedAt": "2026-07-20T20:21:28Z",
+      "volumePath": "/System/Volumes/Data",
+      "freeDiskKiB": 14007668,
+      "workloadFloorKiB": 15728640,
+      "state": "HOLD_BELOW_15_GIB"
+    }
+  },
+  "parentCatalog": {
+    "catalogPath": "config/agent-runtime/external-components.research-only.v1.json",
+    "catalogSha256": "2c796db789c919c630ef425387ed75a0cba94a98886cd40299195e47451482ec",
+    "schemaPath": "schemas/agent-runtime/external-component-intake.v1.schema.json",
+    "schemaSha256": "64127fbcb2595f606060c2fb627c2af414e1a18779d4c14d2bb50f271256d5eb",
+    "validatorPath": "scripts/validate-external-component-intake.mjs",
+    "validatorSha256": "0ff1ed446deb0258a7a0931042d55cefea7eae632674e2161dd6e743f4ba7dd6"
+  },
+  "authority": {
+    "approvalSource": "APPROVE_IMPLEMENTATION_LOCAL_CODE_AND_DOCS_ONLY",
+    "installGrantPresent": false,
+    "connectorGrantPresent": false,
+    "providerGrantPresent": false,
+    "localInferenceGrantPresent": false,
+    "cloudflareMutationGrantPresent": false,
+    "liveSendGrantPresent": false
+  },
+  "protectedReadBoundary": [
+    ".env files",
+    "/Users/sirinx/.hermes/auth.json",
+    "/Users/sirinx/.hermes/config.yaml",
+    "browser profiles, cookies, and keychains"
+  ],
+  "components": [
+    {
+      "id": "openai-codex-cli",
+      "category": "AGENT_HARNESS",
+      "catalogDisposition": "RECONCILE_EXISTING",
+      "status": "LOCAL_EVIDENCE_CAPTURED_NOT_ADMITTED",
+      "classification": "ARTIFACT_IDENTIFIED_NOT_UPSTREAM_BOUND",
+      "selectedRevision": "0.144.6 / 0.144.6-darwin-arm64",
+      "localIdentity": "PATH-first npm layout plus a distinct ChatGPT-app embedded Codex binary",
+      "artifacts": [
+        {
+          "role": "command-link",
+          "path": "/Users/sirinx/.local/bin/codex",
+          "canonicalPath": "/Users/sirinx/.local/lib/node_modules/@openai/codex/bin/codex.js",
+          "pathKind": "SYMLINK_TO_REGULAR_FILE",
+          "linkTarget": "../lib/node_modules/@openai/codex/bin/codex.js",
+          "sizeBytes": 7236,
+          "modeOctal": "755",
+          "sha256": "134063e133f0b4244fa3b251acf973d4fe4b4aeeacbdc135211bf480f59f1477",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "package-manifest",
+          "path": "/Users/sirinx/.local/lib/node_modules/@openai/codex/package.json",
+          "canonicalPath": "/Users/sirinx/.local/lib/node_modules/@openai/codex/package.json",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 1082,
+          "modeOctal": "644",
+          "sha256": "b701b7d7b7683263e5612e612c468c526d78c3deb1360741e976dc40e0456919",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "platform-package-manifest",
+          "path": "/Users/sirinx/.local/lib/node_modules/@openai/codex/node_modules/@openai/codex-darwin-arm64/package.json",
+          "canonicalPath": "/Users/sirinx/.local/lib/node_modules/@openai/codex/node_modules/@openai/codex-darwin-arm64/package.json",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 517,
+          "modeOctal": "644",
+          "sha256": "051cbc20f48e7bd20b89e301ffc8f60af890a1da3815e5e700f11ada41c3b445",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "native-binary",
+          "path": "/Users/sirinx/.local/lib/node_modules/@openai/codex/node_modules/@openai/codex-darwin-arm64/vendor/aarch64-apple-darwin/bin/codex",
+          "canonicalPath": "/Users/sirinx/.local/lib/node_modules/@openai/codex/node_modules/@openai/codex-darwin-arm64/vendor/aarch64-apple-darwin/bin/codex",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 260472144,
+          "modeOctal": "755",
+          "sha256": "80a3933d11a9d13ef806aa24f7bb8afc9169cfe4e9b09d6da6a92922cbde9cff",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "chatgpt-embedded-alternate",
+          "path": "/Applications/ChatGPT.app/Contents/Resources/codex",
+          "canonicalPath": "/Applications/ChatGPT.app/Contents/Resources/codex",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 264898656,
+          "modeOctal": "755",
+          "sha256": "f0b214b476e04175bee104fe441caea874baeef3efc3828bfb79e972266156a9",
+          "verification": "FULL_FILE_SHA256"
+        }
+      ],
+      "packageRecords": [],
+      "observations": [
+        "Package metadata declares @openai/codex 0.144.6 and platform package 0.144.6-darwin-arm64.",
+        "The two native binaries are distinct byte artifacts; the ChatGPT application version is not treated as an embedded CLI version.",
+        "Code-signature inspection reported OpenAI TeamIdentifier 2DC432GLL2 for both native binaries."
+      ],
+      "unresolvedGaps": [
+        "No global npm lock/integrity receipt or exact install transaction was present.",
+        "No reproducible source-to-binary proof binds the local bytes to the upstream release.",
+        "The embedded ChatGPT Codex CLI version remains unasserted."
+      ],
+      "claims": {
+        "upstreamIdentityBound": false,
+        "installReceiptVerified": false,
+        "reproducibleBuildVerified": false,
+        "runtimeVerified": false,
+        "admitted": false,
+        "canInstall": false,
+        "canRun": false,
+        "canConnect": false
+      }
+    },
+    {
+      "id": "nous-hermes-agent",
+      "category": "AGENT_HARNESS",
+      "catalogDisposition": "RECONCILE_EXISTING",
+      "status": "LOCAL_EVIDENCE_CAPTURED_NOT_ADMITTED",
+      "classification": "EDITABLE_SOURCE_UNPINNED",
+      "selectedRevision": "0.18.2 editable@299e409f15aa5615a8a64be488580be92cda351e-dirty",
+      "localIdentity": "Local shell wrapper to a uv-managed editable Python environment",
+      "artifacts": [
+        {
+          "role": "command-wrapper",
+          "path": "/Users/sirinx/.local/bin/hermes",
+          "canonicalPath": "/Users/sirinx/.local/bin/hermes",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 117,
+          "modeOctal": "755",
+          "sha256": "ea0fbb0f5519c2bd1727e0f4433e88e2ff59be88da6135318af479213533bc49",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "python-entrypoint",
+          "path": "/Users/sirinx/.hermes/hermes-agent/venv/bin/hermes",
+          "canonicalPath": "/Users/sirinx/.hermes/hermes-agent/venv/bin/hermes",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 332,
+          "modeOctal": "755",
+          "sha256": "774f2a3981451eb52cc7bac3e1eb2463a59d1567e3e5acda539b80d8a02c5372",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "distribution-metadata",
+          "path": "/Users/sirinx/.hermes/hermes-agent/venv/lib/python3.12/site-packages/hermes_agent-0.18.2.dist-info/METADATA",
+          "canonicalPath": "/Users/sirinx/.hermes/hermes-agent/venv/lib/python3.12/site-packages/hermes_agent-0.18.2.dist-info/METADATA",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 24950,
+          "modeOctal": "644",
+          "sha256": "de2dc10a2bca961fff227bf808641a18a27e1d8349e4796a841b9e96433e12d4",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "editable-source-receipt",
+          "path": "/Users/sirinx/.hermes/hermes-agent/venv/lib/python3.12/site-packages/hermes_agent-0.18.2.dist-info/direct_url.json",
+          "canonicalPath": "/Users/sirinx/.hermes/hermes-agent/venv/lib/python3.12/site-packages/hermes_agent-0.18.2.dist-info/direct_url.json",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 80,
+          "modeOctal": "644",
+          "sha256": "857d9e3a52a6446428dee180a2b61a5e07e8f38d14e33e68bdc80bec8b1b00c0",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "distribution-record",
+          "path": "/Users/sirinx/.hermes/hermes-agent/venv/lib/python3.12/site-packages/hermes_agent-0.18.2.dist-info/RECORD",
+          "canonicalPath": "/Users/sirinx/.hermes/hermes-agent/venv/lib/python3.12/site-packages/hermes_agent-0.18.2.dist-info/RECORD",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 1436,
+          "modeOctal": "644",
+          "sha256": "8ea366c4a2f75182933247c317ecf5b7992f68d076ea8d1df3f0dc8cfeb97e33",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "editable-entry-module",
+          "path": "/Users/sirinx/.hermes/hermes-agent/hermes_cli/main.py",
+          "canonicalPath": "/Users/sirinx/.hermes/hermes-agent/hermes_cli/main.py",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 623008,
+          "modeOctal": "644",
+          "sha256": "7696883c8339be7eb51da78a6a7431f58252921ab1bb5d26d53e12fbec5c3be8",
+          "verification": "FULL_FILE_SHA256"
+        }
+      ],
+      "packageRecords": [],
+      "observations": [
+        "Distribution metadata reports hermes-agent 0.18.2, installer uv, and an editable file URL under /Users/sirinx/.hermes/hermes-agent.",
+        "Local Git observation reported HEAD 299e409f15aa5615a8a64be488580be92cda351e and a dirty editable worktree behind the cached origin/main by 147 commits.",
+        "Hermes was not executed and protected Hermes configuration was not read."
+      ],
+      "unresolvedGaps": [
+        "The editable source is mutable and dirty, so package version metadata is not an immutable runtime receipt.",
+        "Only the entry module and install metadata are byte-bound; the full editable source tree is not sealed.",
+        "No source-to-environment reproducibility or runtime behavior proof exists."
+      ],
+      "claims": {
+        "upstreamIdentityBound": false,
+        "installReceiptVerified": false,
+        "reproducibleBuildVerified": false,
+        "runtimeVerified": false,
+        "admitted": false,
+        "canInstall": false,
+        "canRun": false,
+        "canConnect": false
+      }
+    },
+    {
+      "id": "moonshot-kimi-code",
+      "category": "AGENT_HARNESS",
+      "catalogDisposition": "RECONCILE_EXISTING",
+      "status": "LOCAL_EVIDENCE_CAPTURED_NOT_ADMITTED",
+      "classification": "ARTIFACT_IDENTIFIED_NOT_UPSTREAM_BOUND",
+      "selectedRevision": "0.27.0",
+      "localIdentity": "PATH-first npm Kimi Code plus an unrelated Homebrew-path test stub",
+      "artifacts": [
+        {
+          "role": "command-link",
+          "path": "/Users/sirinx/.local/bin/kimi",
+          "canonicalPath": "/Users/sirinx/.local/lib/node_modules/@moonshot-ai/kimi-code/dist/main.mjs",
+          "pathKind": "SYMLINK_TO_REGULAR_FILE",
+          "linkTarget": "../lib/node_modules/@moonshot-ai/kimi-code/dist/main.mjs",
+          "sizeBytes": 16158694,
+          "modeOctal": "755",
+          "sha256": "6df93ee4819f3747304e524494f0286b30348cb4a0df127a11ff61fc03e4e8d2",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "package-manifest",
+          "path": "/Users/sirinx/.local/lib/node_modules/@moonshot-ai/kimi-code/package.json",
+          "canonicalPath": "/Users/sirinx/.local/lib/node_modules/@moonshot-ai/kimi-code/package.json",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 4318,
+          "modeOctal": "644",
+          "sha256": "f18100804cd2fad670e40aa3ae61134796772489949dcbd718329df2edf87cd2",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "homebrew-path-stub",
+          "path": "/opt/homebrew/bin/kimi",
+          "canonicalPath": "/opt/homebrew/bin/kimi",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 101,
+          "modeOctal": "755",
+          "sha256": "3e4bf60c88345bab5ad6a965e5e93dcb6257dc485520aedaa32e141f45735f27",
+          "verification": "FULL_FILE_SHA256"
+        }
+      ],
+      "packageRecords": [],
+      "observations": [
+        "Package metadata declares @moonshot-ai/kimi-code 0.27.0.",
+        "/opt/homebrew/bin/kimi is a 101-byte test-compatibility stub, not the real Kimi CLI.",
+        "No Kimi command, provider, desktop control, ACP, MCP, or A2A connection was invoked."
+      ],
+      "unresolvedGaps": [
+        "No global npm lock/integrity receipt or exact install transaction was present.",
+        "No reproducible source-to-bundle proof binds the local file to the upstream release.",
+        "The creator and install receipt for the Homebrew-path stub remain unknown."
+      ],
+      "claims": {
+        "upstreamIdentityBound": false,
+        "installReceiptVerified": false,
+        "reproducibleBuildVerified": false,
+        "runtimeVerified": false,
+        "admitted": false,
+        "canInstall": false,
+        "canRun": false,
+        "canConnect": false
+      }
+    },
+    {
+      "id": "axum-existing",
+      "category": "API_FRAMEWORK",
+      "catalogDisposition": "RECONCILE_EXISTING",
+      "status": "LOCAL_EVIDENCE_CAPTURED_NOT_ADMITTED",
+      "classification": "LOCKFILE_AND_CACHE_VERIFIED_NOT_UPSTREAM_BOUND",
+      "selectedRevision": "axum 0.7.9 / axum-core 0.4.5",
+      "localIdentity": "Cargo.lock resolution plus exact locally cached crates.io archives",
+      "artifacts": [
+        {
+          "role": "axum-crate-archive",
+          "path": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/axum-0.7.9.crate",
+          "canonicalPath": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/axum-0.7.9.crate",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 155272,
+          "modeOctal": "644",
+          "sha256": "edca88bc138befd0323b20752846e6587272d3b03b0343c8ea28a6f819e6e71f",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "axum-core-crate-archive",
+          "path": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/axum-core-0.4.5.crate",
+          "canonicalPath": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/axum-core-0.4.5.crate",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 22183,
+          "modeOctal": "644",
+          "sha256": "09f2bd6146b97ae3359fa0cc6d6b376d9539582c7b4220f041a33ec24c226199",
+          "verification": "FULL_FILE_SHA256"
+        }
+      ],
+      "packageRecords": [
+        {
+          "name": "axum",
+          "version": "0.7.9",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "lockChecksum": "edca88bc138befd0323b20752846e6587272d3b03b0343c8ea28a6f819e6e71f",
+          "cacheArchivePath": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/axum-0.7.9.crate",
+          "cacheArchiveSha256": "edca88bc138befd0323b20752846e6587272d3b03b0343c8ea28a6f819e6e71f"
+        },
+        {
+          "name": "axum-core",
+          "version": "0.4.5",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "lockChecksum": "09f2bd6146b97ae3359fa0cc6d6b376d9539582c7b4220f041a33ec24c226199",
+          "cacheArchivePath": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/axum-core-0.4.5.crate",
+          "cacheArchiveSha256": "09f2bd6146b97ae3359fa0cc6d6b376d9539582c7b4220f041a33ec24c226199"
+        }
+      ],
+      "observations": [
+        "Workspace declaration axum = 0.7 resolves to axum 0.7.9 and axum-core 0.4.5 for sirinx-web and sirinx-control.",
+        "Cached compile fingerprints reported default, form, http1, json, matched-path, original-uri, query, tokio, tower-log, and tracing.",
+        "Packaged metadata reports MIT, tokio-rs/axum, MSRV 1.66, and VCS SHA 9983bc1da460becd3a0f08c513d610411e84dd43 for axum."
+      ],
+      "unresolvedGaps": [
+        "No independently verified upstream tag ownership or tag-to-commit binding exists.",
+        "No fresh clean Cargo resolution, build, lifecycle-script review, or vulnerability review ran.",
+        "Cached compile fingerprints are historical supporting evidence, not current execution proof."
+      ],
+      "claims": {
+        "upstreamIdentityBound": false,
+        "installReceiptVerified": false,
+        "reproducibleBuildVerified": false,
+        "runtimeVerified": false,
+        "admitted": false,
+        "canInstall": false,
+        "canRun": false,
+        "canConnect": false
+      }
+    },
+    {
+      "id": "sqlx-existing",
+      "category": "DATABASE_CLIENT",
+      "catalogDisposition": "RECONCILE_EXISTING",
+      "status": "LOCAL_EVIDENCE_CAPTURED_NOT_ADMITTED",
+      "classification": "LOCKFILE_AND_CACHE_VERIFIED_NOT_UPSTREAM_BOUND",
+      "selectedRevision": "sqlx family 0.8.6",
+      "localIdentity": "Cargo.lock resolution plus exact locally cached crates.io archives",
+      "artifacts": [
+        {
+          "role": "sqlx-crate-archive",
+          "path": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sqlx-0.8.6.crate",
+          "canonicalPath": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sqlx-0.8.6.crate",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 190134,
+          "modeOctal": "644",
+          "sha256": "1fefb893899429669dcdd979aff487bd78f4064e5e7907e4269081e0ef7d97dc",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "sqlx-core-crate-archive",
+          "path": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sqlx-core-0.8.6.crate",
+          "canonicalPath": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sqlx-core-0.8.6.crate",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 118378,
+          "modeOctal": "644",
+          "sha256": "ee6798b1838b6a0f69c007c133b8df5866302197e404e8b6ee8ed3e3a5e68dc6",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "sqlx-macros-crate-archive",
+          "path": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sqlx-macros-0.8.6.crate",
+          "canonicalPath": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sqlx-macros-0.8.6.crate",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 6348,
+          "modeOctal": "644",
+          "sha256": "a2d452988ccaacfbf5e0bdbc348fb91d7c8af5bee192173ac3636b5fb6e6715d",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "sqlx-macros-core-crate-archive",
+          "path": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sqlx-macros-core-0.8.6.crate",
+          "canonicalPath": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sqlx-macros-core-0.8.6.crate",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 30587,
+          "modeOctal": "644",
+          "sha256": "19a9c1841124ac5a61741f96e1d9e2ec77424bf323962dd894bdb93f37d5219b",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "sqlx-postgres-crate-archive",
+          "path": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sqlx-postgres-0.8.6.crate",
+          "canonicalPath": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sqlx-postgres-0.8.6.crate",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 140616,
+          "modeOctal": "644",
+          "sha256": "db58fcd5a53cf07c184b154801ff91347e4c30d17a3562a635ff028ad5deda46",
+          "verification": "FULL_FILE_SHA256"
+        }
+      ],
+      "packageRecords": [
+        {
+          "name": "sqlx",
+          "version": "0.8.6",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "lockChecksum": "1fefb893899429669dcdd979aff487bd78f4064e5e7907e4269081e0ef7d97dc",
+          "cacheArchivePath": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sqlx-0.8.6.crate",
+          "cacheArchiveSha256": "1fefb893899429669dcdd979aff487bd78f4064e5e7907e4269081e0ef7d97dc"
+        },
+        {
+          "name": "sqlx-core",
+          "version": "0.8.6",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "lockChecksum": "ee6798b1838b6a0f69c007c133b8df5866302197e404e8b6ee8ed3e3a5e68dc6",
+          "cacheArchivePath": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sqlx-core-0.8.6.crate",
+          "cacheArchiveSha256": "ee6798b1838b6a0f69c007c133b8df5866302197e404e8b6ee8ed3e3a5e68dc6"
+        },
+        {
+          "name": "sqlx-macros",
+          "version": "0.8.6",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "lockChecksum": "a2d452988ccaacfbf5e0bdbc348fb91d7c8af5bee192173ac3636b5fb6e6715d",
+          "cacheArchivePath": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sqlx-macros-0.8.6.crate",
+          "cacheArchiveSha256": "a2d452988ccaacfbf5e0bdbc348fb91d7c8af5bee192173ac3636b5fb6e6715d"
+        },
+        {
+          "name": "sqlx-macros-core",
+          "version": "0.8.6",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "lockChecksum": "19a9c1841124ac5a61741f96e1d9e2ec77424bf323962dd894bdb93f37d5219b",
+          "cacheArchivePath": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sqlx-macros-core-0.8.6.crate",
+          "cacheArchiveSha256": "19a9c1841124ac5a61741f96e1d9e2ec77424bf323962dd894bdb93f37d5219b"
+        },
+        {
+          "name": "sqlx-postgres",
+          "version": "0.8.6",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "lockChecksum": "db58fcd5a53cf07c184b154801ff91347e4c30d17a3562a635ff028ad5deda46",
+          "cacheArchivePath": "/Users/sirinx/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sqlx-postgres-0.8.6.crate",
+          "cacheArchiveSha256": "db58fcd5a53cf07c184b154801ff91347e4c30d17a3562a635ff028ad5deda46"
+        }
+      ],
+      "observations": [
+        "Workspace SQLx declaration disables defaults and requests runtime-tokio, tls-rustls, postgres, uuid, json, migrate, and macros for sirinx-store.",
+        "Cached compile fingerprints reference sqlx-core, sqlx-macros, and sqlx-postgres rather than MySQL or SQLite.",
+        "Packaged 0.8.6 metadata reports MIT OR Apache-2.0, VCS SHA bab1b022bd56a64f9a08b46b36b97c5cff19d77e, and repository launchbadge/sqlx."
+      ],
+      "unresolvedGaps": [
+        "The parent catalog says transact-rs/sqlx while local package metadata says launchbadge/sqlx; current publisher ownership is unresolved.",
+        "No fresh clean Cargo resolution, build, lifecycle-script review, migration-behavior review, or vulnerability review ran.",
+        "The broad lock closure includes optional MySQL and SQLite packages but is not evidence those features are enabled."
+      ],
+      "claims": {
+        "upstreamIdentityBound": false,
+        "installReceiptVerified": false,
+        "reproducibleBuildVerified": false,
+        "runtimeVerified": false,
+        "admitted": false,
+        "canInstall": false,
+        "canRun": false,
+        "canConnect": false
+      }
+    },
+    {
+      "id": "qwen35-2b-local",
+      "category": "LOCAL_MODEL",
+      "catalogDisposition": "QUARANTINE_UNPINNED",
+      "status": "LOCAL_EVIDENCE_CAPTURED_NOT_ADMITTED",
+      "classification": "LOCAL_MANIFEST_BLOBS_VERIFIED_NOT_UPSTREAM_BOUND",
+      "selectedRevision": null,
+      "localIdentity": "Local Ollama manifest and four content-addressed blobs for mutable tag qwen3.5:2b",
+      "artifacts": [
+        {
+          "role": "ollama-manifest",
+          "path": "/Users/sirinx/.ollama/models/manifests/registry.ollama.ai/library/qwen3.5/2b",
+          "canonicalPath": "/Users/sirinx/.ollama/models/manifests/registry.ollama.ai/library/qwen3.5/2b",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 709,
+          "modeOctal": "644",
+          "sha256": "324d162be6ca5629ae4517c8710434d0bd2d665bc94dbad46e9af8fbf8a2f0df",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "ollama-config-blob",
+          "path": "/Users/sirinx/.ollama/models/blobs/sha256-ee043a99abe5e8317272712ed08ee2993af1f7930d69aefa3eba562cdc2822bd",
+          "canonicalPath": "/Users/sirinx/.ollama/models/blobs/sha256-ee043a99abe5e8317272712ed08ee2993af1f7930d69aefa3eba562cdc2822bd",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 473,
+          "modeOctal": "644",
+          "sha256": "ee043a99abe5e8317272712ed08ee2993af1f7930d69aefa3eba562cdc2822bd",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "ollama-model-blob",
+          "path": "/Users/sirinx/.ollama/models/blobs/sha256-b709d81508a078a686961de6ca07a953b895d9b286c46e17f00fb267f4f2d297",
+          "canonicalPath": "/Users/sirinx/.ollama/models/blobs/sha256-b709d81508a078a686961de6ca07a953b895d9b286c46e17f00fb267f4f2d297",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 2741180928,
+          "modeOctal": "644",
+          "sha256": "b709d81508a078a686961de6ca07a953b895d9b286c46e17f00fb267f4f2d297",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "ollama-license-blob",
+          "path": "/Users/sirinx/.ollama/models/blobs/sha256-9be69ef463066202c1b1bd299aaf42bad370a01ba4b40d293617859720776c17",
+          "canonicalPath": "/Users/sirinx/.ollama/models/blobs/sha256-9be69ef463066202c1b1bd299aaf42bad370a01ba4b40d293617859720776c17",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 11354,
+          "modeOctal": "644",
+          "sha256": "9be69ef463066202c1b1bd299aaf42bad370a01ba4b40d293617859720776c17",
+          "verification": "FULL_FILE_SHA256"
+        },
+        {
+          "role": "ollama-params-blob",
+          "path": "/Users/sirinx/.ollama/models/blobs/sha256-9371364b27a52acac9d87f88bd93c9db1174d8d6ec57f6888925cdc1788871ff",
+          "canonicalPath": "/Users/sirinx/.ollama/models/blobs/sha256-9371364b27a52acac9d87f88bd93c9db1174d8d6ec57f6888925cdc1788871ff",
+          "pathKind": "REGULAR_FILE",
+          "linkTarget": null,
+          "sizeBytes": 65,
+          "modeOctal": "644",
+          "sha256": "9371364b27a52acac9d87f88bd93c9db1174d8d6ec57f6888925cdc1788871ff",
+          "verification": "FULL_FILE_SHA256"
+        }
+      ],
+      "packageRecords": [],
+      "observations": [
+        "The local manifest binds four full-file-verified blobs and claims GGUF qwen35, 2.3B, Q8_0, renderer/parser qwen3.5, and Ollama 0.17.1.",
+        "Independent GGUF parsing reported version 3, 2274069824 parameters, context 262144, 728 tensors, 24 blocks, and vision metadata.",
+        "The license layer contains generic Apache-2.0 text with placeholder copyright fields."
+      ],
+      "unresolvedGaps": [
+        "The mutable local tag was not compared with a remote registry receipt under the no-network boundary.",
+        "No upstream model revision, creator identity, conversion recipe, tool version, signature, SBOM, or attestation is embedded.",
+        "The generic license layer does not bind Qwen or Alibaba identity to this model digest."
+      ],
+      "claims": {
+        "upstreamIdentityBound": false,
+        "installReceiptVerified": false,
+        "reproducibleBuildVerified": false,
+        "runtimeVerified": false,
+        "admitted": false,
+        "canInstall": false,
+        "canRun": false,
+        "canConnect": false
+      }
+    }
+  ],
+  "proofFlags": {
+    "protectedConfigRead": false,
+    "cliExecuted": false,
+    "cloned": false,
+    "installed": false,
+    "lifecycleScriptRan": false,
+    "modelDownloaded": false,
+    "modelInvoked": false,
+    "serviceStarted": false,
+    "mcpConnected": false,
+    "a2aLive": false,
+    "providerCalled": false,
+    "cloudflareMutated": false,
+    "messageSent": false,
+    "pushed": false,
+    "merged": false,
+    "deployed": false,
+    "productionReady": false
+  },
+  "stopRules": [
+    "Do not treat local file identity as upstream publisher or release identity.",
+    "Do not execute a component, start a service, invoke a model, connect MCP or A2A, or contact a provider from this packet.",
+    "Do not read protected Hermes configuration, env files, browser profiles, cookies, keychains, or raw tokens.",
+    "Do not install, replace, delete, quarantine-move, or repair any observed artifact without a separate exact ticket.",
+    "Stop at RECONCILIATION_PACKET_REVIEWED_NOT_ACTIVATED while resource admission remains below 15 GiB."
+  ]
+}

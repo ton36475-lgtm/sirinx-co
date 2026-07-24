@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "observedAt": "2026-07-20T04:03:31.757Z",
+  "mode": "read-only-local-surface-audit",
+  "agents": {
+    "claude-cowork": {
+      "surfaceObserved": true,
+      "installed": true,
+      "running": true,
+      "bundleId": "com.anthropic.claudefordesktop",
+      "version": "1.22209.3",
+      "usageLimitedInVisibleCodeSession": true,
+      "coworkConnectionIndicatorObserved": false,
+      "a2aHandshakeVerified": false,
+      "status": "runtime-surface-observed-handshake-unverified"
+    },
+    "kimi-code": {
+      "surfaceObserved": true,
+      "cliInstalled": true,
+      "cliVersion": "0.27.0",
+      "appInstalled": true,
+      "appRunning": false,
+      "bundleId": "com.moonshot.kimichat",
+      "appVersion": "3.1.2",
+      "acpStdioCapabilityAdvertised": true,
+      "acpServerStarted": false,
+      "a2aHandshakeVerified": false,
+      "status": "runtime-surface-observed-handshake-unverified"
+    },
+    "opencode": {
+      "surfaceObserved": true,
+      "cliInstalled": true,
+      "cliVersion": "1.18.3",
+      "existingProcessObserved": true,
+      "boundedWriteHandshakeVerified": true,
+      "persistentA2aConnectionVerified": false,
+      "evidencePath": "reports/runtime/opencode-handshake-20260720-001/HANDSHAKE.json",
+      "status": "bounded-write-handshake-observed"
+    }
+  },
+  "externalOutcomes": {
+    "explicitFreeModelInferenceCount": 1,
+    "telegramProviderCalled": false,
+    "telegramSent": false,
+    "mcpCalled": false,
+    "appStartedByAudit": false,
+    "secretAccess": false
+  }
+}

@@ -1,0 +1,337 @@
+{
+  "schemaVersion": "1.0-plan",
+  "status": "MIGRATION_0007_SEMANTICS_FROZEN_NOT_IMPLEMENTED",
+  "repository": {
+    "branch": "agent/b1-b2-command-center",
+    "headSha": "1f05814c3e9d173e525234d69b3ce7f2d1b01a57"
+  },
+  "migration": {
+    "filename": "0007_agent_runtime_effect_authority.sql",
+    "state": "DEFERRED",
+    "mode": "SINGLE_SHARED_ADDITIVE_AUTHORITY_KERNEL",
+    "filePresent": false,
+    "appliesDatabaseChanges": false
+  },
+  "sourcePins": {
+    "actionRegistry": {
+      "path": "config/agent-runtime/action-circuits.plan-only.v1.json",
+      "sha256": "b92c6152dbfa31d27a83e32f2bb567575ffabe75e558fbe7fb6776dbcdee4b01",
+      "schemaPath": "schemas/agent-runtime/action-circuit-registry.v1.schema.json",
+      "schemaSha256": "01f9a49f683b175613bc2bb0ff72225d17dc9811c005d7e1d1be7ceeb682b532",
+      "manifestDigest": "b2421996825817400d31f88757843225403ed2080541812c4db889e1ffe3cbb0"
+    },
+    "previousMigrations": [
+      {
+        "filename": "0005_agent_runtime_core.sql",
+        "path": "crates/sirinx-store/migrations/0005_agent_runtime_core.sql",
+        "sha256": "50f19a77ec448932236676c91858a558b60bfadfcb5629649efee02b10531051"
+      },
+      {
+        "filename": "0006_agent_runtime_runtime_access.sql",
+        "path": "crates/sirinx-store/migrations/0006_agent_runtime_runtime_access.sql",
+        "sha256": "22c17ea3fdca3675630ba0a18c127a63e822852ea0013241445a41a2494bc56b"
+      }
+    ]
+  },
+  "installation": {
+    "registryDefinitionRows": [
+      {
+        "actionKind": "INSTALL",
+        "circuitName": "install",
+        "effectProfile": "INSTALL",
+        "actionClass": "D",
+        "approvalSchemaVersion": "2.0",
+        "executorRole": "sirinx_agent_runtime_install_executor",
+        "circuitState": "HOLD",
+        "effectState": "PREPARED",
+        "enabled": false,
+        "executorAvailable": false,
+        "routeRegistered": false,
+        "version": 1
+      },
+      {
+        "actionKind": "RESOURCE_CLEANUP",
+        "circuitName": "resource_cleanup",
+        "effectProfile": "RESOURCE_CLEANUP",
+        "actionClass": "C",
+        "approvalSchemaVersion": "2.0",
+        "executorRole": "sirinx_agent_runtime_resource_cleanup_executor",
+        "circuitState": "HOLD",
+        "effectState": "PREPARED",
+        "enabled": false,
+        "executorAvailable": false,
+        "routeRegistered": false,
+        "version": 1
+      },
+      {
+        "actionKind": "CONNECTOR_ACTIVATION",
+        "circuitName": "connector_activation",
+        "effectProfile": "CONNECTOR_ACTIVATION",
+        "actionClass": "D",
+        "approvalSchemaVersion": "2.0",
+        "executorRole": "sirinx_agent_runtime_connector_activation_executor",
+        "circuitState": "HOLD",
+        "effectState": "PREPARED",
+        "enabled": false,
+        "executorAvailable": false,
+        "routeRegistered": false,
+        "version": 1
+      },
+      {
+        "actionKind": "PROVIDER_CALL",
+        "circuitName": "provider_call",
+        "effectProfile": "PROVIDER_CALL",
+        "actionClass": "D",
+        "approvalSchemaVersion": "2.0",
+        "executorRole": "sirinx_agent_runtime_provider_call_executor",
+        "circuitState": "HOLD",
+        "effectState": "PREPARED",
+        "enabled": false,
+        "executorAvailable": false,
+        "routeRegistered": false,
+        "version": 1
+      },
+      {
+        "actionKind": "QUEUE_MUTATION",
+        "circuitName": "queue_mutation",
+        "effectProfile": "QUEUE_MUTATION",
+        "actionClass": "D",
+        "approvalSchemaVersion": "2.0",
+        "executorRole": "sirinx_agent_runtime_queue_mutation_executor",
+        "circuitState": "HOLD",
+        "effectState": "PREPARED",
+        "enabled": false,
+        "executorAvailable": false,
+        "routeRegistered": false,
+        "version": 1
+      },
+      {
+        "actionKind": "A2A_EGRESS",
+        "circuitName": "a2a_egress",
+        "effectProfile": "A2A_EGRESS",
+        "actionClass": "D",
+        "approvalSchemaVersion": "2.0",
+        "executorRole": "sirinx_agent_runtime_a2a_egress_executor",
+        "circuitState": "HOLD",
+        "effectState": "PREPARED",
+        "enabled": false,
+        "executorAvailable": false,
+        "routeRegistered": false,
+        "version": 1
+      },
+      {
+        "actionKind": "LIVE_SEND",
+        "circuitName": "telegram_send",
+        "effectProfile": "TELEGRAM",
+        "actionClass": "D",
+        "approvalSchemaVersion": "2.0",
+        "executorRole": "sirinx_agent_runtime_telegram_send_executor",
+        "circuitState": "HOLD",
+        "effectState": "PREPARED",
+        "enabled": false,
+        "executorAvailable": false,
+        "routeRegistered": false,
+        "version": 1
+      },
+      {
+        "actionKind": "LIVE_SEND",
+        "circuitName": "customer_messaging",
+        "effectProfile": "CUSTOMER_MESSAGING",
+        "actionClass": "D",
+        "approvalSchemaVersion": "2.0",
+        "executorRole": "sirinx_agent_runtime_customer_messaging_executor",
+        "circuitState": "HOLD",
+        "effectState": "PREPARED",
+        "enabled": false,
+        "executorAvailable": false,
+        "routeRegistered": false,
+        "version": 1
+      },
+      {
+        "actionKind": "PUSH",
+        "circuitName": "push",
+        "effectProfile": "PUSH",
+        "actionClass": "D",
+        "approvalSchemaVersion": "2.0",
+        "executorRole": "sirinx_agent_runtime_push_executor",
+        "circuitState": "HOLD",
+        "effectState": "PREPARED",
+        "enabled": false,
+        "executorAvailable": false,
+        "routeRegistered": false,
+        "version": 1
+      },
+      {
+        "actionKind": "MERGE",
+        "circuitName": "merge",
+        "effectProfile": "MERGE",
+        "actionClass": "D",
+        "approvalSchemaVersion": "2.0",
+        "executorRole": "sirinx_agent_runtime_merge_executor",
+        "circuitState": "HOLD",
+        "effectState": "PREPARED",
+        "enabled": false,
+        "executorAvailable": false,
+        "routeRegistered": false,
+        "version": 1
+      },
+      {
+        "actionKind": "PRODUCTION_MIGRATION",
+        "circuitName": "production_migration",
+        "effectProfile": "PRODUCTION_MIGRATION",
+        "actionClass": "D",
+        "approvalSchemaVersion": "2.0",
+        "executorRole": "sirinx_agent_runtime_production_migration_executor",
+        "circuitState": "HOLD",
+        "effectState": "PREPARED",
+        "enabled": false,
+        "executorAvailable": false,
+        "routeRegistered": false,
+        "version": 1
+      },
+      {
+        "actionKind": "CLOUDFLARE_MUTATION",
+        "circuitName": "cloudflare_mutation",
+        "effectProfile": "CLOUDFLARE_MUTATION",
+        "actionClass": "D",
+        "approvalSchemaVersion": "2.0",
+        "executorRole": "sirinx_agent_runtime_cloudflare_mutation_executor",
+        "circuitState": "HOLD",
+        "effectState": "PREPARED",
+        "enabled": false,
+        "executorAvailable": false,
+        "routeRegistered": false,
+        "version": 1
+      },
+      {
+        "actionKind": "DEPLOY",
+        "circuitName": "deploy",
+        "effectProfile": "DEPLOY",
+        "actionClass": "D",
+        "approvalSchemaVersion": "2.0",
+        "executorRole": "sirinx_agent_runtime_deploy_executor",
+        "circuitState": "HOLD",
+        "effectState": "PREPARED",
+        "enabled": false,
+        "executorAvailable": false,
+        "routeRegistered": false,
+        "version": 1
+      }
+    ],
+    "circuitRows": [
+      { "actionKind": "INSTALL", "circuitName": "install", "state": "HOLD", "activeGrantId": null, "activeActionDigest": null, "openedByPrincipalId": null, "openedAt": null, "expiresAt": null, "version": 1 },
+      { "actionKind": "RESOURCE_CLEANUP", "circuitName": "resource_cleanup", "state": "HOLD", "activeGrantId": null, "activeActionDigest": null, "openedByPrincipalId": null, "openedAt": null, "expiresAt": null, "version": 1 },
+      { "actionKind": "CONNECTOR_ACTIVATION", "circuitName": "connector_activation", "state": "HOLD", "activeGrantId": null, "activeActionDigest": null, "openedByPrincipalId": null, "openedAt": null, "expiresAt": null, "version": 1 },
+      { "actionKind": "PROVIDER_CALL", "circuitName": "provider_call", "state": "HOLD", "activeGrantId": null, "activeActionDigest": null, "openedByPrincipalId": null, "openedAt": null, "expiresAt": null, "version": 1 },
+      { "actionKind": "QUEUE_MUTATION", "circuitName": "queue_mutation", "state": "HOLD", "activeGrantId": null, "activeActionDigest": null, "openedByPrincipalId": null, "openedAt": null, "expiresAt": null, "version": 1 },
+      { "actionKind": "A2A_EGRESS", "circuitName": "a2a_egress", "state": "HOLD", "activeGrantId": null, "activeActionDigest": null, "openedByPrincipalId": null, "openedAt": null, "expiresAt": null, "version": 1 },
+      { "actionKind": "LIVE_SEND", "circuitName": "telegram_send", "state": "HOLD", "activeGrantId": null, "activeActionDigest": null, "openedByPrincipalId": null, "openedAt": null, "expiresAt": null, "version": 1 },
+      { "actionKind": "LIVE_SEND", "circuitName": "customer_messaging", "state": "HOLD", "activeGrantId": null, "activeActionDigest": null, "openedByPrincipalId": null, "openedAt": null, "expiresAt": null, "version": 1 },
+      { "actionKind": "PUSH", "circuitName": "push", "state": "HOLD", "activeGrantId": null, "activeActionDigest": null, "openedByPrincipalId": null, "openedAt": null, "expiresAt": null, "version": 1 },
+      { "actionKind": "MERGE", "circuitName": "merge", "state": "HOLD", "activeGrantId": null, "activeActionDigest": null, "openedByPrincipalId": null, "openedAt": null, "expiresAt": null, "version": 1 },
+      { "actionKind": "PRODUCTION_MIGRATION", "circuitName": "production_migration", "state": "HOLD", "activeGrantId": null, "activeActionDigest": null, "openedByPrincipalId": null, "openedAt": null, "expiresAt": null, "version": 1 },
+      { "actionKind": "CLOUDFLARE_MUTATION", "circuitName": "cloudflare_mutation", "state": "HOLD", "activeGrantId": null, "activeActionDigest": null, "openedByPrincipalId": null, "openedAt": null, "expiresAt": null, "version": 1 },
+      { "actionKind": "DEPLOY", "circuitName": "deploy", "state": "HOLD", "activeGrantId": null, "activeActionDigest": null, "openedByPrincipalId": null, "openedAt": null, "expiresAt": null, "version": 1 }
+    ],
+    "resourceCleanup": {
+      "membershipCount": 1,
+      "separateLedger": false
+    }
+  },
+  "architecture": {
+    "reuse0005": [
+      "agent_runtime_action_tickets",
+      "agent_runtime_approval_grants",
+      "agent_runtime_outbox"
+    ],
+    "genericV2Binding": {
+      "bindingKind": "GENERIC_V2_ACTION_INTENT_SCOPE_BINDING",
+      "actionIntentBound": true,
+      "scopeBound": true,
+      "cleanupOnly": false
+    },
+    "cleanupOnlyLedgerAdded": false,
+    "perActionClosedArtifactsRemainSeparate": true,
+    "preserve0006GenericAppDenial": true,
+    "runtimeInventoryPolicy": "VERSION_AWARE_EXACT_INVENTORY_AND_REFUSAL"
+  },
+  "bootstrapAuthority": {
+    "existingProcess": "OUT_OF_BAND_HUMAN_TICKETED_PRODUCTION_MIGRATION_RELEASE",
+    "requiredBindings": [
+      "candidateSha",
+      "candidateChecksum",
+      "target",
+      "baseline",
+      "rollback",
+      "forwardRecovery",
+      "operatorIdentity",
+      "timeWindow",
+      "prerequisiteRoleInventory",
+      "prerequisiteRoleSafety",
+      "disposableEmptyStateProofReceipt",
+      "disposablePriorStateProofReceipt",
+      "disposableRlsProofReceipt",
+      "disposableRaceProofReceipt",
+      "disposableCrashProofReceipt",
+      "disposableRestoreProofReceipt",
+      "independentReviewReceipt"
+    ],
+    "kernelCanAuthorizeOwnInstall": false,
+    "bindingComplete": false
+  },
+  "prerequisiteCapabilityRoles": {
+    "provisioning": "SEPARATELY_TICKETED_OUT_OF_BAND",
+    "noLoginRequired": true,
+    "leastPrivilegeRequired": true,
+    "migrationAbortsIfAbsent": true,
+    "migrationAbortsIfUnsafe": true,
+    "credentialValuesIncluded": false,
+    "verified": false
+  },
+  "seedCounts": {
+    "registryDefinitionRows": 13,
+    "circuitRows": 13,
+    "tickets": 0,
+    "grants": 0,
+    "attestations": 0,
+    "outbox": 0,
+    "admissions": 0,
+    "openCircuits": 0,
+    "loginRoles": 0,
+    "executorRegistrations": 0,
+    "routes": 0
+  },
+  "laterCanary": {
+    "eligibleAction": "RESOURCE_CLEANUP",
+    "separateExactTicketRequired": true,
+    "separateExactGrantRequired": true,
+    "separateExactEvidenceRequired": true,
+    "disposablePostgresProofRequired": true,
+    "circuitOpenedByEligibility": false,
+    "executorRegisteredByEligibility": false,
+    "eligibleNow": false
+  },
+  "blockers": [
+    "resource_admission_missing",
+    "disposable_postgres_proof_missing",
+    "bootstrap_ticket_missing",
+    "bootstrap_roles_unverified",
+    "migration_candidate_absent",
+    "independent_review_missing",
+    "runtime_inventory_update_missing"
+  ],
+  "authority": {
+    "canApplyMigration": false,
+    "canIssueGrant": false,
+    "canOpenCircuit": false,
+    "canClaimEffect": false,
+    "canExecute": false
+  },
+  "effects": {
+    "databaseMutationPerformed": false,
+    "rolesCreated": false,
+    "routesRegistered": false,
+    "externalEffects": false
+  },
+  "packetDigest": "ccb4a5afc0a2ee33114859dd777e4ebcd758f03abf92a103f075405c9324fcea"
+}

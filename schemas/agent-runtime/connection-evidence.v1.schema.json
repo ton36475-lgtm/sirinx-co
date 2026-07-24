@@ -1,0 +1,265 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/connection-evidence.v1.schema.json",
+  "title": "ConnectionEvidenceV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "evidenceId",
+    "connectionId",
+    "transport",
+    "peer",
+    "component",
+    "endpointOrigin",
+    "agentCard",
+    "protocol",
+    "capabilities",
+    "dataClassCeiling",
+    "collector",
+    "observedAt",
+    "expiresAt",
+    "bindings",
+    "evidenceDigest"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "status": { "const": "COLLECTED_NOT_ADMITTED" },
+    "evidenceId": { "type": "string", "pattern": "^CEV-[A-Za-z0-9._-]+$" },
+    "connectionId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,63}$" },
+    "transport": {
+      "enum": [
+        "streamable-http",
+        "cloud-connector",
+        "stdio",
+        "telegram-bot-api",
+        "line-webhook",
+        "a2a-https",
+        "none"
+      ]
+    },
+    "peer": { "$ref": "#/$defs/peer" },
+    "component": { "$ref": "#/$defs/component" },
+    "endpointOrigin": {
+      "anyOf": [
+        { "type": "string", "format": "uri", "maxLength": 2048 },
+        { "type": "null" }
+      ]
+    },
+    "agentCard": {
+      "anyOf": [
+        { "$ref": "#/$defs/agentCard" },
+        { "type": "null" }
+      ]
+    },
+    "protocol": { "$ref": "#/$defs/protocol" },
+    "capabilities": { "$ref": "#/$defs/capabilities" },
+    "dataClassCeiling": { "$ref": "#/$defs/dataClassCeiling" },
+    "collector": { "$ref": "#/$defs/collector" },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "bindings": { "$ref": "#/$defs/bindings" },
+    "evidenceDigest": { "$ref": "#/$defs/sha256" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "type": "object",
+        "required": ["transport"],
+        "properties": { "transport": { "const": "stdio" } }
+      },
+      "then": {
+        "type": "object",
+        "properties": { "endpointOrigin": { "const": null } }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "required": ["peer"],
+        "properties": {
+          "peer": {
+            "type": "object",
+            "required": ["role"],
+            "properties": { "role": { "const": "A2A_PEER" } }
+          }
+        }
+      },
+      "then": {
+        "type": "object",
+        "properties": { "agentCard": { "$ref": "#/$defs/agentCard" } }
+      },
+      "else": {
+        "type": "object",
+        "properties": { "agentCard": { "type": "null" } }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "immutableRevision": {
+      "type": "string",
+      "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"
+    },
+    "peer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["peerId", "principalId", "role", "identityDigest"],
+      "properties": {
+        "peerId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,63}$" },
+        "principalId": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "role": {
+          "enum": [
+            "REMOTE_MCP_SERVER",
+            "MCP_PORTAL",
+            "MCP_CLIENT",
+            "LOCAL_MCP_SERVER",
+            "MESSAGING_TRANSPORT",
+            "A2A_PEER"
+          ]
+        },
+        "identityDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "sourceRevision",
+        "artifactDigest",
+        "spdxLicenseExpression",
+        "licenseDigest",
+        "provenanceDigest",
+        "identityDigest"
+      ],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$",
+          "maxLength": 128
+        },
+        "sourceRevision": { "$ref": "#/$defs/immutableRevision" },
+        "artifactDigest": { "$ref": "#/$defs/sha256" },
+        "spdxLicenseExpression": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9 .()+-]{0,255}$"
+        },
+        "licenseDigest": { "$ref": "#/$defs/sha256" },
+        "provenanceDigest": { "$ref": "#/$defs/sha256" },
+        "identityDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "agentCard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "peerId",
+        "endpointOrigin",
+        "protocolDigest",
+        "capabilityDigest",
+        "dataClassCeilingDigest",
+        "cardDigest"
+      ],
+      "properties": {
+        "peerId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,63}$" },
+        "endpointOrigin": {
+          "anyOf": [
+            { "type": "string", "format": "uri", "maxLength": 2048 },
+            { "type": "null" }
+          ]
+        },
+        "protocolDigest": { "$ref": "#/$defs/sha256" },
+        "capabilityDigest": { "$ref": "#/$defs/sha256" },
+        "dataClassCeilingDigest": { "$ref": "#/$defs/sha256" },
+        "cardDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "digest"],
+      "properties": {
+        "name": { "enum": ["MCP", "A2A", "TELEGRAM_BOT_API", "LINE_MESSAGING_API"] },
+        "version": {
+          "type": "string",
+          "pattern": "^(?:[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?|[0-9]{4}-[0-9]{2}-[0-9]{2})$",
+          "maxLength": 128
+        },
+        "digest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["declared", "digest"],
+      "properties": {
+        "declared": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 256,
+          "items": { "type": "string", "minLength": 1, "maxLength": 128 }
+        },
+        "digest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "dataClassCeiling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "digest"],
+      "properties": {
+        "value": { "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"] },
+        "digest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "collector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "collectorId",
+        "principalId",
+        "revision",
+        "binaryDigest",
+        "attestationDigest",
+        "identityDigest"
+      ],
+      "properties": {
+        "collectorId": { "type": "string", "pattern": "^COLLECTOR-[A-Za-z0-9._-]+$" },
+        "principalId": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "revision": { "$ref": "#/$defs/immutableRevision" },
+        "binaryDigest": { "$ref": "#/$defs/sha256" },
+        "attestationDigest": { "$ref": "#/$defs/sha256" },
+        "identityDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "planDigest",
+        "taskId",
+        "taskDigest",
+        "runId",
+        "runDigest",
+        "leaseId",
+        "leaseDigest",
+        "receiptId",
+        "receiptDigest"
+      ],
+      "properties": {
+        "planDigest": { "$ref": "#/$defs/sha256" },
+        "taskId": { "type": "string", "pattern": "^TASK-[A-Za-z0-9._-]+$" },
+        "taskDigest": { "$ref": "#/$defs/sha256" },
+        "runId": { "type": "string", "pattern": "^RUN-[A-Za-z0-9._-]+$" },
+        "runDigest": { "$ref": "#/$defs/sha256" },
+        "leaseId": { "type": "string", "pattern": "^LEASE-[A-Za-z0-9._-]+$" },
+        "leaseDigest": { "$ref": "#/$defs/sha256" },
+        "receiptId": { "type": "string", "pattern": "^RECEIPT-[A-Za-z0-9._-]+$" },
+        "receiptDigest": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/agent-runtime/durable-authority-unavailable.v1.schema.json",
+  "title": "SIRINX durable authority unavailable refusal v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "httpStatus",
+    "status",
+    "requiredAuthorityProfile",
+    "authoritySource",
+    "manifestDigest",
+    "authorized",
+    "executed",
+    "providerCalled",
+    "externalWrites",
+    "claimCreated",
+    "peerRegistered",
+    "routeSelected",
+    "queueMutated",
+    "messageSent",
+    "blockers"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "httpStatus": { "const": 503 },
+    "status": { "const": "DURABLE_AUTHORITY_UNAVAILABLE" },
+    "requiredAuthorityProfile": { "const": "effect-authority-0007" },
+    "authoritySource": { "type": "null" },
+    "manifestDigest": {
+      "const": "b2421996825817400d31f88757843225403ed2080541812c4db889e1ffe3cbb0"
+    },
+    "authorized": { "const": false },
+    "executed": { "const": false },
+    "providerCalled": { "const": false },
+    "externalWrites": { "const": false },
+    "claimCreated": { "const": false },
+    "peerRegistered": { "const": false },
+    "routeSelected": { "const": false },
+    "queueMutated": { "const": false },
+    "messageSent": { "const": false },
+    "blockers": {
+      "type": "array",
+      "prefixItems": [
+        { "const": "migration_0007_unavailable" },
+        { "const": "durable_authority_store_unavailable" },
+        { "const": "attested_human_authority_unavailable" },
+        { "const": "authoritative_database_clock_unavailable" },
+        { "const": "single_use_replay_ledger_unavailable" }
+      ],
+      "items": false,
+      "minItems": 5,
+      "maxItems": 5
+    }
+  }
+}

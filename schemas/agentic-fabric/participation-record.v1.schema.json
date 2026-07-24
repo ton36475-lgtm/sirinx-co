@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.dev/schemas/agentic-fabric/participation-record.v1.schema.json",
+  "title": "ParticipationRecord",
+  "type": "object",
+  "required": ["schema_version", "participation_id", "agent_id", "lane", "lease_id", "mode", "manifest_ref", "started_at", "state"],
+  "properties": {
+    "schema_version": {"const": "agentic-fabric.participation-record.v1"},
+    "participation_id": {"type": "string", "pattern": "^[0-9a-f-]{36}$"},
+    "agent_id": {"type": "string", "minLength": 1},
+    "lane": {"enum": ["WRITER", "VERIFIER", "INTEGRATION", "INACTIVE"]},
+    "lease_id": {"type": "string", "pattern": "^[0-9a-fA-F-]{36}$"},
+    "lease_nonce": {"type": "string", "minLength": 8},
+    "mode": {"enum": ["DRY_RUN", "BOUND", "LIVE"]},
+    "manifest_ref": {"type": "string", "format": "uri-reference"},
+    "started_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "state": {"enum": ["ACTIVE", "EXPIRED", "REVOKED", "FAILED"]}
+  },
+  "additionalProperties": false
+}

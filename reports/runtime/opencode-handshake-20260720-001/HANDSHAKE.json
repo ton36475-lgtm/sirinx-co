@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "jobId": "OPS-A2A-OPENCODE-20260720-001",
+  "agentId": "opencode",
+  "cliVersion": "1.18.3",
+  "model": "opencode/deepseek-v4-flash-free",
+  "observedAt": "2026-07-20T04:03:31.757Z",
+  "processExitCode": 0,
+  "providerCall": true,
+  "reportedCost": 0,
+  "writeObserved": true,
+  "writeScope": [
+    "RESULT.md"
+  ],
+  "jobSha256": "d010daaec868130c4e1af1bf3317a11278ad3ed11188fb72b22c3b1e06661bea",
+  "resultSha256": "ff2079bf169bc0394ce7abd9e96dbae3220f90566f259f140ed6f705e58f4d4e",
+  "omnirouteEvidence": {
+    "source": "opencode-bounded-write-receipt",
+    "observedAgentIds": [
+      "opencode"
+    ],
+    "laneId": "codex-coding",
+    "laneStatus": "runtime-partially-observed",
+    "handshakeStatus": "omniroute-handshake-partial-evidence",
+    "handshakeComplete": false,
+    "persistentConnectionVerified": false,
+    "routeActivityVerified": false
+  },
+  "externalOutcomes": {
+    "telegramProviderCalled": false,
+    "telegramSent": false,
+    "mcpCalled": false,
+    "sessionShared": false,
+    "gitOperation": false,
+    "deploy": false
+  }
+}

@@ -18,7 +18,9 @@ flowchart LR
         W[sirinx-web :8080]
         K[sirinx-control :8711]
         D[dev-dashboard :8710]
-        N[dev-control-api Node long-tail]
+        N[dev-control-api Node long-tail :8790]
+        T[Telegram command bot :8791]
+        H[Hermes A2A evidence :9000]
     end
     subgraph Data [Supabase Postgres]
         DB[(web_leads / web_analytics_events / web_pending_work / web_control_gates / web_failure_events / web_lessons)]
@@ -29,6 +31,9 @@ flowchart LR
     W --> DB
     K --> DB
     D --> N
+    N --> K
+    N -. read-only evidence .-> H
+    N --> T
     DB -- pg_notify --> K
 ```
 
@@ -76,6 +81,12 @@ and as process rules (`AGENT_TEAM_PLAN.md`).
 
 ## 4. A2A mesh + OmniRoute
 
+The Node evidence plane currently registers 15 unique agent identities across
+10 configured OmniRoute lanes and 23 static routes. Claude Cowork and Kimi
+Code have dedicated lanes. Desktop/CLI presence is a separate surface signal
+and cannot complete a handshake; routes stay inactive until runtime identity
+and route evidence are supplied. Kimi Code ACP is not treated as MCP.
+
 Every node runs `sirinx-control` and publishes an agent card whose
 capabilities auto-load from its installed skills (`.claude/skills/` →
 `skill:<name>` tags).
@@ -103,6 +114,8 @@ sequenceDiagram
 | Recovery bounds | safe failure kinds, structured lessons, capped retry/backoff | `sirinx-core` + `sirinx-store` + `sirinx-autoloop` |
 | Layer discipline | no layer skipping, enforced at dispatch | `sirinx-agents` |
 | AuthN | bearer token on control `/api/*` | `sirinx-control` |
+| Telegram admission | fixed destination + Bearer + idempotency + fresh Postgres gate read | Node/Telegram gateways |
+| Runtime truth | configured, observed, and activated reported separately | A2A OmniRoute / CenterBrain |
 | Data | RLS on all tables, no public policies | Supabase |
 | Consent | analytics allowlist + consent flag | `sirinx-core` |
 | Process | Human ตัดสินใจสุดท้าย | `GO_LIVE_GATE_CHECKLIST.md` |

@@ -1,0 +1,454 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/effect-authority-migration-semantics.v1.schema.json",
+  "title": "EffectAuthorityMigrationSemanticsV1PlanContract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "repository",
+    "migration",
+    "sourcePins",
+    "installation",
+    "architecture",
+    "bootstrapAuthority",
+    "prerequisiteCapabilityRoles",
+    "seedCounts",
+    "laterCanary",
+    "blockers",
+    "authority",
+    "effects",
+    "packetDigest"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0-plan" },
+    "status": { "const": "MIGRATION_0007_SEMANTICS_FROZEN_NOT_IMPLEMENTED" },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["branch", "headSha"],
+      "properties": {
+        "branch": { "const": "agent/b1-b2-command-center" },
+        "headSha": { "const": "1f05814c3e9d173e525234d69b3ce7f2d1b01a57" }
+      }
+    },
+    "migration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["filename", "state", "mode", "filePresent", "appliesDatabaseChanges"],
+      "properties": {
+        "filename": { "const": "0007_agent_runtime_effect_authority.sql" },
+        "state": { "const": "DEFERRED" },
+        "mode": { "const": "SINGLE_SHARED_ADDITIVE_AUTHORITY_KERNEL" },
+        "filePresent": { "const": false },
+        "appliesDatabaseChanges": { "const": false }
+      }
+    },
+    "sourcePins": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actionRegistry", "previousMigrations"],
+      "properties": {
+        "actionRegistry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256", "schemaPath", "schemaSha256", "manifestDigest"],
+          "properties": {
+            "path": { "const": "config/agent-runtime/action-circuits.plan-only.v1.json" },
+            "sha256": { "const": "b92c6152dbfa31d27a83e32f2bb567575ffabe75e558fbe7fb6776dbcdee4b01" },
+            "schemaPath": { "const": "schemas/agent-runtime/action-circuit-registry.v1.schema.json" },
+            "schemaSha256": { "const": "01f9a49f683b175613bc2bb0ff72225d17dc9811c005d7e1d1be7ceeb682b532" },
+            "manifestDigest": { "const": "b2421996825817400d31f88757843225403ed2080541812c4db889e1ffe3cbb0" }
+          }
+        },
+        "previousMigrations": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "prefixItems": [
+            {
+              "allOf": [
+                { "$ref": "#/$defs/sourceMigration" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "filename": { "const": "0005_agent_runtime_core.sql" },
+                    "path": { "const": "crates/sirinx-store/migrations/0005_agent_runtime_core.sql" },
+                    "sha256": { "const": "50f19a77ec448932236676c91858a558b60bfadfcb5629649efee02b10531051" }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                { "$ref": "#/$defs/sourceMigration" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "filename": { "const": "0006_agent_runtime_runtime_access.sql" },
+                    "path": { "const": "crates/sirinx-store/migrations/0006_agent_runtime_runtime_access.sql" },
+                    "sha256": { "const": "22c17ea3fdca3675630ba0a18c127a63e822852ea0013241445a41a2494bc56b" }
+                  }
+                }
+              ]
+            }
+          ],
+          "items": false
+        }
+      }
+    },
+    "installation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["registryDefinitionRows", "circuitRows", "resourceCleanup"],
+      "properties": {
+        "registryDefinitionRows": {
+          "type": "array",
+          "minItems": 13,
+          "maxItems": 13,
+          "uniqueItems": true,
+          "prefixItems": [
+            { "allOf": [{ "$ref": "#/$defs/registryDefinition" }, { "$ref": "#/$defs/installDefinition" }] },
+            { "allOf": [{ "$ref": "#/$defs/registryDefinition" }, { "$ref": "#/$defs/cleanupDefinition" }] },
+            { "allOf": [{ "$ref": "#/$defs/registryDefinition" }, { "$ref": "#/$defs/connectorDefinition" }] },
+            { "allOf": [{ "$ref": "#/$defs/registryDefinition" }, { "$ref": "#/$defs/providerDefinition" }] },
+            { "allOf": [{ "$ref": "#/$defs/registryDefinition" }, { "$ref": "#/$defs/queueDefinition" }] },
+            { "allOf": [{ "$ref": "#/$defs/registryDefinition" }, { "$ref": "#/$defs/a2aDefinition" }] },
+            { "allOf": [{ "$ref": "#/$defs/registryDefinition" }, { "$ref": "#/$defs/telegramDefinition" }] },
+            { "allOf": [{ "$ref": "#/$defs/registryDefinition" }, { "$ref": "#/$defs/customerDefinition" }] },
+            { "allOf": [{ "$ref": "#/$defs/registryDefinition" }, { "$ref": "#/$defs/pushDefinition" }] },
+            { "allOf": [{ "$ref": "#/$defs/registryDefinition" }, { "$ref": "#/$defs/mergeDefinition" }] },
+            { "allOf": [{ "$ref": "#/$defs/registryDefinition" }, { "$ref": "#/$defs/productionMigrationDefinition" }] },
+            { "allOf": [{ "$ref": "#/$defs/registryDefinition" }, { "$ref": "#/$defs/cloudflareDefinition" }] },
+            { "allOf": [{ "$ref": "#/$defs/registryDefinition" }, { "$ref": "#/$defs/deployDefinition" }] }
+          ],
+          "items": false
+        },
+        "circuitRows": {
+          "type": "array",
+          "minItems": 13,
+          "maxItems": 13,
+          "uniqueItems": true,
+          "prefixItems": [
+            { "allOf": [{ "$ref": "#/$defs/circuitRow" }, { "$ref": "#/$defs/installCircuit" }] },
+            { "allOf": [{ "$ref": "#/$defs/circuitRow" }, { "$ref": "#/$defs/cleanupCircuit" }] },
+            { "allOf": [{ "$ref": "#/$defs/circuitRow" }, { "$ref": "#/$defs/connectorCircuit" }] },
+            { "allOf": [{ "$ref": "#/$defs/circuitRow" }, { "$ref": "#/$defs/providerCircuit" }] },
+            { "allOf": [{ "$ref": "#/$defs/circuitRow" }, { "$ref": "#/$defs/queueCircuit" }] },
+            { "allOf": [{ "$ref": "#/$defs/circuitRow" }, { "$ref": "#/$defs/a2aCircuit" }] },
+            { "allOf": [{ "$ref": "#/$defs/circuitRow" }, { "$ref": "#/$defs/telegramCircuit" }] },
+            { "allOf": [{ "$ref": "#/$defs/circuitRow" }, { "$ref": "#/$defs/customerCircuit" }] },
+            { "allOf": [{ "$ref": "#/$defs/circuitRow" }, { "$ref": "#/$defs/pushCircuit" }] },
+            { "allOf": [{ "$ref": "#/$defs/circuitRow" }, { "$ref": "#/$defs/mergeCircuit" }] },
+            { "allOf": [{ "$ref": "#/$defs/circuitRow" }, { "$ref": "#/$defs/productionMigrationCircuit" }] },
+            { "allOf": [{ "$ref": "#/$defs/circuitRow" }, { "$ref": "#/$defs/cloudflareCircuit" }] },
+            { "allOf": [{ "$ref": "#/$defs/circuitRow" }, { "$ref": "#/$defs/deployCircuit" }] }
+          ],
+          "items": false
+        },
+        "resourceCleanup": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["membershipCount", "separateLedger"],
+          "properties": {
+            "membershipCount": { "const": 1 },
+            "separateLedger": { "const": false }
+          }
+        }
+      }
+    },
+    "architecture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reuse0005",
+        "genericV2Binding",
+        "cleanupOnlyLedgerAdded",
+        "perActionClosedArtifactsRemainSeparate",
+        "preserve0006GenericAppDenial",
+        "runtimeInventoryPolicy"
+      ],
+      "properties": {
+        "reuse0005": {
+          "const": [
+            "agent_runtime_action_tickets",
+            "agent_runtime_approval_grants",
+            "agent_runtime_outbox"
+          ]
+        },
+        "genericV2Binding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["bindingKind", "actionIntentBound", "scopeBound", "cleanupOnly"],
+          "properties": {
+            "bindingKind": { "const": "GENERIC_V2_ACTION_INTENT_SCOPE_BINDING" },
+            "actionIntentBound": { "const": true },
+            "scopeBound": { "const": true },
+            "cleanupOnly": { "const": false }
+          }
+        },
+        "cleanupOnlyLedgerAdded": { "const": false },
+        "perActionClosedArtifactsRemainSeparate": { "const": true },
+        "preserve0006GenericAppDenial": { "const": true },
+        "runtimeInventoryPolicy": { "const": "VERSION_AWARE_EXACT_INVENTORY_AND_REFUSAL" }
+      }
+    },
+    "bootstrapAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["existingProcess", "requiredBindings", "kernelCanAuthorizeOwnInstall", "bindingComplete"],
+      "properties": {
+        "existingProcess": { "const": "OUT_OF_BAND_HUMAN_TICKETED_PRODUCTION_MIGRATION_RELEASE" },
+        "requiredBindings": {
+          "const": [
+            "candidateSha",
+            "candidateChecksum",
+            "target",
+            "baseline",
+            "rollback",
+            "forwardRecovery",
+            "operatorIdentity",
+            "timeWindow",
+            "prerequisiteRoleInventory",
+            "prerequisiteRoleSafety",
+            "disposableEmptyStateProofReceipt",
+            "disposablePriorStateProofReceipt",
+            "disposableRlsProofReceipt",
+            "disposableRaceProofReceipt",
+            "disposableCrashProofReceipt",
+            "disposableRestoreProofReceipt",
+            "independentReviewReceipt"
+          ]
+        },
+        "kernelCanAuthorizeOwnInstall": { "const": false },
+        "bindingComplete": { "const": false }
+      }
+    },
+    "prerequisiteCapabilityRoles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provisioning",
+        "noLoginRequired",
+        "leastPrivilegeRequired",
+        "migrationAbortsIfAbsent",
+        "migrationAbortsIfUnsafe",
+        "credentialValuesIncluded",
+        "verified"
+      ],
+      "properties": {
+        "provisioning": { "const": "SEPARATELY_TICKETED_OUT_OF_BAND" },
+        "noLoginRequired": { "const": true },
+        "leastPrivilegeRequired": { "const": true },
+        "migrationAbortsIfAbsent": { "const": true },
+        "migrationAbortsIfUnsafe": { "const": true },
+        "credentialValuesIncluded": { "const": false },
+        "verified": { "const": false }
+      }
+    },
+    "seedCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registryDefinitionRows",
+        "circuitRows",
+        "tickets",
+        "grants",
+        "attestations",
+        "outbox",
+        "admissions",
+        "openCircuits",
+        "loginRoles",
+        "executorRegistrations",
+        "routes"
+      ],
+      "properties": {
+        "registryDefinitionRows": { "const": 13 },
+        "circuitRows": { "const": 13 },
+        "tickets": { "const": 0 },
+        "grants": { "const": 0 },
+        "attestations": { "const": 0 },
+        "outbox": { "const": 0 },
+        "admissions": { "const": 0 },
+        "openCircuits": { "const": 0 },
+        "loginRoles": { "const": 0 },
+        "executorRegistrations": { "const": 0 },
+        "routes": { "const": 0 }
+      }
+    },
+    "laterCanary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eligibleAction",
+        "separateExactTicketRequired",
+        "separateExactGrantRequired",
+        "separateExactEvidenceRequired",
+        "disposablePostgresProofRequired",
+        "circuitOpenedByEligibility",
+        "executorRegisteredByEligibility",
+        "eligibleNow"
+      ],
+      "properties": {
+        "eligibleAction": { "const": "RESOURCE_CLEANUP" },
+        "separateExactTicketRequired": { "const": true },
+        "separateExactGrantRequired": { "const": true },
+        "separateExactEvidenceRequired": { "const": true },
+        "disposablePostgresProofRequired": { "const": true },
+        "circuitOpenedByEligibility": { "const": false },
+        "executorRegisteredByEligibility": { "const": false },
+        "eligibleNow": { "const": false }
+      }
+    },
+    "blockers": {
+      "const": [
+        "resource_admission_missing",
+        "disposable_postgres_proof_missing",
+        "bootstrap_ticket_missing",
+        "bootstrap_roles_unverified",
+        "migration_candidate_absent",
+        "independent_review_missing",
+        "runtime_inventory_update_missing"
+      ]
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canApplyMigration", "canIssueGrant", "canOpenCircuit", "canClaimEffect", "canExecute"],
+      "properties": {
+        "canApplyMigration": { "const": false },
+        "canIssueGrant": { "const": false },
+        "canOpenCircuit": { "const": false },
+        "canClaimEffect": { "const": false },
+        "canExecute": { "const": false }
+      }
+    },
+    "effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["databaseMutationPerformed", "rolesCreated", "routesRegistered", "externalEffects"],
+      "properties": {
+        "databaseMutationPerformed": { "const": false },
+        "rolesCreated": { "const": false },
+        "routesRegistered": { "const": false },
+        "externalEffects": { "const": false }
+      }
+    },
+    "packetDigest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "const": "ccb4a5afc0a2ee33114859dd777e4ebcd758f03abf92a103f075405c9324fcea"
+    }
+  },
+  "$defs": {
+    "sourceMigration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["filename", "path", "sha256"],
+      "properties": {
+        "filename": { "type": "string" },
+        "path": { "type": "string" },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "registryDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actionKind",
+        "circuitName",
+        "effectProfile",
+        "actionClass",
+        "approvalSchemaVersion",
+        "executorRole",
+        "circuitState",
+        "effectState",
+        "enabled",
+        "executorAvailable",
+        "routeRegistered",
+        "version"
+      ],
+      "properties": {
+        "actionKind": { "type": "string" },
+        "circuitName": { "type": "string" },
+        "effectProfile": { "type": "string" },
+        "actionClass": { "enum": ["C", "D"] },
+        "approvalSchemaVersion": { "const": "2.0" },
+        "executorRole": { "type": "string", "pattern": "^sirinx_agent_runtime_[a-z0-9_]+_executor$" },
+        "circuitState": { "const": "HOLD" },
+        "effectState": { "const": "PREPARED" },
+        "enabled": { "const": false },
+        "executorAvailable": { "const": false },
+        "routeRegistered": { "const": false },
+        "version": { "const": 1 }
+      }
+    },
+    "circuitRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actionKind",
+        "circuitName",
+        "state",
+        "activeGrantId",
+        "activeActionDigest",
+        "openedByPrincipalId",
+        "openedAt",
+        "expiresAt",
+        "version"
+      ],
+      "properties": {
+        "actionKind": { "type": "string" },
+        "circuitName": { "type": "string" },
+        "state": { "const": "HOLD" },
+        "activeGrantId": { "type": "null" },
+        "activeActionDigest": { "type": "null" },
+        "openedByPrincipalId": { "type": "null" },
+        "openedAt": { "type": "null" },
+        "expiresAt": { "type": "null" },
+        "version": { "const": 1 }
+      }
+    },
+    "installDefinition": { "$ref": "#/$defs/installTuple" },
+    "cleanupDefinition": { "$ref": "#/$defs/cleanupTuple" },
+    "connectorDefinition": { "$ref": "#/$defs/connectorTuple" },
+    "providerDefinition": { "$ref": "#/$defs/providerTuple" },
+    "queueDefinition": { "$ref": "#/$defs/queueTuple" },
+    "a2aDefinition": { "$ref": "#/$defs/a2aTuple" },
+    "telegramDefinition": { "$ref": "#/$defs/telegramTuple" },
+    "customerDefinition": { "$ref": "#/$defs/customerTuple" },
+    "pushDefinition": { "$ref": "#/$defs/pushTuple" },
+    "mergeDefinition": { "$ref": "#/$defs/mergeTuple" },
+    "productionMigrationDefinition": { "$ref": "#/$defs/productionMigrationTuple" },
+    "cloudflareDefinition": { "$ref": "#/$defs/cloudflareTuple" },
+    "deployDefinition": { "$ref": "#/$defs/deployTuple" },
+    "installCircuit": { "$ref": "#/$defs/installTuple" },
+    "cleanupCircuit": { "$ref": "#/$defs/cleanupTuple" },
+    "connectorCircuit": { "$ref": "#/$defs/connectorTuple" },
+    "providerCircuit": { "$ref": "#/$defs/providerTuple" },
+    "queueCircuit": { "$ref": "#/$defs/queueTuple" },
+    "a2aCircuit": { "$ref": "#/$defs/a2aTuple" },
+    "telegramCircuit": { "$ref": "#/$defs/telegramTuple" },
+    "customerCircuit": { "$ref": "#/$defs/customerTuple" },
+    "pushCircuit": { "$ref": "#/$defs/pushTuple" },
+    "mergeCircuit": { "$ref": "#/$defs/mergeTuple" },
+    "productionMigrationCircuit": { "$ref": "#/$defs/productionMigrationTuple" },
+    "cloudflareCircuit": { "$ref": "#/$defs/cloudflareTuple" },
+    "deployCircuit": { "$ref": "#/$defs/deployTuple" },
+    "installTuple": { "type": "object", "properties": { "actionKind": { "const": "INSTALL" }, "circuitName": { "const": "install" }, "effectProfile": { "const": "INSTALL" }, "actionClass": { "const": "D" }, "executorRole": { "const": "sirinx_agent_runtime_install_executor" } } },
+    "cleanupTuple": { "type": "object", "properties": { "actionKind": { "const": "RESOURCE_CLEANUP" }, "circuitName": { "const": "resource_cleanup" }, "effectProfile": { "const": "RESOURCE_CLEANUP" }, "actionClass": { "const": "C" }, "executorRole": { "const": "sirinx_agent_runtime_resource_cleanup_executor" } } },
+    "connectorTuple": { "type": "object", "properties": { "actionKind": { "const": "CONNECTOR_ACTIVATION" }, "circuitName": { "const": "connector_activation" }, "effectProfile": { "const": "CONNECTOR_ACTIVATION" }, "actionClass": { "const": "D" }, "executorRole": { "const": "sirinx_agent_runtime_connector_activation_executor" } } },
+    "providerTuple": { "type": "object", "properties": { "actionKind": { "const": "PROVIDER_CALL" }, "circuitName": { "const": "provider_call" }, "effectProfile": { "const": "PROVIDER_CALL" }, "actionClass": { "const": "D" }, "executorRole": { "const": "sirinx_agent_runtime_provider_call_executor" } } },
+    "queueTuple": { "type": "object", "properties": { "actionKind": { "const": "QUEUE_MUTATION" }, "circuitName": { "const": "queue_mutation" }, "effectProfile": { "const": "QUEUE_MUTATION" }, "actionClass": { "const": "D" }, "executorRole": { "const": "sirinx_agent_runtime_queue_mutation_executor" } } },
+    "a2aTuple": { "type": "object", "properties": { "actionKind": { "const": "A2A_EGRESS" }, "circuitName": { "const": "a2a_egress" }, "effectProfile": { "const": "A2A_EGRESS" }, "actionClass": { "const": "D" }, "executorRole": { "const": "sirinx_agent_runtime_a2a_egress_executor" } } },
+    "telegramTuple": { "type": "object", "properties": { "actionKind": { "const": "LIVE_SEND" }, "circuitName": { "const": "telegram_send" }, "effectProfile": { "const": "TELEGRAM" }, "actionClass": { "const": "D" }, "executorRole": { "const": "sirinx_agent_runtime_telegram_send_executor" } } },
+    "customerTuple": { "type": "object", "properties": { "actionKind": { "const": "LIVE_SEND" }, "circuitName": { "const": "customer_messaging" }, "effectProfile": { "const": "CUSTOMER_MESSAGING" }, "actionClass": { "const": "D" }, "executorRole": { "const": "sirinx_agent_runtime_customer_messaging_executor" } } },
+    "pushTuple": { "type": "object", "properties": { "actionKind": { "const": "PUSH" }, "circuitName": { "const": "push" }, "effectProfile": { "const": "PUSH" }, "actionClass": { "const": "D" }, "executorRole": { "const": "sirinx_agent_runtime_push_executor" } } },
+    "mergeTuple": { "type": "object", "properties": { "actionKind": { "const": "MERGE" }, "circuitName": { "const": "merge" }, "effectProfile": { "const": "MERGE" }, "actionClass": { "const": "D" }, "executorRole": { "const": "sirinx_agent_runtime_merge_executor" } } },
+    "productionMigrationTuple": { "type": "object", "properties": { "actionKind": { "const": "PRODUCTION_MIGRATION" }, "circuitName": { "const": "production_migration" }, "effectProfile": { "const": "PRODUCTION_MIGRATION" }, "actionClass": { "const": "D" }, "executorRole": { "const": "sirinx_agent_runtime_production_migration_executor" } } },
+    "cloudflareTuple": { "type": "object", "properties": { "actionKind": { "const": "CLOUDFLARE_MUTATION" }, "circuitName": { "const": "cloudflare_mutation" }, "effectProfile": { "const": "CLOUDFLARE_MUTATION" }, "actionClass": { "const": "D" }, "executorRole": { "const": "sirinx_agent_runtime_cloudflare_mutation_executor" } } },
+    "deployTuple": { "type": "object", "properties": { "actionKind": { "const": "DEPLOY" }, "circuitName": { "const": "deploy" }, "effectProfile": { "const": "DEPLOY" }, "actionClass": { "const": "D" }, "executorRole": { "const": "sirinx_agent_runtime_deploy_executor" } } }
+  }
+}

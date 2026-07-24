@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/role-registry.v1.schema.json",
+  "title": "RoninRoleRegistryV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "registryId", "registryVersion", "status", "executable", "description",
+    "authority", "departments", "runtimePrincipals", "roles", "kai"
+  ],
+  "properties": {
+    "registryId": { "const": "sirinx-47-ronin-passive-role-registry" },
+    "registryVersion": { "const": "1.0.0" },
+    "status": { "const": "passive-specification" },
+    "executable": { "const": false },
+    "description": { "type": "string", "minLength": 1 },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "numericRoleRanges", "runtimeMeaning", "durableStateAuthority",
+        "maxConcurrentWorkers", "lanePolicy", "makerCheckerSeparation",
+        "externalActions", "externalActionPolicy"
+      ],
+      "properties": {
+        "numericRoleRanges": { "type": "string", "minLength": 1 },
+        "runtimeMeaning": { "type": "string", "minLength": 1 },
+        "durableStateAuthority": { "type": "string", "minLength": 1 },
+        "maxConcurrentWorkers": { "const": 3 },
+        "lanePolicy": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "makerCheckerSeparation": { "type": "string", "minLength": 1 },
+        "externalActions": { "const": false },
+        "externalActionPolicy": { "type": "string", "minLength": 1 }
+      }
+    },
+    "departments": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "departmentId", "title", "range", "count", "headRoleId",
+          "headCodename", "defaultActionClasses"
+        ],
+        "properties": {
+          "departmentId": { "enum": ["L1", "L2", "L3", "L4", "L5"] },
+          "title": { "type": "string", "minLength": 1 },
+          "range": { "type": "string", "pattern": "^[0-9]{2}-[0-9]{2}$" },
+          "count": { "type": "integer", "minimum": 4, "maximum": 16 },
+          "headRoleId": { "enum": [1, 17, 26, 36, 44] },
+          "headCodename": { "type": "string", "minLength": 1 },
+          "defaultActionClasses": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "A", "B_PLAN_ONLY", "B_COORDINATION", "B_EXACT_LEASE",
+                "B_FIXTURE_ONLY", "C_MAKER_CHECKER", "D_TICKETED_ONLY", "X"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "runtimePrincipals": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["runtimePrincipalId", "roleIds", "sourceAccess"],
+        "properties": {
+          "runtimePrincipalId": { "type": "string", "minLength": 1 },
+          "roleIds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "integer", "minimum": 1, "maximum": 47 }
+          },
+          "sourceAccess": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "roles": {
+      "type": "array",
+      "minItems": 47,
+      "maxItems": 47,
+      "items": { "$ref": "role-card.v1.schema.json" }
+    },
+    "kai": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "roleId", "cardId", "functionalRoleId", "departmentId",
+        "departmentTitle", "codename", "title", "mission", "headRoleId",
+        "reportsTo", "runtimePrincipalId", "runtimePrincipalBoundary",
+        "actionClasses", "responsibilities", "allowedInputs", "outputs",
+        "requiredEvidence", "prohibitedActions", "escalation",
+        "backgroundCadence", "implementationStatus", "sourceRefs"
+      ],
+      "properties": {
+        "roleId": { "const": 0 },
+        "cardId": { "const": "kai-customer-liaison" },
+        "functionalRoleId": { "type": "string", "minLength": 1 },
+        "departmentId": { "const": "KAI" },
+        "departmentTitle": { "type": "string", "minLength": 1 },
+        "codename": { "const": "Kai" },
+        "title": { "type": "string", "minLength": 1 },
+        "mission": { "type": "string", "minLength": 1 },
+        "headRoleId": { "type": "null" },
+        "reportsTo": { "const": "human-operator" },
+        "runtimePrincipalId": { "const": "telegram-kai" },
+        "runtimePrincipalBoundary": { "type": "string", "minLength": 1 },
+        "actionClasses": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "enum": ["A_DRAFT_ONLY", "X"] }
+        },
+        "responsibilities": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "allowedInputs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "outputs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "requiredEvidence": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "prohibitedActions": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "escalation": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "backgroundCadence": { "type": "string", "minLength": 1 },
+        "implementationStatus": { "const": "passive-specification-outside-47" },
+        "sourceRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+      }
+    }
+  }
+}

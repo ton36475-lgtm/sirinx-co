@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "1.0",
+  "httpStatus": 503,
+  "status": "DURABLE_AUTHORITY_UNAVAILABLE",
+  "requiredAuthorityProfile": "effect-authority-0007",
+  "authoritySource": null,
+  "manifestDigest": "b2421996825817400d31f88757843225403ed2080541812c4db889e1ffe3cbb0",
+  "authorized": false,
+  "executed": false,
+  "providerCalled": false,
+  "externalWrites": false,
+  "claimCreated": false,
+  "peerRegistered": false,
+  "routeSelected": false,
+  "queueMutated": false,
+  "messageSent": false,
+  "blockers": [
+    "migration_0007_unavailable",
+    "durable_authority_store_unavailable",
+    "attested_human_authority_unavailable",
+    "authoritative_database_clock_unavailable",
+    "single_use_replay_ledger_unavailable"
+  ]
+}

@@ -1,0 +1,996 @@
+{
+  "schemaVersion": "1.0",
+  "status": "RESEARCH_VERIFIED / NO_CLONE / NO_INSTALL / RESOURCE_HOLD",
+  "generatedAt": "2026-07-20T20:01:22.000Z",
+  "baseline": {
+    "repository": "/Users/sirinx/SIRINXDev/sirinx-co",
+    "branch": "agent/b1-b2-command-center",
+    "headSha": "1f05814c3e9d173e525234d69b3ce7f2d1b01a57",
+    "workingTree": "DIRTY_USER_OWNED",
+    "host": "Mac14,3",
+    "memoryGiB": 8,
+    "logicalCpuCount": 8,
+    "freeDiskKiB": 14268520,
+    "workloadFloorKiB": 15728640,
+    "fullChainTargetKiB": 20971520,
+    "resourceAdmission": "HOLD_BELOW_15_GIB"
+  },
+  "authority": {
+    "approvalSource": "attested-human-operator-exact-ticket",
+    "installGrantPresent": false,
+    "connectorGrantPresent": false,
+    "providerGrantPresent": false,
+    "cloudflareMutationGrantPresent": false,
+    "liveSendGrantPresent": false
+  },
+  "licensePolicy": {
+    "allowedSpdx": ["Apache-2.0", "MIT"],
+    "unknownMeans": "INELIGIBLE",
+    "evidenceRequirement": "publisher-controlled-license-file-or-model-card"
+  },
+  "components": [
+    {
+      "id": "cloudflare-agents",
+      "category": "MCP_SDK",
+      "name": "Cloudflare Agents SDK",
+      "publisher": "cloudflare",
+      "sourceUrl": "https://github.com/cloudflare/agents",
+      "licenseSpdx": ["MIT"],
+      "licenseEvidenceUrl": "https://github.com/cloudflare/agents/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "PIN_EXACT_STABLE_RELEASE",
+      "selectedRevision": null,
+      "selectedArtifact": null,
+      "disposition": "CANDIDATE_RESOURCE_HELD",
+      "installationState": "NOT_INSTALLED",
+      "overlapDecision": "FILL_GAP",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": null,
+        "decisionBasis": "Stateless createMcpHandler preview is preferred; exact dependency and post-install footprint are not measured."
+      },
+      "securityNotes": [
+        "Use Streamable HTTP and stateless createMcpHandler for the first documentation-only preview.",
+        "McpAgent and Durable Objects remain held until state, tenancy, retention, deletion, and migration review."
+      ],
+      "requiredTickets": ["INSTALL", "CONNECTOR_ACTIVATION", "CLOUDFLARE_MUTATION", "DEPLOY"],
+      "officialSources": [
+        "https://developers.cloudflare.com/agents/model-context-protocol/guides/remote-mcp-server/",
+        "https://github.com/cloudflare/agents"
+      ],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "cloudflare-api-code-mode-mcp",
+      "category": "MCP_SERVER",
+      "name": "Cloudflare API Code Mode MCP",
+      "publisher": "cloudflare",
+      "sourceUrl": "https://github.com/cloudflare/mcp",
+      "licenseSpdx": ["Apache-2.0"],
+      "licenseEvidenceUrl": "https://github.com/cloudflare/mcp/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "REFERENCE_ONLY",
+      "selectedRevision": null,
+      "selectedArtifact": null,
+      "disposition": "REFERENCE_ONLY",
+      "installationState": "REFERENCE_ONLY",
+      "overlapDecision": "DO_NOT_ADD_OVERLAP",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": null,
+        "decisionBasis": "Footprint is irrelevant while its broad search and execute API surface remains quarantined."
+      },
+      "securityNotes": [
+        "The server can expose mutating Workers, KV, R2, DNS, and other account APIs.",
+        "Do not use as the first SIRINX MCP connection or treat search plus execute as read-only."
+      ],
+      "requiredTickets": ["CONNECTOR_ACTIVATION", "CLOUDFLARE_MUTATION"],
+      "officialSources": ["https://github.com/cloudflare/mcp"],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "modelcontextprotocol-rust-sdk",
+      "category": "MCP_SDK",
+      "name": "Official MCP Rust SDK (rmcp)",
+      "publisher": "modelcontextprotocol",
+      "sourceUrl": "https://github.com/modelcontextprotocol/rust-sdk",
+      "licenseSpdx": ["Apache-2.0", "MIT"],
+      "licenseEvidenceUrl": "https://github.com/modelcontextprotocol/rust-sdk/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "PIN_EXACT_STABLE_RELEASE",
+      "selectedRevision": "rmcp-v2.2.0",
+      "selectedArtifact": null,
+      "disposition": "CANDIDATE_AUTHORITY_HELD",
+      "installationState": "NOT_INSTALLED",
+      "overlapDecision": "OPTIONAL",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "Native Rust fit is strong, but exact Cargo feature and compiled-footprint receipts are absent."
+      },
+      "securityNotes": [
+        "Prefer minimal server and Streamable HTTP features only.",
+        "OAuth, child-process, and client transports materially expand authority and remain disabled."
+      ],
+      "requiredTickets": ["INSTALL", "CONNECTOR_ACTIVATION"],
+      "officialSources": ["https://github.com/modelcontextprotocol/rust-sdk"],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "modelcontextprotocol-specification",
+      "category": "MCP_SPEC",
+      "name": "Model Context Protocol specification",
+      "publisher": "modelcontextprotocol",
+      "sourceUrl": "https://github.com/modelcontextprotocol/modelcontextprotocol",
+      "licenseSpdx": ["MIT"],
+      "licenseEvidenceUrl": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "REFERENCE_ONLY",
+      "selectedRevision": "2025-11-25",
+      "selectedArtifact": null,
+      "disposition": "REFERENCE_ONLY",
+      "installationState": "REFERENCE_ONLY",
+      "overlapDecision": "NOT_APPLICABLE",
+      "resourceFit": {
+        "downloadGiB": 0,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "Protocol reference only; no runtime installation is required."
+      },
+      "securityNotes": [
+        "Streamable HTTP is the current transport; legacy HTTP plus SSE is deprecated.",
+        "Require PKCE S256, resource binding, audience validation, Origin validation, and no token passthrough."
+      ],
+      "requiredTickets": [],
+      "officialSources": [
+        "https://modelcontextprotocol.io/docs/learn/versioning",
+        "https://modelcontextprotocol.io/specification/2025-11-25/basic/transports",
+        "https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization"
+      ],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "a2a-specification",
+      "category": "A2A_SPEC",
+      "name": "Agent2Agent protocol specification",
+      "publisher": "a2aproject",
+      "sourceUrl": "https://github.com/a2aproject/A2A",
+      "licenseSpdx": ["Apache-2.0"],
+      "licenseEvidenceUrl": "https://github.com/a2aproject/A2A/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "REFERENCE_ONLY",
+      "selectedRevision": "v1.0.1-source / 1.0-wire",
+      "selectedArtifact": null,
+      "disposition": "REFERENCE_ONLY",
+      "installationState": "REFERENCE_ONLY",
+      "overlapDecision": "NOT_APPLICABLE",
+      "resourceFit": {
+        "downloadGiB": 0,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "Protocol reference only."
+      },
+      "securityNotes": [
+        "An Agent Card is untrusted topology data until origin and optional signature trust are verified.",
+        "SIRINX heartbeat, lease, circuit, and receipt requirements are an admission overlay, not normative A2A requirements."
+      ],
+      "requiredTickets": [],
+      "officialSources": [
+        "https://github.com/a2aproject/A2A/releases",
+        "https://a2a-protocol.org/latest/specification/"
+      ],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "a2a-javascript-sdk",
+      "category": "A2A_SDK",
+      "name": "Official A2A JavaScript SDK",
+      "publisher": "a2aproject",
+      "sourceUrl": "https://github.com/a2aproject/a2a-js",
+      "licenseSpdx": ["Apache-2.0"],
+      "licenseEvidenceUrl": "https://github.com/a2aproject/a2a-js/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "PIN_EXACT_STABLE_RELEASE",
+      "selectedRevision": "v0.3.14",
+      "selectedArtifact": null,
+      "disposition": "HOLD_PROTOCOL_VERSION",
+      "installationState": "NOT_INSTALLED",
+      "overlapDecision": "FILL_GAP",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "Node fit is plausible; exact dependency and installed footprint are not measured."
+      },
+      "securityNotes": [
+        "Stable SDK is protocol 0.3; v1 support is beta and the v1 TCK is alpha.",
+        "Do not satisfy a SIRINX A2A v1 gate with the stable 0.3 SDK."
+      ],
+      "requiredTickets": ["INSTALL", "CONNECTOR_ACTIVATION", "A2A_EGRESS"],
+      "officialSources": [
+        "https://github.com/a2aproject/a2a-js/releases",
+        "https://github.com/a2aproject/a2a-tck"
+      ],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "a2a-rust-sdk",
+      "category": "A2A_SDK",
+      "name": "Official A2A Rust SDK",
+      "publisher": "a2aproject",
+      "sourceUrl": "https://github.com/a2aproject/a2a-rs",
+      "licenseSpdx": ["Apache-2.0"],
+      "licenseEvidenceUrl": "https://github.com/a2aproject/a2a-rs/blob/main/LICENSE.md",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "PIN_EXACT_COMMIT",
+      "selectedRevision": "ed8cb2b5fbeaf2286afb8a1877d49285cce05dc0",
+      "selectedArtifact": null,
+      "disposition": "CANDIDATE_AUTHORITY_HELD",
+      "installationState": "NOT_INSTALLED",
+      "overlapDecision": "OPTIONAL",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "Native arm64 fit is plausible; multi-crate transport features and compiled footprint need exact receipts."
+      },
+      "securityNotes": [
+        "Use only as a compatibility adapter and TCK target.",
+        "External cards, callbacks, artifacts, and task content remain untrusted."
+      ],
+      "requiredTickets": ["INSTALL", "CONNECTOR_ACTIVATION", "A2A_EGRESS"],
+      "officialSources": ["https://github.com/a2aproject/a2a-rs"],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "openai-codex-cli",
+      "category": "AGENT_HARNESS",
+      "name": "OpenAI Codex CLI",
+      "publisher": "openai",
+      "sourceUrl": "https://github.com/openai/codex",
+      "licenseSpdx": ["Apache-2.0"],
+      "licenseEvidenceUrl": "https://github.com/openai/codex/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "LOCAL_PROVENANCE_PENDING",
+      "revisionPolicy": "PIN_EXACT_ARTIFACT_DIGEST",
+      "selectedRevision": "rust-v0.144.6",
+      "selectedArtifact": "local binary 0.144.6; digest not cataloged",
+      "disposition": "RECONCILE_EXISTING",
+      "installationState": "EXISTING_UNRECONCILED",
+      "overlapDecision": "REUSE_EXISTING",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "Existing Apple arm64 binary is observed; exact digest and install receipt remain absent."
+      },
+      "securityNotes": [
+        "Treat Codex as an external worker bound to a SIRINX task, lease, path scope, and receipt.",
+        "Shell, filesystem, network, provider, and MCP abilities do not grant SIRINX authority."
+      ],
+      "requiredTickets": [],
+      "officialSources": ["https://github.com/openai/codex"],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "nous-hermes-agent",
+      "category": "AGENT_HARNESS",
+      "name": "Hermes Agent",
+      "publisher": "NousResearch",
+      "sourceUrl": "https://github.com/NousResearch/hermes-agent",
+      "licenseSpdx": ["MIT"],
+      "licenseEvidenceUrl": "https://github.com/NousResearch/hermes-agent/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "LOCAL_PROVENANCE_PENDING",
+      "revisionPolicy": "PIN_EXACT_ARTIFACT_DIGEST",
+      "selectedRevision": null,
+      "selectedArtifact": "local binary observed; protected configuration unread",
+      "disposition": "RECONCILE_EXISTING",
+      "installationState": "EXISTING_UNRECONCILED",
+      "overlapDecision": "REUSE_EXISTING",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "Existing local binary path is observed; exact revision and footprint are not reconciled."
+      },
+      "securityNotes": [
+        "Plugins run with host privileges; shared or untrusted input requires whole-process sandboxing.",
+        "Do not inspect protected Hermes configuration or expose broad messaging tools to the mesh."
+      ],
+      "requiredTickets": [],
+      "officialSources": [
+        "https://github.com/NousResearch/hermes-agent",
+        "https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/mcp.md"
+      ],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "moonshot-kimi-code",
+      "category": "AGENT_HARNESS",
+      "name": "Kimi Code",
+      "publisher": "MoonshotAI",
+      "sourceUrl": "https://github.com/MoonshotAI/kimi-code",
+      "licenseSpdx": ["MIT"],
+      "licenseEvidenceUrl": "https://github.com/MoonshotAI/kimi-code/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "LOCAL_PROVENANCE_PENDING",
+      "revisionPolicy": "PIN_EXACT_ARTIFACT_DIGEST",
+      "selectedRevision": null,
+      "selectedArtifact": "local CLI reports 0.27.0; upstream lineage and digest unverified",
+      "disposition": "RECONCILE_EXISTING",
+      "installationState": "EXISTING_UNRECONCILED",
+      "overlapDecision": "REUSE_EXISTING",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "Existing local CLI is observed; current upstream development requirements do not prove installed lineage."
+      },
+      "securityNotes": [
+        "Do not project current upstream /mcp-config support onto local 0.27.0 without a version-specific receipt.",
+        "ACP, MCP, CLI presence, and desktop presence do not establish native A2A support."
+      ],
+      "requiredTickets": [],
+      "officialSources": ["https://github.com/MoonshotAI/kimi-code"],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "microsoft-playwright",
+      "category": "QA_AUTOMATION",
+      "name": "Playwright",
+      "publisher": "microsoft",
+      "sourceUrl": "https://github.com/microsoft/playwright",
+      "licenseSpdx": ["Apache-2.0"],
+      "licenseEvidenceUrl": "https://github.com/microsoft/playwright/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "PIN_EXACT_STABLE_RELEASE",
+      "selectedRevision": null,
+      "selectedArtifact": null,
+      "disposition": "CANDIDATE_RESOURCE_HELD",
+      "installationState": "NOT_INSTALLED",
+      "overlapDecision": "FILL_GAP",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": null,
+        "decisionBasis": "Browser downloads and runtime footprint are material and unmeasured on the resource-held host."
+      },
+      "securityNotes": [
+        "Authenticate only against an approved non-production target and capture exact browser revision.",
+        "Browser profiles, cookies, and secrets must not enter the repository or evidence report."
+      ],
+      "requiredTickets": ["INSTALL"],
+      "officialSources": ["https://github.com/microsoft/playwright"],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "inspect-ai",
+      "category": "QA_AUTOMATION",
+      "name": "Inspect AI",
+      "publisher": "UKGovernmentBEIS",
+      "sourceUrl": "https://github.com/UKGovernmentBEIS/inspect_ai",
+      "licenseSpdx": ["MIT"],
+      "licenseEvidenceUrl": "https://github.com/UKGovernmentBEIS/inspect_ai/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "PIN_EXACT_COMMIT",
+      "selectedRevision": "15e408cac918940086fffb6b883eec8179c09658",
+      "selectedArtifact": null,
+      "disposition": "CANDIDATE_RESOURCE_HELD",
+      "installationState": "NOT_INSTALLED",
+      "overlapDecision": "OPTIONAL",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": null,
+        "decisionBasis": "Python dependency set includes native-wheel and sandbox risks; exact arm64 resolution is unverified."
+      },
+      "securityNotes": [
+        "Use synthetic fixtures with providers denied for the first pilot.",
+        "Eval tools and sandboxes can execute code or access networks and cannot be approval authority."
+      ],
+      "requiredTickets": ["INSTALL"],
+      "officialSources": ["https://github.com/UKGovernmentBEIS/inspect_ai"],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "axum-existing",
+      "category": "API_FRAMEWORK",
+      "name": "Axum",
+      "publisher": "tokio-rs",
+      "sourceUrl": "https://github.com/tokio-rs/axum",
+      "licenseSpdx": ["MIT"],
+      "licenseEvidenceUrl": "https://github.com/tokio-rs/axum/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "LOCAL_PROVENANCE_PENDING",
+      "revisionPolicy": "PIN_EXACT_ARTIFACT_DIGEST",
+      "selectedRevision": null,
+      "selectedArtifact": "existing Cargo.lock dependency; no upgrade selected",
+      "disposition": "RECONCILE_EXISTING",
+      "installationState": "EXISTING_UNRECONCILED",
+      "overlapDecision": "REUSE_EXISTING",
+      "resourceFit": {
+        "downloadGiB": 0,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "Already part of the Rust workspace dependency graph."
+      },
+      "securityNotes": ["Keep the current HTTP/control boundary; any 0.8 upgrade is a separately tested migration."],
+      "requiredTickets": [],
+      "officialSources": ["https://github.com/tokio-rs/axum"],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "sqlx-existing",
+      "category": "DATABASE_CLIENT",
+      "name": "SQLx",
+      "publisher": "transact-rs",
+      "sourceUrl": "https://github.com/transact-rs/sqlx",
+      "licenseSpdx": ["Apache-2.0", "MIT"],
+      "licenseEvidenceUrl": "https://github.com/transact-rs/sqlx/blob/main/LICENSE-MIT",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "LOCAL_PROVENANCE_PENDING",
+      "revisionPolicy": "PIN_EXACT_ARTIFACT_DIGEST",
+      "selectedRevision": null,
+      "selectedArtifact": "existing Cargo.lock 0.8 line; no upgrade selected",
+      "disposition": "RECONCILE_EXISTING",
+      "installationState": "EXISTING_UNRECONCILED",
+      "overlapDecision": "REUSE_EXISTING",
+      "resourceFit": {
+        "downloadGiB": 0,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "Already part of the Rust workspace; the PostgreSQL path is native Rust."
+      },
+      "securityNotes": [
+        "Use offline metadata when compile-time database contact is not explicitly admitted.",
+        "Re-admit publisher ownership, MSRV, migration behavior, and exact revision before any upgrade."
+      ],
+      "requiredTickets": [],
+      "officialSources": ["https://github.com/transact-rs/sqlx"],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "line-node-sdk",
+      "category": "MESSAGING_SDK",
+      "name": "LINE Bot SDK for Node.js",
+      "publisher": "line",
+      "sourceUrl": "https://github.com/line/line-bot-sdk-nodejs",
+      "licenseSpdx": ["Apache-2.0"],
+      "licenseEvidenceUrl": "https://github.com/line/line-bot-sdk-nodejs/blob/master/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "PIN_EXACT_STABLE_RELEASE",
+      "selectedRevision": "v11.2.0",
+      "selectedArtifact": null,
+      "disposition": "CANDIDATE_AUTHORITY_HELD",
+      "installationState": "NOT_INSTALLED",
+      "overlapDecision": "OPTIONAL",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "Node 22 host fit and small declared dependency set are plausible; exact npm artifact parity is unresolved."
+      },
+      "securityNotes": [
+        "Verify the release tag versus npm package manifest before install.",
+        "Validate the raw-body signature before JSON parsing and keep ingress separate from exact-destination sends."
+      ],
+      "requiredTickets": ["INSTALL", "CONNECTOR_ACTIVATION", "LIVE_SEND"],
+      "officialSources": [
+        "https://github.com/line/line-bot-sdk-nodejs",
+        "https://developers.line.biz/en/docs/messaging-api/verify-webhook-signature/"
+      ],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "line-bot-mcp-server",
+      "category": "MCP_SERVER",
+      "name": "LINE Bot MCP Server",
+      "publisher": "line",
+      "sourceUrl": "https://github.com/line/line-bot-mcp-server",
+      "licenseSpdx": ["Apache-2.0"],
+      "licenseEvidenceUrl": "https://github.com/line/line-bot-mcp-server/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "REFERENCE_ONLY",
+      "selectedRevision": "v0.5.0",
+      "selectedArtifact": null,
+      "disposition": "EXCLUDE_OVERLAP",
+      "installationState": "REFERENCE_ONLY",
+      "overlapDecision": "DO_NOT_ADD_OVERLAP",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": null,
+        "decisionBasis": "Puppeteer dependency can download a browser during postinstall; footprint is unacceptable without a separate review."
+      },
+      "securityNotes": [
+        "Push, broadcast, profile and follower reads, and rich-menu mutation share one broad tool surface.",
+        "Do not promote the existing disabled OpenCode entry or install its browser-downloading dependency path."
+      ],
+      "requiredTickets": ["INSTALL", "CONNECTOR_ACTIVATION", "LIVE_SEND"],
+      "officialSources": ["https://github.com/line/line-bot-mcp-server"],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "teloxide",
+      "category": "MESSAGING_SDK",
+      "name": "Teloxide",
+      "publisher": "teloxide",
+      "sourceUrl": "https://github.com/teloxide/teloxide",
+      "licenseSpdx": ["MIT"],
+      "licenseEvidenceUrl": "https://github.com/teloxide/teloxide/blob/master/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "PIN_EXACT_STABLE_RELEASE",
+      "selectedRevision": "v0.17.0",
+      "selectedArtifact": null,
+      "disposition": "EXCLUDE_OVERLAP",
+      "installationState": "NOT_INSTALLED",
+      "overlapDecision": "DO_NOT_ADD_OVERLAP",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "Native arm64 fit is plausible, but it is unnecessary while the smaller fixed-destination adapter remains adequate."
+      },
+      "securityNotes": ["Broad webhook, dialogue, SQLx, Redis, and TLS features must not be enabled by default."],
+      "requiredTickets": ["INSTALL", "CONNECTOR_ACTIVATION", "LIVE_SEND"],
+      "officialSources": ["https://github.com/teloxide/teloxide"],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "grammy",
+      "category": "MESSAGING_SDK",
+      "name": "grammY",
+      "publisher": "grammyjs",
+      "sourceUrl": "https://github.com/grammyjs/grammY",
+      "licenseSpdx": ["MIT"],
+      "licenseEvidenceUrl": "https://github.com/grammyjs/grammY/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "REFERENCE_ONLY",
+      "selectedRevision": null,
+      "selectedArtifact": null,
+      "disposition": "EXCLUDE_OVERLAP",
+      "installationState": "REFERENCE_ONLY",
+      "overlapDecision": "DO_NOT_ADD_OVERLAP",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "Small Node footprint does not justify duplicating the existing Telegram adapter."
+      },
+      "securityNotes": ["Adding a second Node Telegram framework would deepen a legacy effect path without filling a capability gap."],
+      "requiredTickets": ["INSTALL", "CONNECTOR_ACTIVATION", "LIVE_SEND"],
+      "officialSources": ["https://github.com/grammyjs/grammY"],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "qwen25-coder-15b-gguf",
+      "category": "LOCAL_MODEL",
+      "name": "Qwen2.5-Coder 1.5B Instruct GGUF",
+      "publisher": "Qwen",
+      "sourceUrl": "https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF",
+      "licenseSpdx": ["Apache-2.0"],
+      "licenseEvidenceUrl": "https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "PIN_EXACT_ARTIFACT_DIGEST",
+      "selectedRevision": null,
+      "selectedArtifact": "Q4_K_M 1.12 GB target; digest not selected",
+      "disposition": "CANDIDATE_RESOURCE_HELD",
+      "installationState": "NOT_INSTALLED",
+      "overlapDecision": "FILL_GAP",
+      "resourceFit": {
+        "downloadGiB": 1.12,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "Best publisher-hosted permissive coding fit; estimated bounded resident envelope is roughly 2 to 3 GB."
+      },
+      "securityNotes": [
+        "First pilot is network denied, tools off, synthetic public data, 4K input and 1K output.",
+        "Exact artifact digest, runtime revision, resource receipt, and independent checker remain mandatory."
+      ],
+      "requiredTickets": ["INSTALL", "LOCAL_INFERENCE"],
+      "officialSources": [
+        "https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct",
+        "https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF/tree/main"
+      ],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "granite-33-2b-gguf",
+      "category": "LOCAL_MODEL",
+      "name": "Granite 3.3 2B Instruct GGUF",
+      "publisher": "ibm-granite",
+      "sourceUrl": "https://huggingface.co/ibm-granite/granite-3.3-2b-instruct-GGUF",
+      "licenseSpdx": ["Apache-2.0"],
+      "licenseEvidenceUrl": "https://huggingface.co/ibm-granite/granite-3.3-2b-instruct",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "PIN_EXACT_ARTIFACT_DIGEST",
+      "selectedRevision": null,
+      "selectedArtifact": "Q4_K_M 1.55 GB target; digest not selected",
+      "disposition": "CANDIDATE_RESOURCE_HELD",
+      "installationState": "NOT_INSTALLED",
+      "overlapDecision": "OPTIONAL",
+      "resourceFit": {
+        "downloadGiB": 1.55,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "Publisher-hosted permissive fallback; estimated bounded resident envelope is roughly 2.5 to 4 GB."
+      },
+      "securityNotes": [
+        "Cap context to 4K to 8K rather than the nominal 128K.",
+        "Tool parser and harness compatibility require independent synthetic tests."
+      ],
+      "requiredTickets": ["INSTALL", "LOCAL_INFERENCE"],
+      "officialSources": [
+        "https://huggingface.co/ibm-granite/granite-3.3-2b-instruct",
+        "https://huggingface.co/ibm-granite/granite-3.3-2b-instruct-GGUF/tree/main"
+      ],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "qwen35-2b-local",
+      "category": "LOCAL_MODEL",
+      "name": "Qwen3.5 2B local Ollama conversion",
+      "publisher": "Qwen / Ollama registry conversion",
+      "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-2B",
+      "licenseSpdx": ["Apache-2.0"],
+      "licenseEvidenceUrl": "https://huggingface.co/Qwen/Qwen3.5-2B",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "LOCAL_PROVENANCE_PENDING",
+      "revisionPolicy": "PIN_EXACT_ARTIFACT_DIGEST",
+      "selectedRevision": null,
+      "selectedArtifact": "local qwen3.5:2b Q8_0 2.7 GB; digest and upstream revision unverified",
+      "disposition": "QUARANTINE_UNPINNED",
+      "installationState": "EXISTING_UNRECONCILED",
+      "overlapDecision": "REUSE_EXISTING",
+      "resourceFit": {
+        "downloadGiB": 2.7,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "The local conversion may fit only with bounded context, but provenance and actual runtime envelope are unverified."
+      },
+      "securityNotes": [
+        "The official 4.57 GB Safetensors artifact is not the local 2.7 GB Ollama conversion.",
+        "Capture local manifest, digest, upstream revision, runtime revision, and resource receipt before a pilot."
+      ],
+      "requiredTickets": ["LOCAL_INFERENCE"],
+      "officialSources": [
+        "https://huggingface.co/Qwen/Qwen3.5-2B",
+        "https://ollama.com/library/qwen3.5:2b"
+      ],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "glm-52",
+      "category": "LOCAL_MODEL",
+      "name": "GLM-5.2",
+      "publisher": "zai-org",
+      "sourceUrl": "https://huggingface.co/zai-org/GLM-5.2",
+      "licenseSpdx": ["MIT"],
+      "licenseEvidenceUrl": "https://huggingface.co/zai-org/GLM-5.2",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "REJECT_LOCAL",
+      "selectedRevision": null,
+      "selectedArtifact": "official BF16 1.51 TB; official FP8 756 GB",
+      "disposition": "REJECT_LOCAL_RESOURCE",
+      "installationState": "NOT_APPLICABLE",
+      "overlapDecision": "NOT_APPLICABLE",
+      "resourceFit": {
+        "downloadGiB": 1510,
+        "fitsEightGiBHost": false,
+        "decisionBasis": "Official BF16 is 1.51 TB and FP8 is 756 GB; both exceed the host by orders of magnitude."
+      },
+      "securityNotes": [
+        "No publisher-hosted lightweight GGUF exists in the official collection.",
+        "Do not adopt a community conversion as an official artifact."
+      ],
+      "requiredTickets": [],
+      "officialSources": [
+        "https://huggingface.co/zai-org/GLM-5.2/tree/main",
+        "https://huggingface.co/zai-org/GLM-5.2-FP8/tree/main"
+      ],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "kimi-k3",
+      "category": "HOSTED_MODEL",
+      "name": "Kimi K3",
+      "publisher": "MoonshotAI",
+      "sourceUrl": "https://www.kimi.com/blog/kimi-k3",
+      "licenseSpdx": ["UNKNOWN"],
+      "licenseEvidenceUrl": null,
+      "permissiveLicenseVerified": false,
+      "sourceVerification": "PARTIAL_ARTIFACT_PENDING",
+      "revisionPolicy": "WAIT_FOR_PUBLISHER_ARTIFACT",
+      "selectedRevision": null,
+      "selectedArtifact": null,
+      "disposition": "HOLD_ARTIFACT_LICENSE",
+      "installationState": "NOT_APPLICABLE",
+      "overlapDecision": "NOT_APPLICABLE",
+      "resourceFit": {
+        "downloadGiB": 1400,
+        "fitsEightGiBHost": false,
+        "decisionBasis": "A 2.8T MXFP4 lower bound is roughly 1.4 TB before scales, vision components, metadata, and runtime."
+      },
+      "securityNotes": [
+        "As of 2026-07-21, weights are announced for 2026-07-27 and no artifact license is published.",
+        "Official naming is Kimi K3 with hosted API ID kimi-k3; do not invent a Kimi K3.0 alias.",
+        "Hosted API use remains a separately ticketed provider call even after artifact publication."
+      ],
+      "requiredTickets": ["PROVIDER_CALL"],
+      "officialSources": [
+        "https://www.kimi.com/blog/kimi-k3",
+        "https://huggingface.co/moonshotai/models"
+      ],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "openai-agents-python",
+      "category": "AGENT_HARNESS",
+      "name": "OpenAI Agents SDK for Python",
+      "publisher": "openai",
+      "sourceUrl": "https://github.com/openai/openai-agents-python",
+      "licenseSpdx": ["MIT"],
+      "licenseEvidenceUrl": "https://github.com/openai/openai-agents-python/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "REFERENCE_ONLY",
+      "selectedRevision": null,
+      "selectedArtifact": null,
+      "disposition": "EXCLUDE_OVERLAP",
+      "installationState": "REFERENCE_ONLY",
+      "overlapDecision": "DO_NOT_ADD_OVERLAP",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": true,
+        "decisionBasis": "A second orchestrator is unnecessary even if its package footprint is modest."
+      },
+      "securityNotes": ["Its sessions, guardrails, handoffs, and tracing would create competing orchestration authority."],
+      "requiredTickets": ["INSTALL", "PROVIDER_CALL"],
+      "officialSources": ["https://github.com/openai/openai-agents-python"],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "goose-agent",
+      "category": "AGENT_HARNESS",
+      "name": "Goose",
+      "publisher": "block",
+      "sourceUrl": "https://github.com/block/goose",
+      "licenseSpdx": ["Apache-2.0"],
+      "licenseEvidenceUrl": "https://github.com/block/goose/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "REFERENCE_ONLY",
+      "selectedRevision": null,
+      "selectedArtifact": null,
+      "disposition": "EXCLUDE_OVERLAP",
+      "installationState": "REFERENCE_ONLY",
+      "overlapDecision": "DO_NOT_ADD_OVERLAP",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": null,
+        "decisionBasis": "Large Rust and desktop workspace with provider, MCP, extension, and subagent footprint duplicates current tooling."
+      },
+      "securityNotes": [
+        "Do not use a curl-pipe-shell installation path without an independently verified checksum.",
+        "Adoption would duplicate Codex and SIRINX orchestration."
+      ],
+      "requiredTickets": ["INSTALL", "CONNECTOR_ACTIVATION", "PROVIDER_CALL"],
+      "officialSources": ["https://github.com/block/goose"],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    },
+    {
+      "id": "promptfoo",
+      "category": "QA_AUTOMATION",
+      "name": "Promptfoo",
+      "publisher": "promptfoo",
+      "sourceUrl": "https://github.com/promptfoo/promptfoo",
+      "licenseSpdx": ["MIT"],
+      "licenseEvidenceUrl": "https://github.com/promptfoo/promptfoo/blob/main/LICENSE",
+      "permissiveLicenseVerified": true,
+      "sourceVerification": "PRIMARY_SOURCE_VERIFIED",
+      "revisionPolicy": "PIN_EXACT_STABLE_RELEASE",
+      "selectedRevision": null,
+      "selectedArtifact": null,
+      "disposition": "CANDIDATE_RESOURCE_HELD",
+      "installationState": "NOT_INSTALLED",
+      "overlapDecision": "OPTIONAL",
+      "resourceFit": {
+        "downloadGiB": null,
+        "fitsEightGiBHost": null,
+        "decisionBasis": "Large regular and optional dependency graph plus browser and native integrations requires a separate footprint review."
+      },
+      "securityNotes": [
+        "Custom providers, assertions, and hooks can execute unsandboxed local code.",
+        "Configured features may transmit data; first use would need a sandboxed synthetic-only profile."
+      ],
+      "requiredTickets": ["INSTALL", "PROVIDER_CALL"],
+      "officialSources": ["https://github.com/promptfoo/promptfoo"],
+      "installReady": false,
+      "canClone": false,
+      "canInstall": false,
+      "canRun": false,
+      "canConnect": false
+    }
+  ],
+  "installWaves": [
+    {
+      "wave": 0,
+      "name": "Reconcile existing binaries and artifacts",
+      "componentIds": [
+        "openai-codex-cli",
+        "nous-hermes-agent",
+        "moonshot-kimi-code",
+        "axum-existing",
+        "sqlx-existing",
+        "qwen35-2b-local"
+      ],
+      "state": "HOLD",
+      "entryCriteria": [
+        "Read-only exact revision and digest receipts without protected configuration access.",
+        "Fresh resource receipt and dirty-path ownership reconciliation.",
+        "No provider call, model invocation, MCP connection, A2A egress, or message send."
+      ],
+      "stopPoint": "RECONCILIATION_PACKET_REVIEWED_NOT_ACTIVATED"
+    },
+    {
+      "wave": 1,
+      "name": "Stateless documentation-only MCP local preview",
+      "componentIds": ["cloudflare-agents"],
+      "state": "HOLD",
+      "entryCriteria": [
+        "Free disk at or above the operation-specific threshold and at least 15 GiB.",
+        "Exact package revision, license, dependency, lifecycle-script, footprint, and rollback receipts.",
+        "One exact INSTALL grant; no OAuth, Cloudflare mutation, deploy, provider call, or remote connection."
+      ],
+      "stopPoint": "LOCAL_STATELESS_MCP_TESTED_NOT_CONNECTED_NOT_DEPLOYED"
+    },
+    {
+      "wave": 2,
+      "name": "Authenticated browser smoke tooling",
+      "componentIds": ["microsoft-playwright"],
+      "state": "HOLD",
+      "entryCriteria": [
+        "Exact browser and package revisions plus measured download and installed footprint.",
+        "Approved non-production target and credential-handling plan.",
+        "One exact INSTALL grant; browser profile and secrets excluded from evidence."
+      ],
+      "stopPoint": "BROWSER_TOOLCHAIN_VERIFIED_NO_PRODUCTION_SMOKE"
+    },
+    {
+      "wave": 3,
+      "name": "One bounded local coding-model pilot",
+      "componentIds": ["qwen25-coder-15b-gguf", "granite-33-2b-gguf", "qwen35-2b-local"],
+      "state": "HOLD",
+      "entryCriteria": [
+        "Select exactly one candidate; alternatives remain untouched.",
+        "Exact publisher revision or local artifact digest, runtime revision, license, provenance, and fresh resource receipt.",
+        "Separate INSTALL grant when bytes must be added and a LOCAL_INFERENCE admission receipt.",
+        "Network denied, tools off, synthetic public data, 4K input, 1K output, and an independent checker."
+      ],
+      "stopPoint": "ONE_SYNTHETIC_LOCAL_PILOT_VERIFIED_NOT_ROUTED"
+    }
+  ],
+  "proofFlags": {
+    "cloned": false,
+    "installed": false,
+    "postinstallRan": false,
+    "modelDownloaded": false,
+    "modelInvoked": false,
+    "mcpStarted": false,
+    "mcpConnected": false,
+    "a2aLive": false,
+    "providerCalled": false,
+    "cloudflareMutated": false,
+    "messageSent": false,
+    "pushed": false,
+    "merged": false,
+    "deployed": false,
+    "productionReady": false
+  },
+  "stopRules": [
+    "Unknown license, source ownership, revision, artifact digest, lifecycle script, footprint, authority, or effect outcome means HOLD or INELIGIBLE.",
+    "Do not clone, install, upgrade, run postinstall, start a server, download a model, invoke a model, begin OAuth, connect a client, call a provider, mutate Cloudflare, send a message, push, merge, or deploy from this catalog.",
+    "Do not read .env files, browser profiles, cookies, keychains, /Users/sirinx/.hermes/auth.json, or /Users/sirinx/.hermes/config.yaml.",
+    "Resource admission below 15 GiB forces every install wave to HOLD.",
+    "One accepted component never grants authority to another component or effect lane."
+  ]
+}

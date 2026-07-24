@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/mcp-connection-registry.v1.schema.json",
+  "title": "McpConnectionRegistryV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "generatedAt",
+    "authority",
+    "connections",
+    "stopRules"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "status": { "const": "PLAN_ONLY / ALL_CONNECTIONS_DISABLED" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["transitionAuthority", "approvalAuthority", "runtimeProof", "secretPolicy"],
+      "properties": {
+        "transitionAuthority": { "const": "target-managed-postgres-plus-sirinx-control-not-yet-wired" },
+        "approvalAuthority": { "const": "attested-human-operator-only" },
+        "runtimeProof": { "const": "authenticated-endpoint-plus-fresh-heartbeat-plus-task-bound-receipt" },
+        "secretPolicy": { "const": "opaque-host-secret-reference-only" }
+      }
+    },
+    "connections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "connectionId",
+          "service",
+          "role",
+          "transport",
+          "endpoint",
+          "enabled",
+          "connectionState",
+          "runtimeEvidence",
+          "authMode",
+          "toolPolicy",
+          "dataClassCeiling",
+          "capabilities",
+          "effectKinds",
+          "requiredTicketKinds",
+          "blockers",
+          "officialSources",
+          "notes"
+        ],
+        "properties": {
+          "connectionId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,63}$" },
+          "service": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "role": {
+            "enum": [
+              "REMOTE_MCP_SERVER",
+              "MCP_PORTAL",
+              "MCP_CLIENT",
+              "LOCAL_MCP_SERVER",
+              "MESSAGING_TRANSPORT",
+              "A2A_PEER"
+            ]
+          },
+          "transport": {
+            "enum": [
+              "streamable-http",
+              "cloud-connector",
+              "stdio",
+              "telegram-bot-api",
+              "line-webhook",
+              "a2a-https",
+              "none"
+            ]
+          },
+          "endpoint": { "type": ["string", "null"], "format": "uri" },
+          "enabled": { "const": false },
+          "connectionState": {
+            "enum": [
+              "candidate-not-configured",
+              "portal-not-created",
+              "client-capability-observed-not-configured",
+              "installed-version-mcp-unverified",
+              "protected-config-unread-not-configured",
+              "disabled-existing-config",
+              "transport-not-mcp-not-connected",
+              "peer-card-missing-not-connected"
+            ]
+          },
+          "runtimeEvidence": { "const": "UNVERIFIED" },
+          "authMode": {
+            "enum": [
+              "public-read-only",
+              "oauth-human-required",
+              "cloudflare-access-plus-server-oauth",
+              "host-secret-reference-required",
+              "protected-config-unread",
+              "agent-card-auth-required",
+              "not-applicable"
+            ]
+          },
+          "toolPolicy": { "const": "deny-all" },
+          "dataClassCeiling": { "enum": ["PUBLIC", "INTERNAL"] },
+          "capabilities": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1, "maxLength": 128 }
+          },
+          "effectKinds": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "INSTALL",
+                "CONNECTOR_ACTIVATION",
+                "PROVIDER_CALL",
+                "QUEUE_MUTATION",
+                "A2A_EGRESS",
+                "LIVE_SEND",
+                "CLOUDFLARE_MUTATION",
+                "DEPLOY"
+              ]
+            }
+          },
+          "requiredTicketKinds": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "INSTALL",
+                "CONNECTOR_ACTIVATION",
+                "PROVIDER_CALL",
+                "QUEUE_MUTATION",
+                "A2A_EGRESS",
+                "LIVE_SEND",
+                "CLOUDFLARE_MUTATION",
+                "DEPLOY"
+              ]
+            }
+          },
+          "blockers": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1, "maxLength": 256 }
+          },
+          "officialSources": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string", "format": "uri" }
+          },
+          "notes": { "type": "string", "minLength": 1, "maxLength": 1024 }
+        }
+      }
+    },
+    "stopRules": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

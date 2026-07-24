@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/role-card.v1.schema.json",
+  "title": "RoninRoleCardV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "roleId",
+    "cardId",
+    "functionalRoleId",
+    "departmentId",
+    "departmentTitle",
+    "codename",
+    "title",
+    "mission",
+    "headRoleId",
+    "reportsTo",
+    "runtimePrincipalId",
+    "runtimePrincipalBoundary",
+    "actionClasses",
+    "responsibilities",
+    "allowedInputs",
+    "outputs",
+    "requiredEvidence",
+    "prohibitedActions",
+    "escalation",
+    "backgroundCadence",
+    "implementationStatus",
+    "sourceRefs"
+  ],
+  "properties": {
+    "roleId": { "type": "integer", "minimum": 1, "maximum": 47 },
+    "cardId": {
+      "type": "string",
+      "pattern": "^ronin-(0[1-9]|[1-3][0-9]|4[0-7])-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "functionalRoleId": { "type": "string", "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$" },
+    "departmentId": { "enum": ["L1", "L2", "L3", "L4", "L5"] },
+    "departmentTitle": { "type": "string", "minLength": 1 },
+    "codename": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "mission": { "type": "string", "minLength": 1 },
+    "headRoleId": { "enum": [1, 17, 26, 36, 44] },
+    "reportsTo": {
+      "oneOf": [
+        { "type": "integer", "minimum": 1, "maximum": 47 },
+        { "type": "string", "minLength": 1 },
+        { "type": "null" }
+      ]
+    },
+    "runtimePrincipalId": { "type": "string", "minLength": 1 },
+    "runtimePrincipalBoundary": { "type": "string", "minLength": 1 },
+    "actionClasses": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "A",
+          "A_DRAFT_ONLY",
+          "B_PLAN_ONLY",
+          "B_COORDINATION",
+          "B_EXACT_LEASE",
+          "B_FIXTURE_ONLY",
+          "C_MAKER_CHECKER",
+          "D_TICKETED_ONLY",
+          "X"
+        ]
+      }
+    },
+    "responsibilities": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "allowedInputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "outputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "requiredEvidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "prohibitedActions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "escalation": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      ]
+    },
+    "backgroundCadence": { "type": "string", "minLength": 1 },
+    "implementationStatus": {
+      "enum": [
+        "coded-rust-runtime-plus-passive-card",
+        "passive-specification-anchor-codename",
+        "passive-specification-runtime-principal-mapped"
+      ]
+    },
+    "sourceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

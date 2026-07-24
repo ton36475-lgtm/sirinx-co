@@ -91,14 +91,34 @@ All six tables: RLS enabled, zero public policies (server-only).
 
 | Route | Body → Response |
 | --- | --- |
-| GET `/health`, `/metrics` | open |
-| GET `/api/gates` | `{gates:[{name,state,ticket}]}` |
+| GET `/health`, `/metrics` | open liveness / metrics |
+| GET `/ready` | redacted operational readiness; 200 only with auth + refreshed durable Postgres authority |
+| GET `/api/gates` | `{gates:[{name,state,ticket}],persistence:{backend,durable,observedAt}}` |
 | POST `/api/gates/:name/decision` | `{state,ticket}` → Gate (422 open w/o ticket) |
 | GET/POST `/api/pending-work` | queue list / `{source,title,detail}` → 201 |
 | POST `/api/actions` | `{gate,action,args}` → executed or dry-run plan |
 | GET `/api/a2a/card` | this node's AgentCard |
 | POST `/api/a2a/sync` | SyncRequest → SyncResponse |
 | POST `/api/a2a/route` | `{capabilities:[…]}` → AgentCard / 404 |
+
+### dev-control-api Node long-tail :8790 (local; live A2A Bearer + idempotency)
+
+| Route | Body → Response |
+| --- | --- |
+| GET `/api/a2a-sync` | redacted readiness and 15 unique static-agent registrations |
+| POST `/api/a2a-sync/plan` | A2A plan; `dryRun:false` requires Bearer + `Idempotency-Key` |
+| GET `/api/centerbrain-hub` | CenterBrain status; live flags mirror fresh durable A2A evidence |
+| GET `/api/omniroute?probeHermes=true` | optional read-only loopback Hermes evidence; app/CLI presence stays distinct from handshake identity |
+| POST `/api/omniroute/handshake` | evidence report only; never activates or sends |
+| POST `/api/omniroute/activate` | local activation preview; always `activated:false` |
+
+### telegram-command-bot :8791 (local; fixed destination)
+
+| Route | Body → Response |
+| --- | --- |
+| GET `/health`, `/status` | redacted env + durable-gate readiness |
+| POST `/send` | `{text,dryRun,parseMode?}`; live requires Bearer + `Idempotency-Key` |
+| POST `/webhook` | inbound dry-run inspection only; no command/provider execution |
 
 ## 4. A2A protocol types (`sirinx-a2a`)
 
@@ -143,6 +163,11 @@ covers web + control + a2a + brain surfaces with variables.
 | --- | --- | --- |
 | DATABASE_URL | web, control | Postgres backend + migrations; empty ⇒ in-memory (gate decisions are process-local) |
 | CONTROL_API_TOKEN | control | bearer auth on `/api/*` |
+| SIRINX_CONTROL_URL | Telegram, Node A2A | Rust gate authority; loopback HTTP only |
+| TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID | Telegram | provider credential + fixed destination |
+| TELEGRAM_OWNER_IDS | Telegram | inbound owner allowlist |
+| SIRINX_TELEGRAM_CONFIRM | Telegram | must equal `SEND` for live readiness |
 | A2A_NODE_ID / A2A_ENDPOINT / A2A_PRIORITY | control | node identity |
 | SKILLS_DIR | control | capability autoload (default `.claude/skills`) |
-| PORT / CONTROL_PORT | web / control | listen ports (8080 / 8711) |
+| PORT / CONTROL_PORT | web / Rust control | listen ports (8080 / 8711) |
+| DEV_CONTROL_API_PORT / TELEGRAM_BOT_PORT | Node long-tail / Telegram | local listeners (8790 / 8791) |

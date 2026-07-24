@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package ghostclaw.runtime.v1;
+
+option go_package = "github.com/sirinx/ghostclaw-runtime/proto/ghostclaw/runtime/v1;runtimev1";
+
+message LeaseSpec {
+  string lease_id = 1;
+  string lane = 2;
+  string role = 3;
+  string worktree = 4;
+  string principal = 5;
+  string issued_at = 6;
+  string expires_at = 7;
+  string nonce = 8;
+}
+
+message LeaseGrant {
+  string run_id = 1;
+  LeaseSpec spec = 2;
+  string signature = 3;
+}
+
+message RuntimeEvent {
+  string event_id = 1;
+  string run_id = 2;
+  string stage = 3;
+  string status = 4;
+  string message = 5;
+  string observed_at = 6;
+}
+
+service RuntimeAgent {
+  rpc RegisterLease(LeaseGrant) returns (RuntimeEvent);
+}

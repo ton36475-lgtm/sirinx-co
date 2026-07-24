@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "2.0-plan",
+  "status": "PLAN_ONLY / NO_GRANT / CIRCUIT_HOLD",
+  "generatedAt": "2026-07-20T21:49:36+07:00",
+  "repositoryPath": "/Users/sirinx/SIRINXDev/sirinx-co",
+  "authority": {
+    "action": "RESOURCE_CLEANUP",
+    "circuit": "resource_cleanup",
+    "approvalSchema": "schemas/agent-runtime/resource-cleanup-approval.v2.schema.json",
+    "targetManifestSchema": "schemas/agent-runtime/target-manifest.v1.schema.json",
+    "processEvidenceSchema": "schemas/agent-runtime/process-evidence.v1.schema.json",
+    "transitionAuthority": "future-managed-postgres-plus-sirinx-control-not-yet-wired",
+    "approvalAuthority": "attested-human-operator-only"
+  },
+  "safety": {
+    "emergencyFloorKiB": 5242880,
+    "workloadFloorKiB": 15728640,
+    "conservativeTargetKiB": 20971520,
+    "maxTargetsPerGrant": 1,
+    "targetManifestVersion": "1.0",
+    "worktreeSnapshotVersion": "1.0",
+    "maxEvidenceAgeSeconds": 60,
+    "maxGrantLifetimeSeconds": 300,
+    "maxTargetManifestEntries": 250000,
+    "maxProcessEvidenceEntries": 16384,
+    "sameFilesystemTrashReclaimKiB": 0,
+    "automaticContinuation": false
+  },
+  "runtime": {
+    "circuitState": "HOLD",
+    "grantPresent": false,
+    "executorAvailable": false,
+    "replayProtectionAvailable": false,
+    "canExecute": false
+  },
+  "candidateTargets": [
+    {
+      "absolutePath": "/Users/sirinx/SIRINXDev/sirinx-co/target",
+      "class": "GENERATED_BUILD_OUTPUT"
+    }
+  ],
+  "operationPreview": {
+    "kind": "TOOL_NATIVE_CLEAN",
+    "toolId": "cargo-clean",
+    "executablePath": "/Users/sirinx/.cargo/bin/cargo",
+    "cwd": "/Users/sirinx/SIRINXDev/sirinx-co",
+    "argv": [
+      "clean",
+      "--manifest-path",
+      "/Users/sirinx/SIRINXDev/sirinx-co/Cargo.toml",
+      "--target-dir",
+      "/Users/sirinx/SIRINXDev/sirinx-co/target"
+    ],
+    "environment": {
+      "inherit": false,
+      "set": {
+        "CARGO_HOME": "/Users/sirinx/.cargo",
+        "CARGO_TARGET_DIR": "/Users/sirinx/SIRINXDev/sirinx-co/target",
+        "HOME": "/Users/sirinx",
+        "RUSTUP_HOME": "/Users/sirinx/.rustup"
+      }
+    }
+  },
+  "forbiddenExactTargets": [
+    "/",
+    "/Users",
+    "/Users/sirinx",
+    "/Users/sirinx/SIRINXDev/sirinx-co"
+  ],
+  "forbiddenPrefixes": [
+    "/Users/sirinx/.codex",
+    "/Users/sirinx/.hermes",
+    "/Users/sirinx/.opencode",
+    "/Users/sirinx/.ssh",
+    "/Users/sirinx/.Trash",
+    "/Users/sirinx/.ollama",
+    "/Users/sirinx/.cache/huggingface",
+    "/Users/sirinx/Documents",
+    "/Users/sirinx/Library/Keychains",
+    "/Users/sirinx/Library/Application Support/Cursor",
+    "/Users/sirinx/Library/Application Support/Docker Desktop",
+    "/Users/sirinx/Library/Application Support/Google/Chrome",
+    "/Users/sirinx/Library/Application Support/BraveSoftware",
+    "/Users/sirinx/Library/Application Support/Firefox",
+    "/Users/sirinx/Library/Application Support/Postgres",
+    "/Users/sirinx/Library/Containers/com.docker.docker",
+    "/Users/sirinx/SIRINXDev/sirinx-co/.git",
+    "/Users/sirinx/SIRINXDev/sirinx-co/reports"
+  ],
+  "blockedActions": [
+    "delete",
+    "move-to-trash",
+    "off-filesystem-transfer",
+    "tool-native-clean",
+    "cache-prune",
+    "process-stop",
+    "install",
+    "network-recovery",
+    "build",
+    "database-start",
+    "model-load",
+    "external-connection"
+  ],
+  "stopRules": [
+    "No cleanup grant exists and the resource_cleanup circuit is HOLD.",
+    "This plan never executes a command, mutates the filesystem, or stops a process.",
+    "One future grant may bind exactly one literal target after independent review.",
+    "Protected roots, globs, traversal, special files, escaping symlinks, and incomplete hard-link sets fail closed.",
+    "Same-filesystem Trash movement counts as zero reclaim.",
+    "After any future target action, stop and remeasure before another action or workload."
+  ]
+}

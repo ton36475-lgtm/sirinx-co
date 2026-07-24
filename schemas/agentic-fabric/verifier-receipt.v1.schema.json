@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.dev/schemas/agentic-fabric/verifier-receipt.v1.schema.json",
+  "title": "VerifierReceipt",
+  "type": "object",
+  "required": ["schema_version", "task_id", "agent_id", "status", "checks", "risk_assessment", "created_at"],
+  "properties": {
+    "schema_version": {"const": "agentic-fabric.verifier-receipt.v1"},
+    "task_id": {"type": "string", "minLength": 3},
+    "agent_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["PASS", "BLOCKED", "FAIL", "MISSING_EVIDENCE"]},
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "status"],
+        "properties": {
+          "id": {"type": "string"},
+          "status": {"enum": ["PASS", "FAIL", "BLOCKED", "NOT_EXECUTED"]},
+          "message": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "risk_assessment": {"type": "string", "enum": ["AUTO_GREEN", "AUTO_AMBER", "HUMAN_RED"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "result_ref": {"type": "string", "format": "uri-reference"}
+  },
+  "additionalProperties": false
+}

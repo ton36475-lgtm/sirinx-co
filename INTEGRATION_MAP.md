@@ -52,10 +52,21 @@ bridge = its card registered into OmniRoute via `POST /api/a2a/sync`.
 
 ### 4. Already-connected systems (recap)
 
-Supabase SIRINX (3 web tables, RLS) ↔ sirinx-web/control · Hermes
-dashboard 8710 → control API 8711 (Node long-tail + Rust core) ·
+Supabase SIRINX (six server-only tables, RLS) ↔ sirinx-web/control · Hermes
+dashboard 8710 → Node long-tail 8790 · Rust gate/A2A authority 8711 ·
+Telegram fixed-destination boundary 8791 · Hermes evidence API 9000 ·
 6 Ronin lead sub-agents + 47-role roster (`.claude/agents/`) · 50 skills (`.claude/skills/`)
 → OmniRoute capabilities · mux launcher (`scripts/agents-mux.sh`).
+
+The Node evidence plane separates `configured`, `observed`, and `activated`.
+Static cmux lanes, MCP definitions, or agent cards never count as a completed
+handshake. Telegram live readiness additionally requires fresh Postgres-backed
+`telegram_send` evidence from Rust; provider delivery requires its own receipt.
+The registry has 15 unique identities, including separate `claude-cowork` and
+`kimi-code` entries. Kimi ACP capability is not called MCP without an adapter.
+The verified OpenCode bounded-write receipt is under
+`reports/runtime/opencode-handshake-20260720-001/`; it is one-job evidence,
+not a persistent A2A route.
 
 ## Gaps intentionally left gated
 

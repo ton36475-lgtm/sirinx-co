@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/approval-receipt.v1.schema.json",
+  "title": "ApprovalReceiptV1_1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "ticketId", "grantId", "taskId", "action", "target",
+    "commitSha", "planHash", "scopeHash", "actionDigest", "dataClass", "limits",
+    "approverAssertionRef", "nonceDigest", "issuedAt", "expiresAt", "status"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.1" },
+    "ticketId": { "type": "string", "pattern": "^TKT-[A-Za-z0-9._-]+$" },
+    "grantId": { "type": "string", "pattern": "^GRANT-[A-Za-z0-9._-]+$" },
+    "taskId": { "type": "string", "pattern": "^TASK-[A-Za-z0-9._-]+$" },
+    "action": {
+      "enum": [
+        "INSTALL", "PROVIDER_CALL", "QUEUE_MUTATION", "LIVE_SEND", "PUSH",
+        "MERGE", "PRODUCTION_MIGRATION", "CLOUDFLARE_MUTATION", "DEPLOY"
+      ]
+    },
+    "target": { "type": "string", "minLength": 1 },
+    "commitSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "planHash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "scopeHash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "actionDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "dataClass": { "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"] },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxCalls", "maxCostUsd", "maxRuntimeSeconds"],
+      "properties": {
+        "maxCalls": { "type": "integer", "minimum": 0 },
+        "maxCostUsd": { "type": "number", "minimum": 0 },
+        "maxRuntimeSeconds": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "approverAssertionRef": { "type": "string", "minLength": 1 },
+    "nonceDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "issuedAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "consumedAt": { "type": ["string", "null"], "format": "date-time" },
+    "status": { "enum": ["ISSUED", "CONSUMED", "EXPIRED", "REVOKED", "REJECTED"] }
+  }
+}

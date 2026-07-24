@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/resource-cleanup-plan.v2.schema.json",
+  "title": "ResourceCleanupPlanV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "generatedAt",
+    "repositoryPath",
+    "authority",
+    "safety",
+    "runtime",
+    "candidateTargets",
+    "operationPreview",
+    "forbiddenExactTargets",
+    "forbiddenPrefixes",
+    "blockedActions",
+    "stopRules"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "2.0-plan" },
+    "status": { "const": "PLAN_ONLY / NO_GRANT / CIRCUIT_HOLD" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "repositoryPath": { "const": "/Users/sirinx/SIRINXDev/sirinx-co" },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action",
+        "circuit",
+        "approvalSchema",
+        "targetManifestSchema",
+        "processEvidenceSchema",
+        "transitionAuthority",
+        "approvalAuthority"
+      ],
+      "properties": {
+        "action": { "const": "RESOURCE_CLEANUP" },
+        "circuit": { "const": "resource_cleanup" },
+        "approvalSchema": { "const": "schemas/agent-runtime/resource-cleanup-approval.v2.schema.json" },
+        "targetManifestSchema": { "const": "schemas/agent-runtime/target-manifest.v1.schema.json" },
+        "processEvidenceSchema": { "const": "schemas/agent-runtime/process-evidence.v1.schema.json" },
+        "transitionAuthority": { "const": "future-managed-postgres-plus-sirinx-control-not-yet-wired" },
+        "approvalAuthority": { "const": "attested-human-operator-only" }
+      }
+    },
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "emergencyFloorKiB",
+        "workloadFloorKiB",
+        "conservativeTargetKiB",
+        "maxTargetsPerGrant",
+        "targetManifestVersion",
+        "worktreeSnapshotVersion",
+        "maxEvidenceAgeSeconds",
+        "maxGrantLifetimeSeconds",
+        "maxTargetManifestEntries",
+        "maxProcessEvidenceEntries",
+        "sameFilesystemTrashReclaimKiB",
+        "automaticContinuation"
+      ],
+      "properties": {
+        "emergencyFloorKiB": { "const": 5242880 },
+        "workloadFloorKiB": { "const": 15728640 },
+        "conservativeTargetKiB": { "const": 20971520 },
+        "maxTargetsPerGrant": { "const": 1 },
+        "targetManifestVersion": { "const": "1.0" },
+        "worktreeSnapshotVersion": { "const": "1.0" },
+        "maxEvidenceAgeSeconds": { "const": 60 },
+        "maxGrantLifetimeSeconds": { "const": 300 },
+        "maxTargetManifestEntries": { "const": 250000 },
+        "maxProcessEvidenceEntries": { "const": 16384 },
+        "sameFilesystemTrashReclaimKiB": { "const": 0 },
+        "automaticContinuation": { "const": false }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["circuitState", "grantPresent", "executorAvailable", "replayProtectionAvailable", "canExecute"],
+      "properties": {
+        "circuitState": { "const": "HOLD" },
+        "grantPresent": { "const": false },
+        "executorAvailable": { "const": false },
+        "replayProtectionAvailable": { "const": false },
+        "canExecute": { "const": false }
+      }
+    },
+    "candidateTargets": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["absolutePath", "class"],
+        "properties": {
+          "absolutePath": { "const": "/Users/sirinx/SIRINXDev/sirinx-co/target" },
+          "class": { "const": "GENERATED_BUILD_OUTPUT" }
+        }
+      }
+    },
+    "operationPreview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "toolId", "executablePath", "cwd", "argv", "environment"],
+      "properties": {
+        "kind": { "const": "TOOL_NATIVE_CLEAN" },
+        "toolId": { "const": "cargo-clean" },
+        "executablePath": { "const": "/Users/sirinx/.cargo/bin/cargo" },
+        "cwd": { "const": "/Users/sirinx/SIRINXDev/sirinx-co" },
+        "argv": {
+          "const": [
+            "clean",
+            "--manifest-path",
+            "/Users/sirinx/SIRINXDev/sirinx-co/Cargo.toml",
+            "--target-dir",
+            "/Users/sirinx/SIRINXDev/sirinx-co/target"
+          ]
+        },
+        "environment": {
+          "const": {
+            "inherit": false,
+            "set": {
+              "CARGO_HOME": "/Users/sirinx/.cargo",
+              "CARGO_TARGET_DIR": "/Users/sirinx/SIRINXDev/sirinx-co/target",
+              "HOME": "/Users/sirinx",
+              "RUSTUP_HOME": "/Users/sirinx/.rustup"
+            }
+          }
+        }
+      }
+    },
+    "forbiddenExactTargets": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^/" }
+    },
+    "forbiddenPrefixes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^/" }
+    },
+    "blockedActions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "stopRules": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

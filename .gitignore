@@ -23,3 +23,16 @@ legacy-cache/
 exports/adaptive-sync-plan-latest.json
 exports/telegram-preview-latest.json
 exports/pipeline-audit-latest.json
+.omx/
+.codex/*
+!.codex/agents/
+!.codex/agents/**
+!.codex/skills/
+!.codex/skills/**
+.codex/skills/.system/**
+!.codex/prompts/
+!.codex/prompts/**
+
+# Python bytecode
+__pycache__/
+*.pyc

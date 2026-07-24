@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0.0",
+  "mission_id": "SIRINX_NEURAL_FABRIC_V1_LOCAL_ONLY",
+  "observed_at": "2026-07-23T18:19:30+07:00",
+  "mode": "READ_ONLY_LOCAL_SNAPSHOT",
+  "claim_level": "DOCUMENTATION_EVIDENCE_ONLY",
+  "runtime_connected_claim": false,
+  "external_effect": false,
+  "secret_access": false,
+  "digest_algorithm": "sha256",
+  "source_hash_scope": "raw file bytes exactly as read from the filesystem",
+  "digest_input_format": "UTF-8 lines joined with LF and no trailing LF",
+  "source_files": [
+    {
+      "path": "docs/specs/SIRINX_NEURAL_FABRIC_V1.md",
+      "sha256": "d9b1bece192207fe114c498d33486c941bf1aedcd4085bcc578bcf73e50e1c5e"
+    },
+    {
+      "path": "docs/packets/SIRINX_NEURAL_FABRIC_LOCAL_TEST_PLAN_V1.md",
+      "sha256": "259ca5735234108c7e435742bb4333bee2fee8239b78ca53f5f71f85f02506ae"
+    }
+  ],
+  "observations": [
+    {
+      "id": "listeners",
+      "method": "lsof TCP LISTEN for an explicit port allowlist",
+      "output_sha256": "28a27ea50cd28d3ada7323c4f7dcb5e6ec79f3a45f755f97b81b15a6292afa37",
+      "lines": [
+        "8643\tPython:70030@127.0.0.1:8643",
+        "8644\tPython:70030@127.0.0.1:8644",
+        "8080\tOrbStack:4926@*:8080",
+        "9000\tNO_LISTENER",
+        "8790\tNO_LISTENER",
+        "8791\tNO_LISTENER",
+        "8710\tNO_LISTENER",
+        "8711\tNO_LISTENER",
+        "9119\tPython:2705@127.0.0.1:9119",
+        "11434\tollama:4789@127.0.0.1:11434",
+        "5432\tOrbStack:4926@*:5432"
+      ]
+    },
+    {
+      "id": "health",
+      "method": "HTTP GET with two-second timeout against explicit local health endpoints",
+      "output_sha256": "b89d1d8db6ab2ad824b01b3f5d0a833ebaef2d905160d159a4cc7c2f534f9289",
+      "lines": [
+        "http://127.0.0.1:8643/health\t{\"status\": \"ok\", \"platform\": \"hermes-agent\", \"version\": \"0.19.0\"}",
+        "http://127.0.0.1:8644/health\t{\"status\": \"ok\", \"platform\": \"webhook\"}",
+        "http://127.0.0.1:8080/api/v1/health\t{\"status\":\"ok\",\"service\":\"GHOSTCLAW MCP/API Bridge\",\"version\":\"1.0.0\",\"mcp_version\":\"2025-03-26\",\"database_kind\":\"sqlite\"}",
+        "http://127.0.0.1:8080/api/v1/ready\t{\"ready\":true,\"database\":{\"ok\":true,\"kind\":\"sqlite\",\"path\":\"/mnt/data/ghostclaw.sqlite\",\"user_version\":0}}",
+        "http://127.0.0.1:8080/api/v1/db/status\t{\"ok\":true,\"kind\":\"sqlite\",\"path\":\"/mnt/data/ghostclaw.sqlite\",\"user_version\":0}",
+        "http://127.0.0.1:11434/api/version\t{\"version\":\"0.32.1\"}"
+      ]
+    },
+    {
+      "id": "mcp_tools_list",
+      "method": "JSON-RPC tools/list POST to local port 8080",
+      "output_sha256": "ff875a9e85e9306dfd6b11574b93ac4d588d7b2b2e08184139c898366721303e",
+      "raw_line": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"tools\":[{\"name\":\"lane_status\",\"description\":\"Read status payload for a specific lane.\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"lane_id\":{\"type\":\"string\"}},\"required\":[\"lane_id\"]}},{\"name\":\"db_status\",\"description\":\"Return active database health + transport metadata.\",\"inputSchema\":{\"type\":\"object\",\"properties\":{}}},{\"name\":\"echo\",\"description\":\"Echo a payload for integration testing.\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"message\":{\"type\":\"string\"}}}}]},\"error\":null}",
+      "result": {
+        "tools": [
+          "lane_status",
+          "db_status",
+          "echo"
+        ],
+        "error": null
+      }
+    },
+    {
+      "id": "containers",
+      "method": "docker ps with name, image, status, and ports only",
+      "output_sha256": "b274439e37f6105ff0bd7684e43adf6c779035a0fede9990419f5b7ae599a45d",
+      "lines": [
+        "hermes-03dfe1c0\tnikolaik/python-nodejs:python3.11-nodejs20\tUp 23 hours\t",
+        "ghostclaw-mcp-api\t2026-07-21-a2a-livesync-hermes-agents-telegram-commander-mcp-api\tUp 42 hours\t0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp",
+        "ghostclaw-postgres\tpostgres:17-alpine\tUp 42 hours (healthy)\t0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp"
+      ]
+    }
+  ],
+  "independent_review": {
+    "lane": "/root/neural_fabric_security_review",
+    "initial_verdict": "REPAIR",
+    "re_review_verdict": "PASS_DOCUMENTATION_ONLY",
+    "attested_runtime_identity": false
+  },
+  "limitations": [
+    "This manifest does not prove end-to-end A2A, Telegram delivery, LINE ingress, worker execution, provider routing, or PostgreSQL authority.",
+    "Process IDs and container uptimes are point-in-time observations.",
+    "The dashboard listener was observed but its response body was not read.",
+    "No source implementation or test suite was executed."
+  ]
+}

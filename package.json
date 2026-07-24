@@ -18,6 +18,7 @@
     "verify:public-web-language-switch": "node scripts/verify-public-web-language-switch.mjs",
     "verify:public-web-deps": "node scripts/verify-public-web-dependency-layout.mjs",
     "verify:p092-agentloop": "node scripts/verify-p092-agentloop-gates.mjs",
+    "verify:line-secretary-contracts": "node --test tests/line-secretary-contracts.test.mjs",
     "verify:all-project-governance": "node scripts/verify-all-project-governance-ledger.mjs",
     "verify:all-project-specs": "node scripts/verify-all-project-spec-packs.mjs",
     "verify:all-project-source-discovery": "node scripts/verify-all-project-source-discovery.mjs",

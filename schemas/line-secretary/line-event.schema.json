@@ -1,0 +1,1228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "line-event.schema.json",
+  "title": "LINE Secretary Event Envelope",
+  "description": "L1 contract-only, auditable event envelope for LINE Secretary. Raw LINE recipient identifiers, raw provider identifiers, credentials, secrets, signatures, tokens, and message bodies are intentionally excluded.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "webhookEventId",
+    "eventId",
+    "eventType",
+    "rawEventDigest",
+    "occurredAt",
+    "receivedAt",
+    "correlationId",
+    "causationId",
+    "idempotencyKey",
+    "source",
+    "actor",
+    "recipient",
+    "payloadDigest",
+    "payload",
+    "risk",
+    "confirmation",
+    "lifecycle",
+    "persistence"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "webhookEventId": {
+      "description": "Safe event alias for deduplication; never a LINE user, group, or room identifier.",
+      "type": "string",
+      "pattern": "^event:[a-z0-9][a-z0-9._:-]{2,127}$"
+    },
+    "eventId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "eventType": {
+      "type": "string",
+      "enum": [
+        "line.webhook.received",
+        "line.message.normalized",
+        "media.content.downloaded",
+        "audio.transcription.completed",
+        "document.ocr.completed",
+        "secretary.intent.classified",
+        "task.draft.created",
+        "appointment.awaiting_confirmation",
+        "lead.created",
+        "reply.draft.created",
+        "approval.requested",
+        "line.message.sent",
+        "line.message.failed",
+        "briefing.generated"
+      ]
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rawEventDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "receivedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "correlationId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "causationId": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "uuid"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "idempotencyKey": {
+      "$ref": "#/$defs/idempotencyKey"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "actor": {
+      "$ref": "#/$defs/actorReference"
+    },
+    "recipient": {
+      "$ref": "#/$defs/recipientReference"
+    },
+    "payloadDigest": {
+      "$ref": "#/$defs/sha256Digest"
+    },
+    "payload": {
+      "$ref": "#/$defs/auditPayload"
+    },
+    "risk": {
+      "$ref": "#/$defs/riskAssessment"
+    },
+    "confirmation": {
+      "$ref": "#/$defs/confirmation"
+    },
+    "lifecycle": {
+      "$ref": "#/$defs/eventLifecycle"
+    },
+    "persistence": {
+      "$ref": "#/$defs/persistence"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "risk": {
+            "properties": {
+              "decision": {
+                "const": "AUTO_ALLOWED"
+              }
+            },
+            "required": ["decision"]
+          }
+        },
+        "required": ["risk"]
+      },
+      "then": {
+        "properties": {
+          "confirmation": {
+            "properties": {
+              "required": {
+                "const": false
+              },
+              "status": {
+                "const": "NOT_REQUIRED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "risk": {
+            "properties": {
+              "decision": {
+                "const": "CONFIRMATION_REQUIRED"
+              }
+            },
+            "required": ["decision"]
+          }
+        },
+        "required": ["risk"]
+      },
+      "then": {
+        "properties": {
+          "confirmation": {
+            "properties": {
+              "required": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "risk": {
+            "properties": {
+              "decision": {
+                "const": "BLOCKED"
+              }
+            },
+            "required": ["decision"]
+          }
+        },
+        "required": ["risk"]
+      },
+      "then": {
+        "properties": {
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "BLOCKED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "const": "line.webhook.received"
+          }
+        },
+        "required": ["eventType"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "properties": {
+              "recordType": {
+                "const": "WEBHOOK_AUDIT"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "RECEIVED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "const": "line.message.normalized"
+          }
+        },
+        "required": ["eventType"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "properties": {
+              "recordType": {
+                "const": "NORMALIZED_MESSAGE"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "NORMALIZED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "const": "media.content.downloaded"
+          }
+        },
+        "required": ["eventType"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "properties": {
+              "recordType": {
+                "const": "MEDIA_ARTIFACT"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "COMPLETED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "const": "audio.transcription.completed"
+          }
+        },
+        "required": ["eventType"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "properties": {
+              "recordType": {
+                "const": "TRANSCRIPT_ARTIFACT"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "COMPLETED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "const": "document.ocr.completed"
+          }
+        },
+        "required": ["eventType"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "properties": {
+              "recordType": {
+                "const": "OCR_ARTIFACT"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "COMPLETED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "const": "secretary.intent.classified"
+          }
+        },
+        "required": ["eventType"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "properties": {
+              "recordType": {
+                "const": "SECRETARY_INTENT"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "CLASSIFIED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "const": "task.draft.created"
+          }
+        },
+        "required": ["eventType"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "properties": {
+              "recordType": {
+                "const": "TASK_DRAFT"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "DRAFTED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "const": "appointment.awaiting_confirmation"
+          }
+        },
+        "required": ["eventType"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "properties": {
+              "recordType": {
+                "const": "APPOINTMENT"
+              }
+            }
+          },
+          "risk": {
+            "properties": {
+              "decision": {
+                "const": "CONFIRMATION_REQUIRED"
+              }
+            }
+          },
+          "confirmation": {
+            "properties": {
+              "required": {
+                "const": true
+              },
+              "status": {
+                "const": "AWAITING_CONFIRMATION"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "AWAITING_CONFIRMATION"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "const": "lead.created"
+          }
+        },
+        "required": ["eventType"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "properties": {
+              "recordType": {
+                "const": "LEAD"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "COMPLETED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "const": "reply.draft.created"
+          }
+        },
+        "required": ["eventType"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "properties": {
+              "recordType": {
+                "const": "REPLY_DRAFT"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "DRAFTED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "const": "approval.requested"
+          }
+        },
+        "required": ["eventType"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "properties": {
+              "recordType": {
+                "const": "APPROVAL"
+              }
+            }
+          },
+          "risk": {
+            "properties": {
+              "decision": {
+                "const": "CONFIRMATION_REQUIRED"
+              }
+            }
+          },
+          "confirmation": {
+            "properties": {
+              "required": {
+                "const": true
+              },
+              "status": {
+                "const": "AWAITING_CONFIRMATION"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "AWAITING_CONFIRMATION"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "const": "line.message.sent"
+          }
+        },
+        "required": ["eventType"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "properties": {
+              "recordType": {
+                "const": "OUTBOUND_MESSAGE"
+              }
+            }
+          },
+          "risk": {
+            "properties": {
+              "tier": {
+                "const": "D"
+              },
+              "externalEffect": {
+                "const": true
+              },
+              "decision": {
+                "const": "CONFIRMATION_REQUIRED"
+              }
+            }
+          },
+          "confirmation": {
+            "properties": {
+              "required": {
+                "const": true
+              },
+              "status": {
+                "const": "APPROVED"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "SENT"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "const": "line.message.failed"
+          }
+        },
+        "required": ["eventType"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "properties": {
+              "recordType": {
+                "const": "OUTBOUND_MESSAGE"
+              }
+            }
+          },
+          "risk": {
+            "properties": {
+              "tier": {
+                "const": "D"
+              },
+              "externalEffect": {
+                "const": true
+              },
+              "decision": {
+                "const": "CONFIRMATION_REQUIRED"
+              }
+            }
+          },
+          "confirmation": {
+            "properties": {
+              "required": {
+                "const": true
+              },
+              "status": {
+                "const": "APPROVED"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "FAILED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "eventType": {
+            "const": "briefing.generated"
+          }
+        },
+        "required": ["eventType"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "properties": {
+              "recordType": {
+                "const": "BRIEFING"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "COMPLETED"
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256Digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "pattern": "^idem:[0-9a-f]{64}$"
+    },
+    "safeAlias": {
+      "type": "string",
+      "pattern": "^alias:[a-z0-9][a-z0-9._-]{2,127}$"
+    },
+    "safeRecordReference": {
+      "type": "string",
+      "pattern": "^(artifact|intent|message|task|appointment|lead|reply|approval|briefing):[a-z0-9][a-z0-9._:-]{2,127}$"
+    },
+    "safeCode": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{1,63}$"
+    },
+    "actorReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "alias"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["SYSTEM_ALIAS", "OPERATOR_ALIAS", "WORKER_ALIAS"]
+        },
+        "alias": {
+          "$ref": "#/$defs/safeAlias"
+        }
+      }
+    },
+    "recipientReference": {
+      "description": "Exactly one non-raw recipient reference form is permitted.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": {
+              "const": "HASHED"
+            },
+            "value": {
+              "$ref": "#/$defs/sha256Digest"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": {
+              "const": "ALIAS"
+            },
+            "value": {
+              "$ref": "#/$defs/safeAlias"
+            }
+          }
+        }
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "channel",
+        "origin",
+        "ingressStatus",
+        "providerEventIdDigest"
+      ],
+      "properties": {
+        "channel": {
+          "const": "LINE"
+        },
+        "origin": {
+          "type": "string",
+          "enum": [
+            "LINE_WEBHOOK",
+            "SECRETARY_INTERNAL",
+            "MEDIA_WORKER",
+            "AUDIO_WORKER",
+            "DOCUMENT_WORKER",
+            "APPROVAL_GATE",
+            "BRIEFING_WORKER"
+          ]
+        },
+        "ingressStatus": {
+          "type": "string",
+          "enum": [
+            "NOT_APPLICABLE",
+            "RECEIVED",
+            "SIGNATURE_VERIFIED",
+            "SIGNATURE_REJECTED"
+          ]
+        },
+        "providerEventIdDigest": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256Digest"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "auditPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordType",
+        "recordRef",
+        "recordDigest",
+        "artifactRefs",
+        "codeAttributes",
+        "numericAttributes",
+        "booleanAttributes"
+      ],
+      "properties": {
+        "recordType": {
+          "type": "string",
+          "enum": [
+            "WEBHOOK_AUDIT",
+            "NORMALIZED_MESSAGE",
+            "MEDIA_ARTIFACT",
+            "TRANSCRIPT_ARTIFACT",
+            "OCR_ARTIFACT",
+            "SECRETARY_INTENT",
+            "TASK_DRAFT",
+            "APPOINTMENT",
+            "LEAD",
+            "REPLY_DRAFT",
+            "APPROVAL",
+            "OUTBOUND_MESSAGE",
+            "BRIEFING"
+          ]
+        },
+        "recordRef": {
+          "$ref": "#/$defs/safeRecordReference"
+        },
+        "recordDigest": {
+          "$ref": "#/$defs/sha256Digest"
+        },
+        "artifactRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 32,
+          "items": {
+            "$ref": "#/$defs/safeRecordReference"
+          }
+        },
+        "codeAttributes": {
+          "type": "object",
+          "maxProperties": 32,
+          "propertyNames": {
+            "pattern": "^[a-z][a-zA-Z0-9]{0,63}$"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/safeCode"
+          }
+        },
+        "numericAttributes": {
+          "type": "object",
+          "maxProperties": 32,
+          "propertyNames": {
+            "pattern": "^[a-z][a-zA-Z0-9]{0,63}$"
+          },
+          "additionalProperties": {
+            "type": "number"
+          }
+        },
+        "booleanAttributes": {
+          "type": "object",
+          "maxProperties": 32,
+          "propertyNames": {
+            "pattern": "^[a-z][a-zA-Z0-9]{0,63}$"
+          },
+          "additionalProperties": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "riskAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tier",
+        "dataClass",
+        "externalEffect",
+        "mutation",
+        "decision",
+        "reasonCodes"
+      ],
+      "properties": {
+        "tier": {
+          "type": "string",
+          "enum": ["A", "B", "C", "D", "X"]
+        },
+        "dataClass": {
+          "type": "string",
+          "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"]
+        },
+        "externalEffect": {
+          "type": "boolean"
+        },
+        "mutation": {
+          "type": "boolean"
+        },
+        "decision": {
+          "type": "string",
+          "enum": ["AUTO_ALLOWED", "CONFIRMATION_REQUIRED", "BLOCKED"]
+        },
+        "reasonCodes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/safeCode"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "tier": {
+                "const": "A"
+              }
+            },
+            "required": ["tier"]
+          },
+          "then": {
+            "properties": {
+              "externalEffect": {
+                "const": false
+              },
+              "mutation": {
+                "const": false
+              },
+              "decision": {
+                "const": "AUTO_ALLOWED"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tier": {
+                "enum": ["C", "D"]
+              }
+            },
+            "required": ["tier"]
+          },
+          "then": {
+            "properties": {
+              "decision": {
+                "const": "CONFIRMATION_REQUIRED"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tier": {
+                "const": "D"
+              }
+            },
+            "required": ["tier"]
+          },
+          "then": {
+            "anyOf": [
+              {
+                "properties": {
+                  "externalEffect": {
+                    "const": true
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "mutation": {
+                    "const": true
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tier": {
+                "const": "X"
+              }
+            },
+            "required": ["tier"]
+          },
+          "then": {
+            "properties": {
+              "decision": {
+                "const": "BLOCKED"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "confirmation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "status",
+        "approvalRef",
+        "decisionDigest",
+        "decidedAt",
+        "decidedBy"
+      ],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "NOT_REQUIRED",
+            "AWAITING_CONFIRMATION",
+            "APPROVED",
+            "REJECTED",
+            "EXPIRED"
+          ]
+        },
+        "approvalRef": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^approval:[a-z0-9][a-z0-9._:-]{2,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "decisionDigest": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256Digest"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "decidedAt": {
+          "oneOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "decidedBy": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/actorReference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "required": {
+                "const": false
+              }
+            },
+            "required": ["required"]
+          },
+          "then": {
+            "properties": {
+              "status": {
+                "const": "NOT_REQUIRED"
+              },
+              "approvalRef": {
+                "type": "null"
+              },
+              "decisionDigest": {
+                "type": "null"
+              },
+              "decidedAt": {
+                "type": "null"
+              },
+              "decidedBy": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "required": {
+                "const": true
+              }
+            },
+            "required": ["required"]
+          },
+          "then": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "AWAITING_CONFIRMATION",
+                  "APPROVED",
+                  "REJECTED",
+                  "EXPIRED"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "AWAITING_CONFIRMATION"
+              }
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "approvalRef": {
+                "type": "null"
+              },
+              "decisionDigest": {
+                "type": "null"
+              },
+              "decidedAt": {
+                "type": "null"
+              },
+              "decidedBy": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": ["APPROVED", "REJECTED"]
+              }
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "approvalRef": {
+                "type": "string",
+                "pattern": "^approval:[a-z0-9][a-z0-9._:-]{2,127}$"
+              },
+              "decisionDigest": {
+                "$ref": "#/$defs/sha256Digest"
+              },
+              "decidedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "decidedBy": {
+                "$ref": "#/$defs/actorReference"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "eventLifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "attempt", "updatedAt", "statusReasonCode"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "RECEIVED",
+            "NORMALIZED",
+            "PROCESSING",
+            "CLASSIFIED",
+            "DRAFTED",
+            "AWAITING_CONFIRMATION",
+            "APPROVED",
+            "QUEUED",
+            "SENDING",
+            "SENT",
+            "COMPLETED",
+            "FAILED",
+            "REJECTED",
+            "BLOCKED",
+            "CANCELLED"
+          ]
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "statusReasonCode": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/safeCode"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "persistence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "writeStatus", "recordRef"],
+      "properties": {
+        "status": {
+          "const": "PENDING_L2_DATABASE_DECISION"
+        },
+        "writeStatus": {
+          "const": "NOT_AUTHORIZED"
+        },
+        "recordRef": {
+          "type": "null"
+        }
+      }
+    }
+  }
+}

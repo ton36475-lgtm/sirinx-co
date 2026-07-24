@@ -1,0 +1,955 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "outbound-message.schema.json",
+  "title": "LINE Secretary Outbound Message",
+  "description": "L1 contract-only outbound LINE message record. Content is represented only by safe references and digests. Any live external send is Tier D and requires a digest-bound approval; this schema contains no raw recipient identifier, provider credential, secret, token, or message body.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "messageId",
+    "recipientAlias",
+    "recipientHash",
+    "messageDigest",
+    "templateDigest",
+    "status",
+    "sendPolicy",
+    "sourceIntentId",
+    "createdAt",
+    "correlationId",
+    "idempotencyKey",
+    "actor",
+    "content",
+    "risk",
+    "confirmation",
+    "lifecycle",
+    "delivery",
+    "persistence"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "messageId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "sourceIntentId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "correlationId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "idempotencyKey": {
+      "$ref": "line-event.schema.json#/$defs/idempotencyKey"
+    },
+    "actor": {
+      "$ref": "line-event.schema.json#/$defs/actorReference"
+    },
+    "recipientAlias": {
+      "$ref": "line-event.schema.json#/$defs/safeAlias"
+    },
+    "recipientHash": {
+      "$ref": "line-event.schema.json#/$defs/sha256Digest"
+    },
+    "content": {
+      "$ref": "#/$defs/contentReference"
+    },
+    "messageDigest": {
+      "$ref": "line-event.schema.json#/$defs/sha256Digest"
+    },
+    "templateDigest": {
+      "$ref": "line-event.schema.json#/$defs/sha256Digest"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "WAITING_APPROVAL",
+        "APPROVED",
+        "SEND_REQUESTED",
+        "SENT",
+        "FAILED",
+        "CANCELLED"
+      ]
+    },
+    "sendPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "oneUse",
+        "maxMessages",
+        "riskClass",
+        "approvalRequired",
+        "approvalBinding",
+        "externalEffect"
+      ],
+      "properties": {
+        "oneUse": {
+          "const": true
+        },
+        "maxMessages": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1
+        },
+        "riskClass": {
+          "const": "HUMAN_RED"
+        },
+        "approvalRequired": {
+          "const": true
+        },
+        "approvalBinding": {
+          "const": "MESSAGE_DIGEST_RECIPIENT_AND_IDEMPOTENCY_KEY"
+        },
+        "externalEffect": {
+          "const": "BLOCKED_UNTIL_EXACT_APPROVAL"
+        }
+      }
+    },
+    "approval": {
+      "$ref": "#/$defs/exactApprovalGrant"
+    },
+    "risk": {
+      "$ref": "line-event.schema.json#/$defs/riskAssessment"
+    },
+    "confirmation": {
+      "$ref": "line-event.schema.json#/$defs/confirmation"
+    },
+    "lifecycle": {
+      "$ref": "#/$defs/outboundLifecycle"
+    },
+    "delivery": {
+      "$ref": "#/$defs/delivery"
+    },
+    "persistence": {
+      "$ref": "line-event.schema.json#/$defs/persistence"
+    }
+  },
+  "x-sirinx-equality-constraints": [
+    {
+      "left": "/approval/target/resourceId",
+      "right": "/messageId"
+    },
+    {
+      "left": "/approval/messageBinding/messageId",
+      "right": "/messageId"
+    },
+    {
+      "left": "/approval/messageBinding/recipientAlias",
+      "right": "/recipientAlias"
+    },
+    {
+      "left": "/approval/messageBinding/recipientHash",
+      "right": "/recipientHash"
+    },
+    {
+      "left": "/approval/messageBinding/messageDigest",
+      "right": "/messageDigest"
+    },
+    {
+      "left": "/approval/messageBinding/templateDigest",
+      "right": "/templateDigest"
+    },
+    {
+      "left": "/approval/messageBinding/idempotencyKey",
+      "right": "/idempotencyKey"
+    }
+  ],
+  "x-sirinx-canonical-digest": {
+    "algorithm": "RFC8785_JCS_SHA256",
+    "sourcePointers": [
+      "/approval/actionType",
+      "/approval/target",
+      "/approval/scope",
+      "/approval/messageBinding"
+    ],
+    "mustEqual": "/approval/payloadDigest"
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "APPROVED"
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["approval"],
+        "properties": {
+          "approval": {
+            "properties": {
+              "actionType": {
+                "const": "LINE_MESSAGE_APPROVE"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": ["SEND_REQUESTED", "SENT"]
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["approval"],
+        "properties": {
+          "approval": {
+            "properties": {
+              "actionType": {
+                "const": "LINE_MESSAGE_SEND"
+              },
+              "maxMessages": {
+                "const": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "DRAFT"
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "DRAFT"
+              }
+            }
+          },
+          "delivery": {
+            "properties": {
+              "status": {
+                "const": "NOT_REQUESTED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "WAITING_APPROVAL"
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "confirmation": {
+            "properties": {
+              "status": {
+                "const": "AWAITING_CONFIRMATION"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "AWAITING_CONFIRMATION"
+              }
+            }
+          },
+          "delivery": {
+            "properties": {
+              "status": {
+                "const": "NOT_REQUESTED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "APPROVED"
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "confirmation": {
+            "properties": {
+              "status": {
+                "const": "APPROVED"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "APPROVED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "SEND_REQUESTED"
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "confirmation": {
+            "properties": {
+              "status": {
+                "const": "APPROVED"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "enum": ["QUEUED", "SENDING"]
+              }
+            }
+          },
+          "delivery": {
+            "properties": {
+              "status": {
+                "enum": ["QUEUED", "SENDING"]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "SENT"
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "confirmation": {
+            "properties": {
+              "status": {
+                "const": "APPROVED"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "SENT"
+              }
+            }
+          },
+          "delivery": {
+            "properties": {
+              "status": {
+                "const": "SENT"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "FAILED"
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "confirmation": {
+            "properties": {
+              "status": {
+                "const": "APPROVED"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "FAILED"
+              }
+            }
+          },
+          "delivery": {
+            "properties": {
+              "status": {
+                "const": "FAILED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "CANCELLED"
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "CANCELLED"
+              }
+            }
+          },
+          "delivery": {
+            "properties": {
+              "status": {
+                "const": "CANCELLED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "risk": {
+          "properties": {
+            "tier": {
+              "const": "D"
+            },
+            "externalEffect": {
+              "const": true
+            },
+            "decision": {
+              "const": "CONFIRMATION_REQUIRED"
+            }
+          }
+        },
+        "confirmation": {
+          "properties": {
+            "required": {
+              "const": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "DRAFT"
+              }
+            },
+            "required": ["status"]
+          }
+        },
+        "required": ["lifecycle"]
+      },
+      "then": {
+        "properties": {
+          "delivery": {
+            "properties": {
+              "status": {
+                "const": "NOT_REQUESTED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "AWAITING_CONFIRMATION"
+              }
+            },
+            "required": ["status"]
+          }
+        },
+        "required": ["lifecycle"]
+      },
+      "then": {
+        "properties": {
+          "confirmation": {
+            "properties": {
+              "status": {
+                "const": "AWAITING_CONFIRMATION"
+              }
+            }
+          },
+          "delivery": {
+            "properties": {
+              "status": {
+                "const": "NOT_REQUESTED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "enum": ["APPROVED", "QUEUED", "SENDING", "SENT", "FAILED"]
+              }
+            },
+            "required": ["status"]
+          }
+        },
+        "required": ["lifecycle"]
+      },
+      "then": {
+        "properties": {
+          "confirmation": {
+            "properties": {
+              "status": {
+                "const": "APPROVED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "SENT"
+              }
+            },
+            "required": ["status"]
+          }
+        },
+        "required": ["lifecycle"]
+      },
+      "then": {
+        "properties": {
+          "delivery": {
+            "properties": {
+              "status": {
+                "const": "SENT"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "FAILED"
+              }
+            },
+            "required": ["status"]
+          }
+        },
+        "required": ["lifecycle"]
+      },
+      "then": {
+        "properties": {
+          "delivery": {
+            "properties": {
+              "status": {
+                "const": "FAILED"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "lifecycle": {
+            "properties": {
+              "status": {
+                "const": "BLOCKED"
+              }
+            },
+            "required": ["status"]
+          }
+        },
+        "required": ["lifecycle"]
+      },
+      "then": {
+        "properties": {
+          "delivery": {
+            "properties": {
+              "status": {
+                "const": "BLOCKED"
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "exactApprovalGrant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approvalReceiptId",
+        "actionId",
+        "actionType",
+        "requesterId",
+        "approverId",
+        "target",
+        "scope",
+        "payloadDigest",
+        "createdAt",
+        "expiresAt",
+        "nonce",
+        "oneUse",
+        "maxActions",
+        "maxMessages",
+        "evidenceContractDigest",
+        "messageBinding"
+      ],
+      "properties": {
+        "approvalReceiptId": {
+          "$ref": "line-event.schema.json#/$defs/safeRecordReference"
+        },
+        "actionId": {
+          "$ref": "line-event.schema.json#/$defs/safeRecordReference"
+        },
+        "actionType": {
+          "type": "string",
+          "enum": ["LINE_MESSAGE_APPROVE", "LINE_MESSAGE_SEND"]
+        },
+        "requesterId": {
+          "$ref": "line-event.schema.json#/$defs/safeRecordReference"
+        },
+        "approverId": {
+          "$ref": "line-event.schema.json#/$defs/safeRecordReference"
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "operationId",
+            "pathTemplate",
+            "resourceType",
+            "resourceId"
+          ],
+          "properties": {
+            "operationId": {
+              "type": "string",
+              "enum": ["approveLineMessage", "sendLineMessage"]
+            },
+            "pathTemplate": {
+              "type": "string",
+              "enum": [
+                "/v1/line/messages/{messageId}/approve",
+                "/v1/line/messages/{messageId}/send"
+              ]
+            },
+            "resourceType": {
+              "const": "LINE_MESSAGE"
+            },
+            "resourceId": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "scope": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["line-message:approve", "line-message:send"]
+          }
+        },
+        "payloadDigest": {
+          "$ref": "line-event.schema.json#/$defs/sha256Digest"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "nonce": {
+          "type": "string",
+          "minLength": 32,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_-]{32,128}$"
+        },
+        "oneUse": {
+          "const": true
+        },
+        "maxActions": {
+          "const": 1
+        },
+        "maxMessages": {
+          "const": 1
+        },
+        "maxCostUsd": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,6})?$"
+        },
+        "rollbackRef": {
+          "$ref": "line-event.schema.json#/$defs/safeRecordReference"
+        },
+        "evidenceContractDigest": {
+          "$ref": "line-event.schema.json#/$defs/sha256Digest"
+        },
+        "messageBinding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "messageId",
+            "recipientAlias",
+            "recipientHash",
+            "messageDigest",
+            "templateDigest",
+            "idempotencyKey"
+          ],
+          "properties": {
+            "messageId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "recipientAlias": {
+              "$ref": "line-event.schema.json#/$defs/safeAlias"
+            },
+            "recipientHash": {
+              "$ref": "line-event.schema.json#/$defs/sha256Digest"
+            },
+            "messageDigest": {
+              "$ref": "line-event.schema.json#/$defs/sha256Digest"
+            },
+            "templateDigest": {
+              "$ref": "line-event.schema.json#/$defs/sha256Digest"
+            },
+            "idempotencyKey": {
+              "$ref": "line-event.schema.json#/$defs/idempotencyKey"
+            }
+          }
+        }
+      },
+      "description": "A future runtime MUST reject grants when expiresAt is not in the future, the nonce was previously consumed, requesterId equals approverId, target/action/scope disagree, any equality constraint fails, or payloadDigest does not match the canonical digest."
+    },
+    "contentReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contentType",
+        "bodyRef",
+        "bodyDigest",
+        "altTextDigest",
+        "templateAlias",
+        "attachmentRefs"
+      ],
+      "properties": {
+        "contentType": {
+          "type": "string",
+          "enum": [
+            "TEXT",
+            "IMAGE",
+            "AUDIO",
+            "VIDEO",
+            "FILE",
+            "FLEX",
+            "TEMPLATE"
+          ]
+        },
+        "bodyRef": {
+          "$ref": "line-event.schema.json#/$defs/safeRecordReference"
+        },
+        "bodyDigest": {
+          "$ref": "line-event.schema.json#/$defs/sha256Digest"
+        },
+        "altTextDigest": {
+          "oneOf": [
+            {
+              "$ref": "line-event.schema.json#/$defs/sha256Digest"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "templateAlias": {
+          "oneOf": [
+            {
+              "$ref": "line-event.schema.json#/$defs/safeAlias"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attachmentRefs": {
+          "type": "array",
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "line-event.schema.json#/$defs/safeRecordReference"
+          }
+        }
+      }
+    },
+    "outboundLifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "revision", "updatedAt", "statusReasonCode"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "DRAFT",
+            "AWAITING_CONFIRMATION",
+            "APPROVED",
+            "QUEUED",
+            "SENDING",
+            "SENT",
+            "FAILED",
+            "BLOCKED",
+            "CANCELLED"
+          ]
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "statusReasonCode": {
+          "oneOf": [
+            {
+              "$ref": "line-event.schema.json#/$defs/safeCode"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "channel",
+        "mode",
+        "status",
+        "attempt",
+        "providerRequestIdDigest",
+        "lastAttemptAt",
+        "failureCode"
+      ],
+      "properties": {
+        "channel": {
+          "const": "LINE"
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["REPLY", "PUSH", "MULTICAST", "BROADCAST"]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "NOT_REQUESTED",
+            "QUEUED",
+            "SENDING",
+            "SENT",
+            "FAILED",
+            "BLOCKED",
+            "CANCELLED"
+          ]
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "providerRequestIdDigest": {
+          "oneOf": [
+            {
+              "$ref": "line-event.schema.json#/$defs/sha256Digest"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lastAttemptAt": {
+          "oneOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "failureCode": {
+          "oneOf": [
+            {
+              "$ref": "line-event.schema.json#/$defs/safeCode"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

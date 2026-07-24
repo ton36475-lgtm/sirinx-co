@@ -35,11 +35,6 @@
           "path": "/Users/sirinx/sirinx-os/apps/pocket-hatchery",
           "kind": "local_app_spec_surface",
           "evidence": "web, contracts, schemas, and ops folders exist"
-        },
-        {
-          "path": "/Users/sirinx/Documents/Codex/2026-05-28-ai-company-n-n-l7-interface/products/pocket-hatchery",
-          "kind": "historical_product_spec_reference",
-          "evidence": "product, frontend, contract, memory, test, and release specs exist"
         }
       ],
       "nextSafeAction": "human_confirm_authoritative_source_before_implementation"

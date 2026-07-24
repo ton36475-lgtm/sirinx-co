@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "sirinx.hermes-operating-model.v1",
+  "policyId": "HERMES_3_AGENT_OPERATING_MODEL_V1",
+  "architectureId": "SIRINX_NEURAL_FABRIC_V1",
+  "status": "ACTIVE_LOCAL_GOVERNANCE",
+  "authority": {
+    "humanOwner": "FINAL_RISK_AUTHORITY",
+    "hermes": "ENGINEERING_MANAGER_ONLY",
+    "authorityKernel": "SOLE_TRANSITION_AND_GRANT_ISSUER",
+    "postgresql": "DURABLE_RECORD_ONLY"
+  },
+  "principalCapabilities": {
+    "HERMES": {
+      "worker": false,
+      "mayAuthorProductCode": false,
+      "mayHoldProductWriteLease": false,
+      "maySelfApprove": false
+    },
+    "OPENCODE": {
+      "worker": true,
+      "mayAuthorProductCode": false,
+      "mayHoldProductWriteLease": false,
+      "maySelfApprove": false
+    }
+  },
+  "team": {
+    "implementationAgents": [
+      "CLAUDE_CODE",
+      "CODEX",
+      "OPENCODE"
+    ],
+    "maxParallelAgents": 3,
+    "maxParallelWriters": 2,
+    "independentReviewerCount": 1,
+    "roles": {
+      "CLAUDE_CODE": {
+        "role": "MAKER",
+        "defaultAccess": "BOUNDED_WRITE",
+        "primaryScope": "FRONTEND_UX_DESIGN_SYSTEM"
+      },
+      "CODEX": {
+        "role": "MAKER",
+        "defaultAccess": "BOUNDED_WRITE",
+        "primaryScope": "BACKEND_DATA_API_TESTS"
+      },
+      "OPENCODE": {
+        "role": "INDEPENDENT_VERIFIER",
+        "defaultAccess": "READ_ONLY",
+        "mayAuthorCandidateUnderReview": false,
+        "mayVerifyOwnOutput": false,
+        "mayHoldWriteLease": false
+      }
+    }
+  },
+  "optionalAdapters": {
+    "KIMI": {
+      "enabledByDefault": false,
+      "defaultAccess": "READ_ONLY",
+      "requiresVerifiedAdapterContract": true,
+      "mayBeDefaultMaker": false,
+      "canBeDefaultWorker": false,
+      "mayHoldWriteLease": false,
+      "mayIssueAuthority": false
+    }
+  },
+  "identityPolicy": {
+    "parallelCountMode": "ACTIVE_AGENT_INSTANCES",
+    "aliasesCountAsSeparateInstances": true,
+    "duplicateRoleInstancesCountTowardLimit": true,
+    "optionalAdaptersCountTowardParallelAgentLimit": true
+  },
+  "leases": {
+    "oneWriterPerPath": true,
+    "isolatedWorktreePerWriter": true,
+    "sameFrozenBaseForWriters": true,
+    "verifierMayHoldWriteLease": false,
+    "integrationRequiresSeparateLease": true
+  },
+  "review": {
+    "workerSelfReportsTrusted": false,
+    "independentIdentityRequired": true,
+    "makerMaySelfApprove": false,
+    "finalReceiptRequired": true
+  },
+  "handoff": {
+    "authority": "HERMES",
+    "workerToWorkerExecutableInstructions": false,
+    "versionedArtifactsRequired": true,
+    "digestBindingRequired": true
+  },
+  "riskGates": {
+    "merge": "HUMAN_RED",
+    "push": "HUMAN_RED",
+    "deploy": "HUMAN_RED",
+    "dns": "HUMAN_RED",
+    "productionDatabase": "HUMAN_RED",
+    "marketplaceMutation": "HUMAN_RED",
+    "customerMessage": "HUMAN_RED",
+    "productionUse": "HUMAN_RED"
+  },
+  "approvalPolicy": {
+    "humanRedApprover": "HUMAN_OWNER",
+    "automatedApproval": false,
+    "oneUseGrantRequired": true,
+    "digestBindingRequired": true
+  },
+  "productionPrerequisites": {
+    "keyRotationRequired": true,
+    "existingKeyProductionUse": false
+  },
+  "providerPolicy": {
+    "callAuthority": "SEPARATE_EXACT_GATE",
+    "oneUseGrantRequired": true,
+    "digestBindingRequired": true,
+    "autoFallback": false,
+    "undeclaredFallback": "DENY",
+    "secretInLogs": false,
+    "secretInArgv": false,
+    "existingKeyScope": "LOCAL_DEV_TEST_ONLY",
+    "rotationRequiredBeforeProduction": true
+  },
+  "overlayPolicy": {
+    "generatedOverlayMayExpandLimits": false,
+    "cliRosterGrantsAuthority": false,
+    "cmuxPaneGrantsAuthority": false,
+    "historicalP092MayOverride": false
+  },
+  "failureMode": "FAIL_CLOSED"
+}

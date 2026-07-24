@@ -39,11 +39,13 @@ describe("Agent Driver contract", () => {
     expect(byId["hermes-agent"].classification).toBe("side_effectful");
     expect(byId["codex-app"].classification).toBe("missing");
     expect(byId.openclaw.classification).toBe("needs_install");
-    expect(byId.opencode.classification).toBe("needs_install");
+    expect(byId.opencode.classification).toBe("passed");
+    expect(byId.opencode.approvedReadOnlyCommand).toBe("opencode --version");
+    expect(byId.opencode.evidencePacket.path).toBe("reports/runtime/opencode-handshake-20260720-001/HANDSHAKE.json");
     expect(byId["copilot-cli"].classification).toBe("needs_install");
     expect(byId.droid.classification).toBe("needs_install");
     expect(byId.pi.classification).toBe("needs_install");
-    expect(driver.recommendedOrder.map((agent) => agent.id)).toEqual(["codex", "claude-code", "hermes-agent"]);
+    expect(driver.recommendedOrder.map((agent) => agent.id)).toEqual(["codex", "claude-code", "hermes-agent", "opencode"]);
     expect(driver.nextRecommendedAgent.id).toBe("codex");
     expect(byId["hermes-agent"].blockedLauncherCommand).toBe("ollama launch hermes");
     expect(byId["hermes-agent"].approvedReadOnlyCommands).toEqual(["hermes --version", "hermes status", "hermes --help"]);

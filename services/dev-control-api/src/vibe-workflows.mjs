@@ -128,12 +128,12 @@ export const commandCenterFunctions = [
     title: "47 Ronin Agent Team",
     surface: "Hermes profiles and Command Center",
     owner: "shogun",
-    status: "profile-ready",
+    status: "contract-ready-runtime-unverified",
     mode: "write-ready-approval-gated",
     command: "hermes profile list && curl /api/vibe-command-center",
     actionId: "agent-team-profile-check",
     approvalGate: "External SaaS writes, messaging, deploys, and public website changes still require explicit target approval.",
-    evidence: ["12 active Hermes profiles", "47-role roster", "profile cwd locked to sirinx-os", "Telegram target still blocked"]
+    evidence: ["12 Hermes profile definitions", "47-role roster", "profile cwd evidence not collected from protected config", "Telegram target still blocked"]
   },
   {
     id: "cloudflare-release",
@@ -258,9 +258,9 @@ export const processLane = [
     id: "phase-12",
     label: "Phase 12",
     title: "Create 47 Ronin Agent Team",
-    status: "done",
+    status: "contract-done-runtime-unverified",
     nextCommand: "hermes profile list",
-    output: "12 active Hermes profiles are configured; 47 roles remain managed as a roster."
+    output: "12 Hermes profile definitions exist; 47 roles remain passive until runtime evidence and leases exist."
   }
 ];
 
@@ -268,13 +268,8 @@ export function getVibeCommandCenter() {
   const agentTeam = getRoninAgentTeam();
   const blocked = commandCenterFunctions.filter((item) => item.status.includes("blocked")).length;
   const dryRun = commandCenterFunctions.filter((item) => item.mode.includes("dry") || item.mode.includes("simulation")).length;
-  const ready = commandCenterFunctions.filter((item) =>
-    item.status.includes("done") ||
-    item.status.includes("ready") ||
-    item.status.includes("online") ||
-    item.status.includes("live") ||
-    item.status.includes("active")
-  ).length;
+  const readyStates = new Set(["done", "ready", "online", "live", "active"]);
+  const ready = commandCenterFunctions.filter((item) => readyStates.has(item.status)).length;
 
   return {
     title: "Vibe Coding Command Center",

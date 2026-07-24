@@ -1,5 +1,6 @@
 import { createServer } from "node:http";
 import { execFile } from "node:child_process";
+import { createHash } from "node:crypto";
 import { readdir, readFile } from "node:fs/promises";
 import { promisify } from "node:util";
 import { ensureApprovalRequest, listApprovalQueue } from "./src/approval-queue.mjs";
@@ -43,6 +44,31 @@ import { createLocalRagQueryDryRun, createLocalRagScanDryRun, getLocalRagStatus 
 import { createAgentLaunchGateDryRun, getAgentLaunchGateStatus } from "./src/agent-launch-gate.mjs";
 import { createAgentDriverSmokeDryRun, getAgentDriverStatus } from "./src/agent-driver.mjs";
 import { createCenterBrainSyncDryRun, getCenterBrainHubStatus } from "./src/centerbrain-hub.mjs";
+import {
+  A2aSyncValidationError,
+  createA2aSyncPlan,
+  getA2aSyncStatus
+} from "./src/a2a-sync.mjs";
+import {
+  getLiveSyncStatus,
+  registerAgentWithControl,
+  syncAllAgents,
+  syncAgentIds,
+  syncLanes,
+  queryControlCard,
+  routeThroughControl
+} from "./src/a2a-live-sync.mjs";
+import { authorizeControlRequest } from "../telegram-command-bot/src/control-auth.mjs";
+import {
+  activateOmnirouteLane,
+  executeOmnirouteHandshake,
+  getOmnirouteStatus
+} from "./src/a2a-omniroute.mjs";
+import {
+  createAgenticEnterpriseDispatchPlan,
+  getAgenticEnterpriseStatus
+} from "./src/agentic-enterprise.mjs";
+import { createCodexAutoloopPlan, getCodexAutoloopStatus } from "./src/codex-autoloop.mjs";
 import { createRepoIntakeReviewDryRun, getRepoIntakeGateStatus } from "./src/repo-intake-gate.mjs";
 import { createTeamRuntimeBridgeDryRun, getTeamRuntimeBridgeStatus } from "./src/team-runtime-bridge.mjs";
 import {
@@ -73,7 +99,11 @@ import {
 
 const execFileAsync = promisify(execFile);
 const host = process.env.DEV_CONTROL_API_HOST || "127.0.0.1";
-const port = Number(process.env.DEV_CONTROL_API_PORT || 8711);
+const port = Number(process.env.DEV_CONTROL_API_PORT || 8790);
+const A2A_PLAN_BODY_LIMIT_BYTES = 16 * 1024;
+const A2A_IDEMPOTENCY_TTL_MS = 5 * 60 * 1000;
+const A2A_IDEMPOTENCY_MAX_ENTRIES = 128;
+const a2aPlanIdempotencyCache = new Map();
 const hermesDashboardUrl = process.env.HERMES_DASHBOARD_URL || "http://127.0.0.1:9119";
 const hermesKanbanBoard = process.env.HERMES_KANBAN_BOARD || "sirinx-os";
 const projectRoot = process.env.SIRINX_PROJECT_ROOT || "/Users/sirinx/sirinx-os";
@@ -87,29 +117,131 @@ const allowedOrigins = new Set([
 
 function getCorsOrigin(request) {
   const origin = request.headers.origin;
-  return allowedOrigins.has(origin) ? origin : "http://localhost:8710";
+  return allowedOrigins.has(origin) ? origin : null;
 }
 
-function sendJson(request, response, status, body) {
-  response.writeHead(status, {
+function sendJson(request, response, status, body, extraHeaders = {}) {
+  const corsOrigin = getCorsOrigin(request);
+  const headers = {
     "content-type": "application/json; charset=utf-8",
-    "access-control-allow-origin": getCorsOrigin(request),
     "access-control-allow-methods": "GET,POST,OPTIONS",
-    "access-control-allow-headers": "content-type",
-    "cache-control": "no-store"
-  });
+    "access-control-allow-headers": "authorization,content-type,idempotency-key",
+    "access-control-expose-headers": "idempotency-replayed",
+    "cache-control": "no-store",
+    "vary": "Origin",
+    ...extraHeaders
+  };
+  if (corsOrigin) headers["access-control-allow-origin"] = corsOrigin;
+  response.writeHead(status, headers);
   response.end(JSON.stringify(body, null, 2));
 }
 
-async function readJson(request) {
+class RequestBodyError extends Error {
+  constructor(code, status) {
+    super(code);
+    this.name = "RequestBodyError";
+    this.code = code;
+    this.status = status;
+  }
+}
+
+async function readJson(request, options = {}) {
+  const maxBytes = Number.isFinite(options.maxBytes) ? options.maxBytes : Number.POSITIVE_INFINITY;
+  const declaredLength = Number(request.headers["content-length"] || 0);
+  if (Number.isFinite(declaredLength) && declaredLength > maxBytes) {
+    request.resume();
+    throw new RequestBodyError("request_body_too_large", 413);
+  }
+
   const chunks = [];
+  let byteLength = 0;
 
   for await (const chunk of request) {
+    byteLength += chunk.length;
+    if (byteLength > maxBytes) {
+      throw new RequestBodyError("request_body_too_large", 413);
+    }
     chunks.push(chunk);
   }
 
   const raw = Buffer.concat(chunks).toString("utf8");
-  return raw ? JSON.parse(raw) : {};
+  let body;
+  try {
+    body = raw ? JSON.parse(raw) : {};
+  } catch {
+    throw new RequestBodyError("request_body_invalid_json", 400);
+  }
+  return options.includeRaw ? { body, raw } : body;
+}
+
+function getRequestHeader(request, name) {
+  const value = request.headers[name.toLowerCase()];
+  return Array.isArray(value) ? value[0] || "" : String(value || "");
+}
+
+function pruneA2aIdempotencyCache(now = Date.now()) {
+  for (const [key, entry] of a2aPlanIdempotencyCache) {
+    if (entry.expiresAt <= now) a2aPlanIdempotencyCache.delete(key);
+  }
+}
+
+function ensureA2aIdempotencyCapacity() {
+  if (a2aPlanIdempotencyCache.size < A2A_IDEMPOTENCY_MAX_ENTRIES) return;
+  for (const [key, entry] of a2aPlanIdempotencyCache) {
+    if (entry.settled) {
+      a2aPlanIdempotencyCache.delete(key);
+      return;
+    }
+  }
+  throw new RequestBodyError("idempotency_cache_saturated", 503);
+}
+
+function validateIdempotencyKey(request) {
+  const key = getRequestHeader(request, "idempotency-key").trim();
+  if (!key) throw new RequestBodyError("idempotency_key_required", 400);
+  if (!/^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/.test(key)) {
+    throw new RequestBodyError("idempotency_key_invalid", 400);
+  }
+  return key;
+}
+
+function fingerprintRequestBody(raw) {
+  return createHash("sha256").update(raw).digest("hex");
+}
+
+async function runIdempotentA2aPlan(key, fingerprint, body) {
+  const now = Date.now();
+  pruneA2aIdempotencyCache(now);
+  const existing = a2aPlanIdempotencyCache.get(key);
+  if (existing) {
+    if (existing.fingerprint !== fingerprint) {
+      throw new RequestBodyError("idempotency_key_body_mismatch", 409);
+    }
+    return { receipt: await existing.promise, replayed: true };
+  }
+
+  ensureA2aIdempotencyCapacity();
+  const entry = {
+    fingerprint,
+    expiresAt: Number.POSITIVE_INFINITY,
+    settled: false,
+    promise: null
+  };
+  entry.promise = Promise.resolve()
+    .then(() => createA2aSyncPlan(body))
+    .then((receipt) => {
+      entry.settled = true;
+      entry.expiresAt = Date.now() + A2A_IDEMPOTENCY_TTL_MS;
+      return receipt;
+    });
+  a2aPlanIdempotencyCache.set(key, entry);
+
+  try {
+    return { receipt: await entry.promise, replayed: false };
+  } catch (error) {
+    if (a2aPlanIdempotencyCache.get(key) === entry) a2aPlanIdempotencyCache.delete(key);
+    throw error;
+  }
 }
 
 async function checkHttp(url) {
@@ -414,7 +546,7 @@ async function getExecutiveHq() {
   ];
 
   const onlineServices = services.filter((service) => service.online).length;
-  const roninProfileCount = roninTeam.summary.readyProfiles;
+  const roninProfileCount = roninTeam.summary.activeProfiles;
   const agentCount = hermesAgents.length + thClawsAgents.length + roninProfileCount;
   const canRunNow = Boolean(
     dashboard.online &&
@@ -448,11 +580,13 @@ async function getExecutiveHq() {
     services,
     agentTeams: [
       {
-        name: "SIRINX 47 Ronin Active Profiles",
-        agents: roninTeam.activeProfiles.map((profile) => ({
+        name: "SIRINX 47 Ronin Profile Definitions (runtime unverified)",
+        agents: roninTeam.profileDefinitions.map((profile) => ({
           id: profile.name,
           name: profile.name,
-          description: `${profile.title}: ${profile.responsibility}`
+          description: `${profile.title}: ${profile.responsibility}`,
+          status: profile.status,
+          runtimeReady: profile.runtimeReady
         }))
       },
       {
@@ -915,7 +1049,20 @@ export async function handleRequest(request, response) {
   }
 
   if (request.method === "GET" && url.pathname === "/api/centerbrain-hub") {
-    sendJson(request, response, 200, await getCenterBrainHubStatus());
+    try {
+      sendJson(request, response, 200, await getCenterBrainHubStatus());
+    } catch {
+      sendJson(request, response, 503, {
+        status: "centerbrain_hub_status_unavailable",
+        error: "centerbrain_hub_status_failed",
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canSendMessages: false,
+        canSendTelegram: false,
+        requiresHumanApproval: true
+      });
+    }
     return;
   }
 
@@ -1123,10 +1270,12 @@ export async function handleRequest(request, response) {
       const body = await readJson(request);
       sendJson(request, response, 200, await createCenterBrainSyncDryRun(body));
     } catch (error) {
-      sendJson(request, response, 400, {
-        status: "invalid_centerbrain_sync_dry_run_request",
-        error: "centerbrain_sync_dry_run_failed",
-        message: error.message,
+      const requestError = error instanceof RequestBodyError;
+      sendJson(request, response, requestError ? error.status : 503, {
+        status: requestError
+          ? "invalid_centerbrain_sync_dry_run_request"
+          : "centerbrain_sync_dry_run_unavailable",
+        error: requestError ? error.code : "centerbrain_sync_dry_run_failed",
         externalWrites: false,
         productionWrites: false,
         customerVisible: false,
@@ -1137,6 +1286,88 @@ export async function handleRequest(request, response) {
         canSendMessages: false,
         canDeploy: false,
         canRemoteControlDevices: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/a2a-sync") {
+    try {
+      sendJson(request, response, 200, await getA2aSyncStatus());
+    } catch {
+      sendJson(request, response, 503, {
+        status: "a2a_sync_status_failed",
+        error: "a2a_sync_status_unavailable",
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canSendTelegram: false,
+        canStartAgents: false,
+        commandExecuted: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/a2a-sync/plan") {
+    try {
+      const { body, raw } = await readJson(request, {
+        maxBytes: A2A_PLAN_BODY_LIMIT_BYTES,
+        includeRaw: true
+      });
+
+      if (body?.dryRun === false) {
+        const authorization = authorizeControlRequest(request.headers, process.env);
+        if (!authorization.configured) {
+          sendJson(request, response, 503, {
+            status: "a2a_sync_live_control_unavailable",
+            error: "control_api_token_not_configured",
+            externalWrites: false,
+            canSendTelegram: false,
+            requiresHumanApproval: true
+          });
+          return;
+        }
+        if (!authorization.authorized) {
+          sendJson(request, response, 401, {
+            status: "a2a_sync_live_unauthorized",
+            error: authorization.reason,
+            externalWrites: false,
+            canSendTelegram: false,
+            requiresHumanApproval: true
+          }, { "www-authenticate": "Bearer" });
+          return;
+        }
+
+        const key = validateIdempotencyKey(request);
+        const result = await runIdempotentA2aPlan(key, fingerprintRequestBody(raw), body);
+        sendJson(request, response, 200, result.receipt, {
+          "idempotency-replayed": String(result.replayed)
+        });
+        return;
+      }
+
+      sendJson(request, response, 200, await createA2aSyncPlan(body));
+    } catch (error) {
+      const validation = error instanceof A2aSyncValidationError;
+      const requestError = error instanceof RequestBodyError;
+      const status = validation ? 422 : requestError ? error.status : 500;
+      const errorCode = validation
+        ? error.code
+        : requestError
+          ? error.code
+          : "a2a_sync_plan_internal_error";
+      sendJson(request, response, status, {
+        status: "invalid_a2a_sync_plan_request",
+        error: errorCode,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canSendTelegram: false,
+        canStartAgents: false,
+        commandExecuted: false,
         requiresHumanApproval: true
       });
     }
@@ -1169,6 +1400,62 @@ export async function handleRequest(request, response) {
         canPublish: false,
         requiresHumanApproval: true
       });
+    }
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/a2a-live-sync") {
+    try {
+      sendJson(request, response, 200, await getLiveSyncStatus());
+    } catch {
+      sendJson(request, response, 503, { status: "live_sync_status_failed", error: "live_sync_unavailable", mode: "error" });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/a2a-live-sync/register-all") {
+    try {
+      sendJson(request, response, 200, await syncAllAgents());
+    } catch (error) {
+      sendJson(request, response, 503, { status: "live_sync_register_failed", error: error.message });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/a2a-live-sync/register") {
+    try {
+      const body = await readJson(request);
+      const agentId = String(body?.agentId || "").trim();
+      const result = agentId
+        ? await registerAgentWithControl(agentId)
+        : await syncAgentIds(Array.isArray(body?.targetAgentIds) ? body.targetAgentIds : []);
+      sendJson(request, response, result?.ok !== false ? 200 : 400, result);
+    } catch (error) {
+      sendJson(request, response, 503, { status: "live_sync_register_failed", error: error.message });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/a2a-live-sync/sync-lanes") {
+    try {
+      const body = await readJson(request);
+      const laneIds = Array.isArray(body?.targetLanes) ? body.targetLanes : [];
+      const agents = Array.isArray(body?.targetAgentIds) ? body.targetAgentIds : [];
+      const result = laneIds.length > 0 ? await syncLanes(laneIds) : await syncAgentIds(agents);
+      sendJson(request, response, 200, result);
+    } catch (error) {
+      sendJson(request, response, 503, { status: "live_sync_lanes_failed", error: error.message });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/a2a-live-sync/route") {
+    try {
+      const body = await readJson(request);
+      const capabilities = Array.isArray(body?.capabilities) ? body.capabilities : [];
+      sendJson(request, response, 200, await routeThroughControl(capabilities));
+    } catch (error) {
+      sendJson(request, response, 503, { status: "live_sync_route_failed", error: error.message });
     }
     return;
   }
@@ -1384,6 +1671,142 @@ export async function handleRequest(request, response) {
       const body = { error: "invalid_json", externalWrites: false, requiresHumanApproval: true };
       recordDryRunAuditEvent("invalid-json", body, 400);
       sendJson(request, response, 400, body);
+    }
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/omniroute") {
+    try {
+      const probeHermes = url.searchParams.get("probeHermes") === "true";
+      sendJson(request, response, 200, await getOmnirouteStatus({ probeHermes }));
+    } catch {
+      sendJson(request, response, 503, {
+        status: "omniroute_status_failed",
+        error: "omniroute_status_unavailable",
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canSendTelegram: false,
+        canStartAgents: false,
+        commandExecuted: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/omniroute/handshake") {
+    try {
+      const body = await readJson(request, { maxBytes: A2A_PLAN_BODY_LIMIT_BYTES });
+      sendJson(request, response, 200, await executeOmnirouteHandshake(body, {
+        probeHermes: body?.probeHermes === true
+      }));
+    } catch (error) {
+      const requestError = error instanceof RequestBodyError;
+      sendJson(request, response, requestError ? error.status : 422, {
+        status: "invalid_omniroute_handshake_request",
+        error: requestError ? error.code : "omniroute_handshake_failed",
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canSendTelegram: false,
+        canStartAgents: false,
+        canCreateTmuxSessions: false,
+        commandExecuted: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/omniroute/activate") {
+    try {
+      const body = await readJson(request, { maxBytes: A2A_PLAN_BODY_LIMIT_BYTES });
+      sendJson(request, response, 200, await activateOmnirouteLane(body));
+    } catch (error) {
+      const requestError = error instanceof RequestBodyError;
+      sendJson(request, response, requestError ? error.status : 422, {
+        status: "invalid_omniroute_activate_request",
+        error: requestError ? error.code : "omniroute_activate_failed",
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canSendTelegram: false,
+        canStartAgents: false,
+        canCreateTmuxSessions: false,
+        commandExecuted: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/agent-enterprise") {
+    try {
+      sendJson(request, response, 200, getAgenticEnterpriseStatus());
+    } catch {
+      sendJson(request, response, 503, {
+        status: "agent_enterprise_status_failed",
+        error: "agent_enterprise_status_unavailable",
+        externalWrites: false,
+        canSpawnWorkersNow: false,
+        commandExecuted: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/agent-enterprise/dispatch/plan") {
+    try {
+      const body = await readJson(request, { maxBytes: A2A_PLAN_BODY_LIMIT_BYTES });
+      sendJson(request, response, 200, createAgenticEnterpriseDispatchPlan(body));
+    } catch (error) {
+      const requestError = error instanceof RequestBodyError;
+      sendJson(request, response, requestError ? error.status : 422, {
+        status: "invalid_agent_enterprise_dispatch_request",
+        error: requestError ? error.code : "agent_enterprise_dispatch_failed",
+        externalWrites: false,
+        canSpawnWorkersNow: false,
+        commandExecuted: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/codex-autoloop") {
+    try {
+      sendJson(request, response, 200, await getCodexAutoloopStatus());
+    } catch {
+      sendJson(request, response, 503, {
+        status: "codex_autoloop_status_failed",
+        error: "codex_autoloop_status_unavailable",
+        liveSync: false,
+        externalWrites: false,
+        canSpawnAgents: false,
+        commandExecuted: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/codex-autoloop/plan") {
+    try {
+      const body = await readJson(request, { maxBytes: A2A_PLAN_BODY_LIMIT_BYTES });
+      sendJson(request, response, 200, await createCodexAutoloopPlan(body));
+    } catch (error) {
+      const requestError = error instanceof RequestBodyError;
+      sendJson(request, response, requestError ? error.status : 422, {
+        status: "invalid_codex_autoloop_plan_request",
+        error: requestError ? error.code : "codex_autoloop_plan_failed",
+        liveSync: false,
+        externalWrites: false,
+        canSpawnAgents: false,
+        commandExecuted: false,
+        requiresHumanApproval: true
+      });
     }
     return;
   }

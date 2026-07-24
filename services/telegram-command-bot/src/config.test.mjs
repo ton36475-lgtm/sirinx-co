@@ -6,6 +6,7 @@ import {
   parseAllowedCommands,
   parseOwnerIds,
   resolveTelegramGatewayConfig,
+  resolveTelegramGatewayReadiness,
 } from "./config.mjs";
 
 const FULL_ENV = {
@@ -68,16 +69,55 @@ describe("resolveTelegramGatewayConfig", () => {
     expect(config.missing).toContain("SIRINX_TELEGRAM_CONFIRM=SEND");
   });
 
-  it("reports env-ready but stays blocked while the telegram_send gate holds", () => {
+  it("does not report whitespace-only token or chat id as configured", () => {
+    const config = resolveTelegramGatewayConfig({
+      ...FULL_ENV,
+      TELEGRAM_BOT_TOKEN: "   ",
+      TELEGRAM_CHAT_ID: "\t\n",
+    });
+
+    expect(config.envReady).toBe(false);
+    expect(config.liveSendReady).toBe(false);
+    expect(config.credentials.botTokenConfigured).toBe(false);
+    expect(config.credentials.chatIdConfigured).toBe(false);
+    expect(config.missing).toEqual(expect.arrayContaining([
+      "TELEGRAM_BOT_TOKEN",
+      "TELEGRAM_CHAT_ID",
+    ]));
+  });
+
+  it("reports env-ready but gate-unavailable until durable authority is checked", () => {
     const config = resolveTelegramGatewayConfig(FULL_ENV);
 
-    expect(config.mode).toBe("env-ready-gate-held");
+    expect(config.mode).toBe("env-ready-gate-unavailable");
     expect(config.envReady).toBe(true);
     expect(config.missing).toEqual([]);
     expect(config.gate.name).toBe("telegram_send");
     expect(config.gate.state).toBe("hold");
     expect(config.gate.ticketPrefix).toBe("OPS-TG-");
     expect(config.liveSendReady).toBe(false);
+  });
+
+  it("treats a fresh durable OPS-TG gate as live-ready", () => {
+    const config = resolveTelegramGatewayConfig(FULL_ENV, {
+      gateEvidence: {
+        authority: "sirinx-control",
+        effectiveState: "open",
+        reportedState: "open",
+        open: true,
+        authoritative: true,
+        fresh: true,
+        ticketPresent: true,
+        ticketPrefixValid: true,
+        checkedAt: "2026-07-20T00:00:00.000Z",
+        expiresAt: "2026-07-20T00:00:02.000Z",
+        reason: null,
+      },
+    });
+
+    expect(config.mode).toBe("live-ready");
+    expect(config.gate.state).toBe("open");
+    expect(config.liveSendReady).toBe(true);
   });
 
   it("reports credential booleans and owner count without leaking values", () => {
@@ -99,5 +139,28 @@ describe("resolveTelegramGatewayConfig", () => {
   it("honors the TELEGRAM_ALLOWED_COMMANDS override", () => {
     const config = resolveTelegramGatewayConfig(FULL_ENV);
     expect(config.allowedCommands).toEqual(["/status", "/gates", "/stop"]);
+  });
+});
+
+describe("resolveTelegramGatewayReadiness", () => {
+  it("fails closed when CONTROL_API_TOKEN is absent", async () => {
+    const config = await resolveTelegramGatewayReadiness(FULL_ENV);
+
+    expect(config.mode).toBe("env-ready-gate-unavailable");
+    expect(config.liveSendReady).toBe(false);
+    expect(config.gate.reason).toBe("control_api_token_missing");
+  });
+
+  it("does not expose the control token or durable ticket", async () => {
+    const env = { ...FULL_ENV, CONTROL_API_TOKEN: "control-secret-test" };
+    const config = await resolveTelegramGatewayReadiness(env, {
+      gate: { state: "open", ticket: "OPS-TG-TEST-001" },
+      now: () => new Date("2026-07-20T00:00:00.000Z"),
+    });
+    const serialized = JSON.stringify(config);
+
+    expect(config.liveSendReady).toBe(true);
+    expect(serialized).not.toContain(env.CONTROL_API_TOKEN);
+    expect(serialized).not.toContain("OPS-TG-TEST-001");
   });
 });

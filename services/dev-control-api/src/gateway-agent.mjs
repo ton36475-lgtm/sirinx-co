@@ -300,10 +300,12 @@ export async function getGatewayAgentStatus(options = {}) {
     a2a2LoopSync: makeA2A2LoopSync(),
     agentTeam: {
       mode: agentTeam.mode,
-      activeProfiles: agentTeam.activeProfiles.map((profile) => ({
+      activeProfilesAreDefinitions: agentTeam.activeProfilesAreDefinitions,
+      profileDefinitions: agentTeam.profileDefinitions.map((profile) => ({
         name: profile.name,
         lane: profile.lane,
         status: profile.status,
+        runtimeReady: profile.runtimeReady,
         gateway: profile.gateway,
         externalWrites: profile.externalWrites
       })),

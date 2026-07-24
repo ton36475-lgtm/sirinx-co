@@ -1,4 +1,3 @@
-import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
@@ -158,7 +157,7 @@ export const roninRoleRoster = [
   id,
   title,
   lane,
-  runtime: activeRoninProfiles.some((profile) => profile.name === id) ? "active-profile" : "virtual-roster",
+  runtime: activeRoninProfiles.some((profile) => profile.name === id) ? "profile-definition" : "virtual-roster",
   candidateProfile: id
 }));
 
@@ -264,33 +263,133 @@ export const agentBacklogGates = [
   }
 ];
 
-function readConfiguredCwd(profileName) {
-  const configPath = join(profilesRoot, profileName, "config.yaml");
-  try {
-    const config = readFileSync(configPath, "utf8");
-    const match = config.match(/^\s+cwd:\s+(.+)$/m);
-    return match ? match[1].trim() : "";
-  } catch {
-    return "";
-  }
+function normalizeCwdObservation(value) {
+  const observed = value?.observed === true;
+  const cwd = observed && typeof value?.cwd === "string"
+    ? value.cwd.trim() || null
+    : null;
+
+  return {
+    observed,
+    cwd,
+    source: observed
+      ? "caller-supplied-redacted-observation"
+      : "not-collected-protected-config-boundary"
+  };
 }
 
-export function getRoninAgentTeam() {
-  const activeProfiles = activeRoninProfiles.map((profile) => {
+function normalizeDefinitionObservation(value) {
+  const observed = value?.observed === true;
+
+  return {
+    observed,
+    profileReady: observed && value?.profileReady === true,
+    aliasReady: observed && value?.aliasReady === true,
+    source: observed
+      ? "caller-supplied-redacted-definition-observation"
+      : "not-collected-protected-tree-boundary"
+  };
+}
+
+function currentDate(options = {}) {
+  const value = typeof options.now === "function" ? options.now() : options.now || new Date();
+  return value instanceof Date ? value : new Date(value);
+}
+
+function normalizeRuntimeObservation(value, options = {}) {
+  const observed = value?.observed === true;
+  const observedAt = observed && typeof value?.observedAt === "string"
+    ? value.observedAt
+    : null;
+  const observedAtMs = observedAt ? Date.parse(observedAt) : Number.NaN;
+  const maxAgeMs = Number.isFinite(options.runtimeEvidenceMaxAgeMs)
+    ? Math.max(1_000, Math.min(300_000, options.runtimeEvidenceMaxAgeMs))
+    : 60_000;
+  const ageMs = Number.isFinite(observedAtMs)
+    ? currentDate(options).getTime() - observedAtMs
+    : Number.POSITIVE_INFINITY;
+  const fresh = observed && ageMs >= 0 && ageMs <= maxAgeMs;
+  const running = observed && value?.running === true;
+  const handshakeVerified = observed && value?.handshakeVerified === true;
+  const profileName = observed && typeof value?.profileName === "string" ? value.profileName : null;
+  const cwd = observed && typeof value?.cwd === "string" ? value.cwd : null;
+  const identityBound = observed &&
+    profileName === options.expectedProfileName &&
+    cwd === options.expectedCwd;
+  const attestationVerified = identityBound &&
+    typeof options.verifyRuntimeObservation === "function" &&
+    options.verifyRuntimeObservation(value, {
+      expectedProfileName: options.expectedProfileName,
+      expectedCwd: options.expectedCwd
+    }) === true;
+
+  return {
+    observed,
+    observedAt,
+    fresh,
+    running,
+    handshakeVerified,
+    profileName,
+    cwd,
+    identityBound,
+    attestationVerified,
+    ready: fresh && running && handshakeVerified && attestationVerified,
+    source: attestationVerified
+      ? "caller-supplied-attested-runtime-observation"
+      : observed
+        ? "caller-supplied-unverified-runtime-observation"
+      : "not-collected"
+  };
+}
+
+export function getRoninAgentTeam(options = {}) {
+  const cwdObservations = options.profileCwdObservations &&
+    typeof options.profileCwdObservations === "object" &&
+    !Array.isArray(options.profileCwdObservations)
+    ? options.profileCwdObservations
+    : {};
+  const runtimeObservations = options.profileRuntimeObservations &&
+    typeof options.profileRuntimeObservations === "object" &&
+    !Array.isArray(options.profileRuntimeObservations)
+    ? options.profileRuntimeObservations
+    : {};
+  const definitionObservations = options.profileDefinitionObservations &&
+    typeof options.profileDefinitionObservations === "object" &&
+    !Array.isArray(options.profileDefinitionObservations)
+    ? options.profileDefinitionObservations
+    : {};
+  const profileDefinitions = activeRoninProfiles.map((profile) => {
     const profilePath = join(profilesRoot, profile.name);
     const aliasPath = join(wrapperRoot, profile.name);
-    const profileReady = existsSync(profilePath);
-    const aliasReady = existsSync(aliasPath);
-    const configuredCwd = readConfiguredCwd(profile.name);
-    const cwdReady = configuredCwd === projectRoot;
+    const definitionEvidence = normalizeDefinitionObservation(definitionObservations[profile.name]);
+    const profileReady = definitionEvidence.profileReady;
+    const aliasReady = definitionEvidence.aliasReady;
+    const cwdEvidence = normalizeCwdObservation(cwdObservations[profile.name]);
+    const cwdReady = cwdEvidence.observed && cwdEvidence.cwd === projectRoot;
+    const runtimeEvidence = normalizeRuntimeObservation(runtimeObservations[profile.name], {
+      ...options,
+      expectedProfileName: profile.name,
+      expectedCwd: projectRoot
+    });
+    const runtimeReady = cwdReady && runtimeEvidence.ready;
 
     return {
       ...profile,
       profilePath,
       aliasPath,
       command: `${profile.name} chat`,
-      cwd: configuredCwd || projectRoot,
-      status: profileReady && cwdReady ? "profile-ready" : "profile-needs-check",
+      cwd: cwdEvidence.cwd,
+      expectedCwd: projectRoot,
+      cwdEvidence,
+      definitionEvidence,
+      runtimeEvidence,
+      runtimeReady,
+      profileReady,
+      status: runtimeReady
+        ? "profile-runtime-attested"
+        : profileReady && cwdReady
+          ? "profile-config-observed-runtime-unverified"
+          : "profile-needs-check",
       gateway: "stopped",
       aliasReady,
       cwdReady,
@@ -299,27 +398,36 @@ export function getRoninAgentTeam() {
     };
   });
 
-  const readyProfiles = activeProfiles.filter((profile) => profile.status === "profile-ready").length;
-  const aliasReady = activeProfiles.filter((profile) => profile.aliasReady).length;
+  const readyProfiles = profileDefinitions.filter((profile) => profile.profileReady && profile.cwdReady).length;
+  const activeProfiles = profileDefinitions.filter((profile) => profile.runtimeReady).length;
+  const aliasReady = profileDefinitions.filter((profile) => profile.aliasReady).length;
+  const cwdEvidenceObserved = profileDefinitions.filter((profile) => profile.cwdEvidence.observed).length;
 
   return {
     title: "SIRINX 47 Ronin Agent Team",
-    mode: "12-active-profiles-plus-47-role-roster",
+    mode: "12-profile-definitions-plus-47-role-roster",
     externalWrites: false,
+    protectedConfigRead: false,
     connectorMode: "write-ready-approval-gated",
     mainWebsiteProtected: true,
     telegramDelivery: "blocked-target-fix",
     projectRoot,
     profilesRoot,
     summary: {
-      activeProfiles: activeProfiles.length,
+      profileDefinitions: profileDefinitions.length,
+      activeProfiles,
       readyProfiles,
+      cwdEvidenceObserved,
       aliases: aliasReady,
       rosterRoles: roninRoleRoster.length,
       connectorPolicies: connectorPolicy.length,
       backlogGates: agentBacklogGates.length
     },
-    activeProfiles,
+    activeProfilesAreDefinitions: true,
+    profileDefinitions,
+    // Compatibility alias. Entries are definitions; consumers must use
+    // `summary.activeProfiles`/`runtimeReady` for attested runtime counts.
+    activeProfiles: profileDefinitions,
     roleRoster: roninRoleRoster,
     connectorPolicy,
     backlogGates: agentBacklogGates

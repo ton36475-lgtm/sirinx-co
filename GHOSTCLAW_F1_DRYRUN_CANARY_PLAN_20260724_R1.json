@@ -1,0 +1,100 @@
+{
+  "schema_version": "GHOSTCLAW_F1_DRYRUN_CANARY_PLAN.v1",
+  "status": "BLOCKED",
+  "phase": "F0F1_DRY_RUN_CANARY",
+  "mode": "BOUNDARIED_PLAN",
+  "run_id": "GHOSTCLAW-FABRIC-F0F1-DRYRUN-20260724-R1",
+  "base_sha": "1f05814c3e9d173e525234d69b3ce7f2d1b01a57",
+  "integration_worktree": "/Users/sirinx/SIRINXDev/worktrees/gc-f1-integration-20260724",
+  "recorded_at": "2026-07-23T22:43:40Z",
+  "repository": "/Users/sirinx/SIRINXDev/worktrees/gc-f1-integration-20260724",
+  "task_id": "GHOSTCLAW-FABRIC-F1-CANARY-RUN",
+  "mission_id": "GHOSTCLAW-FULL-SYSTEM-AGENT-FABRIC-20260724-001",
+  "issued_at": "2026-07-23T22:43:40Z",
+  "checks": [
+    {
+      "id": "worktree_head",
+      "status": "BLOCKED",
+      "error": "name 'shutil_which' is not defined",
+      "command": "git rev-parse --short=7 HEAD"
+    },
+    {
+      "id": "git_status_short",
+      "status": "BLOCKED",
+      "error": "name 'shutil_which' is not defined",
+      "command": "git status --short"
+    },
+    {
+      "id": "rust_fmt_all",
+      "status": "BLOCKED",
+      "error": "name 'shutil_which' is not defined",
+      "command": "cargo fmt --all --check"
+    },
+    {
+      "id": "rust_clippy_workspace",
+      "status": "BLOCKED",
+      "error": "name 'shutil_which' is not defined",
+      "command": "cargo clippy --workspace --all-targets --locked --offline -- -D warnings"
+    },
+    {
+      "id": "rust_test_workspace_all",
+      "status": "BLOCKED",
+      "error": "name 'shutil_which' is not defined",
+      "command": "cargo test --workspace --all-targets --all-features --locked --offline"
+    },
+    {
+      "id": "node_check",
+      "status": "BLOCKED",
+      "error": "name 'shutil_which' is not defined",
+      "command": "npm run check"
+    },
+    {
+      "id": "node_control_test",
+      "status": "BLOCKED",
+      "error": "name 'shutil_which' is not defined",
+      "command": "npm run control:test"
+    },
+    {
+      "id": "protobuf_descriptor",
+      "status": "BLOCKED",
+      "error": "name 'shutil_which' is not defined",
+      "command": "protoc --proto_path=. --include_imports --descriptor_set_out=/tmp/ghostclaw-f1-agent-fabric.pb proto/ghostclaw/common/v1/artifact.proto proto/ghostclaw/control/v1/control.proto proto/ghostclaw/runtime/v1/runtime.proto"
+    },
+    {
+      "id": "protobuf_descriptor_golden_digest",
+      "status": "BLOCKED",
+      "error": "name 'shutil_which' is not defined",
+      "command": "shasum -a 256 /tmp/ghostclaw-f1-agent-fabric.pb"
+    },
+    {
+      "id": "git_diff_check_exact_pathset",
+      "status": "BLOCKED",
+      "error": "name 'shutil_which' is not defined",
+      "command": "git diff --check -- proto/ghostclaw/common/v1/artifact.proto proto/ghostclaw/control/v1/control.proto proto/ghostclaw/runtime/v1/runtime.proto schemas/agentic-fabric/agent-registration.v1.schema.json schemas/agentic-fabric/participation-record.v1.schema.json schemas/agentic-fabric/context-bundle.v1.schema.json schemas/agentic-fabric/trusted-observation.v1.schema.json schemas/agentic-fabric/worker-receipt.v1.schema.json schemas/agentic-fabric/verifier-receipt.v1.schema.json docs/agent-runtime/GHOSTCLAW_FULL_SYSTEM_AGENT_FABRIC_V1.md buf.yaml"
+    },
+    {
+      "id": "json_schema_parse",
+      "status": "BLOCKED",
+      "error": "name 'shutil_which' is not defined",
+      "command": "jq -e . schemas/agentic-fabric/agent-registration.v1.schema.json schemas/agentic-fabric/participation-record.v1.schema.json schemas/agentic-fabric/context-bundle.v1.schema.json schemas/agentic-fabric/trusted-observation.v1.schema.json schemas/agentic-fabric/worker-receipt.v1.schema.json schemas/agentic-fabric/verifier-receipt.v1.schema.json"
+    },
+    {
+      "id": "buf_format",
+      "status": "BLOCKED",
+      "error": "name 'shutil_which' is not defined",
+      "command": "[ -x $(command -v buf) ] && buf format -w proto --exit-code"
+    },
+    {
+      "id": "buf_lint",
+      "status": "BLOCKED",
+      "error": "name 'shutil_which' is not defined",
+      "command": "[ -x $(command -v buf) ] && buf lint --path proto/ghostclaw"
+    },
+    {
+      "id": "buf_breaking",
+      "status": "BLOCKED",
+      "error": "name 'shutil_which' is not defined",
+      "command": "[ -x $(command -v buf) ] && buf breaking --against git://. --against-config buf.yaml"
+    }
+  ]
+}

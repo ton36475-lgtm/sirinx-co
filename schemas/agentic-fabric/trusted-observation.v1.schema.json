@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.dev/schemas/agentic-fabric/trusted-observation.v1.schema.json",
+  "title": "TrustedObservation",
+  "type": "object",
+  "required": ["schema_version", "observation_id", "source", "run_id", "status", "severity", "message", "observed_at"],
+  "properties": {
+    "schema_version": {"const": "agentic-fabric.trusted-observation.v1"},
+    "observation_id": {"type": "string", "pattern": "^[0-9a-f-]{36}$"},
+    "source": {"enum": ["F0_BOOTSTRAP", "F1_DRYRUN", "CANARY", "REVIEW", "HERMES_GATE"]},
+    "run_id": {"type": "string", "minLength": 3},
+    "status": {"enum": ["PASS", "FAIL", "BLOCKED", "NOT_EXECUTED"]},
+    "severity": {"enum": ["INFO", "WARN", "ERROR", "CRITICAL"]},
+    "message": {"type": "string", "minLength": 1},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "related": {"type": "array", "items": {"type": "string"}},
+    "receipts": {"type": "array", "items": {"type": "string", "format": "uri-reference"}}
+  },
+  "additionalProperties": false
+}

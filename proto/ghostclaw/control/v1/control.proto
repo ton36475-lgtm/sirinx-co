@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package ghostclaw.control.v1;
+
+import "ghostclaw/common/v1/artifact.proto";
+
+option go_package = "github.com/sirinx/ghostclaw-control/proto/ghostclaw/control/v1;controlv1";
+
+message ControlEnvelope {
+  string run_id = 1;
+  string mission_id = 2;
+  string command = 3;
+  string issued_by = 4;
+  string issued_at = 5;
+  string expires_at = 6;
+  string nonce = 7;
+  string signature = 8;
+  ghostclaw.common.v1.Artifact payload_artifact = 9;
+}
+
+message ControlAck {
+  string control_id = 1;
+  bool accepted = 2;
+  string message = 3;
+  string observed_at = 4;
+}
+
+service ControlGateway {
+  rpc Ack(ControlEnvelope) returns (ControlAck);
+}

@@ -206,7 +206,12 @@ def test_existing_projection_reuse_rejects_manifest_reader_would_reject(
     [
         "glm-share-" + ("a" * 64),
         "123456789:" + ("A" * 35),
-        "xox" + "b-" + "FAKE_TEST_TOKEN_NOT_REAL",
+        # Split so GitHub push protection does not see a contiguous token, matching
+        # how the other fixtures here are built. The value must still satisfy the
+        # detector's own pattern — \bxox(?:b|p|a|r|s)-[A-Za-z0-9-]{10,}\b in
+        # security.py — whose character class excludes '_', so no underscores here
+        # or this case silently stops being tested.
+        "xox" + "b-" + ("A" * 24),
         "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzaXJpbngifQ.signature12345678",
         "hf_" + ("A" * 32),
         "glpat-" + ("A" * 24),

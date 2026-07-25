@@ -1,0 +1,164 @@
+{
+  "schema_version": "1.0.0",
+  "grant": "SIRINX_SHARED_GRAPH_MEMORY_V1_PROJECT_LOCAL_CODE_ONLY",
+  "base_sha": "1f05814c3e9d173e525234d69b3ce7f2d1b01a57",
+  "status": "PASS",
+  "scope": {
+    "owned_paths": [
+      ".graphifyignore",
+      "tools/graph-memory/**"
+    ],
+    "provider_call": "DENY",
+    "external_write": "DENY",
+    "global_install": "DENY",
+    "auto_config_write": "DENY",
+    "hook_install": "DENY",
+    "mcp_transport": "STDIO",
+    "memory_authority": "HERMES_OBSIDIAN",
+    "agent_access": "READ_ALL_WRITE_PROPOSAL_ONLY"
+  },
+  "capabilities": {
+    "graphify_code_only_index": "PASS",
+    "fixed_root_read_only_stdio_mcp": "PASS",
+    "langgraph_proposal_workflow": "PASS",
+    "langchain_proposal_tool": "PASS",
+    "append_only_idempotent_queue": "PASS",
+    "secret_rejection_before_checkpoint": "PASS",
+    "pii_redaction": "PASS",
+    "obsidian_read_only_inventory_adapter": "PASS_SYNTHETIC",
+    "obsidian_digest_bound_projection": "PASS_SYNTHETIC",
+    "obsidian_agent_readable_digest_bound_mcp": "PASS_SYNTHETIC",
+    "mcp_argument_secret_scan": "PASS",
+    "mcp_output_secret_scan": "PASS",
+    "mcp_output_pii_redaction": "PASS",
+    "mcp_policy_denial_is_error": "PASS",
+    "existing_projection_rehash_before_reuse": "PASS",
+    "proposal_schema_runtime_full_parity": "PASS",
+    "context_bundle_v1": "PASS",
+    "context_bundle_schema_runtime_full_parity": "PASS",
+    "context_bundle_fixed_stdin_retrieval": "PASS",
+    "context_bundle_exact_graph_snapshot_binding": "PASS",
+    "context_bundle_exact_source_file_sha256": "PASS",
+    "context_bundle_bounded_16_items_24000_utf8_bytes": "PASS",
+    "context_bundle_raw_query_not_persisted": "PASS",
+    "ambiguous_graph_context_excluded_by_default": "PASS",
+    "obsidian_chunk_provenance_and_reported_evidence": "PASS_SYNTHETIC",
+    "graphify_cache_containment": "PASS",
+    "obsidian_live_vault_read": "NOT_EXECUTED",
+    "obsidian_write": "NOT_EXECUTED"
+  },
+  "mcp_tools": [
+    "query_graph",
+    "get_node",
+    "get_neighbors",
+    "get_community",
+    "god_nodes",
+    "graph_stats",
+    "shortest_path",
+    "obsidian_snapshot_info",
+    "query_obsidian_projection"
+  ],
+  "forbidden_mcp_tools_verified_absent": [
+    "list_prs",
+    "get_pr_impact",
+    "triage_prs",
+    "approve",
+    "delete",
+    "admin",
+    "write"
+  ],
+  "verification": [
+    {
+      "command": "uv sync --locked",
+      "exit_code": 0
+    },
+    {
+      "command": "uv run --offline ruff format .",
+      "exit_code": 0,
+      "result": "24 files left unchanged"
+    },
+    {
+      "command": "uv run --offline ruff format --check .",
+      "exit_code": 0
+    },
+    {
+      "command": "uv run --offline ruff check .",
+      "exit_code": 0
+    },
+    {
+      "command": "uv run --offline pytest",
+      "exit_code": 0,
+      "result": "42 passed"
+    },
+    {
+      "command": "uv run --offline python -m compileall -q src tests",
+      "exit_code": 0
+    },
+    {
+      "command": "uv lock --offline --check",
+      "exit_code": 0,
+      "result": "96 packages resolved from lock"
+    },
+    {
+      "command": "uv run sirinx-graph-memory index",
+      "exit_code": 0,
+      "provider_calls": 0,
+      "raw_output_persisted": false
+    }
+  ],
+  "graph_smoke": {
+    "nodes": 3728,
+    "edges": 8394,
+    "communities": 0,
+    "graph_file_mode": "0600",
+    "runtime_tracked": false,
+    "repo_root_graphify_out_created": false
+  },
+  "context_bundle_snapshot": {
+    "schema_version": "1.0.0",
+    "base_sha": "1f05814c3e9d173e525234d69b3ce7f2d1b01a57",
+    "graph_sha256": "sha256:91b4519ed5d7a6cbd695fb3c8787b9b9c51f304b44afed2fb49d2a6c2fff8751",
+    "graph_manifest_sha256": "sha256:f6e68e6257d2d3465b9ec1c0b05d60da4804cb92beb3eefa96a13996dc154830",
+    "graph_snapshot_digest": "sha256:c811db6ab6d154111867a950fc51250f1c695212354030c28474c7835c86aabf",
+    "context_bundle_schema_sha256": "c2dd0831eeb9264d9e694c3eac279c1faf634d4f4738661f9dc109d6c10f4d41",
+    "provider_calls": 0,
+    "external_calls": 0
+  },
+  "context_bundle_readonly_smoke": {
+    "status": "PASS",
+    "query_digest": "sha256:40f133ec177376185fee8870f9a93f8b88782636412b85e67f356a4a601fe929",
+    "bundle_digest": "sha256:07bf8952ed1cd4207e1870c93b3de87c34bd125c83fa9e9f1294640876f582e5",
+    "item_count": 4,
+    "source_kind": "code_graph",
+    "relative_path": "crates/sirinx-agents/src/engineering_registry.rs",
+    "source_file_sha256": "sha256:fd61a71ffd0028d7b53dee28f2f0ca1c775502e6c842f83fb29ecf9dfc41d9f8",
+    "raw_query_field_present": false,
+    "graph_rebuilt": false,
+    "obsidian_accessed": false,
+    "provider_calls": 0,
+    "external_calls": 0
+  },
+  "dependency_lock": {
+    "resolved_packages": 96,
+    "uv_lock_sha256": "175ec491e52f0e4764f33325160cbbfe14e1ee6852de6dc682d42e6b72a59c0a",
+    "provider_sdk_packages_present": []
+  },
+  "external_effects": {
+    "provider_calls": 0,
+    "network_mcp": 0,
+    "global_config_writes": 0,
+    "hook_writes": 0,
+    "obsidian_writes": 0,
+    "raw_context_queries_persisted": 0,
+    "git_stage_commit_push_merge": 0,
+    "deploys": 0
+  },
+  "limitations": [
+    "The read-only query facade depends on private Graphify 0.9.25 helpers and must be re-audited before any version bump.",
+    "LangSmith is transitively installed by LangChain but API keys are removed and tracing is forcibly disabled.",
+    "No live canonical Obsidian inventory or projection was run.",
+    "No MCP client configuration was written; clients must explicitly launch the project-local stdio command.",
+    "Proposal promotion to authoritative Obsidian memory remains a separate Hermes-reviewed action.",
+    "The approved base SHA is an immutable contract constant for this one-use grant; retrieval does not invoke Git and must be revised under a future grant when the approved base changes."
+  ]
+}

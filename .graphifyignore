@@ -1,0 +1,48 @@
+# SIRINX Graphify scan policy
+#
+# This file is intentionally stricter than .gitignore. The shared graph is a
+# structural code index, not a secret/config/document index.
+
+# Generated or dependency-heavy trees
+**/node_modules/
+**/target/
+**/dist/
+**/build/
+**/.next/
+**/.turbo/
+**/.cache/
+**/coverage/
+**/__pycache__/
+**/.venv/
+**/graphify-out/
+tools/graph-memory/.runtime/
+tools/graph-memory/.runtime-test-*/
+tools/graph-memory/IMPLEMENTATION_RECEIPT.json
+
+# Local/private configuration and credentials
+.env
+.env.*
+**/.env
+**/.env.*
+.mcp.json
+**/.mcp.json
+**/secrets/
+**/credentials/
+**/*secret*.json
+**/*credential*.json
+**/*token*.json
+**/*.token
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.jks
+**/id_rsa*
+**/id_ed25519*
+
+# Runtime evidence can contain proprietary prompts or large logs. It is not
+# part of the structural source graph.
+reports/
+logs/
+tmp/
+temp/

@@ -14,18 +14,21 @@
 //! - `GET  /api/pending-work`              — shared work queue (Store)
 //! - `POST /api/pending-work`              — register work item
 //! - `POST /api/actions`                   — execute-or-dry-run by gate
+//! - `POST /api/goal-runs`                 — sealed local GoalSpec run
+//! - `GET  /api/goal-runs/:run_id`         — process-local run evidence
 //!
 //! When a bearer token is configured, every `/api/*` route requires
-//! `Authorization: Bearer <token>`. Pending work persists through
-//! `sirinx_store::Store`, so with `DATABASE_URL` set all nodes share
-//! one queue and durable gate decisions. Postgres notifies listeners on
-//! every pending-work insert.
+//! `Authorization: Bearer <token>`. Goal-run routes additionally fail closed
+//! with `503 Service Unavailable` when no token is configured. Pending work
+//! persists through `sirinx_store::Store`, so with `DATABASE_URL` set all
+//! nodes share one queue and durable gate decisions. Postgres notifies
+//! listeners on every pending-work insert.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Write as _;
 use std::sync::{Arc, RwLock};
 
-use axum::extract::{Path, Request, State};
+use axum::extract::{DefaultBodyLimit, Path, Request, State};
 use axum::http::StatusCode;
 use axum::middleware::{self, Next};
 use axum::response::Response;
@@ -36,6 +39,11 @@ use serde::Deserialize;
 use sirinx_a2a::{diff_work, AgentCard, OmniRoute, SyncRequest, SyncResponse};
 use sirinx_core::PendingWork;
 use sirinx_store::{MemoryStore, Store, StoreError};
+
+mod goal_runs;
+pub mod harness_engineering;
+
+use goal_runs::{create_goal_run, get_goal_run, GoalRunStore, MAX_GOAL_RUN_REQUEST_BYTES};
 
 // Preserve the original sirinx-control public API while keeping domain
 // types canonical in sirinx-core for persistence and other consumers.
@@ -66,6 +74,8 @@ pub struct ControlState {
     self_card: AgentCard,
     /// Every agent card this node knows (peers register via /api/a2a/sync).
     omniroute: Arc<RwLock<OmniRoute>>,
+    /// Bounded process-local evidence for the sealed GoalSpec API.
+    goal_runs: GoalRunStore,
 }
 
 impl ControlState {
@@ -97,6 +107,7 @@ impl ControlState {
             api_token: api_token.map(Into::into),
             self_card,
             omniroute: Arc::new(RwLock::new(omniroute)),
+            goal_runs: GoalRunStore::default(),
         }
     }
 
@@ -331,7 +342,14 @@ async fn require_bearer(
     request: Request,
     next: Next,
 ) -> Result<Response, StatusCode> {
-    let needs_auth = request.uri().path().starts_with("/api/");
+    let path = request.uri().path();
+    let needs_auth = path.starts_with("/api/");
+    let is_goal_run = path == "/api/goal-runs" || path.starts_with("/api/goal-runs/");
+
+    if is_goal_run && state.api_token.is_none() {
+        return Err(StatusCode::SERVICE_UNAVAILABLE);
+    }
+
     if let (true, Some(expected)) = (needs_auth, state.api_token.as_deref()) {
         let provided = request
             .headers()
@@ -353,6 +371,11 @@ pub fn router(state: ControlState) -> Router {
         .route("/api/gates/:name/decision", post(decide_gate))
         .route("/api/pending-work", get(list_pending).post(add_pending))
         .route("/api/actions", post(run_action))
+        .route(
+            "/api/goal-runs",
+            post(create_goal_run).layer(DefaultBodyLimit::max(MAX_GOAL_RUN_REQUEST_BYTES)),
+        )
+        .route("/api/goal-runs/:run_id", get(get_goal_run))
         .route("/api/a2a/card", get(a2a_card))
         .route("/api/a2a/sync", post(a2a_sync))
         .route("/api/a2a/route", post(a2a_route))

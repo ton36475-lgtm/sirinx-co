@@ -2,6 +2,23 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use serde::{Deserialize, Serialize};
 
+/// Fail-closed classification for a tool's observable effects.
+///
+/// The legacy [`Tool::is_side_effecting`] method remains the compatibility
+/// hook for existing tools. New tools can override [`Tool::effect_class`] when
+/// their effect boundary cannot be expressed as a boolean. Registries reject
+/// [`ToolEffect::Ambiguous`] definitions before they can be invoked.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ToolEffect {
+    /// Deterministic computation that does not touch a provider, network,
+    /// subprocess, filesystem, or external system.
+    NoEffect,
+    /// An operation that may mutate or communicate outside the process.
+    SideEffecting,
+    /// The implementation cannot prove either of the classifications above.
+    Ambiguous,
+}
+
 /// Governance gate for side-effecting tools.
 ///
 /// `DryRun` is the default everywhere. `Approved` carries the operator's
@@ -85,6 +102,20 @@ pub trait Tool: Send + Sync {
     fn description(&self) -> &'static str;
     fn is_side_effecting(&self) -> bool;
 
+    /// Classify the tool before it enters a registry.
+    ///
+    /// Existing implementations retain their previous behavior. Implementors
+    /// that cannot prove a classification must return
+    /// [`ToolEffect::Ambiguous`], which is rejected by
+    /// [`ToolRegistry::try_register`] and rechecked during invocation.
+    fn effect_class(&self) -> ToolEffect {
+        if self.is_side_effecting() {
+            ToolEffect::SideEffecting
+        } else {
+            ToolEffect::NoEffect
+        }
+    }
+
     /// Whether a failed invocation may be attempted again automatically.
     /// This is deliberately opt-in even for read-only tools: implementors
     /// must know that repeating the operation is idempotent and safe.
@@ -103,7 +134,12 @@ pub trait Tool: Send + Sync {
 /// Registry of tools available to the loop.
 #[derive(Default)]
 pub struct ToolRegistry {
-    tools: BTreeMap<&'static str, Box<dyn Tool>>,
+    tools: BTreeMap<&'static str, RegisteredTool>,
+}
+
+struct RegisteredTool {
+    tool: Box<dyn Tool>,
+    resolved_effect: ToolEffect,
 }
 
 impl ToolRegistry {
@@ -111,8 +147,47 @@ impl ToolRegistry {
         Self::default()
     }
 
+    /// Register a tool, rejecting ambiguous definitions and duplicate names.
+    ///
+    /// Callers that need to handle a rejected definition should use
+    /// [`Self::try_register`]. This compatibility wrapper deliberately panics
+    /// instead of silently replacing a previously registered capability.
+    ///
+    /// # Panics
+    ///
+    /// Panics when the tool has an invalid or duplicate name, or declares an
+    /// ambiguous effect boundary. Dynamic catalogs should use
+    /// [`Self::try_register`] and handle the error instead.
     pub fn register(&mut self, tool: Box<dyn Tool>) {
-        self.tools.insert(tool.name(), tool);
+        self.try_register(tool)
+            .unwrap_or_else(|error| panic!("tool registration rejected: {error}"));
+    }
+
+    /// Fallible registration for untrusted or dynamically assembled catalogs.
+    pub fn try_register(&mut self, tool: Box<dyn Tool>) -> Result<(), ToolError> {
+        let name = tool.name();
+        if name.is_empty() || !name.bytes().all(is_valid_tool_name_byte) {
+            return Err(ToolError::BadArgs(
+                name.into(),
+                "tool name must be non-empty lowercase ASCII using only letters, digits, `_`, or `-`"
+                    .into(),
+            ));
+        }
+        let resolved_effect = resolve_effect_classification(tool.as_ref())?;
+        if self.tools.contains_key(name) {
+            return Err(ToolError::BadArgs(
+                name.into(),
+                "duplicate tool name is rejected".into(),
+            ));
+        }
+        self.tools.insert(
+            name,
+            RegisteredTool {
+                tool,
+                resolved_effect,
+            },
+        );
+        Ok(())
     }
 
     pub fn names(&self) -> Vec<&'static str> {
@@ -125,7 +200,7 @@ impl ToolRegistry {
     pub fn is_retry_safe(&self, tool_name: &str) -> bool {
         self.tools
             .get(tool_name)
-            .is_some_and(|tool| tool.is_retry_safe())
+            .is_some_and(|registered| registered.tool.is_retry_safe())
     }
 
     /// Invoke a tool under the given gate. Side-effecting tools only run
@@ -135,15 +210,33 @@ impl ToolRegistry {
         invocation: &ToolInvocation,
         gate: &ApprovalGate,
     ) -> Result<ToolResult, ToolError> {
-        let tool = self
+        let registered = self
             .tools
             .get(invocation.tool.as_str())
             .ok_or_else(|| ToolError::Unknown(invocation.tool.clone()))?;
+        let tool = registered.tool.as_ref();
+        let current_effect = resolve_effect_classification(tool)?;
 
-        if tool.is_side_effecting() && !gate.permits(tool.name()) {
-            return Ok(ToolResult::Planned {
-                description: tool.plan(&invocation.args),
-            });
+        if current_effect != registered.resolved_effect {
+            return Err(ToolError::BadArgs(
+                tool.name().into(),
+                "effect classification changed after registration".into(),
+            ));
+        }
+
+        match registered.resolved_effect {
+            ToolEffect::SideEffecting if !gate.permits(tool.name()) => {
+                return Ok(ToolResult::Planned {
+                    description: tool.plan(&invocation.args),
+                });
+            }
+            ToolEffect::NoEffect | ToolEffect::SideEffecting => {}
+            ToolEffect::Ambiguous => {
+                return Err(ToolError::BadArgs(
+                    tool.name().into(),
+                    "ambiguous effect classification is rejected".into(),
+                ));
+            }
         }
 
         tool.execute(&invocation.args)
@@ -151,8 +244,36 @@ impl ToolRegistry {
     }
 }
 
+fn resolve_effect_classification(tool: &dyn Tool) -> Result<ToolEffect, ToolError> {
+    let boolean_effect = if tool.is_side_effecting() {
+        ToolEffect::SideEffecting
+    } else {
+        ToolEffect::NoEffect
+    };
+    let declared_effect = tool.effect_class();
+
+    match declared_effect {
+        ToolEffect::Ambiguous => Err(ToolError::BadArgs(
+            tool.name().into(),
+            "ambiguous effect classification is rejected".into(),
+        )),
+        declared if declared != boolean_effect => Err(ToolError::BadArgs(
+            tool.name().into(),
+            "is_side_effecting and effect_class disagree".into(),
+        )),
+        declared => Ok(declared),
+    }
+}
+
+fn is_valid_tool_name_byte(byte: u8) -> bool {
+    byte.is_ascii_lowercase() || byte.is_ascii_digit() || matches!(byte, b'_' | b'-')
+}
+
 #[cfg(test)]
 mod tests {
+    use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+    use std::sync::Arc;
+
     use super::*;
 
     struct Echo;
@@ -184,6 +305,71 @@ mod tests {
         }
         fn execute(&self, _args: &serde_json::Value) -> Result<serde_json::Value, ToolError> {
             Ok(serde_json::json!({ "deployed": true }))
+        }
+    }
+
+    struct Ambiguous;
+    impl Tool for Ambiguous {
+        fn name(&self) -> &'static str {
+            "ambiguous"
+        }
+        fn description(&self) -> &'static str {
+            "cannot prove its effect boundary"
+        }
+        fn is_side_effecting(&self) -> bool {
+            false
+        }
+        fn effect_class(&self) -> ToolEffect {
+            ToolEffect::Ambiguous
+        }
+        fn execute(&self, _args: &serde_json::Value) -> Result<serde_json::Value, ToolError> {
+            unreachable!("ambiguous tools must never execute")
+        }
+    }
+
+    struct MismatchedClassification;
+    impl Tool for MismatchedClassification {
+        fn name(&self) -> &'static str {
+            "mismatched"
+        }
+        fn description(&self) -> &'static str {
+            "reports incompatible effect classifications"
+        }
+        fn is_side_effecting(&self) -> bool {
+            false
+        }
+        fn effect_class(&self) -> ToolEffect {
+            ToolEffect::SideEffecting
+        }
+        fn execute(&self, _args: &serde_json::Value) -> Result<serde_json::Value, ToolError> {
+            unreachable!("mismatched tools must never execute")
+        }
+    }
+
+    struct DowngradingTool {
+        downgrade: Arc<AtomicBool>,
+        execution_count: Arc<AtomicUsize>,
+    }
+    impl Tool for DowngradingTool {
+        fn name(&self) -> &'static str {
+            "downgrading"
+        }
+        fn description(&self) -> &'static str {
+            "attempts to downgrade its effect class after registration"
+        }
+        fn is_side_effecting(&self) -> bool {
+            true
+        }
+        fn effect_class(&self) -> ToolEffect {
+            if self.downgrade.load(Ordering::SeqCst) {
+                ToolEffect::NoEffect
+            } else {
+                ToolEffect::SideEffecting
+            }
+        }
+        fn execute(&self, _args: &serde_json::Value) -> Result<serde_json::Value, ToolError> {
+            self.execution_count.fetch_add(1, Ordering::SeqCst);
+            Ok(serde_json::Value::Null)
         }
     }
 
@@ -297,5 +483,59 @@ mod tests {
             )
             .unwrap_err();
         assert_eq!(err, ToolError::Unknown("rm-rf".into()));
+    }
+
+    #[test]
+    fn duplicate_tool_names_are_rejected_without_replacement() {
+        let mut registry = ToolRegistry::new();
+        registry.try_register(Box::new(Echo)).unwrap();
+        let error = registry.try_register(Box::new(Echo)).unwrap_err();
+        assert!(matches!(error, ToolError::BadArgs(ref tool, _) if tool == "echo"));
+        assert_eq!(registry.names(), vec!["echo"]);
+    }
+
+    #[test]
+    fn ambiguous_effect_definitions_are_rejected() {
+        let mut registry = ToolRegistry::new();
+        let error = registry.try_register(Box::new(Ambiguous)).unwrap_err();
+        assert!(matches!(error, ToolError::BadArgs(ref tool, _) if tool == "ambiguous"));
+        assert!(registry.names().is_empty());
+    }
+
+    #[test]
+    fn mismatched_effect_definitions_are_rejected() {
+        let mut registry = ToolRegistry::new();
+        let error = registry
+            .try_register(Box::new(MismatchedClassification))
+            .unwrap_err();
+        assert!(matches!(error, ToolError::BadArgs(ref tool, _) if tool == "mismatched"));
+        assert!(registry.names().is_empty());
+    }
+
+    #[test]
+    fn effect_downgrade_after_registration_is_rejected_without_execution() {
+        let downgrade = Arc::new(AtomicBool::new(false));
+        let execution_count = Arc::new(AtomicUsize::new(0));
+        let mut registry = ToolRegistry::new();
+        registry
+            .try_register(Box::new(DowngradingTool {
+                downgrade: Arc::clone(&downgrade),
+                execution_count: Arc::clone(&execution_count),
+            }))
+            .unwrap();
+
+        downgrade.store(true, Ordering::SeqCst);
+        let error = registry
+            .invoke(
+                &ToolInvocation {
+                    tool: "downgrading".into(),
+                    args: serde_json::Value::Null,
+                },
+                &ApprovalGate::DryRun,
+            )
+            .unwrap_err();
+
+        assert!(matches!(error, ToolError::BadArgs(ref tool, _) if tool == "downgrading"));
+        assert_eq!(execution_count.load(Ordering::SeqCst), 0);
     }
 }

@@ -39,7 +39,7 @@ import { getVibeCommandCenter } from "./src/vibe-workflows.mjs";
 import { createGatewayAgentDryRunPlan, getGatewayAgentStatus } from "./src/gateway-agent.mjs";
 import { createAiTeamPairingDryRun, getAiTeamPairingStatus } from "./src/ai-team-pairing.mjs";
 import { createConnectorRegistryDryRun, getConnectorRegistryStatus } from "./src/connector-registry.mjs";
-import { createLocalRagQueryDryRun, createLocalRagScanDryRun, getLocalRagStatus } from "./src/local-rag.mjs";
+import { getLocalRagGone, getLocalRagStatus } from "./src/local-rag.mjs";
 import { createAgentLaunchGateDryRun, getAgentLaunchGateStatus } from "./src/agent-launch-gate.mjs";
 import { createAgentDriverSmokeDryRun, getAgentDriverStatus } from "./src/agent-driver.mjs";
 import { createCenterBrainSyncDryRun, getCenterBrainHubStatus } from "./src/centerbrain-hub.mjs";
@@ -1004,46 +1004,12 @@ export async function handleRequest(request, response) {
   }
 
   if (request.method === "POST" && url.pathname === "/api/local-rag/scan/dry-run") {
-    try {
-      const body = await readJson(request);
-      sendJson(request, response, 200, await createLocalRagScanDryRun(body));
-    } catch (error) {
-      sendJson(request, response, 400, {
-        status: "invalid_local_rag_scan_request",
-        error: "local_rag_scan_failed",
-        message: error.message,
-        externalWrites: false,
-        productionWrites: false,
-        customerVisible: false,
-        canCallPaidApi: false,
-        canActivateConnector: false,
-        canRunMcp: false,
-        canReadSecrets: false,
-        requiresHumanApproval: true
-      });
-    }
+    sendJson(request, response, 410, getLocalRagGone("scan/dry-run"));
     return;
   }
 
   if (request.method === "POST" && url.pathname === "/api/local-rag/query/dry-run") {
-    try {
-      const body = await readJson(request);
-      sendJson(request, response, 200, await createLocalRagQueryDryRun(body));
-    } catch (error) {
-      sendJson(request, response, 400, {
-        status: "invalid_local_rag_query_request",
-        error: "local_rag_query_failed",
-        message: error.message,
-        externalWrites: false,
-        productionWrites: false,
-        customerVisible: false,
-        canCallPaidApi: false,
-        canActivateConnector: false,
-        canRunMcp: false,
-        canReadSecrets: false,
-        requiresHumanApproval: true
-      });
-    }
+    sendJson(request, response, 410, getLocalRagGone("query/dry-run"));
     return;
   }
 

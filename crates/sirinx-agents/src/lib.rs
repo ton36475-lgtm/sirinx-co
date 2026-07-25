@@ -18,6 +18,7 @@
 
 pub mod agent;
 pub mod bus;
+pub mod engineering_registry;
 pub mod fb_group;
 pub mod layer;
 pub mod line_events;
@@ -29,6 +30,15 @@ pub mod scorer_sme;
 
 pub use agent::{Agent, AgentError, AgentInput, AgentOutput};
 pub use bus::{DispatchError, Dispatcher, Envelope};
+pub use engineering_registry::{
+    engineering_agent_catalog, validate_engineering_run_plan, AdapterAdmissionPolicy,
+    AdapterAuthentication, AdapterClass, AdapterMemoryAccess, AdapterProviderAccess,
+    AdapterRuntimeState, EngineeringAdapterSlot, EngineeringAgentCatalogEntry,
+    EngineeringPrincipal, EngineeringRunMode, EngineeringRunPlan, EngineeringRunPlanError,
+    EngineeringRunRole, EngineeringWorkerRequest, EngineeringWriteLease,
+    FutureAdapterIdentityBinding, FutureAdapterSlot, KnownAdapter, INDEPENDENT_REVIEWERS,
+    MAX_PARALLEL_ACTIVE_AGENTS, MAX_PARALLEL_WRITERS, REGISTERED_AGENT_CATALOG_LIMIT,
+};
 pub use layer::Layer;
 pub use ronin::{run_lead_pipeline, FollowUp, LeadTemperature};
 pub use roster::{AgentId, Roster};

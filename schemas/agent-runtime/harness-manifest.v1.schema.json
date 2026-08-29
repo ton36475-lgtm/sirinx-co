@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/harness-manifest.v1.schema.json",
+  "title": "HarnessManifestV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "manifestId", "taskId", "candidate", "maker", "checker",
+    "fixtures", "checks", "requiredArtifacts", "stopConditions"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "manifestId": { "type": "string", "pattern": "^HARNESS-[A-Za-z0-9._-]+$" },
+    "taskId": { "type": "string", "pattern": "^TASK-[A-Za-z0-9._-]+$" },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repositoryPath", "worktreeId", "commitSha"],
+      "properties": {
+        "repositoryPath": { "type": "string", "minLength": 1 },
+        "worktreeId": { "type": "string", "minLength": 1 },
+        "commitSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+      }
+    },
+    "maker": { "$ref": "#/$defs/actor" },
+    "checker": { "$ref": "#/$defs/actor" },
+    "fixtures": { "type": "array", "items": { "$ref": "#/$defs/namedDigest" } },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "required"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "kind": { "enum": ["contract", "unit", "integration", "migration", "a2a", "browser", "queue", "security", "release"] },
+          "required": { "type": "boolean" }
+        }
+      }
+    },
+    "requiredArtifacts": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "stopConditions": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+  },
+  "$defs": {
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["roleId", "principalId"],
+      "properties": {
+        "roleId": { "type": "integer", "minimum": 1, "maximum": 47 },
+        "principalId": { "type": "string", "minLength": 1 }
+      }
+    },
+    "namedDigest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "digest"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

@@ -1,0 +1,529 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/resource-cleanup-review-request.v1.schema.json",
+  "title": "ResourceCleanupReviewRequestV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "requestId",
+    "taskId",
+    "runId",
+    "action",
+    "circuit",
+    "status",
+    "claimCeiling",
+    "observedAt",
+    "expiresAt",
+    "planBinding",
+    "principals",
+    "exclusionsDigest",
+    "limits",
+    "repository",
+    "target",
+    "processObservation",
+    "tooling",
+    "resources",
+    "operationPreview",
+    "recovery",
+    "proofs",
+    "authority",
+    "blockers",
+    "requestDigest"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "pattern": "^RCRR-[A-Za-z0-9._-]+$", "maxLength": 128 },
+    "taskId": { "type": "string", "pattern": "^TASK-[A-Za-z0-9._-]+$", "maxLength": 128 },
+    "runId": { "type": "string", "pattern": "^RUN-[A-Za-z0-9._-]+$", "maxLength": 128 },
+    "action": { "const": "RESOURCE_CLEANUP" },
+    "circuit": { "const": "resource_cleanup" },
+    "status": { "const": "COLLECTED_NOT_APPROVED" },
+    "claimCeiling": { "const": "PRE_APPROVAL_LOCAL_READ_ONLY_OBSERVATIONS" },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "planBinding": { "$ref": "#/$defs/planBinding" },
+    "principals": { "$ref": "#/$defs/principals" },
+    "exclusionsDigest": { "const": "6adcb018036f2331b9e54d8e41dc8ba29acad972f923d895cf1a07fce443649a" },
+    "limits": { "$ref": "#/$defs/limits" },
+    "repository": { "$ref": "#/$defs/repository" },
+    "target": { "$ref": "#/$defs/target" },
+    "processObservation": { "$ref": "#/$defs/processObservation" },
+    "tooling": { "$ref": "#/$defs/tooling" },
+    "resources": { "$ref": "#/$defs/resources" },
+    "operationPreview": { "$ref": "#/$defs/operationPreview" },
+    "recovery": { "$ref": "#/$defs/recovery" },
+    "proofs": { "$ref": "#/$defs/proofs" },
+    "authority": { "$ref": "#/$defs/authority" },
+    "blockers": {
+      "type": "array",
+      "minItems": 21,
+      "maxItems": 23,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "action_time_evidence_absent",
+          "canonical_worktree_snapshot_absent",
+          "clock_authority_unattested",
+          "cleanup_growth_margin_unreviewed",
+          "cleanup_executor_absent",
+          "complete_process_evidence_v1_absent",
+          "conservative_20gib_target_not_met",
+          "durable_cleanup_authority_absent",
+          "executable_identity_v1_incomplete",
+          "human_approval_absent",
+          "independent_review_absent",
+          "mutable_stable_toolchain_unbound",
+          "non_atomic_collection_not_action_time",
+          "nominal_reclaim_not_guaranteed",
+          "plan_file_not_revalidated_action_time",
+          "recovery_evidence_unverified",
+          "replay_protection_absent",
+          "resource_cleanup_circuit_hold",
+          "rustup_toolchain_proposal_not_bound_to_plan",
+          "target_manifest_v1_absent",
+          "scope_artifacts_not_independently_validated",
+          "visible_process_scope_limited",
+          "visible_target_consumer_observed"
+        ]
+      }
+    },
+    "requestDigest": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "safeCount": { "type": "integer", "minimum": 0, "maximum": 250000 },
+    "safeKiB": { "type": "integer", "minimum": 0, "maximum": 1099511627776 },
+    "planBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["planPath", "planHash", "planFileSha256"],
+      "properties": {
+        "planPath": {
+          "const": "/Users/sirinx/SIRINXDev/sirinx-co/config/agent-runtime/resource-cleanup.plan-only.v2.json"
+        },
+        "planHash": { "const": "57a56f10f23c7874c0788bf9bd065e2fd7707764df6996acceb030f86885162c" },
+        "planFileSha256": { "const": "859a31f0ed505450f78321d738f43b0d4f204ed745834b1436ab000536470ad1" }
+      }
+    },
+    "principals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requester", "maker", "checker", "proposedHumanApprover", "proposedExecutor"],
+      "properties": {
+        "requester": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "maker": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "checker": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "proposedHumanApprover": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "proposedExecutor": { "type": "string", "minLength": 1, "maxLength": 256 }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxCalls",
+        "maxCostUsd",
+        "maxRuntimeSeconds",
+        "maxAffectedKiB",
+        "worstCaseCleanupGrowthKiB",
+        "emergencyFloorKiB",
+        "requiredPostFreeKiB"
+      ],
+      "properties": {
+        "maxCalls": { "const": 1 },
+        "maxCostUsd": { "const": 0 },
+        "maxRuntimeSeconds": { "type": "integer", "minimum": 1, "maximum": 3600 },
+        "maxAffectedKiB": { "$ref": "#/$defs/safeKiB" },
+        "worstCaseCleanupGrowthKiB": { "$ref": "#/$defs/safeKiB" },
+        "emergencyFloorKiB": { "const": 5242880 },
+        "requiredPostFreeKiB": { "const": 15728640 }
+      }
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "branch",
+        "headSha",
+        "statusFormat",
+        "statusEntryCount",
+        "statusDigest"
+      ],
+      "properties": {
+        "path": { "const": "/Users/sirinx/SIRINXDev/sirinx-co" },
+        "branch": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "headSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "statusFormat": { "const": "GIT_STATUS_PORCELAIN_V2_Z_PROTECTED_CONTENT_EXCLUDED_V1" },
+        "statusEntryCount": { "$ref": "#/$defs/safeCount" },
+        "statusDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "realPath",
+        "kind",
+        "isSymlink",
+        "deviceId",
+        "inode",
+        "mode",
+        "linkCount",
+        "descendantEntries",
+        "immediateEntries",
+        "regularFileEntries",
+        "directoryEntries",
+        "symlinkEntries",
+        "specialEntries",
+        "hardlinkEntries",
+        "hardlinkGroups",
+        "hardlinkAliasesInsideTarget",
+        "incompleteHardlinkGroups",
+        "allocatedKiB",
+        "logicalKiB",
+        "metadataScope",
+        "metadataDigest"
+      ],
+      "properties": {
+        "path": { "const": "/Users/sirinx/SIRINXDev/sirinx-co/target" },
+        "realPath": { "const": "/Users/sirinx/SIRINXDev/sirinx-co/target" },
+        "kind": { "const": "DIRECTORY" },
+        "isSymlink": { "const": false },
+        "deviceId": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "inode": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "mode": { "type": "string", "pattern": "^0[0-7]{3}$" },
+        "linkCount": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "descendantEntries": { "$ref": "#/$defs/safeCount" },
+        "immediateEntries": { "$ref": "#/$defs/safeCount" },
+        "regularFileEntries": { "$ref": "#/$defs/safeCount" },
+        "directoryEntries": { "$ref": "#/$defs/safeCount" },
+        "symlinkEntries": { "const": 0 },
+        "specialEntries": { "const": 0 },
+        "hardlinkEntries": { "$ref": "#/$defs/safeCount" },
+        "hardlinkGroups": { "$ref": "#/$defs/safeCount" },
+        "hardlinkAliasesInsideTarget": { "$ref": "#/$defs/safeCount" },
+        "incompleteHardlinkGroups": { "const": 0 },
+        "allocatedKiB": { "type": "integer", "minimum": 1, "maximum": 1099511627776 },
+        "logicalKiB": { "type": "integer", "minimum": 1, "maximum": 1099511627776 },
+        "metadataScope": { "const": "LSTAT_METADATA_ONLY_NO_CONTENT_MANIFEST" },
+        "metadataDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "processObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "targetPath",
+        "scope",
+        "visibility",
+        "visibilityLimited",
+        "recordLimit",
+        "matchingRecordCount",
+        "distinctMatchingProcessCount",
+        "outputTruncated",
+        "completeProcessEvidenceV1",
+        "zeroMatchesProvesNoConsumers",
+        "observationDigest"
+      ],
+      "properties": {
+        "source": { "const": "LSOF_TARGET_PREFIX_OBSERVATION" },
+        "targetPath": { "const": "/Users/sirinx/SIRINXDev/sirinx-co/target" },
+        "scope": { "const": "EXACT_TARGET_PATH_OR_DESCENDANT_PREFIX" },
+        "visibility": { "const": "CURRENT_USER_VISIBLE_PROCESSES_ONLY" },
+        "visibilityLimited": { "const": true },
+        "recordLimit": { "const": 16384 },
+        "matchingRecordCount": { "type": "integer", "minimum": 0, "maximum": 16384 },
+        "distinctMatchingProcessCount": { "type": "integer", "minimum": 0, "maximum": 16384 },
+        "outputTruncated": { "const": false },
+        "completeProcessEvidenceV1": { "const": false },
+        "zeroMatchesProvesNoConsumers": { "const": false },
+        "observationDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "symlinkArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "kind",
+        "deviceId",
+        "inode",
+        "mode",
+        "linkCount",
+        "sizeBytes",
+        "linkText",
+        "metadataDigest"
+      ],
+      "properties": {
+        "path": { "const": "/Users/sirinx/.cargo/bin/cargo" },
+        "kind": { "const": "SYMLINK" },
+        "deviceId": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "inode": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "mode": { "type": "string", "pattern": "^[0-7]{3,6}$" },
+        "linkCount": { "const": 1 },
+        "sizeBytes": { "type": "integer", "minimum": 1, "maximum": 4096 },
+        "linkText": { "const": "rustup" },
+        "metadataDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "fileArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "kind",
+        "deviceId",
+        "inode",
+        "mode",
+        "linkCount",
+        "sizeBytes",
+        "contentSha256"
+      ],
+      "properties": {
+        "path": { "type": "string", "pattern": "^/", "minLength": 2, "maxLength": 4096 },
+        "kind": { "const": "REGULAR_FILE" },
+        "deviceId": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "inode": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "mode": { "type": "string", "pattern": "^[0-7]{3,6}$" },
+        "linkCount": { "const": 1 },
+        "sizeBytes": { "type": "integer", "minimum": 1, "maximum": 1073741824 },
+        "contentSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "tooling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cargoInvocation",
+        "rustupProxy",
+        "selectedCargo",
+        "repositoryToolchainSelector",
+        "verificationCeiling"
+      ],
+      "properties": {
+        "cargoInvocation": { "$ref": "#/$defs/symlinkArtifact" },
+        "rustupProxy": {
+          "allOf": [
+            { "$ref": "#/$defs/fileArtifact" },
+            { "type": "object", "properties": { "path": { "const": "/Users/sirinx/.cargo/bin/rustup" } } }
+          ]
+        },
+        "selectedCargo": {
+          "allOf": [
+            { "$ref": "#/$defs/fileArtifact" },
+            {
+              "type": "object",
+              "properties": {
+                "path": { "const": "/Users/sirinx/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo" }
+              }
+            }
+          ]
+        },
+        "repositoryToolchainSelector": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "value", "mutable", "boundToPlan", "contentSha256"],
+          "properties": {
+            "path": { "const": "/Users/sirinx/SIRINXDev/sirinx-co/rust-toolchain.toml" },
+            "value": { "const": "stable" },
+            "mutable": { "const": true },
+            "boundToPlan": { "const": false },
+            "contentSha256": { "$ref": "#/$defs/sha256" }
+          }
+        },
+        "verificationCeiling": { "const": "LOCAL_FILE_HASHES_ONLY_NO_RUNTIME_REVISION_PROBE" }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "filesystemDeviceId",
+        "currentFreeKiB",
+        "targetAllocatedKiB",
+        "targetLogicalKiB",
+        "emergencyFloorKiB",
+        "workloadFloorKiB",
+        "conservativeTargetKiB",
+        "projectedFreeKiB",
+        "emergencyHeadroomKiB",
+        "workloadHeadroomKiB",
+        "conservativeHeadroomKiB",
+        "projectionBasis",
+        "reclaimCertainty"
+      ],
+      "properties": {
+        "filesystemDeviceId": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "currentFreeKiB": { "$ref": "#/$defs/safeKiB" },
+        "targetAllocatedKiB": { "$ref": "#/$defs/safeKiB" },
+        "targetLogicalKiB": { "$ref": "#/$defs/safeKiB" },
+        "emergencyFloorKiB": { "const": 5242880 },
+        "workloadFloorKiB": { "const": 15728640 },
+        "conservativeTargetKiB": { "const": 20971520 },
+        "projectedFreeKiB": { "$ref": "#/$defs/safeKiB" },
+        "emergencyHeadroomKiB": { "type": "integer", "minimum": -1099511627776, "maximum": 1099511627776 },
+        "workloadHeadroomKiB": { "type": "integer", "minimum": -1099511627776, "maximum": 1099511627776 },
+        "conservativeHeadroomKiB": { "type": "integer", "minimum": -1099511627776, "maximum": 1099511627776 },
+        "projectionBasis": { "const": "CURRENT_FREE_PLUS_TARGET_ALLOCATED_UPPER_BOUND_MINUS_PROPOSED_UNVERIFIED_GROWTH" },
+        "reclaimCertainty": { "const": "NOT_GUARANTEED" }
+      }
+    },
+    "operationPreview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "toolId",
+        "executablePath",
+        "cwd",
+        "argv",
+        "environment",
+        "planOperationParametersDigest",
+        "rustupToolchainProposal"
+      ],
+      "properties": {
+        "kind": { "const": "TOOL_NATIVE_CLEAN" },
+        "toolId": { "const": "cargo-clean" },
+        "executablePath": { "const": "/Users/sirinx/.cargo/bin/cargo" },
+        "cwd": { "const": "/Users/sirinx/SIRINXDev/sirinx-co" },
+        "argv": {
+          "const": [
+            "clean",
+            "--manifest-path",
+            "/Users/sirinx/SIRINXDev/sirinx-co/Cargo.toml",
+            "--target-dir",
+            "/Users/sirinx/SIRINXDev/sirinx-co/target"
+          ]
+        },
+        "environment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["inherit", "set"],
+          "properties": {
+            "inherit": { "const": false },
+            "set": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["CARGO_HOME", "CARGO_TARGET_DIR", "HOME", "RUSTUP_HOME", "RUSTUP_TOOLCHAIN"],
+              "properties": {
+                "CARGO_HOME": { "const": "/Users/sirinx/.cargo" },
+                "CARGO_TARGET_DIR": { "const": "/Users/sirinx/SIRINXDev/sirinx-co/target" },
+                "HOME": { "const": "/Users/sirinx" },
+                "RUSTUP_HOME": { "const": "/Users/sirinx/.rustup" },
+                "RUSTUP_TOOLCHAIN": { "const": "stable-aarch64-apple-darwin" }
+              }
+            }
+          }
+        },
+        "planOperationParametersDigest": { "const": "1da51a67a5d083cdaaea8fa6dd55de93f29b16a875811d6ab3dd8ec6523f365c" },
+        "rustupToolchainProposal": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "value", "selectorClass", "mutable", "boundToPlan", "approvedForExecution"],
+          "properties": {
+            "name": { "const": "RUSTUP_TOOLCHAIN" },
+            "value": { "const": "stable-aarch64-apple-darwin" },
+            "selectorClass": { "const": "MUTABLE_CHANNEL_ALIAS" },
+            "mutable": { "const": true },
+            "boundToPlan": { "const": false },
+            "approvedForExecution": { "const": false }
+          }
+        }
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "targetClass",
+        "status",
+        "sourcePath",
+        "sourceFileSha256",
+        "procedurePath",
+        "networkRequirement",
+        "installRequirement",
+        "checkerReceiptId"
+      ],
+      "properties": {
+        "targetClass": { "const": "GENERATED_BUILD_OUTPUT_CANDIDATE" },
+        "status": { "const": "CANDIDATE_NOT_ACTION_TIME_VERIFIED" },
+        "sourcePath": { "const": "/Users/sirinx/SIRINXDev/sirinx-co/Cargo.lock" },
+        "sourceFileSha256": { "$ref": "#/$defs/sha256" },
+        "procedurePath": { "const": "/Users/sirinx/SIRINXDev/sirinx-co/docs/agent-runtime/RESOURCE_RECOVERY_ADMISSION.md" },
+        "networkRequirement": { "const": "UNVERIFIED_NOT_AUTHORIZED" },
+        "installRequirement": { "const": "UNVERIFIED_NOT_AUTHORIZED" },
+        "checkerReceiptId": { "const": null }
+      }
+    },
+    "proofs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "targetManifestV1Complete",
+        "processEvidenceV1Complete",
+        "actionTimeEvidenceComplete",
+        "canonicalWorktreeSnapshotComplete",
+        "executableIdentityV1Complete",
+        "recoveryVerified",
+        "humanApprovalVerified",
+        "durableAuthorityVerified",
+        "runtimeStateVerified"
+      ],
+      "properties": {
+        "targetManifestV1Complete": { "const": false },
+        "processEvidenceV1Complete": { "const": false },
+        "actionTimeEvidenceComplete": { "const": false },
+        "canonicalWorktreeSnapshotComplete": { "const": false },
+        "executableIdentityV1Complete": { "const": false },
+        "recoveryVerified": { "const": false },
+        "humanApprovalVerified": { "const": false },
+        "durableAuthorityVerified": { "const": false },
+        "runtimeStateVerified": { "const": false }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "humanApprovalPresent",
+        "grantPresent",
+        "circuitOpen",
+        "replayProtectionAvailable",
+        "executorAvailable",
+        "approvalConsumed",
+        "authorized",
+        "admitted",
+        "canDispatch",
+        "canExecute",
+        "commandExecuted",
+        "cleanupExecuted",
+        "processStopped",
+        "networkCalls",
+        "externalWrites",
+        "runtimeActivated"
+      ],
+      "properties": {
+        "humanApprovalPresent": { "const": false },
+        "grantPresent": { "const": false },
+        "circuitOpen": { "const": false },
+        "replayProtectionAvailable": { "const": false },
+        "executorAvailable": { "const": false },
+        "approvalConsumed": { "const": false },
+        "authorized": { "const": false },
+        "admitted": { "const": false },
+        "canDispatch": { "const": false },
+        "canExecute": { "const": false },
+        "commandExecuted": { "const": false },
+        "cleanupExecuted": { "const": false },
+        "processStopped": { "const": false },
+        "networkCalls": { "const": false },
+        "externalWrites": { "const": false },
+        "runtimeActivated": { "const": false }
+      }
+    }
+  }
+}

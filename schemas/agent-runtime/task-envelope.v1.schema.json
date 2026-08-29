@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/task-envelope.v1.schema.json",
+  "title": "TaskEnvelopeV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "taskId",
+    "createdAt",
+    "goal",
+    "constraints",
+    "nonGoals",
+    "requestedBy",
+    "dataClass",
+    "repository",
+    "requestedRoleIds",
+    "actionManifest",
+    "budgets",
+    "stopConditions",
+    "idempotencyKey"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "taskId": { "type": "string", "pattern": "^TASK-[A-Za-z0-9._-]+$" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "goal": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "constraints": { "type": "array", "items": { "type": "string" } },
+    "nonGoals": { "type": "array", "items": { "type": "string" } },
+    "requestedBy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["principalId", "assertionRef"],
+      "properties": {
+        "principalId": { "type": "string", "minLength": 1 },
+        "assertionRef": { "type": "string", "minLength": 1 }
+      }
+    },
+    "dataClass": { "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"] },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "commitSha", "worktreeId"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "commitSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "worktreeId": { "type": "string", "minLength": 1 }
+      }
+    },
+    "planHash": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+    "scopeHash": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+    "requestedRoleIds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "integer", "minimum": 1, "maximum": 47 }
+    },
+    "actionManifest": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["action", "class", "target"],
+        "properties": {
+          "action": { "type": "string", "minLength": 1 },
+          "class": { "enum": ["A", "B", "C", "D", "X"] },
+          "target": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxSteps", "maxRuntimeSeconds", "maxOutputBytes", "maxExternalCalls", "maxCostUsd"],
+      "properties": {
+        "maxSteps": { "type": "integer", "minimum": 1 },
+        "maxRuntimeSeconds": { "type": "integer", "minimum": 1 },
+        "maxOutputBytes": { "type": "integer", "minimum": 1 },
+        "maxExternalCalls": { "type": "integer", "minimum": 0 },
+        "maxCostUsd": { "type": "number", "minimum": 0 }
+      }
+    },
+    "stopConditions": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "idempotencyKey": { "type": "string", "minLength": 16, "maxLength": 256 },
+    "approvalTicketIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^TKT-[A-Za-z0-9._-]+$" }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/process-evidence.v1.schema.json",
+  "title": "ProcessEvidenceV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "snapshotId",
+    "targetPath",
+    "capturedAt",
+    "source",
+    "complete",
+    "entries",
+    "activeConsumers",
+    "snapshotDigest",
+    "status"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "snapshotId": { "type": "string", "pattern": "^PE-[A-Za-z0-9._-]+$" },
+    "targetPath": { "type": "string", "pattern": "^/", "minLength": 2, "maxLength": 4096 },
+    "capturedAt": { "type": "string", "format": "date-time" },
+    "source": { "const": "LOCAL_PROCESS_SNAPSHOT" },
+    "complete": { "const": true },
+    "entries": {
+      "type": "array",
+      "maxItems": 16384,
+      "items": { "$ref": "#/$defs/entry" }
+    },
+    "activeConsumers": { "type": "integer", "minimum": 0 },
+    "snapshotDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "status": { "const": "VERIFIED_MATCH" }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pid",
+        "parentPid",
+        "processGroupId",
+        "startTime",
+        "executablePath",
+        "cwd",
+        "commandDigest",
+        "targetReference"
+      ],
+      "properties": {
+        "pid": { "type": "integer", "minimum": 1 },
+        "parentPid": { "type": "integer", "minimum": 0 },
+        "processGroupId": { "type": "integer", "minimum": 0 },
+        "startTime": { "type": "string", "format": "date-time" },
+        "executablePath": { "type": ["string", "null"], "maxLength": 4096 },
+        "cwd": { "type": ["string", "null"], "maxLength": 4096 },
+        "commandDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "targetReference": { "enum": ["NONE", "CWD", "OPEN_FILE", "ARGUMENT", "MOUNT"] }
+      }
+    }
+  }
+}

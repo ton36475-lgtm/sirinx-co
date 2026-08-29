@@ -84,6 +84,14 @@ pub trait Tool: Send + Sync {
     fn name(&self) -> &'static str;
     fn description(&self) -> &'static str;
     fn is_side_effecting(&self) -> bool;
+
+    /// Whether a failed invocation may be attempted again automatically.
+    /// This is deliberately opt-in even for read-only tools: implementors
+    /// must know that repeating the operation is idempotent and safe.
+    fn is_retry_safe(&self) -> bool {
+        false
+    }
+
     fn execute(&self, args: &serde_json::Value) -> Result<serde_json::Value, ToolError>;
 
     /// Human-readable plan line used when the gate blocks execution.
@@ -109,6 +117,15 @@ impl ToolRegistry {
 
     pub fn names(&self) -> Vec<&'static str> {
         self.tools.keys().copied().collect()
+    }
+
+    /// Automatic recovery retries only tools that explicitly declare the
+    /// operation idempotent. Unknown and side-effecting-by-default tools fail
+    /// closed instead of risking duplicate sends, writes, or deployments.
+    pub fn is_retry_safe(&self, tool_name: &str) -> bool {
+        self.tools
+            .get(tool_name)
+            .is_some_and(|tool| tool.is_retry_safe())
     }
 
     /// Invoke a tool under the given gate. Side-effecting tools only run

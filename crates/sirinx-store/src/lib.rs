@@ -1,4 +1,4 @@
-//! Persistence layer for the SIRINX web funnel.
+//! Persistence layer for the SIRINX web funnel and control plane.
 //!
 //! [`Store`] is the seam promised in Phase R1: `sirinx-web` handlers talk
 //! only to this trait, so swapping the in-memory backend for Supabase
@@ -8,13 +8,16 @@
 //! - [`MemoryStore`] — default for tests and local dev without a database.
 //! - [`PostgresStore`] — sqlx/Postgres, pointed at Supabase via `DATABASE_URL`.
 
+pub mod agent_runtime;
 pub mod memory;
 pub mod postgres;
 
 use async_trait::async_trait;
 use uuid::Uuid;
 
-use sirinx_core::{AnalyticsEvent, Lead, LeadStatus, PendingWork, ValidationError};
+use sirinx_core::{
+    AnalyticsEvent, FailureEvent, Gate, Lead, LeadStatus, Lesson, PendingWork, ValidationError,
+};
 
 #[derive(Debug, thiserror::Error)]
 pub enum StoreError {
@@ -35,7 +38,7 @@ impl From<sqlx::Error> for StoreError {
     }
 }
 
-/// Unified store for leads and consent-gated analytics events.
+/// Unified store for web data, shared work, and release-gate decisions.
 #[async_trait]
 pub trait Store: Send + Sync {
     async fn insert_lead(&self, lead: &Lead) -> Result<(), StoreError>;
@@ -61,7 +64,59 @@ pub trait Store: Send + Sync {
     async fn list_pending_work(&self) -> Result<Vec<PendingWork>, StoreError>;
 
     async fn count_pending_work(&self) -> Result<u64, StoreError>;
+
+    /// Insert or replace the durable decision for one release gate.
+    async fn upsert_gate(&self, _gate: &Gate) -> Result<(), StoreError> {
+        Err(StoreError::Backend(
+            "gate persistence is not supported by this store".into(),
+        ))
+    }
+
+    /// Load every persisted release-gate decision.
+    async fn list_gates(&self) -> Result<Vec<Gate>, StoreError> {
+        // Compatibility-safe default for existing Store implementations:
+        // startup remains on the fixed safe holds, while writes fail closed.
+        Ok(Vec::new())
+    }
+
+    /// Load one gate from the authoritative backend. The compatibility
+    /// default filters [`Store::list_gates`], while concrete stores may use a
+    /// direct lookup. Callers must treat `None` and backend errors as held.
+    async fn get_gate(&self, name: &str) -> Result<Option<Gate>, StoreError> {
+        Ok(self
+            .list_gates()
+            .await?
+            .into_iter()
+            .find(|gate| gate.name == name))
+    }
+
+    /// Persist a bounded failure classification. Implementations must never
+    /// store raw invocation arguments or error-message text.
+    async fn record_failure(&self, _event: &FailureEvent) -> Result<(), StoreError> {
+        Err(StoreError::Backend(
+            "failure persistence is not supported by this store".into(),
+        ))
+    }
+
+    /// Load the failure audit for one recovery run.
+    async fn failure_events_for_run(&self, _run_id: Uuid) -> Result<Vec<FailureEvent>, StoreError> {
+        Ok(Vec::new())
+    }
+
+    /// Insert a new lesson or increment the matching lesson's occurrence
+    /// count. The dedupe key is tool + error kind + structured guidance.
+    async fn upsert_lesson(&self, _lesson: &Lesson) -> Result<Lesson, StoreError> {
+        Err(StoreError::Backend(
+            "lesson persistence is not supported by this store".into(),
+        ))
+    }
+
+    /// Load the accumulated structured lessons for one tool.
+    async fn lessons_for_tool(&self, _tool: &str) -> Result<Vec<Lesson>, StoreError> {
+        Ok(Vec::new())
+    }
 }
 
+pub use agent_runtime::{verify_receipt_hash, AgentRuntimeStore, AgentRuntimeStoreError};
 pub use memory::MemoryStore;
-pub use postgres::PostgresStore;
+pub use postgres::{migrate_postgres_once, AgentRuntimePostgresStore, PostgresStore};

@@ -10,7 +10,7 @@ const DEFAULT_ANALYSIS_MODELS = [
   "~openai/gpt-latest",
   "~google/gemini-pro-latest",
   "deepseek/deepseek-v3.2",
-  "~moonshotai/kimi-latest"
+  "moonshotai/kimi-k3"
 ];
 
 const DEFAULT_JUDGE_MODEL = "~openai/gpt-latest";

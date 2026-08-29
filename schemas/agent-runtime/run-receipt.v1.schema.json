@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/run-receipt.v1.schema.json",
+  "title": "RunReceiptV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "receiptId", "taskId", "runId", "roleId", "principalId",
+    "commitSha", "planHash", "scopeHash", "actionDigest", "result", "artifactDigests",
+    "startedAt", "endedAt", "receiptHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "receiptId": { "type": "string", "pattern": "^RECEIPT-[A-Za-z0-9._-]+$" },
+    "previousReceiptHash": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+    "taskId": { "type": "string", "pattern": "^TASK-[A-Za-z0-9._-]+$" },
+    "runId": { "type": "string", "pattern": "^RUN-[A-Za-z0-9._-]+$" },
+    "roleId": { "type": "integer", "minimum": 1, "maximum": 47 },
+    "principalId": { "type": "string", "minLength": 1 },
+    "commitSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "planHash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "scopeHash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "actionDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "result": { "enum": ["PASS", "FAIL", "BLOCKED", "UNVERIFIED", "CANCELED", "EFFECT_UNKNOWN"] },
+    "artifactDigests": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+    },
+    "verificationReceiptId": { "type": ["string", "null"] },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "endedAt": { "type": "string", "format": "date-time" },
+    "receiptHash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

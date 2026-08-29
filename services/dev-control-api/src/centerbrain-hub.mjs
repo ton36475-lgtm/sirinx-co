@@ -1,5 +1,6 @@
 import { getAgentDriverStatus } from "./agent-driver.mjs";
 import { getConnectorRegistryStatus } from "./connector-registry.mjs";
+import { getA2aSyncStatus } from "./a2a-sync.mjs";
 
 export const centerBrainBlockedActions = [
   "deploy",
@@ -11,7 +12,7 @@ export const centerBrainBlockedActions = [
   "secret_read_or_print",
   "customer_message_send",
   "production_database_write",
-  "telegram_send",
+  "telegram_send_without_gate",
   "line_send",
   "connector_auto_run",
   "device_remote_control",
@@ -60,6 +61,7 @@ function lock() {
     canRunMcp: false,
     canReadSecrets: false,
     canSendMessages: false,
+    canSendTelegram: false,
     canDeploy: false,
     canRemoteControlDevices: false,
     requiresHumanApproval: true
@@ -115,38 +117,67 @@ function findBlockedReasons(goal) {
   return dangerousGoalRules.filter(([, pattern]) => pattern.test(goal)).map(([reason]) => reason);
 }
 
-function makeSummary({ aiNodes, deviceNodes, connectorRegistry, stackLanes }) {
+function hasFreshA2aTelegramReadiness(a2aSync) {
+  const lane = a2aSync?.telegramLane;
+  return a2aSync?.status === "a2a-sync-live-ready"
+    && a2aSync?.canSendTelegram === true
+    && a2aSync?.summary?.liveTelegramReady === true
+    && lane?.liveSendReady === true
+    && lane?.canSend === true
+    && lane?.gateAuthoritative === true
+    && lane?.gateFresh === true
+    && lane?.ticketPrefixValid === true;
+}
+
+function makeSummary({ aiNodes, deviceNodes, connectorRegistry, stackLanes, a2aSync, telegramLiveReady }) {
   return {
     aiNodes: aiNodes.length,
     deviceNodes: deviceNodes.length,
     connectorLanes: connectorRegistry.summary.connectorsTotal,
     stackLanes: stackLanes.length,
+    a2aSyncAgents: a2aSync ? a2aSync.summary.syncAgents : 0,
+    a2aSyncPendingMessages: a2aSync ? a2aSync.summary.pendingMessages : 0,
+    a2aSyncLiveTelegram: telegramLiveReady,
     liveExternalActions: 0,
     blockedActions: centerBrainBlockedActions.length
   };
 }
 
 export async function getCenterBrainHubStatus(options = {}) {
-  const [agentDriver, connectorRegistry] = await Promise.all([
+  const [agentDriver, connectorRegistry, a2aSync] = await Promise.all([
     Promise.resolve(getAgentDriverStatus(options)),
-    getConnectorRegistryStatus(options)
+    getConnectorRegistryStatus(options),
+    getA2aSyncStatus(options)
   ]);
   const aiNodes = [...agentDriver.agents].sort((left, right) => left.order - right.order).map(normalizeAiNode);
   const devices = deviceNodes.map(makeDeviceNode);
   const stacks = stackLanes.map(makeStackLane);
+  const telegramLiveReady = hasFreshA2aTelegramReadiness(a2aSync);
 
   return {
     title: "CenterBrain Hub",
-    status: "centerbrain-hub-ready-local-only",
+    status: telegramLiveReady
+      ? "centerbrain-hub-telegram-live-ready"
+      : "centerbrain-hub-ready-local-only",
     mode: "a2a2-adaptive-sync-control-plane",
     ...lock(),
+    canSendMessages: telegramLiveReady,
+    canSendTelegram: telegramLiveReady,
     source: "local-dev-control-api",
-    summary: makeSummary({ aiNodes, deviceNodes: devices, connectorRegistry, stackLanes: stacks }),
+    summary: makeSummary({
+      aiNodes,
+      deviceNodes: devices,
+      connectorRegistry,
+      stackLanes: stacks,
+      a2aSync,
+      telegramLiveReady
+    }),
     aiNodes,
     deviceNodes: devices,
     stackLanes: stacks,
     connectorRegistry,
     agentDriver,
+    a2aSync,
     syncContract: {
       handshake: ["discover", "classify", "dry-run", "evidence", "approval", "manual-activation"],
       evidencePath: "docs/knowledge/SIRINX_CENTERBRAIN_HUB_V1.md",
@@ -164,12 +195,18 @@ export async function getCenterBrainHubStatus(options = {}) {
     blockedActions: centerBrainBlockedActions,
     stopRules: [
       "Keep all AI and connector nodes local-only until explicit approval.",
-      "Do not activate Figma, Canva, ClickUp, Supabase, GitHub, Browser, Chrome, or messaging connectors from this hub.",
+      telegramLiveReady
+        ? "Only the approval-gated A2A Telegram lane is live-ready; every provider attempt must re-check the durable gate."
+        : "Do not activate Figma, Canva, ClickUp, Supabase, GitHub, Browser, Chrome, or messaging connectors from this hub.",
       "Do not create device pairing, mobile push, MCP, deploy, or package install side effects.",
       "Use CenterBrain as a status, evidence, and dry-run planning hub first."
     ],
-    nextRecommendedAction: "Build Next.js/Tailwind shell only after local dashboard contract remains green.",
-    stopPoint: "CENTERBRAIN HUB READY LOCAL-ONLY - WAITING FOR HUMAN APPROVAL",
+    nextRecommendedAction: telegramLiveReady
+      ? "Submit only an approved alert or approval_request with dryRun=false; the sender must re-check the durable OPS-TG gate."
+      : "Provision Telegram env and open the durable telegram_send gate with an OPS-TG ticket.",
+    stopPoint: telegramLiveReady
+      ? "CENTERBRAIN HUB TELEGRAM LIVE-READY - EXPLICIT AUTHENTICATED SEND REQUIRED"
+      : "CENTERBRAIN HUB READY LOCAL-ONLY - WAITING FOR ENV + DURABLE GATE",
     updatedAt: nowIso(options)
   };
 }

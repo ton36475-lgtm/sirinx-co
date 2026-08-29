@@ -1,0 +1,222 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/executable-identity.v1.schema.json",
+  "title": "ExecutableIdentityV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "identityId",
+    "observedAt",
+    "platform",
+    "architecture",
+    "ownerUid",
+    "invocationPath",
+    "invocationArgv0",
+    "invocationNode",
+    "symlinkChain",
+    "resolvedPath",
+    "resolvedNode",
+    "parentDirectories",
+    "binary",
+    "selectedTool",
+    "manifestPathIdentity",
+    "cwdIdentity",
+    "operationParametersDigest",
+    "environmentDigest",
+    "identityDigest",
+    "status"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "identityId": { "type": "string", "pattern": "^EXE-[A-Za-z0-9._-]+$" },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "platform": { "const": "darwin" },
+    "architecture": { "const": "arm64" },
+    "ownerUid": { "$ref": "#/$defs/decimal" },
+    "invocationPath": { "$ref": "#/$defs/absolutePath" },
+    "invocationArgv0": { "const": "cargo" },
+    "invocationNode": { "$ref": "#/$defs/nodeBase" },
+    "symlinkChain": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 16,
+      "items": { "$ref": "#/$defs/symlinkHop" }
+    },
+    "resolvedPath": { "$ref": "#/$defs/absolutePath" },
+    "resolvedNode": { "$ref": "#/$defs/regularNode" },
+    "parentDirectories": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "items": { "$ref": "#/$defs/directoryIdentity" }
+    },
+    "binary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format", "architecture", "contentSha256", "contentSizeBytes"],
+      "properties": {
+        "format": { "const": "MACH_O_64" },
+        "architecture": { "const": "arm64" },
+        "contentSha256": { "$ref": "#/$defs/sha256" },
+        "contentSizeBytes": { "$ref": "#/$defs/decimal" }
+      }
+    },
+    "selectedTool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool",
+        "proxy",
+        "toolchainSelectorSource",
+        "toolchainName",
+        "repositorySelector",
+        "exactToolchainEnvironment",
+        "cargoRevision",
+        "rustcRevision",
+        "selectedCargoExecutable",
+        "toolchainManifestDigest",
+        "revisionProbeDigest"
+      ],
+      "properties": {
+        "tool": { "const": "cargo" },
+        "proxy": { "const": "rustup" },
+        "toolchainSelectorSource": { "const": "ACTION_TIME_EXACT_OVERRIDE_PREVIEW" },
+        "toolchainName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9._+-]+$"
+        },
+        "repositorySelector": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value", "path", "node", "contentSha256"],
+          "properties": {
+            "kind": { "const": "RUST_TOOLCHAIN_TOML" },
+            "value": { "type": "string", "minLength": 1, "maxLength": 256 },
+            "path": { "$ref": "#/$defs/absolutePath" },
+            "node": { "$ref": "#/$defs/regularNode" },
+            "contentSha256": { "$ref": "#/$defs/sha256" }
+          }
+        },
+        "exactToolchainEnvironment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "value", "includedInOperationPreview"],
+          "properties": {
+            "name": { "const": "RUSTUP_TOOLCHAIN" },
+            "value": { "type": "string", "minLength": 1, "maxLength": 256 },
+            "includedInOperationPreview": { "const": false }
+          }
+        },
+        "cargoRevision": { "$ref": "#/$defs/toolRevision" },
+        "rustcRevision": { "$ref": "#/$defs/toolRevision" },
+        "selectedCargoExecutable": { "$ref": "#/$defs/fileIdentity" },
+        "toolchainManifestDigest": { "$ref": "#/$defs/sha256" },
+        "revisionProbeDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "manifestPathIdentity": { "$ref": "#/$defs/fileIdentity" },
+    "cwdIdentity": { "$ref": "#/$defs/directoryIdentity" },
+    "operationParametersDigest": { "$ref": "#/$defs/sha256" },
+    "environmentDigest": { "$ref": "#/$defs/sha256" },
+    "identityDigest": { "$ref": "#/$defs/sha256" },
+    "status": { "const": "VERIFIED_MATCH" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "decimal": { "type": "string", "pattern": "^(0|[1-9][0-9]*)$", "maxLength": 40 },
+    "absolutePath": {
+      "type": "string",
+      "pattern": "^/",
+      "minLength": 2,
+      "maxLength": 4096
+    },
+    "nodeBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "deviceId",
+        "inode",
+        "mode",
+        "uid",
+        "gid",
+        "linkCount",
+        "sizeBytes",
+        "mtimeNs"
+      ],
+      "properties": {
+        "kind": { "enum": ["SYMLINK", "REGULAR_FILE", "DIRECTORY"] },
+        "deviceId": { "$ref": "#/$defs/decimal" },
+        "inode": { "type": "string", "pattern": "^[1-9][0-9]*$", "maxLength": 40 },
+        "mode": { "type": "string", "pattern": "^[0-7]{3,6}$" },
+        "uid": { "$ref": "#/$defs/decimal" },
+        "gid": { "$ref": "#/$defs/decimal" },
+        "linkCount": { "type": "string", "pattern": "^[1-9][0-9]*$", "maxLength": 40 },
+        "sizeBytes": { "$ref": "#/$defs/decimal" },
+        "mtimeNs": { "$ref": "#/$defs/decimal" }
+      }
+    },
+    "symlinkNode": {
+      "allOf": [
+        { "$ref": "#/$defs/nodeBase" },
+        { "type": "object", "properties": { "kind": { "const": "SYMLINK" } } }
+      ]
+    },
+    "regularNode": {
+      "allOf": [
+        { "$ref": "#/$defs/nodeBase" },
+        { "type": "object", "properties": { "kind": { "const": "REGULAR_FILE" } } }
+      ]
+    },
+    "directoryNode": {
+      "allOf": [
+        { "$ref": "#/$defs/nodeBase" },
+        { "type": "object", "properties": { "kind": { "const": "DIRECTORY" } } }
+      ]
+    },
+    "symlinkHop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "node", "linkText", "resolvedNextPath"],
+      "properties": {
+        "path": { "$ref": "#/$defs/absolutePath" },
+        "node": { "$ref": "#/$defs/symlinkNode" },
+        "linkText": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "resolvedNextPath": { "$ref": "#/$defs/absolutePath" }
+      }
+    },
+    "directoryIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "node"],
+      "properties": {
+        "path": { "$ref": "#/$defs/absolutePath" },
+        "node": { "$ref": "#/$defs/directoryNode" }
+      }
+    },
+    "fileIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "node", "contentSha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/absolutePath" },
+        "node": { "$ref": "#/$defs/regularNode" },
+        "contentSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "toolRevision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "commitHash", "commitDate", "hostTriple"],
+      "properties": {
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$" },
+        "commitHash": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "commitDate": { "type": "string", "format": "date" },
+        "hostTriple": { "const": "aarch64-apple-darwin" }
+      }
+    }
+  }
+}

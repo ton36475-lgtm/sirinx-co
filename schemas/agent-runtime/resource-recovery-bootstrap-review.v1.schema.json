@@ -1,0 +1,532 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/resource-recovery-bootstrap-review.v1.schema.json",
+  "title": "SIRINX resource recovery bootstrap comparison review v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "reviewId",
+    "taskId",
+    "runId",
+    "action",
+    "circuit",
+    "status",
+    "claimCeiling",
+    "observedAt",
+    "expiresAt",
+    "repository",
+    "parentArtifacts",
+    "resources",
+    "candidates",
+    "ineligibleRoots",
+    "keepByDefaultTargets",
+    "policy",
+    "blockers",
+    "authority",
+    "effects",
+    "packetDigest"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "reviewId": { "const": "RRBR-A32-20260721" },
+    "taskId": { "const": "TASK-RESOURCE-RECOVERY-BOOTSTRAP" },
+    "runId": { "const": "RUN-A32-RESOURCE-RECOVERY-001" },
+    "action": { "const": "RESOURCE_RECOVERY_BOOTSTRAP_REVIEW" },
+    "circuit": { "const": "resource_cleanup" },
+    "status": { "const": "BOOTSTRAP_REVIEW_BLOCKED" },
+    "claimCeiling": { "const": "COMPARISON_ONLY_RECORDED_METADATA_NO_AUTHORITY" },
+    "observedAt": {
+      "type": "string",
+      "format": "date-time",
+      "const": "2026-07-21T04:40:19+07:00"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "const": "2026-07-21T05:40:19+07:00"
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "branch", "headSha"],
+      "properties": {
+        "path": { "const": "/Users/sirinx/SIRINXDev/sirinx-co" },
+        "branch": { "const": "agent/b1-b2-command-center" },
+        "headSha": { "const": "1f05814c3e9d173e525234d69b3ce7f2d1b01a57" }
+      }
+    },
+    "parentArtifacts": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "prefixItems": [
+        { "$ref": "#/$defs/a22Report" },
+        { "$ref": "#/$defs/a23Plan" },
+        { "$ref": "#/$defs/a31Packet" },
+        { "$ref": "#/$defs/a31Report" }
+      ],
+      "items": false
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "filesystemDeviceId",
+        "currentFreeKiB",
+        "workloadFloorKiB",
+        "conservativeTargetKiB"
+      ],
+      "properties": {
+        "filesystemDeviceId": { "const": 16777232 },
+        "currentFreeKiB": { "const": 11820344 },
+        "workloadFloorKiB": { "const": 15728640 },
+        "conservativeTargetKiB": { "const": 20971520 }
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "prefixItems": [
+        { "$ref": "#/$defs/candidateC01" },
+        { "$ref": "#/$defs/candidateC02a" },
+        { "$ref": "#/$defs/candidateC05a" },
+        { "$ref": "#/$defs/candidateC05b" }
+      ],
+      "items": false
+    },
+    "ineligibleRoots": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "prefixItems": [
+        { "$ref": "#/$defs/ineligibleNpxRoot" },
+        { "$ref": "#/$defs/ineligibleNpmCacheRoot" },
+        { "$ref": "#/$defs/ineligibleGoModuleRoot" },
+        { "$ref": "#/$defs/ineligiblePnpmStoreRoot" }
+      ],
+      "items": false
+    },
+    "keepByDefaultTargets": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        { "$ref": "#/$defs/keepC05c" },
+        { "$ref": "#/$defs/keepC06" }
+      ],
+      "items": false
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "multiTargetGrantAllowed",
+        "aggregateReclaimCredited",
+        "automaticContinuation",
+        "sequentialOneTargetGrantsRequired",
+        "stopAndRemeasureAfterEach"
+      ],
+      "properties": {
+        "multiTargetGrantAllowed": { "const": false },
+        "aggregateReclaimCredited": { "const": false },
+        "automaticContinuation": { "const": false },
+        "sequentialOneTargetGrantsRequired": { "const": true },
+        "stopAndRemeasureAfterEach": { "const": true }
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "uniqueItems": true,
+      "prefixItems": [
+        { "const": "apfs_unique_extent_proof_absent" },
+        { "const": "bootstrap_authority_unavailable" },
+        { "const": "candidate_specific_operation_plans_absent" },
+        { "const": "clone_isolation_proof_absent" },
+        { "const": "consumer_absence_proof_absent" },
+        { "const": "hardlink_isolation_proof_absent" },
+        { "const": "migration_0007_registry_semantics_unresolved" },
+        { "const": "no_single_target_meets_threshold" },
+        { "const": "recovery_proof_absent" },
+        { "const": "staged_recovery_policy_unresolved" }
+      ],
+      "items": false
+    },
+    "authority": { "$ref": "#/$defs/authority" },
+    "effects": { "$ref": "#/$defs/effects" },
+    "packetDigest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "const": "67f729a0f729535c68a9f7ba244f6999289799f1e2271aa2d264c37079415268"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "parentArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifactId", "path", "sha256"],
+      "properties": {
+        "artifactId": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "path": { "type": "string", "pattern": "^/", "minLength": 2, "maxLength": 4096 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "a22Report": {
+      "allOf": [
+        { "$ref": "#/$defs/parentArtifact" },
+        {
+          "type": "object",
+          "properties": {
+            "artifactId": { "const": "A22_REPORT" },
+            "path": { "const": "/Users/sirinx/SIRINXDev/sirinx-co/reports/runtime/resource-recovery-admission-plan-20260720.md" },
+            "sha256": { "const": "d22040817758472d68587f48b070e6a16686a4f0419005cad85836b17c9bccc3" }
+          }
+        }
+      ]
+    },
+    "a23Plan": {
+      "allOf": [
+        { "$ref": "#/$defs/parentArtifact" },
+        {
+          "type": "object",
+          "properties": {
+            "artifactId": { "const": "A23_PLAN" },
+            "path": { "const": "/Users/sirinx/SIRINXDev/sirinx-co/config/agent-runtime/resource-cleanup.plan-only.v2.json" },
+            "sha256": { "const": "859a31f0ed505450f78321d738f43b0d4f204ed745834b1436ab000536470ad1" }
+          }
+        }
+      ]
+    },
+    "a31Packet": {
+      "allOf": [
+        { "$ref": "#/$defs/parentArtifact" },
+        {
+          "type": "object",
+          "properties": {
+            "artifactId": { "const": "A31_PACKET" },
+            "path": { "const": "/Users/sirinx/SIRINXDev/sirinx-co/config/agent-runtime/resource-cleanup.review-request.v1.json" },
+            "sha256": { "const": "d7c700253d3b6a6666cb3f321960be00e3aa91a834cef3f0f232df7b7d661ec2" }
+          }
+        }
+      ]
+    },
+    "a31Report": {
+      "allOf": [
+        { "$ref": "#/$defs/parentArtifact" },
+        {
+          "type": "object",
+          "properties": {
+            "artifactId": { "const": "A31_REPORT" },
+            "path": { "const": "/Users/sirinx/SIRINXDev/sirinx-co/reports/runtime/resource-cleanup-review-request-20260721.md" },
+            "sha256": { "const": "0d86a0a8441c29720c4934f13c036dcf95eb643afea3844f5071f476587e1a65" }
+          }
+        }
+      ]
+    },
+    "candidateProofs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "apfsUniqueExtentVerified",
+        "consumerAbsenceVerified",
+        "hardlinkIsolationVerified",
+        "cloneIsolationVerified",
+        "recoveryVerified"
+      ],
+      "properties": {
+        "apfsUniqueExtentVerified": { "const": false },
+        "consumerAbsenceVerified": { "const": false },
+        "hardlinkIsolationVerified": { "const": false },
+        "cloneIsolationVerified": { "const": false },
+        "recoveryVerified": { "const": false }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidateId",
+        "path",
+        "realPath",
+        "targetClass",
+        "disposition",
+        "kind",
+        "isSymlink",
+        "deviceId",
+        "inode",
+        "mode",
+        "linkCount",
+        "allocatedKiB",
+        "logicalKiB",
+        "metadataScope",
+        "metadataDigest",
+        "nominalProjectedFreeKiB",
+        "guaranteedMinimumReclaimKiB",
+        "approvalEligible",
+        "operationPlanBound",
+        "proofs"
+      ],
+      "properties": {
+        "candidateId": { "type": "string", "minLength": 1, "maxLength": 16 },
+        "path": { "type": "string", "pattern": "^/", "minLength": 2, "maxLength": 4096 },
+        "realPath": { "type": "string", "pattern": "^/", "minLength": 2, "maxLength": 4096 },
+        "targetClass": {
+          "enum": ["GENERATED_BUILD_OUTPUT", "PACKAGE_CACHE_ENTRY", "PACKAGE_STORE_GENERATION"]
+        },
+        "disposition": { "enum": ["CANDIDATE_UNVERIFIED", "EXCEPTION_CANDIDATE"] },
+        "kind": { "const": "DIRECTORY" },
+        "isSymlink": { "const": false },
+        "deviceId": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "inode": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "mode": { "type": "string", "pattern": "^0[0-7]{3}$" },
+        "linkCount": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "allocatedKiB": { "type": "integer", "minimum": 1, "maximum": 1099511627776 },
+        "logicalKiB": { "type": "integer", "minimum": 1, "maximum": 1099511627776 },
+        "metadataScope": {
+          "const": "LSTAT_ROOT_IDENTITY_PLUS_ALLOCATED_LOGICAL_SIZE_NO_CONTENT_MANIFEST"
+        },
+        "metadataDigest": { "$ref": "#/$defs/sha256" },
+        "nominalProjectedFreeKiB": {
+          "type": "integer",
+          "minimum": 0,
+          "exclusiveMaximum": 15728640
+        },
+        "guaranteedMinimumReclaimKiB": { "const": 0 },
+        "approvalEligible": { "const": false },
+        "operationPlanBound": { "const": false },
+        "proofs": { "$ref": "#/$defs/candidateProofs" }
+      }
+    },
+    "candidateC01": {
+      "allOf": [
+        { "$ref": "#/$defs/candidate" },
+        {
+          "type": "object",
+          "properties": {
+            "candidateId": { "const": "C01" },
+            "path": { "const": "/Users/sirinx/SIRINXDev/sirinx-co/target" },
+            "realPath": { "const": "/Users/sirinx/SIRINXDev/sirinx-co/target" },
+            "targetClass": { "const": "GENERATED_BUILD_OUTPUT" },
+            "disposition": { "const": "CANDIDATE_UNVERIFIED" },
+            "deviceId": { "const": 16777232 },
+            "inode": { "const": 35550880 },
+            "mode": { "const": "0755" },
+            "linkCount": { "const": 6 },
+            "allocatedKiB": { "const": 3125988 },
+            "logicalKiB": { "const": 3098930 },
+            "metadataDigest": { "const": "488ca5572667f2506834a3c8b9293ba88ca04518d1b965e4c0f52b7c5cf0e00f" },
+            "nominalProjectedFreeKiB": { "const": 14946332 }
+          }
+        }
+      ]
+    },
+    "candidateC02a": {
+      "allOf": [
+        { "$ref": "#/$defs/candidate" },
+        {
+          "type": "object",
+          "properties": {
+            "candidateId": { "const": "C02a" },
+            "path": { "const": "/Users/sirinx/.npm/_npx/7a45358b2a5848bb" },
+            "realPath": { "const": "/Users/sirinx/.npm/_npx/7a45358b2a5848bb" },
+            "targetClass": { "const": "PACKAGE_CACHE_ENTRY" },
+            "disposition": { "const": "EXCEPTION_CANDIDATE" },
+            "deviceId": { "const": 16777232 },
+            "inode": { "const": 36387099 },
+            "mode": { "const": "0755" },
+            "linkCount": { "const": 5 },
+            "allocatedKiB": { "const": 2619468 },
+            "logicalKiB": { "const": 2397745 },
+            "metadataDigest": { "const": "cde02bafedbac87707ea3bd4bd72f68ad913921855becf3612c19dfe8147bd5a" },
+            "nominalProjectedFreeKiB": { "const": 14439812 }
+          }
+        }
+      ]
+    },
+    "candidateC05a": {
+      "allOf": [
+        { "$ref": "#/$defs/candidate" },
+        {
+          "type": "object",
+          "properties": {
+            "candidateId": { "const": "C05a" },
+            "path": { "const": "/Users/sirinx/Library/pnpm/store/v3" },
+            "realPath": { "const": "/Users/sirinx/Library/pnpm/store/v3" },
+            "targetClass": { "const": "PACKAGE_STORE_GENERATION" },
+            "disposition": { "const": "EXCEPTION_CANDIDATE" },
+            "deviceId": { "const": 16777232 },
+            "inode": { "const": 3865928 },
+            "mode": { "const": "0755" },
+            "linkCount": { "const": 3 },
+            "allocatedKiB": { "const": 1931228 },
+            "logicalKiB": { "const": 1705487 },
+            "metadataDigest": { "const": "739158103e82b5f49304cbc93c64d4c93a3ab1ca79ee7ec2017381838da41748" },
+            "nominalProjectedFreeKiB": { "const": 13751572 }
+          }
+        }
+      ]
+    },
+    "candidateC05b": {
+      "allOf": [
+        { "$ref": "#/$defs/candidate" },
+        {
+          "type": "object",
+          "properties": {
+            "candidateId": { "const": "C05b" },
+            "path": { "const": "/Users/sirinx/Library/pnpm/store/v10" },
+            "realPath": { "const": "/Users/sirinx/Library/pnpm/store/v10" },
+            "targetClass": { "const": "PACKAGE_STORE_GENERATION" },
+            "disposition": { "const": "EXCEPTION_CANDIDATE" },
+            "deviceId": { "const": 16777232 },
+            "inode": { "const": 1187695 },
+            "mode": { "const": "0755" },
+            "linkCount": { "const": 5 },
+            "allocatedKiB": { "const": 2950664 },
+            "logicalKiB": { "const": 2683175 },
+            "metadataDigest": { "const": "663ab5fe16eece101124361dcc9f16bd0326d119394bd6c24bf2c8b39dae9360" },
+            "nominalProjectedFreeKiB": { "const": 14771008 }
+          }
+        }
+      ]
+    },
+    "ineligibleRoot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "reason"],
+      "properties": {
+        "path": { "type": "string", "pattern": "^/", "minLength": 2, "maxLength": 4096 },
+        "reason": { "const": "WHOLESALE_ROOT_INELIGIBLE" }
+      }
+    },
+    "ineligibleNpxRoot": {
+      "allOf": [
+        { "$ref": "#/$defs/ineligibleRoot" },
+        { "type": "object", "properties": { "path": { "const": "/Users/sirinx/.npm/_npx" } } }
+      ]
+    },
+    "ineligibleNpmCacheRoot": {
+      "allOf": [
+        { "$ref": "#/$defs/ineligibleRoot" },
+        { "type": "object", "properties": { "path": { "const": "/Users/sirinx/.npm/_cacache" } } }
+      ]
+    },
+    "ineligibleGoModuleRoot": {
+      "allOf": [
+        { "$ref": "#/$defs/ineligibleRoot" },
+        { "type": "object", "properties": { "path": { "const": "/Users/sirinx/go/pkg/mod" } } }
+      ]
+    },
+    "ineligiblePnpmStoreRoot": {
+      "allOf": [
+        { "$ref": "#/$defs/ineligibleRoot" },
+        { "type": "object", "properties": { "path": { "const": "/Users/sirinx/Library/pnpm/store" } } }
+      ]
+    },
+    "keepTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateId", "path", "targetClass", "disposition"],
+      "properties": {
+        "candidateId": { "type": "string", "minLength": 1, "maxLength": 16 },
+        "path": { "type": "string", "pattern": "^/", "minLength": 2, "maxLength": 4096 },
+        "targetClass": { "enum": ["PACKAGE_STORE_GENERATION", "PACKAGE_REGISTRY"] },
+        "disposition": { "const": "KEEP_BY_DEFAULT" }
+      }
+    },
+    "keepC05c": {
+      "allOf": [
+        { "$ref": "#/$defs/keepTarget" },
+        {
+          "type": "object",
+          "properties": {
+            "candidateId": { "const": "C05c" },
+            "path": { "const": "/Users/sirinx/Library/pnpm/store/v11" },
+            "targetClass": { "const": "PACKAGE_STORE_GENERATION" }
+          }
+        }
+      ]
+    },
+    "keepC06": {
+      "allOf": [
+        { "$ref": "#/$defs/keepTarget" },
+        {
+          "type": "object",
+          "properties": {
+            "candidateId": { "const": "C06" },
+            "path": { "const": "/Users/sirinx/.cargo/registry" },
+            "targetClass": { "const": "PACKAGE_REGISTRY" }
+          }
+        }
+      ]
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "humanApprovalPresent",
+        "singleTargetGrantPresent",
+        "bootstrapAuthorityAvailable",
+        "durableAuthorityAvailable",
+        "replayProtectionAvailable",
+        "circuitOpen",
+        "executorAvailable",
+        "approvalConsumed",
+        "authorized",
+        "admitted",
+        "canDispatch",
+        "canExecute"
+      ],
+      "properties": {
+        "humanApprovalPresent": { "const": false },
+        "singleTargetGrantPresent": { "const": false },
+        "bootstrapAuthorityAvailable": { "const": false },
+        "durableAuthorityAvailable": { "const": false },
+        "replayProtectionAvailable": { "const": false },
+        "circuitOpen": { "const": false },
+        "executorAvailable": { "const": false },
+        "approvalConsumed": { "const": false },
+        "authorized": { "const": false },
+        "admitted": { "const": false },
+        "canDispatch": { "const": false },
+        "canExecute": { "const": false }
+      }
+    },
+    "effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commandExecuted",
+        "cleanupExecuted",
+        "filesDeleted",
+        "trashMoved",
+        "cachePruned",
+        "storePruned",
+        "processStopped",
+        "networkCalls",
+        "externalWrites",
+        "databaseWrites",
+        "runtimeActivated"
+      ],
+      "properties": {
+        "commandExecuted": { "const": false },
+        "cleanupExecuted": { "const": false },
+        "filesDeleted": { "const": false },
+        "trashMoved": { "const": false },
+        "cachePruned": { "const": false },
+        "storePruned": { "const": false },
+        "processStopped": { "const": false },
+        "networkCalls": { "const": false },
+        "externalWrites": { "const": false },
+        "databaseWrites": { "const": false },
+        "runtimeActivated": { "const": false }
+      }
+    }
+  }
+}

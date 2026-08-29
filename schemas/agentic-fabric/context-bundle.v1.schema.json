@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.dev/schemas/agentic-fabric/context-bundle.v1.schema.json",
+  "title": "ContextBundle",
+  "type": "object",
+  "required": ["schema_version", "bundle_id", "mission_id", "run_id", "source_root", "paths", "path_partition", "created_at"],
+  "properties": {
+    "schema_version": {"const": "agentic-fabric.context-bundle.v1"},
+    "bundle_id": {"type": "string", "pattern": "^[0-9a-f-]{36}$"},
+    "mission_id": {"type": "string", "minLength": 3},
+    "run_id": {"type": "string", "minLength": 3},
+    "source_root": {"type": "string", "minLength": 1},
+    "paths": {"type": "array", "items": {"type": "string"}},
+    "path_partition": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["role", "pathset_sha256", "files"],
+        "properties": {
+          "role": {"enum": ["WRITER_A", "WRITER_B", "VERIFIER", "INTEGRATION"]},
+          "pathset_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "files": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

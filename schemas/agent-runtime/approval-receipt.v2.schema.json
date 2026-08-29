@@ -1,0 +1,458 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/approval-receipt.v2.schema.json",
+  "title": "ApprovalReceiptV2StructuralPlanContract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "manifestDigest",
+    "ticketId",
+    "ticketVersion",
+    "grantId",
+    "grantVersion",
+    "taskId",
+    "taskDigest",
+    "runId",
+    "runDigest",
+    "leaseId",
+    "leaseDigest",
+    "actionKind",
+    "actionClass",
+    "circuitName",
+    "effectProfile",
+    "executorRole",
+    "effectState",
+    "effectKey",
+    "targetRef",
+    "targetDigest",
+    "payloadDigest",
+    "repositoryCommitSha",
+    "planHash",
+    "scopeHash",
+    "actionDigest",
+    "contractDigest",
+    "dataClass",
+    "limits",
+    "principals",
+    "attestations",
+    "approverAssertionRef",
+    "nonceDigest",
+    "scope",
+    "connectionEvidence",
+    "issuedAtUnixMs",
+    "expiresAtUnixMs",
+    "consumedAtUnixMs"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "2.0" },
+    "status": { "const": "ISSUED_STRUCTURAL_ONLY" },
+    "manifestDigest": { "const": "b2421996825817400d31f88757843225403ed2080541812c4db889e1ffe3cbb0" },
+    "ticketId": { "type": "string", "pattern": "^TKT-[A-Za-z0-9._-]+$", "maxLength": 160 },
+    "ticketVersion": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "grantId": { "type": "string", "pattern": "^GRANT-[A-Za-z0-9._-]+$", "maxLength": 160 },
+    "grantVersion": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "taskId": { "type": "string", "pattern": "^TASK-[A-Za-z0-9._-]+$", "maxLength": 160 },
+    "taskDigest": { "$ref": "#/$defs/sha256" },
+    "runId": { "type": "string", "pattern": "^RUN-[A-Za-z0-9._-]+$", "maxLength": 160 },
+    "runDigest": { "$ref": "#/$defs/sha256" },
+    "leaseId": { "type": "string", "pattern": "^LEASE-[A-Za-z0-9._-]+$", "maxLength": 160 },
+    "leaseDigest": { "$ref": "#/$defs/sha256" },
+    "actionKind": { "$ref": "#/$defs/actionKind" },
+    "actionClass": { "enum": ["C", "D"] },
+    "circuitName": { "$ref": "#/$defs/circuitName" },
+    "effectProfile": { "$ref": "#/$defs/effectProfile" },
+    "executorRole": {
+      "type": "string",
+      "pattern": "^sirinx_agent_runtime_[a-z0-9_]+_executor$",
+      "maxLength": 128
+    },
+    "effectState": { "const": "PREPARED" },
+    "effectKey": { "type": "string", "pattern": "^[a-z][a-z0-9_]*:GRANT-[A-Za-z0-9._-]+$", "maxLength": 256 },
+    "targetRef": { "type": "string", "pattern": "^target://", "maxLength": 2048 },
+    "targetDigest": { "$ref": "#/$defs/sha256" },
+    "payloadDigest": { "$ref": "#/$defs/sha256" },
+    "repositoryCommitSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "planHash": { "$ref": "#/$defs/sha256" },
+    "scopeHash": { "$ref": "#/$defs/sha256" },
+    "actionDigest": { "$ref": "#/$defs/sha256" },
+    "contractDigest": { "$ref": "#/$defs/sha256" },
+    "dataClass": { "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"] },
+    "limits": { "$ref": "#/$defs/limits" },
+    "principals": { "$ref": "#/$defs/principals" },
+    "attestations": { "$ref": "#/$defs/attestations" },
+    "approverAssertionRef": { "type": "string", "pattern": "^assertion://", "maxLength": 2048 },
+    "nonceDigest": { "$ref": "#/$defs/sha256" },
+    "scope": { "$ref": "#/$defs/scope" },
+    "connectionEvidence": { "$ref": "#/$defs/connectionEvidence" },
+    "issuedAtUnixMs": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "expiresAtUnixMs": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "consumedAtUnixMs": { "const": null }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        { "$ref": "#/$defs/installBinding" },
+        { "$ref": "#/$defs/cleanupBinding" },
+        { "$ref": "#/$defs/connectorBinding" },
+        { "$ref": "#/$defs/providerBinding" },
+        { "$ref": "#/$defs/queueBinding" },
+        { "$ref": "#/$defs/a2aBinding" },
+        { "$ref": "#/$defs/telegramBinding" },
+        { "$ref": "#/$defs/customerBinding" },
+        { "$ref": "#/$defs/pushBinding" },
+        { "$ref": "#/$defs/mergeBinding" },
+        { "$ref": "#/$defs/migrationBinding" },
+        { "$ref": "#/$defs/cloudflareBinding" },
+        { "$ref": "#/$defs/deployBinding" }
+      ]
+    },
+    {
+      "if": {
+        "properties": {
+          "actionKind": {
+            "enum": [
+              "CONNECTOR_ACTIVATION",
+              "PROVIDER_CALL",
+              "QUEUE_MUTATION",
+              "A2A_EGRESS",
+              "LIVE_SEND",
+              "PUSH",
+              "MERGE",
+              "PRODUCTION_MIGRATION",
+              "CLOUDFLARE_MUTATION",
+              "DEPLOY"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "connectionEvidence": {
+            "type": "object",
+            "properties": {
+              "connectionId": { "type": "string" },
+              "planDigest": { "type": "string" },
+              "evidenceDigest": { "type": "string" },
+              "endpointDigest": { "type": "string" },
+              "authenticationPolicyDigest": { "type": "string" },
+              "toolPolicyDigest": { "type": "string" },
+              "componentRevisionDigest": { "type": "string" },
+              "licenseDigest": { "type": "string" },
+              "provenanceDigest": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "actionKind": { "const": "RESOURCE_CLEANUP" } }
+      },
+      "then": {
+        "properties": {
+          "connectionEvidence": {
+            "type": "object",
+            "properties": {
+              "connectionId": { "type": "null" },
+              "planDigest": { "type": "null" },
+              "evidenceDigest": { "type": "null" },
+              "agentCardDigest": { "type": "null" },
+              "endpointDigest": { "type": "null" },
+              "authenticationPolicyDigest": { "type": "null" },
+              "toolPolicyDigest": { "type": "null" },
+              "componentRevisionDigest": { "type": "null" },
+              "licenseDigest": { "type": "null" },
+              "provenanceDigest": { "type": "null" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "actionKind": { "const": "A2A_EGRESS" } }
+      },
+      "then": {
+        "properties": {
+          "connectionEvidence": {
+            "type": "object",
+            "properties": { "agentCardDigest": { "type": "string" } }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "not": {
+          "properties": {
+            "actionKind": { "enum": ["A2A_EGRESS", "CONNECTOR_ACTIVATION"] }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "connectionEvidence": {
+            "type": "object",
+            "properties": { "agentCardDigest": { "type": "null" } }
+          }
+        }
+      }
+    },
+    {
+      "not": {
+        "anyOf": [
+          {
+            "properties": {
+              "connectionEvidence": {
+                "type": "object",
+                "properties": {
+                  "connectionId": {
+                    "enum": ["line-official-local-mcp", "line-webhook-transport"]
+                  }
+                }
+              }
+            }
+          },
+          { "properties": { "targetRef": { "type": "string", "pattern": "^target://line/" } } }
+        ]
+      }
+    },
+    {
+      "if": { "properties": { "effectProfile": { "const": "TELEGRAM" } } },
+      "then": {
+        "properties": {
+          "targetRef": { "type": "string", "pattern": "^target://telegram/" },
+          "scope": {
+            "type": "object",
+            "properties": {
+              "schemaId": { "const": "https://sirinx.co/schemas/agent-runtime/live-send-scope.v2.schema.json" }
+            }
+          },
+          "connectionEvidence": {
+            "type": "object",
+            "properties": {
+              "connectionId": { "const": "telegram-bot-transport" },
+              "agentCardDigest": { "type": "null" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "effectProfile": { "const": "CUSTOMER_MESSAGING" } } },
+      "then": false
+    },
+    {
+      "if": { "properties": { "effectProfile": { "const": "A2A_EGRESS" } } },
+      "then": {
+        "properties": {
+          "connectionEvidence": {
+            "type": "object",
+            "properties": {
+              "connectionId": {
+                "enum": [
+                  "codex-a2a-peer",
+                  "claude-a2a-peer",
+                  "kimi-a2a-peer",
+                  "hermes-a2a-peer"
+                ]
+              },
+              "agentCardDigest": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "nullableSha256": {
+      "oneOf": [
+        { "$ref": "#/$defs/sha256" },
+        { "type": "null" }
+      ]
+    },
+    "actionKind": {
+      "enum": [
+        "INSTALL",
+        "RESOURCE_CLEANUP",
+        "CONNECTOR_ACTIVATION",
+        "PROVIDER_CALL",
+        "QUEUE_MUTATION",
+        "A2A_EGRESS",
+        "LIVE_SEND",
+        "PUSH",
+        "MERGE",
+        "PRODUCTION_MIGRATION",
+        "CLOUDFLARE_MUTATION",
+        "DEPLOY"
+      ]
+    },
+    "circuitName": {
+      "enum": [
+        "install",
+        "resource_cleanup",
+        "connector_activation",
+        "provider_call",
+        "queue_mutation",
+        "a2a_egress",
+        "telegram_send",
+        "customer_messaging",
+        "push",
+        "merge",
+        "production_migration",
+        "cloudflare_mutation",
+        "deploy"
+      ]
+    },
+    "effectProfile": {
+      "enum": [
+        "INSTALL",
+        "RESOURCE_CLEANUP",
+        "CONNECTOR_ACTIVATION",
+        "PROVIDER_CALL",
+        "QUEUE_MUTATION",
+        "A2A_EGRESS",
+        "TELEGRAM",
+        "CUSTOMER_MESSAGING",
+        "PUSH",
+        "MERGE",
+        "PRODUCTION_MIGRATION",
+        "CLOUDFLARE_MUTATION",
+        "DEPLOY"
+      ]
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxCalls", "maxCostMicrousd", "maxRuntimeSeconds"],
+      "properties": {
+        "maxCalls": { "const": 1 },
+        "maxCostMicrousd": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "maxRuntimeSeconds": { "type": "integer", "minimum": 1, "maximum": 3600 }
+      }
+    },
+    "principals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requester", "approver", "maker", "checker", "executor", "issuer"],
+      "properties": {
+        "requester": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "approver": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "maker": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "checker": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "executor": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "issuer": { "type": "string", "minLength": 1, "maxLength": 256 }
+      }
+    },
+    "attestations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approverAttestationId",
+        "approverAttestationDigest",
+        "issuerAttestationId",
+        "issuerAttestationDigest"
+      ],
+      "properties": {
+        "approverAttestationId": { "type": "string", "pattern": "^ATTEST-[A-Za-z0-9._-]+$", "maxLength": 160 },
+        "approverAttestationDigest": { "$ref": "#/$defs/sha256" },
+        "issuerAttestationId": { "type": "string", "pattern": "^ATTEST-[A-Za-z0-9._-]+$", "maxLength": 160 },
+        "issuerAttestationDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaId", "schemaVersion", "scopeDigest", "artifactRef"],
+      "properties": {
+        "schemaId": { "type": "string", "pattern": "^https://sirinx\\.co/schemas/", "maxLength": 2048 },
+        "schemaVersion": { "type": "string", "minLength": 1, "maxLength": 32 },
+        "scopeDigest": { "$ref": "#/$defs/sha256" },
+        "artifactRef": { "type": "string", "pattern": "^artifact://", "maxLength": 2048 }
+      }
+    },
+    "connectionEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "connectionId",
+        "planDigest",
+        "evidenceDigest",
+        "agentCardDigest",
+        "endpointDigest",
+        "authenticationPolicyDigest",
+        "toolPolicyDigest",
+        "componentRevisionDigest",
+        "licenseDigest",
+        "provenanceDigest"
+      ],
+      "properties": {
+        "connectionId": {
+          "oneOf": [
+            { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,63}$" },
+            { "type": "null" }
+          ]
+        },
+        "planDigest": {
+          "oneOf": [
+            { "const": null },
+            { "const": "51bb41ec38c1472c1ec0684cc6668591cebc3d58a05747d112d1917eecb046d1" }
+          ]
+        },
+        "evidenceDigest": { "$ref": "#/$defs/nullableSha256" },
+        "agentCardDigest": { "$ref": "#/$defs/nullableSha256" },
+        "endpointDigest": { "$ref": "#/$defs/nullableSha256" },
+        "authenticationPolicyDigest": { "$ref": "#/$defs/nullableSha256" },
+        "toolPolicyDigest": { "$ref": "#/$defs/nullableSha256" },
+        "componentRevisionDigest": { "$ref": "#/$defs/nullableSha256" },
+        "licenseDigest": { "$ref": "#/$defs/nullableSha256" },
+        "provenanceDigest": { "$ref": "#/$defs/nullableSha256" }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "connectionId": { "type": "null" },
+            "planDigest": { "type": "null" },
+            "evidenceDigest": { "type": "null" },
+            "agentCardDigest": { "type": "null" },
+            "endpointDigest": { "type": "null" },
+            "authenticationPolicyDigest": { "type": "null" },
+            "toolPolicyDigest": { "type": "null" },
+            "componentRevisionDigest": { "type": "null" },
+            "licenseDigest": { "type": "null" },
+            "provenanceDigest": { "type": "null" }
+          }
+        },
+        {
+          "properties": {
+            "connectionId": { "type": "string" },
+            "planDigest": { "type": "string" },
+            "evidenceDigest": { "type": "string" },
+            "endpointDigest": { "type": "string" },
+            "authenticationPolicyDigest": { "type": "string" },
+            "toolPolicyDigest": { "type": "string" },
+            "componentRevisionDigest": { "type": "string" },
+            "licenseDigest": { "type": "string" },
+            "provenanceDigest": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "installBinding": { "type": "object", "properties": { "actionKind": { "const": "INSTALL" }, "actionClass": { "const": "D" }, "circuitName": { "const": "install" }, "effectProfile": { "const": "INSTALL" }, "executorRole": { "const": "sirinx_agent_runtime_install_executor" }, "effectKey": { "type": "string", "pattern": "^install:GRANT-" } } },
+    "cleanupBinding": { "type": "object", "properties": { "actionKind": { "const": "RESOURCE_CLEANUP" }, "actionClass": { "const": "C" }, "circuitName": { "const": "resource_cleanup" }, "effectProfile": { "const": "RESOURCE_CLEANUP" }, "executorRole": { "const": "sirinx_agent_runtime_resource_cleanup_executor" }, "effectKey": { "type": "string", "pattern": "^resource_cleanup:GRANT-" } } },
+    "connectorBinding": { "type": "object", "properties": { "actionKind": { "const": "CONNECTOR_ACTIVATION" }, "actionClass": { "const": "D" }, "circuitName": { "const": "connector_activation" }, "effectProfile": { "const": "CONNECTOR_ACTIVATION" }, "executorRole": { "const": "sirinx_agent_runtime_connector_activation_executor" }, "effectKey": { "type": "string", "pattern": "^connector_activation:GRANT-" } } },
+    "providerBinding": { "type": "object", "properties": { "actionKind": { "const": "PROVIDER_CALL" }, "actionClass": { "const": "D" }, "circuitName": { "const": "provider_call" }, "effectProfile": { "const": "PROVIDER_CALL" }, "executorRole": { "const": "sirinx_agent_runtime_provider_call_executor" }, "effectKey": { "type": "string", "pattern": "^provider_call:GRANT-" } } },
+    "queueBinding": { "type": "object", "properties": { "actionKind": { "const": "QUEUE_MUTATION" }, "actionClass": { "const": "D" }, "circuitName": { "const": "queue_mutation" }, "effectProfile": { "const": "QUEUE_MUTATION" }, "executorRole": { "const": "sirinx_agent_runtime_queue_mutation_executor" }, "effectKey": { "type": "string", "pattern": "^queue_mutation:GRANT-" } } },
+    "a2aBinding": { "type": "object", "properties": { "actionKind": { "const": "A2A_EGRESS" }, "actionClass": { "const": "D" }, "circuitName": { "const": "a2a_egress" }, "effectProfile": { "const": "A2A_EGRESS" }, "executorRole": { "const": "sirinx_agent_runtime_a2a_egress_executor" }, "effectKey": { "type": "string", "pattern": "^a2a_egress:GRANT-" } } },
+    "telegramBinding": { "type": "object", "properties": { "actionKind": { "const": "LIVE_SEND" }, "actionClass": { "const": "D" }, "circuitName": { "const": "telegram_send" }, "effectProfile": { "const": "TELEGRAM" }, "executorRole": { "const": "sirinx_agent_runtime_telegram_send_executor" }, "effectKey": { "type": "string", "pattern": "^telegram_send:GRANT-" } } },
+    "customerBinding": { "type": "object", "properties": { "actionKind": { "const": "LIVE_SEND" }, "actionClass": { "const": "D" }, "circuitName": { "const": "customer_messaging" }, "effectProfile": { "const": "CUSTOMER_MESSAGING" }, "executorRole": { "const": "sirinx_agent_runtime_customer_messaging_executor" }, "effectKey": { "type": "string", "pattern": "^customer_messaging:GRANT-" } } },
+    "pushBinding": { "type": "object", "properties": { "actionKind": { "const": "PUSH" }, "actionClass": { "const": "D" }, "circuitName": { "const": "push" }, "effectProfile": { "const": "PUSH" }, "executorRole": { "const": "sirinx_agent_runtime_push_executor" }, "effectKey": { "type": "string", "pattern": "^push:GRANT-" } } },
+    "mergeBinding": { "type": "object", "properties": { "actionKind": { "const": "MERGE" }, "actionClass": { "const": "D" }, "circuitName": { "const": "merge" }, "effectProfile": { "const": "MERGE" }, "executorRole": { "const": "sirinx_agent_runtime_merge_executor" }, "effectKey": { "type": "string", "pattern": "^merge:GRANT-" } } },
+    "migrationBinding": { "type": "object", "properties": { "actionKind": { "const": "PRODUCTION_MIGRATION" }, "actionClass": { "const": "D" }, "circuitName": { "const": "production_migration" }, "effectProfile": { "const": "PRODUCTION_MIGRATION" }, "executorRole": { "const": "sirinx_agent_runtime_production_migration_executor" }, "effectKey": { "type": "string", "pattern": "^production_migration:GRANT-" } } },
+    "cloudflareBinding": { "type": "object", "properties": { "actionKind": { "const": "CLOUDFLARE_MUTATION" }, "actionClass": { "const": "D" }, "circuitName": { "const": "cloudflare_mutation" }, "effectProfile": { "const": "CLOUDFLARE_MUTATION" }, "executorRole": { "const": "sirinx_agent_runtime_cloudflare_mutation_executor" }, "effectKey": { "type": "string", "pattern": "^cloudflare_mutation:GRANT-" } } },
+    "deployBinding": { "type": "object", "properties": { "actionKind": { "const": "DEPLOY" }, "actionClass": { "const": "D" }, "circuitName": { "const": "deploy" }, "effectProfile": { "const": "DEPLOY" }, "executorRole": { "const": "sirinx_agent_runtime_deploy_executor" }, "effectKey": { "type": "string", "pattern": "^deploy:GRANT-" } } }
+  }
+}

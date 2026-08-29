@@ -1,0 +1,13 @@
+name = "sirinx-brain-sync"
+main = "src/worker.js"
+compatibility_date = "2026-07-01"
+
+# Deployment stays behind the `deploy` gate — run `wrangler deploy` only
+# after the gate is opened with a ticket (GO_LIVE_GATE_CHECKLIST.md).
+# Secret required before first deploy:
+#   wrangler secret put BRAIN_SYNC_TOKEN
+
+[[d1_databases]]
+binding = "BRAIN_DB"
+database_name = "sirinx-unified-db"
+database_id = "3d1da4d2-3f50-4ec8-ac2f-5be50f86bd2e"

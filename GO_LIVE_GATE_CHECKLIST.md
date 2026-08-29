@@ -43,8 +43,17 @@ Ready when ALL of:
 
 Ready when ALL of:
 - [ ] Bot token + chat id provisioned outside the repo
+- [ ] `DATABASE_URL` is provisioned and `/api/gates` reports
+      `persistence.backend=postgres`, `durable=true`
+- [ ] `CONTROL_API_TOKEN` protects Rust `:8711`, Node `:8790`, and Telegram
+      live-send requests
+- [ ] `npm run telegram:preflight` returns `READY` with exact service
+      identities and Rust `/ready` confirms durable Postgres authority
 - [ ] Dry-run previews reviewed (`npm run telegram:preview`)
 - [ ] Message templates approved (no customer data leakage)
+- [ ] Exact fixed destination, message, and one unique `Idempotency-Key`
+      recorded in the ticket
+- [ ] Re-hold command and ambiguous-provider reconciliation reviewed
 - Ticket prefix: `OPS-TG-…`
 
 ## 4. `customer_messaging` — Kai drafts go out for real

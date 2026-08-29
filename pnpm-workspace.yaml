@@ -3,3 +3,5 @@ packages:
   - "services/*"
   - "packages/*"
   - "mcp/*"
+allowBuilds:
+  esbuild: set this to true or false

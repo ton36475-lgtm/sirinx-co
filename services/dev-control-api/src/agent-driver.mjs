@@ -57,11 +57,12 @@ const driverProfiles = {
     notes: "No install was attempted; remains manual review only."
   },
   opencode: {
-    classification: "needs_install",
-    approvedReadOnlyCommand: "ollama launch opencode",
-    evidenceStatus: "needs-install-confirmation",
+    classification: "passed",
+    approvedReadOnlyCommand: "opencode --version",
+    evidenceStatus: "bounded-write-handshake-passed",
+    evidencePath: "reports/runtime/opencode-handshake-20260720-001/HANDSHAKE.json",
     order: 92,
-    notes: "No install was attempted; remains manual review only."
+    notes: "OpenCode 1.18.3 completed one explicitly requested bounded write with the free DeepSeek V4 Flash model; this is not a persistent A2A connection."
   },
   "copilot-cli": {
     classification: "needs_install",
@@ -133,7 +134,7 @@ function classifyGoal(goal) {
 
 function makeEvidencePacket(agent, options) {
   return {
-    path: evidencePath,
+    path: agent.evidencePath || evidencePath,
     mode: "local-docs-evidence",
     didWriteFromApi: false,
     evidenceStatus: agent.evidenceStatus,

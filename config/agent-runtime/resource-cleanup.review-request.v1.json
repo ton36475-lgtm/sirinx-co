@@ -1,0 +1,232 @@
+{
+  "schemaVersion": "1.0",
+  "requestId": "RCRR-C01-20260721-035131",
+  "taskId": "TASK-RESOURCE-RECOVERY-C01",
+  "runId": "RUN-RESOURCE-REVIEW-20260721-001",
+  "action": "RESOURCE_CLEANUP",
+  "circuit": "resource_cleanup",
+  "status": "COLLECTED_NOT_APPROVED",
+  "claimCeiling": "PRE_APPROVAL_LOCAL_READ_ONLY_OBSERVATIONS",
+  "observedAt": "2026-07-21T03:51:31+07:00",
+  "expiresAt": "2026-07-21T04:51:31+07:00",
+  "planBinding": {
+    "planPath": "/Users/sirinx/SIRINXDev/sirinx-co/config/agent-runtime/resource-cleanup.plan-only.v2.json",
+    "planHash": "57a56f10f23c7874c0788bf9bd065e2fd7707764df6996acceb030f86885162c",
+    "planFileSha256": "859a31f0ed505450f78321d738f43b0d4f204ed745834b1436ab000536470ad1"
+  },
+  "principals": {
+    "requester": "principal:operator:request-origin",
+    "maker": "principal:codex:local-evidence-maker",
+    "checker": "principal:reviewer:independent-pending",
+    "proposedHumanApprover": "principal:human:operator-pending",
+    "proposedExecutor": "principal:executor:resource-cleanup-unavailable"
+  },
+  "exclusionsDigest": "6adcb018036f2331b9e54d8e41dc8ba29acad972f923d895cf1a07fce443649a",
+  "limits": {
+    "maxCalls": 1,
+    "maxCostUsd": 0,
+    "maxRuntimeSeconds": 300,
+    "maxAffectedKiB": 3125988,
+    "worstCaseCleanupGrowthKiB": 0,
+    "emergencyFloorKiB": 5242880,
+    "requiredPostFreeKiB": 15728640
+  },
+  "repository": {
+    "path": "/Users/sirinx/SIRINXDev/sirinx-co",
+    "branch": "agent/b1-b2-command-center",
+    "headSha": "1f05814c3e9d173e525234d69b3ce7f2d1b01a57",
+    "statusFormat": "GIT_STATUS_PORCELAIN_V2_Z_PROTECTED_CONTENT_EXCLUDED_V1",
+    "statusEntryCount": 256,
+    "statusDigest": "2aa76cd732e044d450d6c17a5b5425d3537e35e11ac7997bbfa6bf475118663b"
+  },
+  "target": {
+    "path": "/Users/sirinx/SIRINXDev/sirinx-co/target",
+    "realPath": "/Users/sirinx/SIRINXDev/sirinx-co/target",
+    "kind": "DIRECTORY",
+    "isSymlink": false,
+    "deviceId": 16777232,
+    "inode": 35550880,
+    "mode": "0755",
+    "linkCount": 6,
+    "descendantEntries": 27787,
+    "immediateEntries": 4,
+    "regularFileEntries": 26826,
+    "directoryEntries": 961,
+    "symlinkEntries": 0,
+    "specialEntries": 0,
+    "hardlinkEntries": 18716,
+    "hardlinkGroups": 5492,
+    "hardlinkAliasesInsideTarget": 13224,
+    "incompleteHardlinkGroups": 0,
+    "allocatedKiB": 3125988,
+    "logicalKiB": 3098930,
+    "metadataScope": "LSTAT_METADATA_ONLY_NO_CONTENT_MANIFEST",
+    "metadataDigest": "9f12ae322a275f3374eb31d61234bfd9b2444fe636c67e1d9a0c711b4c71661d"
+  },
+  "processObservation": {
+    "source": "LSOF_TARGET_PREFIX_OBSERVATION",
+    "targetPath": "/Users/sirinx/SIRINXDev/sirinx-co/target",
+    "scope": "EXACT_TARGET_PATH_OR_DESCENDANT_PREFIX",
+    "visibility": "CURRENT_USER_VISIBLE_PROCESSES_ONLY",
+    "visibilityLimited": true,
+    "recordLimit": 16384,
+    "matchingRecordCount": 0,
+    "distinctMatchingProcessCount": 0,
+    "outputTruncated": false,
+    "completeProcessEvidenceV1": false,
+    "zeroMatchesProvesNoConsumers": false,
+    "observationDigest": "09b3ba778e82eff1b04266e1e5c26dcd018d6d68d92fa1e85c0be3b0fc9e3584"
+  },
+  "tooling": {
+    "cargoInvocation": {
+      "path": "/Users/sirinx/.cargo/bin/cargo",
+      "kind": "SYMLINK",
+      "deviceId": 16777232,
+      "inode": 30862423,
+      "mode": "120755",
+      "linkCount": 1,
+      "sizeBytes": 6,
+      "linkText": "rustup",
+      "metadataDigest": "2311041bed6ab48f9025457e7b5c158e92c88a104fedbda9dc4e1d321c9201ed"
+    },
+    "rustupProxy": {
+      "path": "/Users/sirinx/.cargo/bin/rustup",
+      "kind": "REGULAR_FILE",
+      "deviceId": 16777232,
+      "inode": 30862417,
+      "mode": "100755",
+      "linkCount": 1,
+      "sizeBytes": 11053296,
+      "contentSha256": "aeb4105778ca1bd3c6b0e75768f581c656633cd51368fa61289b6a71696ac7e1"
+    },
+    "selectedCargo": {
+      "path": "/Users/sirinx/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "kind": "REGULAR_FILE",
+      "deviceId": 16777232,
+      "inode": 30863144,
+      "mode": "100755",
+      "linkCount": 1,
+      "sizeBytes": 31887528,
+      "contentSha256": "ab0f670cc50bc74a6f79bc2250a9310515f71ab81d513748ce5a7f309808b3bf"
+    },
+    "repositoryToolchainSelector": {
+      "path": "/Users/sirinx/SIRINXDev/sirinx-co/rust-toolchain.toml",
+      "value": "stable",
+      "mutable": true,
+      "boundToPlan": false,
+      "contentSha256": "a6a0bbd29ffaa8182dc22d1d9149709f1091e47df40ed96eb8a78a711c66a4ce"
+    },
+    "verificationCeiling": "LOCAL_FILE_HASHES_ONLY_NO_RUNTIME_REVISION_PROBE"
+  },
+  "resources": {
+    "filesystemDeviceId": 16777232,
+    "currentFreeKiB": 13625216,
+    "targetAllocatedKiB": 3125988,
+    "targetLogicalKiB": 3098930,
+    "emergencyFloorKiB": 5242880,
+    "workloadFloorKiB": 15728640,
+    "conservativeTargetKiB": 20971520,
+    "projectedFreeKiB": 16751204,
+    "emergencyHeadroomKiB": 8382336,
+    "workloadHeadroomKiB": 1022564,
+    "conservativeHeadroomKiB": -4220316,
+    "projectionBasis": "CURRENT_FREE_PLUS_TARGET_ALLOCATED_UPPER_BOUND_MINUS_PROPOSED_UNVERIFIED_GROWTH",
+    "reclaimCertainty": "NOT_GUARANTEED"
+  },
+  "operationPreview": {
+    "kind": "TOOL_NATIVE_CLEAN",
+    "toolId": "cargo-clean",
+    "executablePath": "/Users/sirinx/.cargo/bin/cargo",
+    "cwd": "/Users/sirinx/SIRINXDev/sirinx-co",
+    "argv": [
+      "clean",
+      "--manifest-path",
+      "/Users/sirinx/SIRINXDev/sirinx-co/Cargo.toml",
+      "--target-dir",
+      "/Users/sirinx/SIRINXDev/sirinx-co/target"
+    ],
+    "environment": {
+      "inherit": false,
+      "set": {
+        "CARGO_HOME": "/Users/sirinx/.cargo",
+        "CARGO_TARGET_DIR": "/Users/sirinx/SIRINXDev/sirinx-co/target",
+        "HOME": "/Users/sirinx",
+        "RUSTUP_HOME": "/Users/sirinx/.rustup",
+        "RUSTUP_TOOLCHAIN": "stable-aarch64-apple-darwin"
+      }
+    },
+    "planOperationParametersDigest": "1da51a67a5d083cdaaea8fa6dd55de93f29b16a875811d6ab3dd8ec6523f365c",
+    "rustupToolchainProposal": {
+      "name": "RUSTUP_TOOLCHAIN",
+      "value": "stable-aarch64-apple-darwin",
+      "selectorClass": "MUTABLE_CHANNEL_ALIAS",
+      "mutable": true,
+      "boundToPlan": false,
+      "approvedForExecution": false
+    }
+  },
+  "recovery": {
+    "targetClass": "GENERATED_BUILD_OUTPUT_CANDIDATE",
+    "status": "CANDIDATE_NOT_ACTION_TIME_VERIFIED",
+    "sourcePath": "/Users/sirinx/SIRINXDev/sirinx-co/Cargo.lock",
+    "sourceFileSha256": "b1f0cddffa71d8189a7e40a87a169d98eb407a2da39b2b21d1ddfece8473185b",
+    "procedurePath": "/Users/sirinx/SIRINXDev/sirinx-co/docs/agent-runtime/RESOURCE_RECOVERY_ADMISSION.md",
+    "networkRequirement": "UNVERIFIED_NOT_AUTHORIZED",
+    "installRequirement": "UNVERIFIED_NOT_AUTHORIZED",
+    "checkerReceiptId": null
+  },
+  "proofs": {
+    "targetManifestV1Complete": false,
+    "processEvidenceV1Complete": false,
+    "actionTimeEvidenceComplete": false,
+    "canonicalWorktreeSnapshotComplete": false,
+    "executableIdentityV1Complete": false,
+    "recoveryVerified": false,
+    "humanApprovalVerified": false,
+    "durableAuthorityVerified": false,
+    "runtimeStateVerified": false
+  },
+  "authority": {
+    "humanApprovalPresent": false,
+    "grantPresent": false,
+    "circuitOpen": false,
+    "replayProtectionAvailable": false,
+    "executorAvailable": false,
+    "approvalConsumed": false,
+    "authorized": false,
+    "admitted": false,
+    "canDispatch": false,
+    "canExecute": false,
+    "commandExecuted": false,
+    "cleanupExecuted": false,
+    "processStopped": false,
+    "networkCalls": false,
+    "externalWrites": false,
+    "runtimeActivated": false
+  },
+  "blockers": [
+    "action_time_evidence_absent",
+    "canonical_worktree_snapshot_absent",
+    "cleanup_executor_absent",
+    "cleanup_growth_margin_unreviewed",
+    "clock_authority_unattested",
+    "complete_process_evidence_v1_absent",
+    "conservative_20gib_target_not_met",
+    "durable_cleanup_authority_absent",
+    "executable_identity_v1_incomplete",
+    "human_approval_absent",
+    "independent_review_absent",
+    "mutable_stable_toolchain_unbound",
+    "nominal_reclaim_not_guaranteed",
+    "non_atomic_collection_not_action_time",
+    "plan_file_not_revalidated_action_time",
+    "recovery_evidence_unverified",
+    "replay_protection_absent",
+    "resource_cleanup_circuit_hold",
+    "rustup_toolchain_proposal_not_bound_to_plan",
+    "scope_artifacts_not_independently_validated",
+    "target_manifest_v1_absent",
+    "visible_process_scope_limited"
+  ],
+  "requestDigest": "aecc0a0e0f6dd93bd1e4967a4ccbc754d9a7e003f432a9b086acaa19b09d8896"
+}

@@ -1,0 +1,238 @@
+{
+  "schemaVersion": "1.0",
+  "reviewId": "RRBR-A32-20260721",
+  "taskId": "TASK-RESOURCE-RECOVERY-BOOTSTRAP",
+  "runId": "RUN-A32-RESOURCE-RECOVERY-001",
+  "action": "RESOURCE_RECOVERY_BOOTSTRAP_REVIEW",
+  "circuit": "resource_cleanup",
+  "status": "BOOTSTRAP_REVIEW_BLOCKED",
+  "claimCeiling": "COMPARISON_ONLY_RECORDED_METADATA_NO_AUTHORITY",
+  "observedAt": "2026-07-21T04:40:19+07:00",
+  "expiresAt": "2026-07-21T05:40:19+07:00",
+  "repository": {
+    "path": "/Users/sirinx/SIRINXDev/sirinx-co",
+    "branch": "agent/b1-b2-command-center",
+    "headSha": "1f05814c3e9d173e525234d69b3ce7f2d1b01a57"
+  },
+  "parentArtifacts": [
+    {
+      "artifactId": "A22_REPORT",
+      "path": "/Users/sirinx/SIRINXDev/sirinx-co/reports/runtime/resource-recovery-admission-plan-20260720.md",
+      "sha256": "d22040817758472d68587f48b070e6a16686a4f0419005cad85836b17c9bccc3"
+    },
+    {
+      "artifactId": "A23_PLAN",
+      "path": "/Users/sirinx/SIRINXDev/sirinx-co/config/agent-runtime/resource-cleanup.plan-only.v2.json",
+      "sha256": "859a31f0ed505450f78321d738f43b0d4f204ed745834b1436ab000536470ad1"
+    },
+    {
+      "artifactId": "A31_PACKET",
+      "path": "/Users/sirinx/SIRINXDev/sirinx-co/config/agent-runtime/resource-cleanup.review-request.v1.json",
+      "sha256": "d7c700253d3b6a6666cb3f321960be00e3aa91a834cef3f0f232df7b7d661ec2"
+    },
+    {
+      "artifactId": "A31_REPORT",
+      "path": "/Users/sirinx/SIRINXDev/sirinx-co/reports/runtime/resource-cleanup-review-request-20260721.md",
+      "sha256": "0d86a0a8441c29720c4934f13c036dcf95eb643afea3844f5071f476587e1a65"
+    }
+  ],
+  "resources": {
+    "filesystemDeviceId": 16777232,
+    "currentFreeKiB": 11820344,
+    "workloadFloorKiB": 15728640,
+    "conservativeTargetKiB": 20971520
+  },
+  "candidates": [
+    {
+      "candidateId": "C01",
+      "path": "/Users/sirinx/SIRINXDev/sirinx-co/target",
+      "realPath": "/Users/sirinx/SIRINXDev/sirinx-co/target",
+      "targetClass": "GENERATED_BUILD_OUTPUT",
+      "disposition": "CANDIDATE_UNVERIFIED",
+      "kind": "DIRECTORY",
+      "isSymlink": false,
+      "deviceId": 16777232,
+      "inode": 35550880,
+      "mode": "0755",
+      "linkCount": 6,
+      "allocatedKiB": 3125988,
+      "logicalKiB": 3098930,
+      "metadataScope": "LSTAT_ROOT_IDENTITY_PLUS_ALLOCATED_LOGICAL_SIZE_NO_CONTENT_MANIFEST",
+      "metadataDigest": "488ca5572667f2506834a3c8b9293ba88ca04518d1b965e4c0f52b7c5cf0e00f",
+      "nominalProjectedFreeKiB": 14946332,
+      "guaranteedMinimumReclaimKiB": 0,
+      "approvalEligible": false,
+      "operationPlanBound": false,
+      "proofs": {
+        "apfsUniqueExtentVerified": false,
+        "cloneIsolationVerified": false,
+        "consumerAbsenceVerified": false,
+        "hardlinkIsolationVerified": false,
+        "recoveryVerified": false
+      }
+    },
+    {
+      "candidateId": "C02a",
+      "path": "/Users/sirinx/.npm/_npx/7a45358b2a5848bb",
+      "realPath": "/Users/sirinx/.npm/_npx/7a45358b2a5848bb",
+      "targetClass": "PACKAGE_CACHE_ENTRY",
+      "disposition": "EXCEPTION_CANDIDATE",
+      "kind": "DIRECTORY",
+      "isSymlink": false,
+      "deviceId": 16777232,
+      "inode": 36387099,
+      "mode": "0755",
+      "linkCount": 5,
+      "allocatedKiB": 2619468,
+      "logicalKiB": 2397745,
+      "metadataScope": "LSTAT_ROOT_IDENTITY_PLUS_ALLOCATED_LOGICAL_SIZE_NO_CONTENT_MANIFEST",
+      "metadataDigest": "cde02bafedbac87707ea3bd4bd72f68ad913921855becf3612c19dfe8147bd5a",
+      "nominalProjectedFreeKiB": 14439812,
+      "guaranteedMinimumReclaimKiB": 0,
+      "approvalEligible": false,
+      "operationPlanBound": false,
+      "proofs": {
+        "apfsUniqueExtentVerified": false,
+        "cloneIsolationVerified": false,
+        "consumerAbsenceVerified": false,
+        "hardlinkIsolationVerified": false,
+        "recoveryVerified": false
+      }
+    },
+    {
+      "candidateId": "C05a",
+      "path": "/Users/sirinx/Library/pnpm/store/v3",
+      "realPath": "/Users/sirinx/Library/pnpm/store/v3",
+      "targetClass": "PACKAGE_STORE_GENERATION",
+      "disposition": "EXCEPTION_CANDIDATE",
+      "kind": "DIRECTORY",
+      "isSymlink": false,
+      "deviceId": 16777232,
+      "inode": 3865928,
+      "mode": "0755",
+      "linkCount": 3,
+      "allocatedKiB": 1931228,
+      "logicalKiB": 1705487,
+      "metadataScope": "LSTAT_ROOT_IDENTITY_PLUS_ALLOCATED_LOGICAL_SIZE_NO_CONTENT_MANIFEST",
+      "metadataDigest": "739158103e82b5f49304cbc93c64d4c93a3ab1ca79ee7ec2017381838da41748",
+      "nominalProjectedFreeKiB": 13751572,
+      "guaranteedMinimumReclaimKiB": 0,
+      "approvalEligible": false,
+      "operationPlanBound": false,
+      "proofs": {
+        "apfsUniqueExtentVerified": false,
+        "cloneIsolationVerified": false,
+        "consumerAbsenceVerified": false,
+        "hardlinkIsolationVerified": false,
+        "recoveryVerified": false
+      }
+    },
+    {
+      "candidateId": "C05b",
+      "path": "/Users/sirinx/Library/pnpm/store/v10",
+      "realPath": "/Users/sirinx/Library/pnpm/store/v10",
+      "targetClass": "PACKAGE_STORE_GENERATION",
+      "disposition": "EXCEPTION_CANDIDATE",
+      "kind": "DIRECTORY",
+      "isSymlink": false,
+      "deviceId": 16777232,
+      "inode": 1187695,
+      "mode": "0755",
+      "linkCount": 5,
+      "allocatedKiB": 2950664,
+      "logicalKiB": 2683175,
+      "metadataScope": "LSTAT_ROOT_IDENTITY_PLUS_ALLOCATED_LOGICAL_SIZE_NO_CONTENT_MANIFEST",
+      "metadataDigest": "663ab5fe16eece101124361dcc9f16bd0326d119394bd6c24bf2c8b39dae9360",
+      "nominalProjectedFreeKiB": 14771008,
+      "guaranteedMinimumReclaimKiB": 0,
+      "approvalEligible": false,
+      "operationPlanBound": false,
+      "proofs": {
+        "apfsUniqueExtentVerified": false,
+        "cloneIsolationVerified": false,
+        "consumerAbsenceVerified": false,
+        "hardlinkIsolationVerified": false,
+        "recoveryVerified": false
+      }
+    }
+  ],
+  "ineligibleRoots": [
+    {
+      "path": "/Users/sirinx/.npm/_npx",
+      "reason": "WHOLESALE_ROOT_INELIGIBLE"
+    },
+    {
+      "path": "/Users/sirinx/.npm/_cacache",
+      "reason": "WHOLESALE_ROOT_INELIGIBLE"
+    },
+    {
+      "path": "/Users/sirinx/go/pkg/mod",
+      "reason": "WHOLESALE_ROOT_INELIGIBLE"
+    },
+    {
+      "path": "/Users/sirinx/Library/pnpm/store",
+      "reason": "WHOLESALE_ROOT_INELIGIBLE"
+    }
+  ],
+  "keepByDefaultTargets": [
+    {
+      "candidateId": "C05c",
+      "path": "/Users/sirinx/Library/pnpm/store/v11",
+      "targetClass": "PACKAGE_STORE_GENERATION",
+      "disposition": "KEEP_BY_DEFAULT"
+    },
+    {
+      "candidateId": "C06",
+      "path": "/Users/sirinx/.cargo/registry",
+      "targetClass": "PACKAGE_REGISTRY",
+      "disposition": "KEEP_BY_DEFAULT"
+    }
+  ],
+  "policy": {
+    "aggregateReclaimCredited": false,
+    "automaticContinuation": false,
+    "multiTargetGrantAllowed": false,
+    "sequentialOneTargetGrantsRequired": true,
+    "stopAndRemeasureAfterEach": true
+  },
+  "blockers": [
+    "apfs_unique_extent_proof_absent",
+    "bootstrap_authority_unavailable",
+    "candidate_specific_operation_plans_absent",
+    "clone_isolation_proof_absent",
+    "consumer_absence_proof_absent",
+    "hardlink_isolation_proof_absent",
+    "migration_0007_registry_semantics_unresolved",
+    "no_single_target_meets_threshold",
+    "recovery_proof_absent",
+    "staged_recovery_policy_unresolved"
+  ],
+  "authority": {
+    "admitted": false,
+    "approvalConsumed": false,
+    "authorized": false,
+    "bootstrapAuthorityAvailable": false,
+    "canDispatch": false,
+    "canExecute": false,
+    "circuitOpen": false,
+    "durableAuthorityAvailable": false,
+    "executorAvailable": false,
+    "humanApprovalPresent": false,
+    "replayProtectionAvailable": false,
+    "singleTargetGrantPresent": false
+  },
+  "effects": {
+    "cachePruned": false,
+    "cleanupExecuted": false,
+    "commandExecuted": false,
+    "databaseWrites": false,
+    "externalWrites": false,
+    "filesDeleted": false,
+    "networkCalls": false,
+    "processStopped": false,
+    "runtimeActivated": false,
+    "storePruned": false,
+    "trashMoved": false
+  },
+  "packetDigest": "67f729a0f729535c68a9f7ba244f6999289799f1e2271aa2d264c37079415268"
+}

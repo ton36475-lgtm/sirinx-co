@@ -34,7 +34,7 @@ describe("Hermes Spec-First Swarm contract", () => {
 
     expect(status.status).toBe("hermes-spec-first-swarm-ready-live-local-state");
     expect(status.currentPhase).toBe("APPROVAL_GATE");
-    expect(status.approvalStatus).toBe("APPROVED_CLOUDFLARE_DEV_PLAN_LOCAL_ONLY_ONLY");
+    expect(status.approvalStatus).toBe("APPROVE_IMPLEMENTATION_RECEIVED_LOCAL_ONLY");
     expect(status.approvalPhrase).toBe("APPROVE_IMPLEMENTATION");
     expect(status.implementationStarted).toBe(true);
     expect(status.canModifySource).toBe(false);

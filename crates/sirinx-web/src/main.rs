@@ -18,8 +18,8 @@ async fn main() {
         Ok(url) if !url.trim().is_empty() => {
             let store = PostgresStore::connect(&url)
                 .await
-                .expect("failed to connect to Postgres / run migrations");
-            tracing::info!("storage backend: postgres (migrations applied)");
+                .expect("failed to connect to pre-migrated Postgres");
+            tracing::info!("storage backend: postgres (connect only; no startup migration)");
             AppState::new(Arc::new(store))
         }
         _ => {

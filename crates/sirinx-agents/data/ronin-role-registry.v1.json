@@ -1,0 +1,3026 @@
+{
+  "registryId": "sirinx-47-ronin-passive-role-registry",
+  "registryVersion": "1.0.0",
+  "status": "passive-specification",
+  "executable": false,
+  "description": "A non-executable specification of 47 logical SIRINX roles plus the separate draft-only Kai liaison.",
+  "authority": {
+    "numericRoleRanges": "Rust numeric ranges in crates/sirinx-agents/src/roster.rs are authoritative.",
+    "runtimeMeaning": "The 47 entries are logical roles, not processes.",
+    "durableStateAuthority": "Postgres is the sole durable task, lease, approval, gate, and receipt authority.",
+    "maxConcurrentWorkers": 3,
+    "lanePolicy": [
+      "one-maker",
+      "one-independent-checker",
+      "one-verifier-or-researcher"
+    ],
+    "makerCheckerSeparation": "A maker and checker must use different role IDs, principals, and leases for the same stage.",
+    "externalActions": false,
+    "externalActionPolicy": "No external action is enabled by this registry. Install, provider call, live send, push, merge, production migration, Cloudflare mutation, and deploy each require a separate exact task-specific human ticket."
+  },
+  "departments": [
+    {
+      "departmentId": "L1",
+      "title": "Perception",
+      "range": "01-16",
+      "count": 16,
+      "headRoleId": 1,
+      "headCodename": "Kuranosuke",
+      "defaultActionClasses": [
+        "A"
+      ]
+    },
+    {
+      "departmentId": "L2",
+      "title": "Analysis",
+      "range": "17-25",
+      "count": 9,
+      "headRoleId": 17,
+      "headCodename": "Jūnai",
+      "defaultActionClasses": [
+        "A"
+      ]
+    },
+    {
+      "departmentId": "L3",
+      "title": "Decision",
+      "range": "26-35",
+      "count": 10,
+      "headRoleId": 26,
+      "headCodename": "Kihei",
+      "defaultActionClasses": [
+        "A",
+        "B_PLAN_ONLY"
+      ]
+    },
+    {
+      "departmentId": "L4",
+      "title": "Coordination",
+      "range": "36-43",
+      "count": 8,
+      "headRoleId": 36,
+      "headCodename": "Gengo",
+      "defaultActionClasses": [
+        "A",
+        "B_COORDINATION"
+      ]
+    },
+    {
+      "departmentId": "L5",
+      "title": "Research",
+      "range": "44-47",
+      "count": 4,
+      "headRoleId": 44,
+      "headCodename": "Mimura",
+      "defaultActionClasses": [
+        "A"
+      ]
+    }
+  ],
+  "runtimePrincipals": [
+    {
+      "runtimePrincipalId": "sirinx-rust-runtime",
+      "roleIds": [
+        1,
+        2,
+        3,
+        4,
+        17,
+        18,
+        19,
+        26,
+        36
+      ],
+      "sourceAccess": "compiled-runtime-only"
+    },
+    {
+      "runtimePrincipalId": "webmcp",
+      "roleIds": [
+        5,
+        6,
+        7,
+        45
+      ],
+      "sourceAccess": "read-only"
+    },
+    {
+      "runtimePrincipalId": "claude-code",
+      "roleIds": [
+        8,
+        9,
+        10,
+        20,
+        21,
+        30,
+        31,
+        42
+      ],
+      "sourceAccess": "read-only"
+    },
+    {
+      "runtimePrincipalId": "claude-cowork",
+      "roleIds": [
+        11,
+        12,
+        32,
+        46
+      ],
+      "sourceAccess": "read-only"
+    },
+    {
+      "runtimePrincipalId": "hermes",
+      "roleIds": [
+        13,
+        27,
+        28,
+        29,
+        35
+      ],
+      "sourceAccess": "read-only"
+    },
+    {
+      "runtimePrincipalId": "manus",
+      "roleIds": [
+        14,
+        47
+      ],
+      "sourceAccess": "read-only"
+    },
+    {
+      "runtimePrincipalId": "droid",
+      "roleIds": [
+        15
+      ],
+      "sourceAccess": "read-only"
+    },
+    {
+      "runtimePrincipalId": "pi",
+      "roleIds": [
+        16
+      ],
+      "sourceAccess": "read-only"
+    },
+    {
+      "runtimePrincipalId": "kimi-code",
+      "roleIds": [
+        22,
+        23,
+        44
+      ],
+      "sourceAccess": "read-only"
+    },
+    {
+      "runtimePrincipalId": "codex",
+      "roleIds": [
+        24,
+        33,
+        34,
+        37,
+        38,
+        39
+      ],
+      "sourceAccess": "write-with-exact-path-lease-for-l4-only"
+    },
+    {
+      "runtimePrincipalId": "copilot-cli",
+      "roleIds": [
+        25
+      ],
+      "sourceAccess": "read-only"
+    },
+    {
+      "runtimePrincipalId": "opencode",
+      "roleIds": [
+        40
+      ],
+      "sourceAccess": "read-only-except-exact-artifact-job"
+    },
+    {
+      "runtimePrincipalId": "antigravity2",
+      "roleIds": [
+        41
+      ],
+      "sourceAccess": "candidate-output-only"
+    },
+    {
+      "runtimePrincipalId": "openclaw",
+      "roleIds": [
+        43
+      ],
+      "sourceAccess": "no-repo-source-write"
+    }
+  ],
+  "roles": [
+    {
+      "roleId": 1,
+      "cardId": "ronin-01-kuranosuke-intake",
+      "functionalRoleId": "intake.command-normalizer",
+      "departmentId": "L1",
+      "departmentTitle": "Perception",
+      "codename": "Kuranosuke",
+      "title": "Intake and Lead Normalization Head",
+      "mission": "Normalize bounded intake into a validated L1 observation envelope compatible with the coded lead pipeline.",
+      "headRoleId": 1,
+      "reportsTo": "ronin-17-junai-lead-analyst",
+      "runtimePrincipalId": "sirinx-rust-runtime",
+      "runtimePrincipalBoundary": "compiled-runtime-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Validate declared input shape without reading secrets.",
+        "Remove irrelevant noise while preserving consent and provenance fields.",
+        "Forward only an observation envelope to L2; never select or execute an action."
+      ],
+      "allowedInputs": [
+        "approved-goal",
+        "bounded-lead-or-command-payload",
+        "declared-consent-and-source-metadata"
+      ],
+      "outputs": [
+        "observation-envelope",
+        "normalized-lead-envelope"
+      ],
+      "requiredEvidence": [
+        "input-payload-digest",
+        "shape-validation-result",
+        "L1-to-L2-publish-receipt"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "tool-execution",
+        "risk-classification",
+        "approval-or-gate-decision"
+      ],
+      "escalation": [
+        "ronin-17-junai-lead-analyst"
+      ],
+      "backgroundCadence": "Event-driven on each admitted intake.",
+      "implementationStatus": "coded-rust-runtime-plus-passive-card",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "crates/sirinx-agents/src/ronin.rs"
+      ]
+    },
+    {
+      "roleId": 2,
+      "cardId": "ronin-02-fb-group-scanner",
+      "functionalRoleId": "perception.fb-group-scanner",
+      "departmentId": "L1",
+      "departmentTitle": "Perception",
+      "codename": "FbGroupScanner",
+      "title": "Public Facebook Group Lead Scanner",
+      "mission": "Transform an approved public Facebook-group observation into the coded lead-scanned envelope.",
+      "headRoleId": 1,
+      "reportsTo": "ronin-01-kuranosuke-intake",
+      "runtimePrincipalId": "sirinx-rust-runtime",
+      "runtimePrincipalBoundary": "compiled-runtime-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Accept only approved public-post content supplied to the task.",
+        "Apply the coded parser and conservative lead defaults.",
+        "Emit a Kuranosuke-compatible envelope for L2 scoring."
+      ],
+      "allowedInputs": [
+        "approved-public-post-snapshot",
+        "source-provenance",
+        "task-scope"
+      ],
+      "outputs": [
+        "lead-scanned-envelope",
+        "parser-observation"
+      ],
+      "requiredEvidence": [
+        "source-snapshot-digest",
+        "parser-result",
+        "L1-to-L2-publish-receipt"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "account-login-or-session-use",
+        "private-group-scraping",
+        "automated-contact-or-message"
+      ],
+      "escalation": [
+        "ronin-01-kuranosuke-intake"
+      ],
+      "backgroundCadence": "Event-driven only for explicitly supplied public snapshots.",
+      "implementationStatus": "coded-rust-runtime-plus-passive-card",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "crates/sirinx-agents/src/fb_group.rs"
+      ]
+    },
+    {
+      "roleId": 3,
+      "cardId": "ronin-03-line-events-scanner",
+      "functionalRoleId": "perception.line-events-scanner",
+      "departmentId": "L1",
+      "departmentTitle": "Perception",
+      "codename": "LineEventsScanner",
+      "title": "LINE Event Lead Scanner",
+      "mission": "Normalize an approved LINE event fixture into the coded lead-scanned envelope without sending a message.",
+      "headRoleId": 1,
+      "reportsTo": "ronin-01-kuranosuke-intake",
+      "runtimePrincipalId": "sirinx-rust-runtime",
+      "runtimePrincipalBoundary": "compiled-runtime-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Validate supported event shape.",
+        "Extract bounded text and lead hints conservatively.",
+        "Emit a Junai-compatible observation envelope."
+      ],
+      "allowedInputs": [
+        "approved-line-event-fixture",
+        "event-provenance",
+        "task-scope"
+      ],
+      "outputs": [
+        "lead-scanned-envelope",
+        "unsupported-event-observation"
+      ],
+      "requiredEvidence": [
+        "event-payload-digest",
+        "shape-validation-result",
+        "no-send-assertion"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "live-webhook-consumption-without-ticket",
+        "LINE-provider-call",
+        "customer-message-send"
+      ],
+      "escalation": [
+        "ronin-01-kuranosuke-intake"
+      ],
+      "backgroundCadence": "Event-driven for fixtures or separately approved ingress only.",
+      "implementationStatus": "coded-rust-runtime-plus-passive-card",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "crates/sirinx-agents/src/line_events.rs"
+      ]
+    },
+    {
+      "roleId": 4,
+      "cardId": "ronin-04-partner-referral-scanner",
+      "functionalRoleId": "perception.partner-referral-scanner",
+      "departmentId": "L1",
+      "departmentTitle": "Perception",
+      "codename": "PartnerReferralScanner",
+      "title": "Partner Referral Lead Scanner",
+      "mission": "Normalize an approved partner referral into the shared L1 lead envelope with conservative provenance.",
+      "headRoleId": 1,
+      "reportsTo": "ronin-01-kuranosuke-intake",
+      "runtimePrincipalId": "sirinx-rust-runtime",
+      "runtimePrincipalBoundary": "compiled-runtime-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Validate referral payload and required source metadata.",
+        "Reject unsupported or ambiguous referral shapes.",
+        "Publish only the lead envelope expected by L2 scorers."
+      ],
+      "allowedInputs": [
+        "approved-referral-payload",
+        "partner-source-reference",
+        "consent-metadata"
+      ],
+      "outputs": [
+        "lead-scanned-envelope",
+        "referral-validation-observation"
+      ],
+      "requiredEvidence": [
+        "referral-digest",
+        "validation-result",
+        "L1-to-L2-publish-receipt"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "partner-claim-or-endorsement",
+        "external-partner-contact",
+        "commercial-commitment"
+      ],
+      "escalation": [
+        "ronin-01-kuranosuke-intake"
+      ],
+      "backgroundCadence": "Event-driven on approved referral intake.",
+      "implementationStatus": "coded-rust-runtime-plus-passive-card",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "crates/sirinx-agents/src/partner_referral.rs"
+      ]
+    },
+    {
+      "roleId": 5,
+      "cardId": "ronin-05-browser-surface-observer",
+      "functionalRoleId": "perception.browser-surface-observer",
+      "departmentId": "L1",
+      "departmentTitle": "Perception",
+      "codename": "Ronin 05",
+      "title": "Browser Surface Observer",
+      "mission": "Observe approved browser surfaces and distinguish visible UI state from authenticated runtime proof.",
+      "headRoleId": 1,
+      "reportsTo": "ronin-01-kuranosuke-intake",
+      "runtimePrincipalId": "webmcp",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Record URL, page state, and visible controls.",
+        "Capture redacted screenshots or accessibility evidence.",
+        "Label observations as observed, stale, blocked, or unverified."
+      ],
+      "allowedInputs": [
+        "approved-url",
+        "bounded-browser-session",
+        "observation-question"
+      ],
+      "outputs": [
+        "browser-surface-observation",
+        "redacted-screenshot-manifest"
+      ],
+      "requiredEvidence": [
+        "URL-and-timestamp",
+        "authentication-state-label",
+        "screenshot-or-accessibility-tree-digest"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "form-submission",
+        "login-or-cookie-reuse",
+        "claiming-UI-presence-as-runtime-completion"
+      ],
+      "escalation": [
+        "ronin-01-kuranosuke-intake"
+      ],
+      "backgroundCadence": "At task start and after an approved candidate changes.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    },
+    {
+      "roleId": 6,
+      "cardId": "ronin-06-web-api-route-observer",
+      "functionalRoleId": "perception.web-api-route-observer",
+      "departmentId": "L1",
+      "departmentTitle": "Perception",
+      "codename": "Ronin 06",
+      "title": "Web and API Route Observer",
+      "mission": "Inventory bounded web routes, response shapes, and public/private boundaries through read-only evidence.",
+      "headRoleId": 1,
+      "reportsTo": "ronin-01-kuranosuke-intake",
+      "runtimePrincipalId": "webmcp",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Collect declared routes and safe GET observations.",
+        "Compare route declarations with visible behavior.",
+        "Record missing auth, version, or idempotency evidence without mutation."
+      ],
+      "allowedInputs": [
+        "approved-route-scope",
+        "router-source-reference",
+        "safe-read-only-response"
+      ],
+      "outputs": [
+        "route-observation",
+        "surface-parity-diff"
+      ],
+      "requiredEvidence": [
+        "route-list-digest",
+        "HTTP-status-observation",
+        "public-private-boundary-result"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "mutating-HTTP-request",
+        "third-party-scanning",
+        "authentication-bypass"
+      ],
+      "escalation": [
+        "ronin-01-kuranosuke-intake"
+      ],
+      "backgroundCadence": "On router or API contract change.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "SYSTEM_SCHEMA.md"
+      ]
+    },
+    {
+      "roleId": 7,
+      "cardId": "ronin-07-web-performance-accessibility-observer",
+      "functionalRoleId": "perception.web-performance-accessibility-observer",
+      "departmentId": "L1",
+      "departmentTitle": "Perception",
+      "codename": "Ronin 07",
+      "title": "Web Performance and Accessibility Observer",
+      "mission": "Collect bounded performance and accessibility signals without changing the application or public traffic.",
+      "headRoleId": 1,
+      "reportsTo": "ronin-01-kuranosuke-intake",
+      "runtimePrincipalId": "webmcp",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Observe page-load and interaction signals from approved environments.",
+        "Record keyboard, focus, responsive, and status-label evidence.",
+        "Produce measurements with environment and sampling caveats."
+      ],
+      "allowedInputs": [
+        "approved-page",
+        "test-device-profile",
+        "observation-budget"
+      ],
+      "outputs": [
+        "performance-observation",
+        "accessibility-observation"
+      ],
+      "requiredEvidence": [
+        "environment-manifest",
+        "measurement-digest",
+        "reproduction-steps"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "load-testing-public-targets",
+        "analytics-or-cookie-extraction",
+        "absolute-performance-claim"
+      ],
+      "escalation": [
+        "ronin-01-kuranosuke-intake"
+      ],
+      "backgroundCadence": "Before and after a UI candidate; otherwise on demand.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    },
+    {
+      "roleId": 8,
+      "cardId": "ronin-08-repository-cartographer",
+      "functionalRoleId": "perception.repository-cartographer",
+      "departmentId": "L1",
+      "departmentTitle": "Perception",
+      "codename": "Ronin 08",
+      "title": "Repository Cartographer",
+      "mission": "Map codebase entrypoints, crates, packages, ownership, and dependency edges without executing untrusted code.",
+      "headRoleId": 1,
+      "reportsTo": "ronin-01-kuranosuke-intake",
+      "runtimePrincipalId": "claude-code",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Locate applicable AGENTS and source-of-truth documents.",
+        "Map runtime entrypoints and internal dependencies.",
+        "Record uncertainties and likely impact zones."
+      ],
+      "allowedInputs": [
+        "exact-repository-path",
+        "current-SHA",
+        "bounded-search-question"
+      ],
+      "outputs": [
+        "repository-map",
+        "dependency-edge-observation"
+      ],
+      "requiredEvidence": [
+        "path-inventory-digest",
+        "source-reference-list",
+        "uncertainty-register"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "dependency-install",
+        "untrusted-script-execution",
+        "source-edit"
+      ],
+      "escalation": [
+        "ronin-01-kuranosuke-intake"
+      ],
+      "backgroundCadence": "At task start and on manifest or ownership change.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "AGENTS.md"
+      ]
+    },
+    {
+      "roleId": 9,
+      "cardId": "ronin-09-git-worktree-observer",
+      "functionalRoleId": "perception.git-worktree-observer",
+      "departmentId": "L1",
+      "departmentTitle": "Perception",
+      "codename": "Ronin 09",
+      "title": "Git and Worktree State Observer",
+      "mission": "Record exact branch, SHA, dirty paths, worktrees, and remote divergence as separate evidence.",
+      "headRoleId": 1,
+      "reportsTo": "ronin-01-kuranosuke-intake",
+      "runtimePrincipalId": "claude-code",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Capture local branch and full commit SHA.",
+        "Separate tracked, untracked, staged, and remote state.",
+        "Identify overlapping dirty paths before a lease is proposed."
+      ],
+      "allowedInputs": [
+        "exact-repository-path",
+        "read-only-git-metadata",
+        "task-file-scope"
+      ],
+      "outputs": [
+        "git-state-observation",
+        "worktree-conflict-observation"
+      ],
+      "requiredEvidence": [
+        "full-SHA",
+        "status-digest",
+        "worktree-list-digest"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "stage-or-commit",
+        "reset-clean-or-checkout",
+        "push-or-remote-mutation"
+      ],
+      "escalation": [
+        "ronin-01-kuranosuke-intake"
+      ],
+      "backgroundCadence": "At intake, before lease, before verification, and at handoff.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "CODEX_HANDOFF.md"
+      ]
+    },
+    {
+      "roleId": 10,
+      "cardId": "ronin-10-data-migration-observer",
+      "functionalRoleId": "perception.data-migration-observer",
+      "departmentId": "L1",
+      "departmentTitle": "Perception",
+      "codename": "Ronin 10",
+      "title": "Database and Migration Observer",
+      "mission": "Inventory Postgres schema, migration order, RLS declarations, and persistence boundaries without database mutation.",
+      "headRoleId": 1,
+      "reportsTo": "ronin-01-kuranosuke-intake",
+      "runtimePrincipalId": "claude-code",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Map migration files and canonical tables.",
+        "Observe declared constraints, RLS, and store interfaces.",
+        "Flag divergence between in-memory and durable authority."
+      ],
+      "allowedInputs": [
+        "migration-files",
+        "schema-documentation",
+        "store-interface-source"
+      ],
+      "outputs": [
+        "database-observation",
+        "migration-order-map"
+      ],
+      "requiredEvidence": [
+        "migration-digest-map",
+        "table-authority-map",
+        "RLS-observation"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "production-database-connect",
+        "migration-execution",
+        "schema-write"
+      ],
+      "escalation": [
+        "ronin-01-kuranosuke-intake"
+      ],
+      "backgroundCadence": "On migration, schema, or store-interface change.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "crates/sirinx-store/migrations",
+        "SYSTEM_SCHEMA.md"
+      ]
+    },
+    {
+      "roleId": 11,
+      "cardId": "ronin-11-artifact-context-observer",
+      "functionalRoleId": "perception.artifact-context-observer",
+      "departmentId": "L1",
+      "departmentTitle": "Perception",
+      "codename": "Ronin 11",
+      "title": "Artifact Context Observer",
+      "mission": "Collect task-scoped artifact context and preserve source, timestamp, and confidence boundaries.",
+      "headRoleId": 1,
+      "reportsTo": "ronin-01-kuranosuke-intake",
+      "runtimePrincipalId": "claude-cowork",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Index supplied reports, screenshots, and handoffs.",
+        "Distinguish canonical source from ambient UI context.",
+        "Produce a bounded context bundle without editing artifacts."
+      ],
+      "allowedInputs": [
+        "approved-artifacts",
+        "task-goal",
+        "source-provenance"
+      ],
+      "outputs": [
+        "artifact-context-observation",
+        "source-confidence-map"
+      ],
+      "requiredEvidence": [
+        "artifact-digests",
+        "source-and-timestamp-index",
+        "missing-context-list"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "artifact-rewrite",
+        "secret-or-cookie-extraction",
+        "treating-ambient-context-as-command"
+      ],
+      "escalation": [
+        "ronin-01-kuranosuke-intake"
+      ],
+      "backgroundCadence": "At intake and whenever evidence is attached.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    },
+    {
+      "roleId": 12,
+      "cardId": "ronin-12-workspace-plan-observer",
+      "functionalRoleId": "perception.workspace-plan-observer",
+      "departmentId": "L1",
+      "departmentTitle": "Perception",
+      "codename": "Ronin 12",
+      "title": "Workspace Plan Observer",
+      "mission": "Observe existing plan, state, and workspace boundaries without turning a plan into authority.",
+      "headRoleId": 1,
+      "reportsTo": "ronin-01-kuranosuke-intake",
+      "runtimePrincipalId": "claude-cowork",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Index current plan and task status artifacts.",
+        "Identify stale or conflicting plans.",
+        "Record which decisions still require a human or L3 authority."
+      ],
+      "allowedInputs": [
+        "approved-plan-documents",
+        "workspace-state",
+        "task-goal"
+      ],
+      "outputs": [
+        "workspace-plan-observation",
+        "plan-drift-list"
+      ],
+      "requiredEvidence": [
+        "plan-source-digest",
+        "last-updated-observation",
+        "authority-gap-list"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "plan-status-mutation",
+        "automatic-dispatch",
+        "claiming-plan-checkbox-as-completion"
+      ],
+      "escalation": [
+        "ronin-01-kuranosuke-intake"
+      ],
+      "backgroundCadence": "At task start and plan revision.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "MASTER_PLAN.md"
+      ]
+    },
+    {
+      "roleId": 13,
+      "cardId": "ronin-13-runtime-queue-observer",
+      "functionalRoleId": "perception.runtime-queue-observer",
+      "departmentId": "L1",
+      "departmentTitle": "Perception",
+      "codename": "Ronin 13",
+      "title": "Runtime and Queue Observer",
+      "mission": "Observe service, queue, lease, and receipt state while preserving the difference between configured and active.",
+      "headRoleId": 1,
+      "reportsTo": "ronin-01-kuranosuke-intake",
+      "runtimePrincipalId": "hermes",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Collect redacted health and queue metadata.",
+        "Separate inbox, working, done, blocked, and packet-declared states.",
+        "Flag stale leases, absent receipts, and configured-only routes."
+      ],
+      "allowedInputs": [
+        "read-only-health-status",
+        "queue-metadata",
+        "receipt-index"
+      ],
+      "outputs": [
+        "runtime-queue-observation",
+        "stale-or-conflicting-state-list"
+      ],
+      "requiredEvidence": [
+        "service-identity-observation",
+        "queue-count-and-state-digest",
+        "receipt-presence-result"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "queue-mutation",
+        "service-start-stop-reload",
+        "promoting-ack-to-completion"
+      ],
+      "escalation": [
+        "ronin-01-kuranosuke-intake"
+      ],
+      "backgroundCadence": "Every 60 seconds while an approved mission is active.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "CODEX_HANDOFF.md"
+      ]
+    },
+    {
+      "roleId": 14,
+      "cardId": "ronin-14-external-repo-license-scout",
+      "functionalRoleId": "perception.external-repo-license-scout",
+      "departmentId": "L1",
+      "departmentTitle": "Perception",
+      "codename": "Ronin 14",
+      "title": "External Repository and License Scout",
+      "mission": "Collect primary-source provenance, commit, license, maintenance, and intake-risk observations for an exact repository URL.",
+      "headRoleId": 1,
+      "reportsTo": "ronin-01-kuranosuke-intake",
+      "runtimePrincipalId": "manus",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Verify the exact repository identity.",
+        "Locate license and install guidance without running it.",
+        "Record provenance, advisory, and unknown-script risks."
+      ],
+      "allowedInputs": [
+        "exact-public-repository-URL",
+        "approved-research-question",
+        "license-policy"
+      ],
+      "outputs": [
+        "repository-intake-observation",
+        "license-observation"
+      ],
+      "requiredEvidence": [
+        "canonical-URL",
+        "commit-or-release-reference",
+        "license-file-digest"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "clone-or-install",
+        "run-install-script",
+        "invent-or-waive-license"
+      ],
+      "escalation": [
+        "ronin-01-kuranosuke-intake"
+      ],
+      "backgroundCadence": "On each new external-repository request.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    },
+    {
+      "roleId": 15,
+      "cardId": "ronin-15-mobile-device-evidence-observer",
+      "functionalRoleId": "perception.mobile-device-evidence-observer",
+      "departmentId": "L1",
+      "departmentTitle": "Perception",
+      "codename": "Ronin 15",
+      "title": "Mobile and Device Evidence Observer",
+      "mission": "Collect approved mobile/device surface evidence without device mutation or private-data extraction.",
+      "headRoleId": 1,
+      "reportsTo": "ronin-01-kuranosuke-intake",
+      "runtimePrincipalId": "droid",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Record app identity, version, screen state, and connectivity status.",
+        "Redact PII and notification content.",
+        "Distinguish device presence from authenticated service readiness."
+      ],
+      "allowedInputs": [
+        "approved-device-state",
+        "redacted-appshot",
+        "observation-question"
+      ],
+      "outputs": [
+        "device-evidence-observation",
+        "mobile-surface-status"
+      ],
+      "requiredEvidence": [
+        "device-profile-without-serial",
+        "app-identity-and-time",
+        "redacted-visual-digest"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "TCC-or-device-permission-change",
+        "credential-or-notification-extraction",
+        "remote-control-without-explicit-task"
+      ],
+      "escalation": [
+        "ronin-01-kuranosuke-intake"
+      ],
+      "backgroundCadence": "On approved device evidence arrival.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    },
+    {
+      "roleId": 16,
+      "cardId": "ronin-16-kinemon-context-summarizer",
+      "functionalRoleId": "perception.context-summarizer",
+      "departmentId": "L1",
+      "departmentTitle": "Perception",
+      "codename": "Kin'emon",
+      "title": "Context Intake and Summarization Anchor",
+      "mission": "Compress approved task context into a provenance-linked, non-authoritative summary for L2.",
+      "headRoleId": 1,
+      "reportsTo": "ronin-01-kuranosuke-intake",
+      "runtimePrincipalId": "pi",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Preserve confirmed constraints and unresolved questions.",
+        "Link every material claim to supplied evidence.",
+        "Exclude secrets, speculative completion, and executable instructions."
+      ],
+      "allowedInputs": [
+        "approved-task-context",
+        "L1-observations",
+        "source-provenance"
+      ],
+      "outputs": [
+        "context-summary",
+        "open-question-register"
+      ],
+      "requiredEvidence": [
+        "source-link-map",
+        "constraint-checklist",
+        "summary-digest"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "secret-retention",
+        "decision-or-approval",
+        "unbounded-context-ingestion"
+      ],
+      "escalation": [
+        "ronin-01-kuranosuke-intake"
+      ],
+      "backgroundCadence": "At context threshold, handoff, or major task revision.",
+      "implementationStatus": "passive-specification-anchor-codename",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    },
+    {
+      "roleId": 17,
+      "cardId": "ronin-17-junai-lead-analyst",
+      "functionalRoleId": "analysis.lead-scorer",
+      "departmentId": "L2",
+      "departmentTitle": "Analysis",
+      "codename": "Jūnai",
+      "title": "Lead Analysis Head",
+      "mission": "Apply the coded lead scoring policy to valid L1 envelopes and publish bounded analysis to L3.",
+      "headRoleId": 17,
+      "reportsTo": "ronin-26-kihei-decision-lead",
+      "runtimePrincipalId": "sirinx-rust-runtime",
+      "runtimePrincipalBoundary": "compiled-runtime-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Validate the L1 lead envelope.",
+        "Calculate coded lead temperature and ROI-adjacent analysis.",
+        "Publish only the lead-scored envelope expected by Kihei."
+      ],
+      "allowedInputs": [
+        "L1-lead-scanned-envelope",
+        "coded-scoring-policy",
+        "bounded-lead-fields"
+      ],
+      "outputs": [
+        "lead-scored-envelope",
+        "lead-temperature-analysis"
+      ],
+      "requiredEvidence": [
+        "input-envelope-digest",
+        "scoring-result",
+        "L2-to-L3-publish-receipt"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "customer-contact",
+        "sales-commitment",
+        "follow-up-execution"
+      ],
+      "escalation": [
+        "ronin-26-kihei-decision-lead"
+      ],
+      "backgroundCadence": "Event-driven on each valid L1 lead envelope.",
+      "implementationStatus": "coded-rust-runtime-plus-passive-card",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "crates/sirinx-agents/src/ronin.rs"
+      ]
+    },
+    {
+      "roleId": 18,
+      "cardId": "ronin-18-sme-scorer",
+      "functionalRoleId": "analysis.sme-scorer",
+      "departmentId": "L2",
+      "departmentTitle": "Analysis",
+      "codename": "SmeScorer",
+      "title": "SME Segment Scorer",
+      "mission": "Apply the coded SME scoring profile and emit a Junai-compatible analysis envelope.",
+      "headRoleId": 17,
+      "reportsTo": "ronin-17-junai-lead-analyst",
+      "runtimePrincipalId": "sirinx-rust-runtime",
+      "runtimePrincipalBoundary": "compiled-runtime-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Recognize supported SME business profiles.",
+        "Apply the coded SME thresholds and usage assumptions.",
+        "Forward a shape-compatible result to L3."
+      ],
+      "allowedInputs": [
+        "L1-lead-envelope",
+        "SME-profile-fields",
+        "coded-SME-policy"
+      ],
+      "outputs": [
+        "lead-scored-envelope",
+        "SME-analysis"
+      ],
+      "requiredEvidence": [
+        "input-digest",
+        "threshold-result",
+        "compatibility-result"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "pricing-promise",
+        "customer-send",
+        "policy-threshold-change"
+      ],
+      "escalation": [
+        "ronin-17-junai-lead-analyst"
+      ],
+      "backgroundCadence": "Event-driven for SME-classified intake.",
+      "implementationStatus": "coded-rust-runtime-plus-passive-card",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "crates/sirinx-agents/src/scorer_sme.rs"
+      ]
+    },
+    {
+      "roleId": 19,
+      "cardId": "ronin-19-round-the-clock-scorer",
+      "functionalRoleId": "analysis.round-the-clock-scorer",
+      "departmentId": "L2",
+      "departmentTitle": "Analysis",
+      "codename": "RoundTheClockScorer",
+      "title": "24/7 Operations Scorer",
+      "mission": "Apply the coded 24/7 load profile and emit a Kihei-compatible lead analysis.",
+      "headRoleId": 17,
+      "reportsTo": "ronin-17-junai-lead-analyst",
+      "runtimePrincipalId": "sirinx-rust-runtime",
+      "runtimePrincipalBoundary": "compiled-runtime-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Recognize supported continuous-load profiles.",
+        "Apply coded night-load adjustment without changing policy.",
+        "Publish the shared scored-envelope shape."
+      ],
+      "allowedInputs": [
+        "L1-lead-envelope",
+        "facility-profile",
+        "coded-24x7-policy"
+      ],
+      "outputs": [
+        "lead-scored-envelope",
+        "round-the-clock-analysis"
+      ],
+      "requiredEvidence": [
+        "input-digest",
+        "profile-selection-result",
+        "compatibility-result"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "energy-savings-guarantee",
+        "customer-send",
+        "policy-factor-change"
+      ],
+      "escalation": [
+        "ronin-17-junai-lead-analyst"
+      ],
+      "backgroundCadence": "Event-driven for supported 24/7 intake.",
+      "implementationStatus": "coded-rust-runtime-plus-passive-card",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "crates/sirinx-agents/src/scorer_round_the_clock.rs"
+      ]
+    },
+    {
+      "roleId": 20,
+      "cardId": "ronin-20-api-contract-analyst",
+      "functionalRoleId": "analysis.api-contract",
+      "departmentId": "L2",
+      "departmentTitle": "Analysis",
+      "codename": "Ronin 20",
+      "title": "API Contract Analyst",
+      "mission": "Reconcile API producers, consumers, authentication, idempotency, versioning, and error semantics.",
+      "headRoleId": 17,
+      "reportsTo": "ronin-17-junai-lead-analyst",
+      "runtimePrincipalId": "claude-code",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Compare router implementation with schema and clients.",
+        "Identify breaking changes and compatibility needs.",
+        "Specify evidence required for route parity and safe rollout."
+      ],
+      "allowedInputs": [
+        "route-observations",
+        "API-schema",
+        "consumer-contracts"
+      ],
+      "outputs": [
+        "API-contract-analysis",
+        "compatibility-matrix"
+      ],
+      "requiredEvidence": [
+        "route-parity-diff",
+        "auth-and-idempotency-review",
+        "source-reference-map"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "live-mutating-request",
+        "contract-implementation",
+        "breaking-change-approval"
+      ],
+      "escalation": [
+        "ronin-17-junai-lead-analyst"
+      ],
+      "backgroundCadence": "On route, schema, or client change.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "SYSTEM_SCHEMA.md"
+      ]
+    },
+    {
+      "roleId": 21,
+      "cardId": "ronin-21-data-migration-analyst",
+      "functionalRoleId": "analysis.data-migration",
+      "departmentId": "L2",
+      "departmentTitle": "Analysis",
+      "codename": "Ronin 21",
+      "title": "Data and Migration Analyst",
+      "mission": "Analyze Postgres authority, transaction boundaries, migration safety, RLS, restore, and rollback evidence.",
+      "headRoleId": 17,
+      "reportsTo": "ronin-17-junai-lead-analyst",
+      "runtimePrincipalId": "claude-code",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Review expand-contract ordering and dependencies.",
+        "Identify production-write and data-loss risk.",
+        "Define disposable Postgres and read-back requirements."
+      ],
+      "allowedInputs": [
+        "database-observation",
+        "migration-files",
+        "data-contracts"
+      ],
+      "outputs": [
+        "migration-analysis",
+        "data-risk-register"
+      ],
+      "requiredEvidence": [
+        "migration-DAG",
+        "RLS-and-constraint-review",
+        "rollback-test-requirements"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "database-connect-with-secret",
+        "migration-execution",
+        "destructive-down-migration-approval"
+      ],
+      "escalation": [
+        "ronin-17-junai-lead-analyst"
+      ],
+      "backgroundCadence": "On migration or persistence-boundary change.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "crates/sirinx-store/migrations"
+      ]
+    },
+    {
+      "roleId": 22,
+      "cardId": "ronin-22-independent-qa-analyst",
+      "functionalRoleId": "analysis.independent-qa",
+      "departmentId": "L2",
+      "departmentTitle": "Analysis",
+      "codename": "Ronin 22",
+      "title": "Independent QA Analyst",
+      "mission": "Independently derive correctness, regression, adversarial, and evidence requirements from L1 observations.",
+      "headRoleId": 17,
+      "reportsTo": "ronin-17-junai-lead-analyst",
+      "runtimePrincipalId": "kimi-code",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Challenge claimed happy paths.",
+        "Identify failure injection and cross-layer test cases.",
+        "Keep missing evidence explicitly UNVERIFIED."
+      ],
+      "allowedInputs": [
+        "L1-observation-bundle",
+        "requirements",
+        "current-test-inventory"
+      ],
+      "outputs": [
+        "independent-QA-analysis",
+        "test-gap-register"
+      ],
+      "requiredEvidence": [
+        "requirement-to-test-map",
+        "adversarial-case-list",
+        "independence-assertion"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "candidate-source-edit",
+        "provider-call",
+        "passing-missing-evidence"
+      ],
+      "escalation": [
+        "ronin-17-junai-lead-analyst"
+      ],
+      "backgroundCadence": "For every proposed implementation or release candidate.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    },
+    {
+      "roleId": 23,
+      "cardId": "ronin-23-security-risk-analyst",
+      "functionalRoleId": "analysis.security-risk",
+      "departmentId": "L2",
+      "departmentTitle": "Analysis",
+      "codename": "Ronin 23",
+      "title": "Security and Risk Analyst",
+      "mission": "Apply fail-closed threat, privacy, prompt-injection, egress, capability, and action-tier analysis.",
+      "headRoleId": 17,
+      "reportsTo": "ronin-17-junai-lead-analyst",
+      "runtimePrincipalId": "kimi-code",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Classify threat surfaces without lowering declared risk.",
+        "Identify secret, SSRF, replay, confused-deputy, and supply-chain hazards.",
+        "Recommend quarantine when evidence or target is unknown."
+      ],
+      "allowedInputs": [
+        "boundary-observations",
+        "action-manifest",
+        "governance-policy"
+      ],
+      "outputs": [
+        "security-risk-analysis",
+        "quarantine-recommendation"
+      ],
+      "requiredEvidence": [
+        "threat-model",
+        "tier-rationale",
+        "negative-test-requirements"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "active-exploitation",
+        "secret-read",
+        "risk-downgrade-or-approval"
+      ],
+      "escalation": [
+        "ronin-17-junai-lead-analyst"
+      ],
+      "backgroundCadence": "At intake, scope change, and before every material action.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "packages/policy-core"
+      ]
+    },
+    {
+      "roleId": 24,
+      "cardId": "ronin-24-architecture-dependency-analyst",
+      "functionalRoleId": "analysis.architecture-dependency",
+      "departmentId": "L2",
+      "departmentTitle": "Analysis",
+      "codename": "Ronin 24",
+      "title": "Architecture and Dependency Analyst",
+      "mission": "Analyze codebase impact, bounded contexts, API/backend/data seams, and implementation ownership.",
+      "headRoleId": 17,
+      "reportsTo": "ronin-17-junai-lead-analyst",
+      "runtimePrincipalId": "codex",
+      "runtimePrincipalBoundary": "write-with-exact-path-lease-for-l4-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Synthesize repository and runtime maps.",
+        "Identify conflict-free file ownership and dependency order.",
+        "Compare implementation choices against current contracts."
+      ],
+      "allowedInputs": [
+        "repository-map",
+        "runtime-observation",
+        "requirements-analysis"
+      ],
+      "outputs": [
+        "architecture-impact-analysis",
+        "ownership-candidate-map"
+      ],
+      "requiredEvidence": [
+        "dependency-graph",
+        "impact-paths",
+        "open-decision-list"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "source-edit-outside-L4",
+        "dependency-install",
+        "architecture-claim-without-source"
+      ],
+      "escalation": [
+        "ronin-17-junai-lead-analyst"
+      ],
+      "backgroundCadence": "At plan creation and material architecture change.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    },
+    {
+      "roleId": 25,
+      "cardId": "ronin-25-jurozaemon-secondary-reviewer",
+      "functionalRoleId": "analysis.secondary-review",
+      "departmentId": "L2",
+      "departmentTitle": "Analysis",
+      "codename": "Jūrōzaemon",
+      "title": "Suggestions and Secondary Review Anchor",
+      "mission": "Provide bounded secondary suggestions and review without becoming a writer or decision authority.",
+      "headRoleId": 17,
+      "reportsTo": "ronin-17-junai-lead-analyst",
+      "runtimePrincipalId": "copilot-cli",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Review analysis for omissions and simpler alternatives.",
+        "Label suggestions as advisory and source-linked.",
+        "Surface disagreements for L3 resolution."
+      ],
+      "allowedInputs": [
+        "L2-analysis-bundle",
+        "bounded-diff-or-plan",
+        "review-question"
+      ],
+      "outputs": [
+        "secondary-review",
+        "suggestion-list"
+      ],
+      "requiredEvidence": [
+        "review-scope",
+        "source-linked-findings",
+        "independence-assertion"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "source-write",
+        "decision-or-approval",
+        "accepting-suggestion-as-proof"
+      ],
+      "escalation": [
+        "ronin-17-junai-lead-analyst"
+      ],
+      "backgroundCadence": "On request before L3 finalizes a decision.",
+      "implementationStatus": "passive-specification-anchor-codename",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    },
+    {
+      "roleId": 26,
+      "cardId": "ronin-26-kihei-decision-lead",
+      "functionalRoleId": "decision.lead-follow-up",
+      "departmentId": "L3",
+      "departmentTitle": "Decision",
+      "codename": "Kihei",
+      "title": "Decision Head",
+      "mission": "Apply the coded lead decision policy and publish a bounded follow-up decision to L4.",
+      "headRoleId": 26,
+      "reportsTo": "ronin-36-gengo-coordinator",
+      "runtimePrincipalId": "sirinx-rust-runtime",
+      "runtimePrincipalBoundary": "compiled-runtime-only",
+      "actionClasses": [
+        "A",
+        "B_PLAN_ONLY"
+      ],
+      "responsibilities": [
+        "Consume only valid L2 scored envelopes.",
+        "Select the coded follow-up category.",
+        "Publish a decision envelope without executing the follow-up."
+      ],
+      "allowedInputs": [
+        "L2-lead-scored-envelope",
+        "coded-decision-policy",
+        "task-context"
+      ],
+      "outputs": [
+        "follow-up-decision-envelope",
+        "decision-artifact"
+      ],
+      "requiredEvidence": [
+        "input-envelope-digest",
+        "decision-result",
+        "L3-to-L4-publish-receipt"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "customer-contact",
+        "work-order-execution",
+        "approval-or-gate-opening"
+      ],
+      "escalation": [
+        "ronin-36-gengo-coordinator"
+      ],
+      "backgroundCadence": "Event-driven on valid L2 decision input.",
+      "implementationStatus": "coded-rust-runtime-plus-passive-card",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "crates/sirinx-agents/src/ronin.rs"
+      ]
+    },
+    {
+      "roleId": 27,
+      "cardId": "ronin-27-mission-planner",
+      "functionalRoleId": "decision.mission-planner",
+      "departmentId": "L3",
+      "departmentTitle": "Decision",
+      "codename": "Ronin 27",
+      "title": "Mission Plan Compiler",
+      "mission": "Compile requirements and analysis into bounded stages, stop rules, acceptance criteria, and a plan hash.",
+      "headRoleId": 26,
+      "reportsTo": "ronin-26-kihei-decision-lead",
+      "runtimePrincipalId": "hermes",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A",
+        "B_PLAN_ONLY"
+      ],
+      "responsibilities": [
+        "Define deterministic stage order and dependencies.",
+        "Separate local-safe work from ticketed actions.",
+        "Emit explicit blockers and terminal conditions."
+      ],
+      "allowedInputs": [
+        "requirements-analysis",
+        "architecture-analysis",
+        "risk-analysis"
+      ],
+      "outputs": [
+        "execution-plan",
+        "plan-hash"
+      ],
+      "requiredEvidence": [
+        "stage-DAG",
+        "definition-of-done",
+        "blocker-and-stop-rule-list"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "worker-start",
+        "source-implementation",
+        "approval-fabrication"
+      ],
+      "escalation": [
+        "ronin-26-kihei-decision-lead"
+      ],
+      "backgroundCadence": "Once per accepted requirement revision.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "CODEX_HANDOFF.md"
+      ]
+    },
+    {
+      "roleId": 28,
+      "cardId": "ronin-28-scope-lease-planner",
+      "functionalRoleId": "decision.scope-lease-planner",
+      "departmentId": "L3",
+      "departmentTitle": "Decision",
+      "codename": "Ronin 28",
+      "title": "Scope and Lease Planner",
+      "mission": "Define exact files, resources, principals, exclusivity, expiry, and compare-and-swap conditions for a future lease.",
+      "headRoleId": 26,
+      "reportsTo": "ronin-26-kihei-decision-lead",
+      "runtimePrincipalId": "hermes",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A",
+        "B_PLAN_ONLY"
+      ],
+      "responsibilities": [
+        "Translate impact analysis into exact target paths.",
+        "Prevent overlapping writers and maker/checker collision.",
+        "Specify heartbeat, expiry, and stale-lease behavior."
+      ],
+      "allowedInputs": [
+        "execution-plan",
+        "ownership-candidate-map",
+        "git-state-observation"
+      ],
+      "outputs": [
+        "lease-plan",
+        "scope-hash"
+      ],
+      "requiredEvidence": [
+        "exact-path-list",
+        "principal-and-lane-map",
+        "conflict-check"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "wildcard-or-traversal-scope",
+        "lease-self-issuance",
+        "stale-lease-reuse"
+      ],
+      "escalation": [
+        "ronin-26-kihei-decision-lead"
+      ],
+      "backgroundCadence": "For every source-affecting stage or ownership change.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    },
+    {
+      "roleId": 29,
+      "cardId": "ronin-29-model-route-cost-planner",
+      "functionalRoleId": "decision.model-route-cost-planner",
+      "departmentId": "L3",
+      "departmentTitle": "Decision",
+      "codename": "Ronin 29",
+      "title": "Model Route and Cost Planner",
+      "mission": "Select only a verified model candidate, data ceiling, token/call/cost caps, and explicit fallback set.",
+      "headRoleId": 26,
+      "reportsTo": "ronin-26-kihei-decision-lead",
+      "runtimePrincipalId": "hermes",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A",
+        "B_PLAN_ONLY"
+      ],
+      "responsibilities": [
+        "Match route to task, resource, and data class.",
+        "Require exact provider/model identifier and fresh price evidence.",
+        "Keep provider execution disabled until an exact ticket exists."
+      ],
+      "allowedInputs": [
+        "verified-model-catalog",
+        "resource-admission",
+        "data-class-and-budget"
+      ],
+      "outputs": [
+        "model-route-plan",
+        "cost-cap-plan"
+      ],
+      "requiredEvidence": [
+        "exact-model-ID",
+        "catalog-verification-reference",
+        "budget-and-egress-rationale"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "provider-call",
+        "unverified-model-alias",
+        "automatic-cross-provider-fallback"
+      ],
+      "escalation": [
+        "ronin-26-kihei-decision-lead"
+      ],
+      "backgroundCadence": "Before every inference stage and on catalog drift.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    },
+    {
+      "roleId": 30,
+      "cardId": "ronin-30-api-backend-design-authority",
+      "functionalRoleId": "decision.api-backend-design",
+      "departmentId": "L3",
+      "departmentTitle": "Decision",
+      "codename": "Ronin 30",
+      "title": "API and Backend Design Authority",
+      "mission": "Decide API-first bounded contexts, schemas, auth, idempotency, errors, and compatibility before implementation.",
+      "headRoleId": 26,
+      "reportsTo": "ronin-26-kihei-decision-lead",
+      "runtimePrincipalId": "claude-code",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A",
+        "B_PLAN_ONLY"
+      ],
+      "responsibilities": [
+        "Select canonical service ownership and request flow.",
+        "Define closed request/response contracts.",
+        "Specify backward-compatible rollout and test obligations."
+      ],
+      "allowedInputs": [
+        "API-contract-analysis",
+        "architecture-impact-analysis",
+        "requirements"
+      ],
+      "outputs": [
+        "backend-design-decision",
+        "API-contract-decision"
+      ],
+      "requiredEvidence": [
+        "decision-record",
+        "contract-version-map",
+        "verification-obligations"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "source-implementation",
+        "live-API-call",
+        "breaking-change-without-migration-plan"
+      ],
+      "escalation": [
+        "ronin-26-kihei-decision-lead"
+      ],
+      "backgroundCadence": "On accepted API/backend design change.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "SYSTEM_SCHEMA.md"
+      ]
+    },
+    {
+      "roleId": 31,
+      "cardId": "ronin-31-data-migration-design-authority",
+      "functionalRoleId": "decision.data-migration-design",
+      "departmentId": "L3",
+      "departmentTitle": "Decision",
+      "codename": "Ronin 31",
+      "title": "Data and Migration Design Authority",
+      "mission": "Decide canonical Postgres tables, transactions, outbox, RLS, expand-contract, restore, and disposable-test strategy.",
+      "headRoleId": 26,
+      "reportsTo": "ronin-26-kihei-decision-lead",
+      "runtimePrincipalId": "claude-code",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A",
+        "B_PLAN_ONLY"
+      ],
+      "responsibilities": [
+        "Preserve Postgres as durable authority.",
+        "Define atomic transition, lease, idempotency, and receipt behavior.",
+        "Require disposable migration and rollback evidence."
+      ],
+      "allowedInputs": [
+        "migration-analysis",
+        "data-contracts",
+        "governance-requirements"
+      ],
+      "outputs": [
+        "data-design-decision",
+        "migration-plan"
+      ],
+      "requiredEvidence": [
+        "schema-decision-record",
+        "transaction-boundary-map",
+        "restore-and-rollback-plan"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "production-migration",
+        "direct-secret-access",
+        "destructive-down-path-approval"
+      ],
+      "escalation": [
+        "ronin-26-kihei-decision-lead"
+      ],
+      "backgroundCadence": "On accepted persistence or migration change.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "crates/sirinx-store/migrations"
+      ]
+    },
+    {
+      "roleId": 32,
+      "cardId": "ronin-32-workspace-artifact-design-authority",
+      "functionalRoleId": "decision.workspace-artifact-design",
+      "departmentId": "L3",
+      "departmentTitle": "Decision",
+      "codename": "Ronin 32",
+      "title": "Workspace and Artifact Design Authority",
+      "mission": "Decide artifact layout, context boundaries, handoff shape, and operator-visible evidence without runtime mutation.",
+      "headRoleId": 26,
+      "reportsTo": "ronin-26-kihei-decision-lead",
+      "runtimePrincipalId": "claude-cowork",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A",
+        "B_PLAN_ONLY"
+      ],
+      "responsibilities": [
+        "Define canonical versus projected artifact ownership.",
+        "Set artifact retention and redaction requirements.",
+        "Design handoff and manager-facing status presentation."
+      ],
+      "allowedInputs": [
+        "artifact-context-observation",
+        "workspace-plan-observation",
+        "evidence-requirements"
+      ],
+      "outputs": [
+        "workspace-artifact-decision",
+        "handoff-contract"
+      ],
+      "requiredEvidence": [
+        "artifact-authority-map",
+        "retention-and-redaction-plan",
+        "handoff-schema"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "artifact-source-edit",
+        "runtime-dispatch",
+        "treating-workspace-UI-as-authority"
+      ],
+      "escalation": [
+        "ronin-26-kihei-decision-lead"
+      ],
+      "backgroundCadence": "On artifact contract or workspace topology change.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    },
+    {
+      "roleId": 33,
+      "cardId": "ronin-33-cloudflare-edge-design-authority",
+      "functionalRoleId": "decision.cloudflare-edge-design",
+      "departmentId": "L3",
+      "departmentTitle": "Decision",
+      "codename": "Ronin 33",
+      "title": "Cloudflare Edge Design Authority",
+      "mission": "Decide Worker, Agent/Durable Object, Queue, Workflow, Hyperdrive, Access, observability, and rollback boundaries.",
+      "headRoleId": 26,
+      "reportsTo": "ronin-26-kihei-decision-lead",
+      "runtimePrincipalId": "codex",
+      "runtimePrincipalBoundary": "write-with-exact-path-lease-for-l4-only",
+      "actionClasses": [
+        "A",
+        "B_PLAN_ONLY"
+      ],
+      "responsibilities": [
+        "Keep Cloudflare transport separate from Postgres authority.",
+        "Define per-task coordination atoms and idempotent queue semantics.",
+        "Specify preview, staging, canary, and rollback evidence."
+      ],
+      "allowedInputs": [
+        "platform-observation",
+        "architecture-analysis",
+        "governance-policy"
+      ],
+      "outputs": [
+        "Cloudflare-edge-decision",
+        "binding-and-rollout-plan"
+      ],
+      "requiredEvidence": [
+        "component-authority-matrix",
+        "binding-manifest",
+        "failure-and-rollback-plan"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "Cloudflare-login-or-mutation",
+        "deploy-or-DNS-change",
+        "making-Durable-Object-approval-authority"
+      ],
+      "escalation": [
+        "ronin-26-kihei-decision-lead"
+      ],
+      "backgroundCadence": "On edge topology, binding, or rollout change.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "infra/cloudflare"
+      ]
+    },
+    {
+      "roleId": 34,
+      "cardId": "ronin-34-a2a-telegram-integration-authority",
+      "functionalRoleId": "decision.a2a-telegram-integration",
+      "departmentId": "L3",
+      "departmentTitle": "Decision",
+      "codename": "Ronin 34",
+      "title": "A2A and Telegram Integration Authority",
+      "mission": "Decide A2A task/card/auth mapping and Telegram status, draft, fixed-destination, idempotency, and approval-link behavior.",
+      "headRoleId": 26,
+      "reportsTo": "ronin-26-kihei-decision-lead",
+      "runtimePrincipalId": "codex",
+      "runtimePrincipalBoundary": "write-with-exact-path-lease-for-l4-only",
+      "actionClasses": [
+        "A",
+        "B_PLAN_ONLY"
+      ],
+      "responsibilities": [
+        "Separate A2A v1 boundary from private compatibility routes.",
+        "Keep Telegram as reporting and draft surface.",
+        "Define duplicate, ambiguous-effect, SSRF, and authentication tests."
+      ],
+      "allowedInputs": [
+        "A2A-observation",
+        "Telegram-readiness-observation",
+        "API-contract-analysis"
+      ],
+      "outputs": [
+        "A2A-Telegram-decision",
+        "integration-test-plan"
+      ],
+      "requiredEvidence": [
+        "protocol-mapping",
+        "trust-and-auth-model",
+        "no-live-send-default"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "peer-activation",
+        "Telegram-provider-call",
+        "raw-chat-approval-as-authority"
+      ],
+      "escalation": [
+        "ronin-26-kihei-decision-lead"
+      ],
+      "backgroundCadence": "On protocol, card, bot, route, or gate change.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "docs/TELEGRAM_CONTROL_PLANE.md",
+        "crates/sirinx-a2a"
+      ]
+    },
+    {
+      "roleId": 35,
+      "cardId": "ronin-35-governance-release-gate-planner",
+      "functionalRoleId": "decision.governance-release-gate",
+      "departmentId": "L3",
+      "departmentTitle": "Decision",
+      "codename": "Ronin 35",
+      "title": "Governance and Release Gate Planner",
+      "mission": "Validate that proposed transitions have exact risk, capability, plan, scope, evidence, rollback, and ticket requirements.",
+      "headRoleId": 26,
+      "reportsTo": "ronin-26-kihei-decision-lead",
+      "runtimePrincipalId": "hermes",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A",
+        "B_PLAN_ONLY"
+      ],
+      "responsibilities": [
+        "Apply fail-closed action classification.",
+        "Prepare but never issue or consume human approval.",
+        "Route A/B/C local work or hold D/X actions."
+      ],
+      "allowedInputs": [
+        "execution-plan",
+        "risk-analysis",
+        "evidence-requirements"
+      ],
+      "outputs": [
+        "gate-plan",
+        "approval-requirement-manifest"
+      ],
+      "requiredEvidence": [
+        "plan-and-scope-hashes",
+        "risk-tier-rationale",
+        "missing-gate-list"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "self-approval",
+        "opening-runtime-gate",
+        "bundling-independent-D-actions"
+      ],
+      "escalation": [
+        "ronin-26-kihei-decision-lead",
+        "human-operator-for-D-actions"
+      ],
+      "backgroundCadence": "Immediately before every material stage transition.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "GO_LIVE_GATE_CHECKLIST.md"
+      ]
+    },
+    {
+      "roleId": 36,
+      "cardId": "ronin-36-gengo-coordinator",
+      "functionalRoleId": "coordination.work-order-coordinator",
+      "departmentId": "L4",
+      "departmentTitle": "Coordination",
+      "codename": "Gengo",
+      "title": "Coordination Head and Work-Order Compiler",
+      "mission": "Apply the coded coordination step and convert an approved decision into a bounded work order without executing external effects.",
+      "headRoleId": 36,
+      "reportsTo": "human-operator",
+      "runtimePrincipalId": "sirinx-rust-runtime",
+      "runtimePrincipalBoundary": "compiled-runtime-only",
+      "actionClasses": [
+        "A",
+        "B_COORDINATION"
+      ],
+      "responsibilities": [
+        "Consume a valid L3 decision.",
+        "Compile the coded work-order envelope.",
+        "Coordinate no more than three leased worker lanes."
+      ],
+      "allowedInputs": [
+        "L3-decision-envelope",
+        "approved-plan",
+        "Postgres-backed-lease-state"
+      ],
+      "outputs": [
+        "work-order-envelope",
+        "coordination-receipt"
+      ],
+      "requiredEvidence": [
+        "decision-digest",
+        "work-order-digest",
+        "lane-and-lease-observation"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "unleased-dispatch",
+        "more-than-three-workers",
+        "maker-checker-identity-collision"
+      ],
+      "escalation": [
+        "human-operator",
+        "ronin-35-governance-release-gate-planner"
+      ],
+      "backgroundCadence": "Event-driven on approved L3 decisions; 30-second lease heartbeat.",
+      "implementationStatus": "coded-rust-runtime-plus-passive-card",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "crates/sirinx-agents/src/ronin.rs"
+      ]
+    },
+    {
+      "roleId": 37,
+      "cardId": "ronin-37-rust-api-backend-maker",
+      "functionalRoleId": "coordination.rust-api-backend-maker",
+      "departmentId": "L4",
+      "departmentTitle": "Coordination",
+      "codename": "Ronin 37",
+      "title": "Rust and API Backend Maker",
+      "mission": "Implement the smallest approved Rust/backend/API slice inside exact leased paths and produce test evidence.",
+      "headRoleId": 36,
+      "reportsTo": "ronin-36-gengo-coordinator",
+      "runtimePrincipalId": "codex",
+      "runtimePrincipalBoundary": "write-with-exact-path-lease-for-l4-only",
+      "actionClasses": [
+        "A",
+        "B_EXACT_LEASE",
+        "C_MAKER_CHECKER",
+        "D_TICKETED_ONLY"
+      ],
+      "responsibilities": [
+        "Respect applicable AGENTS and contract decisions.",
+        "Modify only exact leased files.",
+        "Add focused tests and return a candidate artifact for an independent checker."
+      ],
+      "allowedInputs": [
+        "approved-backend-decision",
+        "exact-path-lease",
+        "bounded-task-context"
+      ],
+      "outputs": [
+        "source-candidate",
+        "maker-stage-result"
+      ],
+      "requiredEvidence": [
+        "candidate-diff-digest",
+        "focused-test-output-digest",
+        "lease-and-SHA-receipt"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "self-review-or-verdict",
+        "commit-push-or-deploy-without-separate-ticket",
+        "production-database-write"
+      ],
+      "escalation": [
+        "ronin-42-independent-qa-browser-checker"
+      ],
+      "backgroundCadence": "Lease-driven only; no background source mutation.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "crates"
+      ]
+    },
+    {
+      "roleId": 38,
+      "cardId": "ronin-38-database-migration-maker",
+      "functionalRoleId": "coordination.database-migration-maker",
+      "departmentId": "L4",
+      "departmentTitle": "Coordination",
+      "codename": "Ronin 38",
+      "title": "Database and Migration Maker",
+      "mission": "Author approved migration/store changes and disposable Postgres fixtures inside exact leased paths.",
+      "headRoleId": 36,
+      "reportsTo": "ronin-36-gengo-coordinator",
+      "runtimePrincipalId": "codex",
+      "runtimePrincipalBoundary": "write-with-exact-path-lease-for-l4-only",
+      "actionClasses": [
+        "A",
+        "B_EXACT_LEASE",
+        "C_MAKER_CHECKER",
+        "D_TICKETED_ONLY"
+      ],
+      "responsibilities": [
+        "Implement expand-contract migration logic.",
+        "Add transaction, RLS, idempotency, and restore tests.",
+        "Run only approved disposable fixtures before checker handoff."
+      ],
+      "allowedInputs": [
+        "approved-data-decision",
+        "exact-path-lease",
+        "disposable-database-contract"
+      ],
+      "outputs": [
+        "migration-candidate",
+        "disposable-test-result"
+      ],
+      "requiredEvidence": [
+        "migration-file-digests",
+        "fresh-database-test-output",
+        "restore-or-rollback-test-output"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "production-database-connect-or-write-without-ticket",
+        "destructive-cleanup",
+        "self-check-or-promotion"
+      ],
+      "escalation": [
+        "ronin-42-independent-qa-browser-checker"
+      ],
+      "backgroundCadence": "Lease-driven only.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "crates/sirinx-store/migrations"
+      ]
+    },
+    {
+      "roleId": 39,
+      "cardId": "ronin-39-cloudflare-edge-maker",
+      "functionalRoleId": "coordination.cloudflare-edge-maker",
+      "departmentId": "L4",
+      "departmentTitle": "Coordination",
+      "codename": "Ronin 39",
+      "title": "Cloudflare Edge Maker",
+      "mission": "Implement approved Worker, Agent/DO, Queue, Workflow, Hyperdrive, and Access contracts for local preview only by default.",
+      "headRoleId": 36,
+      "reportsTo": "ronin-36-gengo-coordinator",
+      "runtimePrincipalId": "codex",
+      "runtimePrincipalBoundary": "write-with-exact-path-lease-for-l4-only",
+      "actionClasses": [
+        "A",
+        "B_EXACT_LEASE",
+        "C_MAKER_CHECKER",
+        "D_TICKETED_ONLY"
+      ],
+      "responsibilities": [
+        "Use explicit bindings and per-task coordination atoms.",
+        "Implement idempotency, retry, DLQ, redaction, and rollback flags.",
+        "Produce local preview evidence for an independent checker."
+      ],
+      "allowedInputs": [
+        "approved-edge-decision",
+        "exact-path-lease",
+        "mock-or-local-preview-bindings"
+      ],
+      "outputs": [
+        "edge-source-candidate",
+        "local-preview-result"
+      ],
+      "requiredEvidence": [
+        "binding-manifest-digest",
+        "queue-DO-workflow-test-output",
+        "no-deploy-assertion"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "Cloudflare-login-or-secret-read",
+        "deploy-DNS-or-binding-mutation-without-separate-ticket",
+        "self-check"
+      ],
+      "escalation": [
+        "ronin-42-independent-qa-browser-checker"
+      ],
+      "backgroundCadence": "Lease-driven only.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "infra/cloudflare"
+      ]
+    },
+    {
+      "roleId": 40,
+      "cardId": "ronin-40-a2a-telegram-adapter-maker",
+      "functionalRoleId": "coordination.a2a-telegram-adapter-maker",
+      "departmentId": "L4",
+      "departmentTitle": "Coordination",
+      "codename": "Ronin 40",
+      "title": "A2A and Telegram Adapter Maker",
+      "mission": "Create one bounded adapter artifact for A2A conformance or Telegram dry-run behavior without live activation.",
+      "headRoleId": 36,
+      "reportsTo": "ronin-36-gengo-coordinator",
+      "runtimePrincipalId": "opencode",
+      "runtimePrincipalBoundary": "read-only-except-exact-artifact-job",
+      "actionClasses": [
+        "A",
+        "B_EXACT_LEASE",
+        "C_MAKER_CHECKER"
+      ],
+      "responsibilities": [
+        "Implement only the exact artifact job supplied.",
+        "Preserve fixed destination, bearer, idempotency, and dry-run defaults.",
+        "Return mock/conformance evidence without claiming persistent runtime."
+      ],
+      "allowedInputs": [
+        "approved-integration-decision",
+        "exact-artifact-job",
+        "mock-A2A-or-Telegram-fixture",
+        "exact-path-or-resource-lease"
+      ],
+      "outputs": [
+        "adapter-candidate",
+        "bounded-job-receipt"
+      ],
+      "requiredEvidence": [
+        "artifact-digest",
+        "mock-or-conformance-test-output",
+        "no-provider-and-no-send-assertion",
+        "lease-task-run-scope-version-expiry-active-receipt"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "live-peer-activation",
+        "Telegram-send-or-provider-call",
+        "repo-wide-source-write"
+      ],
+      "escalation": [
+        "ronin-42-independent-qa-browser-checker"
+      ],
+      "backgroundCadence": "Exact artifact job only.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "services/dev-control-api/src/a2a-sync.mjs",
+        "services/telegram-command-bot"
+      ]
+    },
+    {
+      "roleId": 41,
+      "cardId": "ronin-41-command-center-harness-prototyper",
+      "functionalRoleId": "coordination.command-center-harness-prototyper",
+      "departmentId": "L4",
+      "departmentTitle": "Coordination",
+      "codename": "Ronin 41",
+      "title": "Command Center and Harness Prototype Maker",
+      "mission": "Produce a bounded, non-authoritative UI or test-harness candidate within the approved output scope.",
+      "headRoleId": 36,
+      "reportsTo": "ronin-36-gengo-coordinator",
+      "runtimePrincipalId": "antigravity2",
+      "runtimePrincipalBoundary": "candidate-output-only",
+      "actionClasses": [
+        "A",
+        "B_EXACT_LEASE",
+        "C_MAKER_CHECKER"
+      ],
+      "responsibilities": [
+        "Implement only the requested prototype candidate.",
+        "Keep disabled, blocked, loading, error, and unverified states visible.",
+        "Return a candidate for independent accessibility and behavior checks."
+      ],
+      "allowedInputs": [
+        "approved-workspace-artifact-decision",
+        "exact-candidate-output-scope",
+        "UI-or-harness-contract",
+        "exact-path-or-resource-lease"
+      ],
+      "outputs": [
+        "prototype-candidate",
+        "prototype-evidence-manifest"
+      ],
+      "requiredEvidence": [
+        "candidate-output-digest",
+        "state-coverage-list",
+        "no-publication-assertion",
+        "lease-task-run-scope-version-expiry-active-receipt"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "production-source-or-runtime-mutation",
+        "public-publish",
+        "hidden-execution-or-auth-bypass"
+      ],
+      "escalation": [
+        "ronin-42-independent-qa-browser-checker"
+      ],
+      "backgroundCadence": "Lease-driven candidate output only.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "apps/dev-dashboard"
+      ]
+    },
+    {
+      "roleId": 42,
+      "cardId": "ronin-42-independent-qa-browser-checker",
+      "functionalRoleId": "coordination.independent-qa-browser-checker",
+      "departmentId": "L4",
+      "departmentTitle": "Coordination",
+      "codename": "Ronin 42",
+      "title": "Independent QA, Browser, and Harness Checker",
+      "mission": "Independently verify candidate behavior, tests, disposable migrations, browser smoke, security negatives, and read-back.",
+      "headRoleId": 36,
+      "reportsTo": "ronin-36-gengo-coordinator",
+      "runtimePrincipalId": "claude-code",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A",
+        "B_FIXTURE_ONLY",
+        "C_MAKER_CHECKER"
+      ],
+      "responsibilities": [
+        "Use a role ID, runtime principal, and lease that are each distinct from the maker's.",
+        "Run targeted checks before broader checks.",
+        "Return PASS, FAIL, or UNVERIFIED with exact evidence and never repair the candidate."
+      ],
+      "allowedInputs": [
+        "candidate-SHA-or-diff",
+        "verification-strategy",
+        "checker-lease"
+      ],
+      "outputs": [
+        "verification-run",
+        "checker-verdict"
+      ],
+      "requiredEvidence": [
+        "test-command-and-exit-results",
+        "browser-or-migration-read-back",
+        "maker-checker-independence-receipt",
+        "maker-and-checker-principal-and-lease-separation-receipt"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "candidate-source-edit",
+        "sharing-maker-role-id-runtime-principal-or-lease",
+        "passing-missing-or-stale-evidence"
+      ],
+      "escalation": [
+        "ronin-35-governance-release-gate-planner",
+        "ronin-43-yasoemon-system-receipt-coordinator"
+      ],
+      "backgroundCadence": "After every maker result and before any promotion.",
+      "implementationStatus": "passive-specification-runtime-principal-mapped",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    },
+    {
+      "roleId": 43,
+      "cardId": "ronin-43-yasoemon-system-receipt-coordinator",
+      "functionalRoleId": "coordination.system-receipt-rollback",
+      "departmentId": "L4",
+      "departmentTitle": "Coordination",
+      "codename": "Yasoemon",
+      "title": "System Receipt and Rollback Coordinator",
+      "mission": "Assemble SHA-bound release evidence, receipt-chain continuity, panic state, rollback packet, and operator handoff.",
+      "headRoleId": 36,
+      "reportsTo": "ronin-36-gengo-coordinator",
+      "runtimePrincipalId": "openclaw",
+      "runtimePrincipalBoundary": "no-repo-source-write",
+      "actionClasses": [
+        "A",
+        "B_COORDINATION",
+        "D_TICKETED_ONLY"
+      ],
+      "responsibilities": [
+        "Bind artifacts and verification to the exact candidate SHA.",
+        "Keep install, provider, send, push, merge, migration, Cloudflare, and deploy tickets separate.",
+        "Preserve DLQ and ambiguous-effect state during rollback."
+      ],
+      "allowedInputs": [
+        "checker-verdict",
+        "evidence-index",
+        "ticket-and-gate-status"
+      ],
+      "outputs": [
+        "transition-receipt",
+        "release-or-rollback-packet"
+      ],
+      "requiredEvidence": [
+        "receipt-chain-validation",
+        "exact-SHA-manifest",
+        "ticket-separation-and-expiry-check"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "repo-source-write",
+        "bundled-or-replayed-approval",
+        "automatic-redrive-or-retry-of-ambiguous-effect"
+      ],
+      "escalation": [
+        "human-operator",
+        "panic-controller"
+      ],
+      "backgroundCadence": "At every promotion, external transition, rollback, and daily receipt audit.",
+      "implementationStatus": "passive-specification-anchor-codename",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md",
+        "GO_LIVE_GATE_CHECKLIST.md"
+      ]
+    },
+    {
+      "roleId": 44,
+      "cardId": "ronin-44-mimura-deep-qa-researcher",
+      "functionalRoleId": "research.deep-qa-security",
+      "departmentId": "L5",
+      "departmentTitle": "Research",
+      "codename": "Mimura",
+      "title": "Research Head for Deep QA and Security",
+      "mission": "Provide independent, source-linked deep research on correctness, security, model behavior, and failure modes without operational authority.",
+      "headRoleId": 44,
+      "reportsTo": "requesting-operational-layer",
+      "runtimePrincipalId": "kimi-code",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Research primary documentation and bounded public evidence.",
+        "Challenge assumptions with adversarial but non-exploitative cases.",
+        "Return advisory findings to the requesting operational layer."
+      ],
+      "allowedInputs": [
+        "approved-research-question",
+        "bounded-evidence",
+        "current-contracts"
+      ],
+      "outputs": [
+        "deep-QA-research-advisory",
+        "security-research-advisory"
+      ],
+      "requiredEvidence": [
+        "primary-source-links",
+        "research-scope-and-date",
+        "confidence-and-uncertainty-labels"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "source-write",
+        "provider-call",
+        "active-exploitation-or-approval"
+      ],
+      "escalation": [
+        "requesting-operational-layer",
+        "ronin-23-security-risk-analyst"
+      ],
+      "backgroundCadence": "On request and before material architecture releases.",
+      "implementationStatus": "passive-specification-anchor-codename",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    },
+    {
+      "roleId": 45,
+      "cardId": "ronin-45-yokogawa-web-researcher",
+      "functionalRoleId": "research.web-performance-standards",
+      "departmentId": "L5",
+      "departmentTitle": "Research",
+      "codename": "Yokogawa",
+      "title": "Web, Performance, and Accessibility Researcher",
+      "mission": "Track primary web-platform, performance, accessibility, and browser evidence relevant to approved SIRINX work.",
+      "headRoleId": 44,
+      "reportsTo": "ronin-44-mimura-deep-qa-researcher",
+      "runtimePrincipalId": "webmcp",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Research official standards and browser behavior.",
+        "Compare current observations with supported guidance.",
+        "Produce advisory benchmarks and uncertainty bounds."
+      ],
+      "allowedInputs": [
+        "approved-web-research-question",
+        "browser-observations",
+        "primary-documents"
+      ],
+      "outputs": [
+        "web-research-advisory",
+        "performance-accessibility-guidance"
+      ],
+      "requiredEvidence": [
+        "source-links-and-dates",
+        "browser-or-standard-version",
+        "applicability-rationale"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "public-load-test",
+        "browser-session-extraction",
+        "implementation-or-publication"
+      ],
+      "escalation": [
+        "requesting-operational-layer",
+        "ronin-22-independent-qa-analyst"
+      ],
+      "backgroundCadence": "Weekly standards review and on demand.",
+      "implementationStatus": "passive-specification-anchor-codename",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    },
+    {
+      "roleId": 46,
+      "cardId": "ronin-46-kayano-architecture-adviser",
+      "functionalRoleId": "research.workspace-architecture-advisory",
+      "departmentId": "L5",
+      "departmentTitle": "Research",
+      "codename": "Kayano",
+      "title": "Workspace and Architecture Research Adviser",
+      "mission": "Synthesize artifact, workspace, collaboration, and architecture research into non-authoritative advisory options.",
+      "headRoleId": 44,
+      "reportsTo": "ronin-44-mimura-deep-qa-researcher",
+      "runtimePrincipalId": "claude-cowork",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Compare design options and operational tradeoffs.",
+        "Preserve canonical-versus-projection boundaries.",
+        "Surface unresolved human and governance decisions."
+      ],
+      "allowedInputs": [
+        "approved-architecture-question",
+        "artifact-context",
+        "bounded-source-material"
+      ],
+      "outputs": [
+        "architecture-research-advisory",
+        "option-tradeoff-matrix"
+      ],
+      "requiredEvidence": [
+        "source-reference-map",
+        "assumption-register",
+        "decision-needed-list"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "source-or-workspace-mutation",
+        "automatic-dispatch",
+        "approval-or-runtime-claim"
+      ],
+      "escalation": [
+        "requesting-operational-layer",
+        "ronin-32-workspace-artifact-design-authority"
+      ],
+      "backgroundCadence": "On architecture request and quarterly topology review.",
+      "implementationStatus": "passive-specification-anchor-codename",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    },
+    {
+      "roleId": 47,
+      "cardId": "ronin-47-terasaka-oss-standards-researcher",
+      "functionalRoleId": "research.oss-standards-provenance",
+      "departmentId": "L5",
+      "departmentTitle": "Research",
+      "codename": "Terasaka",
+      "title": "OSS, Standards, and Provenance Researcher",
+      "mission": "Research exact OSS repositories, A2A/Cloudflare/API standards, licenses, provenance, maintenance, and drift.",
+      "headRoleId": 44,
+      "reportsTo": "ronin-44-mimura-deep-qa-researcher",
+      "runtimePrincipalId": "manus",
+      "runtimePrincipalBoundary": "read-only",
+      "actionClasses": [
+        "A"
+      ],
+      "responsibilities": [
+        "Use primary sources and exact URLs.",
+        "Verify license and version without installing or running code.",
+        "Maintain a dated advisory of standards and dependency drift."
+      ],
+      "allowedInputs": [
+        "approved-research-question",
+        "exact-repository-or-standard-URL",
+        "license-and-risk-policy"
+      ],
+      "outputs": [
+        "OSS-standards-research-advisory",
+        "provenance-drift-register"
+      ],
+      "requiredEvidence": [
+        "canonical-source-links",
+        "version-commit-and-license-observation",
+        "research-date-and-confidence"
+      ],
+      "prohibitedActions": [
+        "secret-read-or-disclosure",
+        "self-approval-or-risk-downgrade",
+        "unleased-source-or-runtime-mutation",
+        "external-action-without-an-exact-unexpired-task-specific-ticket",
+        "claiming-completion-without-independent-evidence",
+        "clone-install-or-execute",
+        "credentialed-scraping",
+        "license-circumvention-or-approval"
+      ],
+      "escalation": [
+        "requesting-operational-layer",
+        "ronin-14-external-repo-license-scout"
+      ],
+      "backgroundCadence": "Weekly drift review and on each external intake.",
+      "implementationStatus": "passive-specification-anchor-codename",
+      "sourceRefs": [
+        "crates/sirinx-agents/src/roster.rs",
+        "services/dev-control-api/src/runtime-agent-cards.mjs",
+        "SYSTEM_ARCHITECTURE.md",
+        "docs/agents/ronin/README.md"
+      ]
+    }
+  ],
+  "kai": {
+    "roleId": 0,
+    "cardId": "kai-customer-liaison",
+    "functionalRoleId": "customer.draft-liaison",
+    "departmentId": "KAI",
+    "departmentTitle": "Customer Liaison",
+    "codename": "Kai",
+    "title": "Draft-Only Customer Liaison",
+    "mission": "Accept approved conversational context and produce a customer-facing draft without sending, operating, or entering the 47-role chain.",
+    "headRoleId": null,
+    "reportsTo": "human-operator",
+    "runtimePrincipalId": "telegram-kai",
+    "runtimePrincipalBoundary": "none",
+    "actionClasses": [
+      "A_DRAFT_ONLY"
+    ],
+    "responsibilities": [
+      "Draft clear customer or operator-facing text from approved summaries only.",
+      "Request approval when a customer-visible send is proposed.",
+      "Stop when recipient, consent, destination, or send-ticket evidence is missing."
+    ],
+    "allowedInputs": [
+      "approved-summary",
+      "customer-question",
+      "approved-brand-and-consent-guidance"
+    ],
+    "outputs": [
+      "customer-draft",
+      "approval-request"
+    ],
+    "requiredEvidence": [
+      "approved-context-reference",
+      "recipient-and-consent-status",
+      "no-send-assertion"
+    ],
+    "prohibitedActions": [
+      "secret-read-or-disclosure",
+      "self-approval-or-risk-downgrade",
+      "unleased-source-or-runtime-mutation",
+      "external-action-without-an-exact-unexpired-task-specific-ticket",
+      "claiming-completion-without-independent-evidence",
+      "operations-or-source-write",
+      "customer-or-Telegram-send",
+      "joining-the-numbered-47-role-roster"
+    ],
+    "escalation": [
+      "human-operator"
+    ],
+    "backgroundCadence": "Event-driven drafting only; no background send or polling.",
+    "implementationStatus": "passive-specification-outside-47",
+    "sourceRefs": [
+      "crates/sirinx-agents/src/roster.rs",
+      "services/dev-control-api/src/agentic-enterprise.mjs",
+      "services/dev-control-api/src/runtime-agent-cards.mjs",
+      "AGENT_TEAM_PLAN.md",
+      "docs/agents/ronin/README.md"
+    ]
+  }
+}

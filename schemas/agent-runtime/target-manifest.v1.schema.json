@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/target-manifest.v1.schema.json",
+  "title": "TargetManifestV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "manifestId",
+    "targetPath",
+    "targetDeviceId",
+    "targetInode",
+    "canonicalEncoding",
+    "entries",
+    "entryCount",
+    "totalSizeBytes",
+    "entriesDigest",
+    "manifestDigest",
+    "containsSpecialFiles",
+    "containsEscapingSymlinks",
+    "incompleteHardlinkSets",
+    "generatedAt",
+    "status"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "manifestId": { "type": "string", "pattern": "^TM-[A-Za-z0-9._-]+$" },
+    "targetPath": { "type": "string", "pattern": "^/", "minLength": 2, "maxLength": 4096 },
+    "targetDeviceId": { "type": "integer", "minimum": 0 },
+    "targetInode": { "type": "integer", "minimum": 1 },
+    "canonicalEncoding": { "const": "sorted-nul-v1" },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 250000,
+      "items": { "$ref": "#/$defs/entry" }
+    },
+    "entryCount": { "type": "integer", "minimum": 1 },
+    "totalSizeBytes": { "type": "integer", "minimum": 0 },
+    "entriesDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "manifestDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "containsSpecialFiles": { "const": false },
+    "containsEscapingSymlinks": { "const": false },
+    "incompleteHardlinkSets": { "const": false },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "status": { "enum": ["OBSERVED_READ_ONLY", "VERIFIED_MATCH", "DRIFTED"] }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relativePath",
+        "kind",
+        "deviceId",
+        "inode",
+        "mode",
+        "linkCount",
+        "sizeBytes",
+        "mtimeNs",
+        "contentSha256",
+        "symlinkText"
+      ],
+      "properties": {
+        "relativePath": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+        },
+        "kind": { "enum": ["FILE", "DIRECTORY", "SYMLINK"] },
+        "deviceId": { "type": "integer", "minimum": 0 },
+        "inode": { "type": "integer", "minimum": 1 },
+        "mode": { "type": "string", "pattern": "^[0-7]{3,6}$" },
+        "linkCount": { "type": "integer", "minimum": 1 },
+        "sizeBytes": { "type": "integer", "minimum": 0 },
+        "mtimeNs": { "type": "string", "pattern": "^[0-9]+$" },
+        "contentSha256": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "symlinkText": { "type": ["string", "null"], "maxLength": 4096 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "FILE" } } },
+          "then": {
+            "properties": {
+              "contentSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+              "symlinkText": { "type": "null" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "DIRECTORY" } } },
+          "then": {
+            "properties": {
+              "contentSha256": { "type": "null" },
+              "symlinkText": { "type": "null" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "SYMLINK" } } },
+          "then": {
+            "properties": {
+              "contentSha256": { "type": "null" },
+              "symlinkText": { "type": "string" }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

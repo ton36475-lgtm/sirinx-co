@@ -11,6 +11,7 @@ authors.workspace = true
 sirinx-core = { workspace = true }
 sirinx-roi = { workspace = true }
 sirinx-store = { workspace = true }
+sirinx-agents = { workspace = true }
 axum = { workspace = true }
 tokio = { workspace = true }
 serde = { workspace = true }

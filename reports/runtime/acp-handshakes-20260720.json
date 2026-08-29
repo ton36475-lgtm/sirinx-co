@@ -1,0 +1,75 @@
+{
+  "$schema": "sirinx.acp-initialize-evidence.v1",
+  "collectedAt": "2026-07-19T22:07:38.443Z",
+  "status": "three-acp-identities-verified-one-preflight-passed",
+  "scope": {
+    "initializeOnly": true,
+    "sessionCreated": false,
+    "promptSent": false,
+    "modelRequestSent": false,
+    "providerInference": false,
+    "networkObservation": "not-instrumented",
+    "externalWrites": false,
+    "realAuthHomeRead": false,
+    "protectedConfigRead": false
+  },
+  "isolation": {
+    "writableEmptyTemporaryHome": true,
+    "firstReadOnlyHomeAttemptFailedClosed": true,
+    "temporaryArtifactsBytesApprox": 138412032,
+    "temporaryArtifactsMovedToMacOsTrash": true,
+    "rawStdoutRetained": false,
+    "rawStderrRetained": false
+  },
+  "results": [
+    {
+      "agentId": "kimi-code",
+      "commandProfile": "kimi",
+      "status": "acp-initialize-verified",
+      "handshakeVerified": true,
+      "protocolVersion": 1,
+      "transport": "stdio",
+      "sessionCreated": false,
+      "promptSent": false,
+      "modelRequestSent": false,
+      "terminationConfirmed": true
+    },
+    {
+      "agentId": "opencode",
+      "commandProfile": "opencode",
+      "status": "acp-initialize-verified",
+      "handshakeVerified": true,
+      "protocolVersion": 1,
+      "transport": "stdio",
+      "sessionCreated": false,
+      "promptSent": false,
+      "modelRequestSent": false,
+      "terminationConfirmed": true
+    },
+    {
+      "agentId": "copilot-cli",
+      "commandProfile": "copilot",
+      "status": "acp-initialize-verified",
+      "handshakeVerified": true,
+      "protocolVersion": 1,
+      "transport": "stdio",
+      "sessionCreated": false,
+      "promptSent": false,
+      "modelRequestSent": false,
+      "terminationConfirmed": true
+    },
+    {
+      "agentId": "hermes-agent",
+      "commandProfile": "hermes-check",
+      "status": "acp-preflight-passed",
+      "handshakeVerified": false,
+      "preflightPassed": true,
+      "transport": "process-exit",
+      "sessionCreated": false,
+      "promptSent": false,
+      "modelRequestSent": false,
+      "terminationConfirmed": true
+    }
+  ]
+}
+

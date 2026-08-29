@@ -1,0 +1,297 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/existing-component-provenance.v1.schema.json",
+  "title": "ExistingComponentProvenanceV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "generatedAt",
+    "baseline",
+    "parentCatalog",
+    "authority",
+    "protectedReadBoundary",
+    "components",
+    "proofFlags",
+    "stopRules"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "status": { "const": "READ_ONLY_PROVENANCE_CAPTURED / NOT_ADMITTED / RESOURCE_HOLD" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "branch",
+        "headSha",
+        "workingTree",
+        "cargoLockPath",
+        "cargoLockSha256",
+        "host",
+        "memoryGiB",
+        "logicalCpuCount",
+        "resourceReceipt"
+      ],
+      "properties": {
+        "repository": { "const": "/Users/sirinx/SIRINXDev/sirinx-co" },
+        "branch": { "type": "string", "minLength": 1 },
+        "headSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "workingTree": { "const": "DIRTY_USER_OWNED_CANDIDATE" },
+        "cargoLockPath": { "const": "Cargo.lock" },
+        "cargoLockSha256": { "$ref": "#/$defs/sha256" },
+        "host": { "const": "Mac14,3" },
+        "memoryGiB": { "const": 8 },
+        "logicalCpuCount": { "const": 8 },
+        "resourceReceipt": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["capturedAt", "volumePath", "freeDiskKiB", "workloadFloorKiB", "state"],
+          "properties": {
+            "capturedAt": { "type": "string", "format": "date-time" },
+            "volumePath": { "const": "/System/Volumes/Data" },
+            "freeDiskKiB": { "type": "integer", "minimum": 1 },
+            "workloadFloorKiB": { "const": 15728640 },
+            "state": { "const": "HOLD_BELOW_15_GIB" }
+          }
+        }
+      }
+    },
+    "parentCatalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "catalogPath",
+        "catalogSha256",
+        "schemaPath",
+        "schemaSha256",
+        "validatorPath",
+        "validatorSha256"
+      ],
+      "properties": {
+        "catalogPath": { "const": "config/agent-runtime/external-components.research-only.v1.json" },
+        "catalogSha256": { "$ref": "#/$defs/sha256" },
+        "schemaPath": { "const": "schemas/agent-runtime/external-component-intake.v1.schema.json" },
+        "schemaSha256": { "$ref": "#/$defs/sha256" },
+        "validatorPath": { "const": "scripts/validate-external-component-intake.mjs" },
+        "validatorSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approvalSource",
+        "installGrantPresent",
+        "connectorGrantPresent",
+        "providerGrantPresent",
+        "localInferenceGrantPresent",
+        "cloudflareMutationGrantPresent",
+        "liveSendGrantPresent"
+      ],
+      "properties": {
+        "approvalSource": { "const": "APPROVE_IMPLEMENTATION_LOCAL_CODE_AND_DOCS_ONLY" },
+        "installGrantPresent": { "const": false },
+        "connectorGrantPresent": { "const": false },
+        "providerGrantPresent": { "const": false },
+        "localInferenceGrantPresent": { "const": false },
+        "cloudflareMutationGrantPresent": { "const": false },
+        "liveSendGrantPresent": { "const": false }
+      }
+    },
+    "protectedReadBoundary": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": { "$ref": "#/$defs/component" }
+    },
+    "proofFlags": { "$ref": "#/$defs/proofFlags" },
+    "stopRules": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 512 }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "path",
+        "canonicalPath",
+        "pathKind",
+        "linkTarget",
+        "sizeBytes",
+        "modeOctal",
+        "sha256",
+        "verification"
+      ],
+      "properties": {
+        "role": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,79}$" },
+        "path": { "type": "string", "minLength": 1 },
+        "canonicalPath": { "type": "string", "minLength": 1 },
+        "pathKind": { "enum": ["REGULAR_FILE", "SYMLINK_TO_REGULAR_FILE"] },
+        "linkTarget": { "type": ["string", "null"], "minLength": 1 },
+        "sizeBytes": { "type": "integer", "minimum": 0 },
+        "modeOctal": { "type": "string", "pattern": "^[0-7]{3,4}$" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "verification": { "const": "FULL_FILE_SHA256" }
+      }
+    },
+    "packageRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "source",
+        "lockChecksum",
+        "cacheArchivePath",
+        "cacheArchiveSha256"
+      ],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "source": { "const": "registry+https://github.com/rust-lang/crates.io-index" },
+        "lockChecksum": { "$ref": "#/$defs/sha256" },
+        "cacheArchivePath": { "type": "string", "minLength": 1 },
+        "cacheArchiveSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "componentClaims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "upstreamIdentityBound",
+        "installReceiptVerified",
+        "reproducibleBuildVerified",
+        "runtimeVerified",
+        "admitted",
+        "canInstall",
+        "canRun",
+        "canConnect"
+      ],
+      "properties": {
+        "upstreamIdentityBound": { "const": false },
+        "installReceiptVerified": { "const": false },
+        "reproducibleBuildVerified": { "const": false },
+        "runtimeVerified": { "const": false },
+        "admitted": { "const": false },
+        "canInstall": { "const": false },
+        "canRun": { "const": false },
+        "canConnect": { "const": false }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "category",
+        "catalogDisposition",
+        "status",
+        "classification",
+        "selectedRevision",
+        "localIdentity",
+        "artifacts",
+        "packageRecords",
+        "observations",
+        "unresolvedGaps",
+        "claims"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,79}$" },
+        "category": {
+          "enum": ["AGENT_HARNESS", "API_FRAMEWORK", "DATABASE_CLIENT", "LOCAL_MODEL"]
+        },
+        "catalogDisposition": { "enum": ["RECONCILE_EXISTING", "QUARANTINE_UNPINNED"] },
+        "status": { "const": "LOCAL_EVIDENCE_CAPTURED_NOT_ADMITTED" },
+        "classification": {
+          "enum": [
+            "ARTIFACT_IDENTIFIED_NOT_UPSTREAM_BOUND",
+            "EDITABLE_SOURCE_UNPINNED",
+            "LOCKFILE_AND_CACHE_VERIFIED_NOT_UPSTREAM_BOUND",
+            "LOCAL_MANIFEST_BLOBS_VERIFIED_NOT_UPSTREAM_BOUND"
+          ]
+        },
+        "selectedRevision": { "type": ["string", "null"], "minLength": 1, "maxLength": 160 },
+        "localIdentity": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/artifact" }
+        },
+        "packageRecords": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/packageRecord" }
+        },
+        "observations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 1024 }
+        },
+        "unresolvedGaps": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 1024 }
+        },
+        "claims": { "$ref": "#/$defs/componentClaims" }
+      }
+    },
+    "proofFlags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protectedConfigRead",
+        "cliExecuted",
+        "cloned",
+        "installed",
+        "lifecycleScriptRan",
+        "modelDownloaded",
+        "modelInvoked",
+        "serviceStarted",
+        "mcpConnected",
+        "a2aLive",
+        "providerCalled",
+        "cloudflareMutated",
+        "messageSent",
+        "pushed",
+        "merged",
+        "deployed",
+        "productionReady"
+      ],
+      "properties": {
+        "protectedConfigRead": { "const": false },
+        "cliExecuted": { "const": false },
+        "cloned": { "const": false },
+        "installed": { "const": false },
+        "lifecycleScriptRan": { "const": false },
+        "modelDownloaded": { "const": false },
+        "modelInvoked": { "const": false },
+        "serviceStarted": { "const": false },
+        "mcpConnected": { "const": false },
+        "a2aLive": { "const": false },
+        "providerCalled": { "const": false },
+        "cloudflareMutated": { "const": false },
+        "messageSent": { "const": false },
+        "pushed": { "const": false },
+        "merged": { "const": false },
+        "deployed": { "const": false },
+        "productionReady": { "const": false }
+      }
+    }
+  }
+}

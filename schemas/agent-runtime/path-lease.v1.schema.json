@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/path-lease.v1.schema.json",
+  "title": "PathLeaseV1_1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "leaseId", "taskId", "runId", "roleId", "principalId",
+    "repositoryPath", "worktreeId", "paths", "resources", "sourceWrite",
+    "nonceDigest", "issuedAt",
+    "expiresAt", "heartbeatDueAt", "version", "state"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.1" },
+    "leaseId": { "type": "string", "pattern": "^LEASE-[A-Za-z0-9._-]+$" },
+    "taskId": { "type": "string", "pattern": "^TASK-[A-Za-z0-9._-]+$" },
+    "runId": { "type": "string", "pattern": "^RUN-[A-Za-z0-9._-]+$" },
+    "roleId": { "type": "integer", "minimum": 1, "maximum": 47 },
+    "principalId": { "type": "string", "minLength": 1 },
+    "repositoryPath": { "type": "string", "minLength": 1 },
+    "worktreeId": { "type": "string", "minLength": 1 },
+    "paths": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "not": { "pattern": "(^|/)\\.\\.(/|$)" } }
+    },
+    "resources": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "sourceWrite": { "type": "boolean" },
+    "nonceDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "issuedAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "heartbeatDueAt": { "type": "string", "format": "date-time" },
+    "version": { "type": "integer", "minimum": 1 },
+    "state": { "enum": ["ACTIVE", "EXPIRED", "REVOKED", "RELEASED"] }
+  }
+}

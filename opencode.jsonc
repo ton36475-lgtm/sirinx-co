@@ -1,0 +1,44 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "line_official": {
+      "type": "local",
+      "command": [
+        "npx",
+        "--yes",
+        "@line/line-bot-mcp-server@0.5.0"
+      ],
+      "environment": {
+        "NPM_CONFIG_IGNORE_SCRIPTS": "true",
+        "CHANNEL_ACCESS_TOKEN": "{env:LINE_CHANNEL_ACCESS_TOKEN}"
+      },
+      "enabled": false,
+      "timeout": 5000
+    }
+  },
+  "permission": {
+    "line_official_*": "deny"
+  },
+  "agent": {
+    "projectread": {
+      "description": "Read-only SIRINX project inspection with separately approved LINE Official Account metadata reads",
+      "mode": "subagent",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "edit": "deny",
+        "bash": "deny",
+        "task": "deny",
+        "external_directory": "deny",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "line_official_*": "deny",
+        "line_official_get_message_quota": "ask",
+        "line_official_get_rich_menu_list": "ask"
+      }
+    }
+  }
+}
+

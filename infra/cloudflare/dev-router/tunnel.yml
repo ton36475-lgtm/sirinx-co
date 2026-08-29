@@ -1,0 +1,32 @@
+# SIRINX dev.sirinx.co Tunnel Config
+# Tunnel: sirinx-hybrid-tunnel (id: 98b951b0-2251-4737-abad-684808bf0b35)
+#
+# Deploy:   cloudflared tunnel run sirinx-hybrid-tunnel
+# Requires: cloudflare_dns gate open + cert.pem in ~/.cloudflared/
+#
+# Ingress rules:
+#   dev.sirinx.co/*            -> dev-control-api (A2A, OmniRoute, approvals)
+#   dev.sirinx.co/hermes/*     -> hermes-api (agent cards, health)
+#   dev.sirinx.co/web/*        -> sirinx-web (Rust landing + leads API)
+#   dev.sirinx.co/tg/*         -> telegram-bot (command webhook)
+
+tunnel: 98b951b0-2251-4737-abad-684808bf0b35
+credentials-file: /Users/sirinx/.cloudflared/98b951b0-2251-4737-abad-684808bf0b35.json
+
+ingress:
+  - hostname: dev.sirinx.co
+    path: /hermes/*
+    service: http://localhost:9000
+
+  - hostname: dev.sirinx.co
+    path: /web/*
+    service: http://localhost:8080
+
+  - hostname: dev.sirinx.co
+    path: /tg/*
+    service: http://localhost:8787
+
+  - hostname: dev.sirinx.co
+    service: http://localhost:8790
+
+  - service: http_status:404

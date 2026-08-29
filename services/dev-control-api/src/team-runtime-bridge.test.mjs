@@ -24,7 +24,7 @@ describe("Team Runtime Bridge contract", () => {
     expect(status.canStartHermesTeam).toBe(false);
     expect(status.summary).toMatchObject({
       runtimeLanes: 5,
-      cloudModelLanes: 1,
+      cloudModelLanes: 2,
       paidApiExecutable: 0,
       antigravityExecutable: 0,
       hermesRoutingReady: false,
@@ -34,6 +34,19 @@ describe("Team Runtime Bridge contract", () => {
       provider: "OpenRouter",
       modelId: "qwen/qwen3.7-max",
       contextWindow: 1000000,
+      canCallProvider: false,
+      canReadApiKey: false,
+      paidApiRequired: true,
+      autoExecute: false,
+      commandExecuted: false
+    });
+    expect(status.modelLanes.find((lane) => lane.id === "kimi-k3-openrouter")).toMatchObject({
+      provider: "OpenRouter",
+      modelId: "moonshotai/kimi-k3",
+      status: "approval-required-paid-api",
+      contextWindow: 1048576,
+      sourceVerification: "official-moonshot-k3-launch-2026-07-16",
+      apiKeyEnvName: "OPENROUTER_API_KEY",
       canCallProvider: false,
       canReadApiKey: false,
       paidApiRequired: true,
@@ -153,6 +166,7 @@ describe("Team Runtime Bridge API routes", () => {
     expect(body.canCallPaidApi).toBe(false);
     expect(body.canReadSecrets).toBe(false);
     expect(body.modelLanes.find((lane) => lane.id === "qwen-3-7-max-openrouter").modelId).toBe("qwen/qwen3.7-max");
+    expect(body.modelLanes.find((lane) => lane.id === "kimi-k3-openrouter").modelId).toBe("moonshotai/kimi-k3");
     expect(body.openRouterQwenAdapter.primaryModel).toBe("qwen/qwen3.7-max");
     expect(JSON.stringify(body)).not.toMatch(/sk-[A-Za-z0-9_-]{20,}/);
   });

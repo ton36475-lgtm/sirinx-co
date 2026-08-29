@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/run-state.v1.schema.json",
+  "title": "RunStateV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "runId", "taskId", "stageId", "roleId", "principalId",
+    "state", "actionClass", "attempt", "budgetUsage", "createdAt", "updatedAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "runId": { "type": "string", "pattern": "^RUN-[A-Za-z0-9._-]+$" },
+    "taskId": { "type": "string", "pattern": "^TASK-[A-Za-z0-9._-]+$" },
+    "stageId": { "type": "string", "minLength": 1 },
+    "roleId": { "type": "integer", "minimum": 1, "maximum": 47 },
+    "principalId": { "type": "string", "minLength": 1 },
+    "state": {
+      "enum": [
+        "DRAFT", "TRIAGED", "PLANNED", "QUEUED", "LEASED", "RUNNING",
+        "CHECKING", "GUARDED", "WAITING_APPROVAL", "EXECUTING", "VERIFYING",
+        "RECEIPTED", "SUCCEEDED", "FAILED", "BLOCKED", "CANCELED",
+        "QUARANTINED", "INPUT_REQUIRED", "AUTH_REQUIRED", "EFFECT_UNKNOWN",
+        "DEAD_LETTER"
+      ]
+    },
+    "actionClass": { "enum": ["A", "B", "C", "D", "X"] },
+    "attempt": { "type": "integer", "minimum": 1 },
+    "leaseId": { "type": ["string", "null"] },
+    "budgetUsage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["steps", "runtimeSeconds", "outputBytes", "externalCalls", "costUsd"],
+      "properties": {
+        "steps": { "type": "integer", "minimum": 0 },
+        "runtimeSeconds": { "type": "integer", "minimum": 0 },
+        "outputBytes": { "type": "integer", "minimum": 0 },
+        "externalCalls": { "type": "integer", "minimum": 0 },
+        "costUsd": { "type": "number", "minimum": 0 }
+      }
+    },
+    "blocker": { "type": ["string", "null"] },
+    "resultReceiptId": { "type": ["string", "null"] },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  }
+}

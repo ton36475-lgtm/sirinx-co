@@ -10,7 +10,11 @@ Status: planning map only.
 | 5177 | Dev dashboard / Vibe HQ | local only, Access route after approval |
 | 8443 | thClaws serve mode | bind `127.0.0.1`, Access route only |
 | 8642 | Hermes gateway | local only, second auth gate |
+| 8710 | Hermes dashboard | local only |
+| 8711 | `sirinx-control` durable gate authority | local only, Bearer on `/api/*` |
 | 8790 | Office Link / dev-control-api | local only, token required |
+| 8791 | Telegram command bot | local only, Bearer + idempotency on live send |
+| 9000 | Hermes A2A / knowledge evidence | local only, read-only probes from OmniRoute |
 | 15672 | RabbitMQ management | local only, Access route only |
 | 5672 | RabbitMQ AMQP | never public |
 | 3306 | MySQL | never public |

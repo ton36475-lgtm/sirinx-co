@@ -12,8 +12,15 @@
 //! 2. **Bounded loops** — every run has a hard iteration budget so an
 //!    autonomous loop can never spin unattended.
 
+pub mod codex_bridge;
+pub mod goal;
 pub mod loop_runner;
 pub mod tool;
 
-pub use loop_runner::{AutoLoop, LoopConfig, LoopError, LoopOutcome, StepRecord};
+pub use codex_bridge::{A2aSummary, BridgeStatus, CodexBridge, OmniRouteSummary, RuntimeStatus};
+pub use goal::{GoalPlanner, GoalRunReport, GoalSpec};
+pub use loop_runner::{
+    AutoLoop, LoopConfig, LoopError, LoopOutcome, Planner, RecoveryConfig, RecoveryError,
+    RecoveryRun, StepRecord,
+};
 pub use tool::{ApprovalGate, Tool, ToolError, ToolInvocation, ToolRegistry, ToolResult};

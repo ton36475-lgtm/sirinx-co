@@ -34,8 +34,9 @@ describe("AI team pairing contract", () => {
     expect(status.summary).toMatchObject({
       rolesTotal: 47,
       pairedRoles: 47,
-      activeProfiles: 12,
-      virtualRoles: 35,
+      profileDefinitions: 12,
+      activeProfiles: 0,
+      virtualRoles: 47,
       executableExternalActions: 0,
       telegramReady: false
     });

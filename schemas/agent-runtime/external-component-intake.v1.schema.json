@@ -1,0 +1,303 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/external-component-intake.v1.schema.json",
+  "title": "ExternalComponentIntakeV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "generatedAt",
+    "baseline",
+    "authority",
+    "licensePolicy",
+    "components",
+    "installWaves",
+    "proofFlags",
+    "stopRules"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "status": { "const": "RESEARCH_VERIFIED / NO_CLONE / NO_INSTALL / RESOURCE_HOLD" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "branch",
+        "headSha",
+        "workingTree",
+        "host",
+        "memoryGiB",
+        "logicalCpuCount",
+        "freeDiskKiB",
+        "workloadFloorKiB",
+        "fullChainTargetKiB",
+        "resourceAdmission"
+      ],
+      "properties": {
+        "repository": { "const": "/Users/sirinx/SIRINXDev/sirinx-co" },
+        "branch": { "type": "string", "minLength": 1 },
+        "headSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "workingTree": { "const": "DIRTY_USER_OWNED" },
+        "host": { "const": "Mac14,3" },
+        "memoryGiB": { "const": 8 },
+        "logicalCpuCount": { "const": 8 },
+        "freeDiskKiB": { "type": "integer", "minimum": 1 },
+        "workloadFloorKiB": { "const": 15728640 },
+        "fullChainTargetKiB": { "const": 20971520 },
+        "resourceAdmission": { "const": "HOLD_BELOW_15_GIB" }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approvalSource",
+        "installGrantPresent",
+        "connectorGrantPresent",
+        "providerGrantPresent",
+        "cloudflareMutationGrantPresent",
+        "liveSendGrantPresent"
+      ],
+      "properties": {
+        "approvalSource": { "const": "attested-human-operator-exact-ticket" },
+        "installGrantPresent": { "const": false },
+        "connectorGrantPresent": { "const": false },
+        "providerGrantPresent": { "const": false },
+        "cloudflareMutationGrantPresent": { "const": false },
+        "liveSendGrantPresent": { "const": false }
+      }
+    },
+    "licensePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowedSpdx", "unknownMeans", "evidenceRequirement"],
+      "properties": {
+        "allowedSpdx": {
+          "const": ["Apache-2.0", "MIT"]
+        },
+        "unknownMeans": { "const": "INELIGIBLE" },
+        "evidenceRequirement": { "const": "publisher-controlled-license-file-or-model-card" }
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/component" }
+    },
+    "installWaves": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/installWave" }
+    },
+    "proofFlags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cloned",
+        "installed",
+        "postinstallRan",
+        "modelDownloaded",
+        "modelInvoked",
+        "mcpStarted",
+        "mcpConnected",
+        "a2aLive",
+        "providerCalled",
+        "cloudflareMutated",
+        "messageSent",
+        "pushed",
+        "merged",
+        "deployed",
+        "productionReady"
+      ],
+      "properties": {
+        "cloned": { "const": false },
+        "installed": { "const": false },
+        "postinstallRan": { "const": false },
+        "modelDownloaded": { "const": false },
+        "modelInvoked": { "const": false },
+        "mcpStarted": { "const": false },
+        "mcpConnected": { "const": false },
+        "a2aLive": { "const": false },
+        "providerCalled": { "const": false },
+        "cloudflareMutated": { "const": false },
+        "messageSent": { "const": false },
+        "pushed": { "const": false },
+        "merged": { "const": false },
+        "deployed": { "const": false },
+        "productionReady": { "const": false }
+      }
+    },
+    "stopRules": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 512 }
+    }
+  },
+  "$defs": {
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "category",
+        "name",
+        "publisher",
+        "sourceUrl",
+        "licenseSpdx",
+        "licenseEvidenceUrl",
+        "permissiveLicenseVerified",
+        "sourceVerification",
+        "revisionPolicy",
+        "selectedRevision",
+        "selectedArtifact",
+        "disposition",
+        "installationState",
+        "overlapDecision",
+        "resourceFit",
+        "securityNotes",
+        "requiredTickets",
+        "officialSources",
+        "installReady",
+        "canClone",
+        "canInstall",
+        "canRun",
+        "canConnect"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,79}$" },
+        "category": {
+          "enum": [
+            "MCP_SDK",
+            "MCP_SERVER",
+            "MCP_SPEC",
+            "A2A_SDK",
+            "A2A_SPEC",
+            "AGENT_HARNESS",
+            "QA_AUTOMATION",
+            "API_FRAMEWORK",
+            "DATABASE_CLIENT",
+            "MESSAGING_SDK",
+            "LOCAL_MODEL",
+            "HOSTED_MODEL"
+          ]
+        },
+        "name": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "publisher": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "sourceUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "licenseSpdx": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["Apache-2.0", "MIT", "UNKNOWN"] }
+        },
+        "licenseEvidenceUrl": { "type": ["string", "null"], "format": "uri" },
+        "permissiveLicenseVerified": { "type": "boolean" },
+        "sourceVerification": {
+          "enum": ["PRIMARY_SOURCE_VERIFIED", "PARTIAL_ARTIFACT_PENDING", "LOCAL_PROVENANCE_PENDING"]
+        },
+        "revisionPolicy": {
+          "enum": [
+            "PIN_EXACT_STABLE_RELEASE",
+            "PIN_EXACT_COMMIT",
+            "PIN_EXACT_ARTIFACT_DIGEST",
+            "REFERENCE_ONLY",
+            "REJECT_LOCAL",
+            "WAIT_FOR_PUBLISHER_ARTIFACT"
+          ]
+        },
+        "selectedRevision": { "type": ["string", "null"], "minLength": 1, "maxLength": 160 },
+        "selectedArtifact": { "type": ["string", "null"], "minLength": 1, "maxLength": 256 },
+        "disposition": {
+          "enum": [
+            "REFERENCE_ONLY",
+            "RECONCILE_EXISTING",
+            "CANDIDATE_RESOURCE_HELD",
+            "CANDIDATE_AUTHORITY_HELD",
+            "HOLD_PROTOCOL_VERSION",
+            "HOLD_ARTIFACT_LICENSE",
+            "QUARANTINE_UNPINNED",
+            "EXCLUDE_OVERLAP",
+            "REJECT_LOCAL_RESOURCE"
+          ]
+        },
+        "installationState": {
+          "enum": ["NOT_INSTALLED", "EXISTING_UNRECONCILED", "REFERENCE_ONLY", "NOT_APPLICABLE"]
+        },
+        "overlapDecision": {
+          "enum": ["FILL_GAP", "REUSE_EXISTING", "OPTIONAL", "DO_NOT_ADD_OVERLAP", "NOT_APPLICABLE"]
+        },
+        "resourceFit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["downloadGiB", "fitsEightGiBHost", "decisionBasis"],
+          "properties": {
+            "downloadGiB": { "type": ["number", "null"], "minimum": 0 },
+            "fitsEightGiBHost": { "type": ["boolean", "null"] },
+            "decisionBasis": { "type": "string", "minLength": 1, "maxLength": 512 }
+          }
+        },
+        "securityNotes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 512 }
+        },
+        "requiredTickets": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "INSTALL",
+              "CONNECTOR_ACTIVATION",
+              "A2A_EGRESS",
+              "LOCAL_INFERENCE",
+              "PROVIDER_CALL",
+              "CLOUDFLARE_MUTATION",
+              "DEPLOY",
+              "LIVE_SEND"
+            ]
+          }
+        },
+        "officialSources": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "format": "uri" }
+        },
+        "installReady": { "const": false },
+        "canClone": { "const": false },
+        "canInstall": { "const": false },
+        "canRun": { "const": false },
+        "canConnect": { "const": false }
+      }
+    },
+    "installWave": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["wave", "name", "componentIds", "state", "entryCriteria", "stopPoint"],
+      "properties": {
+        "wave": { "type": "integer", "minimum": 0, "maximum": 9 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "componentIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,79}$" }
+        },
+        "state": { "const": "HOLD" },
+        "entryCriteria": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 512 }
+        },
+        "stopPoint": { "type": "string", "minLength": 1, "maxLength": 512 }
+      }
+    }
+  }
+}

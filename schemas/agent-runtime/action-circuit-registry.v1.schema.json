@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/action-circuit-registry.v1.schema.json",
+  "title": "ActionCircuitRegistryV1PlanContract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "migration",
+    "migrationState",
+    "authoritySource",
+    "bindings",
+    "unboundEffectProfiles",
+    "stopRules"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0-plan" },
+    "status": { "const": "PLAN_ONLY_ALL_EFFECT_CIRCUITS_HELD" },
+    "migration": { "const": "0007_agent_runtime_effect_authority.sql" },
+    "migrationState": { "const": "DEFERRED" },
+    "authoritySource": { "const": "RUST_EMBEDDED_REVIEW_PINNED_MANIFEST" },
+    "bindings": {
+      "type": "array",
+      "minItems": 13,
+      "maxItems": 13,
+      "uniqueItems": true,
+      "prefixItems": [
+        { "allOf": [{ "$ref": "#/$defs/binding" }, { "$ref": "#/$defs/installBinding" }] },
+        { "allOf": [{ "$ref": "#/$defs/binding" }, { "$ref": "#/$defs/cleanupBinding" }] },
+        { "allOf": [{ "$ref": "#/$defs/binding" }, { "$ref": "#/$defs/connectorBinding" }] },
+        { "allOf": [{ "$ref": "#/$defs/binding" }, { "$ref": "#/$defs/providerBinding" }] },
+        { "allOf": [{ "$ref": "#/$defs/binding" }, { "$ref": "#/$defs/queueBinding" }] },
+        { "allOf": [{ "$ref": "#/$defs/binding" }, { "$ref": "#/$defs/a2aBinding" }] },
+        { "allOf": [{ "$ref": "#/$defs/binding" }, { "$ref": "#/$defs/telegramBinding" }] },
+        { "allOf": [{ "$ref": "#/$defs/binding" }, { "$ref": "#/$defs/customerBinding" }] },
+        { "allOf": [{ "$ref": "#/$defs/binding" }, { "$ref": "#/$defs/pushBinding" }] },
+        { "allOf": [{ "$ref": "#/$defs/binding" }, { "$ref": "#/$defs/mergeBinding" }] },
+        { "allOf": [{ "$ref": "#/$defs/binding" }, { "$ref": "#/$defs/migrationBinding" }] },
+        { "allOf": [{ "$ref": "#/$defs/binding" }, { "$ref": "#/$defs/cloudflareBinding" }] },
+        { "allOf": [{ "$ref": "#/$defs/binding" }, { "$ref": "#/$defs/deployBinding" }] }
+      ],
+      "items": false
+    },
+    "unboundEffectProfiles": { "const": ["LINE"] },
+    "stopRules": {
+      "const": [
+        "migration-0007-deferred",
+        "durable-authority-kernel-unavailable",
+        "all-effect-circuits-held",
+        "approval-consumption-disabled",
+        "outbox-claim-disabled",
+        "executors-unavailable",
+        "b10-effect-routes-unregistered",
+        "network-provider-and-message-io-disabled"
+      ]
+    }
+  },
+  "$defs": {
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actionKind",
+        "circuitName",
+        "effectProfile",
+        "actionClass",
+        "approvalSchemaVersion",
+        "executorRole",
+        "circuitState",
+        "effectState",
+        "enabled",
+        "executorAvailable",
+        "routeRegistered"
+      ],
+      "properties": {
+        "actionKind": {
+          "enum": [
+            "INSTALL",
+            "RESOURCE_CLEANUP",
+            "CONNECTOR_ACTIVATION",
+            "PROVIDER_CALL",
+            "QUEUE_MUTATION",
+            "A2A_EGRESS",
+            "LIVE_SEND",
+            "PUSH",
+            "MERGE",
+            "PRODUCTION_MIGRATION",
+            "CLOUDFLARE_MUTATION",
+            "DEPLOY"
+          ]
+        },
+        "circuitName": {
+          "enum": [
+            "install",
+            "resource_cleanup",
+            "connector_activation",
+            "provider_call",
+            "queue_mutation",
+            "a2a_egress",
+            "telegram_send",
+            "customer_messaging",
+            "push",
+            "merge",
+            "production_migration",
+            "cloudflare_mutation",
+            "deploy"
+          ]
+        },
+        "effectProfile": {
+          "enum": [
+            "INSTALL",
+            "RESOURCE_CLEANUP",
+            "CONNECTOR_ACTIVATION",
+            "PROVIDER_CALL",
+            "QUEUE_MUTATION",
+            "A2A_EGRESS",
+            "TELEGRAM",
+            "CUSTOMER_MESSAGING",
+            "PUSH",
+            "MERGE",
+            "PRODUCTION_MIGRATION",
+            "CLOUDFLARE_MUTATION",
+            "DEPLOY"
+          ]
+        },
+        "actionClass": { "enum": ["C", "D"] },
+        "approvalSchemaVersion": { "const": "2.0" },
+        "executorRole": {
+          "type": "string",
+          "pattern": "^sirinx_agent_runtime_[a-z0-9_]+_executor$",
+          "maxLength": 128
+        },
+        "circuitState": { "const": "HOLD" },
+        "effectState": { "const": "PREPARED" },
+        "enabled": { "const": false },
+        "executorAvailable": { "const": false },
+        "routeRegistered": { "const": false }
+      },
+      "allOf": [
+        {
+          "oneOf": [
+            { "$ref": "#/$defs/installBinding" },
+            { "$ref": "#/$defs/cleanupBinding" },
+            { "$ref": "#/$defs/connectorBinding" },
+            { "$ref": "#/$defs/providerBinding" },
+            { "$ref": "#/$defs/queueBinding" },
+            { "$ref": "#/$defs/a2aBinding" },
+            { "$ref": "#/$defs/telegramBinding" },
+            { "$ref": "#/$defs/customerBinding" },
+            { "$ref": "#/$defs/pushBinding" },
+            { "$ref": "#/$defs/mergeBinding" },
+            { "$ref": "#/$defs/migrationBinding" },
+            { "$ref": "#/$defs/cloudflareBinding" },
+            { "$ref": "#/$defs/deployBinding" }
+          ]
+        }
+      ]
+    },
+    "installBinding": { "type": "object", "properties": { "actionKind": { "const": "INSTALL" }, "actionClass": { "const": "D" }, "circuitName": { "const": "install" }, "effectProfile": { "const": "INSTALL" }, "executorRole": { "const": "sirinx_agent_runtime_install_executor" } } },
+    "cleanupBinding": { "type": "object", "properties": { "actionKind": { "const": "RESOURCE_CLEANUP" }, "actionClass": { "const": "C" }, "circuitName": { "const": "resource_cleanup" }, "effectProfile": { "const": "RESOURCE_CLEANUP" }, "executorRole": { "const": "sirinx_agent_runtime_resource_cleanup_executor" } } },
+    "connectorBinding": { "type": "object", "properties": { "actionKind": { "const": "CONNECTOR_ACTIVATION" }, "actionClass": { "const": "D" }, "circuitName": { "const": "connector_activation" }, "effectProfile": { "const": "CONNECTOR_ACTIVATION" }, "executorRole": { "const": "sirinx_agent_runtime_connector_activation_executor" } } },
+    "providerBinding": { "type": "object", "properties": { "actionKind": { "const": "PROVIDER_CALL" }, "actionClass": { "const": "D" }, "circuitName": { "const": "provider_call" }, "effectProfile": { "const": "PROVIDER_CALL" }, "executorRole": { "const": "sirinx_agent_runtime_provider_call_executor" } } },
+    "queueBinding": { "type": "object", "properties": { "actionKind": { "const": "QUEUE_MUTATION" }, "actionClass": { "const": "D" }, "circuitName": { "const": "queue_mutation" }, "effectProfile": { "const": "QUEUE_MUTATION" }, "executorRole": { "const": "sirinx_agent_runtime_queue_mutation_executor" } } },
+    "a2aBinding": { "type": "object", "properties": { "actionKind": { "const": "A2A_EGRESS" }, "actionClass": { "const": "D" }, "circuitName": { "const": "a2a_egress" }, "effectProfile": { "const": "A2A_EGRESS" }, "executorRole": { "const": "sirinx_agent_runtime_a2a_egress_executor" } } },
+    "telegramBinding": { "type": "object", "properties": { "actionKind": { "const": "LIVE_SEND" }, "actionClass": { "const": "D" }, "circuitName": { "const": "telegram_send" }, "effectProfile": { "const": "TELEGRAM" }, "executorRole": { "const": "sirinx_agent_runtime_telegram_send_executor" } } },
+    "customerBinding": { "type": "object", "properties": { "actionKind": { "const": "LIVE_SEND" }, "actionClass": { "const": "D" }, "circuitName": { "const": "customer_messaging" }, "effectProfile": { "const": "CUSTOMER_MESSAGING" }, "executorRole": { "const": "sirinx_agent_runtime_customer_messaging_executor" } } },
+    "pushBinding": { "type": "object", "properties": { "actionKind": { "const": "PUSH" }, "actionClass": { "const": "D" }, "circuitName": { "const": "push" }, "effectProfile": { "const": "PUSH" }, "executorRole": { "const": "sirinx_agent_runtime_push_executor" } } },
+    "mergeBinding": { "type": "object", "properties": { "actionKind": { "const": "MERGE" }, "actionClass": { "const": "D" }, "circuitName": { "const": "merge" }, "effectProfile": { "const": "MERGE" }, "executorRole": { "const": "sirinx_agent_runtime_merge_executor" } } },
+    "migrationBinding": { "type": "object", "properties": { "actionKind": { "const": "PRODUCTION_MIGRATION" }, "actionClass": { "const": "D" }, "circuitName": { "const": "production_migration" }, "effectProfile": { "const": "PRODUCTION_MIGRATION" }, "executorRole": { "const": "sirinx_agent_runtime_production_migration_executor" } } },
+    "cloudflareBinding": { "type": "object", "properties": { "actionKind": { "const": "CLOUDFLARE_MUTATION" }, "actionClass": { "const": "D" }, "circuitName": { "const": "cloudflare_mutation" }, "effectProfile": { "const": "CLOUDFLARE_MUTATION" }, "executorRole": { "const": "sirinx_agent_runtime_cloudflare_mutation_executor" } } },
+    "deployBinding": { "type": "object", "properties": { "actionKind": { "const": "DEPLOY" }, "actionClass": { "const": "D" }, "circuitName": { "const": "deploy" }, "effectProfile": { "const": "DEPLOY" }, "executorRole": { "const": "sirinx_agent_runtime_deploy_executor" } } }
+  }
+}

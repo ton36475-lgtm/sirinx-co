@@ -1,0 +1,265 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/agent-runtime/b10-compatibility-surface-inventory.v1.schema.json",
+  "title": "SIRINX B10.1 compatibility surface inventory v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "baseline",
+    "scope",
+    "contractPins",
+    "sourcePins",
+    "surfaces",
+    "documentationHazards",
+    "expectedSummary",
+    "proofFlags"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "status": { "const": "STATIC_INVENTORY_VALIDATED_NOT_QUARANTINED" },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "branch", "head", "workingTree", "resourceAdmission"],
+      "properties": {
+        "repository": { "const": "ton36475-lgtm/sirinx-co" },
+        "branch": { "const": "agent/b1-b2-command-center" },
+        "head": { "const": "1f05814c3e9d173e525234d69b3ce7f2d1b01a57" },
+        "workingTree": { "const": "DIRTY_WORKING_TREE_BYTES_PINNED_INDIVIDUALLY" },
+        "resourceAdmission": { "const": "HOLD_BELOW_15_GIB" }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["includedFamilies", "explicitExclusions", "claimCeiling"],
+      "properties": {
+        "includedFamilies": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "rust-action-a2a-queue-readiness" },
+            { "const": "node-a2a-omniroute-to-telegram" },
+            { "const": "telegram-http-direct-helper-and-injected-gate" }
+          ],
+          "items": false,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "explicitExclusions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "claimCeiling": { "const": "DESIGNATED_B10_1_SURFACES_ACCOUNTED_ONLY" }
+      }
+    },
+    "contractPins": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "refusalFixturePath",
+        "refusalFixtureSha256",
+        "refusalSchemaPath",
+        "refusalSchemaSha256",
+        "a27ManifestPath",
+        "a27RawSha256",
+        "a27DomainSeparatedDigest"
+      ],
+      "properties": {
+        "refusalFixturePath": { "const": "config/agent-runtime/durable-authority-unavailable.v1.json" },
+        "refusalFixtureSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "refusalSchemaPath": { "const": "schemas/agent-runtime/durable-authority-unavailable.v1.schema.json" },
+        "refusalSchemaSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "a27ManifestPath": { "const": "config/agent-runtime/action-circuits.plan-only.v1.json" },
+        "a27RawSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "a27DomainSeparatedDigest": {
+          "const": "b2421996825817400d31f88757843225403ed2080541812c4db889e1ffe3cbb0"
+        }
+      }
+    },
+    "sourcePins": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256", "kind"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$" },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "kind": {
+            "enum": ["RUNTIME", "TEST", "STORE", "MIGRATION", "DOCUMENTATION"]
+          }
+        }
+      }
+    },
+    "surfaces": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/surface" }
+    },
+    "documentationHazards": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "path", "requiredMarker", "risk", "requiredRemediation", "resolved"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "path": { "type": "string", "minLength": 1 },
+          "requiredMarker": { "type": "string", "minLength": 1 },
+          "risk": { "type": "string", "minLength": 1 },
+          "requiredRemediation": { "type": "string", "minLength": 1 },
+          "resolved": { "const": false }
+        }
+      }
+    },
+    "expectedSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surfaceCount", "sourcePinCount", "documentationHazardCount", "byClassification"],
+      "properties": {
+        "surfaceCount": { "const": 39 },
+        "sourcePinCount": { "const": 28 },
+        "documentationHazardCount": { "const": 1 },
+        "byClassification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "SHARED_REFUSAL_REQUIRED",
+            "STATUS_REWRITE_REQUIRED",
+            "DERIVED_EFFECT_SUPPRESSION_REQUIRED",
+            "LEGACY_CONTROL_RESTRICT_ONLY",
+            "DATA_EGRESS_REVIEW_REQUIRED",
+            "STATUS_ONLY_ALLOWED"
+          ],
+          "properties": {
+            "SHARED_REFUSAL_REQUIRED": { "const": 17 },
+            "STATUS_REWRITE_REQUIRED": { "const": 18 },
+            "DERIVED_EFFECT_SUPPRESSION_REQUIRED": { "const": 1 },
+            "LEGACY_CONTROL_RESTRICT_ONLY": { "const": 1 },
+            "DATA_EGRESS_REVIEW_REQUIRED": { "const": 1 },
+            "STATUS_ONLY_ALLOWED": { "const": 1 }
+          }
+        }
+      }
+    },
+    "proofFlags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runtimeQuarantineImplemented",
+        "durableAuthorityAvailable",
+        "migration0007Present",
+        "canDispatch",
+        "canRegisterPeer",
+        "canRoutePeer",
+        "canMutateQueue",
+        "canCallProvider",
+        "canSendMessage",
+        "mcpConnected",
+        "a2aLive",
+        "productionReady"
+      ],
+      "properties": {
+        "runtimeQuarantineImplemented": { "const": false },
+        "durableAuthorityAvailable": { "const": false },
+        "migration0007Present": { "const": false },
+        "canDispatch": { "const": false },
+        "canRegisterPeer": { "const": false },
+        "canRoutePeer": { "const": false },
+        "canMutateQueue": { "const": false },
+        "canCallProvider": { "const": false },
+        "canSendMessage": { "const": false },
+        "mcpConnected": { "const": false },
+        "a2aLive": { "const": false },
+        "productionReady": { "const": false }
+      }
+    }
+  },
+  "$defs": {
+    "surface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "layer",
+        "entryKind",
+        "sourcePath",
+        "locator",
+        "classification",
+        "effectProfiles",
+        "currentRisk",
+        "currentUnsafeBehaviorPresent",
+        "requiredBoundary",
+        "quarantineImplemented",
+        "durableAuthorityAvailable",
+        "runtimeVerified",
+        "requiredSourceMarkers",
+        "evidenceTestPath",
+        "requiredTestMarkers",
+        "dependencies"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+        "layer": { "enum": ["RUST_CONTROL", "NODE_CONTROL", "TELEGRAM"] },
+        "entryKind": { "enum": ["HTTP_ROUTE", "EXPORTED_FUNCTION", "COMPOSITION_SEAM"] },
+        "sourcePath": { "type": "string", "minLength": 1 },
+        "locator": { "type": "string", "minLength": 1 },
+        "classification": {
+          "enum": [
+            "SHARED_REFUSAL_REQUIRED",
+            "STATUS_REWRITE_REQUIRED",
+            "DERIVED_EFFECT_SUPPRESSION_REQUIRED",
+            "LEGACY_CONTROL_RESTRICT_ONLY",
+            "DATA_EGRESS_REVIEW_REQUIRED",
+            "STATUS_ONLY_ALLOWED"
+          ]
+        },
+        "effectProfiles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" }
+        },
+        "currentRisk": { "type": "string", "minLength": 1 },
+        "currentUnsafeBehaviorPresent": { "type": "boolean" },
+        "requiredBoundary": {
+          "enum": [
+            "SHARED_503_BEFORE_ANY_EFFECT_SEAM",
+            "SUPPRESS_DERIVED_EFFECT_PRESERVE_PRIMARY_WRITE",
+            "LEGACY_HOLD_ONLY_OPEN_NONAUTHORITATIVE",
+            "FORCE_FALSE_AUTHORITY_PROJECTION",
+            "SEPARATE_READ_ADMISSION_REQUIRED",
+            "NONAUTHORITATIVE_SELF_DESCRIPTION_ONLY"
+          ]
+        },
+        "quarantineImplemented": { "const": false },
+        "durableAuthorityAvailable": { "const": false },
+        "runtimeVerified": { "const": false },
+        "requiredSourceMarkers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "evidenceTestPath": { "type": ["string", "null"] },
+        "requiredTestMarkers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "dependencies": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" }
+        }
+      }
+    }
+  }
+}

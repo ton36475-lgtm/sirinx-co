@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/resource-cleanup-action-time-evidence.v1.schema.json",
+  "title": "ResourceCleanupActionTimeEvidenceV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "evidenceId",
+    "ticketId",
+    "grantId",
+    "taskId",
+    "runId",
+    "action",
+    "circuit",
+    "collectedAt",
+    "grantBinding",
+    "repository",
+    "targetManifest",
+    "processEvidence",
+    "executableIdentity",
+    "executor",
+    "lease",
+    "circuitSnapshot",
+    "replaySnapshot",
+    "operation",
+    "resources",
+    "recovery",
+    "evidenceDigest",
+    "status"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0-plan" },
+    "evidenceId": { "type": "string", "pattern": "^RCAE-[A-Za-z0-9._-]+$" },
+    "ticketId": { "type": "string", "pattern": "^TKT-[A-Za-z0-9._-]+$" },
+    "grantId": { "type": "string", "pattern": "^GRANT-[A-Za-z0-9._-]+$" },
+    "taskId": { "type": "string", "pattern": "^TASK-[A-Za-z0-9._-]+$" },
+    "runId": { "type": "string", "pattern": "^RUN-[A-Za-z0-9._-]+$" },
+    "action": { "const": "RESOURCE_CLEANUP" },
+    "circuit": { "const": "resource_cleanup" },
+    "collectedAt": { "type": "string", "format": "date-time" },
+    "grantBinding": { "$ref": "#/$defs/grantBinding" },
+    "repository": { "$ref": "#/$defs/repository" },
+    "targetManifest": { "$ref": "target-manifest.v1.schema.json" },
+    "processEvidence": { "$ref": "process-evidence.v1.schema.json" },
+    "executableIdentity": { "$ref": "executable-identity.v1.schema.json" },
+    "executor": { "$ref": "#/$defs/executor" },
+    "lease": { "$ref": "#/$defs/lease" },
+    "circuitSnapshot": { "$ref": "#/$defs/circuitSnapshot" },
+    "replaySnapshot": { "$ref": "#/$defs/replaySnapshot" },
+    "operation": { "$ref": "#/$defs/operation" },
+    "resources": { "$ref": "#/$defs/resources" },
+    "recovery": { "$ref": "#/$defs/recovery" },
+    "evidenceDigest": { "$ref": "#/$defs/sha256" },
+    "status": { "const": "STRUCTURALLY_VERIFIED_ONLY" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "grantBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "planHash",
+        "scopeHash",
+        "actionDigest",
+        "nonceDigest",
+        "proposalManifestDigest",
+        "proposalProcessEvidenceDigest",
+        "issuedAt",
+        "expiresAt"
+      ],
+      "properties": {
+        "planHash": { "$ref": "#/$defs/sha256" },
+        "scopeHash": { "$ref": "#/$defs/sha256" },
+        "actionDigest": { "$ref": "#/$defs/sha256" },
+        "nonceDigest": { "$ref": "#/$defs/sha256" },
+        "proposalManifestDigest": { "$ref": "#/$defs/sha256" },
+        "proposalProcessEvidenceDigest": { "$ref": "#/$defs/sha256" },
+        "issuedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "branch",
+        "commitSha",
+        "worktreeSnapshotVersion",
+        "baselineWorktreeSnapshotDigest",
+        "currentWorktreeSnapshotDigest"
+      ],
+      "properties": {
+        "path": { "const": "/Users/sirinx/SIRINXDev/sirinx-co" },
+        "branch": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "commitSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "worktreeSnapshotVersion": { "const": "1.0" },
+        "baselineWorktreeSnapshotDigest": { "$ref": "#/$defs/sha256" },
+        "currentWorktreeSnapshotDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "executor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "principalId",
+        "binaryIdentityDigest",
+        "hostAttestationDigest",
+        "capabilities",
+        "networkDenied",
+        "available"
+      ],
+      "properties": {
+        "principalId": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "binaryIdentityDigest": { "$ref": "#/$defs/sha256" },
+        "hostAttestationDigest": { "$ref": "#/$defs/sha256" },
+        "capabilities": {
+          "type": "array",
+          "const": ["RESOURCE_CLEANUP"]
+        },
+        "networkDenied": { "const": true },
+        "available": { "const": false }
+      }
+    },
+    "lease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "leaseId",
+        "taskId",
+        "runId",
+        "grantId",
+        "executorPrincipalId",
+        "state",
+        "path",
+        "resource",
+        "nonceDigest",
+        "expiresAt"
+      ],
+      "properties": {
+        "leaseId": { "type": "string", "pattern": "^LEASE-[A-Za-z0-9._-]+$" },
+        "taskId": { "type": "string", "pattern": "^TASK-[A-Za-z0-9._-]+$" },
+        "runId": { "type": "string", "pattern": "^RUN-[A-Za-z0-9._-]+$" },
+        "grantId": { "type": "string", "pattern": "^GRANT-[A-Za-z0-9._-]+$" },
+        "executorPrincipalId": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "state": { "const": "ACTIVE" },
+        "path": { "const": "/Users/sirinx/SIRINXDev/sirinx-co/target" },
+        "resource": { "const": "resource_cleanup:/Users/sirinx/SIRINXDev/sirinx-co/target" },
+        "nonceDigest": { "$ref": "#/$defs/sha256" },
+        "expiresAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "circuitSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["circuit", "state", "backend", "durable", "observedAt", "version", "snapshotDigest"],
+      "properties": {
+        "circuit": { "const": "resource_cleanup" },
+        "state": { "enum": ["HOLD", "OPEN"] },
+        "backend": { "const": "POSTGRES" },
+        "durable": { "const": true },
+        "observedAt": { "type": "string", "format": "date-time" },
+        "version": { "type": "integer", "minimum": 1 },
+        "snapshotDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "replaySnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grantState",
+        "nonceState",
+        "consumedAt",
+        "expectedVersion",
+        "observedAt",
+        "snapshotDigest",
+        "authoritative",
+        "status"
+      ],
+      "properties": {
+        "grantState": { "const": "ACTIVE" },
+        "nonceState": { "const": "UNUSED" },
+        "consumedAt": { "const": null },
+        "expectedVersion": { "type": "integer", "minimum": 1 },
+        "observedAt": { "type": "string", "format": "date-time" },
+        "snapshotDigest": { "$ref": "#/$defs/sha256" }
+        ,"authoritative": { "const": false }
+        ,"status": { "const": "STRUCTURAL_ONLY_NO_REPLAY_AUTHORITY" }
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parametersDigest", "environmentDigest", "exactToolchainEnvironment"],
+      "properties": {
+        "parametersDigest": { "$ref": "#/$defs/sha256" },
+        "environmentDigest": { "$ref": "#/$defs/sha256" },
+        "exactToolchainEnvironment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "value", "includedInPlanDigest"],
+          "properties": {
+            "name": { "const": "RUSTUP_TOOLCHAIN" },
+            "value": { "type": "string", "minLength": 1, "maxLength": 256 },
+            "includedInPlanDigest": { "const": false }
+          }
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "filesystemDeviceId",
+        "currentFreeKiB",
+        "targetAllocatedKiB",
+        "worstCaseCleanupGrowthKiB",
+        "projectedMinimumFreeKiB"
+      ],
+      "properties": {
+        "filesystemDeviceId": { "type": "integer", "minimum": 0 },
+        "currentFreeKiB": { "type": "integer", "minimum": 0 },
+        "targetAllocatedKiB": { "type": "integer", "minimum": 0 },
+        "worstCaseCleanupGrowthKiB": { "type": "integer", "minimum": 0 },
+        "projectedMinimumFreeKiB": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceDigest",
+        "procedureDigest",
+        "networkRequired",
+        "installRequired",
+        "verifiedAt",
+        "checkerReceiptId"
+      ],
+      "properties": {
+        "sourceDigest": { "$ref": "#/$defs/sha256" },
+        "procedureDigest": { "$ref": "#/$defs/sha256" },
+        "networkRequired": { "const": false },
+        "installRequired": { "const": false },
+        "verifiedAt": { "type": "string", "format": "date-time" },
+        "checkerReceiptId": { "type": "string", "pattern": "^RECEIPT-[A-Za-z0-9._-]+$" }
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.dev/schemas/agentic-fabric/agent-registration.v1.schema.json",
+  "title": "AgentRegistration",
+  "type": "object",
+  "required": ["schema_version", "agent_id", "agent_instance", "principal", "roles", "issued_at", "expires_at", "grant_ref"],
+  "properties": {
+    "schema_version": {"const": "agentic-fabric.agent-registration.v1"},
+    "agent_id": {"type": "string", "pattern": "^agent-[0-9a-fA-F-]+$"},
+    "agent_instance": {"type": "string", "minLength": 1},
+    "principal": {"type": "string", "minLength": 1},
+    "roles": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "provider": {"type": "string"},
+    "model_id": {"type": "string"},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "grant_ref": {"type": "string", "format": "uri-reference"},
+    "source_receipts": {
+      "type": "array",
+      "items": {"type": "string", "format": "uri-reference"}
+    }
+  },
+  "additionalProperties": false
+}

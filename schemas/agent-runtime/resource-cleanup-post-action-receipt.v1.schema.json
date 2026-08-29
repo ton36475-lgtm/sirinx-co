@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/resource-cleanup-post-action-receipt.v1.schema.json",
+  "title": "ResourceCleanupPostActionReceiptV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "receiptId",
+    "artifactId",
+    "attemptId",
+    "effectKey",
+    "ticketId",
+    "grantId",
+    "taskId",
+    "runId",
+    "action",
+    "circuit",
+    "verdict",
+    "effectState",
+    "bindings",
+    "effect",
+    "after",
+    "verification",
+    "createdAt",
+    "receiptDigest"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "status": { "const": "STRUCTURAL_ONLY_NO_AUTHORITY" },
+    "receiptId": { "type": "string", "pattern": "^RECEIPT-[A-Za-z0-9._-]+$" },
+    "artifactId": { "type": "string", "pattern": "^ARTIFACT-[A-Za-z0-9._-]+$" },
+    "attemptId": { "type": "string", "pattern": "^ATTEMPT-[A-Za-z0-9._-]+$" },
+    "effectKey": { "type": "string", "pattern": "^resource_cleanup:[A-Za-z0-9._:-]+$", "maxLength": 256 },
+    "ticketId": { "type": "string", "pattern": "^TKT-[A-Za-z0-9._-]+$" },
+    "grantId": { "type": "string", "pattern": "^GRANT-[A-Za-z0-9._-]+$" },
+    "taskId": { "type": "string", "pattern": "^TASK-[A-Za-z0-9._-]+$" },
+    "runId": { "type": "string", "pattern": "^RUN-[A-Za-z0-9._-]+$" },
+    "action": { "const": "RESOURCE_CLEANUP" },
+    "circuit": { "const": "resource_cleanup" },
+    "verdict": { "enum": ["PASS", "FAIL", "BLOCKED", "CANCELED", "EFFECT_UNKNOWN"] },
+    "effectState": { "enum": ["CONFIRMED", "FAILED", "BLOCKED", "CANCELED", "EFFECT_UNKNOWN"] },
+    "bindings": { "$ref": "#/$defs/bindings" },
+    "effect": { "$ref": "#/$defs/effect" },
+    "after": { "$ref": "#/$defs/after" },
+    "verification": { "$ref": "#/$defs/verification" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "receiptDigest": { "$ref": "#/$defs/sha256" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "type": "object",
+        "properties": { "verdict": { "const": "PASS" } }
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "effectState": { "const": "CONFIRMED" },
+          "effect": {
+            "type": "object",
+            "properties": {
+              "exitCode": { "const": 0 },
+              "signal": { "const": null },
+              "outputTruncated": { "const": false },
+              "timedOut": { "const": false },
+              "interruptionObserved": { "const": false }
+            }
+          },
+          "after": {
+            "type": "object",
+            "properties": {
+              "excludedPathsUnchanged": { "const": true },
+              "worktreeUnchanged": { "const": true },
+              "processEvidenceComplete": { "const": true },
+              "thresholdSatisfied": { "const": true },
+              "minReclaimSatisfied": { "const": true },
+              "impactBounded": { "const": true }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "planHash",
+        "scopeHash",
+        "actionDigest",
+        "admissionDigest",
+        "nonceDigest",
+        "executableIdentityDigest",
+        "beforeManifestDigest",
+        "beforeProcessDigest",
+        "beforeWorktreeDigest"
+      ],
+      "properties": {
+        "planHash": { "$ref": "#/$defs/sha256" },
+        "scopeHash": { "$ref": "#/$defs/sha256" },
+        "actionDigest": { "$ref": "#/$defs/sha256" },
+        "admissionDigest": { "$ref": "#/$defs/sha256" },
+        "nonceDigest": { "$ref": "#/$defs/sha256" },
+        "executableIdentityDigest": { "$ref": "#/$defs/sha256" },
+        "beforeManifestDigest": { "$ref": "#/$defs/sha256" },
+        "beforeProcessDigest": { "$ref": "#/$defs/sha256" },
+        "beforeWorktreeDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operationParametersDigest",
+        "environmentDigest",
+        "startedAt",
+        "endedAt",
+        "pid",
+        "processStartTime",
+        "exitCode",
+        "signal",
+        "stdoutDigest",
+        "stdoutBytes",
+        "stderrDigest",
+        "stderrBytes",
+        "outputTruncated",
+        "timedOut",
+        "interruptionObserved"
+      ],
+      "properties": {
+        "operationParametersDigest": { "$ref": "#/$defs/sha256" },
+        "environmentDigest": { "$ref": "#/$defs/sha256" },
+        "startedAt": { "type": ["string", "null"], "format": "date-time" },
+        "endedAt": { "type": ["string", "null"], "format": "date-time" },
+        "pid": { "type": ["integer", "null"], "minimum": 1 },
+        "processStartTime": { "type": ["string", "null"], "format": "date-time" },
+        "exitCode": { "type": ["integer", "null"], "minimum": 0, "maximum": 255 },
+        "signal": { "type": ["string", "null"], "maxLength": 64 },
+        "stdoutDigest": { "$ref": "#/$defs/sha256" },
+        "stdoutBytes": { "type": "integer", "minimum": 0, "maximum": 1048576 },
+        "stderrDigest": { "$ref": "#/$defs/sha256" },
+        "stderrBytes": { "type": "integer", "minimum": 0, "maximum": 1048576 },
+        "outputTruncated": { "type": "boolean" },
+        "timedOut": { "type": "boolean" },
+        "interruptionObserved": { "type": "boolean" }
+      }
+    },
+    "after": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observedAt",
+        "filesystemDeviceId",
+        "targetPath",
+        "targetExists",
+        "targetDeviceId",
+        "targetInode",
+        "targetManifestDigest",
+        "targetAllocatedKiB",
+        "currentFreeKiB",
+        "actualAffectedKiB",
+        "actualReclaimedKiB",
+        "processEvidenceDigest",
+        "worktreeSnapshotDigest",
+        "exclusionsDigest",
+        "excludedPathsUnchanged",
+        "worktreeUnchanged",
+        "processEvidenceComplete",
+        "thresholdSatisfied",
+        "minReclaimSatisfied",
+        "impactBounded"
+      ],
+      "properties": {
+        "observedAt": { "type": "string", "format": "date-time" },
+        "filesystemDeviceId": { "type": "integer", "minimum": 0 },
+        "targetPath": { "const": "/Users/sirinx/SIRINXDev/sirinx-co/target" },
+        "targetExists": { "type": "boolean" },
+        "targetDeviceId": { "type": ["integer", "null"], "minimum": 0 },
+        "targetInode": { "type": ["integer", "null"], "minimum": 1 },
+        "targetManifestDigest": {
+          "anyOf": [
+            { "$ref": "#/$defs/sha256" },
+            { "type": "null" }
+          ]
+        },
+        "targetAllocatedKiB": { "type": "integer", "minimum": 0 },
+        "currentFreeKiB": { "type": "integer", "minimum": 0 },
+        "actualAffectedKiB": { "type": "integer", "minimum": 0 },
+        "actualReclaimedKiB": { "type": "integer", "minimum": 0 },
+        "processEvidenceDigest": { "$ref": "#/$defs/sha256" },
+        "worktreeSnapshotDigest": { "$ref": "#/$defs/sha256" },
+        "exclusionsDigest": { "$ref": "#/$defs/sha256" },
+        "excludedPathsUnchanged": { "type": "boolean" },
+        "worktreeUnchanged": { "type": "boolean" },
+        "processEvidenceComplete": { "type": "boolean" },
+        "thresholdSatisfied": { "type": "boolean" },
+        "minReclaimSatisfied": { "type": "boolean" },
+        "impactBounded": { "type": "boolean" }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "makerPrincipalId",
+        "checkerPrincipalId",
+        "principalsDistinct",
+        "verificationReceiptId",
+        "evidenceDigest"
+      ],
+      "properties": {
+        "makerPrincipalId": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "checkerPrincipalId": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "principalsDistinct": { "const": true },
+        "verificationReceiptId": { "type": "string", "pattern": "^RECEIPT-[A-Za-z0-9._-]+$" },
+        "evidenceDigest": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  }
+}

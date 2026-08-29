@@ -77,6 +77,28 @@ function makeQwenOpenRouterLane() {
   };
 }
 
+function makeKimiK3OpenRouterLane() {
+  return {
+    id: "kimi-k3-openrouter",
+    title: "Kimi K3 via OpenRouter",
+    provider: "OpenRouter",
+    modelId: "moonshotai/kimi-k3",
+    status: "approval-required-paid-api",
+    role: "official Moonshot flagship lane shared by all agent teams: long-horizon coding, 1M-context synthesis, and multi-agent coordination",
+    contextWindow: 1048576,
+    source: "https://openrouter.ai/moonshotai/kimi-k3/api",
+    sourceVerification: "official-moonshot-k3-launch-2026-07-16",
+    paidApiRequired: true,
+    apiKeyEnvName: "OPENROUTER_API_KEY",
+    canCallProvider: false,
+    canReadApiKey: false,
+    autoExecute: false,
+    commandExecuted: false,
+    allowedUse: "Planning and approval packet only until explicit provider-call approval exists; once approved this lane is available to every agent team.",
+    blockedActions: teamRuntimeBridgeBlockedActions
+  };
+}
+
 function makeLocalQwenFallbackLane(localModels) {
   const observed = localModels.includes("qwen3.6:latest");
 
@@ -228,7 +250,7 @@ function makeOpenRouterQwenAdapterSummary(adapter) {
 export async function getTeamRuntimeBridgeStatus(options = {}) {
   const localModels = Array.isArray(options.localModels) ? options.localModels.map(String) : [];
   const runtimeLanes = makeRuntimeLanes(options);
-  const modelLanes = [makeQwenOpenRouterLane(), makeLocalQwenFallbackLane(localModels)];
+  const modelLanes = [makeQwenOpenRouterLane(), makeKimiK3OpenRouterLane(), makeLocalQwenFallbackLane(localModels)];
   const aiTeamPairing = await getAiTeamPairingStatus(options);
   const openRouterQwenAdapter = getOpenRouterQwenAdapterStatus(options);
 

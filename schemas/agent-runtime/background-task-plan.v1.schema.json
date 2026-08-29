@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/agent-runtime/background-task-plan.v1.schema.json",
+  "title": "BackgroundTaskPlanV1_1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "enabled", "maxConcurrentTasks", "tasks"],
+  "properties": {
+    "schemaVersion": { "const": "1.1" },
+    "status": { "const": "PLAN_ONLY" },
+    "enabled": { "const": false },
+    "maxConcurrentTasks": { "const": 1 },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/task" }
+    }
+  },
+  "$defs": {
+    "nonEmptyUniqueStrings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "roleAssignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["roleId", "cardId", "functionalRoleId", "contributionOutputs", "cadence"],
+      "properties": {
+        "roleId": { "type": "integer", "minimum": 1, "maximum": 47 },
+        "cardId": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$" },
+        "functionalRoleId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*(?:\\.[a-z][a-z0-9-]*)+$" },
+        "contributionOutputs": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+        "cadence": { "type": "string", "minLength": 1 }
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "enabled",
+        "mode",
+        "purpose",
+        "roleAssignments",
+        "cadence",
+        "maxRuntimeSeconds",
+        "maxSteps",
+        "outputs",
+        "prohibitedActions",
+        "activationGate",
+        "stopConditions"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "enabled": { "const": false },
+        "mode": { "enum": ["READ_ONLY", "PROPOSAL_ONLY"] },
+        "purpose": { "type": "string", "minLength": 1 },
+        "roleAssignments": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/roleAssignment" }
+        },
+        "cadence": { "type": "string", "minLength": 1 },
+        "maxRuntimeSeconds": { "type": "integer", "minimum": 1, "maximum": 900 },
+        "maxSteps": { "type": "integer", "minimum": 1, "maximum": 50 },
+        "outputs": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+        "prohibitedActions": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+        "activationGate": { "type": "string", "minLength": 1 },
+        "stopConditions": { "$ref": "#/$defs/nonEmptyUniqueStrings" }
+      }
+    }
+  }
+}

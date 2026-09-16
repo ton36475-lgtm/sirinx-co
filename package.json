@@ -32,7 +32,7 @@
     "source-recovery",
     "ghostclaw"
   ],
-  "license": "UNLICENSED",
+  "license": "MIT",
   "devDependencies": {
     "vitest": "^2.1.9"
   }

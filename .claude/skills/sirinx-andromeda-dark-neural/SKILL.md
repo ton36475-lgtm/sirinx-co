@@ -6,6 +6,8 @@ description: >
   Triggers on: andromeda, dark neural, creator coder operator, neural fabric, 3-core
 ---
 
+> **Repo scope note (added 2026-07-20, B10 skill hygiene audit):** this skill's routes/files/architecture (Next.js `apps/sirinx-web`, OpenClaw, `/warroom`-style routes, etc.) describe the sibling **`sirinx-solar-energy`** repo, not this repo (`sirinx-co`, a Rust-crate monorepo). Treat file paths and route names below as reference material for that other codebase, not as claims about what exists here. For `sirinx-co`'s actual architecture, see `SYSTEM_ARCHITECTURE.md`, `docs/RONIN_ROSTER.md`, and `.claude/skills/ghostclaw-manager/SKILL.md`.
+
 # SIRINX Andromeda Dark Neural Fabric — v0.5
 
 **Mission:** Next-generation AI architecture ที่ขับเคลื่อน SIRINX ด้วย 3-core neural fabric

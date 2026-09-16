@@ -9,6 +9,7 @@ authors.workspace = true
 
 [dependencies]
 sirinx-core = { workspace = true }
+sirinx-a2a = { workspace = true }
 async-trait = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

@@ -14,30 +14,36 @@ description: >
 
 ## Model Registry
 
-### Production Models (2026 Q1)
+### Production Models (updated 2026-07-20 — see `ronin-model-routing`
+### skill for the authoritative lane config; this table is the
+### intelligence/benchmark view, not the router)
 
 | Model | Provider | Context | Thai | Speed | Cost |
 |-------|----------|---------|------|-------|------|
-| claude-sonnet-4-6 | Anthropic | 200K | Good | Fast | $$ |
-| claude-opus-4-6 | Anthropic | 200K | Good | Slow | $$$$ |
+| claude-sonnet-5 | Anthropic | 200K | Good | Fast | $$ |
+| claude-opus-4-8 | Anthropic | 200K | Good | Slow | $$$$ |
+| claude-fable-5 | Anthropic | 200K | Good | Fast (extra-effort capable) | $$ |
 | claude-haiku-4-5 | Anthropic | 200K | OK | Fast | $ |
-| qwen-max | Alibaba | 32K | Excellent | Fast | $$ |
-| qwen-turbo | Alibaba | 128K | Excellent | VFast | $ |
-| deepseek-r1 | DeepSeek | 64K | Good | Medium | $ |
-| deepseek-v3 | DeepSeek | 128K | Good | Fast | $ |
-| gemini-2.0-flash | Google | 1M | Good | VFast | $ |
+| glm-5.2 (cointh.com proxy) | Zhipu, via 3rd-party proxy | — | Good | Fast | $ — see `ronin-model-routing` approval gate |
+| cloudflare-workers-ai | Cloudflare | model-dependent | Varies | VFast | Free tier — see `ronin-model-routing` approval gate |
+
+Superseded: `claude-sonnet-4-6`, `claude-opus-4-6` are prior-generation
+IDs and are no longer the current family; qwen/deepseek/gemini rows
+from the original stub were never wired to a real lane in this repo —
+removed rather than left as unverified claims. If a future model
+lane is actually implemented, add it here **and** to
+`ronin-model-routing`'s lane table in the same commit.
 
 ### Model Assignment (47 Ronin Layers)
 
 | Layer | Recommended Model | Reason |
 |-------|------------------|--------|
 | L1 Perception | claude-haiku-4-5 | Fast, cheap, structured output |
-| L2 Analysis | claude-sonnet-4-6 | Balance cost/quality |
-| L3 Decision | claude-sonnet-4-6 | Reasoning required |
-| L4 Coordination | claude-opus-4-6 | Complex orchestration |
-| L5 Research | gemini-2.0-flash | Long context needed |
-| Thai Content | qwen-max | Best Thai language |
-| Math/Finance | deepseek-r1 | Superior reasoning |
+| L2 Analysis | claude-sonnet-5 | Balance cost/quality |
+| L3 Decision | claude-sonnet-5 | Reasoning required |
+| L4 Coordination | claude-opus-4-8 | Complex orchestration, hard-coding tasks |
+| L5 Research | claude-sonnet-5 | Advisory research, no long-context lane wired yet |
+| QA / post-limit-reset verification | claude-fable-5 | Cheapest reliable pass right after a usage-window reset |
 
 ## Benchmark Metrics
 
@@ -55,4 +61,6 @@ description: >
 
 ## Status
 
-🚧 **Stub** — Registry defined, ต้องการ automated benchmark pipeline
+✅ **Current** (as of 2026-07-20, B10 skill hygiene audit) — Model registry and lane
+mapping reflect `ronin-model-routing`'s live config. Only the automated benchmark
+pipeline (auto-run on new model release → recommendation report) remains unbuilt.

@@ -6,6 +6,8 @@ description: >
   Triggers on: dashboard, warroom, CEO view, KPI, monitor, real-time, ดู status, overview
 ---
 
+> **Repo scope note (added 2026-07-20, B10 skill hygiene audit):** this skill's routes/files/architecture (Next.js `apps/sirinx-web`, OpenClaw, `/warroom`-style routes, etc.) describe the sibling **`sirinx-solar-energy`** repo, not this repo (`sirinx-co`, a Rust-crate monorepo). Treat file paths and route names below as reference material for that other codebase, not as claims about what exists here. For `sirinx-co`'s actual architecture, see `SYSTEM_ARCHITECTURE.md`, `docs/RONIN_ROSTER.md`, and `.claude/skills/ghostclaw-manager/SKILL.md`.
+
 # SIRINX Dashboard Orchestration — v1.0
 
 **Mission:** สร้าง unified WARROOM dashboard สำหรับ CEO ดู real-time status ทุก system ของ SIRINX

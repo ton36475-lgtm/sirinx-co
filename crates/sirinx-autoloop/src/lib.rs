@@ -13,7 +13,11 @@
 //!    autonomous loop can never spin unattended.
 
 pub mod loop_runner;
+pub mod recovery;
 pub mod tool;
 
 pub use loop_runner::{AutoLoop, LoopConfig, LoopError, LoopOutcome, StepRecord};
+pub use recovery::{
+    LearningSink, NullSink, RecoveryConfig, RecoveryLoop, RecoveryOutcome, RecoveryRecord,
+};
 pub use tool::{ApprovalGate, Tool, ToolError, ToolInvocation, ToolRegistry, ToolResult};

@@ -4,7 +4,10 @@ use std::sync::RwLock;
 use async_trait::async_trait;
 use uuid::Uuid;
 
-use sirinx_core::{AnalyticsEvent, Lead, LeadStatus, PendingWork};
+use sirinx_a2a::AgentCard;
+use sirinx_core::{
+    AnalyticsEvent, EventSummary, FailureRecord, GateRecord, Lead, LeadStatus, Lesson, PendingWork,
+};
 
 use crate::{Store, StoreError};
 
@@ -14,6 +17,10 @@ pub struct MemoryStore {
     leads: RwLock<HashMap<Uuid, Lead>>,
     events: RwLock<Vec<AnalyticsEvent>>,
     pending: RwLock<Vec<PendingWork>>,
+    gates: RwLock<HashMap<String, GateRecord>>,
+    failures: RwLock<Vec<FailureRecord>>,
+    lessons: RwLock<HashMap<String, Lesson>>,
+    agent_cards: RwLock<HashMap<String, AgentCard>>,
 }
 
 #[async_trait]
@@ -67,6 +74,28 @@ impl Store for MemoryStore {
         Ok(self.events.read().expect("event store poisoned").len() as u64)
     }
 
+    async fn list_recent_events(&self, limit: u32) -> Result<Vec<EventSummary>, StoreError> {
+        let events = self.events.read().expect("event store poisoned");
+        // MemoryStore is test/dev-only; PostgresStore's real timestamptz
+        // is the source of truth in production (same convention as B12).
+        let secs = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.as_secs())
+            .unwrap_or(0);
+        Ok(events
+            .iter()
+            .enumerate()
+            .rev()
+            .take(limit as usize)
+            .map(|(i, e)| EventSummary {
+                id: (i + 1) as i64,
+                event: e.event.clone(),
+                page: e.page.clone(),
+                created_at: format!("epoch:{secs}"),
+            })
+            .collect())
+    }
+
     async fn insert_pending_work(&self, item: &PendingWork) -> Result<(), StoreError> {
         self.pending
             .write()
@@ -76,11 +105,128 @@ impl Store for MemoryStore {
     }
 
     async fn list_pending_work(&self) -> Result<Vec<PendingWork>, StoreError> {
-        Ok(self.pending.read().expect("pending store poisoned").clone())
+        Ok(self
+            .pending
+            .read()
+            .expect("pending store poisoned")
+            .iter()
+            .filter(|item| item.status == "pending")
+            .cloned()
+            .collect())
     }
 
     async fn count_pending_work(&self) -> Result<u64, StoreError> {
-        Ok(self.pending.read().expect("pending store poisoned").len() as u64)
+        Ok(self
+            .pending
+            .read()
+            .expect("pending store poisoned")
+            .iter()
+            .filter(|item| item.status == "pending")
+            .count() as u64)
+    }
+
+    async fn complete_pending_work(
+        &self,
+        id: Uuid,
+        completed_by: &str,
+    ) -> Result<PendingWork, StoreError> {
+        let mut pending = self.pending.write().expect("pending store poisoned");
+        let item = pending
+            .iter_mut()
+            .find(|item| item.id == id)
+            .ok_or(StoreError::NotFound)?;
+        if item.status == "completed" {
+            return Err(StoreError::Conflict(format!(
+                "work item {id} was already completed by {}",
+                item.completed_by.as_deref().unwrap_or("unknown")
+            )));
+        }
+        item.status = "completed".to_owned();
+        // MemoryStore is for tests/local dev only; PostgresStore's
+        // `now()` is the timestamp of record in production.
+        let secs = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.as_secs())
+            .unwrap_or(0);
+        item.completed_at = Some(format!("epoch:{secs}"));
+        item.completed_by = Some(completed_by.to_owned());
+        Ok(item.clone())
+    }
+
+    async fn load_gates(&self) -> Result<Vec<GateRecord>, StoreError> {
+        let mut gates: Vec<GateRecord> = self
+            .gates
+            .read()
+            .expect("gate store poisoned")
+            .values()
+            .cloned()
+            .collect();
+        gates.sort_by(|a, b| a.name.cmp(&b.name));
+        Ok(gates)
+    }
+
+    async fn upsert_gate(&self, gate: &GateRecord) -> Result<(), StoreError> {
+        self.gates
+            .write()
+            .expect("gate store poisoned")
+            .insert(gate.name.clone(), gate.clone());
+        Ok(())
+    }
+
+    async fn record_failure(&self, failure: &FailureRecord) -> Result<(), StoreError> {
+        self.failures
+            .write()
+            .expect("failure store poisoned")
+            .push(failure.clone());
+        Ok(())
+    }
+
+    async fn count_failures(&self) -> Result<u64, StoreError> {
+        Ok(self.failures.read().expect("failure store poisoned").len() as u64)
+    }
+
+    async fn upsert_lesson(&self, lesson: &Lesson) -> Result<(), StoreError> {
+        let mut lessons = self.lessons.write().expect("lesson store poisoned");
+        lessons
+            .entry(lesson.pattern.clone())
+            .and_modify(|existing| {
+                existing.resolution = lesson.resolution.clone();
+                existing.hits += 1;
+            })
+            .or_insert_with(|| lesson.clone());
+        Ok(())
+    }
+
+    async fn list_lessons(&self) -> Result<Vec<Lesson>, StoreError> {
+        let mut lessons: Vec<Lesson> = self
+            .lessons
+            .read()
+            .expect("lesson store poisoned")
+            .values()
+            .cloned()
+            .collect();
+        lessons.sort_by(|a, b| a.pattern.cmp(&b.pattern));
+        Ok(lessons)
+    }
+
+    async fn load_agent_cards(&self) -> Result<Vec<AgentCard>, StoreError> {
+        let mut cards: Vec<AgentCard> = self
+            .agent_cards
+            .read()
+            .expect("agent card store poisoned")
+            .values()
+            .cloned()
+            .collect();
+        cards.sort_by(|a, b| a.id.cmp(&b.id));
+        Ok(cards)
+    }
+
+    async fn upsert_agent_card(&self, card: &AgentCard) -> Result<(), StoreError> {
+        self.agent_cards
+            .write()
+            .expect("agent card store poisoned")
+            .insert(card.id.clone(), card.clone());
+        Ok(())
     }
 }
 
@@ -140,5 +286,61 @@ mod tests {
             .await
             .unwrap_err();
         assert!(matches!(err, StoreError::NotFound));
+    }
+
+    #[tokio::test]
+    async fn completing_pending_work_stamps_it_and_drains_the_queue() {
+        let store = MemoryStore::default();
+        let item = PendingWork::new("agent:kuranosuke-01", "scan leads", serde_json::json!({}));
+        store.insert_pending_work(&item).await.unwrap();
+        assert_eq!(store.count_pending_work().await.unwrap(), 1);
+
+        let completed = store
+            .complete_pending_work(item.id, "agent:gengo-35")
+            .await
+            .unwrap();
+        assert_eq!(completed.status, "completed");
+        assert_eq!(completed.completed_by.as_deref(), Some("agent:gengo-35"));
+        assert!(completed.completed_at.is_some());
+
+        // Completed work drops off the live queue, same as Postgres.
+        assert_eq!(store.count_pending_work().await.unwrap(), 0);
+        assert!(store.list_pending_work().await.unwrap().is_empty());
+    }
+
+    #[tokio::test]
+    async fn completing_unknown_work_is_not_found() {
+        let store = MemoryStore::default();
+        let err = store
+            .complete_pending_work(Uuid::new_v4(), "agent:gengo-35")
+            .await
+            .unwrap_err();
+        assert!(matches!(err, StoreError::NotFound));
+    }
+
+    #[tokio::test]
+    async fn completing_already_completed_work_conflicts_instead_of_overwriting() {
+        // 2026-07-20 QA finding: a second completion used to silently
+        // overwrite completed_by, losing who actually finished it first.
+        let store = MemoryStore::default();
+        let item = PendingWork::new("agent:kuranosuke-01", "scan leads", serde_json::json!({}));
+        store.insert_pending_work(&item).await.unwrap();
+        store
+            .complete_pending_work(item.id, "agent:first")
+            .await
+            .unwrap();
+
+        let err = store
+            .complete_pending_work(item.id, "agent:second")
+            .await
+            .unwrap_err();
+        match err {
+            StoreError::Conflict(msg) => {
+                // The first completion's attribution must be reported
+                // back, not silently replaced by the second caller.
+                assert!(msg.contains("agent:first"));
+            }
+            other => panic!("expected Conflict, got {other:?}"),
+        }
     }
 }

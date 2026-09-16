@@ -6,6 +6,8 @@ description: >
   Triggers on: sirinx os, unified os, master os, ระบบหลัก, จัดการ agents, orchestrate
 ---
 
+> **Repo scope note (added 2026-07-20, B10 skill hygiene audit):** this skill's routes/files/architecture (Next.js `apps/sirinx-web`, OpenClaw, `/warroom`-style routes, etc.) describe the sibling **`sirinx-solar-energy`** repo, not this repo (`sirinx-co`, a Rust-crate monorepo). Treat file paths and route names below as reference material for that other codebase, not as claims about what exists here. For `sirinx-co`'s actual architecture, see `SYSTEM_ARCHITECTURE.md`, `docs/RONIN_ROSTER.md`, and `.claude/skills/ghostclaw-manager/SKILL.md`.
+
 # SIRINX Unified OS — v1.0
 
 **Mission:** Master Operating System สำหรับควบคุมและประสาน 47 Ronin multi-agent system ทั้งหมดบน SIRINX Solar Platform

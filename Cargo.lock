@@ -1336,6 +1336,8 @@ version = "0.1.0"
 dependencies = [
  "serde",
  "serde_json",
+ "sirinx-core",
+ "sirinx-roi",
  "thiserror 1.0.69",
 ]
 
@@ -1346,6 +1348,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sirinx-agents",
+ "sirinx-core",
  "thiserror 1.0.69",
 ]
 
@@ -1391,6 +1394,7 @@ dependencies = [
  "async-trait",
  "serde",
  "serde_json",
+ "sirinx-a2a",
  "sirinx-core",
  "sqlx",
  "thiserror 1.0.69",
@@ -1405,6 +1409,7 @@ dependencies = [
  "axum",
  "serde",
  "serde_json",
+ "sirinx-agents",
  "sirinx-core",
  "sirinx-roi",
  "sirinx-store",

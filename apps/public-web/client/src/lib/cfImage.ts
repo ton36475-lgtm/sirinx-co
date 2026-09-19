@@ -46,8 +46,8 @@ export function createCfImageHelpers(enabled: boolean) {
     options: CfImageOptions = {}
   ) {
     if (!enabled || !isResizableRemoteImage(src)) return undefined;
-    const validWidths = [...new Set(widths.map(normalizeWidth)
-      .filter((width): width is number => width !== undefined))].sort((a, b) => a - b);
+    const validWidths = Array.from(new Set(widths.map(normalizeWidth)
+      .filter((width): width is number => width !== undefined))).sort((a, b) => a - b);
     if (validWidths.length === 0) return undefined;
     return validWidths.map(width => `${cfImage(src, width, options)} ${width}w`).join(", ");
   }

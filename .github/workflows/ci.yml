@@ -38,8 +38,7 @@ jobs:
       - name: Repo governance scripts
         run: npm run check
       - name: Hermes control API tests
-        # control:test excludes the swarm-contract suite: it validates the
-        # operator machine's .hermes/state.json, which never exists in CI.
+        # control:test excludes the operator-machine state contract suite.
         run: npm run control:test
 
   public-web:
@@ -68,6 +67,7 @@ jobs:
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: corepack pnpm run test
       - name: Static website build and asset preflight
+        id: build
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         env:
           NODE_ENV: production
@@ -76,3 +76,23 @@ jobs:
           corepack pnpm exec vite build
           corepack pnpm exec tsx server/staticSeoBuild.ts
           node scripts/pages-preflight.mjs
+      - name: Install isolated pinned browser audit tooling
+        id: browser-tools
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          npm install --prefix "$RUNNER_TEMP/sirinx-browser" --no-package-lock --ignore-scripts --no-audit --no-fund playwright@1.58.2
+          "$RUNNER_TEMP/sirinx-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Local and public website read-only browser audit
+        if: ${{ !cancelled() && steps.browser-tools.outcome == 'success' }}
+        env:
+          RECOVERY_TOOLS_NODE_MODULES: ${{ runner.temp }}/sirinx-browser/node_modules
+          RECOVERY_SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: node scripts/browser-recovery-audit.mjs
+      - name: Preserve browser evidence even on failure
+        if: ${{ !cancelled() && steps.browser-tools.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: sirinx-browser-recovery-${{ github.run_id }}
+          path: apps/public-web/audit-output/
+          if-no-files-found: error
+          retention-days: 14

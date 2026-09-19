@@ -1,7 +1,6 @@
 const SIRINX_IMAGE_ORIGIN = "https://www.sirinx.co";
-const RESIZABLE_REMOTE_ORIGINS = [
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv",
-];
+const REMOTE_ORIGIN = "https://d2xsxph8kpxj0f.cloudfront.net";
+const REMOTE_PATH = "/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/";
 
 type CfImageOptions = {
   quality?: number;
@@ -9,27 +8,58 @@ type CfImageOptions = {
 };
 
 function isResizableRemoteImage(src: string) {
-  return RESIZABLE_REMOTE_ORIGINS.some(origin => src.startsWith(origin));
+  try {
+    const url = new URL(src);
+    return url.origin === REMOTE_ORIGIN &&
+      url.pathname.startsWith(REMOTE_PATH) && !url.username && !url.password;
+  } catch {
+    return false;
+  }
 }
 
-export function cfImage(src: string, width: number, options: CfImageOptions = {}) {
-  if (!isResizableRemoteImage(src)) return src;
-  const quality = options.quality ?? 74;
-  const format = options.format ?? "auto";
-  const directives = [
-    `width=${Math.max(1, Math.round(width))}`,
-    `quality=${quality}`,
-    `format=${format}`,
-    "fit=scale-down",
-  ];
-  return `${SIRINX_IMAGE_ORIGIN}/cdn-cgi/image/${directives.join(",")}/${src}`;
+function normalizeWidth(width: number) {
+  if (!Number.isFinite(width) || width <= 0) return undefined;
+  return Math.min(8192, Math.max(1, Math.round(width)));
 }
 
-export function cfImageSrcSet(
-  src: string,
-  widths: number[] = [360, 640, 960, 1280],
-  options: CfImageOptions = {}
-) {
-  if (!isResizableRemoteImage(src)) return undefined;
-  return widths.map(width => `${cfImage(src, width, options)} ${width}w`).join(", ");
+// Keep transformation policy testable without requiring a Cloudflare account.
+export function createCfImageHelpers(enabled: boolean) {
+  function cfImage(src: string, width: number, options: CfImageOptions = {}) {
+    const normalizedWidth = normalizeWidth(width);
+    if (!enabled || !isResizableRemoteImage(src) || normalizedWidth === undefined) {
+      return src;
+    }
+    const quality = Number.isFinite(options.quality)
+      ? Math.min(100, Math.max(1, Math.round(options.quality!))) : 74;
+    const directives = [
+      `width=${normalizedWidth}`,
+      `quality=${quality}`,
+      `format=${options.format ?? "auto"}`,
+      "fit=scale-down",
+    ];
+    return `${SIRINX_IMAGE_ORIGIN}/cdn-cgi/image/${directives.join(",")}/${src}`;
+  }
+
+  function cfImageSrcSet(
+    src: string,
+    widths: number[] = [360, 640, 960, 1280],
+    options: CfImageOptions = {}
+  ) {
+    if (!enabled || !isResizableRemoteImage(src)) return undefined;
+    const validWidths = Array.from(new Set(widths.map(normalizeWidth)
+      .filter((width): width is number => width !== undefined))).sort((a, b) => a - b);
+    if (validWidths.length === 0) return undefined;
+    return validWidths.map(width => `${cfImage(src, width, options)} ${width}w`).join(", ");
+  }
+
+  return { cfImage, cfImageSrcSet };
 }
+
+// Enable only after the zone and this exact external source are verified.
+// This is a public build-time flag, not a secret or a runtime dashboard toggle.
+const env = (import.meta as ImportMeta & {
+  env?: { VITE_CF_IMAGE_TRANSFORMS?: string };
+}).env;
+export const { cfImage, cfImageSrcSet } = createCfImageHelpers(
+  env?.VITE_CF_IMAGE_TRANSFORMS === "true"
+);

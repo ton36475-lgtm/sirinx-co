@@ -152,13 +152,15 @@ function vitePluginManusDebugCollector(): Plugin {
 }
 
 const isProduction = process.env.NODE_ENV === "production";
+const isTest = process.env.NODE_ENV === "test" || process.env.VITEST === "true";
 const enableProductionObfuscation =
   isProduction && process.env.VITE_ENABLE_JS_OBFUSCATION === "true";
 
 const plugins = [
   react(),
   tailwindcss(),
-  ...(!isProduction
+  // Editor instrumentation must not alter rendered markup during unit tests.
+  ...(!isProduction && !isTest
     ? [
         jsxLocPlugin(),
         vitePluginManusRuntime(),

@@ -52,18 +52,17 @@ if (forbidden.length > 0) {
   process.exit(1);
 }
 
-// Phase advanced (Rust monorepo migration): CI is now required instead of
-// forbidden. Deploy-style workflows remain out of scope — only ci.yml may
-// exist until the deploy gate opens.
+// CI and the already-established defensive secret scan are permitted.
+// Keep all other workflow names blocked; this does not open the deploy gate.
 const workflowsDir = join(root, ".github", "workflows");
 if (!existsSync(join(workflowsDir, "ci.yml"))) {
   console.error("CI workflow .github/workflows/ci.yml must exist in this phase.");
   process.exit(1);
 }
-const allowedWorkflows = new Set(["ci.yml"]);
+const allowedWorkflows = new Set(["ci.yml", "secret-scan.yml"]);
 for (const file of readdirSync(workflowsDir)) {
   if (!allowedWorkflows.has(file)) {
-    console.error(`Unexpected workflow '${file}' — only ci.yml is allowed before the deploy gate opens.`);
+    console.error(`Unexpected workflow '${file}' — only ci.yml and secret-scan.yml are allowed before the deploy gate opens.`);
     process.exit(1);
   }
 }

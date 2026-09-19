@@ -1,1 +1,3 @@
-/* /index.html 200
+# Pages serves matching static files and generated route/index.html files first.
+# With no top-level 404.html, unmatched client routes use the native SPA fallback.
+# Do not add /* /index.html 200: it can intercept assets and route-specific HTML.

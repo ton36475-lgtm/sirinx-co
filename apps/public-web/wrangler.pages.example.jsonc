@@ -1,0 +1,8 @@
+{
+  // Reference only. Download and reconcile the existing Pages settings first.
+  // Do not rename this file until project identity and bindings are verified.
+  "name": "sirinx-co",
+  "pages_build_output_dir": "./dist/public",
+  // A candidate date for a new static-only preview, not a verified production setting.
+  "compatibility_date": "2026-09-19"
+}

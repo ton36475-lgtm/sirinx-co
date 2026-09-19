@@ -60,7 +60,7 @@ jobs:
         run: node --experimental-strip-types --test scripts/cloudflare-recovery.check.mjs
       - name: Install website dependencies from the existing lockfile
         id: install
-        run: corepack pnpm install --frozen-lockfile --prod=false
+        run: corepack pnpm install --ignore-workspace --frozen-lockfile --prod=false
       - name: Website typecheck
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: corepack pnpm run check

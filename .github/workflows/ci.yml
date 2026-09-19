@@ -41,3 +41,38 @@ jobs:
         # control:test excludes the swarm-contract suite: it validates the
         # operator machine's .hermes/state.json, which never exists in CI.
         run: npm run control:test
+
+  public-web:
+    name: Public website checks (no deployment)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: apps/public-web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Standalone Cloudflare recovery checks
+        run: node --experimental-strip-types --test scripts/cloudflare-recovery.check.mjs
+      - name: Install website dependencies from the existing lockfile
+        id: install
+        run: corepack pnpm install --frozen-lockfile --prod=false
+      - name: Website typecheck
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: corepack pnpm run check
+      - name: Website tests
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: corepack pnpm run test
+      - name: Static website build and asset preflight
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        env:
+          NODE_ENV: production
+          VITE_CF_IMAGE_TRANSFORMS: "false"
+        run: |
+          corepack pnpm exec vite build
+          corepack pnpm exec tsx server/staticSeoBuild.ts
+          node scripts/pages-preflight.mjs

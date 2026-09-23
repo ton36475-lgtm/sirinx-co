@@ -274,6 +274,9 @@ try {
             console.log('SIRINX_PORTFOLIO_CHECKS '+JSON.stringify(portfolio));
           }
           if (route==='/'||route==='/projects/') {
+            await page.evaluate(()=>window.scrollTo({top:0,left:0,behavior:'instant'}));
+            await page.waitForFunction(()=>window.scrollY===0,null,{timeout:3000});
+            row.screenshotScrollY=await page.evaluate(()=>window.scrollY);
             row.screenshot=`${environment}-${device}-${route==='/'?'home':'projects'}.png`;
             await page.screenshot({path:path.join(output,row.screenshot),fullPage:false,timeout:10000});
           }

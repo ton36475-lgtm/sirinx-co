@@ -204,24 +204,6 @@ export default function HomeSolution() {
   return (
     <div className="bg-background text-foreground">
       <Helmet>
-        <title>Home Solar Solution บ้านใหญ่และโฮมออฟฟิศ | SIRINX</title>
-        <meta
-          name="description"
-          content="SIRINX Home Solar Solution สำหรับบ้านขนาดใหญ่ โฮมออฟฟิศ และโครงการหมู่บ้านพรีเมียมที่ใช้ไฟสูง พร้อม Rooftop Solar, Solar Carport, BESS, EV Charger และ AI Energy Monitoring"
-        />
-        <link rel="canonical" href="https://www.sirinx.co/home-solution/" />
-        <meta
-          property="og:title"
-          content="Home Solar Solution บ้านใหญ่และโฮมออฟฟิศ | SIRINX"
-        />
-        <meta
-          property="og:description"
-          content="ระบบโซลาร์สำหรับบ้านใหญ่ โฮมออฟฟิศ และโครงการพรีเมียมที่ใช้ไฟสูง พร้อมหลักฐาน commissioning, monitoring และ reference site จริง"
-        />
-        <meta
-          property="og:image"
-          content={`https://www.sirinx.co${HERO_IMAGE}`}
-        />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 

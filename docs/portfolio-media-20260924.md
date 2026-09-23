@@ -52,3 +52,13 @@ Validation at handoff: four importer tests and local real-media dry-run passed. 
 App TypeScript: pass. Vitest: 64 tests in 9 files pass. Importer targeted TypeScript: pass; 4 Node tests pass. All 100 public media files match the frozen release. Vite build, SEO generation (94 routes) and esbuild server bundle pass using `node --import tsx` for SEO. The nominal build command hits restricted-runner tsx IPC `EPERM` after Vite succeeds; no build-script change was needed.
 
 Browser visual verification is **unmet**: no working local Chromium, official download returned an invalid empty archive, and the cloud browser cannot reach localhost. Keep this PR draft until a working browser verifies mobile/desktop layout, filters, lightbox and video. No production or backend action is inferred from local gates.
+
+## Continuation: compiled-browser failure and correction
+
+CI run `35897081104` tested media head `bcf83febdbcf6396b128a3344ed2f27f8dfd1c7b` and exposed a spinner-only `/projects/` at 1365×900 and 390×844, with a `removeChild` error. Passing earlier unit tests and builds did not establish working browser rendering.
+
+The correction renders static projects without any tRPC hook; backend mode supplies its own tRPC/QueryClient providers. Shared SEO tags now have one imperative owner, with Home Solution's page-specific JSON-LD retained. Real component-render regression tests cover static/provider startup and metadata ownership. Local TypeScript and all 68 app tests pass, as do Vite, static SEO generation, asset preflight and server bundling.
+
+The compiled browser audit now additionally checks all 27 gallery images, the three project filters, lightbox navigation/Escape/focus, native video metadata/playback, and horizontal overflow on both viewports. These are additive checks; existing route, asset and live-site assertions remain enabled. Browser results for this correction must be read from its exact-head CI artifact before claiming the new gates pass.
+
+The 66 input files remain byte-identical to the original inventory. No media regeneration or new project attribution occurred in this continuation. Coordination is recorded on recovery PR #10, comment `5799931940`, linking media PR #11 and the user-supplied session ID. Direct Codex-session messaging remains unavailable. AIAgent is still offline and SentinelX lists no connected hosts/integrations; no live import or deployment was performed.

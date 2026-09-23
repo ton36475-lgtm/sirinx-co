@@ -8,6 +8,7 @@ import {
   X,
 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
+import { TrpcProvider } from "@/lib/trpc-provider";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   selectPortfolioState,
@@ -125,12 +126,27 @@ function ProjectPhoto({
 }
 
 export default function Projects() {
-  const { lang } = useLanguage();
-  const text = labels[lang];
-  const source =
-    import.meta.env.VITE_PORTFOLIO_SOURCE === "backend" ? "backend" : "static";
+  if (import.meta.env.VITE_PORTFOLIO_SOURCE === "backend") {
+    return (
+      <TrpcProvider>
+        <BackendProjects />
+      </TrpcProvider>
+    );
+  }
+
+  // A disabled query still requires a tRPC provider. Static builds do not use a query at all.
+  return (
+    <PortfolioContent
+      portfolio={selectPortfolioState({
+        source: "static",
+        queryStatus: "pending",
+      })}
+    />
+  );
+}
+
+function BackendProjects() {
   const projectQuery = trpc.project.list.useQuery(undefined, {
-    enabled: source === "backend",
     retry: false,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
@@ -138,12 +154,29 @@ export default function Projects() {
   const portfolio = useMemo(
     () =>
       selectPortfolioState({
-        source,
+        source: "backend",
         queryStatus: projectQuery.status,
         rows: projectQuery.data,
       }),
-    [source, projectQuery.status, projectQuery.data],
+    [projectQuery.status, projectQuery.data],
   );
+  return (
+    <PortfolioContent
+      portfolio={portfolio}
+      onRetry={() => void projectQuery.refetch()}
+    />
+  );
+}
+
+function PortfolioContent({
+  portfolio,
+  onRetry,
+}: {
+  portfolio: ReturnType<typeof selectPortfolioState>;
+  onRetry?: () => void;
+}) {
+  const { lang } = useLanguage();
+  const text = labels[lang];
   const projects = portfolio.projects;
   const [filter, setFilter] = useState("all");
   const [selected, setSelected] = useState<{
@@ -283,11 +316,7 @@ export default function Projects() {
         {portfolio.status === "error" && (
           <div className="cp-state" role="alert">
             <p>{text.error}</p>
-            <button
-              type="button"
-              className="cp-retry"
-              onClick={() => void projectQuery.refetch()}
-            >
+            <button type="button" className="cp-retry" onClick={onRetry}>
               {text.retry}
             </button>
           </div>

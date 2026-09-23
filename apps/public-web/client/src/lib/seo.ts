@@ -42,6 +42,7 @@ const metaByPath: Record<string, SeoMeta> = {
   },
   "/home-solution": {
     path: "/home-solution",
+    image: "https://www.sirinx.co/assets/home-solution/home-solution-drone-hero.jpg",
     title:
       "Home Solar Solution บ้านใหญ่และโฮมออฟฟิศ | Rooftop Solar, Carport, BESS, EV | SIRINX",
     description:

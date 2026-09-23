@@ -61,9 +61,9 @@ const metaByPath: Record<string, SeoMeta> = {
   },
   "/projects": {
     path: "/projects",
-    title: "ผลงาน Solar Carport และระบบพลังงานสะอาด | SIRINX",
+    title: "ผลงานติดตั้งโซลาร์โรงแรมและบ้านพักอาศัย | SIRINX",
     description:
-      "ดูตัวอย่างโครงการ Solar Carport, BESS, EV Charging และระบบบริหารพลังงานที่ SIRINX ออกแบบและติดตั้งจริง",
+      "ชมภาพงานติดตั้งจริงของโรงแรมเรือนแพรอยัลปาร์ค โรงแรมโฮลาเทล และบ้านพักอาศัย พร้อมภาพแผงโซลาร์ อุปกรณ์ และวิดีโอจากหน้างาน",
   },
   "/strategy": {
     path: "/strategy",

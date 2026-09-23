@@ -120,7 +120,32 @@ async function auditPortfolio(page, device) {
     check(await page.locator('.cp-gallery img').count()===27,'Expected exactly 27 gallery images');
     return {sections,photoCount:27};
   });
-  if (!rendered) { result.skipped=['all-gallery-images','project-filters','lightbox','native-video','horizontal-overflow'];return result; }
+  if (!rendered) { result.skipped=['hero-clear-of-header','all-gallery-images','project-filters','lightbox','native-video','horizontal-overflow'];return result; }
+
+  await gate('hero-clear-of-header',async()=>{
+    await page.evaluate(()=>window.scrollTo({top:0,left:0,behavior:'instant'}));
+    await page.waitForFunction(()=>window.scrollY===0,null,{timeout:3000});
+    const layout=await page.evaluate(()=>{
+      const measure=selector=>{
+        const node=document.querySelector(selector);
+        if(!node)return null;
+        const rect=node.getBoundingClientRect();const style=getComputedStyle(node);
+        return {top:rect.top,bottom:rect.bottom,left:rect.left,right:rect.right,width:rect.width,height:rect.height,
+          position:style.position,visible:rect.width>0&&rect.height>0&&style.display!=='none'&&style.visibility==='visible'&&Number(style.opacity)>0};
+      };
+      return {scrollY,viewportWidth:innerWidth,viewportHeight:innerHeight,
+        header:measure('nav.fixed'),eyebrow:measure('.cp-hero .cp-eyebrow'),heading:measure('.cp-hero h1'),image:measure('.cp-hero-image img')};
+    });
+    // Retain numeric geometry even if the overlap assertion fails.
+    result.heroLayout=layout;
+    check(layout.header?.visible&&layout.header.position==='fixed','Expected the fixed Navbar from Layout');
+    for(const [name,rect] of [['eyebrow',layout.eyebrow],['heading',layout.heading],['image',layout.image]]) {
+      check(rect?.visible,`Hero ${name} must be visible`);
+      check(rect.top>=layout.header.bottom-0.5,`Hero ${name} must begin below the fixed Navbar`);
+      if(name!=='image')check(rect.top<layout.viewportHeight,`Hero ${name} must begin inside the first viewport`);
+    }
+    return layout;
+  });
 
   await gate('all-gallery-images',async()=>{
     const images=page.locator('.cp-gallery img');
@@ -274,8 +299,10 @@ try {
             console.log('SIRINX_PORTFOLIO_CHECKS '+JSON.stringify(portfolio));
           }
           if (route==='/'||route==='/projects/') {
-            await page.evaluate(()=>window.scrollTo({top:0,left:0,behavior:'instant'}));
-            await page.waitForFunction(()=>window.scrollY===0,null,{timeout:3000});
+            if(environment==='local'&&route==='/projects/') {
+              await page.evaluate(()=>window.scrollTo({top:0,left:0,behavior:'instant'}));
+              await page.waitForFunction(()=>window.scrollY===0,null,{timeout:3000});
+            }
             row.screenshotScrollY=await page.evaluate(()=>window.scrollY);
             row.screenshot=`${environment}-${device}-${route==='/'?'home':'projects'}.png`;
             await page.screenshot({path:path.join(output,row.screenshot),fullPage:false,timeout:10000});

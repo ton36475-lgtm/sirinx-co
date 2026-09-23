@@ -1,0 +1,294 @@
+[
+  {
+    "id": "ruean-phae-royal-park",
+    "title": "โรงแรมเรือนแพรอยัลปาร์ค",
+    "shortTitle": "เรือนแพรอยัลปาร์ค",
+    "category": "โรงแรม",
+    "summary": "แผงโซลาร์บนหลังคาอาคารและหลังคาลานจอดรถ พร้อมภาพอุปกรณ์จากหน้างานจริง",
+    "scope": "หลังคาอาคาร · หลังคาลานจอดรถ",
+    "coverId": "1000076002",
+    "inverterBrand": "Solis",
+    "images": [
+      {
+        "id": "1000076002",
+        "src": "/assets/real-installations/ruean-phae-royal-park/1000076002.jpg",
+        "width": 1600,
+        "height": 901,
+        "srcSet": "/assets/real-installations/ruean-phae-royal-park/1000076002-640.webp 640w, /assets/real-installations/ruean-phae-royal-park/1000076002-960.webp 960w, /assets/real-installations/ruean-phae-royal-park/1000076002-1600.webp 1600w",
+        "caption": "ภาพรวมแผงโซลาร์บนหลังคาอาคารโรงแรม",
+        "alt": "โรงแรมเรือนแพรอยัลปาร์ค: ภาพรวมแผงโซลาร์บนหลังคาอาคารโรงแรม"
+      },
+      {
+        "id": "1000076006",
+        "src": "/assets/real-installations/ruean-phae-royal-park/1000076006.jpg",
+        "width": 1600,
+        "height": 901,
+        "srcSet": "/assets/real-installations/ruean-phae-royal-park/1000076006-640.webp 640w, /assets/real-installations/ruean-phae-royal-park/1000076006-960.webp 960w, /assets/real-installations/ruean-phae-royal-park/1000076006-1600.webp 1600w",
+        "caption": "ตู้อุปกรณ์ภายในอาคาร",
+        "alt": "โรงแรมเรือนแพรอยัลปาร์ค: ตู้อุปกรณ์ภายในอาคาร"
+      },
+      {
+        "id": "1000076005",
+        "src": "/assets/real-installations/ruean-phae-royal-park/1000076005.jpg",
+        "width": 901,
+        "height": 1600,
+        "srcSet": "/assets/real-installations/ruean-phae-royal-park/1000076005-640.webp 640w, /assets/real-installations/ruean-phae-royal-park/1000076005-960.webp 960w",
+        "caption": "หลังคาโซลาร์บริเวณลานจอดรถ มุมสูง",
+        "alt": "โรงแรมเรือนแพรอยัลปาร์ค: หลังคาโซลาร์บริเวณลานจอดรถ มุมสูง"
+      },
+      {
+        "id": "1000076004",
+        "src": "/assets/real-installations/ruean-phae-royal-park/1000076004.jpg",
+        "width": 901,
+        "height": 1600,
+        "srcSet": "/assets/real-installations/ruean-phae-royal-park/1000076004-640.webp 640w, /assets/real-installations/ruean-phae-royal-park/1000076004-960.webp 960w",
+        "caption": "ภาพรวมหลังคาโซลาร์และบริเวณทางเข้า",
+        "alt": "โรงแรมเรือนแพรอยัลปาร์ค: ภาพรวมหลังคาโซลาร์และบริเวณทางเข้า"
+      },
+      {
+        "id": "1000076003",
+        "src": "/assets/real-installations/ruean-phae-royal-park/1000076003.jpg",
+        "width": 1600,
+        "height": 901,
+        "srcSet": "/assets/real-installations/ruean-phae-royal-park/1000076003-640.webp 640w, /assets/real-installations/ruean-phae-royal-park/1000076003-960.webp 960w, /assets/real-installations/ruean-phae-royal-park/1000076003-1600.webp 1600w",
+        "caption": "แผงโซลาร์บนหลังคาอาคารและบริเวณสระว่ายน้ำ",
+        "alt": "โรงแรมเรือนแพรอยัลปาร์ค: แผงโซลาร์บนหลังคาอาคารและบริเวณสระว่ายน้ำ"
+      },
+      {
+        "id": "1000076001",
+        "src": "/assets/real-installations/ruean-phae-royal-park/1000076001.jpg",
+        "width": 1600,
+        "height": 901,
+        "srcSet": "/assets/real-installations/ruean-phae-royal-park/1000076001-640.webp 640w, /assets/real-installations/ruean-phae-royal-park/1000076001-960.webp 960w, /assets/real-installations/ruean-phae-royal-park/1000076001-1600.webp 1600w",
+        "caption": "แนวแผงโซลาร์บนหลังคาอาคาร",
+        "alt": "โรงแรมเรือนแพรอยัลปาร์ค: แนวแผงโซลาร์บนหลังคาอาคาร"
+      },
+      {
+        "id": "1000076000",
+        "src": "/assets/real-installations/ruean-phae-royal-park/1000076000.jpg",
+        "width": 865,
+        "height": 1536,
+        "srcSet": "/assets/real-installations/ruean-phae-royal-park/1000076000-640.webp 640w, /assets/real-installations/ruean-phae-royal-park/1000076000-865.webp 865w",
+        "caption": "ภาพหน้างานบริเวณตู้อุปกรณ์",
+        "alt": "โรงแรมเรือนแพรอยัลปาร์ค: ภาพหน้างานบริเวณตู้อุปกรณ์"
+      },
+      {
+        "id": "1000075999",
+        "src": "/assets/real-installations/ruean-phae-royal-park/1000075999.jpg",
+        "width": 865,
+        "height": 1536,
+        "srcSet": "/assets/real-installations/ruean-phae-royal-park/1000075999-640.webp 640w, /assets/real-installations/ruean-phae-royal-park/1000075999-865.webp 865w",
+        "caption": "แนวหลังคาโซลาร์เหนือพื้นที่จอดรถ",
+        "alt": "โรงแรมเรือนแพรอยัลปาร์ค: แนวหลังคาโซลาร์เหนือพื้นที่จอดรถ"
+      },
+      {
+        "id": "1000075997",
+        "src": "/assets/real-installations/ruean-phae-royal-park/1000075997.jpg",
+        "width": 1600,
+        "height": 901,
+        "srcSet": "/assets/real-installations/ruean-phae-royal-park/1000075997-640.webp 640w, /assets/real-installations/ruean-phae-royal-park/1000075997-960.webp 960w, /assets/real-installations/ruean-phae-royal-park/1000075997-1600.webp 1600w",
+        "caption": "รายละเอียดแนวแผงบนหลังคาลานจอดรถ",
+        "alt": "โรงแรมเรือนแพรอยัลปาร์ค: รายละเอียดแนวแผงบนหลังคาลานจอดรถ"
+      },
+      {
+        "id": "1000075996",
+        "src": "/assets/real-installations/ruean-phae-royal-park/1000075996.jpg",
+        "width": 1600,
+        "height": 901,
+        "srcSet": "/assets/real-installations/ruean-phae-royal-park/1000075996-640.webp 640w, /assets/real-installations/ruean-phae-royal-park/1000075996-960.webp 960w, /assets/real-installations/ruean-phae-royal-park/1000075996-1600.webp 1600w",
+        "caption": "หลังคาโซลาร์สำหรับลานจอดรถ",
+        "alt": "โรงแรมเรือนแพรอยัลปาร์ค: หลังคาโซลาร์สำหรับลานจอดรถ"
+      },
+      {
+        "id": "1000075994",
+        "src": "/assets/real-installations/ruean-phae-royal-park/1000075994.jpg",
+        "width": 901,
+        "height": 1600,
+        "srcSet": "/assets/real-installations/ruean-phae-royal-park/1000075994-640.webp 640w, /assets/real-installations/ruean-phae-royal-park/1000075994-960.webp 960w",
+        "caption": "อินเวอร์เตอร์ Solis ที่ติดตั้งในโครงการ",
+        "alt": "โรงแรมเรือนแพรอยัลปาร์ค: อินเวอร์เตอร์ Solis ที่ติดตั้งในโครงการ"
+      }
+    ],
+    "videos": []
+  },
+  {
+    "id": "holatel",
+    "title": "โรงแรมโฮลาเทล",
+    "shortTitle": "โฮลาเทล",
+    "category": "โรงแรม",
+    "summary": "งานติดตั้งโซลาร์บนหลังคาโรงแรม รวมภาพแนวแผง ตู้อุปกรณ์ และบรรยากาศหน้างาน",
+    "scope": "หลังคาอาคารโรงแรม",
+    "coverId": "1000075878",
+    "inverterBrand": null,
+    "images": [
+      {
+        "id": "1000075878",
+        "src": "/assets/real-installations/holatel/1000075878.jpg",
+        "width": 1536,
+        "height": 865,
+        "srcSet": "/assets/real-installations/holatel/1000075878-640.webp 640w, /assets/real-installations/holatel/1000075878-960.webp 960w, /assets/real-installations/holatel/1000075878-1536.webp 1536w",
+        "caption": "ภาพรวมแนวแผงโซลาร์บนหลังคา",
+        "alt": "โรงแรมโฮลาเทล: ภาพรวมแนวแผงโซลาร์บนหลังคา"
+      },
+      {
+        "id": "1000075912",
+        "src": "/assets/real-installations/holatel/1000075912.jpg",
+        "width": 865,
+        "height": 1536,
+        "srcSet": "/assets/real-installations/holatel/1000075912-640.webp 640w, /assets/real-installations/holatel/1000075912-865.webp 865w",
+        "caption": "ภาพตัวอาคารโรงแรม",
+        "alt": "โรงแรมโฮลาเทล: ภาพตัวอาคารโรงแรม"
+      },
+      {
+        "id": "1000075911",
+        "src": "/assets/real-installations/holatel/1000075911.jpg",
+        "width": 865,
+        "height": 1536,
+        "srcSet": "/assets/real-installations/holatel/1000075911-640.webp 640w, /assets/real-installations/holatel/1000075911-865.webp 865w",
+        "caption": "ตำแหน่งติดตั้งตู้อุปกรณ์ข้างอาคาร",
+        "alt": "โรงแรมโฮลาเทล: ตำแหน่งติดตั้งตู้อุปกรณ์ข้างอาคาร"
+      },
+      {
+        "id": "1000075870",
+        "src": "/assets/real-installations/holatel/1000075870.jpg",
+        "width": 1152,
+        "height": 1536,
+        "srcSet": "/assets/real-installations/holatel/1000075870-640.webp 640w, /assets/real-installations/holatel/1000075870-960.webp 960w, /assets/real-installations/holatel/1000075870-1152.webp 1152w",
+        "caption": "ภาพบุคคลบริเวณหน้างานบนหลังคา",
+        "alt": "โรงแรมโฮลาเทล: ภาพบุคคลบริเวณหน้างานบนหลังคา"
+      },
+      {
+        "id": "1000075821",
+        "src": "/assets/real-installations/holatel/1000075821.jpg",
+        "width": 717,
+        "height": 1536,
+        "srcSet": "/assets/real-installations/holatel/1000075821-640.webp 640w, /assets/real-installations/holatel/1000075821-717.webp 717w",
+        "caption": "มุมมองตามแนวแผงโซลาร์บนหลังคา",
+        "alt": "โรงแรมโฮลาเทล: มุมมองตามแนวแผงโซลาร์บนหลังคา"
+      },
+      {
+        "id": "1000075818",
+        "src": "/assets/real-installations/holatel/1000075818.jpg",
+        "width": 1536,
+        "height": 717,
+        "srcSet": "/assets/real-installations/holatel/1000075818-640.webp 640w, /assets/real-installations/holatel/1000075818-960.webp 960w, /assets/real-installations/holatel/1000075818-1536.webp 1536w",
+        "caption": "แผงโซลาร์บนหลังคาโรงแรม",
+        "alt": "โรงแรมโฮลาเทล: แผงโซลาร์บนหลังคาโรงแรม"
+      },
+      {
+        "id": "1000075808",
+        "src": "/assets/real-installations/holatel/1000075808.jpg",
+        "width": 717,
+        "height": 1536,
+        "srcSet": "/assets/real-installations/holatel/1000075808-640.webp 640w, /assets/real-installations/holatel/1000075808-717.webp 717w",
+        "caption": "รายละเอียดตู้อุปกรณ์จากหน้างาน",
+        "alt": "โรงแรมโฮลาเทล: รายละเอียดตู้อุปกรณ์จากหน้างาน"
+      },
+      {
+        "id": "1000075806",
+        "src": "/assets/real-installations/holatel/1000075806.jpg",
+        "width": 716,
+        "height": 1536,
+        "srcSet": "/assets/real-installations/holatel/1000075806-640.webp 640w, /assets/real-installations/holatel/1000075806-716.webp 716w",
+        "caption": "ตู้อุปกรณ์ภายนอกอาคาร",
+        "alt": "โรงแรมโฮลาเทล: ตู้อุปกรณ์ภายนอกอาคาร"
+      },
+      {
+        "id": "1000075805",
+        "src": "/assets/real-installations/holatel/1000075805.jpg",
+        "width": 717,
+        "height": 1536,
+        "srcSet": "/assets/real-installations/holatel/1000075805-640.webp 640w, /assets/real-installations/holatel/1000075805-717.webp 717w",
+        "caption": "พื้นที่ด้านหน้าอาคารโรงแรม",
+        "alt": "โรงแรมโฮลาเทล: พื้นที่ด้านหน้าอาคารโรงแรม"
+      },
+      {
+        "id": "1000075803",
+        "src": "/assets/real-installations/holatel/1000075803.jpg",
+        "width": 716,
+        "height": 1536,
+        "srcSet": "/assets/real-installations/holatel/1000075803-640.webp 640w, /assets/real-installations/holatel/1000075803-716.webp 716w",
+        "caption": "ภาพอาคารและตำแหน่งตู้อุปกรณ์",
+        "alt": "โรงแรมโฮลาเทล: ภาพอาคารและตำแหน่งตู้อุปกรณ์"
+      }
+    ],
+    "videos": []
+  },
+  {
+    "id": "suphalai-residence",
+    "title": "บ้านพักอาศัยในหมู่บ้านศุภภาลัย",
+    "shortTitle": "บ้านในหมู่บ้านศุภภาลัย",
+    "category": "บ้านพักอาศัย",
+    "summary": "งานติดตั้งแผงโซลาร์บนหลังคาบ้านพักอาศัย พร้อมภาพมุมสูงและวิดีโอรอบหลังคา",
+    "scope": "บ้านพักอาศัยภายในโครงการ",
+    "coverId": "1000075975",
+    "inverterBrand": null,
+    "images": [
+      {
+        "id": "1000075975",
+        "src": "/assets/real-installations/suphalai-residence/1000075975.jpg",
+        "width": 1600,
+        "height": 1201,
+        "srcSet": "/assets/real-installations/suphalai-residence/1000075975-640.webp 640w, /assets/real-installations/suphalai-residence/1000075975-960.webp 960w, /assets/real-installations/suphalai-residence/1000075975-1600.webp 1600w",
+        "caption": "ภาพมุมสูงของบ้านและแผงโซลาร์บนหลังคา",
+        "alt": "บ้านพักอาศัยในโครงการหมู่บ้านศุภภาลัย: ภาพมุมสูงของบ้านและแผงโซลาร์บนหลังคา"
+      },
+      {
+        "id": "1000075978",
+        "src": "/assets/real-installations/suphalai-residence/1000075978.jpg",
+        "width": 1600,
+        "height": 1201,
+        "srcSet": "/assets/real-installations/suphalai-residence/1000075978-640.webp 640w, /assets/real-installations/suphalai-residence/1000075978-960.webp 960w, /assets/real-installations/suphalai-residence/1000075978-1600.webp 1600w",
+        "caption": "ภาพรวมบ้านพักอาศัยและบริเวณข้างเคียง",
+        "alt": "บ้านพักอาศัยในโครงการหมู่บ้านศุภภาลัย: ภาพรวมบ้านพักอาศัยและบริเวณข้างเคียง"
+      },
+      {
+        "id": "1000075977",
+        "src": "/assets/real-installations/suphalai-residence/1000075977.jpg",
+        "width": 1600,
+        "height": 1201,
+        "srcSet": "/assets/real-installations/suphalai-residence/1000075977-640.webp 640w, /assets/real-installations/suphalai-residence/1000075977-960.webp 960w, /assets/real-installations/suphalai-residence/1000075977-1600.webp 1600w",
+        "caption": "ภาพบ้านและแนวแผงโซลาร์จากมุมด้านข้าง",
+        "alt": "บ้านพักอาศัยในโครงการหมู่บ้านศุภภาลัย: ภาพบ้านและแนวแผงโซลาร์จากมุมด้านข้าง"
+      },
+      {
+        "id": "1000075976",
+        "src": "/assets/real-installations/suphalai-residence/1000075976.jpg",
+        "width": 1600,
+        "height": 1201,
+        "srcSet": "/assets/real-installations/suphalai-residence/1000075976-640.webp 640w, /assets/real-installations/suphalai-residence/1000075976-960.webp 960w, /assets/real-installations/suphalai-residence/1000075976-1600.webp 1600w",
+        "caption": "ภาพมุมสูงแสดงแผงโซลาร์หลายด้านของหลังคา",
+        "alt": "บ้านพักอาศัยในโครงการหมู่บ้านศุภภาลัย: ภาพมุมสูงแสดงแผงโซลาร์หลายด้านของหลังคา"
+      },
+      {
+        "id": "1000075974",
+        "src": "/assets/real-installations/suphalai-residence/1000075974.jpg",
+        "width": 1600,
+        "height": 1201,
+        "srcSet": "/assets/real-installations/suphalai-residence/1000075974-640.webp 640w, /assets/real-installations/suphalai-residence/1000075974-960.webp 960w, /assets/real-installations/suphalai-residence/1000075974-1600.webp 1600w",
+        "caption": "รายละเอียดชุดแผงโซลาร์บนหลังคาบ้าน",
+        "alt": "บ้านพักอาศัยในโครงการหมู่บ้านศุภภาลัย: รายละเอียดชุดแผงโซลาร์บนหลังคาบ้าน"
+      },
+      {
+        "id": "1000075973",
+        "src": "/assets/real-installations/suphalai-residence/1000075973.jpg",
+        "width": 1600,
+        "height": 1201,
+        "srcSet": "/assets/real-installations/suphalai-residence/1000075973-640.webp 640w, /assets/real-installations/suphalai-residence/1000075973-960.webp 960w, /assets/real-installations/suphalai-residence/1000075973-1600.webp 1600w",
+        "caption": "ภาพจากด้านบนแสดงการจัดวางแผงบนหลังคา",
+        "alt": "บ้านพักอาศัยในโครงการหมู่บ้านศุภภาลัย: ภาพจากด้านบนแสดงการจัดวางแผงบนหลังคา"
+      }
+    ],
+    "videos": [
+      {
+        "id": "suphalai-residence-drone",
+        "src": "/assets/real-installations/suphalai-residence/suphalai-residence-drone-web.mp4",
+        "poster": "/assets/real-installations/suphalai-residence/suphalai-residence-drone-web.jpg",
+        "width": 960,
+        "height": 540,
+        "durationSeconds": 43.11,
+        "caption": "ภาพมุมสูงรอบหลังคาบ้านพักอาศัย"
+      }
+    ]
+  }
+]

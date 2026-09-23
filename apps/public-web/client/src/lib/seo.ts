@@ -42,6 +42,7 @@ const metaByPath: Record<string, SeoMeta> = {
   },
   "/home-solution": {
     path: "/home-solution",
+    image: "https://www.sirinx.co/assets/home-solution/home-solution-drone-hero.jpg",
     title:
       "Home Solar Solution บ้านใหญ่และโฮมออฟฟิศ | Rooftop Solar, Carport, BESS, EV | SIRINX",
     description:
@@ -61,9 +62,9 @@ const metaByPath: Record<string, SeoMeta> = {
   },
   "/projects": {
     path: "/projects",
-    title: "ผลงาน Solar Carport และระบบพลังงานสะอาด | SIRINX",
+    title: "ผลงานติดตั้งโซลาร์โรงแรมและบ้านพักอาศัย | SIRINX",
     description:
-      "ดูตัวอย่างโครงการ Solar Carport, BESS, EV Charging และระบบบริหารพลังงานที่ SIRINX ออกแบบและติดตั้งจริง",
+      "ชมภาพงานติดตั้งจริงของโรงแรมเรือนแพรอยัลปาร์ค โรงแรมโฮลาเทล และบ้านพักอาศัย พร้อมภาพแผงโซลาร์ อุปกรณ์ และวิดีโอจากหน้างาน",
   },
   "/strategy": {
     path: "/strategy",

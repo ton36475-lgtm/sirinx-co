@@ -14,6 +14,7 @@ import {
   getStaticProvinceCanaryRoutes,
 } from "../shared/siteContentRegistry";
 import { buildProvinceLongformHtml } from "../shared/provinceLongformHtml";
+import { buildStaticRouteShell } from "../shared/staticRouteShell";
 
 const distPublic = path.resolve(import.meta.dirname, "..", "dist", "public");
 const distAssets = path.join(distPublic, "assets");
@@ -410,6 +411,17 @@ function injectStaticShell(html: string, route: string) {
     return html.replace(
       '<div id="root"></div>',
       `<div id="root">\n    ${provinceCanaryShell}\n    </div>`
+    );
+  }
+
+  // Anything still empty is a client-rendered route. Give it at least its own
+  // title and description as real body text rather than shipping a blank page
+  // to every crawler that does not run JavaScript.
+  const genericRouteShell = buildStaticRouteShell(route, { escapeHtml });
+  if (genericRouteShell) {
+    return html.replace(
+      '<div id="root"></div>',
+      `<div id="root">\n    ${genericRouteShell}\n    </div>`
     );
   }
 

@@ -5,6 +5,7 @@ import path from "node:path";
 import { appRouter } from "./routers";
 import type { TrpcContext } from "./_core/context";
 import * as db from "./db";
+import * as notification from "./_core/notification";
 
 // ==================== MOCK DB ====================
 
@@ -162,6 +163,10 @@ function createUserContext(): TrpcContext {
 
 // ==================== LEAD TESTS ====================
 
+beforeEach(() => {
+  vi.clearAllMocks();
+});
+
 describe("lead.submit", () => {
   it("creates a lead from public context (no auth required)", async () => {
     const caller = appRouter.createCaller(createPublicContext());
@@ -196,6 +201,37 @@ describe("lead.submit", () => {
       message: "ต้องการข้อมูลเพิ่มเติม",
     });
     expect(result.success).toBe(true);
+  });
+
+  it("keeps Contact, Assessment, and LINE sources on the public synthetic boundary", async () => {
+    const caller = appRouter.createCaller(createPublicContext());
+    const sources = ["contact", "assessment", "line"] as const;
+
+    for (const source of sources) {
+      const result = await caller.lead.submit({
+        source,
+        name: `Synthetic ${source}`,
+        phone: "0812345678",
+        message: "Synthetic local test; do not contact.",
+      });
+
+      expect(result).toEqual({ success: true, id: 1 });
+    }
+
+    expect(db.createLead).toHaveBeenCalledTimes(sources.length);
+    expect(db.createContactSubmission).toHaveBeenCalledTimes(sources.length);
+    expect(notification.notifyOwner).toHaveBeenCalledTimes(sources.length);
+    expect(
+      vi.mocked(db.createLead).mock.calls.map(([input]) => input.source)
+    ).toEqual(sources);
+  });
+
+  it("rejects lead payloads that exceed the persisted name boundary", async () => {
+    const caller = appRouter.createCaller(createPublicContext());
+
+    await expect(
+      caller.lead.submit({ source: "contact", name: "x".repeat(256) })
+    ).rejects.toThrow();
   });
 
   it("queues public leads locally when database is unavailable", async () => {

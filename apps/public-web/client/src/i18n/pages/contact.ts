@@ -5,10 +5,10 @@ const dict: TranslationDict = {
   chPhone: { th: "โทรศัพท์", en: "Phone", cn: "电话" },
   chPhoneSub: { th: "คุณ Pitoon — CEO & Founder", en: "Khun Pitoon — CEO & Founder", cn: "Pitoon — CEO & 创始人" },
   chEmail: { th: "อีเมล", en: "Email", cn: "电子邮件" },
-  chEmailSub: { th: "ตอบกลับภายใน 24 ชม.", en: "Reply within 24 hrs", cn: "24小时内回复" },
+  chEmailSub: { th: "ตอบกลับตามเวลาทำการและคิวงาน", en: "Reply by business hours and queue", cn: "按工作时间和队列回复" },
   chOffice: { th: "สำนักงาน", en: "Office", cn: "办公室" },
   chWebsite: { th: "เว็บไซต์", en: "Website", cn: "网站" },
-  chWebsiteSub: { th: "ติดต่อได้ตลอด 24 ชม.", en: "Available 24/7", cn: "全天候服务" },
+  chWebsiteSub: { th: "ส่งข้อมูลผ่านแบบฟอร์มได้", en: "Submit via the form", cn: "可通过表单提交" },
   chLineSub: { th: "แชทสดกับทีมงาน", en: "Live chat with our team", cn: "与团队实时聊天" },
 
   /* ── Interest Options ── */
@@ -40,10 +40,10 @@ const dict: TranslationDict = {
   prefillFromCalc: { th: "(ข้อมูลจากเครื่องมือคำนวณ Solar Assessment)", en: "(Data from Solar Assessment calculator)", cn: "(来自太阳能评估计算器的数据)" },
 
   /* ── Success State ── */
-  successToast: { th: "ส่งข้อมูลเรียบร้อย ทีมงานจะติดต่อกลับภายใน 24 ชั่วโมง", en: "Submitted successfully. Our team will contact you within 24 hours.", cn: "提交成功。我们的团队将在24小时内与您联系。" },
+  successToast: { th: "ส่งข้อมูลเรียบร้อย ทีมงานจะตรวจสอบและติดต่อกลับตามเวลาทำการและคิวงาน", en: "Submitted successfully. Our team will review it and follow up by business hours and queue.", cn: "提交成功。我们的团队将审核信息，并按工作时间和队列跟进。" },
   errorToast: { th: "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", en: "An error occurred. Please try again.", cn: "发生错误，请重试。" },
   successTitle: { th: "ขอบคุณสำหรับข้อมูล", en: "Thank You for Your Information", cn: "感谢您提供的信息" },
-  successDesc: { th: "ทีมวิศวกรของ SIRINX จะตรวจสอบข้อมูลและติดต่อกลับภายใน 24 ชั่วโมง หากต้องการความช่วยเหลือเร่งด่วน กรุณาโทร +66 81 972 3969", en: "SIRINX engineering team will review your information and contact you within 24 hours. For urgent assistance, please call +66 81 972 3969", cn: "SIRINX工程团队将审核您的信息并在24小时内与您联系。如需紧急帮助，请致电 +66 81 972 3969" },
+  successDesc: { th: "ทีมวิศวกรของ SIRINX จะตรวจสอบข้อมูลและติดต่อกลับตามเวลาทำการและคิวงาน หากต้องการความช่วยเหลือเร่งด่วน กรุณาโทร +66 81 972 3969", en: "SIRINX engineering team will review your information and follow up by business hours and queue. For urgent assistance, please call +66 81 972 3969", cn: "SIRINX工程团队将审核您的信息，并按工作时间和队列跟进。如需紧急帮助，请致电 +66 81 972 3969" },
   successBtnHome: { th: "กลับหน้าหลัก", en: "Back to Home", cn: "返回首页" },
   successBtnCalc: { th: "คำนวณระบบโซลาร์", en: "Calculate Solar System", cn: "计算太阳能系统" },
   successLinePrompt: { th: "ติดตามสถานะผ่าน LINE OA ได้เลย", en: "Follow up via LINE OA", cn: "通过LINE OA跟进" },
@@ -67,7 +67,7 @@ const dict: TranslationDict = {
 
   /* ── Form Section ── */
   formTitle: { th: "แบบฟอร์มขอใบเสนอราคา", en: "Request a Quote", cn: "请求报价" },
-  formDesc: { th: "กรอกข้อมูลเบื้องต้น ทีมวิศวกรจะวิเคราะห์และติดต่อกลับภายใน 24 ชม.", en: "Fill in basic information. Our engineers will analyze and contact you within 24 hours.", cn: "填写基本信息。我们的工程师将在24小时内分析并与您联系。" },
+  formDesc: { th: "กรอกข้อมูลเบื้องต้น ทีมวิศวกรจะตรวจสอบและติดต่อกลับตามเวลาทำการและคิวงาน", en: "Fill in basic information. Our engineers will review it and follow up by business hours and queue.", cn: "填写基本信息。我们的工程师将审核信息，并按工作时间和队列跟进。" },
   labelName: { th: "ชื่อ-นามสกุล *", en: "Full Name *", cn: "姓名 *" },
   labelCompany: { th: "บริษัท / องค์กร", en: "Company / Organization", cn: "公司/组织" },
   labelEmail: { th: "อีเมล", en: "Email", cn: "电子邮件" },
@@ -92,7 +92,7 @@ const dict: TranslationDict = {
 
   /* ── Sidebar ── */
   lineTitle: { th: "แชทกับเราผ่าน LINE", en: "Chat with Us on LINE", cn: "通过LINE与我们聊天" },
-  lineDesc: { th: "สอบถามข้อมูลเบื้องต้น หรือนัดสำรวจหน้างานผ่าน LINE OA ได้ทันที ตอบกลับรวดเร็วภายใน 5 นาที", en: "Ask preliminary questions or schedule a site survey via LINE OA. Quick response within 5 minutes.", cn: "通过LINE OA咨询初步问题或预约现场勘察。5分钟内快速回复。" },
+  lineDesc: { th: "สอบถามข้อมูลเบื้องต้น หรือนัดสำรวจหน้างานผ่าน LINE OA ได้ทันที ทีมงานจะตอบกลับตามเวลาทำการและคิวงาน", en: "Ask preliminary questions or schedule a site survey via LINE OA. The team will follow up by business hours and queue.", cn: "通过LINE OA咨询初步问题或预约现场勘察。团队将按工作时间和队列回复。" },
   lineBtn: { th: "เพิ่มเพื่อน LINE @SIRINX", en: "Add LINE @SIRINX", cn: "添加LINE @SIRINX" },
   calcTitle: { th: "ยังไม่แน่ใจ?", en: "Not Sure Yet?", cn: "还不确定？" },
   calcDesc: { th: "ใช้เครื่องมือคำนวณขั้นสูงของ SIRINX เพื่อประเมินขนาดระบบ ผลตอบแทน และระยะเวลาคืนทุนเบื้องต้น", en: "Use SIRINX's advanced calculator to estimate system size, returns, and payback period.", cn: "使用SIRINX的高级计算器估算系统规模、回报和投资回收期。" },
@@ -101,20 +101,20 @@ const dict: TranslationDict = {
   /* ── Steps after submit ── */
   stepsTitle: { th: "ขั้นตอนหลังส่งแบบฟอร์ม", en: "Steps After Submission", cn: "提交后的步骤" },
   step1Title: { th: "ทีมวิศวกรตรวจสอบข้อมูล", en: "Engineering team reviews data", cn: "工程团队审核数据" },
-  step1Time: { th: "ภายใน 24 ชม.", en: "Within 24 hrs", cn: "24小时内" },
+  step1Time: { th: "หลังได้รับข้อมูล", en: "After information is received", cn: "收到信息后" },
   step2Title: { th: "นัดสำรวจหน้างาน", en: "Schedule site survey", cn: "预约现场勘察" },
-  step2Time: { th: "ภายใน 3-5 วัน", en: "Within 3-5 days", cn: "3-5天内" },
+  step2Time: { th: "หลังตรวจสอบข้อมูล", en: "After information review", cn: "审核信息后" },
   step3Title: { th: "ออกแบบระบบ + ประเมิน ROI", en: "System design + ROI estimate", cn: "系统设计 + ROI评估" },
-  step3Time: { th: "ภายใน 7 วัน", en: "Within 7 days", cn: "7天内" },
+  step3Time: { th: "หลังสำรวจหน้างาน", en: "After the site survey", cn: "现场勘察后" },
   step4Title: { th: "นำเสนอข้อเสนอ", en: "Present proposal", cn: "提交方案" },
-  step4Time: { th: "ภายใน 10 วัน", en: "Within 10 days", cn: "10天内" },
+  step4Time: { th: "ตามข้อเสนอที่อนุมัติ", en: "By the approved proposal", cn: "以批准的方案为准" },
 
   /* ── Why SIRINX ── */
   whyTitle: { th: "ทำไมเลือก SIRINX", en: "Why Choose SIRINX", cn: "为什么选择SIRINX" },
   why1: { th: "สำรวจหน้างานฟรี ไม่มีข้อผูกมัด", en: "Free site survey, no obligation", cn: "免费现场勘察，无任何义务" },
   why2: { th: "ใบเสนอราคาโปร่งใส ไม่มีค่าใช้จ่ายแอบแฝง", en: "Transparent quotation, no hidden costs", cn: "透明报价，无隐藏费用" },
   why3: { th: "ทีมวิศวกรมืออาชีพ", en: "Professional engineering team", cn: "专业工程团队" },
-  why4: { th: "ดูแลระบบตลอดอายุ 25 ปี", en: "System maintenance for 25 years", cn: "25年系统维护" },
+  why4: { th: "ดูแลระบบตามขอบเขต O&M ที่อนุมัติ", en: "System care by approved O&M scope", cn: "按批准的运维范围维护系统" },
 
   /* ── Final CTA ── */
   ctaTitle: { th: "ต้องการข้อมูลเพิ่มเติม?", en: "Need More Information?", cn: "需要更多信息？" },

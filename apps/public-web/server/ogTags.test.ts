@@ -76,7 +76,8 @@ describe("getPageMeta", () => {
   it("returns project portfolio meta for /projects", () => {
     const meta = getPageMeta("/projects");
     expect(meta.title).toContain("ผลงานติดตั้ง");
-    expect(meta.description).toContain("Rooftop Solar");
+    expect(meta.description).toContain("ภาพผลงานติดตั้งจริง");
+    expect(meta.description).toContain("โรงแรมโฮลาเทล");
   });
 
   it("returns assessment-focused meta for /assessment", () => {
@@ -90,10 +91,17 @@ describe("getPageMeta", () => {
     expect(meta.title).toContain("ลดค่าไฟระยะยาว");
   });
 
-  it("handles blog slug pattern with SEO copy", () => {
+  it("matches blog slug meta to the post record (crawler/client parity)", () => {
     const meta = getPageMeta("/blog/rooftop-solar-roi-2025");
-    expect(meta.title).toContain("โซลาร์เซลล์ SIRINX");
-    expect(meta.description).toContain("rooftop solar roi 2025");
+    expect(meta.title).toContain("Rooftop Solar ROI");
+    expect(meta.title).toContain("SIRINX Blog");
+    expect(meta.description).toContain("ผลตอบแทนการลงทุน");
+    expect(meta.noindex).toBeUndefined();
+  });
+
+  it("marks unknown blog slugs noindex", () => {
+    const meta = getPageMeta("/blog/not-a-post");
+    expect(meta.noindex).toBe(true);
   });
 
   it("strips query params and hash", () => {
@@ -122,9 +130,9 @@ describe("getPageMeta", () => {
     const meta = getPageMeta("/solar-carport/phitsanulok");
     expect(meta.title).toContain("พิษณุโลก");
     expect(meta.description).toContain("Solar Carport");
-    expect(meta.description).toContain("30-100%");
-    expect(meta.description).toContain("3-5 ปี");
-    expect(meta.description).toContain("ตามข้อมูลไซต์จริง");
+    expect(meta.description).not.toContain("30-100%");
+    expect(meta.description).not.toContain("3-5 ปี");
+    expect(meta.description).toContain("ข้อมูลการใช้ไฟจริงก่อนออกแบบ");
   });
 });
 
@@ -243,25 +251,26 @@ describe("injectOgTags", () => {
     expect(result).toContain("AdministrativeArea");
   });
 
-  it("injects route-specific hero image preload", () => {
+  it("does not preload an unverified remote route hero", () => {
     const result = injectOgTags(
       sampleHtml,
       "/solar-carport",
       "https://www.sirinx.co"
     );
-    expect(result).toContain('rel="preload" as="image"');
-    expect(result).toContain("/cdn-cgi/image/width=1280");
-    expect(result).toContain("carport-wide-1_30e3af4c.jpeg");
+    expect(result).not.toContain('rel="preload" as="image"');
+    expect(result).not.toContain("/cdn-cgi/image/width=1280");
+    expect(result).not.toContain("carport-wide-1_30e3af4c.jpeg");
   });
 
   it("uses responsive preload candidates for the homepage hero", () => {
     const result = injectOgTags(sampleHtml, "/", "https://www.sirinx.co");
 
     expect(result).toContain('rel="preload" as="image"');
-    expect(result).toContain("imagesrcset=");
-    expect(result).toContain("solar-carport-hero-640.avif 640w");
-    expect(result).toContain('imagesizes="(max-width: 767px) 80vw, 100vw"');
-    expect(result).toContain('type="image/avif"');
+    expect(result).toContain(
+      'href="/assets/projects/ruenphae/20260924/1000076001.jpg"',
+    );
+    expect(result).toContain('type="image/jpeg"');
+    expect(result).not.toContain("imagesrcset=");
   });
 
   it("uses responsive preload candidates for the home solution hero", () => {

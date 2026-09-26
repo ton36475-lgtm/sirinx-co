@@ -17,8 +17,31 @@ const dict: TranslationDict = {
     en: "System Lifespan",
     cn: "使用寿命",
   },
-  "home.stat.paybackVal": { th: "3-5 ปี", en: "3-5 Years", cn: "3-5年" },
-  "home.stat.lifespanVal": { th: "25+ ปี", en: "25+ Years", cn: "25+年" },
+  "home.stat.reduceBillVal": {
+    th: "ประเมินจากข้อมูลหน้างาน",
+    en: "Assessed from site data",
+    cn: "根据现场数据评估",
+  },
+  "home.stat.paybackVal": {
+    th: "คำนวณเฉพาะโครงการ",
+    en: "Project-specific calculation",
+    cn: "按项目计算",
+  },
+  "home.stat.lifespanVal": {
+    th: "ตามรุ่นอุปกรณ์",
+    en: "Equipment-specific",
+    cn: "以设备型号为准",
+  },
+  "home.stat.monitor": {
+    th: "การติดตามระบบ",
+    en: "System monitoring",
+    cn: "系统监控",
+  },
+  "home.stat.monitorVal": {
+    th: "AI / Energy Monitoring",
+    en: "AI / Energy Monitoring",
+    cn: "AI / Energy Monitoring",
+  },
 
   // Solar Carport Spotlight
   "home.flagship.tag": {
@@ -32,9 +55,9 @@ const dict: TranslationDict = {
     cn: "为什么太阳能车棚\n是最佳选择？",
   },
   "home.flagship.desc": {
-    th: "ธุรกิจที่มีลานจอดรถ 50+ คัน สามารถเปลี่ยนพื้นที่ว่างเปล่าให้เป็นแหล่งผลิตไฟฟ้า ลดค่าพลังงาน เพิ่มมูลค่าอสังหาริมทรัพย์ และเตรียมพร้อมสำหรับ EV ในคราวเดียว",
-    en: "Businesses with 50+ parking spaces can transform unused areas into power generation sources, reduce energy costs, increase property value, and prepare for EV — all at once.",
-    cn: "拥有50+停车位的企业可以将闲置空间转化为发电来源，降低能源成本，提升房产价值，同时为电动车做好准备。",
+    th: "ธุรกิจที่มีลานจอดรถสามารถเปลี่ยนพื้นที่ว่างให้เป็นแหล่งผลิตไฟฟ้า เพิ่มร่มเงา และเตรียมพร้อมสำหรับ EV โดยเริ่มจากการประเมินพื้นที่จริง",
+    en: "Businesses with parking areas can turn available space into a source of power, shade, and EV readiness, starting with a real site assessment.",
+    cn: "拥有停车区域的企业可以从现场评估开始，将可用空间转化为发电、遮阳和电动车准备空间。",
   },
   "home.flagship.benefit1": {
     th: "ผลิตไฟฟ้าจากพื้นที่ที่ไม่ได้ใช้ — ไม่ต้องแตะหลังคาอาคาร",
@@ -106,9 +129,9 @@ const dict: TranslationDict = {
 
   // Mid-page CTA
   "home.midCta.title": {
-    th: "มีลานจอดรถ 50+ คัน?",
-    en: "Have 50+ Parking Spaces?",
-    cn: "拥有50+停车位？",
+    th: "มีพื้นที่จอดรถสำหรับธุรกิจ?",
+    en: "Have a business parking area?",
+    cn: "拥有企业停车区域？",
   },
   "home.midCta.desc": {
     th: "ให้ SIRINX ประเมินศักยภาพพื้นที่ของคุณฟรี — รับข้อเสนอ Solar Carport พร้อม ROI เฉพาะโครงการ",
@@ -144,9 +167,9 @@ const dict: TranslationDict = {
     cn: "将停车场变成发电站，支持电动车充电",
   },
   "home.sol.rooftop.desc": {
-    th: "ลดค่าไฟได้ประมาณ 30-100% ด้วยระบบโซลาร์บนหลังคา โดยขึ้นอยู่กับ load profile จริง",
-    en: "Estimate 30-100% bill reduction with rooftop solar, depending on the real load profile.",
-    cn: "通过屋顶太阳能预估降低30-100%电费，具体取决于实际负载曲线。",
+    th: "ออกแบบระบบโซลาร์บนหลังคาจากพื้นที่และ load profile จริงของอาคาร",
+    en: "Design rooftop solar from the building's available area and real load profile.",
+    cn: "根据建筑可用空间和实际负载曲线设计屋顶太阳能系统。",
   },
   "home.sol.floating.desc": {
     th: "ใช้พื้นที่ผิวน้ำให้เกิดประโยชน์สูงสุด",
@@ -169,9 +192,9 @@ const dict: TranslationDict = {
     cn: "运维服务",
   },
   "home.sol.om.desc": {
-    th: "Predictive maintenance ตลอด 25 ปี",
-    en: "Predictive maintenance for 25 years",
-    cn: "25年预测性维护",
+    th: "Predictive maintenance ตามขอบเขต O&M และเงื่อนไขสัญญา",
+    en: "Predictive maintenance by O&M scope and contract terms",
+    cn: "根据运维范围和合同条款提供预测性维护",
   },
 
   // Process
@@ -203,14 +226,14 @@ const dict: TranslationDict = {
   },
   "home.process.step3.title": { th: "ติดตั้ง", en: "Installation", cn: "安装" },
   "home.process.step3.desc": {
-    th: "ทีมวิศวกรมืออาชีพ ติดตั้งตามมาตรฐาน 45-90 วัน",
-    en: "Professional engineering team, standard installation in 45-90 days",
-    cn: "专业工程团队，45-90天标准安装",
+    th: "ทีมงานติดตั้งตามแบบที่อนุมัติและแผนงานของโครงการ",
+    en: "The installation team works to the approved design and project schedule",
+    cn: "安装团队按照批准的设计和项目计划执行",
   },
   "home.process.step4.title": {
-    th: "ดูแลตลอด 25 ปี",
-    en: "25-Year Maintenance",
-    cn: "25年维护",
+    th: "ดูแลตามสัญญา O&M",
+    en: "O&M by contract",
+    cn: "按运维合同维护",
   },
   "home.process.step4.desc": {
     th: "AI Monitoring + O&M ดูแลระบบตลอดอายุการใช้งาน",
@@ -294,9 +317,14 @@ const dict: TranslationDict = {
     cn: "已完成",
   },
   "home.projects.underConstruction": {
-    th: "กำลังก่อสร้าง",
-    en: "Under Construction",
-    cn: "建设中",
+    th: "รอตรวจสถานะ",
+    en: "Status Review",
+    cn: "状态审核",
+  },
+  "home.projects.completedInstallation": {
+    th: "ติดตั้งแล้ว",
+    en: "Installed",
+    cn: "已安装",
   },
   "home.projects.node1.name": {
     th: "โรงแรมเรือนแพ รอยัลปาร์ค",
@@ -324,25 +352,25 @@ const dict: TranslationDict = {
     cn: "能源管理",
   },
   "home.projects.node2.name": {
-    th: "โรงแรมโฮลาเทลริมน่าน",
-    en: "Holatel Rim Nan Hotel",
-    cn: "Holatel Rim Nan酒店",
+    th: "โรงแรมโฮลาเทล",
+    en: "Holatel Hotel",
+    cn: "Holatel Hotel",
   },
   "home.projects.node2.location": {
-    th: "น่าน — Solar + BESS + Smart Hotel System",
-    en: "Nan — Solar + BESS + Smart Hotel System",
-    cn: "南府 — 太阳能+储能+智能酒店系统",
+    th: "Solar Rooftop — ภาพงานติดตั้งจริง",
+    en: "Solar Rooftop — real installation photos",
+    cn: "屋顶太阳能 — 真实安装照片",
   },
   "home.projects.node2.smartHotel": {
-    th: "ระบบอัจฉริยะ",
-    en: "Smart System",
-    cn: "智能系统",
+    th: "ระบบที่ติดตั้ง",
+    en: "Installed System",
+    cn: "已安装系统",
   },
-  "home.projects.node2.target": { th: "เป้าหมาย", en: "Target", cn: "目标" },
+  "home.projects.node2.target": { th: "สถานะ", en: "Status", cn: "状态" },
   "home.projects.node2.opening": {
-    th: "เปิดให้บริการ",
-    en: "Opening",
-    cn: "开业",
+    th: "หลักฐานภาพ",
+    en: "Photo Evidence",
+    cn: "图片证据",
   },
   "home.projects.viewAll": {
     th: "ดูโครงการทั้งหมด",
@@ -353,34 +381,39 @@ const dict: TranslationDict = {
   // O&M Section
   "home.om.tag": { th: "O&M Service", en: "O&M Service", cn: "运维服务" },
   "home.om.title": {
-    th: "ดูแลระบบตลอด 25 ปี\nด้วย AI และทีมวิศวกร",
-    en: "25-Year System Maintenance\nwith AI and Engineering Team",
-    cn: "25年系统维护\nAI与工程团队",
+    th: "ดูแลระบบตามขอบเขต O&M\nด้วย AI และทีมวิศวกร",
+    en: "System care by O&M scope\nwith AI and engineering team",
+    cn: "按运维范围维护系统\n由AI和工程团队支持",
   },
   "home.om.desc": {
-    th: "SIRINX ไม่ใช่แค่ติดตั้งแล้วจบ — เราดูแลระบบตลอดอายุการใช้งานด้วย AI Monitoring, Drone Inspection และทีมช่างที่พร้อมออกซ่อมบำรุงภายใน 24-48 ชม.",
-    en: "SIRINX doesn't just install and leave — we maintain the system throughout its lifetime with AI Monitoring, Drone Inspection, and a maintenance team ready within 24-48 hours.",
-    cn: "SIRINX不只是安装就结束 — 我们通过AI监控、无人机巡检和24-48小时内响应的维护团队，全程维护系统。",
+    th: "SIRINX ไม่ใช่แค่ติดตั้งแล้วจบ — เราจัดบริการ O&M ด้วย AI Monitoring, Drone Inspection และทีมช่างตามขอบเขตและเวลาตอบสนองที่ระบุในสัญญา",
+    en: "SIRINX does not just install and leave — O&M can include AI Monitoring, Drone Inspection, and engineering support by the scope and response terms in the contract.",
+    cn: "SIRINX不只是安装就结束——运维可按合同范围和响应条款提供AI监控、无人机巡检和工程支持。",
   },
   "home.om.monitoring": {
     th: "AI Monitoring",
     en: "AI Monitoring",
     cn: "AI监控",
   },
+  "home.om.monitoringVal": {
+    th: "ตามขอบเขตงาน",
+    en: "By project scope",
+    cn: "按项目范围",
+  },
   "home.om.response": { th: "ตอบสนอง", en: "Response Time", cn: "响应时间" },
-  "home.om.responseVal": { th: "24-48 ชม.", en: "24-48 hrs", cn: "24-48小时" },
+  "home.om.responseVal": { th: "ตามสัญญา", en: "By contract", cn: "以合同为准" },
   "home.om.drone": {
     th: "Drone Inspection",
     en: "Drone Inspection",
     cn: "无人机巡检",
   },
-  "home.om.droneVal": { th: "รายไตรมาส", en: "Quarterly", cn: "每季度" },
+  "home.om.droneVal": { th: "ตามแผนตรวจสอบ", en: "By inspection plan", cn: "按检查计划" },
   "home.om.report": {
     th: "รายงานผลผลิต",
     en: "Production Report",
     cn: "产量报告",
   },
-  "home.om.reportVal": { th: "รายเดือน", en: "Monthly", cn: "每月" },
+  "home.om.reportVal": { th: "ตามขอบเขตงาน", en: "By project scope", cn: "按项目范围" },
   "home.om.viewAll": {
     th: "ดูบริการ O&M ทั้งหมด",
     en: "View All O&M Services",
@@ -395,9 +428,9 @@ const dict: TranslationDict = {
     cn: "投资太阳能车棚\n无需首日全额付款",
   },
   "home.invest.desc": {
-    th: "SIRINX มีรูปแบบการลงทุนที่ยืดหยุ่น — ซื้อขาด ผ่อนชำระ หรือ Co-investment 50:50 ช่วยให้ธุรกิจเข้าถึง Solar Carport ได้ทันที",
-    en: "SIRINX offers flexible investment models — outright purchase, installment, or Co-investment 50:50 to help businesses access Solar Carport immediately",
-    cn: "SIRINX提供灵活的投资模式 — 买断、分期付款或50:50共同投资，帮助企业立即获得太阳能车棚",
+    th: "SIRINX มีรูปแบบการลงทุนที่ต้องตรวจสอบตามโครงสร้างและเงื่อนไขของแต่ละโครงการ — ซื้อขาด ผ่อนชำระ หรือรูปแบบร่วมลงทุนที่ได้รับอนุมัติ",
+    en: "SIRINX can assess outright purchase, installment, or an approved co-investment structure according to each project's terms.",
+    cn: "SIRINX可根据项目条件评估买断、分期或经批准的共同投资结构。",
   },
   "home.invest.option1": {
     th: "ซื้อขาด — คืนทุนเร็ว ผลตอบแทนสูงสุด",
@@ -410,14 +443,14 @@ const dict: TranslationDict = {
     cn: "分期付款 — 月供低于节省的电费",
   },
   "home.invest.option3": {
-    th: "Co-investment 50:50 — แบ่งเบาภาระลงทุน",
-    en: "Co-investment 50:50 — Share the investment burden",
-    cn: "50:50共同投资 — 分担投资负担",
+    th: "Co-investment — ตามโครงสร้างที่อนุมัติ",
+    en: "Co-investment — By approved structure",
+    cn: "共同投资 — 以批准的结构为准",
   },
   "home.invest.option4": {
-    th: "สิทธิประโยชน์ทางภาษี — หักค่าเสื่อม 150%",
-    en: "Tax Benefits — 150% depreciation deduction",
-    cn: "税收优惠 — 150%折旧扣除",
+    th: "สิทธิประโยชน์ทางภาษี — ตรวจสอบตามเงื่อนไขล่าสุด",
+    en: "Tax benefits — subject to current eligibility rules",
+    cn: "税收优惠 — 以最新资格条件为准",
   },
   "home.invest.viewMore": {
     th: "ศึกษาข้อมูลการลงทุน",
@@ -455,9 +488,9 @@ const dict: TranslationDict = {
     cn: "太阳能车棚安装需要多长时间？",
   },
   "home.faq.a2": {
-    th: "โดยทั่วไปใช้เวลา 45-90 วัน ขึ้นอยู่กับขนาดโครงการ ตั้งแต่การสำรวจหน้างาน ออกแบบโครงสร้าง ขออนุญาต จนถึงติดตั้งและทดสอบระบบ SIRINX มีทีมวิศวกรมืออาชีพดูแลทุกขั้นตอน",
-    en: "Typically 45-90 days depending on project size, from site survey, structural design, permits, to installation and system testing. SIRINX has a professional engineering team managing every step.",
-    cn: "通常需要45-90天，取决于项目规模，从现场勘查、结构设计、许可证申请到安装和系统测试。SIRINX拥有专业工程团队管理每个环节。",
+    th: "ระยะเวลาขึ้นอยู่กับขนาดโครงการ การออกแบบโครงสร้าง การขออนุญาต และแผนงานติดตั้ง ทีม SIRINX จะยืนยันกำหนดการหลังตรวจข้อมูลหน้างาน",
+    en: "Timing depends on project size, structural design, permits, and the installation plan. The SIRINX team confirms the schedule after reviewing site data.",
+    cn: "时间取决于项目规模、结构设计、许可和安装计划。SIRINX团队在审核现场数据后确认时间表。",
   },
   "home.faq.q3": {
     th: "Solar Carport คุ้มค่าไหม คืนทุนกี่ปี?",
@@ -465,9 +498,9 @@ const dict: TranslationDict = {
     cn: "太阳能车棚值得投资吗？回本期多长？",
   },
   "home.faq.a3": {
-    th: "คืนทุนเฉลี่ย 3-5 ปี ขึ้นอยู่กับขนาดระบบ ค่าไฟปัจจุบัน load profile และรูปแบบการลงทุน (ซื้อขาด ผ่อนชำระ หรือ Co-investment) ระบบมีอายุการใช้งาน 25+ ปี สามารถขอประเมิน ROI เฉพาะโครงการได้ฟรี",
-    en: "Average payback is 3-5 years depending on system size, current electricity costs, load profile, and investment model (outright purchase, installment, or Co-investment). System lifespan is 25+ years. Free project-specific ROI assessment available.",
-    cn: "平均回本期为3-5年，取决于系统规模、当前电费、负载曲线和投资模式（买断、分期或共同投资）。系统寿命25年以上，可免费获取项目专属ROI评估。",
+    th: "ความคุ้มค่าต้องคำนวณเฉพาะโครงการจากค่าไฟจริง load profile พื้นที่ติดตั้ง รูปแบบการลงทุน และข้อจำกัดหน้างาน ผลลัพธ์ในหน้าเว็บเป็นเพียงการประเมินเบื้องต้น ไม่ใช่ใบเสนอราคาหรือการรับประกันผลประหยัด",
+    en: "Project value must be calculated from actual electricity costs, load profile, installation area, investment model, and site constraints. Website results are preliminary assessments, not quotes or guaranteed savings.",
+    cn: "项目价值需要根据实际电费、负载曲线、安装面积、投资方式和现场限制单独计算。网站结果仅为初步评估，不是报价或节省保证。",
   },
   "home.faq.q4": {
     th: "รองรับ EV Charger ได้เลยไหม?",
@@ -485,9 +518,9 @@ const dict: TranslationDict = {
     cn: "SIRINX如何处理安装后的维护？",
   },
   "home.faq.a5": {
-    th: "SIRINX มีบริการ O&M (Operation & Maintenance) ตลอดอายุระบบ 25 ปี ด้วยระบบ AI Monitoring ตรวจสอบประสิทธิภาพแบบ real-time ทีมช่างพร้อมออกซ่อมบำรุงภายใน 24-48 ชม. และรายงานผลการผลิตไฟฟ้ารายเดือน",
-    en: "SIRINX provides O&M (Operation & Maintenance) service throughout the 25-year system life with AI Monitoring for real-time performance tracking, maintenance team ready within 24-48 hours, and monthly electricity production reports.",
-    cn: "SIRINX提供贯穿25年系统寿命的运维服务，包括AI监控实时性能追踪、24-48小时内响应的维护团队和月度发电量报告。",
+    th: "SIRINX มีบริการ O&M (Operation & Maintenance) ตามขอบเขตสัญญา เช่น AI Monitoring การตรวจสอบ และรายงานผล โดยรายละเอียดระยะเวลาและการตอบสนองต้องยืนยันในข้อเสนอที่อนุมัติ",
+    en: "SIRINX provides O&M by contract scope, such as AI Monitoring, inspections, and reporting. Service duration and response terms must be confirmed in the approved proposal.",
+    cn: "SIRINX可按合同范围提供运维服务，例如AI监控、检查和报告。服务期限和响应条款必须在批准的方案中确认。",
   },
 
   // Final CTA

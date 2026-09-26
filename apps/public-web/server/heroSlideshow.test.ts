@@ -65,15 +65,10 @@ interface HeroSlide {
 
 const ALL_SLIDES: HeroSlide[] = [
   { id: "carport-aerial", category: "solar-carport" },
-  { id: "carport-ground", category: "solar-carport" },
   { id: "rooftop-factory", category: "rooftop-solar" },
-  { id: "floating-solar", category: "floating-solar" },
-  { id: "carport-ev", category: "solar-carport" },
-  { id: "bess-realistic", category: "bess" },
   { id: "hotel-resort", category: "hospitality" },
   { id: "carport-realistic", category: "solar-carport" },
-  { id: "ai-monitoring", category: "ai-energy" },
-  { id: "carport-mall", category: "solar-carport" },
+  { id: "bess-realistic", category: "bess" },
 ];
 
 function getPersonalizedSlides(): HeroSlide[] {
@@ -178,9 +173,9 @@ describe("HeroSlideshow Personalization", () => {
   describe("getPersonalizedSlides", () => {
     it("should return default order when no prefs exist", () => {
       const slides = getPersonalizedSlides();
-      expect(slides.length).toBe(10);
+      expect(slides.length).toBe(5);
       expect(slides[0].id).toBe("carport-aerial");
-      expect(slides[9].id).toBe("carport-mall");
+      expect(slides[4].id).toBe("bess-realistic");
     });
 
     it("should prioritize floating-solar slides when that category is most visited", () => {
@@ -189,8 +184,8 @@ describe("HeroSlideshow Personalization", () => {
       trackSolutionVisit("floating-solar");
 
       const slides = getPersonalizedSlides();
-      expect(slides[0].category).toBe("floating-solar");
-      expect(slides.length).toBe(10);
+      expect(slides[0].id).toBe("carport-aerial");
+      expect(slides.length).toBe(5);
     });
 
     it("should prioritize BESS slides when BESS is most visited", () => {
@@ -216,12 +211,12 @@ describe("HeroSlideshow Personalization", () => {
       // Actually it could be if remaining has carport slides, but the prioritized section is capped at 2
     });
 
-    it("should include all 10 slides regardless of preferences", () => {
+    it("should include all 5 reviewed real-photo slides regardless of preferences", () => {
       trackSolutionVisit("hospitality");
-      trackSolutionVisit("ai-energy");
+      trackSolutionVisit("bess");
 
       const slides = getPersonalizedSlides();
-      expect(slides.length).toBe(10);
+      expect(slides.length).toBe(5);
 
       // All original slide IDs should be present
       const ids = new Set(slides.map(s => s.id));
@@ -236,11 +231,13 @@ describe("HeroSlideshow Personalization", () => {
       trackSolutionVisit("ai-energy");
       trackSolutionVisit("hospitality");
       trackSolutionVisit("hospitality");
+      trackSolutionVisit("bess");
+      trackSolutionVisit("bess");
+      trackSolutionVisit("bess");
 
       const slides = getPersonalizedSlides();
-      // First slide should be ai-energy (most visited)
-      expect(slides[0].category).toBe("ai-energy");
-      // Second should be hospitality (2nd most visited)
+      // BESS is most visited, then hospitality.
+      expect(slides[0].category).toBe("bess");
       expect(slides[1].category).toBe("hospitality");
     });
   });

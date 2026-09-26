@@ -6,14 +6,14 @@ const dict: TranslationDict = {
   "sa.hero.title1": { th: "คำนวณระบบโซลาร์เซลล์", en: "Calculate Your Solar System", cn: "计算您的太阳能系统" },
   "sa.hero.title2": { th: "และแบตเตอรี่สำรอง", en: "and Battery Storage", cn: "和电池储能" },
   "sa.hero.desc": {
-    th: "เครื่องมือวิเคราะห์ระดับวิศวกรรม — คำนวณขนาดระบบ Solar PV + BESS ที่เหมาะสมกับธุรกิจของคุณ พร้อมประมาณการ 25 ปี, IRR, LCOE, และตรวจสอบความสมเหตุสมผลของขนาดเทียบกับกำลังการผลิตจริง",
-    en: "Engineering-grade analysis tool — Calculate the optimal Solar PV + BESS system for your business with 25-year projections, IRR, LCOE, and system sizing validation against actual production capacity",
-    cn: "工程级分析工具 — 计算适合您业务的最佳太阳能光伏 + BESS系统，提供25年预测、IRR、LCOE，并验证系统规模与实际产能的合理性"
+    th: "เครื่องมือประเมินเบื้องต้นสำหรับคุยกับทีมวิศวกร — ใช้สมมติฐานที่กรอกเพื่อดูแนวทาง Solar PV + BESS, IRR และ LCOE โดยผลลัพธ์ไม่ใช่ใบเสนอราคาหรือการรับประกัน",
+    en: "A preliminary discussion tool for engineers — uses entered assumptions to explore Solar PV + BESS, IRR, and LCOE. Results are not a quote or a guarantee.",
+    cn: "供工程团队初步讨论的评估工具——使用输入假设探索太阳能光伏+BESS、IRR和LCOE。结果不是报价或保证。"
   },
   "sa.hero.feat1": { th: "ข้อมูล Solar Irradiance ประเทศไทย", en: "Thailand Solar Irradiance Data", cn: "泰国太阳辐照数据" },
   "sa.hero.feat2": { th: "รองรับ 7 ประเภทธุรกิจ", en: "Supports 7 Business Types", cn: "支持7种业务类型" },
   "sa.hero.feat3": { th: "วิเคราะห์ ROI + IRR + LCOE", en: "ROI + IRR + LCOE Analysis", cn: "ROI + IRR + LCOE 分析" },
-  "sa.hero.feat4": { th: "ประมาณการ 25 ปี", en: "25-Year Projections", cn: "25年预测" },
+  "sa.hero.feat4": { th: "ประมาณการตามสมมติฐาน", en: "Assumption-based projections", cn: "基于假设的预测" },
 
   /* ── Steps ── */
   "sa.step.businessType": { th: "ประเภทธุรกิจ", en: "Business Type", cn: "业务类型" },
@@ -351,14 +351,14 @@ const dict: TranslationDict = {
     cn: "计算结果是基于输入数据的初步估算，不构成商业报价或回报保证。实际数字取决于现场条件、设备质量、天气和其他因素。"
   },
   "sa.disclaimer.p2": {
-    th: "ค่า Solar Irradiance อ้างอิงจาก Global Solar Atlas (World Bank) สำหรับประเทศไทย ค่าไฟฟ้าอ้างอิงจากอัตราค่าไฟ กกพ. ปี 2567-2568 ราคาอุปกรณ์เป็นราคาตลาดเฉลี่ย Q1/2569",
-    en: "Solar Irradiance data referenced from Global Solar Atlas (World Bank) for Thailand. Electricity rates based on ERC tariff 2024-2025. Equipment prices are market averages for Q1/2026.",
-    cn: "太阳辐照数据参考世界银行全球太阳能图集（泰国）。电费基于ERC 2024-2025年电价。设备价格为2026年第一季度市场平均价。"
+    th: "ข้อมูล Solar Irradiance ค่าไฟ และราคาอุปกรณ์เป็นข้อมูลอ้างอิงเพื่อการประเมินเบื้องต้น ต้องตรวจสอบแหล่งที่มาและเวอร์ชันล่าสุดก่อนใช้ตัดสินใจหรือออกแบบจริง",
+    en: "Solar irradiance, electricity-rate, and equipment-price inputs are references for preliminary assessment. Verify sources and current versions before decisions or final design.",
+    cn: "太阳辐照、电费和设备价格输入仅用于初步评估。决策或最终设计前请核实来源和最新版本。"
   },
   "sa.disclaimer.p3": {
-    th: "ควรให้วิศวกรผู้เชี่ยวชาญสำรวจหน้างานจริงก่อนตัดสินใจลงทุน SIRINX ให้บริการสำรวจหน้างานฟรีสำหรับโครงการ 100 kWp ขึ้นไป",
-    en: "An expert engineer should conduct an on-site survey before making investment decisions. SIRINX offers free site surveys for projects 100 kWp and above.",
-    cn: "在做出投资决定之前，应由专业工程师进行现场勘察。SIRINX为100 kWp及以上项目提供免费现场勘察。"
+    th: "ควรให้วิศวกรผู้เชี่ยวชาญสำรวจหน้างานจริงก่อนตัดสินใจลงทุน โดยขอบเขตและเงื่อนไขการสำรวจต้องยืนยันกับทีม SIRINX",
+    en: "An expert engineer should conduct an on-site survey before investment decisions. Survey scope and terms must be confirmed with the SIRINX team.",
+    cn: "投资决策前应由专业工程师进行现场勘察。勘察范围和条款需与SIRINX团队确认。"
   },
 
   /* ── Final CTA ── */

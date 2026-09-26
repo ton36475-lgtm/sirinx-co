@@ -328,7 +328,7 @@ export default function Blog() {
                   },
                   {
                     label: "อายุระบบ",
-                    value: "25+ ปี",
+                    value: "ตามรุ่นอุปกรณ์",
                     sub: "รับประกันผลผลิต",
                   },
                   { label: "ลด CO₂", value: "40+ ตัน", sub: "ต่อ MW ต่อปี" },

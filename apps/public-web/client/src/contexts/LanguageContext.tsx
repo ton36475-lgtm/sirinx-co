@@ -46,6 +46,11 @@ const translations: Record<string, Record<Language, string>> = {
   "nav.partner": { th: "พันธมิตร", en: "Partners", cn: "合作伙伴" },
 
   // Solutions dropdown
+  "sol.provinces": {
+    th: "Solar Carport 77 จังหวัด",
+    en: "Solar Carport in 77 provinces",
+    cn: "覆盖 77 个府的太阳能车棚",
+  },
   "sol.rooftopSolar": {
     th: "Rooftop Solar",
     en: "Rooftop Solar",
@@ -137,9 +142,9 @@ const translations: Record<string, Record<Language, string>> = {
     cn: "变成太阳能发电站",
   },
   "home.heroDesc": {
-    th: "ผลิตไฟฟ้า ให้ร่มเงา รองรับ EV Charger ลดค่าไฟ 30-100% คืนทุน 3-5 ปีโดยประมาณตามข้อมูลไซต์จริง",
-    en: "Generate electricity, provide shade, and support EV Charging with estimated 30-100% bill reduction and 3-5 year payback based on real site data.",
-    cn: "发电、遮阳并支持电动车充电，根据现场数据预估降低30-100%电费，3-5年回本。",
+    th: "ผลิตไฟฟ้า ให้ร่มเงา รองรับ EV Charger และวางแผนระบบจากข้อมูลหน้างานจริง",
+    en: "Generate electricity, provide shade, support EV Charging, and plan the system from real site data.",
+    cn: "发电、遮阳并支持电动车充电，根据实际现场数据规划系统。",
   },
 
   // Pricing page
@@ -184,9 +189,9 @@ const translations: Record<string, Record<Language, string>> = {
     cn: "回本年数",
   },
   "pricing.savings25yr": {
-    th: "ประหยัดรวม 25 ปี (บาท)",
-    en: "25-Year Total Savings (THB)",
-    cn: "25年总节省（泰铢）",
+    th: "ผลประเมินสะสมตามสมมติฐาน (บาท)",
+    en: "Cumulative estimate under assumptions (THB)",
+    cn: "按假设的累计估算（泰铢）",
   },
   "pricing.co2Reduction": {
     th: "ตัน CO2 ลด/ปี",

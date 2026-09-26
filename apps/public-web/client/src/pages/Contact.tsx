@@ -11,6 +11,7 @@ import { trpc } from "@/lib/trpc";
 import { TrpcProvider } from "@/lib/trpc-provider";
 import { useTrackCTA, useTrackFormSubmit, useTrackLINEClick } from "@/hooks/useAnalytics";
 import { usePageTranslation } from "@/i18n";
+import { lineOfficialConfig } from "@shared/lineOfficial";
 import "@/i18n/pages/contact";
 import {
   ArrowRight, Phone, Mail, MapPin, Clock, Send, CheckCircle2,
@@ -29,7 +30,7 @@ const fadeUp = {
   visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.5 } }),
 };
 
-const LINE_OA_URL = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_LINE_OA_URL) || "https://lin.ee/sirinx";
+const LINE_OA_URL = (typeof import.meta !== "undefined" && import.meta.env?.VITE_LINE_OA_URL) || lineOfficialConfig.addFriendUrl;
 
 function ContactInner() {
   const { t } = usePageTranslation("contact");
@@ -113,9 +114,9 @@ function ContactInner() {
         "hospitality": t("interestGeneral"),
       };
       const packageLabels: Record<string, string> = {
-        "start": "Start (10-30 kWp)",
-        "pro": "Pro (30-100 kWp)",
-        "enterprise": "Enterprise (100-500+ kWp)",
+        "start": "Start (scope to be confirmed)",
+        "pro": "Pro (scope to be confirmed)",
+        "enterprise": "Enterprise (scope to be confirmed)",
       };
       const mappedInterest = interest ? (interestMap[interest] || "Solar Carport") : "Solar Carport";
       const pkgLabel = pkg ? packageLabels[pkg] : null;

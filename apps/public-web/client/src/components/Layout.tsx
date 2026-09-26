@@ -40,12 +40,8 @@ import {
 import { lineOfficialConfig } from "@shared/lineOfficial";
 
 const LOGO_URL = "/assets/optimized/sirinx-logo.jpg";
-const DBD_REGISTERED_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/DLpAL6PTE5qU_2bde4df9.png";
-const THAILAND_TRUST_MARK_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/yOSTZisxsQLA_fba48286.jpg";
-const DBD_VERIFIED_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/pxcfay2CDun0_9a6a41ea.jpg";
+const DBD_REGISTERED_URL = "/assets/projects/dbd-logo.png";
+const THAILAND_TRUST_MARK_URL = "/assets/projects/thailand-trust-mark.webp";
 
 const navLinksData = [
   { href: "/", i18nKey: "nav.home" },
@@ -464,6 +460,7 @@ const footerLinksData = [
     titleKey: "footer.solutions",
     links: [
       { href: "/solar-carport", i18nKey: "sol.solarCarport" },
+      { href: "/provinces", i18nKey: "sol.provinces" },
       { href: "/home-solution", i18nKey: "sol.homeSolution" },
       { href: "/solutions#rooftop", i18nKey: "sol.rooftopSolar" },
       { href: "/solutions#floating", i18nKey: "sol.floatingSolar" },
@@ -675,7 +672,7 @@ function Footer() {
             <div className="flex flex-wrap items-center justify-center gap-6">
               {/* DBD Registered */}
               <a
-                href="https://www.trustmarkthai.com"
+                href="https://www.dbd.go.th/search/company"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-border-subtle hover:border-border-accent transition-all group"
@@ -684,24 +681,6 @@ function Footer() {
                 <img
                   src={DBD_REGISTERED_URL}
                   alt="DBD Registered"
-                  width={96}
-                  height={32}
-                  className="h-8 object-contain"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </a>
-              {/* DBD Verified */}
-              <a
-                href="https://www.trustmarkthai.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-border-subtle hover:border-border-accent transition-all group"
-                title="DBD Verified"
-              >
-                <img
-                  src={DBD_VERIFIED_URL}
-                  alt="DBD Verified"
                   width={96}
                   height={32}
                   className="h-8 object-contain"

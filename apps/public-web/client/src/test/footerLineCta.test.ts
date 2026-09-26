@@ -10,8 +10,21 @@ const floatingChatWidgetPath = join(
 );
 const layoutPath = join(root, "client/src/components/Layout.tsx");
 const lineConfigPath = join(root, "shared/lineOfficial.ts");
+const linePagePath = join(root, "client/src/pages/Line.tsx");
 
 describe("footer LINE Official QR CTA", () => {
+  it("exposes a dedicated /line landing page with the shared LINE config", () => {
+    const appSource = readFileSync(appPath, "utf8");
+    const linePageSource = readFileSync(linePagePath, "utf8");
+
+    expect(appSource).toContain('const Line = lazy(() => import("./pages/Line"))');
+    expect(appSource).toContain('<Route path="/line" component={Line} />');
+    expect(linePageSource).toContain("lineOfficialConfig.shortLink");
+    expect(linePageSource).toContain("lineOfficialConfig.addFriendUrl");
+    expect(linePageSource).toContain("lineOfficialConfig.chatUrl");
+    expect(linePageSource).toContain("lineOfficialConfig.basicId");
+  });
+
   it("keeps canonical LINE Official data in a local shared config", () => {
     expect(existsSync(lineConfigPath)).toBe(true);
 

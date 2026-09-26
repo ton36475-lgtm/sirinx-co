@@ -37,8 +37,8 @@ const investmentModels = [
     title: "ซื้อขาด (Outright Purchase)",
     desc: "ลงทุนเต็มจำนวน เป็นเจ้าของระบบทันที ได้ผลตอบแทนสูงสุดในระยะยาว",
     pros: [
-      "ผลตอบแทนสูงสุด (IRR 15-25%)",
-      "เป็นเจ้าของระบบ 100%",
+      "คำนวณผลตอบแทนจากข้อมูลโครงการจริง",
+      "เป็นเจ้าของระบบตามเงื่อนไขสัญญา",
       "ใช้สิทธิ์ลดหย่อนภาษีได้เต็มที่",
       "ไม่มีค่าใช้จ่ายรายเดือน",
     ],
@@ -253,21 +253,21 @@ export default function InvestmentTaxHub() {
               </span>
             </div>
             <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-5">
-              ตัวอย่าง ROI: Solar Carport 100 คัน
+              กรอบข้อมูลที่ใช้ประเมิน Solar Carport
             </h2>
             <div className="p-5 lg:p-6 rounded-xl border border-border-accent bg-surface-elevated">
               <h3 className="font-display font-semibold text-foreground text-sm mb-4">
-                ห้างสรรพสินค้า / อาคารพาณิชย์ — ลานจอดรถ 100 คัน
+                ห้างสรรพสินค้า / อาคารพาณิชย์ — ต้องสำรวจพื้นที่จริงก่อนออกแบบ
               </h3>
               <div className="grid grid-cols-2 gap-3 mb-5">
                 {[
-                  { label: "กำลังผลิตโดยประมาณ", value: "200-300 kW" },
-                  { label: "เงินลงทุนโดยประมาณ", value: "8-12 ล้านบาท" },
-                  { label: "ประหยัดค่าไฟต่อปี", value: "2-3.5 ล้านบาท" },
-                  { label: "คืนทุนโดยประมาณ", value: "3-5 ปี", accent: true },
+                  { label: "กำลังผลิตโดยประมาณ", value: "คำนวณจากพื้นที่และ load profile" },
+                  { label: "เงินลงทุนโดยประมาณ", value: "จัดทำหลังยืนยันขอบเขตงาน" },
+                  { label: "ประหยัดค่าไฟต่อปี", value: "คำนวณจากค่าไฟและการใช้ไฟจริง" },
+                  { label: "คืนทุนโดยประมาณ", value: "คำนวณเฉพาะโครงการ", accent: true },
                   {
-                    label: "ผลตอบแทนตลอดอายุ 25 ปี",
-                    value: "40-70 ล้านบาท",
+                    label: "ผลตอบแทนตลอดอายุโครงการ",
+                    value: "ต้องยืนยันอายุอุปกรณ์และเงื่อนไขสัญญา",
                     accent: true,
                   },
                   { label: "รายได้เสริม EV Charging", value: "มีโอกาส" },
@@ -322,7 +322,7 @@ export default function InvestmentTaxHub() {
               ROI Estimation
             </span>
             <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-5">
-              ตัวอย่าง ROI: Rooftop Solar 500 kW
+              กรอบข้อมูลที่ใช้ประเมิน Rooftop Solar
             </h2>
             <div className="p-5 lg:p-6 rounded-xl border border-border-subtle bg-surface-elevated">
               <h3 className="font-display font-semibold text-foreground text-sm mb-4">
@@ -330,12 +330,12 @@ export default function InvestmentTaxHub() {
               </h3>
               <div className="grid grid-cols-2 gap-3 mb-5">
                 {[
-                  { label: "เงินลงทุนโดยประมาณ", value: "12-15 ล้านบาท" },
-                  { label: "ประหยัดค่าไฟต่อปี", value: "3-4 ล้านบาท" },
-                  { label: "คืนทุนโดยประมาณ", value: "3-5 ปี", accent: true },
+                  { label: "เงินลงทุนโดยประมาณ", value: "จัดทำหลังยืนยันขอบเขตงาน" },
+                  { label: "ประหยัดค่าไฟต่อปี", value: "คำนวณจากค่าไฟและการใช้ไฟจริง" },
+                  { label: "คืนทุนโดยประมาณ", value: "คำนวณเฉพาะโครงการ", accent: true },
                   {
-                    label: "ผลตอบแทนตลอดอายุ 25 ปี",
-                    value: "60-80 ล้านบาท",
+                    label: "ผลตอบแทนตลอดอายุโครงการ",
+                    value: "ต้องยืนยันอายุอุปกรณ์และเงื่อนไขสัญญา",
                     accent: true,
                   },
                 ].map(item => (

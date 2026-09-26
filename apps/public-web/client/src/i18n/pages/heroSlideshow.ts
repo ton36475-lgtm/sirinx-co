@@ -1,36 +1,41 @@
 import { registerPageTranslations, type TranslationDict } from "../index";
 
 const dict: TranslationDict = {
-  // Slide 1 — Carport Aerial
+  // Slide 1 — Ruenphae Royal Park, verified installation
   "hero.carport-aerial.badge": {
+    th: "ผลงานติดตั้งจริง",
+    en: "Real Installation",
+    cn: "实际安装",
+  },
+  "hero.carport-aerial.headline": {
     th: "Solar Carport",
     en: "Solar Carport",
     cn: "太阳能车棚",
   },
-  "hero.carport-aerial.headline": {
-    th: "เปลี่ยนที่จอดรถ",
-    en: "Transform Your Parking",
-    cn: "将停车场",
-  },
   "hero.carport-aerial.highlight": {
-    th: "เป็นโรงไฟฟ้าพลังงานแสงอาทิตย์",
-    en: "Into a Solar Power Plant",
-    cn: "变成太阳能发电站",
+    th: "โรงแรมเรือนแพ รอยัลปาร์ค",
+    en: "Ruenphae Royal Park Hotel",
+    cn: "Ruenphae Royal Park 酒店",
+  },
+  "hero.carport-aerial.alt": {
+    th: "ภาพมุมสูงของ Solar Carport และพื้นที่จอดรถ โรงแรมเรือนแพ รอยัลปาร์ค",
+    en: "Elevated view of the real Solar Carport and parking area at Ruenphae Royal Park Hotel",
+    cn: "Ruenphae Royal Park 酒店太阳能车棚及停车区的高处实景",
   },
   "hero.carport-aerial.desc": {
-    th: "ผลิตไฟฟ้า ให้ร่มเงา รองรับ EV Charger ลดค่าไฟ 30-100% คืนทุน 3-5 ปีโดยประมาณตามข้อมูลไซต์จริง",
-    en: "Generate electricity, provide shade, and support EV Charger, with estimated 30-100% bill reduction and 3-5 year payback based on real site data.",
-    cn: "发电、遮阳并支持电动车充电，根据现场数据预估降低30-100%电费，3-5年回本。",
+    th: "ภาพมุมสูงจาก Solar Carport และพื้นที่จอดรถที่ติดตั้งจริง",
+    en: "An elevated view of the real Solar Carport and parking-area installation.",
+    cn: "真实太阳能车棚及停车区域的高处实景。",
   },
   "hero.carport-aerial.cta": {
-    th: "ขอใบเสนอราคา Solar Carport",
-    en: "Get Solar Carport Quote",
-    cn: "获取太阳能车棚报价",
+    th: "ดูผลงานติดตั้งจริง",
+    en: "View Real Installation",
+    cn: "查看实际安装",
   },
   "hero.carport-aerial.cta2": {
-    th: "ดูผลงานจริง",
-    en: "View Real Projects",
-    cn: "查看实际项目",
+    th: "ประเมินโครงการของคุณ",
+    en: "Evaluate Your Project",
+    cn: "评估您的项目",
   },
 
   // Slide 2 — Carport Ground
@@ -50,9 +55,9 @@ const dict: TranslationDict = {
     cn: "Tier-1品质太阳能板",
   },
   "hero.carport-ground.desc": {
-    th: "ออกแบบเฉพาะทาง รับน้ำหนักลม-ฝน ตามมาตรฐานวิศวกรรม อายุใช้งาน 25+ ปี",
-    en: "Custom-designed, wind and rain resistant, engineering standard. 25+ year lifespan",
-    cn: "定制设计，抗风雨，工程标准。25+年使用寿命",
+    th: "ออกแบบเฉพาะทางตามโครงสร้างหน้างานและข้อกำหนดวิศวกรรม",
+    en: "Custom-designed from site structure and engineering requirements",
+    cn: "根据现场结构和工程要求定制设计",
   },
   "hero.carport-ground.cta": {
     th: "นัดสำรวจหน้างานฟรี",
@@ -65,36 +70,41 @@ const dict: TranslationDict = {
     cn: "查看所有解决方案",
   },
 
-  // Slide 3 — Rooftop Factory
+  // Slide 2 — Ruenphae Royal Park, verified rooftop installation
   "hero.rooftop-factory.badge": {
+    th: "ผลงานติดตั้งจริง",
+    en: "Real Installation",
+    cn: "实际安装",
+  },
+  "hero.rooftop-factory.headline": {
     th: "Rooftop Solar",
     en: "Rooftop Solar",
     cn: "屋顶太阳能",
   },
-  "hero.rooftop-factory.headline": {
-    th: "โซลาร์บนหลังคาโรงงาน",
-    en: "Factory Rooftop Solar",
-    cn: "工厂屋顶太阳能",
-  },
   "hero.rooftop-factory.highlight": {
-    th: "ลดต้นทุนพลังงานการผลิต",
-    en: "Reduce Production Energy Costs",
-    cn: "降低生产能源成本",
+    th: "ระบบพลังงานบนอาคารจริง",
+    en: "Real Building Energy System",
+    cn: "真实建筑能源系统",
+  },
+  "hero.rooftop-factory.alt": {
+    th: "ภาพรวมแผงโซลาร์รอบสระว่ายน้ำ โรงแรมเรือนแพ รอยัลปาร์ค",
+    en: "Overview of rooftop solar arrays around the pool at Ruenphae Royal Park Hotel",
+    cn: "Ruenphae Royal Park 酒店泳池周围屋顶太阳能阵列全景",
   },
   "hero.rooftop-factory.desc": {
-    th: "ใช้พื้นที่หลังคาให้เกิดประโยชน์สูงสุด ลดค่าไฟ 30-100% โดยประมาณตาม load profile จริง",
-    en: "Maximize roof space utilization with estimated 30-100% bill reduction depending on the real load profile.",
-    cn: "最大化屋顶空间利用，并根据实际负载曲线预估降低30-100%电费。",
+    th: "แผงโซลาร์บริเวณสระว่ายน้ำและหลังคาอาคารของโรงแรมเรือนแพ รอยัลปาร์ค",
+    en: "Rooftop solar panels beside the pool and across the hotel building at Ruenphae Royal Park.",
+    cn: "Ruenphae Royal Park 酒店泳池旁及建筑屋顶的太阳能板。",
   },
   "hero.rooftop-factory.cta": {
-    th: "ขอใบเสนอราคา Rooftop Solar",
-    en: "Get Rooftop Solar Quote",
-    cn: "获取屋顶太阳能报价",
+    th: "ดูภาพผลงาน",
+    en: "View Project Photos",
+    cn: "查看项目照片",
   },
   "hero.rooftop-factory.cta2": {
-    th: "ดูอุตสาหกรรมที่เหมาะ",
-    en: "View Suitable Industries",
-    cn: "查看适合的行业",
+    th: "ขอใบเสนอราคา",
+    en: "Get a Quote",
+    cn: "获取报价",
   },
 
   // Slide 4 — Floating Solar
@@ -161,100 +171,115 @@ const dict: TranslationDict = {
     cn: "查看太阳能车棚详情",
   },
 
-  // Slide 6 — BESS
+  // Slide 6 — Holatel installed energy-system photo
   "hero.bess-realistic.badge": {
-    th: "BESS / ESS",
-    en: "BESS / ESS",
-    cn: "储能系统",
+    th: "ภาพระบบจริง",
+    en: "Real Installation",
+    cn: "实际安装",
   },
   "hero.bess-realistic.headline": {
-    th: "ระบบกักเก็บพลังงาน",
-    en: "Energy Storage System",
-    cn: "储能系统",
+    th: "ระบบพลังงานที่ติดตั้งแล้ว",
+    en: "Installed Energy System",
+    cn: "已安装的能源系统",
   },
   "hero.bess-realistic.highlight": {
-    th: "ใช้ไฟฟ้าได้แม้ไม่มีแสงแดด",
-    en: "Use Electricity Even Without Sunlight",
-    cn: "无阳光也能用电",
+    th: "ภาพจากงานติดตั้งจริงที่โรงแรมโฮลาเทล",
+    en: "Real Installation Photo at Holatel Hotel",
+    cn: "Holatel Hotel 真实施工照片",
+  },
+  "hero.bess-realistic.alt": {
+    th: "ภาพระยะใกล้ของแผงโซลาร์บนหลังคาโรงแรมโฮลาเทล",
+    en: "Close view of rooftop solar panels at Holatel Hotel",
+    cn: "Holatel Hotel 屋顶太阳能板近景",
   },
   "hero.bess-realistic.desc": {
-    th: "Battery Energy Storage System ลด demand charge ใช้ไฟในช่วง peak สำรองไฟยามฉุกเฉิน",
-    en: "Battery Energy Storage System reduces demand charges, peak usage, emergency backup",
-    cn: "电池储能系统降低需求费用，高峰用电，应急备用",
+    th: "ภาพระยะใกล้จากงานติดตั้งจริง โดยไม่แสดงข้อมูลอุปกรณ์ กำลังผลิต หรือผลลัพธ์ที่ยังไม่ผ่านการตรวจหลักฐาน",
+    en: "A close view of the real installation, without unverified equipment, capacity, or performance claims.",
+    cn: "真实施工近景，不包含未经核实的设备、容量或性能声明。",
   },
   "hero.bess-realistic.cta": {
-    th: "ขอใบเสนอราคา BESS",
-    en: "Get BESS Quote",
-    cn: "获取储能报价",
+    th: "ดูรายละเอียดโครงการ",
+    en: "View Project Details",
+    cn: "查看项目详情",
   },
   "hero.bess-realistic.cta2": {
-    th: "ดูโซลูชันทั้งหมด",
-    en: "View All Solutions",
-    cn: "查看所有解决方案",
+    th: "ปรึกษาระบบพลังงาน",
+    en: "Consult an Energy System",
+    cn: "咨询能源系统",
   },
 
-  // Slide 7 — Hotel Resort
+  // Slide 3 — Holatel, owner-confirmed completed installation
   "hero.hotel-resort.badge": {
-    th: "โรงแรม & รีสอร์ท",
-    en: "Hotel & Resort",
-    cn: "酒店与度假村",
+    th: "ผลงานติดตั้งจริง",
+    en: "Real Installation",
+    cn: "实际安装",
   },
   "hero.hotel-resort.headline": {
-    th: "พลังงานสะอาด",
-    en: "Clean Energy",
-    cn: "清洁能源",
+    th: "Solar Rooftop",
+    en: "Solar Rooftop",
+    cn: "屋顶太阳能",
   },
   "hero.hotel-resort.highlight": {
-    th: "สำหรับธุรกิจโรงแรม",
-    en: "for Hotel Business",
-    cn: "酒店行业专用",
+    th: "โรงแรมโฮลาเทล",
+    en: "Holatel Hotel",
+    cn: "Holatel Hotel",
+  },
+  "hero.hotel-resort.alt": {
+    th: "ภาพแผงโซลาร์บนหลังคาโรงแรมโฮลาเทล",
+    en: "Rooftop solar arrays at Holatel Hotel",
+    cn: "Holatel Hotel 屋顶太阳能阵列",
   },
   "hero.hotel-resort.desc": {
-    th: "ลดค่าไฟ เสริมภาพลักษณ์ Green Hotel ดึงดูดนักท่องเที่ยวที่ใส่ใจสิ่งแวดล้อม",
-    en: "Reduce electricity costs, enhance Green Hotel image, attract eco-conscious travelers",
-    cn: "降低电费，提升绿色酒店形象，吸引环保旅客",
+    th: "ภาพแผงโซลาร์บนหลังคาที่ติดตั้งแล้ว โดยไม่แสดงตัวเลขหรือผลประหยัดที่ยังไม่ผ่านการตรวจหลักฐาน",
+    en: "Installed rooftop solar panels, without publishing unverified capacity or savings claims.",
+    cn: "已安装的屋顶太阳能板，不展示尚未核实的容量或节能数据。",
   },
   "hero.hotel-resort.cta": {
+    th: "ดูผลงานโรงแรม",
+    en: "View Hotel Project",
+    cn: "查看酒店项目",
+  },
+  "hero.hotel-resort.cta2": {
     th: "ปรึกษาโซลูชันโรงแรม",
     en: "Consult Hotel Solution",
     cn: "咨询酒店方案",
   },
-  "hero.hotel-resort.cta2": {
-    th: "ดูอุตสาหกรรมทั้งหมด",
-    en: "View All Industries",
-    cn: "查看所有行业",
-  },
 
-  // Slide 8 — Carport Realistic
+  // Slide 4 — Holatel building and parking context
   "hero.carport-realistic.badge": {
+    th: "ผลงานติดตั้งจริง",
+    en: "Real Installation",
+    cn: "实际安装",
+  },
+  "hero.carport-realistic.headline": {
     th: "Solar Carport",
     en: "Solar Carport",
     cn: "太阳能车棚",
   },
-  "hero.carport-realistic.headline": {
-    th: "ติดตั้งจริง",
-    en: "Real Installation",
-    cn: "实际安装",
-  },
   "hero.carport-realistic.highlight": {
-    th: "ผลงาน Solar Carport สำนักงาน",
-    en: "Office Solar Carport Project",
-    cn: "办公室太阳能车棚项目",
+    th: "ทางเข้าและพื้นที่จอดรถจริง",
+    en: "Real Entrance and Parking Context",
+    cn: "真实入口和停车区域",
+  },
+  "hero.carport-realistic.alt": {
+    th: "ภาพ Solar Carport บริเวณทางเข้าโรงแรมเรือนแพ รอยัลปาร์ค",
+    en: "Solar Carport near the entrance of Ruenphae Royal Park Hotel",
+    cn: "Ruenphae Royal Park 酒店入口附近的太阳能车棚",
   },
   "hero.carport-realistic.desc": {
-    th: "โครงสร้างเหล็กชุบกัลวาไนซ์ แผง Tier-1 ติดตั้งโดยทีมวิศวกรมืออาชีพ",
-    en: "Galvanized steel structure, Tier-1 panels, installed by professional engineers",
-    cn: "镀锌钢结构，Tier-1面板，专业工程师安装",
+    th: "ภาพ Solar Carport บริเวณทางเข้าโรงแรมเรือนแพ รอยัลปาร์ค ใช้แสดงรูปแบบระบบจริงโดยไม่อ้างค่ากำลังหรือผลลัพธ์ที่ยังไม่ยืนยัน",
+    en: "A real Solar Carport view near the entrance of Ruenphae Royal Park Hotel, shown without unverified capacity or performance claims.",
+    cn: "Ruenphae Royal Park 酒店入口处的真实太阳能车棚照片，不包含未经核实的容量或性能声明。",
   },
   "hero.carport-realistic.cta": {
-    th: "ขอใบเสนอราคา",
-    en: "Get Quote",
-    cn: "获取报价",
+    th: "เปิดชุดภาพโรงแรม",
+    en: "Open Hotel Gallery",
+    cn: "打开酒店图库",
   },
   "hero.carport-realistic.cta2": {
-    th: "ดูผลงานทั้งหมด",
-    en: "View All Projects",
-    cn: "查看所有项目",
+    th: "นัดสำรวจหน้างาน",
+    en: "Book a Site Survey",
+    cn: "预约现场勘查",
   },
 
   // Slide 9 — AI Monitoring
@@ -274,9 +299,9 @@ const dict: TranslationDict = {
     cn: "智能能源管理",
   },
   "hero.ai-monitoring.desc": {
-    th: "ตรวจสอบ วิเคราะห์ และเพิ่มประสิทธิภาพการผลิตไฟฟ้าแบบ real-time ตลอด 24/7",
-    en: "Monitor, analyze, and optimize electricity production in real-time 24/7",
-    cn: "24/7实时监控、分析和优化发电效率",
+    th: "ตรวจสอบและวิเคราะห์ข้อมูลพลังงานตามอุปกรณ์และขอบเขตการติดตั้ง",
+    en: "Monitor and analyze energy data by installed equipment and scope",
+    cn: "根据已安装设备和范围监控并分析能源数据",
   },
   "hero.ai-monitoring.cta": {
     th: "ปรึกษาระบบ AI",

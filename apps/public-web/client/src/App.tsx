@@ -9,6 +9,7 @@ import { usePageViewTracking } from "@/hooks/useAnalytics";
 import AntiCopy from "./components/AntiCopy";
 import AILiveAvatarMark from "./components/AILiveAvatarMark";
 import { lineOfficialConfig } from "@shared/lineOfficial";
+import { TrpcProvider } from "./lib/trpc-provider";
 
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Home = lazy(() => import("./pages/Home"));
@@ -18,13 +19,16 @@ const HomeSolution = lazy(() => import("./pages/HomeSolution"));
 const Industries = lazy(() => import("./pages/Industries"));
 const InvestmentTaxHub = lazy(() => import("./pages/InvestmentTaxHub"));
 const Projects = lazy(() => import("./pages/Projects"));
+const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const Contact = lazy(() => import("./pages/Contact"));
+const Line = lazy(() => import("./pages/Line"));
 const SolarAssessment = lazy(() => import("./pages/SolarAssessment"));
 const Partner = lazy(() => import("./pages/Partner"));
 const Strategy = lazy(() => import("./pages/Strategy"));
 const SolarCarport = lazy(() => import("./pages/SolarCarport"));
+const Provinces = lazy(() => import("./pages/Provinces"));
 const Pricing = lazy(() => import("./pages/Pricing"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
@@ -149,15 +153,18 @@ function PublicRouter() {
         <Route path="/about" component={About} />
         <Route path="/solar-carport/:province" component={SolarCarport} />
         <Route path="/solar-carport" component={SolarCarport} />
+        <Route path="/provinces" component={Provinces} />
         <Route path="/pricing" component={Pricing} />
         <Route path="/solutions" component={Solutions} />
         <Route path="/home-solution" component={HomeSolution} />
         <Route path="/industries" component={Industries} />
         <Route path="/investment" component={InvestmentTaxHub} />
+        <Route path="/projects/:slug" component={ProjectDetail} />
         <Route path="/projects" component={Projects} />
         <Route path="/strategy" component={Strategy} />
         <Route path="/blog" component={Blog} />
         <Route path="/blog/:slug" component={BlogPost} />
+        <Route path="/line" component={Line} />
         <Route path="/contact" component={Contact} />
         <Route path="/assessment" component={SolarAssessment} />
         <Route path="/partner" component={Partner} />
@@ -173,17 +180,19 @@ function PublicRouter() {
 
 function AdminRouter() {
   return (
-    <DashboardLayout>
-      <Switch>
-        <Route path="/admin" component={AdminDashboard} />
-        <Route path="/admin/leads" component={AdminLeads} />
-        <Route path="/admin/blog" component={AdminBlogCMS} />
-        <Route path="/admin/contacts" component={AdminContactSubmissions} />
-        <Route path="/admin/analytics" component={AdminAnalytics} />
-        <Route path="/admin/agent-monitor" component={AdminAgentMonitor} />
-        <Route component={NotFound} />
-      </Switch>
-    </DashboardLayout>
+    <TrpcProvider>
+      <DashboardLayout>
+        <Switch>
+          <Route path="/admin" component={AdminDashboard} />
+          <Route path="/admin/leads" component={AdminLeads} />
+          <Route path="/admin/blog" component={AdminBlogCMS} />
+          <Route path="/admin/contacts" component={AdminContactSubmissions} />
+          <Route path="/admin/analytics" component={AdminAnalytics} />
+          <Route path="/admin/agent-monitor" component={AdminAgentMonitor} />
+          <Route component={NotFound} />
+        </Switch>
+      </DashboardLayout>
+    </TrpcProvider>
   );
 }
 
@@ -231,6 +240,41 @@ function PageViewTracker() {
   return null;
 }
 
+function ImageFallbackInstaller() {
+  useEffect(() => {
+    const useFallback = (target: HTMLImageElement) => {
+      if (target.dataset.sirinxFallbackApplied === "true") return;
+
+      target.dataset.sirinxFallbackApplied = "true";
+      target.removeAttribute("srcset");
+      target.src = "/assets/image-unavailable.svg";
+    };
+
+    const onImageError = (event: ErrorEvent) => {
+      const target = event.target;
+      if (!(target instanceof HTMLImageElement)) return;
+      useFallback(target);
+    };
+
+    const replaceUnusableImages = () => {
+      for (const target of Array.from(document.images)) {
+        if (target.complete && target.naturalWidth === 0) useFallback(target);
+      }
+    };
+
+    window.addEventListener("error", onImageError, true);
+    const scanTimer = window.setInterval(replaceUnusableImages, 1000);
+    const stopTimer = window.setTimeout(() => window.clearInterval(scanTimer), 10000);
+    return () => {
+      window.removeEventListener("error", onImageError, true);
+      window.clearInterval(scanTimer);
+      window.clearTimeout(stopTimer);
+    };
+  }, []);
+
+  return null;
+}
+
 function App() {
   return (
     <ErrorBoundary>
@@ -239,6 +283,7 @@ function App() {
           <DeferredToaster />
           <RouteSeo />
           <PageViewTracker />
+          <ImageFallbackInstaller />
           <AntiCopy enabled={import.meta.env.PROD} />
           <Suspense fallback={<RouteFallback />}>
             <Router />

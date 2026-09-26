@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">SIRINX image unavailable</title>
+  <desc id="desc">Project image is unavailable until an approved source is connected.</desc>
+  <rect width="1600" height="900" fill="#0f172a"/>
+  <path d="M0 700 360 420l260 190 210-150 770 510H0Z" fill="#164e63" opacity=".75"/>
+  <circle cx="1220" cy="240" r="92" fill="#22d3ee" opacity=".25"/>
+  <text x="800" y="430" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="64" font-weight="700" text-anchor="middle">SIRINX</text>
+  <text x="800" y="510" fill="#94a3b8" font-family="Arial, sans-serif" font-size="28" text-anchor="middle">ภาพอยู่ระหว่างตรวจสอบแหล่งที่มา</text>
+</svg>

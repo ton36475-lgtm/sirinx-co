@@ -57,7 +57,7 @@ const GALLERY_IMAGES = [
 ];
 
 const highLoadSignals = [
-  "ค่าไฟบ้านใหญ่หรือโฮมออฟฟิศระดับ 35,000-250,000+ บาทต่อเดือน",
+  "ค่าไฟบ้านใหญ่หรือโฮมออฟฟิศที่ควรประเมินจากบิลและ load profile จริง",
   "แอร์หลายโซน, ห้องประชุม, server/network, CCTV, pool pump, kitchen load",
   "มี EV หรือเตรียมติดตั้ง EV Charger หลายจุด",
   "ต้องการ backup บางโหลดสำคัญด้วย Hybrid Inverter + BESS",

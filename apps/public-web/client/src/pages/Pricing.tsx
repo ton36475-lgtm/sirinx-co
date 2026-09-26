@@ -41,7 +41,7 @@ const packageConfigs = [
   {
     id: "start",
     name: "Start",
-    capacity: "10 – 30 kWp",
+    capacity: "ตามขอบเขตโครงการ",
     color: "from-emerald-500/20 to-emerald-600/5",
     borderColor: "border-emerald-500/30 hover:border-emerald-500/60",
     accentColor: "text-emerald-500",
@@ -52,7 +52,7 @@ const packageConfigs = [
   {
     id: "pro",
     name: "Pro",
-    capacity: "30 – 100 kWp",
+    capacity: "ตามขอบเขตโครงการ",
     color: "from-accent-primary/20 to-accent-primary/5",
     borderColor: "border-accent-primary/40 hover:border-accent-primary/70",
     accentColor: "text-accent-primary",
@@ -63,7 +63,7 @@ const packageConfigs = [
   {
     id: "enterprise",
     name: "Enterprise",
-    capacity: "100 – 500+ kWp",
+    capacity: "ตามขอบเขตโครงการ",
     color: "from-amber-500/20 to-amber-600/5",
     borderColor: "border-amber-500/30 hover:border-amber-500/60",
     accentColor: "text-amber-500",

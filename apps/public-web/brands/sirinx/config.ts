@@ -136,11 +136,13 @@ const sirinxConfig: BrandConfig = {
   trustBadges: [
     {
       name: "DBD Registered",
-      imageUrl: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/dbd-registered-bCzCTCeaup46mVvtEbpjnr.png",
+      imageUrl: "/assets/projects/dbd-logo.png",
+      link: "https://www.dbd.go.th/search/company",
     },
     {
       name: "Thailand Trust Mark",
-      imageUrl: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/ttm-logo-bCzCTCeaup46mVvtEbpjnr.png",
+      imageUrl: "/assets/projects/thailand-trust-mark.webp",
+      link: "https://www.thailandtrustmark.com",
     },
   ],
 

@@ -10,6 +10,13 @@ import { usePageTranslation } from "@/i18n";
 import "@/i18n/pages/projects";
 import { cfImage, cfImageSrcSet } from "@/lib/cfImage";
 import {
+  getProjectEvidenceBadgeKey,
+  type PublicProjectEvidenceState,
+} from "@shared/publicProjectContent";
+import { holatelProjectMedia } from "@shared/holatelProjectMedia";
+import { ruenphaeProjectMedia } from "@shared/ruenphaeProjectMedia";
+import ProjectImage from "@/components/ProjectImage";
+import {
   ArrowRight, MapPin, Zap, Calendar, TrendingUp, Filter,
   X, ChevronLeft, ChevronRight, CheckCircle2, Car,
   Sun, Battery, Download, Award, Shield, Gauge
@@ -22,51 +29,11 @@ const fadeUp = {
 
 const CDN = "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv";
 
-/* ── Curated gallery — real photos from Royal Park installation ── */
+/* Curated gallery: only privacy-reviewed real installation photos. */
 const galleryPhotos = [
-  // Original carport photos
-  `${CDN}/carport-wide-1_30e3af4c.jpeg`,
-  `${CDN}/carport-structure-1_c0c17293.jpeg`,
-  `${CDN}/carport-structure-2_f0ab2f56.jpeg`,
-  `${CDN}/carport-underside-1_51e3d09a.jpeg`,
-  `${CDN}/carport-underside-2_e70e97e1.jpeg`,
-  `${CDN}/carport-pillar-1_b7680b5f.jpeg`,
-  `${CDN}/bess-cabinet-1_f027743f.jpeg`,
-  `${CDN}/bess-cabinet-2_54c824b8.jpeg`,
-  `${CDN}/install-team-1_91970553.jpeg`,
-  `${CDN}/install-team-2_23aa9cdf.jpeg`,
-  `${CDN}/carport-detail-1_34c7c42f.jpeg`,
-  `${CDN}/cable-tray-detail_1ddf9610.jpeg`,
-  `${CDN}/carport-structure-3_dc2bbd1c.jpeg`,
-  `${CDN}/carport-structure-4_cc6ef3f6.jpeg`,
-  `${CDN}/carport-underside-3_b58d5713.jpeg`,
-  `${CDN}/carport-underside-4_297c327b.jpeg`,
-  // New album photos
-  `${CDN}/received_788849360726061_ca92b1c0.jpeg`,
-  `${CDN}/received_838004412130021_0bff9074.jpeg`,
-  `${CDN}/received_860608253106107_74bef87c.jpeg`,
-  `${CDN}/received_953338167167889_69f1f0d1.jpeg`,
-  `${CDN}/received_1275473157247530_e858ce4f.jpeg`,
-  `${CDN}/received_1307276091455018_bfd822e2.jpeg`,
-  `${CDN}/received_1671730360935692_4383b8b5.jpeg`,
-  `${CDN}/received_4483667365251479_64c29bcb.jpeg`,
-  `${CDN}/received_1744928873539515_fbc26c2d.jpeg`,
-  `${CDN}/received_24191309453900004_8591d0d3.jpeg`,
-  `${CDN}/received_968971135787180_c9ab3134.jpeg`,
-  `${CDN}/received_1282589370476708_97781ff2.jpeg`,
-  `${CDN}/received_2009519266306215_3caf5665.jpeg`,
-  `${CDN}/received_1308771534448072_67348e79.jpeg`,
-  `${CDN}/received_1370916548413599_b473b929.jpeg`,
-  `${CDN}/received_1917926608836989_c1380667.jpeg`,
-  // Rendering photos
-  `${CDN}/floating-solar-reservoir-BHro9zmCAKLtycFVXgfe9G.webp`,
-  `${CDN}/resort-rooftop-solar-Q4vG7VqDnaYmRWdsyKtp7H.webp`,
-  `${CDN}/warehouse-rooftop-solar-eGvaQedufCt28G4VBAahMs.webp`,
-  `${CDN}/farm-solar-bess-VwUa48BekdDzTkGLwkeJJX.webp`,
+  ...ruenphaeProjectMedia.map(photo => photo.src),
+  ...holatelProjectMedia.map(photo => photo.src),
 ];
-
-const DATASHEET_PANEL = `${CDN}/Neostar_1U_Plus_AIKO_A_MAH78Dw_655W_680W_2465x1134_260418_205454_73a93b47.pdf`;
-const DATASHEET_BESS = `${CDN}/GSL_ENERGY_512V_314AH_16kwh_IP65_Ground%26Outdoor_P_260418_205515_847d9d21.pdf`;
 
 const filterOptions = [
   { value: "all", key: "filterAll" },
@@ -75,6 +42,26 @@ const filterOptions = [
   { value: "carport", label: "Solar Carport" },
   { value: "bess", label: "BESS / ESS" },
 ];
+
+function ProjectEvidenceBadge({ projectId, projectStatus, t }: {
+  projectId?: string;
+  projectStatus?: PublicProjectEvidenceState;
+  t: (key: string) => string;
+}) {
+  const labelKey = getProjectEvidenceBadgeKey(projectId, projectStatus);
+  const colorByStatus: Record<string, string> = {
+    badgeVerifiedLive: "bg-emerald-500/90",
+    badgeUnderConstruction: "bg-sky-500/90",
+    badgeConceptSimulation: "bg-slate-500/90",
+    badgePendingEvidence: "bg-amber-500/90",
+  };
+  const color = colorByStatus[labelKey] ?? "bg-amber-500/90";
+  return (
+    <span aria-label={t(labelKey)} className={`px-2 py-0.5 text-[10px] font-medium ${color} text-white rounded-md`}>
+      {t(labelKey)}
+    </span>
+  );
+}
 
 export default function Projects() {
   const { t } = usePageTranslation("projects");
@@ -91,52 +78,56 @@ export default function Projects() {
     year: t("featuredYear"),
     owner: t("featuredOwner"),
     desc: t("featuredDesc"),
-    image: `${CDN}/carport-wide-1_30e3af4c.jpeg`,
+    image: "/assets/projects/ruenphae/20260924/1000076001.jpg",
     highlights: [t("featuredHighlight1"), t("featuredHighlight2"), t("featuredHighlight3"), t("featuredHighlight4")],
   };
 
   const projects = [
     {
-      title: t("proj1Title"), location: t("proj1Location"), type: "Rooftop Solar",
-      capacity: "Solar Farm", saving: t("proj1Saving"), year: "2025",
+      projectId: "holatel-rim-nan",
+      title: t("proj1Title"), location: t("proj1Location"), type: "Solar Rooftop",
+      capacity: "Installed system", saving: t("proj1Saving"), year: t("installationComplete"),
       desc: t("proj1Desc"),
-      image: `${CDN}/solar-farm-nan-construction-QGr9YXP2AW2qpMnWCVJjj3.webp`,
-      tag: "rooftop", isRendering: true,
+      image: "/assets/projects/holatel/20260924/1000075878.jpg",
+      tag: "rooftop",
+      projectStatus: "VERIFIED_LIVE" as const,
     },
     {
       title: t("proj2Title"), location: t("proj2Location"), type: "Floating Solar",
-      capacity: "2.5 MW", saving: t("proj2Saving"), year: "2024",
+      capacity: "Proposed system", saving: t("proj2Saving"), year: t("conceptYear"),
       desc: t("proj2Desc"),
       image: `${CDN}/floating-solar-reservoir-BHro9zmCAKLtycFVXgfe9G.webp`,
-      tag: "floating", isRendering: true,
+      tag: "floating", projectStatus: "CONCEPT / SIMULATION" as const,
     },
     {
+      projectId: "ruenphae-royal-park",
       title: t("proj3Title"), location: t("proj3Location"), type: "Solar Carport + BESS",
-      capacity: "Solar Carport", saving: t("proj3Saving"), year: "2024",
+      capacity: "Solar Carport", saving: t("proj3Saving"), year: t("yearUnderReview"),
       desc: t("proj3Desc"),
-      image: `${CDN}/carport-structure-2_f0ab2f56.jpeg`,
+      image: "/assets/projects/ruenphae/20260924/1000076001.jpg",
       tag: "carport",
+      projectStatus: "VERIFIED_LIVE" as const,
     },
     {
       title: t("proj4Title"), location: t("proj4Location"), type: "Rooftop + BESS",
-      capacity: "500 kW", saving: t("proj4Saving"), year: "2023",
+      capacity: "Proposed system", saving: t("proj4Saving"), year: t("conceptYear"),
       desc: t("proj4Desc"),
       image: `${CDN}/resort-rooftop-solar-Q4vG7VqDnaYmRWdsyKtp7H.webp`,
-      tag: "bess", isRendering: true,
+      tag: "bess", projectStatus: "CONCEPT / SIMULATION" as const,
     },
     {
       title: t("proj5Title"), location: t("proj5Location"), type: "Rooftop Solar",
-      capacity: "3 MW", saving: t("proj5Saving"), year: "2025",
+      capacity: "Proposed system", saving: t("proj5Saving"), year: t("conceptYear"),
       desc: t("proj5Desc"),
       image: `${CDN}/warehouse-rooftop-solar-eGvaQedufCt28G4VBAahMs.webp`,
-      tag: "rooftop", isRendering: true,
+      tag: "rooftop", projectStatus: "CONCEPT / SIMULATION" as const,
     },
     {
       title: t("proj6Title"), location: t("proj6Location"), type: "Solar + BESS",
-      capacity: "350 kW", saving: t("proj6Saving"), year: "2024",
+      capacity: "Proposed system", saving: t("proj6Saving"), year: t("conceptYear"),
       desc: t("proj6Desc"),
       image: `${CDN}/farm-solar-bess-VwUa48BekdDzTkGLwkeJJX.webp`,
-      tag: "bess", isRendering: true,
+      tag: "bess", projectStatus: "CONCEPT / SIMULATION" as const,
     },
   ];
 
@@ -169,7 +160,8 @@ export default function Projects() {
           >
             <div className="grid lg:grid-cols-2">
               <div className="relative aspect-[4/3] lg:aspect-auto overflow-hidden">
-	                <img
+	                <ProjectImage
+	                  fallbackLabel={t("imageUnavailable")}
 	                  src={cfImage(featured.image, 960, { quality: 76 })}
 	                  srcSet={cfImageSrcSet(featured.image, [480, 720, 960, 1280], { quality: 76 })}
 	                  sizes="(min-width: 1024px) 50vw, 100vw"
@@ -183,6 +175,12 @@ export default function Projects() {
                   <span className="px-3 py-1.5 text-xs font-bold bg-accent-primary text-text-inverse rounded-lg">
                     {t("featuredBadge")}
                   </span>
+                  <div className="mt-2">
+                    <ProjectEvidenceBadge
+                      projectId="ruenphae-royal-park"
+                      t={t}
+                    />
+                  </div>
                 </div>
               </div>
               <div className="p-6 lg:p-8 flex flex-col justify-center">
@@ -207,6 +205,12 @@ export default function Projects() {
                   <span>·</span>
                   <span className="text-accent-primary font-medium">{featured.saving}</span>
                 </div>
+                <Link
+                  href="/projects/ruenphae-royal-park"
+                  className="mt-5 inline-flex w-fit items-center gap-2 rounded-lg border border-border-accent px-4 py-2 text-xs font-semibold text-accent-primary transition-colors hover:bg-accent-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-primary"
+                >
+                  ดูรายละเอียดโครงการ <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
               </div>
             </div>
           </motion.div>
@@ -262,7 +266,8 @@ export default function Projects() {
                 >
                   <div className="grid sm:grid-cols-[240px_1fr]">
                     <div className="relative h-48 sm:h-full overflow-hidden">
-	                      <img
+	                      <ProjectImage
+	                        fallbackLabel={t("imageUnavailable")}
 	                        src={cfImage(project.image, 640)}
 	                        srcSet={cfImageSrcSet(project.image, [320, 480, 640, 960])}
 	                        sizes="(min-width: 768px) 240px, 100vw"
@@ -275,15 +280,7 @@ export default function Projects() {
                         <span className="px-2 py-0.5 text-[10px] font-medium bg-accent-primary/90 text-text-inverse rounded-md">
                           {project.type}
                         </span>
-                        {project.isRendering ? (
-                          <span className="px-2 py-0.5 text-[10px] font-medium bg-amber-500/90 text-white rounded-md">
-                            {t("badgeRendering")}
-                          </span>
-                        ) : (
-                          <span className="px-2 py-0.5 text-[10px] font-medium bg-emerald-500/90 text-white rounded-md">
-                            {t("badgeReal")}
-                          </span>
-                        )}
+                        <ProjectEvidenceBadge projectId={project.projectId} projectStatus={project.projectStatus} t={t} />
                       </div>
                     </div>
                     <div className="p-4 sm:p-5 flex flex-col justify-center">
@@ -297,6 +294,14 @@ export default function Projects() {
                         <div className="flex items-center gap-1"><TrendingUp className="w-3 h-3 shrink-0" /> {project.saving}</div>
                         <div className="flex items-center gap-1"><Calendar className="w-3 h-3 shrink-0" /> {project.year}</div>
                       </div>
+                      {project.projectId ? (
+                        <Link
+                          href={`/projects/${project.projectId}`}
+                          className="mt-4 inline-flex w-fit items-center gap-1.5 text-xs font-semibold text-accent-primary transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-primary"
+                        >
+                          ดูรายละเอียด <ArrowRight className="h-3.5 w-3.5" />
+                        </Link>
+                      ) : null}
                     </div>
                   </div>
                 </motion.div>
@@ -372,14 +377,9 @@ export default function Projects() {
                   <span className="text-text-secondary">{t("equipPanelAward")}</span>
                 </div>
               </div>
-              <a
-                href={DATASHEET_PANEL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium text-accent-primary border border-border-accent rounded-lg hover:bg-accent-glow transition-colors"
-              >
-                <Download className="w-3.5 h-3.5" /> {t("equipDatasheet")} — AIKO Neostar
-              </a>
+              <div className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium text-text-muted border border-border-subtle rounded-lg">
+                <Download className="w-3.5 h-3.5" /> {t("equipDatasheet")}
+              </div>
             </motion.div>
 
             {/* BESS Card */}
@@ -419,14 +419,9 @@ export default function Projects() {
                   <span className="text-text-secondary">{t("equipBessScale")}</span>
                 </div>
               </div>
-              <a
-                href={DATASHEET_BESS}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium text-accent-primary border border-border-accent rounded-lg hover:bg-accent-glow transition-colors"
-              >
-                <Download className="w-3.5 h-3.5" /> {t("equipDatasheet")} — GSL Energy
-              </a>
+              <div className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium text-text-muted border border-border-subtle rounded-lg">
+                <Download className="w-3.5 h-3.5" /> {t("equipDatasheet")}
+              </div>
             </motion.div>
           </div>
         </div>

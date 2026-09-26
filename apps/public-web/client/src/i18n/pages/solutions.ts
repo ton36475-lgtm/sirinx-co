@@ -57,14 +57,14 @@ const dict: Record<string, { th: string; en: string; cn: string }> = {
     cn: "教育机构/政府机关",
   },
   "sol.carport.benefit1": {
-    th: "ลดค่าไฟได้ประมาณ 30-100%",
-    en: "Estimated 30-100% bill reduction",
-    cn: "预估节省30-100%电费",
+    th: "ประเมินผลจากค่าไฟและ load profile จริง",
+    en: "Assess outcomes from actual bills and load profile",
+    cn: "根据实际电费和负载曲线评估结果",
   },
   "sol.carport.benefit2": {
-    th: "คืนทุนเฉลี่ย 3-5 ปี",
-    en: "Average payback in 3-5 years",
-    cn: "平均3-5年回本",
+    th: "คำนวณผลตอบแทนเฉพาะโครงการ",
+    en: "Calculate returns for each project",
+    cn: "按项目计算回报",
   },
   "sol.carport.benefit3": {
     th: "รองรับ EV Charging",
@@ -124,14 +124,14 @@ const dict: Record<string, { th: string; en: string; cn: string }> = {
     cn: "按负载曲线节省",
   },
   "sol.rooftop.benefit2": {
-    th: "คืนทุนเฉลี่ย 3-5 ปี",
-    en: "Average payback in 3-5 years",
-    cn: "平均3-5年回本",
+    th: "คำนวณผลตอบแทนเฉพาะโครงการ",
+    en: "Calculate returns for each project",
+    cn: "按项目计算回报",
   },
   "sol.rooftop.benefit3": {
-    th: "อายุการใช้งาน 25+ ปี",
-    en: "25+ year lifespan",
-    cn: "25年以上使用寿命",
+    th: "เลือกอุปกรณ์ตามสเปกและการรับประกัน",
+    en: "Select equipment by specification and warranty",
+    cn: "根据规格和质保选择设备",
   },
   "sol.rooftop.benefit4": {
     th: "เพิ่มมูลค่าอาคาร",
@@ -181,9 +181,9 @@ const dict: Record<string, { th: string; en: string; cn: string }> = {
     cn: "有效利用水面面积",
   },
   "sol.floating.benefit2": {
-    th: "ลดการระเหยของน้ำ 30-50%",
-    en: "Reduce water evaporation 30-50%",
-    cn: "减少30-50%水分蒸发",
+    th: "ประเมินผลต่อการระเหยของน้ำตามพื้นที่และสภาพแวดล้อม",
+    en: "Assess evaporation effects from site and environmental conditions",
+    cn: "根据场地和环境条件评估蒸发影响",
   },
   "sol.floating.benefit3": {
     th: "ประสิทธิภาพสูงกว่า ground-mount",
@@ -233,9 +233,9 @@ const dict: Record<string, { th: string; en: string; cn: string }> = {
     cn: "电网不稳定的地区",
   },
   "sol.bess.benefit1": {
-    th: "ลดค่า demand charge 15-30%",
-    en: "Reduce demand charges 15-30%",
-    cn: "降低15-30%需量电费",
+    th: "ประเมินผลต่อ demand charge จาก load profile",
+    en: "Assess demand-charge impact from the load profile",
+    cn: "根据负载曲线评估需量电费影响",
   },
   "sol.bess.benefit2": {
     th: "สำรองไฟฟ้ายามฉุกเฉิน",
@@ -243,9 +243,9 @@ const dict: Record<string, { th: string; en: string; cn: string }> = {
     cn: "紧急备用电源",
   },
   "sol.bess.benefit3": {
-    th: "ใช้โซลาร์ได้ตลอด 24 ชม.",
-    en: "Use solar power 24/7",
-    cn: "24小时使用太阳能",
+    th: "วางแผนการใช้พลังงานตามช่วงเวลาและความปลอดภัย",
+    en: "Plan energy use by time period and safety requirements",
+    cn: "根据时段和安全要求规划能源使用",
   },
   "sol.bess.benefit4": {
     th: "เพิ่มความเสถียรของระบบ",
@@ -305,9 +305,9 @@ const dict: Record<string, { th: string; en: string; cn: string }> = {
     cn: "自动ESG报告",
   },
   "sol.ai.benefit4": {
-    th: "ลดพลังงานสิ้นเปลืองเพิ่ม 10-20%",
-    en: "Additional 10-20% energy savings",
-    cn: "额外节省10-20%能源",
+    th: "ติดตามจุดใช้พลังงานสิ้นเปลืองเพื่อวางแผนปรับปรุง",
+    en: "Track energy waste to plan improvements",
+    cn: "追踪能源浪费以规划改进",
   },
 
   // Solution: O&M
@@ -322,9 +322,9 @@ const dict: Record<string, { th: string; en: string; cn: string }> = {
     cn: "太阳能系统随时间效率下降。传统检查缓慢且昂贵。",
   },
   "sol.om.solution": {
-    th: "ระบบดูแลรักษาด้วย AI + Drone Inspection + ทีมวิศวกร ตรวจจับปัญหาก่อนเกิดความเสียหาย ดูแลตลอด 25 ปี",
-    en: "AI + Drone Inspection + Engineering team maintenance — detect issues before damage occurs. 25-year service.",
-    cn: "AI + 无人机巡检 + 工程师团队维护——在损坏发生前检测问题。25年服务。",
+    th: "ระบบดูแลรักษาด้วย AI + Drone Inspection + ทีมวิศวกร โดยกำหนดขอบเขตบริการตามสัญญาและสภาพหน้างาน",
+    en: "AI + Drone Inspection + engineering support, with service scope defined by contract and site conditions.",
+    cn: "AI + 无人机巡检 + 工程支持，服务范围根据合同和现场条件确定。",
   },
   "sol.om.suitable1": {
     th: "โครงการโซลาร์ทุกขนาด",

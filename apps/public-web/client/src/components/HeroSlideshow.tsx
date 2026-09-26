@@ -18,6 +18,9 @@ interface HeroSlide {
   id: string;
   category: SolutionCategory;
   image: string;
+  alt: string;
+  width: number;
+  height: number;
   imageSet?: {
     avifSrcSet: string;
     fallback: string;
@@ -34,176 +37,76 @@ interface HeroSlide {
   secondaryCta?: { label: string; href: string };
 }
 
-const responsiveHeroWidths = [640, 960, 1280] as const;
-const optimizedAsset = (
-  name: string,
-  width: number,
-  extension: "avif" | "jpg"
-) => `/assets/optimized/${name}-${width}.${extension}`;
-const responsiveHeroSrcSet = (name: string, extension: "avif" | "jpg") =>
-  responsiveHeroWidths
-    .map(width => `${optimizedAsset(name, width, extension)} ${width}w`)
-    .join(", ");
-const heroImageSizes = "(max-width: 767px) 80vw, 100vw";
-
 const ALL_SLIDES: HeroSlide[] = [
   {
     id: "carport-aerial",
     category: "solar-carport",
-    image: "/assets/optimized/solar-carport-hero.jpg",
-    imageSet: {
-      avifSrcSet: responsiveHeroSrcSet("solar-carport-hero", "avif"),
-      fallback: optimizedAsset("solar-carport-hero", 1280, "jpg"),
-      height: 720,
-      jpgSrcSet: responsiveHeroSrcSet("solar-carport-hero", "jpg"),
-      sizes: heroImageSizes,
-      width: 1280,
-    },
-    badge: "Solar Carport",
-    headline: "เปลี่ยนที่จอดรถ",
-    highlightLine: "เป็นโรงไฟฟ้าพลังงานแสงอาทิตย์",
-    description:
-      "ผลิตไฟฟ้า ให้ร่มเงา รองรับ EV Charger ลดค่าไฟ 30-100% คืนทุน 3-5 ปีโดยประมาณตามข้อมูลไซต์จริง",
-    cta: {
-      label: "ขอใบเสนอราคา Solar Carport",
-      href: "/contact?interest=solar-carport",
-    },
-    secondaryCta: { label: "ดูผลงานจริง", href: "/projects" },
-  },
-  {
-    id: "carport-ground",
-    category: "solar-carport",
-    image:
-      "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-02-carport-ground_724c7ad7.jpg",
-    badge: "Solar Carport",
-    headline: "โครงสร้างเหล็กมาตรฐาน",
-    highlightLine: "แผงโซลาร์เซลล์คุณภาพ Tier-1",
-    description:
-      "ออกแบบเฉพาะทาง รับน้ำหนักลม-ฝน ตามมาตรฐานวิศวกรรม อายุใช้งาน 25+ ปี",
-    cta: {
-      label: "นัดสำรวจหน้างานฟรี",
-      href: "/contact?interest=solar-carport",
-    },
-    secondaryCta: { label: "ดูโซลูชันทั้งหมด", href: "/solutions" },
+    image: "/assets/projects/ruenphae/20260924/1000076004.jpg",
+    alt: "ภาพมุมสูงของ Solar Carport และพื้นที่จอดรถ โรงแรมเรือนแพ รอยัลปาร์ค",
+    width: 721,
+    height: 1280,
+    badge: "ผลงานติดตั้งจริง",
+    headline: "Solar Carport",
+    highlightLine: "โรงแรมเรือนแพ รอยัลปาร์ค",
+    description: "ภาพมุมสูงจาก Solar Carport และพื้นที่จอดรถที่ติดตั้งจริง",
+    cta: { label: "ดูผลงานติดตั้งจริง", href: "/projects/ruenphae-royal-park" },
+    secondaryCta: { label: "ประเมินโครงการของคุณ", href: "/contact?interest=solar-carport" },
   },
   {
     id: "rooftop-factory",
     category: "rooftop-solar",
-    image:
-      "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-03-rooftop-factory_7c52b0c3.jpg",
-    badge: "Rooftop Solar",
-    headline: "โซลาร์บนหลังคาโรงงาน",
-    highlightLine: "ลดต้นทุนพลังงานการผลิต",
-    description:
-      "ใช้พื้นที่หลังคาให้เกิดประโยชน์สูงสุด ลดค่าไฟ 30-100% โดยประมาณตาม load profile จริง",
-    cta: {
-      label: "ขอใบเสนอราคา Rooftop Solar",
-      href: "/contact?interest=rooftop-solar",
-    },
-    secondaryCta: { label: "ดูอุตสาหกรรมที่เหมาะ", href: "/industries" },
-  },
-  {
-    id: "floating-solar",
-    category: "floating-solar",
-    image:
-      "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-04-floating-solar_1d083f09.jpg",
-    badge: "Floating Solar",
-    headline: "โซลาร์ลอยน้ำ",
-    highlightLine: "ใช้พื้นที่ผิวน้ำให้เกิดประโยชน์",
-    description:
-      "เหมาะกับอ่างเก็บน้ำ บ่อน้ำอุตสาหกรรม ลดการระเหยของน้ำ เพิ่มประสิทธิภาพแผง",
-    cta: {
-      label: "ขอใบเสนอราคา Floating Solar",
-      href: "/contact?interest=floating-solar",
-    },
-    secondaryCta: { label: "ดูผลงานจริง", href: "/projects" },
-  },
-  {
-    id: "carport-ev",
-    category: "solar-carport",
-    image:
-      "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-05-carport-ev_993f529d.jpg",
-    badge: "Solar Carport + EV Charging",
-    headline: "Solar Carport",
-    highlightLine: "พร้อม EV Charging Station",
-    description:
-      "รองรับรถยนต์ไฟฟ้าในอนาคต ชาร์จจากพลังงานแสงอาทิตย์โดยตรง ลดต้นทุนพลังงาน",
-    cta: { label: "ขอใบเสนอราคา", href: "/contact?interest=solar-carport" },
-    secondaryCta: {
-      label: "ดูรายละเอียด Solar Carport",
-      href: "/solar-carport",
-    },
-  },
-  {
-    id: "bess-realistic",
-    category: "bess",
-    image:
-      "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-06-bess-realistic_884e849f.jpg",
-    badge: "BESS / ESS",
-    headline: "ระบบกักเก็บพลังงาน",
-    highlightLine: "ใช้ไฟฟ้าได้แม้ไม่มีแสงแดด",
-    description:
-      "Battery Energy Storage System ลด demand charge ใช้ไฟในช่วง peak สำรองไฟยามฉุกเฉิน",
-    cta: { label: "ขอใบเสนอราคา BESS", href: "/contact?interest=bess" },
-    secondaryCta: { label: "ดูโซลูชันทั้งหมด", href: "/solutions" },
+    image: "/assets/projects/ruenphae/20260924/1000076003.jpg",
+    alt: "ภาพรวมแผงโซลาร์รอบสระว่ายน้ำ โรงแรมเรือนแพ รอยัลปาร์ค",
+    width: 1280,
+    height: 721,
+    badge: "ผลงานติดตั้งจริง",
+    headline: "Rooftop Solar",
+    highlightLine: "ระบบพลังงานบนอาคารจริง",
+    description: "แผงโซลาร์บริเวณสระว่ายน้ำและหลังคาอาคารของโรงแรมเรือนแพ รอยัลปาร์ค",
+    cta: { label: "ดูภาพผลงาน", href: "/projects/ruenphae-royal-park" },
+    secondaryCta: { label: "ขอใบเสนอราคา", href: "/contact?interest=rooftop-solar" },
   },
   {
     id: "hotel-resort",
     category: "hospitality",
-    image:
-      "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-07-hotel-resort_947837b6.jpg",
-    badge: "โรงแรม & รีสอร์ท",
-    headline: "พลังงานสะอาด",
-    highlightLine: "สำหรับธุรกิจโรงแรม",
-    description:
-      "ลดค่าไฟ เสริมภาพลักษณ์ Green Hotel ดึงดูดนักท่องเที่ยวที่ใส่ใจสิ่งแวดล้อม",
-    cta: {
-      label: "ปรึกษาโซลูชันโรงแรม",
-      href: "/contact?interest=hospitality",
-    },
-    secondaryCta: { label: "ดูอุตสาหกรรมทั้งหมด", href: "/industries" },
+    image: "/assets/projects/holatel/20260924/1000075878.jpg",
+    alt: "ภาพแผงโซลาร์บนหลังคาโรงแรมโฮลาเทล",
+    width: 1280,
+    height: 721,
+    badge: "ผลงานติดตั้งจริง",
+    headline: "Solar Rooftop",
+    highlightLine: "โรงแรมโฮลาเทล",
+    description: "ภาพแผงโซลาร์บนหลังคาที่ติดตั้งแล้ว โดยไม่แสดงตัวเลขหรือผลประหยัดที่ยังไม่ผ่านการตรวจหลักฐาน",
+    cta: { label: "ดูผลงานโรงแรม", href: "/projects/holatel-rim-nan" },
+    secondaryCta: { label: "ปรึกษาโซลูชันโรงแรม", href: "/contact?interest=hospitality" },
   },
   {
     id: "carport-realistic",
     category: "solar-carport",
-    image:
-      "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-08-carport-realistic_a75f7b0e.jpg",
-    badge: "Solar Carport",
-    headline: "ติดตั้งจริง",
-    highlightLine: "ผลงาน Solar Carport สำนักงาน",
-    description:
-      "โครงสร้างเหล็กชุบกัลวาไนซ์ แผง Tier-1 ติดตั้งโดยทีมวิศวกรมืออาชีพ",
-    cta: { label: "ขอใบเสนอราคา", href: "/contact?interest=solar-carport" },
-    secondaryCta: { label: "ดูผลงานทั้งหมด", href: "/projects" },
+    image: "/assets/projects/ruenphae/20260924/1000075999.jpg",
+    alt: "Solar Carport บริเวณทางเข้าโรงแรมเรือนแพ รอยัลปาร์ค",
+    width: 721,
+    height: 1280,
+    badge: "ผลงานติดตั้งจริง",
+    headline: "Solar Carport",
+    highlightLine: "ทางเข้าและพื้นที่จอดรถจริง",
+    description: "ภาพ Solar Carport บริเวณทางเข้าโรงแรมเรือนแพ รอยัลปาร์ค ใช้แสดงรูปแบบระบบจริงโดยไม่อ้างค่ากำลังหรือผลลัพธ์ที่ยังไม่ยืนยัน",
+    cta: { label: "เปิดชุดภาพโรงแรม", href: "/projects/ruenphae-royal-park" },
+    secondaryCta: { label: "นัดสำรวจหน้างาน", href: "/contact?interest=solar-carport" },
   },
   {
-    id: "ai-monitoring",
-    category: "ai-energy",
-    image:
-      "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-09-ai-monitoring_814e9276.jpg",
-    badge: "AI Energy Management",
-    headline: "ระบบ AI",
-    highlightLine: "บริหารพลังงานอัจฉริยะ",
-    description:
-      "ตรวจสอบ วิเคราะห์ และเพิ่มประสิทธิภาพการผลิตไฟฟ้าแบบ real-time ตลอด 24/7",
-    cta: { label: "ปรึกษาระบบ AI", href: "/contact?interest=ai-energy" },
-    secondaryCta: { label: "ดูโซลูชัน AI", href: "/solutions#ai-energy" },
-  },
-  {
-    id: "carport-mall",
-    category: "solar-carport",
-    image:
-      "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-10-carport-mall-realistic_4b322654.jpg",
-    badge: "Solar Carport",
-    headline: "Solar Carport ขนาดใหญ่",
-    highlightLine: "สำหรับห้างสรรพสินค้า & โรงงาน",
-    description:
-      "รองรับพื้นที่จอดรถขนาดใหญ่ ผลิตไฟฟ้าได้มากกว่า ลดค่าไฟทั้งอาคาร",
-    cta: { label: "ขอใบเสนอราคา", href: "/contact?interest=solar-carport" },
-    secondaryCta: {
-      label: "ดูรายละเอียด Solar Carport",
-      href: "/solar-carport",
-    },
+    id: "bess-realistic",
+    category: "bess",
+    image: "/assets/projects/holatel/20260924/1000075879.jpg",
+    alt: "ภาพระยะใกล้ของแผงโซลาร์บนหลังคาโรงแรมโฮลาเทล",
+    width: 1280,
+    height: 721,
+    badge: "ภาพระบบจริง",
+    headline: "ระบบพลังงาน",
+    highlightLine: "รายละเอียดงานติดตั้ง",
+    description: "ภาพระยะใกล้ของระบบพลังงานจริง พร้อม fallback และไม่แสดงข้อมูลอุปกรณ์ที่ยังไม่ผ่านการอนุมัติ",
+    cta: { label: "ดูรายละเอียดโครงการ", href: "/projects/holatel-rim-nan" },
+    secondaryCta: { label: "ปรึกษาระบบพลังงาน", href: "/contact?interest=bess" },
   },
 ];
 
@@ -325,6 +228,8 @@ export default function HeroSlideshow() {
   }, [isPaused, next]);
 
   const slide = slides[current];
+  const slideAltKey = `hero.${slide.id}.alt`;
+  const slideAlt = t(slideAltKey) !== slideAltKey ? t(slideAltKey) : slide.alt;
 
   return (
     <section
@@ -353,7 +258,7 @@ export default function HeroSlideshow() {
                 src={slide.imageSet.fallback}
                 srcSet={slide.imageSet.jpgSrcSet}
                 sizes={slide.imageSet.sizes}
-                alt={slide.badge}
+                alt={slideAlt}
                 width={slide.imageSet.width}
                 height={slide.imageSet.height}
                 className="h-full w-full object-cover"
@@ -365,9 +270,9 @@ export default function HeroSlideshow() {
           ) : (
             <img
               src={slide.image}
-              alt={slide.badge}
-              width={1500}
-              height={838}
+              alt={slideAlt}
+              width={slide.width}
+              height={slide.height}
               className="w-full h-full object-cover"
               loading={current === 0 ? "eager" : "lazy"}
               fetchPriority={current === 0 ? "high" : "low"}

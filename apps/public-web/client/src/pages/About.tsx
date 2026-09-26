@@ -25,13 +25,13 @@ const values = [
   { icon: Cpu, title: "Engineering-First", desc: "ทุกโซลูชันเริ่มจากวิศวกรรมที่แม่นยำ ไม่ใช่การขาย" },
   { icon: ShieldCheck, title: "ความน่าเชื่อถือ", desc: "โปร่งใส ตรงไปตรงมา ไม่สัญญาสิ่งที่ทำไม่ได้" },
   { icon: Target, title: "ผลลัพธ์ที่วัดได้", desc: "ทุกโครงการมี KPI ชัดเจน ติดตามผลได้ตลอดอายุระบบ" },
-  { icon: Users, title: "พันธมิตรระยะยาว", desc: "ดูแลตลอดอายุการใช้งาน 25+ ปี ไม่ใช่แค่ขายและติดตั้ง" },
+  { icon: Users, title: "พันธมิตรระยะยาว", desc: "ดูแลตามขอบเขต O&M ที่ตกลง ไม่ใช่แค่ขายและติดตั้ง" },
 ];
 
 const milestones = [
   { year: "2023", event: "ก่อตั้ง SIRINX โดยคุณ Pitoon Yingyosruangrong ด้วยวิสัยทัศน์ Solar Digital Agentic Company" },
   { year: "2024", event: "Solar Farm Node 1 — โรงแรมเรือนแพ รอยัลปาร์ค พิษณุโลก ติดตั้งและเปิดใช้งาน" },
-  { year: "2025", event: "Solar Farm Node 2 — โรงแรมโฮลาเทลริมน่าน เริ่มก่อสร้าง" },
+  { year: "2026", event: "Solar Rooftop — โรงแรมโฮลาเทล ติดตั้งเรียบร้อยแล้ว" },
   { year: "2025", event: "เปิดตัว Solar Carport เป็น Flagship Solution พร้อม AI Energy Management Platform" },
   { year: "2026", event: "ขยายสู่ Full Automation Corporation System ระดับ World-Wide Enterprise" },
 ];
@@ -182,7 +182,7 @@ export default function About() {
               <h2 className="font-display text-2xl font-bold text-foreground mb-1">Pitoon Yingyosruangrong</h2>
               <p className="text-accent-primary font-medium text-sm mb-3">CEO & Founder — SIRINX Co., Ltd.</p>
               <p className="text-sm text-text-secondary leading-relaxed mb-5">
-                ผู้ก่อตั้งและเจ้าของ SIRINX ผู้มีวิสัยทัศน์ในการปฏิวัติพลังงานอัจฉริยะเพื่ออนาคตที่ยั่งยืน เป็นเจ้าของโรงแรมเรือนแพ รอยัลปาร์ค พิษณุโลก และโรงแรมโฮลาเทลริมน่าน โดยมี Solar Farm 2 Node ที่ดำเนินการอยู่
+                ผู้ก่อตั้งและเจ้าของ SIRINX ผู้มีวิสัยทัศน์ในการปฏิวัติพลังงานอัจฉริยะเพื่ออนาคตที่ยั่งยืน มีผลงานติดตั้ง Solar Rooftop ที่โรงแรมเรือนแพ รอยัลปาร์ค พิษณุโลก และโรงแรมโฮลาเทลที่เผยแพร่ด้วยภาพจริง
               </p>
               <div className="space-y-1.5 text-xs text-text-muted">
                 <a href="tel:+66819723969" className="flex items-center gap-2 hover:text-accent-primary transition-colors">
@@ -206,8 +206,8 @@ export default function About() {
               </div>
               <div className="p-5 rounded-xl border border-border-accent bg-accent-glow">
                 <h3 className="font-display font-semibold text-foreground text-sm mb-1">Solar Farm Node 2</h3>
-                <p className="text-accent-primary text-xs font-medium mb-1">โรงแรมโฮลาเทลริมน่าน</p>
-                <p className="text-xs text-text-muted">กำลังดำเนินการก่อสร้าง พร้อมปรับปรุงโรงแรมใหม่</p>
+                <p className="text-accent-primary text-xs font-medium mb-1">โรงแรมโฮลาเทล</p>
+                <p className="text-xs text-text-muted">ติดตั้ง Solar Rooftop เรียบร้อยแล้ว พร้อมภาพงานจริงที่ผ่านการคัดเลือกด้านสิทธิ์ใช้งานและข้อมูลส่วนบุคคล</p>
               </div>
               <div className="p-5 rounded-xl glass-card">
                 <div className="flex items-center gap-2 mb-2">

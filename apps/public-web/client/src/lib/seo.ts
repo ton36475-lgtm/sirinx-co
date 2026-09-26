@@ -1,5 +1,10 @@
 import { blogPosts } from "@/lib/blogData";
 import { getProvinceBySlug } from "@shared/thaiProvinces";
+import {
+  getPublicProjectDetail,
+  isProjectDetailIndexable,
+  projectsPageMeta,
+} from "@shared/publicProjectContent";
 
 export type SeoMeta = {
   title: string;
@@ -27,6 +32,12 @@ const metaByPath: Record<string, SeoMeta> = {
     title: "Solar Carport สำหรับธุรกิจ | เปลี่ยนที่จอดรถเป็นโรงไฟฟ้า | SIRINX",
     description:
       "Solar Carport ผลิตไฟฟ้าจากลานจอดรถ ให้ร่มเงา รองรับ EV Charger และ BESS พร้อมประเมิน ROI จากข้อมูลไซต์จริงโดย SIRINX",
+  },
+  "/provinces": {
+    path: "/provinces",
+    title: "Solar Carport 77 จังหวัด | เลือกจังหวัดที่ต้องการประเมิน | SIRINX",
+    description:
+      "เลือกจังหวัดเพื่อดูแนวทางออกแบบ Solar Carport, BESS, EV Charger และ AI Energy Management ของ SIRINX ครบทั้ง 77 จังหวัด พร้อมข้อมูลที่ต้องใช้สำรวจหน้างาน",
   },
   "/pricing": {
     path: "/pricing",
@@ -59,12 +70,7 @@ const metaByPath: Record<string, SeoMeta> = {
     description:
       "วิเคราะห์รูปแบบการลงทุน Solar Carport ซื้อขาด ผ่อนชำระ หรือร่วมลงทุน พร้อมผลตอบแทน ภาษี และมูลค่า ESG",
   },
-  "/projects": {
-    path: "/projects",
-    title: "ผลงาน Solar Carport และระบบพลังงานสะอาด | SIRINX",
-    description:
-      "ดูตัวอย่างโครงการ Solar Carport, BESS, EV Charging และระบบบริหารพลังงานที่ SIRINX ออกแบบและติดตั้งจริง",
-  },
+  "/projects": projectsPageMeta,
   "/strategy": {
     path: "/strategy",
     title: "กลยุทธ์พลังงานดิจิทัลสำหรับธุรกิจ | SIRINX",
@@ -82,6 +88,12 @@ const metaByPath: Record<string, SeoMeta> = {
     title: "ติดต่อ SIRINX | นัดสำรวจหน้างาน Solar Carport ฟรี",
     description:
       "ติดต่อทีม SIRINX เพื่อขอใบเสนอราคา นัดสำรวจหน้างาน หรือปรึกษา Solar Carport, BESS, EV Charger และระบบลดค่าไฟองค์กร",
+  },
+  "/line": {
+    path: "/line",
+    title: "ติดต่อ SIRINX ผ่าน LINE Official | Solar Carport, Rooftop Solar, BESS, EV Charger",
+    description:
+      "เพิ่มเพื่อน LINE Official ของ SIRINX เพื่อส่งบิลค่าไฟ รูปพื้นที่ และขอประเมินระบบ Solar Carport, Rooftop Solar, BESS และ EV Charger เบื้องต้น",
   },
   "/assessment": {
     path: "/assessment",
@@ -135,7 +147,22 @@ function getProvinceSeoMeta(path: string): SeoMeta | null {
   return {
     path,
     title: `ติดตั้ง Solar Carport ${province.nameTh} | โซลาร์ที่จอดรถ EV Charger BESS | SIRINX`,
-    description: `SIRINX รับออกแบบและติดตั้ง Solar Carport ${province.nameTh} สำหรับโรงงาน โรงแรม อาคาร และลานจอดรถองค์กร พร้อม EV Charger, BESS, AI Energy, O&M และประเมินลดค่าไฟ 30-100% คืนทุนเฉลี่ย 3-5 ปีตามข้อมูลไซต์จริง`,
+    description: `SIRINX รับออกแบบและติดตั้ง Solar Carport ${province.nameTh} สำหรับโรงงาน โรงแรม อาคาร และลานจอดรถองค์กร พร้อม EV Charger, BESS, AI Energy และ O&M โดยเริ่มจากการสำรวจพื้นที่และข้อมูลการใช้ไฟจริงก่อนออกแบบ`,
+  };
+}
+
+function getProjectDetailSeoMeta(path: string): SeoMeta | null {
+  if (!path.startsWith("/projects/")) return null;
+
+  const slug = path.replace("/projects/", "");
+  const project = getPublicProjectDetail(slug);
+  if (!project) return null;
+
+  return {
+    path,
+    title: project.seoTitle,
+    description: project.seoDescription,
+    noindex: !isProjectDetailIndexable(project),
   };
 }
 
@@ -144,6 +171,9 @@ export function getSeoMeta(pathname: string): SeoMeta {
 
   const provinceMeta = getProvinceSeoMeta(path);
   if (provinceMeta) return provinceMeta;
+
+  const projectDetailMeta = getProjectDetailSeoMeta(path);
+  if (projectDetailMeta) return projectDetailMeta;
 
   if (path.startsWith("/blog/")) {
     const slug = path.replace("/blog/", "");

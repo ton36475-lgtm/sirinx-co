@@ -1,1 +1,16 @@
-/* /index.html 200
+# ── Route-aware fallback (replaces the old `/* /index.html 200` catch-all) ──
+# Why: the catch-all made EVERY nonexistent URL on www.sirinx.co answer 200
+# with the SPA shell (soft-404), so crawlers and uptime checks could not see
+# real breakage and unknown paths became duplicate content. With no catch-all,
+# unmatched paths reach 404.html and Cloudflare Pages serves it with a real
+# 404 status. See docs/seo/TECHNICAL_SEO_FIX_PACK_20260926.md.
+# Guarded by shared/staticDeploySurface.test.ts.
+
+# The only client-rendered subtree left is the robots-disallowed admin area.
+# /projects/:slug and /blog/:slug pages are prerendered (server/ogTags.ts
+# getStaticSeoRoutes), so unknown slugs under them must hit the real 404.
+/admin /index.html 200
+/admin/* /index.html 200
+
+# Everything else resolves as a static file (prerendered routes) or as an
+# honest 404 via 404.html. Do not re-add a `/*` catch-all here.

@@ -3,15 +3,46 @@
  * Deep-dive: benefits, specs, integration, proof, financing, FAQ, CTA
  * Full i18n support via usePageTranslation
  */
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import { motion } from "framer-motion";
 import { Link, useParams } from "wouter";
-import { Helmet } from "react-helmet-async";
 import { trackSolutionVisit } from "@/components/HeroSlideshow";
 import { usePageTranslation } from "@/i18n";
 import "@/i18n/pages/solarCarport";
 import { cfImage, cfImageSrcSet } from "@/lib/cfImage";
 import { getProvinceBySlug } from "@shared/thaiProvinces";
+import { getProvinceEnergyFact } from "@shared/provinceEnergyData";
+import ProvinceSolarChart from "@/components/ProvinceSolarChart";
+import { nationalMonthlyMean } from "@shared/provinceSolarMonthly";
+
+// Three.js must never enter the province page bundle. The viewer is a separate
+// chunk and is mounted on the product page only.
+const SolarCarportViewer = lazy(
+  () => import("@/components/SolarCarportViewer")
+);
+// 3D data infographics — separate chunks, mounted below the fold only.
+const ProvinceYieldChart3D = lazy(
+  () => import("@/components/three/ProvinceYieldChart3D")
+);
+const ProvinceSolarScene = lazy(
+  () => import("@/components/three/ProvinceSolarScene")
+);
+// Deep-dive province article (12,000-word standard) — text-only lazy chunk.
+const ProvinceLongform = lazy(
+  () => import("@/components/ProvinceLongform")
+);
+
+const MONTH_LABELS_TH = [
+  "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+  "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.",
+];
+import {
+  provinceDisplayName,
+  provincePlaceholder,
+  solarCarportFaq,
+  solarCarportProvinceFaq,
+} from "@shared/solarCarportFaq";
+import { provincesIndexPath } from "@/lib/routeSeoContent";
 import {
   Car,
   Sun,
@@ -81,23 +112,23 @@ const specKeys = [
   { key: "sc.spec.install" },
 ];
 
-const faqKeys = [
-  "sc.faq1",
-  "sc.faq2",
-  "sc.faq3",
-  "sc.faq4",
-  "sc.faq5",
-  "sc.faq6",
-];
-
 export default function SolarCarport() {
-  const { t } = usePageTranslation("solarCarport");
+  const { t, lang } = usePageTranslation("solarCarport");
   const params = useParams<{ province?: string }>();
   const province = params.province ? getProvinceBySlug(params.province) : undefined;
+  const energyFact = province ? getProvinceEnergyFact(province.slug) : null;
+  // The product page has no province, so the viewer uses the HQ reference point.
+  const referenceFact = province ? null : getProvinceEnergyFact("phitsanulok");
   const contactHref = province
     ? `/contact?interest=solar-carport&province=${province.slug}`
     : "/contact";
+  const fill = (text: string, vars: Record<string, string | number>) =>
+    Object.entries(vars).reduce(
+      (acc, [key, value]) => acc.split(`{${key}}`).join(String(value)),
+      text
+    );
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [show3d, setShow3d] = useState(false);
   const [showStickyCta, setShowStickyCta] = useState(false);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
 
@@ -108,23 +139,53 @@ export default function SolarCarport() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const faqs = faqKeys.map(k => ({ q: t(`${k}.q`), a: t(`${k}.a`) }));
-
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map(faq => ({
-      "@type": "Question",
-      name: faq.q,
-      acceptedAnswer: { "@type": "Answer", text: faq.a },
-    })),
-  };
+  // Visible questions are rendered from the same shared source the FAQPage schema
+  // uses (RouteSeo -> routeSeoContent), so markup and content cannot drift.
+  const faqs = solarCarportFaq.map((item, index) => ({
+    id: item.id,
+    q: t(`sc.faq${index + 1}.q`),
+    a: t(`sc.faq${index + 1}.a`),
+  }));
+  if (province) {
+    const name = provinceDisplayName(province, lang);
+    const fill = (text: string) => text.split(provincePlaceholder).join(name);
+    solarCarportProvinceFaq.forEach((item, index) => {
+      faqs.push({
+        id: item.id,
+        q: fill(t(`sc.faqProvince${index + 1}.q`)),
+        a: fill(t(`sc.faqProvince${index + 1}.a`)),
+      });
+    });
+  }
 
   return (
     <div>
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
-      </Helmet>
+      {/* Visible breadcrumb. Matches BreadcrumbList in the route JSON-LD. */}
+      {province ? (
+        <nav
+          aria-label="Breadcrumb"
+          data-sirinx-breadcrumb="province"
+          className="container pt-6 text-sm text-text-secondary"
+        >
+          <ol className="flex flex-wrap items-center gap-2">
+            <li>
+              <Link href="/" className="underline-offset-4 hover:underline">
+                หน้าแรก
+              </Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li>
+              <Link href="/solar-carport" className="underline-offset-4 hover:underline">
+                Solar Carport
+              </Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" className="text-foreground">
+              Solar Carport {province.nameTh}
+            </li>
+          </ol>
+        </nav>
+      ) : null}
 
       {/* ===== HERO ===== */}
       <section className="relative min-h-[85vh] flex items-center overflow-hidden">
@@ -164,7 +225,7 @@ export default function SolarCarport() {
               {province ? `Solar Carport ${province.nameTh}` : t("sc.hero.title1")}
               <br />
               <span className="text-gradient-accent">
-                {province ? "ที่จอดรถผลิตไฟฟ้าสำหรับธุรกิจ" : t("sc.hero.title2")}
+                {province ? t("sc.hero.titleProvince") : t("sc.hero.title2")}
               </span>
             </motion.h1>
             <motion.p
@@ -204,17 +265,17 @@ export default function SolarCarport() {
               className="flex flex-wrap gap-6"
             >
               {[
-                { value: "30-100%", labelKey: "sc.hero.stat.bill" },
-                { value: "3-5 ปี", labelKey: "sc.hero.stat.roi" },
-                { value: "25+", labelKey: "sc.hero.stat.life" },
-                { value: "24/7", labelKey: "sc.hero.stat.bill" },
+                { value: t("sc.hero.stat.billValue"), labelKey: "sc.hero.stat.bill" },
+                { value: t("sc.hero.stat.roiValue"), labelKey: "sc.hero.stat.roi" },
+                { value: t("sc.hero.stat.lifeValue"), labelKey: "sc.hero.stat.life" },
+                { value: t("sc.hero.stat.monitorValue"), labelKey: "sc.hero.stat.monitor" },
               ].map((item, i) => (
                 <div key={i} className="text-center">
                   <div className="font-display text-lg font-bold text-gradient-accent">
                     {item.value}
                   </div>
                   <div className="text-[10px] text-text-muted">
-                    {i === 3 ? "AI Monitor" : t(item.labelKey)}
+                    {t(item.labelKey)}
                   </div>
                 </div>
               ))}
@@ -229,28 +290,25 @@ export default function SolarCarport() {
             <div className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr] items-start">
               <div className="rounded-2xl border border-border-subtle bg-surface-elevated p-6 lg:p-8">
                 <span className="text-xs font-medium text-accent-secondary tracking-widest uppercase mb-3 block">
-                  Local Solar Carport Planning
+                  {t("sc.province.badge")}
                 </span>
                 <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-3">
-                  ออกแบบ Solar Carport สำหรับพื้นที่{province.nameTh}
+                  {fill(t("sc.province.title"), { province: province.nameTh })}
                 </h2>
                 <p className="text-sm text-text-secondary leading-relaxed">
-                  SIRINX วางแผนระบบ Solar Carport สำหรับโรงงาน โรงแรม อาคารพาณิชย์
-                  ศูนย์กระจายสินค้า สถานศึกษา และองค์กรใน{province.nameTh}
-                  โดยประเมินจากพื้นที่จอดรถ ค่าไฟจริง load profile โครงสร้างหน้างาน
-                  EV Charger, BESS และรูปแบบการลงทุน ก่อนสรุปแบบวิศวกรรมและใบเสนอราคา
+                  {fill(t("sc.province.body"), { province: province.nameTh })}
                 </p>
               </div>
               <div className="rounded-2xl border border-border-accent bg-accent-glow p-6 lg:p-8">
                 <h3 className="font-display text-lg font-bold text-foreground mb-4">
-                  สิ่งที่ประเมินให้ก่อนติดตั้ง
+                  {t("sc.province.checklistTitle")}
                 </h3>
                 <ul className="space-y-3 text-sm text-text-secondary">
                   {[
-                    `ศักยภาพพื้นที่จอดรถใน${province.nameTh}`,
-                    "ขนาดระบบ kWp ที่เหมาะกับค่าไฟและ load profile",
-                    "EV Charger, BESS และ AI Energy Management ที่ควรใช้",
-                    "กรอบผลประหยัด 30-100% และคืนทุนเฉลี่ย 3-5 ปีตามข้อมูลไซต์จริง",
+                    fill(t("sc.province.item1"), { province: province.nameTh }),
+                    t("sc.province.item2"),
+                    t("sc.province.item3"),
+                    t("sc.province.item4"),
                   ].map(item => (
                     <li key={item} className="flex gap-3">
                       <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent-primary" />
@@ -260,9 +318,103 @@ export default function SolarCarport() {
                 </ul>
               </div>
             </div>
+            {/* Sourced provincial solar data. Rendered only when a PVGIS record
+                exists for this province, so a page never shows a guess. */}
+            {energyFact ? (
+              <div
+                data-sirinx-solar-data={province.slug}
+                className="mt-6 rounded-2xl border border-border-subtle bg-surface-elevated p-6 lg:p-8"
+              >
+                <span className="text-xs font-medium uppercase tracking-widest text-accent-secondary">
+                  {t("sc.solar.label")}
+                </span>
+                <div className="mt-4 grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <p className="font-display text-lg font-bold text-foreground">
+                      {energyFact.irradiationDaily} kWh/m²/วัน
+                    </p>
+                    <p className="mt-1 text-sm text-text-secondary">
+                      {fill(t("sc.solar.irradiation"), {
+                        value: energyFact.irradiationDaily,
+                      })}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="font-display text-lg font-bold text-foreground">
+                      {energyFact.specificYield} kWh/kWp/ปี
+                    </p>
+                    <p className="mt-1 text-sm text-text-secondary">
+                      {fill(t("sc.solar.yield"), {
+                        value: energyFact.specificYield,
+                      })}
+                    </p>
+                  </div>
+                </div>
+                <p className="mt-5 text-sm leading-relaxed text-text-secondary">
+                  {t("sc.solar.disclaimer")}
+                </p>
+                <p className="mt-3 text-xs leading-relaxed text-text-muted">
+                  {fill(t("sc.solar.source"), {
+                    source: energyFact.source.name,
+                    database: energyFact.source.database,
+                    years: energyFact.source.yearRange,
+                    date: energyFact.source.retrievedAt,
+                  })}
+                  {" · "}
+                  {fill(t("sc.solar.coords"), {
+                    lat: energyFact.lat,
+                    lon: energyFact.lon,
+                  })}
+                </p>
+                <p className="mt-4 text-sm font-medium text-foreground">
+                  {t("sc.solar.chartTitle")}
+                </p>
+                <ProvinceSolarChart
+                  slug={province.slug}
+                  provinceNameTh={province.nameTh}
+                  provinceNameEn={province.nameEn}
+                  caption={t("sc.solar.chartCaption")}
+                  referenceCaption={t("sc.solar.chartRef")}
+                  ariaLabel={t("sc.solar.chartTitle")}
+                />
+                {/* 3D infographics over the same sourced PVGIS record.
+                    Lazy chunks; each canvas pauses itself offscreen. */}
+                <Suspense fallback={null}>
+                  <div className="mt-6">
+                    <ProvinceYieldChart3D
+                      slug={province.slug}
+                      nameTh={province.nameTh}
+                    />
+                  </div>
+                  <div className="mt-6">
+                    <ProvinceSolarScene
+                      nameTh={province.nameTh}
+                      latitude={energyFact.lat}
+                      longitude={energyFact.lon}
+                      irradiationDaily={energyFact.irradiationDaily}
+                      specificYield={energyFact.specificYield}
+                      source={
+                        energyFact.source.name +
+                        " · " +
+                        energyFact.source.database +
+                        ", " +
+                        energyFact.source.yearRange
+                      }
+                    />
+                  </div>
+                </Suspense>
+              </div>
+            ) : null}
           </div>
         </section>
       )}
+
+      {/* Deep-dive province content (renders nothing until an entry exists). */}
+      {province ? (
+        <Suspense fallback={null}>
+          <ProvinceLongform slug={province.slug} />
+        </Suspense>
+      ) : null}
 
       {/* ===== BENEFITS GRID ===== */}
       <section className="py-16 lg:py-24 bg-background">
@@ -545,7 +697,7 @@ export default function SolarCarport() {
                   {
                     icon: BarChart3,
                     labelKey: "sc.om.monitoring",
-                    value: "24/7",
+                    valueKey: "sc.om.monitoring.value",
                   },
                   {
                     icon: Wrench,
@@ -557,7 +709,7 @@ export default function SolarCarport() {
                     labelKey: "sc.om.warranty",
                     valueKey: "sc.om.warranty.value",
                   },
-                  { icon: Zap, labelKey: "sc.om.monitoring", value: "99.5%" },
+                  { icon: Zap, labelKey: "sc.om.monitoring", valueKey: "sc.om.monitoring.value" },
                 ].map((item, i) => (
                   <div
                     key={i}
@@ -566,7 +718,7 @@ export default function SolarCarport() {
                     <item.icon className="w-5 h-5 text-accent-primary shrink-0" />
                     <div>
                       <div className="text-xs font-bold text-gradient-accent">
-                        {item.value || t(item.valueKey!)}
+                        {t(item.valueKey)}
                       </div>
                       <div className="text-[10px] text-text-muted">
                         {t(item.labelKey)}
@@ -772,6 +924,58 @@ export default function SolarCarport() {
         </div>
       )}
 
+      {/* 3D structure viewer. Product page only: the province pages carry the
+          data charts, and keeping Three.js out of them protects their weight. */}
+      {!province ? (
+        <section className="py-16 lg:py-24 section-alt" data-sirinx-viewer-section>
+          <div className="container">
+            <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground">
+              {t("sc.viewer.title")}
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-relaxed text-text-secondary">
+              {fill(t("sc.viewer.intro"), { province: "ประเทศไทย (พิกัดสำนักงานใหญ่ พิษณุโลก)" })}
+            </p>
+            <div className="mt-8">
+              {show3d ? (
+                <Suspense
+                  fallback={
+                    <p className="text-sm text-text-muted">{t("sc.viewer.loading")}</p>
+                  }
+                >
+                  <SolarCarportViewer
+                    slug="phitsanulok"
+                    provinceNameTh="ประเทศไทย"
+                    lat={referenceFact?.lat ?? 16.82}
+                    monthlyGhi={nationalMonthlyMean}
+                    systemKwp={100}
+                    moduleEfficiency={0.2}
+                    labels={MONTH_LABELS_TH}
+                    titleId={t("sc.viewer.title")}
+                    fallbackText={t("sc.viewer.loading")}
+                    unitLabel={t("sc.viewer.poa")}
+                    energyLabel={t("sc.viewer.energy")}
+                    tiltLabel={t("sc.viewer.tilt")}
+                    noWebglLabel={t("sc.viewer.noWebgl")}
+                  />
+                </Suspense>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShow3d(true)}
+                  data-sirinx-viewer-start
+                  className="flex w-full flex-col items-center gap-2 rounded-2xl border border-border-subtle bg-surface-elevated px-6 py-10 text-sm font-medium text-foreground transition-colors hover:border-accent-primary"
+                >
+                  <span>{t("sc.viewer.start")}</span>
+                  <span className="text-xs font-normal text-text-muted">
+                    {t("sc.viewer.startHint")}
+                  </span>
+                </button>
+              )}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       {/* ===== FAQ ===== */}
       <section className="py-16 lg:py-24 section-alt">
         <div className="container max-w-3xl">
@@ -790,10 +994,26 @@ export default function SolarCarport() {
               {t("sc.faq.title")}
             </h2>
           </motion.div>
+          {province ? (
+            <div className="mb-8 flex flex-wrap items-center gap-4">
+              <Link
+                href={provincesIndexPath}
+                className="inline-flex items-center gap-2 rounded-lg border border-border-accent bg-accent-glow px-5 py-2.5 text-sm font-semibold text-accent-primary"
+              >
+                {t("sc.provinces.link")}
+              </Link>
+              <Link
+                href="/solar-carport"
+                className="text-sm text-text-secondary underline-offset-4 hover:underline"
+              >
+                {t("sc.provinces.all")}
+              </Link>
+            </div>
+          ) : null}
           <div className="space-y-3">
             {faqs.map((faq, i) => (
               <motion.div
-                key={i}
+                key={faq.id}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}

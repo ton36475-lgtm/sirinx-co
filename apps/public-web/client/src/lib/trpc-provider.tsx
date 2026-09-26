@@ -16,12 +16,13 @@ const redirectToLoginIfUnauthorized = (error: unknown) => {
 
   if (!isUnauthorized) return;
 
-  window.location.href = getLoginUrl();
+  const loginUrl = getLoginUrl();
+  if (loginUrl) window.location.href = loginUrl;
 };
 
 const isApiTransportUnavailableError = (error: unknown) =>
   error instanceof TRPCClientError &&
-  /Failed to fetch|Unexpected end of JSON input/i.test(error.message);
+  /Failed to fetch|Unexpected (?:end of JSON input|token)/i.test(error.message);
 
 queryClient.getQueryCache().subscribe(event => {
   if (event.type === "updated" && event.action.type === "error") {

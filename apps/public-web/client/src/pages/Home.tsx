@@ -43,20 +43,14 @@ const fadeUp = {
   }),
 };
 
-const CDN =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv";
-
 const HERO_CARPARK = "/assets/optimized/solar-carport-hero.jpg";
 const IMG_EV = "/assets/optimized/solar-carport-ev.jpg";
-const IMG_OM = `${CDN}/install-team-2_23aa9cdf.jpeg`;
-const IMG_AI = `${CDN}/solar-ai-dashboard-CDhHz7V3K98CLU6eGvW8PP.webp`;
-const IMG_INVESTMENT = `${CDN}/hero-investment-fRtcNVseiLRqovGxudgo83.webp`;
 const LOGO_URL = "/assets/optimized/sirinx-logo.jpg";
-// Real photos from Royal Park Solar Carport installation
-const IMG_NODE1 = `${CDN}/carport-wide-1_30e3af4c.jpeg`;
-const IMG_NODE2 = `${CDN}/bess-cabinet-2_54c824b8.jpeg`;
-const IMG_CARPORT_TEAM = `${CDN}/install-team-1_91970553.jpeg`;
-const IMG_CARPORT_UNDER = `${CDN}/carport-underside-2_e70e97e1.jpeg`;
+// Real, privacy-reviewed project photos
+const IMG_NODE1 = "/assets/projects/ruenphae/20260924/1000076001.jpg";
+const IMG_NODE2 = "/assets/projects/holatel/20260924/1000075878.jpg";
+const IMG_OM = IMG_NODE1;
+const IMG_INVESTMENT = IMG_NODE2;
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -100,7 +94,7 @@ export default function Home() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {[
               {
-                value: "30-100%",
+                value: t("home.stat.reduceBillVal"),
                 label: t("home.stat.reduceBill"),
                 icon: TrendingUp,
               },
@@ -114,7 +108,11 @@ export default function Home() {
                 label: t("home.stat.lifespan"),
                 icon: Shield,
               },
-              { value: "99.5%", label: "System Uptime", icon: BarChart3 },
+              {
+                value: t("home.stat.monitorVal"),
+                label: t("home.stat.monitor"),
+                icon: BarChart3,
+              },
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -622,7 +620,7 @@ export default function Home() {
               <div className="relative aspect-[16/10] overflow-hidden">
                 <img
                   src={IMG_NODE1}
-                  alt="Solar Farm Node 1 — Rueanpae Royal Park"
+                  alt="Solar rooftop installation at Ruenphae Royal Park Hotel"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                   decoding="async"
@@ -686,7 +684,7 @@ export default function Home() {
               <div className="relative aspect-[16/10] overflow-hidden">
                 <img
                   src={IMG_NODE2}
-                  alt="Solar Farm Node 2 — Holatel Rim Nan"
+                  alt="Rooftop solar installation at Holatel Hotel"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                   decoding="async"
@@ -696,8 +694,8 @@ export default function Home() {
                   <span className="px-2 py-0.5 text-[10px] font-medium bg-accent-primary text-text-inverse rounded-md">
                     Node 2
                   </span>
-                  <span className="px-2 py-0.5 text-[10px] font-semibold bg-amber-300 text-slate-950 rounded-md">
-                    {t("home.projects.underConstruction")}
+                  <span className="px-2 py-0.5 text-[10px] font-semibold bg-emerald-800 text-white rounded-md">
+                    {t("home.projects.completedInstallation")}
                   </span>
                 </div>
                 <div className="absolute bottom-3 left-3 right-3">
@@ -713,7 +711,7 @@ export default function Home() {
                 <div className="grid grid-cols-3 gap-2 text-center">
                   <div>
                     <div className="text-xs font-bold text-gradient-accent">
-                      Smart Hotel
+                      Solar
                     </div>
                     <div className="text-[9px] text-text-muted">
                       {t("home.projects.node2.smartHotel")}
@@ -721,7 +719,7 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="text-xs font-bold text-gradient-accent">
-                      Net Zero
+                      {t("home.projects.completedInstallation")}
                     </div>
                     <div className="text-[9px] text-text-muted">
                       {t("home.projects.node2.target")}
@@ -729,7 +727,7 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="text-xs font-bold text-gradient-accent">
-                      2026
+                      Photos
                     </div>
                     <div className="text-[9px] text-text-muted">
                       {t("home.projects.node2.opening")}
@@ -766,7 +764,7 @@ export default function Home() {
             >
               <img
                 src={IMG_OM}
-                alt="SIRINX O&M — AI Monitoring"
+                alt="Selected real installation photo at Ruenphae Royal Park Hotel"
                 className="rounded-2xl w-full aspect-[16/10] object-cover"
                 loading="lazy"
                 decoding="async"
@@ -791,7 +789,7 @@ export default function Home() {
               </p>
               <div className="grid grid-cols-2 gap-3 mb-5">
                 {[
-                  { label: t("home.om.monitoring"), value: "24/7" },
+                  { label: t("home.om.monitoring"), value: t("home.om.monitoringVal") },
                   {
                     label: t("home.om.response"),
                     value: t("home.om.responseVal"),
@@ -878,7 +876,7 @@ export default function Home() {
             >
               <img
                 src={IMG_INVESTMENT}
-                alt="Solar Carport Investment — ROI Analysis"
+                alt="Selected real installation photo at Holatel Hotel"
                 className="rounded-2xl w-full aspect-[16/10] object-cover"
                 loading="lazy"
                 decoding="async"

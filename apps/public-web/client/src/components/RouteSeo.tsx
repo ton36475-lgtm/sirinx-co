@@ -2,6 +2,8 @@ import { Helmet } from "react-helmet-async";
 import { useEffect } from "react";
 import { useLocation } from "wouter";
 import { absoluteUrl, getSeoMeta, seoDefaults } from "@/lib/seo";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { bcp47ByLanguage } from "@/lib/routeSeoContent";
 
 function upsertMeta(selector: string, attrs: Record<string, string>) {
   let element = document.head.querySelector<HTMLMetaElement>(selector);
@@ -29,10 +31,12 @@ function upsertCanonical(href: string) {
 
 export default function RouteSeo() {
   const [location] = useLocation();
+  const { lang } = useLanguage();
   const meta = getSeoMeta(location);
   const url = absoluteUrl(meta.path);
   const image = meta.image ?? seoDefaults.image;
   const robots = meta.noindex ? "noindex, nofollow" : "index, follow";
+  const documentLanguage = bcp47ByLanguage[lang];
 
   useEffect(() => {
     document.title = meta.title;
@@ -54,11 +58,12 @@ export default function RouteSeo() {
 
   return (
     <Helmet>
-      <html lang="th" />
+      <html lang={documentLanguage} />
       <title>{meta.title}</title>
       <meta name="description" content={meta.description} />
       <meta name="robots" content={robots} />
       <link rel="canonical" href={url} />
+      <link rel="alternate" hrefLang={documentLanguage} href={url} />
 
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content={seoDefaults.siteName} />

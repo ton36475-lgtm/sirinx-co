@@ -1,4 +1,5 @@
 import { registerPageTranslations, type TranslationDict } from "../index";
+import { solarCarportFaqTranslationEntries } from "@shared/solarCarportFaq";
 
 const dict: TranslationDict = {
   // Hero
@@ -18,9 +19,9 @@ const dict: TranslationDict = {
     cn: "发电 遮阳 支持电动车",
   },
   "sc.hero.desc": {
-    th: "เปลี่ยนลานจอดรถเป็นโรงไฟฟ้าพลังงานแสงอาทิตย์ ลดค่าไฟ 30-100% คืนทุน 3-5 ปีโดยประมาณ พร้อม AI Energy Management และ O&M ตลอด 25 ปี",
-    en: "Transform your parking lot into a solar power plant with estimated 30-100% bill reduction, 3-5 year payback, AI Energy Management, and 25-year O&M service.",
-    cn: "将停车场变为太阳能发电站，预估降低30-100%电费，3-5年回本，配备AI能源管理和25年运维服务。",
+    th: "เปลี่ยนลานจอดรถเป็นแหล่งผลิตไฟฟ้า ให้ร่มเงา รองรับ EV และวางแผนระบบจากข้อมูลหน้างานจริง",
+    en: "Transform your parking lot into a power-generation asset that provides shade and supports EV, planned from real site data.",
+    cn: "将停车场转变为发电设施，提供遮阳并支持电动车，根据实际现场数据规划系统。",
   },
   "sc.hero.cta1": {
     th: "ขอใบเสนอราคา Solar Carport",
@@ -35,6 +36,11 @@ const dict: TranslationDict = {
   "sc.hero.stat.bill": { th: "ลดค่าไฟ", en: "Bill Reduction", cn: "电费减少" },
   "sc.hero.stat.roi": { th: "คืนทุน", en: "ROI Period", cn: "回本周期" },
   "sc.hero.stat.life": { th: "อายุระบบ", en: "System Life", cn: "系统寿命" },
+  "sc.hero.stat.monitor": { th: "การติดตามระบบ", en: "System monitoring", cn: "系统监控" },
+  "sc.hero.stat.billValue": { th: "ประเมินจากข้อมูลหน้างาน", en: "Assessed from site data", cn: "根据现场数据评估" },
+  "sc.hero.stat.roiValue": { th: "คำนวณเฉพาะโครงการ", en: "Project-specific calculation", cn: "按项目计算" },
+  "sc.hero.stat.lifeValue": { th: "ตามรุ่นอุปกรณ์", en: "Equipment-specific", cn: "以设备型号为准" },
+  "sc.hero.stat.monitorValue": { th: "AI / Energy Monitoring", en: "AI / Energy Monitoring", cn: "AI / Energy Monitoring" },
 
   // Benefits
   "sc.benefits.label": { th: "Benefits", en: "Benefits", cn: "优势" },
@@ -54,9 +60,9 @@ const dict: TranslationDict = {
     cn: "利用闲置空间发电",
   },
   "sc.b1.desc": {
-    th: "เปลี่ยนลานจอดรถที่ไม่สร้างรายได้ให้เป็นแหล่งผลิตไฟฟ้า ลดค่าไฟ 30-100% โดยประมาณโดยไม่ต้องแตะหลังคาอาคาร",
-    en: "Turn non-revenue parking areas into power generation sources with estimated 30-100% bill reduction without touching building roofs.",
-    cn: "将无收益的停车区域变为发电来源，预估降低30-100%电费，无需改动建筑屋顶。",
+    th: "เปลี่ยนลานจอดรถให้เป็นแหล่งผลิตไฟฟ้าโดยไม่ต้องใช้พื้นที่หลังคาอาคาร พร้อมประเมินผลจากข้อมูลหน้างาน",
+    en: "Turn parking areas into power-generation space without using building roofs, with outcomes assessed from site data.",
+    cn: "将停车区域转化为发电空间，无需占用建筑屋顶，并根据现场数据评估结果。",
   },
   "sc.b2.title": {
     th: "ร่มเงาปกป้องรถยนต์",
@@ -84,9 +90,9 @@ const dict: TranslationDict = {
     cn: "BESS储能系统",
   },
   "sc.b4.desc": {
-    th: "เก็บไฟฟ้าส่วนเกินไว้ใช้ช่วง peak หรือยามไฟดับ ลดค่า demand charge ได้อีก 15-30%",
-    en: "Store excess electricity for peak hours or outages, reducing demand charges by an additional 15-30%.",
-    cn: "储存多余电力用于高峰时段或停电，额外减少15-30%的需量电费。",
+    th: "เก็บไฟฟ้าส่วนเกินไว้ใช้ช่วง peak หรือเป็นพลังงานสำรอง โดยประเมินผลจาก load profile และข้อกำหนดความปลอดภัย",
+    en: "Store excess electricity for peak periods or backup use, with results assessed from the load profile and safety requirements.",
+    cn: "将多余电力用于高峰时段或备用，并根据负载曲线和安全要求评估效果。",
   },
   "sc.b5.title": {
     th: "AI Energy Management",
@@ -192,9 +198,9 @@ const dict: TranslationDict = {
     cn: "镀锌钢",
   },
   "sc.spec.structure.note": {
-    th: "ทนทาน 25+ ปี",
-    en: "Durable 25+ years",
-    cn: "耐用25年以上",
+    th: "ตามสเปกและการรับประกัน",
+    en: "By specification and warranty",
+    cn: "以规格和质保为准",
   },
   "sc.spec.panel.label": {
     th: "แผงโซลาร์",
@@ -202,9 +208,9 @@ const dict: TranslationDict = {
     cn: "太阳能板",
   },
   "sc.spec.panel.note": {
-    th: "ประสิทธิภาพ 21%+",
-    en: "21%+ efficiency",
-    cn: "效率21%以上",
+    th: "ตามรุ่นอุปกรณ์ที่อนุมัติ",
+    en: "By approved equipment model",
+    cn: "以批准的设备型号为准",
   },
   "sc.spec.inverter.label": { th: "Inverter", en: "Inverter", cn: "逆变器" },
   "sc.spec.inverter.note": {
@@ -214,9 +220,9 @@ const dict: TranslationDict = {
   },
   "sc.spec.height.label": { th: "ความสูง", en: "Height", cn: "高度" },
   "sc.spec.height.value": {
-    th: "3.0-4.5 เมตร",
-    en: "3.0-4.5 meters",
-    cn: "3.0-4.5米",
+    th: "ตามแบบวิศวกรรม",
+    en: "By engineering design",
+    cn: "以工程设计为准",
   },
   "sc.spec.height.note": {
     th: "รองรับรถตู้/SUV",
@@ -228,7 +234,7 @@ const dict: TranslationDict = {
     en: "Installation Time",
     cn: "安装时间",
   },
-  "sc.spec.install.value": { th: "45-90 วัน", en: "45-90 days", cn: "45-90天" },
+  "sc.spec.install.value": { th: "ตามแผนงานโครงการ", en: "By project schedule", cn: "按项目计划" },
   "sc.spec.install.note": {
     th: "รวมขออนุญาต",
     en: "Including permits",
@@ -302,9 +308,9 @@ const dict: TranslationDict = {
   // O&M
   "sc.om.label": { th: "After-Sales", en: "After-Sales", cn: "售后服务" },
   "sc.om.title1": {
-    th: "ดูแลตลอด 25 ปี",
-    en: "25-Year Care",
-    cn: "25年全程维护",
+    th: "ดูแลตามสัญญา O&M",
+    en: "Care by O&M contract",
+    cn: "按运维合同维护",
   },
   "sc.om.title2": {
     th: "ไม่ใช่แค่ติดตั้งแล้วจบ",
@@ -312,19 +318,20 @@ const dict: TranslationDict = {
     cn: "不只是安装完就结束",
   },
   "sc.om.desc": {
-    th: "SIRINX มีบริการ O&M ครบวงจร ด้วย AI Monitoring, Drone Inspection และทีมวิศวกรที่พร้อมดูแลระบบตลอดอายุการใช้งาน",
-    en: "SIRINX provides comprehensive O&M service with AI Monitoring, Drone Inspection, and engineering team support throughout the system's lifetime.",
-    cn: "SIRINX提供全面的运维服务，包括AI监控、无人机巡检和工程团队全生命周期支持。",
+    th: "SIRINX มีบริการ O&M ด้วย AI Monitoring, Drone Inspection และทีมวิศวกรตามขอบเขตและเงื่อนไขสัญญา",
+    en: "SIRINX provides O&M with AI Monitoring, Drone Inspection, and engineering support by scope and contract terms.",
+    cn: "SIRINX按范围和合同条款提供AI监控、无人机巡检和工程支持。",
   },
   "sc.om.monitoring": {
     th: "AI Monitoring",
     en: "AI Monitoring",
     cn: "AI监控",
   },
+  "sc.om.monitoring.value": { th: "ตามขอบเขตงาน", en: "By project scope", cn: "按项目范围" },
   "sc.om.response": { th: "ตอบสนอง", en: "Response", cn: "响应时间" },
-  "sc.om.response.value": { th: "24-48 ชม.", en: "24-48 hrs", cn: "24-48小时" },
+  "sc.om.response.value": { th: "ตามสัญญา", en: "By contract", cn: "以合同为准" },
   "sc.om.warranty": { th: "รับประกัน", en: "Warranty", cn: "质保" },
-  "sc.om.warranty.value": { th: "25 ปี", en: "25 years", cn: "25年" },
+  "sc.om.warranty.value": { th: "ตามผู้ผลิตและสัญญา", en: "By manufacturer and contract", cn: "以制造商和合同为准" },
 
   // Financing
   "sc.fin.label": { th: "Financing", en: "Financing", cn: "融资方案" },
@@ -344,14 +351,14 @@ const dict: TranslationDict = {
     cn: "全额购买",
   },
   "sc.fin.buy.desc": {
-    th: "ลงทุนครั้งเดียว คืนทุนเร็ว ผลตอบแทนสูงสุดตลอดอายุ 25 ปี",
-    en: "One-time investment, fast ROI, maximum returns over 25 years.",
-    cn: "一次性投资，快速回本，25年最大回报。",
+    th: "ลงทุนครั้งเดียว โดยผลตอบแทนต้องคำนวณจากข้อมูลโครงการและเงื่อนไขการลงทุน",
+    en: "One-time investment, with returns calculated from project data and investment terms.",
+    cn: "一次性投资，回报根据项目数据和投资条款计算。",
   },
   "sc.fin.buy.highlight": {
-    th: "คืนทุนเฉลี่ย 3-5 ปี",
-    en: "Average payback in 3-5 years",
-    cn: "平均3-5年回本",
+    th: "คำนวณผลตอบแทนเฉพาะโครงการ",
+    en: "Project-specific return calculation",
+    cn: "按项目计算回报",
   },
   "sc.fin.buy.f1": {
     th: "ผลตอบแทนสูงสุด",
@@ -464,65 +471,154 @@ const dict: TranslationDict = {
     en: "Frequently Asked Questions",
     cn: "常见问题",
   },
-  "sc.faq1.q": {
-    th: "Solar Carport ต่างจาก Rooftop Solar อย่างไร?",
-    en: "How is Solar Carport different from Rooftop Solar?",
-    cn: "Solar Carport与屋顶太阳能有什么区别？",
+  // FAQ entries are generated from shared/solarCarportFaq.ts so the visible
+  // questions and the FAQPage schema can never drift apart.
+  ...solarCarportFaqTranslationEntries(),
+
+  // Province planning block. Previously hardcoded Thai, which left English and
+  // Chinese province pages showing a Thai section and a broken H1 continuation.
+  "sc.hero.titleProvince": {
+    th: "เปลี่ยนที่จอดรถเป็นโรงไฟฟ้า",
+    en: "Turn your parking lot into a power plant",
+    cn: "把停车场变成发电站",
   },
-  "sc.faq1.a": {
-    th: "Solar Carport ติดตั้งบนโครงสร้างหลังคาที่จอดรถ ไม่ต้องใช้พื้นที่หลังคาอาคาร เหมาะกับธุรกิจที่มีลานจอดรถขนาดใหญ่ นอกจากผลิตไฟฟ้าแล้ว ยังให้ร่มเงาปกป้องรถและรองรับ EV Charger ได้ทันที ในขณะที่ Rooftop Solar ต้องใช้หลังคาอาคารที่มีความแข็งแรงเพียงพอ",
-    en: "Solar Carport is installed on parking lot roof structures, not building roofs. It's ideal for businesses with large parking areas. Besides generating electricity, it provides vehicle shade and supports EV Chargers. Rooftop Solar requires structurally sound building roofs.",
-    cn: "Solar Carport安装在停车场屋顶结构上，不占用建筑屋顶。适合拥有大型停车场的企业。除发电外，还提供车辆遮阳并支持电动车充电。屋顶太阳能需要结构坚固的建筑屋顶。",
+  "sc.province.badge": {
+    th: "แนวทางออกแบบ Solar Carport ในจังหวัด",
+    en: "Solar Carport planning in this province",
+    cn: "本府的太阳能车棚规划",
   },
-  "sc.faq2.q": {
-    th: "ลานจอดรถต้องใหญ่แค่ไหนถึงจะคุ้มค่า?",
-    en: "How big does the parking lot need to be?",
-    cn: "停车场需要多大才划算？",
+  "sc.province.title": {
+    th: "ออกแบบ Solar Carport สำหรับพื้นที่{province}",
+    en: "Solar Carport design for sites in {province}",
+    cn: "{province}的太阳能车棚设计",
   },
-  "sc.faq2.a": {
-    th: "โดยทั่วไป ลานจอดรถ 50 คันขึ้นไป (ประมาณ 500 ตร.ม.) จะเริ่มคุ้มค่าทางเศรษฐกิจ แต่ SIRINX สามารถออกแบบระบบสำหรับพื้นที่ตั้งแต่ 30 คันขึ้นไปได้ ขึ้นอยู่กับค่าไฟปัจจุบันและรูปแบบการลงทุน",
-    en: "Generally, parking lots for 50+ vehicles (approx. 500 sq.m.) become economically viable. SIRINX can design systems for 30+ vehicles depending on current electricity costs and investment model.",
-    cn: "通常50辆以上的停车场（约500平方米）开始具有经济可行性。SIRINX可根据当前电费和投资模式为30辆以上的停车场设计系统。",
+  "sc.province.body": {
+    th: "SIRINX วางแผนระบบ Solar Carport สำหรับโรงงาน โรงแรม อาคารพาณิชย์ ศูนย์กระจายสินค้า สถานศึกษา และองค์กรใน{province} โดยประเมินจากพื้นที่จอดรถ ค่าไฟจริง load profile โครงสร้างหน้างาน EV Charger, BESS และรูปแบบการลงทุน ก่อนสรุปแบบวิศวกรรมและใบเสนอราคา",
+    en: "SIRINX plans Solar Carport systems for factories, hotels, commercial buildings, distribution centres, schools, and organisations in {province}. The design starts from the parking area, actual electricity bills and load profile, site structure, EV Charger and BESS needs, and the investment model, before the engineering design and the quotation are finalised.",
+    cn: "SIRINX 为{province}的工厂、酒店、商业建筑、配送中心、学校和机构规划太阳能车棚系统。设计从停车场面积、实际电费与负荷曲线、现场结构、EV 充电桩与储能需求以及投资模式出发，然后才确定工程设计与报价。",
   },
-  "sc.faq3.q": {
-    th: "คืนทุนกี่ปี? ผลตอบแทนเท่าไหร่?",
-    en: "What's the ROI period and returns?",
-    cn: "回本周期和回报率是多少？",
+  "sc.province.checklistTitle": {
+    th: "สิ่งที่ประเมินให้ก่อนติดตั้ง",
+    en: "What we assess before installation",
+    cn: "安装前的评估内容",
   },
-  "sc.faq3.a": {
-    th: "คืนทุนเฉลี่ย 3-5 ปี ขึ้นอยู่กับขนาดระบบ ค่าไฟปัจจุบัน load profile พื้นที่ติดตั้ง และรูปแบบการลงทุน ระบบมีอายุการใช้งาน 25+ ปี SIRINX จะประเมิน ROI เฉพาะโครงการก่อนเสนอราคา",
-    en: "Average payback is 3-5 years, depending on system size, current electricity costs, load profile, installation area, and investment model. The system lifespan is 25+ years. SIRINX assesses project-specific ROI before quoting.",
-    cn: "平均3-5年回本，取决于系统规模、当前电费、负载曲线、安装面积和投资模式。系统寿命25年以上，SIRINX会在报价前进行项目专属ROI评估。",
+  "sc.province.item1": {
+    th: "ศักยภาพพื้นที่จอดรถใน{province}",
+    en: "Solar potential of parking areas in {province}",
+    cn: "{province}停车场的太阳能潜力",
   },
-  "sc.faq4.q": {
-    th: "ต้องขออนุญาตอะไรบ้าง?",
-    en: "What permits are required?",
-    cn: "需要哪些许可证？",
+  "sc.province.item2": {
+    th: "ขนาดระบบ kWp ที่เหมาะกับค่าไฟและ load profile",
+    en: "System size in kWp matched to electricity cost and load profile",
+    cn: "与电费和负荷曲线匹配的系统容量（kWp）",
   },
-  "sc.faq4.a": {
-    th: "SIRINX ดูแลเรื่องการขออนุญาตทั้งหมด ตั้งแต่ใบอนุญาตก่อสร้าง (อ.1) การขออนุญาตผลิตไฟฟ้า (กกพ.) และการเชื่อมต่อกับระบบไฟฟ้า (MEA/PEA) ทั้งหมดรวมอยู่ในบริการของเรา",
-    en: "SIRINX handles all permits — construction permits, power generation licenses (ERC), and grid connection (MEA/PEA). Everything is included in our service.",
-    cn: "SIRINX处理所有许可——建筑许可、发电许可证（ERC）和电网连接（MEA/PEA）。全部包含在我们的服务中。",
+  "sc.province.item3": {
+    th: "EV Charger, BESS และ AI Energy Management ที่ควรใช้",
+    en: "Which EV Charger, BESS, and AI Energy Management to use",
+    cn: "EV 充电桩、储能与 AI 能源管理方案的选择",
   },
-  "sc.faq5.q": {
-    th: "มีรูปแบบการลงทุนอะไรบ้าง?",
-    en: "What investment models are available?",
-    cn: "有哪些投资模式？",
+  "sc.province.item4": {
+    th: "กรอบผลประหยัดและระยะคืนทุนต้องประเมินจากข้อมูลไซต์จริง",
+    en: "Savings and payback range must be assessed from real site data",
+    cn: "节省与回收期区间必须基于现场真实数据评估",
   },
-  "sc.faq5.a": {
-    th: "SIRINX มี 3 รูปแบบหลัก: (1) ซื้อขาด — คืนทุนเร็ว ผลตอบแทนสูงสุด (2) ผ่อนชำระ — ค่างวดต่ำกว่าค่าไฟที่ประหยัดได้ (3) Co-investment 50:50 — แบ่งเบาภาระลงทุน ทุกรูปแบบสามารถใช้สิทธิหักค่าเสื่อม 150% ได้",
-    en: "SIRINX offers 3 main models: (1) Outright Purchase — fast ROI, maximum returns (2) Installment — payments lower than savings (3) Co-investment 50:50 — shared burden. All models qualify for 150% depreciation deduction.",
-    cn: "SIRINX提供3种主要模式：(1) 全额购买——快速回本，最高回报 (2) 分期付款——月供低于节省金额 (3) 联合投资50:50——分担负担。所有模式均可享受150%折旧抵扣。",
+
+  // Province energy facts, rendered only where a sourced record exists.
+  "sc.solar.label": {
+    th: "ข้อมูลพลังงานแสงอาทิตย์ของจังหวัด",
+    en: "Provincial solar resource",
+    cn: "本府太阳能资源数据",
   },
-  "sc.faq6.q": {
-    th: "หลังติดตั้งแล้ว SIRINX ดูแลอย่างไร?",
-    en: "How does SIRINX maintain the system after installation?",
-    cn: "安装后SIRINX如何维护系统？",
+  "sc.solar.irradiation": {
+    th: "ค่าการแผ่รังสีรวมเฉลี่ย {value} kWh/m² ต่อวัน",
+    en: "Average global irradiation {value} kWh/m² per day",
+    cn: "平均总辐照量 {value} kWh/m²/天",
   },
-  "sc.faq6.a": {
-    th: "SIRINX มีบริการ O&M ตลอด 25 ปี ด้วย AI Monitoring 24/7, Drone Inspection รายไตรมาส, ทีมช่างพร้อมออกซ่อมภายใน 24-48 ชม. และรายงานผลผลิตรายเดือน ลูกค้าไม่ต้องกังวลเรื่องการดูแลระบบ",
-    en: "SIRINX provides 25-year O&M service with 24/7 AI Monitoring, quarterly Drone Inspection, repair team response within 24-48 hours, and monthly production reports. Customers don't need to worry about system maintenance.",
-    cn: "SIRINX提供25年运维服务，包括24/7 AI监控、季度无人机巡检、24-48小时维修响应和月度产量报告。客户无需担心系统维护。",
+  "sc.solar.yield": {
+    th: "ค่าการผลิตไฟฟ้าต่อหน่วยกำลัง {value} kWh ต่อ kWp ต่อปี",
+    en: "Specific yield {value} kWh per kWp per year",
+    cn: "单位发电量 {value} kWh/kWp/年",
+  },
+  "sc.solar.disclaimer": {
+    th: "ค่านี้เป็นค่ากลางทางภูมิอากาศของจังหวัด ไม่ใช่ผลจากการสำรวจหน้างาน และไม่ใช่การรับประกันผลประหยัด ผลจริงขึ้นกับทิศหลังคา เงาบัง ระยะจากต้นข่าย ค่าการสูญเสียระบบ และรูปแบบการใช้ไฟของแต่ละไซต์",
+    en: "These are climate normals for the province, not a site survey result and not a savings guarantee. Real output depends on roof orientation, shading, distance to the grid connection, system losses, and each site's actual consumption pattern.",
+    cn: "以上数值为该府的气候平均值，并非现场勘察结果，也不构成节省保证。实际发电取决于屋顶朝向、遮挡、与并网点的距离、系统损耗以及每个场地的实际用电情况。",
+  },
+  "sc.solar.source": {
+    th: "ที่มา: {source} · ฐานข้อมูล {database} · ช่วงปี {years} · ดึงข้อมูล {date}",
+    en: "Source: {source} · database {database} · years {years} · retrieved {date}",
+    cn: "来源：{source} · 数据库 {database} · 年份 {years} · 获取日期 {date}",
+  },
+  "sc.solar.coords": {
+    th: "พิกัดที่ใช้คำนวณ: {lat}, {lon}",
+    en: "Lookup coordinates: {lat}, {lon}",
+    cn: "计算坐标：{lat}, {lon}",
+  },
+
+  "sc.solar.chartTitle": {
+    th: "โครงสร้างแสงอาทิตย์รายเดือนของจังหวัด",
+    en: "Monthly solar profile of the province",
+    cn: "本府的逐月太阳能曲线",
+  },
+  "sc.solar.chartRef": {
+    th: "ค่าเฉลี่ยของ 77 จังหวัด",
+    en: "Mean across the 77 provinces",
+    cn: "77 个府的均值",
+  },
+  "sc.solar.chartCaption": {
+    th: "ความสูงแท่งคือค่าการแผ่รังสีเฉลี่ยของเดือนนั้น เส้นประคือค่าเฉลี่ยของทั้งประเทศ เพื่อให้เห็นว่าจังหวัดนี้สูงกว่าหรือต่ำกว่าค่ากลางอย่างไร",
+    en: "Bar height is that month's average irradiation. The dashed line is the national mean, so you can see whether this province sits above or below it.",
+    cn: "柱高为该月的平均辐照量，虚线为全国均值，便于判断本省高于还是低于平均水平。",
+  },
+
+  // 3D viewer, product page only. Lazy loaded so Three.js never enters the
+  // province page bundle.
+  "sc.viewer.title": {
+    th: "ดูโครงสร้าง Solar Carport แบบสามมิติ",
+    en: "See the Solar Carport structure in 3D",
+    cn: "以三维方式查看太阳能车棚结构",
+  },
+  "sc.viewer.intro": {
+    th: "ลากเพื่อหมุนมุมมอง และเลื่อนเดือนหรือมุมเอียงแผงเพื่อดูผลกับ{province} ตัวเลขคำนวณจากค่าแสงอาทิตย์จริงของจังหวัดนี้",
+    en: "Drag to orbit, and move the month or panel tilt to see the effect for {province}. The figures come from this province's own solar resource data.",
+    cn: "拖动可旋转视角，调节月份或组件倾角可查看在{province}的效果。数值来自本府的太阳能资源数据。",
+  },
+  "sc.viewer.month": { th: "เดือน", en: "Month", cn: "月份" },
+  "sc.viewer.tilt": { th: "มุมเอียงแผง", en: "Panel tilt", cn: "组件倾角" },
+  "sc.viewer.poa": { th: "รัศมีบนแผง", en: "Irradiance on panel", cn: "组件表面辐照量" },
+  "sc.viewer.energy": { th: "พลังงานต่อวัน", en: "Energy per day", cn: "日发电量" },
+  "sc.viewer.sun": { th: "มุมดวงอาทิตย์", en: "Sun elevation", cn: "太阳高度角" },
+  "sc.viewer.noWebgl": {
+    th: "เบราว์เซอร์นี้ไม่รองรับ WebGL จึงแสดงเฉพาะตัวเลข ตัวโครงสร้างและการจัดวางอ้างอิงจากหน้า Solar Carport",
+    en: "This browser does not support WebGL, so only the figures are shown. See the Solar Carport page for the structure and layout.",
+    cn: "此浏览器不支持 WebGL，因此仅显示数值。结构与布局请见太阳能车棚页面。",
+  },
+  "sc.viewer.start": {
+    th: "เปิดดูโครงสร้างสามมิติ",
+    en: "Open the 3D structure",
+    cn: "打开三维结构",
+  },
+  "sc.viewer.startHint": {
+    th: "โหลด Three.js เมื่อกดเท่านั้น ใช้เมาส์หรือนิ้วลากเพื่อหมุนมุมมอง",
+    en: "Loads Three.js only when clicked. Drag with the mouse or a finger to orbit.",
+    cn: "仅在点击后加载 Three.js。可拖动旋转视角。",
+  },
+  "sc.viewer.loading": {
+    th: "กำลังเตรียมภาพสามมิติ",
+    en: "Preparing the 3D view",
+    cn: "正在准备三维视图",
+  },
+
+  // Province index cross-links
+  "sc.provinces.link": {
+    th: "ดู Solar Carport ทุกจังหวัด",
+    en: "See Solar Carport in all provinces",
+    cn: "查看所有省市的太阳能车棚",
+  },
+  "sc.provinces.all": {
+    th: "กลับไปหน้า Solar Carport",
+    en: "Back to Solar Carport",
+    cn: "返回太阳能车棚页面",
   },
 
   // Sticky CTA

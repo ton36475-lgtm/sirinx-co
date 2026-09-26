@@ -1,4 +1,3 @@
-const SIRINX_IMAGE_ORIGIN = "https://www.sirinx.co";
 const RESIZABLE_REMOTE_ORIGINS = [
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv",
 ];
@@ -13,16 +12,13 @@ function isResizableRemoteImage(src: string) {
 }
 
 export function cfImage(src: string, width: number, options: CfImageOptions = {}) {
-  if (!isResizableRemoteImage(src)) return src;
-  const quality = options.quality ?? 74;
-  const format = options.format ?? "auto";
-  const directives = [
-    `width=${Math.max(1, Math.round(width))}`,
-    `quality=${quality}`,
-    `format=${format}`,
-    "fit=scale-down",
-  ];
-  return `${SIRINX_IMAGE_ORIGIN}/cdn-cgi/image/${directives.join(",")}/${src}`;
+  // The Cloudflare Image Transform endpoint currently returns 403 for this
+  // CloudFront origin. Keep the original asset URL until the transform route
+  // has a verified origin policy; a broken optimized URL must not replace a
+  // working image in the public site.
+  void width;
+  void options;
+  return src;
 }
 
 export function cfImageSrcSet(
@@ -30,6 +26,8 @@ export function cfImageSrcSet(
   widths: number[] = [360, 640, 960, 1280],
   options: CfImageOptions = {}
 ) {
+  void widths;
+  void options;
   if (!isResizableRemoteImage(src)) return undefined;
-  return widths.map(width => `${cfImage(src, width, options)} ${width}w`).join(", ");
+  return undefined;
 }

@@ -19,30 +19,36 @@ import * as db from "./db";
 
 // ==================== LEAD ROUTER ====================
 
+const leadInputSchema = z.object({
+  source: z
+    .enum(["contact", "assessment", "partner", "line"])
+    .default("contact"),
+  name: z.string().trim().min(1, "กรุณากรอกชื่อ").max(255),
+  company: z.string().trim().max(255).optional(),
+  email: z
+    .string()
+    .trim()
+    .max(320, "อีเมลยาวเกินไป")
+    .email("อีเมลไม่ถูกต้อง")
+    .optional()
+    .or(z.literal("")),
+  phone: z.string().trim().max(32).optional(),
+  industry: z.string().trim().max(100).optional(),
+  interest: z.string().trim().max(255).optional(),
+  budget: z.string().trim().max(100).optional(),
+  timeline: z.string().trim().max(100).optional(),
+  systemSize: z.string().trim().max(50).optional(),
+  systemType: z.string().trim().max(100).optional(),
+  monthlyBill: z.string().trim().max(50).optional(),
+  bessInterest: z.string().trim().max(10).optional(),
+  message: z.string().trim().max(20000).optional(),
+  lineUserId: z.string().trim().max(64).optional(),
+});
+
 const leadRouter = router({
   /** Public: Submit a new lead (from Contact form, Assessment, Partner page) */
   submit: publicProcedure
-    .input(
-      z.object({
-        source: z
-          .enum(["contact", "assessment", "partner", "line"])
-          .default("contact"),
-        name: z.string().min(1, "กรุณากรอกชื่อ"),
-        company: z.string().optional(),
-        email: z.string().email("อีเมลไม่ถูกต้อง").optional().or(z.literal("")),
-        phone: z.string().optional(),
-        industry: z.string().optional(),
-        interest: z.string().optional(),
-        budget: z.string().optional(),
-        timeline: z.string().optional(),
-        systemSize: z.string().optional(),
-        systemType: z.string().optional(),
-        monthlyBill: z.string().optional(),
-        bessInterest: z.string().optional(),
-        message: z.string().optional(),
-        lineUserId: z.string().optional(),
-      })
-    )
+    .input(leadInputSchema)
     .mutation(async ({ input, ctx }) => {
       try {
         // Create lead
@@ -443,7 +449,7 @@ Solar Carport คือผลิตภัณฑ์เด่นของ SIRINX �
 ข้อมูลสำคัญ:
 - คืนทุนและ LCOE ต้องคำนวณจากข้อมูลลูกค้าจริงก่อนเสนอราคา
 - สิทธิประโยชน์ภาษี/BOI ต้องตรวจตามเงื่อนไขล่าสุดกับผู้เชี่ยวชาญหรือหน่วยงานที่เกี่ยวข้องก่อนใช้ในข้อเสนอ
-- รูปแบบลงทุน: ซื้อขาด, ผ่อนชำระ 0%, Co-investment 50:50
+- รูปแบบลงทุน: ซื้อขาด ผ่อนชำระ หรือรูปแบบร่วมลงทุนที่ต้องตรวจสอบและอนุมัติตามเงื่อนไขของแต่ละโครงการ
 - ติดต่อ: คุณ Pitoon (CEO) โทร 081-972-3969 | LINE @SIRINX
 
 Lead qualification ที่ต้องค่อยๆ เก็บโดยไม่กดดันลูกค้า:

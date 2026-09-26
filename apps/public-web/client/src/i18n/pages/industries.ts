@@ -16,12 +16,12 @@ registerPageTranslations("industries", {
 
   // Manufacturing
   "ind.manufacturing.title": { th: "โรงงานอุตสาหกรรม", en: "Manufacturing & Industrial", cn: "制造业与工业" },
-  "ind.manufacturing.challenge": { th: "ค่าไฟฟ้าคิดเป็น 15-30% ของต้นทุนการผลิต การแข่งขันด้านราคาทำให้ต้องลดต้นทุนทุกทาง", en: "Electricity costs account for 15-30% of production costs. Price competition demands cost reduction at every level.", cn: "电费占生产成本的15-30%。价格竞争要求全方位降低成本。" },
+  "ind.manufacturing.challenge": { th: "ค่าไฟฟ้าเป็นต้นทุนสำคัญของการผลิต การแข่งขันด้านราคาทำให้ต้องวิเคราะห์ต้นทุนอย่างเป็นระบบ", en: "Electricity is a material production cost, so price competition requires systematic cost analysis.", cn: "电费是生产的重要成本，价格竞争需要系统地分析成本。" },
   "ind.manufacturing.uc1": { th: "Rooftop Solar บนหลังคาโรงงาน ลดค่าไฟช่วงกลางวัน", en: "Rooftop Solar on factory roofs to reduce daytime electricity costs", cn: "工厂屋顶太阳能，降低白天电费" },
   "ind.manufacturing.uc2": { th: "Solar Carport สำหรับลานจอดรถพนักงาน 100+ คัน", en: "Solar Carport for 100+ employee parking spaces", cn: "太阳能车棚，可容纳100+员工停车位" },
   "ind.manufacturing.uc3": { th: "BESS สำหรับ peak shaving ลดค่า demand charge", en: "BESS for peak shaving to reduce demand charges", cn: "BESS用于削峰填谷，降低需量电费" },
   "ind.manufacturing.uc4": { th: "AI Energy Management ปรับการใช้พลังงานตามกำลังการผลิต", en: "AI Energy Management to optimize energy use based on production capacity", cn: "AI能源管理，根据产能优化能源使用" },
-  "ind.manufacturing.outcome": { th: "ลดต้นทุนพลังงาน 30-50%", en: "Reduce energy costs by 30-50%", cn: "降低能源成本30-50%" },
+  "ind.manufacturing.outcome": { th: "วางแผนลดต้นทุนจากข้อมูลการใช้ไฟจริง", en: "Plan cost reductions from actual energy data", cn: "根据实际能源数据规划成本降低" },
   "ind.manufacturing.carport": { th: "ลานจอดรถพนักงานขนาดใหญ่ = โอกาสผลิตไฟฟ้าที่ยังไม่ได้ใช้", en: "Large employee parking lots = untapped electricity generation opportunity", cn: "大型员工停车场 = 尚未利用的发电机会" },
 
   // Agriculture
@@ -31,7 +31,7 @@ registerPageTranslations("industries", {
   "ind.agriculture.uc2": { th: "Solar Pump สำหรับระบบชลประทาน", en: "Solar Pump for irrigation systems", cn: "太阳能水泵用于灌溉系统" },
   "ind.agriculture.uc3": { th: "ระบบพลังงานสำหรับ Cold Storage", en: "Energy systems for Cold Storage", cn: "冷库能源系统" },
   "ind.agriculture.uc4": { th: "AI ควบคุมระบบน้ำอัตโนมัติ", en: "AI-controlled automatic water management", cn: "AI自动控制水管理系统" },
-  "ind.agriculture.outcome": { th: "ลดค่าพลังงาน 40-60%", en: "Reduce energy costs by 40-60%", cn: "降低能源成本40-60%" },
+  "ind.agriculture.outcome": { th: "ประเมินการลดค่าพลังงานตามพื้นที่และฤดูกาล", en: "Assess energy reduction by site and season", cn: "根据场地和季节评估能源降低" },
 
   // Hospitality
   "ind.hospitality.title": { th: "โรงแรมและรีสอร์ท", en: "Hotels & Resorts", cn: "酒店与度假村" },
@@ -40,7 +40,7 @@ registerPageTranslations("industries", {
   "ind.hospitality.uc2": { th: "Rooftop Solar ลดค่าไฟช่วงกลางวัน", en: "Rooftop Solar to reduce daytime electricity costs", cn: "屋顶太阳能降低白天电费" },
   "ind.hospitality.uc3": { th: "BESS สำรองไฟฟ้าสำหรับ critical systems", en: "BESS backup power for critical systems", cn: "BESS为关键系统提供备用电力" },
   "ind.hospitality.uc4": { th: "AI ปรับ HVAC ตามจำนวนผู้เข้าพัก", en: "AI-optimized HVAC based on occupancy", cn: "AI根据入住率优化HVAC" },
-  "ind.hospitality.outcome": { th: "ลดค่าพลังงาน 25-40%", en: "Reduce energy costs by 25-40%", cn: "降低能源成本25-40%" },
+  "ind.hospitality.outcome": { th: "วางแผนระบบจากรูปแบบการเข้าพักและ load profile", en: "Plan from occupancy patterns and the load profile", cn: "根据入住模式和负载曲线规划系统" },
   "ind.hospitality.carport": { th: "Solar Carport + EV Charger = จุดขาย Green Hotel ที่ดึงดูดนักท่องเที่ยว", en: "Solar Carport + EV Charger = Green Hotel selling point that attracts tourists", cn: "太阳能车棚 + 电动车充电 = 吸引游客的绿色酒店卖点" },
 
   // Education
@@ -50,7 +50,7 @@ registerPageTranslations("industries", {
   "ind.education.uc2": { th: "Rooftop Solar บนอาคารเรียนและหอพัก", en: "Rooftop Solar on classrooms and dormitories", cn: "教学楼和宿舍屋顶太阳能" },
   "ind.education.uc3": { th: "Energy Dashboard สำหรับการเรียนรู้", en: "Energy Dashboard for educational learning", cn: "能源仪表板用于教学" },
   "ind.education.uc4": { th: "ระบบ monitoring เชื่อมต่อหลักสูตร STEM", en: "Monitoring system integrated with STEM curriculum", cn: "监控系统与STEM课程整合" },
-  "ind.education.outcome": { th: "ลดงบค่าไฟ 30-50%", en: "Reduce electricity budget by 30-50%", cn: "降低电费预算30-50%" },
+  "ind.education.outcome": { th: "ประเมินงบพลังงานจากรูปแบบการใช้ไฟของอาคาร", en: "Assess the energy budget from building usage", cn: "根据建筑用电模式评估能源预算" },
   "ind.education.carport": { th: "ลานจอดรถมหาวิทยาลัย = พื้นที่ผลิตไฟฟ้าขนาดใหญ่ + Living Lab", en: "University parking lots = large power generation area + Living Lab", cn: "大学停车场 = 大型发电区域 + 实验室" },
 
   // Commercial
@@ -60,7 +60,7 @@ registerPageTranslations("industries", {
   "ind.commercial.uc2": { th: "Rooftop Solar ลดค่าส่วนกลาง", en: "Rooftop Solar to reduce common area fees", cn: "屋顶太阳能降低公共区域费用" },
   "ind.commercial.uc3": { th: "AI Energy Management สำหรับ BMS", en: "AI Energy Management for BMS", cn: "AI能源管理用于BMS" },
   "ind.commercial.uc4": { th: "ESG Reporting อัตโนมัติ", en: "Automated ESG Reporting", cn: "自动ESG报告" },
-  "ind.commercial.outcome": { th: "ลดค่าส่วนกลาง 20-35%", en: "Reduce common area fees by 20-35%", cn: "降低公共区域费用20-35%" },
+  "ind.commercial.outcome": { th: "วางแผนค่าส่วนกลางจากข้อมูลการใช้ไฟจริง", en: "Plan common-area costs from actual energy data", cn: "根据实际能源数据规划公共区域费用" },
   "ind.commercial.carport": { th: "Solar Carport เพิ่มมูลค่าอาคาร + ดึงดูดผู้เช่าที่ใส่ใจ ESG", en: "Solar Carport increases building value + attracts ESG-conscious tenants", cn: "太阳能车棚提升建筑价值 + 吸引注重ESG的租户" },
 
   // Government
@@ -70,7 +70,7 @@ registerPageTranslations("industries", {
   "ind.government.uc2": { th: "Rooftop Solar สำหรับอาคารราชการ", en: "Rooftop Solar for government buildings", cn: "政府建筑屋顶太阳能" },
   "ind.government.uc3": { th: "Floating Solar บนอ่างเก็บน้ำชลประทาน", en: "Floating Solar on irrigation reservoirs", cn: "灌溉水库浮动太阳能" },
   "ind.government.uc4": { th: "PPA Model ไม่ต้องใช้งบลงทุนตั้งแต่วันแรก", en: "PPA Model — zero upfront investment from day one", cn: "PPA模式 — 从第一天起零前期投资" },
-  "ind.government.outcome": { th: "ลดงบค่าพลังงาน 30-50%", en: "Reduce energy budget by 30-50%", cn: "降低能源预算30-50%" },
+  "ind.government.outcome": { th: "ประเมินงบพลังงานและรูปแบบจัดซื้อที่เหมาะสม", en: "Assess the energy budget and suitable procurement model", cn: "评估能源预算和合适的采购模式" },
   "ind.government.carport": { th: "ลานจอดรถราชการ = โอกาสผลิตไฟฟ้าโดยไม่ต้องใช้งบลงทุน (PPA)", en: "Government parking lots = power generation opportunity with zero investment (PPA)", cn: "政府停车场 = 零投资发电机会（PPA）" },
 
   // Mid-page CTA

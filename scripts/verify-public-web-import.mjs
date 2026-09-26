@@ -17,6 +17,7 @@ const REQUIRED_PATHS = [
   "client/src/pages/SolarCarport.tsx",
   "client/src/components/Layout.tsx",
   "client/src/components/HeroSlideshow.tsx",
+  "client/src/i18n/pages/heroSlideshow.ts",
   "client/src/components/RouteSeo.tsx",
   "client/src/lib/seo.ts",
   "client/src/i18n/pages/home.ts",
@@ -73,7 +74,7 @@ function main() {
     assertExists(targetRoot, relativePath, failures);
   }
 
-  assertFileContains(path.join(targetRoot, "client/src/components/HeroSlideshow.tsx"), REQUIRED_HERO_STRINGS, failures);
+  assertFileContains(path.join(targetRoot, "client/src/i18n/pages/heroSlideshow.ts"), REQUIRED_HERO_STRINGS, failures);
   assertFileContains(path.join(targetRoot, "client/src/App.tsx"), ["isInternalHost", "dev.sirinx.co", "function PublicRouter", "component={PublicRouter}"], failures);
   assertFileContains(path.join(targetRoot, "client/src/lib/seo.ts"), ["https://www.sirinx.co", "Solar Carport"], failures);
   assertFileContains(path.join(targetRoot, "brands/sirinx/config.ts"), ["id: \"sirinx\"", "Solar Carport", "lineUrl"], failures);

@@ -132,3 +132,111 @@ test("source stays static, system-font-only, and storage-free", async () => {
   });
   assert.deepEqual([...socialImage.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
 });
+
+test("dependency manifest and lock pin the audited Next.js 16.3.1 toolchain", async () => {
+  const [packageText, lockText] = await Promise.all([
+    readFile(new URL("../package.json", import.meta.url), "utf8"),
+    readFile(new URL("../package-lock.json", import.meta.url), "utf8"),
+  ]);
+  const packageJson = JSON.parse(packageText);
+  const lock = JSON.parse(lockText);
+
+  const expectedDependencies = {
+    next: "16.3.1",
+    react: "19.2.8",
+    "react-dom": "19.2.8",
+  };
+  const expectedDevDependencies = {
+    "@cloudflare/vite-plugin": "1.52.1",
+    "@vitejs/plugin-rsc": "0.5.34",
+    "eslint-config-next": "16.3.1",
+    "react-server-dom-webpack": "19.2.8",
+    vinext: "1.0.0-beta.6",
+    vite: "8.2.1",
+    wrangler: "4.123.0",
+  };
+
+  assert.deepEqual(
+    Object.fromEntries(Object.keys(expectedDependencies).map((name) => [name, packageJson.dependencies[name]])),
+    expectedDependencies,
+  );
+  assert.deepEqual(
+    Object.fromEntries(
+      Object.keys(expectedDevDependencies).map((name) => [name, packageJson.devDependencies[name]]),
+    ),
+    expectedDevDependencies,
+  );
+
+  for (const [name, version] of Object.entries({
+    ...expectedDependencies,
+    ...expectedDevDependencies,
+  })) {
+    const rootSection = name in expectedDependencies ? "dependencies" : "devDependencies";
+    assert.equal(lock.packages[""][rootSection][name], version);
+    assert.equal(lock.packages[`node_modules/${name}`].version, version);
+  }
+});
+
+test("Cloudflare compatibility and local observability defaults stay explicit", async () => {
+  const viteConfig = await readFile(new URL("../vite.config.ts", import.meta.url), "utf8");
+
+  assert.match(viteConfig, /process\.env\.X_LOCAL_OBSERVABILITY\s*\?\?=\s*["']false["']/);
+  assert.match(viteConfig, /compatibility_date:\s*["']2026-05-15["']/);
+});
+
+test("transitive build dependencies stay outside the audited vulnerable ranges", async () => {
+  const lock = JSON.parse(await readFile(new URL("../package-lock.json", import.meta.url), "utf8"));
+  const expectedVersions = {
+    "@babel/core": ["7.29.7"],
+    "brace-expansion": ["1.1.18", "5.0.9"],
+    esbuild: ["0.28.1"],
+    "fast-uri": ["3.1.5"],
+    "js-yaml": ["4.3.1"],
+    miniflare: ["5.20260811.1-alpha"],
+    sharp: ["0.35.2", "0.35.3"],
+    undici: ["7.29.0"],
+    ws: ["8.21.0"],
+  };
+
+  for (const [name, versions] of Object.entries(expectedVersions)) {
+    const suffix = `/node_modules/${name}`;
+    const lockedVersions = Object.entries(lock.packages)
+      .filter(([path]) => path === `node_modules/${name}` || path.endsWith(suffix))
+      .map(([, metadata]) => metadata.version)
+      .sort();
+
+    assert.deepEqual([...new Set(lockedVersions)], versions, `${name} lock versions`);
+  }
+
+  assert.equal(lock.packages["node_modules/image-size"], undefined);
+
+  for (const [name, version] of Object.entries({
+    react: "19.2.8",
+    "react-dom": "19.2.8",
+    "react-server-dom-webpack": "19.2.8",
+    vinext: "1.0.0-beta.6",
+    vite: "8.2.1",
+    wrangler: "4.123.0",
+  })) {
+    const suffix = `/node_modules/${name}`;
+    const copies = Object.entries(lock.packages)
+      .filter(([path]) => path === `node_modules/${name}` || path.endsWith(suffix))
+      .map(([, metadata]) => metadata.version);
+
+    assert.deepEqual(copies, [version], `${name} single-copy closure`);
+  }
+
+  assert.deepEqual(lock.packages["node_modules/@cloudflare/vite-plugin"].peerDependencies, {
+    vite: "^6.1.0 || ^7.0.0 || ^8.0.0",
+    wrangler: "^4.123.0",
+  });
+  assert.deepEqual(lock.packages["node_modules/vinext"].peerDependencies, {
+    "@mdx-js/rollup": "^3.0.0",
+    "@vitejs/plugin-react": "^5.1.4 || ^6.0.0",
+    "@vitejs/plugin-rsc": "^0.5.34",
+    react: "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-server-dom-webpack": "^19.2.6",
+    vite: "^8.0.0",
+  });
+});

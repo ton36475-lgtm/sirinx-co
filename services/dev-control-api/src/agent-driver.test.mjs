@@ -124,6 +124,13 @@ describe("Agent Driver contract", () => {
 describe("Agent Driver API routes", () => {
   const port = 19880 + Math.floor(Math.random() * 1000);
   const baseUrl = `http://127.0.0.1:${port}`;
+  // Every /api/ route requires a Bearer token. These tests used to pass only
+  // because the server served those routes to anyone who asked.
+  const apiFetch = (path, options = {}) =>
+    fetch(`${baseUrl}${path}`, {
+      ...options,
+      headers: { authorization: `Bearer ${process.env.CONTROL_API_TOKEN}`, ...options.headers }
+    });
   let server;
 
   beforeAll(async () => {
@@ -147,7 +154,7 @@ describe("Agent Driver API routes", () => {
   });
 
   it("serves local-only driver status without secret-like values", async () => {
-    const response = await fetch(`${baseUrl}/api/agent-driver`);
+    const response = await apiFetch("/api/agent-driver");
     const body = await response.json();
 
     expect(response.status).toBe(200);
@@ -165,7 +172,7 @@ describe("Agent Driver API routes", () => {
   });
 
   it("serves a dry-run smoke packet without executing commands", async () => {
-    const response = await fetch(`${baseUrl}/api/agent-driver/smoke/dry-run`, {
+    const response = await apiFetch("/api/agent-driver/smoke/dry-run", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ requestId: "agent-driver-smoke", agentId: "codex", goal: "read-only smoke" })
@@ -183,7 +190,7 @@ describe("Agent Driver API routes", () => {
   });
 
   it("fails closed on invalid driver dry-run JSON", async () => {
-    const response = await fetch(`${baseUrl}/api/agent-driver/smoke/dry-run`, {
+    const response = await apiFetch("/api/agent-driver/smoke/dry-run", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: "{invalid-json"

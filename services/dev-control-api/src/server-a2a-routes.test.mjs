@@ -8,6 +8,17 @@ const noTokenBaseUrl = `http://127.0.0.1:${noTokenPort}`;
 const controlToken = "test-control-token";
 const processes = [];
 
+/**
+ * Every /api/ route requires a Bearer token. /health is the only public route,
+ * because the stack manager polls it without credentials.
+ */
+function apiFetch(url, options = {}) {
+  return fetch(url, {
+    ...options,
+    headers: { authorization: `Bearer ${controlToken}`, ...options.headers }
+  });
+}
+
 function spawnServer(port, token) {
   const child = spawn("node", ["services/dev-control-api/server.mjs"], {
     cwd: process.cwd(),
@@ -42,7 +53,7 @@ function liveRequestBody(overrides = {}) {
 }
 
 async function postPlan(baseUrl, body, headers = {}) {
-  return fetch(`${baseUrl}/api/a2a-sync/plan`, {
+  return apiFetch(`${baseUrl}/api/a2a-sync/plan`, {
     method: "POST",
     headers: { "content-type": "application/json", ...headers },
     body: typeof body === "string" ? body : JSON.stringify(body)
@@ -65,7 +76,19 @@ describe("dev-control A2A route hardening", () => {
     }
   });
 
-  it("allows local dry-run planning without control auth", async () => {
+  it("requires control auth for dry-run plans too, not only for live ones", async () => {
+    const unauthenticated = await fetch(`${liveBaseUrl}/api/a2a-sync/plan`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ ...liveRequestBody(), dryRun: true })
+    });
+    const unauthenticatedBody = await unauthenticated.json();
+
+    expect(unauthenticated.status).toBe(401);
+    expect(unauthenticated.headers.get("www-authenticate")).toBe("Bearer");
+    expect(unauthenticatedBody.error).toBe("bearer_token_missing");
+    expect(unauthenticatedBody.externalWrites).toBe(false);
+
     const response = await postPlan(liveBaseUrl, {
       ...liveRequestBody(),
       dryRun: true
@@ -79,7 +102,7 @@ describe("dev-control A2A route hardening", () => {
   });
 
   it("serves a truthful A2A status body over GET", async () => {
-    const response = await fetch(`${liveBaseUrl}/api/a2a-sync`);
+    const response = await apiFetch(`${liveBaseUrl}/api/a2a-sync`);
     const body = await response.json();
 
     expect(response.status).toBe(200);
@@ -102,7 +125,7 @@ describe("dev-control A2A route hardening", () => {
     ]));
   });
 
-  it("fails closed when live control auth is not configured", async () => {
+  it("closes the whole /api/ surface when control auth is not configured", async () => {
     const response = await postPlan(noTokenBaseUrl, liveRequestBody(), {
       "idempotency-key": "missing-config-1"
     });
@@ -110,10 +133,10 @@ describe("dev-control A2A route hardening", () => {
 
     expect(response.status).toBe(503);
     expect(body).toMatchObject({
-      status: "a2a_sync_live_control_unavailable",
+      status: "control_api_token_not_configured",
       error: "control_api_token_not_configured",
       externalWrites: false,
-      canSendTelegram: false
+      requiresHumanApproval: true
     });
   });
 
@@ -153,9 +176,12 @@ describe("dev-control A2A route hardening", () => {
     ["missing bearer", {}, "bearer_token_missing"],
     ["invalid bearer", { authorization: "Bearer wrong-token" }, "bearer_token_invalid"]
   ])("rejects %s for a live plan", async (_label, authHeaders, expectedError) => {
-    const response = await postPlan(liveBaseUrl, liveRequestBody(), {
-      "idempotency-key": `auth-${expectedError}`,
-      ...authHeaders
+    // Calls fetch directly rather than postPlan: postPlan attaches the valid
+    // token, and these cases exist precisely to prove it is enforced.
+    const response = await fetch(`${liveBaseUrl}/api/a2a-sync/plan`, {
+      method: "POST",
+      headers: { "content-type": "application/json", ...authHeaders },
+      body: JSON.stringify(liveRequestBody())
     });
     const body = await response.json();
 
@@ -262,7 +288,7 @@ describe("dev-control A2A route hardening", () => {
   });
 
   it("advertises auth and idempotency headers only to an allowed dashboard origin", async () => {
-    const allowed = await fetch(`${liveBaseUrl}/api/a2a-sync/plan`, {
+    const allowed = await apiFetch(`${liveBaseUrl}/api/a2a-sync/plan`, {
       method: "OPTIONS",
       headers: {
         origin: "http://localhost:8710",
@@ -274,14 +300,14 @@ describe("dev-control A2A route hardening", () => {
     expect(allowed.headers.get("access-control-allow-headers")).toContain("authorization");
     expect(allowed.headers.get("access-control-allow-headers")).toContain("idempotency-key");
 
-    const denied = await fetch(`${liveBaseUrl}/api/a2a-sync`, {
+    const denied = await apiFetch(`${liveBaseUrl}/api/a2a-sync`, {
       headers: { origin: "https://untrusted.example" }
     });
     expect(denied.headers.get("access-control-allow-origin")).toBeNull();
   });
 
   it("serves a truthful OmniRoute status and handshake without activating or sending", async () => {
-    const statusResponse = await fetch(`${liveBaseUrl}/api/omniroute`);
+    const statusResponse = await apiFetch(`${liveBaseUrl}/api/omniroute`);
     const status = await statusResponse.json();
     expect(statusResponse.status).toBe(200);
     expect(status).toMatchObject({
@@ -290,7 +316,7 @@ describe("dev-control A2A route hardening", () => {
       commandExecuted: false,
     });
 
-    const handshakeResponse = await fetch(`${liveBaseUrl}/api/omniroute/handshake`, {
+    const handshakeResponse = await apiFetch(`${liveBaseUrl}/api/omniroute/handshake`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ requestId: "http-handshake", dryRun: false }),
@@ -312,7 +338,7 @@ describe("dev-control A2A route hardening", () => {
   });
 
   it("serves the 47-role enterprise registry without spawning workers", async () => {
-    const statusResponse = await fetch(`${liveBaseUrl}/api/agent-enterprise`);
+    const statusResponse = await apiFetch(`${liveBaseUrl}/api/agent-enterprise`);
     const status = await statusResponse.json();
 
     expect(statusResponse.status).toBe(200);
@@ -336,7 +362,7 @@ describe("dev-control A2A route hardening", () => {
     });
     expect(status.roleCards).toHaveLength(47);
 
-    const planResponse = await fetch(`${liveBaseUrl}/api/agent-enterprise/dispatch/plan`, {
+    const planResponse = await apiFetch(`${liveBaseUrl}/api/agent-enterprise/dispatch/plan`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ goal: "plan 47 departments", dryRun: true }),
@@ -352,7 +378,7 @@ describe("dev-control A2A route hardening", () => {
   });
 
   it("serves a truthful OpenCode autoloop view and all-agent dry-run plan", async () => {
-    const statusResponse = await fetch(`${liveBaseUrl}/api/codex-autoloop`);
+    const statusResponse = await apiFetch(`${liveBaseUrl}/api/codex-autoloop`);
     const status = await statusResponse.json();
 
     expect(statusResponse.status).toBe(200);
@@ -372,7 +398,7 @@ describe("dev-control A2A route hardening", () => {
       },
     });
 
-    const planResponse = await fetch(`${liveBaseUrl}/api/codex-autoloop/plan`, {
+    const planResponse = await apiFetch(`${liveBaseUrl}/api/codex-autoloop/plan`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ goal: "plan all agents", dryRun: true }),
@@ -392,7 +418,7 @@ describe("dev-control A2A route hardening", () => {
   });
 
   it("applies the same 16 KiB limit to OmniRoute handshake bodies", async () => {
-    const response = await fetch(`${liveBaseUrl}/api/omniroute/handshake`, {
+    const response = await apiFetch(`${liveBaseUrl}/api/omniroute/handshake`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ goal: "x".repeat(17 * 1024) }),

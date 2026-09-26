@@ -179,6 +179,13 @@ describe("OpenRouter Fusion Router policy", () => {
 describe("OpenRouter Fusion Router API routes", () => {
   const port = 23000 + Math.floor(Math.random() * 1000);
   const baseUrl = `http://127.0.0.1:${port}`;
+  // Every /api/ route requires a Bearer token. These tests used to pass only
+  // because the server served those routes to anyone who asked.
+  const apiFetch = (path, options = {}) =>
+    fetch(`${baseUrl}${path}`, {
+      ...options,
+      headers: { authorization: `Bearer ${process.env.CONTROL_API_TOKEN}`, ...options.headers }
+    });
   let server;
 
   beforeAll(async () => {
@@ -202,7 +209,7 @@ describe("OpenRouter Fusion Router API routes", () => {
   });
 
   it("serves Fusion Router status without secret-like values", async () => {
-    const response = await fetch(`${baseUrl}/api/openrouter-fusion-router`);
+    const response = await apiFetch("/api/openrouter-fusion-router");
     const body = await response.json();
 
     expect(response.status).toBe(200);
@@ -215,7 +222,7 @@ describe("OpenRouter Fusion Router API routes", () => {
   });
 
   it("serves dry-run planning without provider execution", async () => {
-    const response = await fetch(`${baseUrl}/api/openrouter-fusion-router/plan/dry-run`, {
+    const response = await apiFetch("/api/openrouter-fusion-router/plan/dry-run", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -237,7 +244,7 @@ describe("OpenRouter Fusion Router API routes", () => {
   });
 
   it("fails closed on invalid dry-run JSON", async () => {
-    const response = await fetch(`${baseUrl}/api/openrouter-fusion-router/plan/dry-run`, {
+    const response = await apiFetch("/api/openrouter-fusion-router/plan/dry-run", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: "{invalid-json"

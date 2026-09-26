@@ -159,6 +159,13 @@ describe("CenterBrain Hub contract", () => {
 describe("CenterBrain Hub API routes", () => {
   const port = 19980 + Math.floor(Math.random() * 1000);
   const baseUrl = `http://127.0.0.1:${port}`;
+  // Every /api/ route requires a Bearer token. These tests used to pass only
+  // because the server served those routes to anyone who asked.
+  const apiFetch = (path, options = {}) =>
+    fetch(`${baseUrl}${path}`, {
+      ...options,
+      headers: { authorization: `Bearer ${process.env.CONTROL_API_TOKEN}`, ...options.headers }
+    });
   let server;
 
   beforeAll(async () => {
@@ -182,7 +189,7 @@ describe("CenterBrain Hub API routes", () => {
   });
 
   it("serves CenterBrain status over the local API", async () => {
-    const response = await fetch(`${baseUrl}/api/centerbrain-hub`);
+    const response = await apiFetch("/api/centerbrain-hub");
     const body = await response.json();
 
     expect(response.status).toBe(200);
@@ -194,7 +201,7 @@ describe("CenterBrain Hub API routes", () => {
   });
 
   it("serves dry-run sync without activating connectors", async () => {
-    const response = await fetch(`${baseUrl}/api/centerbrain-hub/sync/dry-run`, {
+    const response = await apiFetch("/api/centerbrain-hub/sync/dry-run", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ requestId: "api-centerbrain-test", goal: "local-only adaptive sync" })
@@ -209,7 +216,7 @@ describe("CenterBrain Hub API routes", () => {
   });
 
   it("fails closed on invalid dry-run JSON", async () => {
-    const response = await fetch(`${baseUrl}/api/centerbrain-hub/sync/dry-run`, {
+    const response = await apiFetch("/api/centerbrain-hub/sync/dry-run", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: "{invalid-json"

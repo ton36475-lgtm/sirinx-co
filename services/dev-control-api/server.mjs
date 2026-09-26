@@ -622,6 +622,38 @@ export async function handleRequest(request, response) {
     return;
   }
 
+  // Every /api/ route requires a Bearer token. This used to be enforced on
+  // exactly one route (a2a-sync/plan, and only when dryRun === false), which
+  // left 92 routes — including the local-file writers — reachable by anything
+  // that could reach the port. /health stays open because the stack manager
+  // and operator preflight poll it without credentials.
+  //
+  // When CONTROL_API_TOKEN is unset the API refuses rather than serving
+  // unauthenticated. That is deliberate: a control plane with no credential
+  // configured is misconfiguration, not a licence to be open.
+  if (url.pathname.startsWith("/api/")) {
+    const authorization = authorizeControlRequest(request.headers, process.env);
+    if (!authorization.configured) {
+      sendJson(request, response, 503, {
+        status: "control_api_token_not_configured",
+        error: "control_api_token_not_configured",
+        hint: "Set CONTROL_API_TOKEN to use any /api/ route.",
+        externalWrites: false,
+        requiresHumanApproval: true
+      });
+      return;
+    }
+    if (!authorization.authorized) {
+      sendJson(request, response, 401, {
+        status: "control_api_unauthorized",
+        error: authorization.reason,
+        externalWrites: false,
+        requiresHumanApproval: true
+      }, { "www-authenticate": "Bearer" });
+      return;
+    }
+  }
+
   if (request.method === "GET" && url.pathname === "/health") {
     sendJson(request, response, 200, {
       status: "ok",

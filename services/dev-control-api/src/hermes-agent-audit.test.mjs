@@ -107,6 +107,17 @@ describe("Hermes Agent messaging audit API routes", () => {
   let server;
   let baseUrl;
 
+  // Every /api/ route requires a Bearer token. This test used to pass only
+  // because the server served those routes to anyone who asked.
+  const apiFetch = (path, options = {}) =>
+    fetch(`${baseUrl}${path}`, {
+      ...options,
+      headers: {
+        authorization: `Bearer ${process.env.CONTROL_API_TOKEN}`,
+        ...options.headers
+      }
+    });
+
   beforeEach(async () => {
     const module = await import("../server.mjs");
     server = createServer(module.handleRequest);
@@ -121,7 +132,7 @@ describe("Hermes Agent messaging audit API routes", () => {
   });
 
   it("serves local-only audit status without secret-like values", async () => {
-    const response = await fetch(`${baseUrl}/api/hermes-agent-audit`);
+    const response = await apiFetch("/api/hermes-agent-audit");
     const body = await response.json();
     const serialized = JSON.stringify(body);
 
@@ -133,7 +144,7 @@ describe("Hermes Agent messaging audit API routes", () => {
   });
 
   it("serves approval dry-run and fails closed on invalid JSON", async () => {
-    const response = await fetch(`${baseUrl}/api/hermes-agent-audit/approval/dry-run`, {
+    const response = await apiFetch("/api/hermes-agent-audit/approval/dry-run", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ requestId: "api-hermes-audit" }),
@@ -145,7 +156,7 @@ describe("Hermes Agent messaging audit API routes", () => {
     expect(body.commandExecuted).toBe(false);
     expect(body.requiresHumanApproval).toBe(true);
 
-    const invalid = await fetch(`${baseUrl}/api/hermes-agent-audit/approval/dry-run`, {
+    const invalid = await apiFetch("/api/hermes-agent-audit/approval/dry-run", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: "{",

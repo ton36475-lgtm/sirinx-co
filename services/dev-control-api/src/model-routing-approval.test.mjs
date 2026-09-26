@@ -93,6 +93,13 @@ describe("OpenRouter Qwen model routing approval gate", () => {
 describe("OpenRouter Qwen model routing approval API routes", () => {
   const port = 23000 + Math.floor(Math.random() * 1000);
   const baseUrl = `http://127.0.0.1:${port}`;
+  // Every /api/ route requires a Bearer token. These tests used to pass only
+  // because the server served those routes to anyone who asked.
+  const apiFetch = (path, options = {}) =>
+    fetch(`${baseUrl}${path}`, {
+      ...options,
+      headers: { authorization: `Bearer ${process.env.CONTROL_API_TOKEN}`, ...options.headers }
+    });
   let server;
 
   beforeAll(async () => {
@@ -116,7 +123,7 @@ describe("OpenRouter Qwen model routing approval API routes", () => {
   });
 
   it("serves approval status without secret-like values", async () => {
-    const response = await fetch(`${baseUrl}/api/model-routing-approval/openrouter-qwen`);
+    const response = await apiFetch("/api/model-routing-approval/openrouter-qwen");
     const body = await response.json();
 
     expect(response.status).toBe(200);
@@ -128,7 +135,7 @@ describe("OpenRouter Qwen model routing approval API routes", () => {
   });
 
   it("serves dry-run approval without provider execution", async () => {
-    const response = await fetch(`${baseUrl}/api/model-routing-approval/openrouter-qwen/dry-run`, {
+    const response = await apiFetch("/api/model-routing-approval/openrouter-qwen/dry-run", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -147,7 +154,7 @@ describe("OpenRouter Qwen model routing approval API routes", () => {
   });
 
   it("fails closed on invalid dry-run JSON", async () => {
-    const response = await fetch(`${baseUrl}/api/model-routing-approval/openrouter-qwen/dry-run`, {
+    const response = await apiFetch("/api/model-routing-approval/openrouter-qwen/dry-run", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: "{invalid-json"

@@ -121,6 +121,13 @@ describe("Local RAG prototype", () => {
 describe("Local RAG API routes", () => {
   const port = 19200 + Math.floor(Math.random() * 1000);
   const baseUrl = `http://127.0.0.1:${port}`;
+  // Every /api/ route requires a Bearer token. These tests used to pass only
+  // because the server served those routes to anyone who asked.
+  const apiFetch = (path, options = {}) =>
+    fetch(`${baseUrl}${path}`, {
+      ...options,
+      headers: { authorization: `Bearer ${process.env.CONTROL_API_TOKEN}`, ...options.headers }
+    });
   let server;
   let repoRoot;
 
@@ -152,7 +159,7 @@ describe("Local RAG API routes", () => {
   });
 
   it("serves local RAG status over the local API", async () => {
-    const response = await fetch(`${baseUrl}/api/local-rag`);
+    const response = await apiFetch("/api/local-rag");
     const body = await response.json();
 
     expect(response.status).toBe(200);
@@ -163,7 +170,7 @@ describe("Local RAG API routes", () => {
   });
 
   it("fails closed on invalid local RAG query dry-run JSON", async () => {
-    const response = await fetch(`${baseUrl}/api/local-rag/query/dry-run`, {
+    const response = await apiFetch("/api/local-rag/query/dry-run", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: "{invalid-json"

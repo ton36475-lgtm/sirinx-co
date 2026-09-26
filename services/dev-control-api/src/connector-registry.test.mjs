@@ -86,6 +86,13 @@ describe("Connector capability registry", () => {
 describe("Connector registry API routes", () => {
   const port = 18780 + Math.floor(Math.random() * 1000);
   const baseUrl = `http://127.0.0.1:${port}`;
+  // Every /api/ route requires a Bearer token. These tests used to pass only
+  // because the server served those routes to anyone who asked.
+  const apiFetch = (path, options = {}) =>
+    fetch(`${baseUrl}${path}`, {
+      ...options,
+      headers: { authorization: `Bearer ${process.env.CONTROL_API_TOKEN}`, ...options.headers }
+    });
   let server;
 
   beforeAll(async () => {
@@ -109,7 +116,7 @@ describe("Connector registry API routes", () => {
   });
 
   it("serves connector registry status over the local API", async () => {
-    const response = await fetch(`${baseUrl}/api/connector-registry`);
+    const response = await apiFetch("/api/connector-registry");
     const body = await response.json();
 
     expect(response.status).toBe(200);
@@ -119,7 +126,7 @@ describe("Connector registry API routes", () => {
   });
 
   it("fails closed on invalid connector registry dry-run JSON", async () => {
-    const response = await fetch(`${baseUrl}/api/connector-registry/dry-run`, {
+    const response = await apiFetch("/api/connector-registry/dry-run", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: "{invalid-json"

@@ -112,6 +112,13 @@ describe("Agent Launch Gate registry", () => {
 describe("Agent Launch Gate API routes", () => {
   const port = 19780 + Math.floor(Math.random() * 1000);
   const baseUrl = `http://127.0.0.1:${port}`;
+  // Every /api/ route requires a Bearer token. These tests used to pass only
+  // because the server served those routes to anyone who asked.
+  const apiFetch = (path, options = {}) =>
+    fetch(`${baseUrl}${path}`, {
+      ...options,
+      headers: { authorization: `Bearer ${process.env.CONTROL_API_TOKEN}`, ...options.headers }
+    });
   let server;
 
   beforeAll(async () => {
@@ -135,7 +142,7 @@ describe("Agent Launch Gate API routes", () => {
   });
 
   it("serves local-only launch gate status over the local API", async () => {
-    const response = await fetch(`${baseUrl}/api/agent-launch-gate`);
+    const response = await apiFetch("/api/agent-launch-gate");
     const body = await response.json();
 
     expect(response.status).toBe(200);
@@ -148,7 +155,7 @@ describe("Agent Launch Gate API routes", () => {
   });
 
   it("serves a dry-run plan without launching an agent", async () => {
-    const response = await fetch(`${baseUrl}/api/agent-launch-gate/plan/dry-run`, {
+    const response = await apiFetch("/api/agent-launch-gate/plan/dry-run", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ agentId: "codex", goal: "manual smoke test" })
@@ -164,7 +171,7 @@ describe("Agent Launch Gate API routes", () => {
   });
 
   it("fails closed on invalid launch gate dry-run JSON", async () => {
-    const response = await fetch(`${baseUrl}/api/agent-launch-gate/plan/dry-run`, {
+    const response = await apiFetch("/api/agent-launch-gate/plan/dry-run", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: "{invalid-json"

@@ -135,6 +135,13 @@ describe("Repo Intake Gate contract", () => {
 describe("Repo Intake Gate API routes", () => {
   const port = 20880 + Math.floor(Math.random() * 1000);
   const baseUrl = `http://127.0.0.1:${port}`;
+  // Every /api/ route requires a Bearer token. These tests used to pass only
+  // because the server served those routes to anyone who asked.
+  const apiFetch = (path, options = {}) =>
+    fetch(`${baseUrl}${path}`, {
+      ...options,
+      headers: { authorization: `Bearer ${process.env.CONTROL_API_TOKEN}`, ...options.headers }
+    });
   let server;
 
   beforeAll(async () => {
@@ -158,7 +165,7 @@ describe("Repo Intake Gate API routes", () => {
   });
 
   it("serves local-only gate status without secret-like values", async () => {
-    const response = await fetch(`${baseUrl}/api/repo-intake-gate`);
+    const response = await apiFetch("/api/repo-intake-gate");
     const body = await response.json();
 
     expect(response.status).toBe(200);
@@ -170,7 +177,7 @@ describe("Repo Intake Gate API routes", () => {
   });
 
   it("serves dry-run review packets without executing commands", async () => {
-    const response = await fetch(`${baseUrl}/api/repo-intake-gate/review/dry-run`, {
+    const response = await apiFetch("/api/repo-intake-gate/review/dry-run", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -192,7 +199,7 @@ describe("Repo Intake Gate API routes", () => {
   });
 
   it("fails closed on invalid dry-run JSON", async () => {
-    const response = await fetch(`${baseUrl}/api/repo-intake-gate/review/dry-run`, {
+    const response = await apiFetch("/api/repo-intake-gate/review/dry-run", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: "{invalid-json"

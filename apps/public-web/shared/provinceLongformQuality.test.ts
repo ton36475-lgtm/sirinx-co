@@ -177,6 +177,31 @@ describe("province longform coverage", () => {
     }
   });
 
+  it("answers every H2 with substantive prose before elaborating", () => {
+    // The audit measured 82.3% of H2s (762/926) with a lead under 200 chars.
+    // Answer engines quote what follows the heading, so the first block has to
+    // stand on its own. A bullet list counts: heading → list is a legitimate
+    // answer shape, and forcing a paragraph in front of one would be padding.
+    const THRESHOLD = 300;
+    const thin: string[] = [];
+    for (const province of thaiProvinces) {
+      const entry = getProvinceLongformEntry(province.slug);
+      if (!entry) continue;
+      entry.sections.forEach((section) => {
+        const first = section.blocks.find(
+          (block) => (block as { type?: string }).type !== "h3",
+        ) as { type?: string; text?: string; items?: string[] } | undefined;
+        let lead = "";
+        if (first?.type === "p") lead = first.text ?? "";
+        else if (first?.type === "list") lead = (first.items ?? []).join(" ");
+        if (lead.length < THRESHOLD) {
+          thin.push(`${province.slug}/${section.h2.slice(0, 28)}=${lead.length}`);
+        }
+      });
+    }
+    expect(thin, `H2 leads under ${THRESHOLD} chars: ${thin.join(", ")}`).toEqual([]);
+  });
+
   it("keeps the worst cross-province pair below the duplicate threshold", () => {
     const sets = new Map(
       thaiProvinces.map(p => [p.slug, shingles(flatten(getProvinceLongformEntry(p.slug)))])

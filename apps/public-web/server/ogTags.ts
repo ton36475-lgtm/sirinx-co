@@ -11,49 +11,37 @@ import {
   thaiProvinces,
   type ThaiProvince,
 } from "../shared/thaiProvinces";
+import {
+  getAllProjectDetailSlugs,
+  getPublicProjectDetail,
+  isProjectDetailIndexable,
+  projectsPageMeta,
+} from "../shared/publicProjectContent";
+import { blogPosts } from "../client/src/lib/blogData";
+import { buildSeoBreadcrumbs, buildSeoGraph } from "../shared/seoGraph";
+import { buildSolarCarportFaq } from "../shared/solarCarportFaq";
+import { getProvinceLongformEntry } from "../shared/provinceLongformResolver";
+import { longformWordCount } from "../shared/provinceLongform";
+import { provinceInstallSteps } from "../shared/provinceHowTo";
+import { homeSolutionFaq } from "../shared/homeSolutionFaq";
 
 const OG_IMAGE =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/sirinx-og-image-hbNko5JADXArPGo26hmGrN.png";
 
 const SITE_NAME = "SIRINX";
 const PRODUCTION_BASE_URL = "https://www.sirinx.co";
-const ASSET_CDN =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv";
 const MOBILE_FIRST_HERO_IMAGE_SIZES = "(max-width: 767px) 80vw, 100vw";
-const imageResizeBase = `${PRODUCTION_BASE_URL}/cdn-cgi/image/width=1280,quality=76,format=auto,fit=scale-down`;
 const DEFAULT_TITLE =
   "SIRINX | Solar Carport วางแผนลดค่าไฟองค์กร พร้อม EV Charger, BESS & AI Energy";
 const DEFAULT_DESC =
   "SIRINX Solar Carport ผลิตไฟฟ้าจากที่จอดรถ รองรับ EV Charger + BESS + AI Energy พร้อมประเมินผลประหยัดและคืนทุนจากข้อมูลไซต์จริง";
-
-const homeSolutionFaqs = [
-  {
-    question: "Home Solution ของ SIRINX เหมาะกับบ้านแบบไหน?",
-    answer:
-      "เหมาะกับบ้านขนาดใหญ่ โฮมออฟฟิศ บ้านพักผู้บริหาร บ้านที่มี EV หลายคัน หรือบ้านที่มีโหลดไฟสูง เช่น แอร์หลายโซน ห้องทำงาน server ห้องประชุม สระว่ายน้ำ และระบบรักษาความปลอดภัย",
-  },
-  {
-    question: "ทำไมไม่ควรซื้อระบบจากราคาต่อกิโลวัตต์อย่างเดียว?",
-    answer:
-      "เพราะบ้านใหญ่มีข้อจำกัดเฉพาะ เช่น เงาบัง ทิศหลังคา MDB เดิม backup load และ EV charging behavior ระบบที่คุ้มจริงต้องออกแบบจากข้อมูลโหลดและหน้างาน ไม่ใช่ใช้ราคาแผงเป็นตัวตัดสินอย่างเดียว",
-  },
-  {
-    question: "SIRINX ช่วยลดความเสี่ยงเรื่องงานติดตั้งไม่ได้มาตรฐานอย่างไร?",
-    answer:
-      "ใช้กระบวนการสำรวจ ออกแบบเอกสารวิศวกรรม BOQ ชัดเจน payment milestone commissioning record และ monitoring หลังส่งมอบ เพื่อให้ลูกค้าตรวจสอบได้ทุกช่วง ไม่ใช่รอเชื่อคำขายอย่างเดียว",
-  },
-  {
-    question: "สามารถใช้ร่วมกับ EV Charger และ Battery ได้หรือไม่?",
-    answer:
-      "ได้ โดยออกแบบเป็นระบบเดียวกันตั้งแต่ต้นเพื่อจัดลำดับการใช้ไฟจาก solar, grid, battery และ EV charger ตามพฤติกรรมของบ้านและข้อจำกัดของอุปกรณ์",
-  },
-];
 
 // Route-specific metadata map — SEO/AEO promotional copy
 interface PageMeta {
   title: string;
   description: string;
   image?: string;
+  noindex?: boolean;
 }
 
 export function getProvinceRoute(province: ThaiProvince): string {
@@ -63,7 +51,21 @@ export function getProvinceRoute(province: ThaiProvince): string {
 function getProvinceMeta(province: ThaiProvince): PageMeta {
   return {
     title: `ติดตั้ง Solar Carport ${province.nameTh} | โซลาร์ที่จอดรถ EV Charger BESS | SIRINX`,
-    description: `SIRINX รับออกแบบและติดตั้ง Solar Carport ${province.nameTh} สำหรับโรงงาน โรงแรม อาคาร และลานจอดรถองค์กร พร้อม EV Charger, BESS, AI Energy, O&M และประเมินลดค่าไฟ 30-100% คืนทุนเฉลี่ย 3-5 ปีตามข้อมูลไซต์จริง`,
+    description: `SIRINX รับออกแบบและติดตั้ง Solar Carport ${province.nameTh} สำหรับโรงงาน โรงแรม อาคาร และลานจอดรถองค์กร พร้อม EV Charger, BESS, AI Energy และ O&M โดยเริ่มจากการสำรวจพื้นที่และข้อมูลการใช้ไฟจริงก่อนออกแบบ`,
+  };
+}
+
+function getProjectDetailMeta(cleanPath: string): PageMeta | null {
+  if (!cleanPath.startsWith("/projects/")) return null;
+
+  const slug = cleanPath.replace("/projects/", "");
+  const project = getPublicProjectDetail(slug);
+  if (!project) return null;
+
+  return {
+    title: project.seoTitle,
+    description: project.seoDescription,
+    noindex: !isProjectDetailIndexable(project),
   };
 }
 
@@ -80,6 +82,11 @@ const routeMetaMap: Record<string, PageMeta> = {
     description:
       "Solar Carport ผลิตไฟฟ้าจากที่จอดรถ ให้ร่มเงา รองรับ EV Charging + BESS + AI Energy และประเมินความคุ้มค่าตามข้อมูลไซต์จริง",
   },
+  "/provinces": {
+    title: "Solar Carport 77 จังหวัด | เลือกจังหวัดที่ต้องการประเมิน | SIRINX",
+    description:
+      "เลือกจังหวัดเพื่อดูแนวทางออกแบบ Solar Carport, BESS, EV Charger และ AI Energy Management ของ SIRINX ครบทั้ง 77 จังหวัด พร้อมข้อมูลที่ต้องใช้สำรวจหน้างาน",
+  },
   "/home-solution": {
     title:
       "Home Solar Solution บ้านใหญ่และโฮมออฟฟิศ | Rooftop Solar, Carport, BESS, EV | SIRINX",
@@ -90,7 +97,7 @@ const routeMetaMap: Record<string, PageMeta> = {
   "/about": {
     title: "SIRINX คือใคร? บริษัทติดตั้งโซลาร์เซลล์ + AI Energy ครบวงจรของไทย",
     description:
-      "SIRINX ผู้เชี่ยวชาญโซลาร์เซลล์ครบวงจร ออกแบบ ติดตั้ง ดูแลระบบด้วย AI ตลอด 25 ปี ช่วยธุรกิจไทยลดต้นทุนพลังงานด้วยเทคโนโลยีสะอาด",
+      "SIRINX ออกแบบ ติดตั้ง และดูแลระบบพลังงานสะอาดตามขอบเขตโครงการ พร้อมใช้ข้อมูลหน้างานเพื่อช่วยธุรกิจวางแผนลดต้นทุนพลังงาน",
   },
   "/solutions": {
     title:
@@ -109,15 +116,11 @@ const routeMetaMap: Record<string, PageMeta> = {
     description:
       "วิเคราะห์ความคุ้มค่าลงทุนโซลาร์เซลล์ — ซื้อขาด PPA Leasing พร้อมตรวจสิทธิ BOI ภาษี ค่าเสื่อม และสมมติฐานคืนทุนตามเงื่อนไขล่าสุด",
   },
-  "/projects": {
-    title: "ผลงานติดตั้ง Solar Carport & โซลาร์เซลล์จริง | ภาพโครงการ | SIRINX",
-    description:
-      "ผลงานจริง SIRINX — Solar Carport, Rooftop Solar, Floating Solar, Solar Farm พร้อมภาพถ่ายจริงจากหน้างานและตัวเลขผลประหยัดค่าไฟ",
-  },
+  "/projects": projectsPageMeta,
   "/strategy": {
     title: "วางแผนลดค่าไฟระยะยาว | กลยุทธ์ Solar + BESS + AI Energy | SIRINX",
     description:
-      "วางกลยุทธ์พลังงานสะอาดสำหรับธุรกิจ — เริ่มจาก Solar Rooftop ต่อยอดด้วย BESS กักเก็บพลังงาน และ AI Energy Management ลดค่าไฟได้ทุกปีตลอด 25 ปี",
+      "วางกลยุทธ์พลังงานสะอาดสำหรับธุรกิจ — เริ่มจาก Solar Rooftop ต่อยอดด้วย BESS กักเก็บพลังงาน และ AI Energy Management ตามข้อมูลการใช้ไฟและข้อจำกัดของไซต์",
   },
   "/blog": {
     title:
@@ -128,7 +131,12 @@ const routeMetaMap: Record<string, PageMeta> = {
   "/contact": {
     title: "นัดสำรวจหน้างานฟรี | ขอใบเสนอราคาโซลาร์เซลล์ | SIRINX",
     description:
-      "ปรึกษาฟรี! นัดทีมวิศวกร SIRINX สำรวจหน้างาน ประเมินค่าไฟ ออกแบบระบบโซลาร์เซลล์เฉพาะอาคารของคุณ พร้อมใบเสนอราคาภายใน 3 วัน โทร, LINE หรือกรอกแบบฟอร์ม",
+      "ปรึกษาฟรี! นัดทีมวิศวกร SIRINX สำรวจหน้างาน ประเมินค่าไฟ และออกแบบระบบโซลาร์เซลล์เฉพาะอาคารของคุณตามข้อมูลจริง พร้อมช่องทางขอใบเสนอราคา โทร, LINE หรือกรอกแบบฟอร์ม",
+  },
+  "/line": {
+    title: "ติดต่อ SIRINX ผ่าน LINE Official | Solar Carport, Rooftop Solar, BESS, EV Charger",
+    description:
+      "เพิ่มเพื่อน LINE Official ของ SIRINX เพื่อส่งบิลค่าไฟ รูปพื้นที่ และขอประเมินระบบ Solar Carport, Rooftop Solar, BESS และ EV Charger เบื้องต้น",
   },
   "/assessment": {
     title:
@@ -140,7 +148,7 @@ const routeMetaMap: Record<string, PageMeta> = {
     title:
       "แพ็คเกจราคา Solar Carport | Start / Pro / Enterprise พร้อม EV Charger | SIRINX",
     description:
-      "เปรียบเทียบแพ็คเกจ Solar Carport 3 ระดับ Start / Pro / Enterprise (10-500+ kWp) — ผลิตไฟฟ้า ให้ร่มเงา รองรับ EV Charger และประเมินคืนทุนตามไซต์จริง",
+      "เปรียบเทียบกรอบบริการ Solar Carport ระดับ Start / Pro / Enterprise — ผลิตไฟฟ้า ให้ร่มเงา รองรับ EV Charger และประเมินความคุ้มค่าตามไซต์จริง",
   },
   "/partner": {
     title: "ร่วมเป็นพันธมิตรพลังงานสะอาดกับ SIRINX",
@@ -188,13 +196,37 @@ export function getPageMeta(urlPath: string): PageMeta {
     return getProvinceMeta(province);
   }
 
-  // Blog post pattern: /blog/:slug
+  const projectDetail = getProjectDetailMeta(cleanPath);
+  if (projectDetail) {
+    return projectDetail;
+  }
+
+  if (cleanPath.startsWith("/projects/")) {
+    return {
+      title: "ไม่พบรายละเอียดโครงการ | SIRINX",
+      description:
+        "รายละเอียดโครงการนี้ยังไม่มีข้อมูลสาธารณะที่ผ่านการตรวจสอบ หรือยังไม่อนุมัติให้เผยแพร่",
+      noindex: true,
+    };
+  }
+
+  // Blog post pattern: /blog/:slug — copy matches the client RouteSeo meta
+  // (client/src/lib/seo.ts getSeoMeta) so crawler HTML and hydrated HTML agree.
   if (cleanPath.startsWith("/blog/")) {
     const slug = cleanPath.replace("/blog/", "");
-    const readableSlug = slug.replace(/-/g, " ");
+    const post = blogPosts.find(item => item.slug === slug);
+    if (post) {
+      return {
+        title: `${post.title} | SIRINX Blog`,
+        description: post.excerpt,
+        image: post.image,
+      };
+    }
     return {
-      title: `${readableSlug.replace(/\b\w/g, c => c.toUpperCase())} | บทความโซลาร์เซลล์ SIRINX`,
-      description: `อ่านบทความ "${readableSlug}" — ความรู้เชิงลึกเกี่ยวกับโซลาร์เซลล์ พลังงานสะอาด BESS และ AI Energy Management จากทีมวิศวกร SIRINX`,
+      title: "ไม่พบหน้าที่คุณต้องการ | SIRINX",
+      description:
+        "หน้านี้อาจถูกย้ายหรือลบไปแล้ว กรุณากลับไปหน้าหลักของ SIRINX",
+      noindex: true,
     };
   }
 
@@ -205,96 +237,73 @@ export function getPageMeta(urlPath: string): PageMeta {
   };
 }
 
-function getBreadcrumbItems(urlPath: string, baseUrl: string) {
-  const cleanPath =
-    urlPath.split("?")[0].split("#")[0].replace(/\/$/, "") || "/";
-  const items = [{ name: "หน้าแรก", item: baseUrl }];
-
-  if (cleanPath.startsWith("/solar-carport")) {
-    items.push({ name: "Solar Carport", item: `${baseUrl}/solar-carport` });
-    const province = getProvinceFromPath(cleanPath);
-    if (province) {
-      items.push({
-        name: `Solar Carport ${province.nameTh}`,
-        item: `${baseUrl}${getProvinceRoute(province)}`,
-      });
-    }
-  } else if (cleanPath !== "/") {
-    items.push({
-      name: getPageMeta(cleanPath).title.split("|")[0].trim(),
-      item: `${baseUrl}${cleanPath}`,
-    });
-  }
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: items.map((entry, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: entry.name,
-      item: entry.item,
-    })),
-  };
+function getBreadcrumbTrail(
+  cleanPath: string,
+  baseUrl: string,
+  title: string,
+  province?: ThaiProvince
+): Array<{ name: string; item: string }> {
+  return buildSeoBreadcrumbs({
+    baseUrl,
+    path: cleanPath,
+    title,
+    province: province
+      ? { slug: province.slug, nameTh: province.nameTh }
+      : null,
+  });
 }
 
-export function getStructuredData(urlPath: string, baseUrl: string) {
+export function getStructuredData(
+  urlPath: string,
+  baseUrl: string,
+  /**
+   * Build timestamp, used for Article.dateModified. The static build passes
+   * the same value it writes into the sitemap <lastmod> so a page and its
+   * sitemap entry can never disagree.
+   */
+  dateModified?: string
+) {
   const cleanPath =
     urlPath.split("?")[0].split("#")[0].replace(/\/$/, "") || "/";
   const meta = getPageMeta(cleanPath);
   const province = getProvinceFromPath(cleanPath);
   const isHomeSolution = cleanPath === "/home-solution";
+  const isSolarCarport = cleanPath === "/solar-carport" || Boolean(province);
   const areaServed = province
-    ? { "@type": "AdministrativeArea", name: province.nameTh }
-    : thaiProvinces.slice(0, 12).map(item => ({
-        "@type": "AdministrativeArea",
-        name: item.nameTh,
-      }));
+    ? [{ name: province.nameTh }]
+    : [{ name: "Thailand" }];
 
-  const graph: Array<Record<string, unknown>> = [
-    {
-      "@type": "Organization",
-      "@id": `${baseUrl}/#organization`,
-      name: SITE_NAME,
-      url: baseUrl,
-      logo: OG_IMAGE,
-      description: DEFAULT_DESC,
-      areaServed: {
-        "@type": "Country",
-        name: "Thailand",
-      },
-      contactPoint: {
-        "@type": "ContactPoint",
-        contactType: "sales",
-        areaServed: "TH",
-        availableLanguage: ["th", "en", "zh"],
-      },
-    },
-    {
-      "@type": "WebSite",
-      "@id": `${baseUrl}/#website`,
-      name: SITE_NAME,
-      url: baseUrl,
-      inLanguage: "th-TH",
-      publisher: { "@id": `${baseUrl}/#organization` },
-    },
-    {
-      "@type": "WebPage",
-      "@id": `${baseUrl}${cleanPath === "/" ? "" : cleanPath}#webpage`,
-      url: `${baseUrl}${cleanPath === "/" ? "" : cleanPath}`,
-      name: meta.title,
-      description: meta.description,
-      isPartOf: { "@id": `${baseUrl}/#website` },
-      about: {
-        "@id": isHomeSolution
-          ? `${baseUrl}/home-solution#service`
-          : `${baseUrl}/solar-carport#service`,
-      },
-      inLanguage: "th-TH",
-    },
-    {
-      "@type": "Service",
-      "@id": isHomeSolution
+  // The province long-form renders its own visible FAQ (ProvinceLongform), and
+  // this graph is allowed exactly one FAQPage node per document — so the
+  // long-form questions join the shared solar-carport FAQ for province routes
+  // instead of becoming a second FAQPage.
+  const longformFaq = province
+    ? (getProvinceLongformEntry(province.slug)?.faq ?? []).map(item => ({
+        question: item.q,
+        answer: item.a,
+      }))
+    : [];
+  const longformEntry = province ? getProvinceLongformEntry(province.slug) : null;
+
+  const faq = isHomeSolution
+    ? homeSolutionFaq.map(item => ({
+        question: item.question,
+        answer: item.answer,
+      }))
+    : isSolarCarport
+      ? [...buildSolarCarportFaq({ lang: "th", province }), ...longformFaq]
+      : undefined;
+
+  return buildSeoGraph({
+    baseUrl,
+    siteName: SITE_NAME,
+    path: cleanPath,
+    title: meta.title,
+    description: meta.description,
+    image: OG_IMAGE,
+    organizationDescription: DEFAULT_DESC,
+    service: {
+      id: isHomeSolution
         ? `${baseUrl}/home-solution#service`
         : `${baseUrl}/solar-carport#service`,
       name: isHomeSolution
@@ -305,63 +314,32 @@ export function getStructuredData(urlPath: string, baseUrl: string) {
       serviceType: isHomeSolution
         ? "Solar rooftop, solar carport, BESS, EV Charger, and AI energy monitoring for large homes and home offices"
         : "Solar Carport design, installation, EV Charger, BESS, AI Energy Management",
-      provider: { "@id": `${baseUrl}/#organization` },
-      areaServed,
-      description: meta.description,
-      offers: {
-        "@type": "Offer",
-        availability: "https://schema.org/InStock",
-        priceSpecification: {
-          "@type": "PriceSpecification",
-          priceCurrency: "THB",
-          description:
-            "Project-specific quotation after site survey and engineering assessment.",
-        },
-      },
     },
-    getBreadcrumbItems(cleanPath, baseUrl),
-  ];
-
-  if (isHomeSolution) {
-    graph.push({
-      "@type": "FAQPage",
-      mainEntity: homeSolutionFaqs.map(faq => ({
-        "@type": "Question",
-        name: faq.question,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: faq.answer,
-        },
-      })),
-    });
-  } else if (province) {
-    graph.push({
-      "@type": "FAQPage",
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: `SIRINX รับติดตั้ง Solar Carport ที่${province.nameTh}หรือไม่?`,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: `รับวางแผน ออกแบบ และประสานทีมสำรวจสำหรับโครงการ Solar Carport ใน${province.nameTh} โดยประเมินจากพื้นที่จอดรถ ค่าไฟจริง load profile และเงื่อนไขหน้างานก่อนเสนอราคา`,
+    areaServed,
+    breadcrumbs: getBreadcrumbTrail(cleanPath, baseUrl, meta.title, province),
+    faq,
+    // Province pages are long-form articles, so they get Article + HowTo.
+    // Both are omitted elsewhere: a service landing page is not an article, and
+    // a HowTo without real steps would be decoration. LocalBusiness and a
+    // Person author stay absent on purpose — SIRINX has no verified address,
+    // phone, or individual author, and the telephone field was deliberately
+    // removed from this graph for exactly that reason.
+    ...(province && longformEntry
+      ? {
+          article: {
+            headline: `Solar Carport ใน${province.nameTh}`,
+            dateModified: dateModified ?? new Date().toISOString(),
+            wordCount: longformWordCount(longformEntry),
+            section: "Solar Carport",
           },
-        },
-        {
-          "@type": "Question",
-          name: `Solar Carport ใน${province.nameTh}เหมาะกับธุรกิจแบบไหน?`,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "เหมาะกับโรงงาน โรงแรม อาคารพาณิชย์ ศูนย์กระจายสินค้า สถานศึกษา หน่วยงาน และธุรกิจที่มีลานจอดรถหรือพื้นที่เปิดโล่งและต้องการลดต้นทุนพลังงานพร้อมรองรับ EV Charger",
+          howTo: {
+            name: `ขั้นตอนติดตั้ง Solar Carport ใน${province.nameTh}`,
+            description: `ขั้นตอนติดตั้ง Solar Carport สำหรับอาคารใน${province.nameTh} ตั้งแต่สำรวจหน้างานจนถึงส่งมอบระบบ โดยขั้นตอนการขออนุญาตและการเชื่อมต่อต้องตรวจสอบกับหน่วยงานที่ดูแลพื้นที่อีกครั้ง`,
+            steps: provinceInstallSteps(province.nameTh),
           },
-        },
-      ],
-    });
-  }
-
-  return {
-    "@context": "https://schema.org",
-    "@graph": graph,
-  };
+        }
+      : {}),
+  });
 }
 
 function escapeHtmlAttribute(value: string): string {
@@ -374,6 +352,10 @@ function escapeHtmlAttribute(value: string): string {
 
 function injectStructuredData(html: string, data: unknown): string {
   const payload = JSON.stringify(data).replace(/</g, "\\u003c");
+  // The static build is the single owner of the route JSON-LD. No data-rh here on
+  // purpose: a data-rh tag is treated as client state, so the hydrated app would
+  // either duplicate it or strip it. The client manages title, meta, canonical and
+  // hreflang only, and never re-emits this graph.
   const script = `    <script type="application/ld+json" data-sirinx-seo="route">${payload}</script>\n`;
   if (html.includes("</head>")) {
     return html.replace("</head>", `${script}  </head>`);
@@ -421,11 +403,8 @@ function getRouteHeroPreload(urlPath: string) {
     urlPath.split("?")[0].split("#")[0].replace(/\/$/, "") || "/";
   if (cleanPath === "/") {
     return {
-      href: "/assets/optimized/solar-carport-hero-960.avif",
-      imageSrcSet:
-        "/assets/optimized/solar-carport-hero-640.avif 640w, /assets/optimized/solar-carport-hero-960.avif 960w, /assets/optimized/solar-carport-hero-1280.avif 1280w",
-      imageSizes: MOBILE_FIRST_HERO_IMAGE_SIZES,
-      type: "image/avif",
+      href: "/assets/projects/ruenphae/20260924/1000076001.jpg",
+      type: "image/jpeg",
     };
   }
   if (cleanPath === "/home-solution") {
@@ -437,47 +416,9 @@ function getRouteHeroPreload(urlPath: string) {
       type: "image/avif",
     };
   }
-  if (
-    cleanPath === "/solar-carport" ||
-    cleanPath.startsWith("/solar-carport/")
-  ) {
-    return {
-      href: `${imageResizeBase}/${ASSET_CDN}/carport-wide-1_30e3af4c.jpeg`,
-      type: "image/jpeg",
-    };
-  }
-  const heroByPath: Record<string, { src: string; type: string }> = {
-    "/about": {
-      src: `${ASSET_CDN}/hero-about-3Trik9L6DrdCwCcjCt2KVz.webp`,
-      type: "image/webp",
-    },
-    "/solutions": {
-      src: `${ASSET_CDN}/hero-solutions-AG25WEja6TRJEEzvpx3wZU.webp`,
-      type: "image/webp",
-    },
-    "/industries": {
-      src: `${ASSET_CDN}/sirinx-agrivoltaic-b6XSpaadLj5vpaTu52tenb.webp`,
-      type: "image/webp",
-    },
-    "/investment": {
-      src: `${ASSET_CDN}/hero-investment-fRtcNVseiLRqovGxudgo83.webp`,
-      type: "image/webp",
-    },
-    "/projects": {
-      src: `${ASSET_CDN}/carport-wide-1_30e3af4c.jpeg`,
-      type: "image/jpeg",
-    },
-    "/strategy": {
-      src: `${ASSET_CDN}/sirinx-smart-energy-JXCSVMQTKJHxRxSagYajgy.webp`,
-      type: "image/webp",
-    },
-  };
-  if (heroByPath[cleanPath]) {
-    return {
-      href: `${imageResizeBase}/${heroByPath[cleanPath].src}`,
-      type: heroByPath[cleanPath].type,
-    };
-  }
+  // Do not preload remote hero assets until the configured origin is proven
+  // reachable from production. A preload for a 403 asset creates an avoidable
+  // browser failure before the page can apply its own media fallback.
   return null;
 }
 
@@ -547,7 +488,9 @@ function injectNoScriptStaticFallback(html: string, urlPath: string): string {
 export function injectOgTags(
   html: string,
   urlPath: string,
-  baseUrl: string
+  baseUrl: string,
+  /** Build timestamp forwarded to Article.dateModified; see getStructuredData. */
+  dateModified?: string
 ): string {
   const meta = getPageMeta(urlPath);
   const image = meta.image || OG_IMAGE;
@@ -562,6 +505,11 @@ export function injectOgTags(
 
   // Replace meta description
   html = replaceMetaByName(html, "description", description);
+  html = replaceMetaByName(
+    html,
+    "robots",
+    meta.noindex ? "noindex, nofollow" : "index, follow",
+  );
 
   // Replace OG tags
   html = replaceMetaByProperty(html, "og:title", title);
@@ -591,13 +539,35 @@ export function injectOgTags(
   html = injectRouteHeroPreload(html, urlPath);
   html = injectNoScriptStaticFallback(html, urlPath);
 
-  return injectStructuredData(html, getStructuredData(urlPath, baseUrl));
+  return injectStructuredData(
+    html,
+    getStructuredData(urlPath, baseUrl, dateModified)
+  );
 }
 
+/**
+ * Every route that gets a prerendered HTML file. Includes project detail and
+ * blog post pages even when noindex — the page must exist so deep links work
+ * and crawlers see real metadata; whether it is discoverable is decided by
+ * getSitemapRoutes() and the per-page robots meta.
+ */
 export function getStaticSeoRoutes() {
   const coreRoutes = Object.keys(routeMetaMap);
   const provinceRoutes = thaiProvinces.map(getProvinceRoute);
-  return [...coreRoutes, ...provinceRoutes];
+  const projectRoutes = getAllProjectDetailSlugs().map(
+    slug => `/projects/${slug}`
+  );
+  const blogRoutes = blogPosts.map(post => `/blog/${post.slug}`);
+  return [...coreRoutes, ...provinceRoutes, ...projectRoutes, ...blogRoutes];
+}
+
+/**
+ * Sitemap routes = prerendered routes minus noindex ones. A project detail
+ * page enters the sitemap automatically the moment its evidence gate passes
+ * (isProjectDetailIndexable), without a code change.
+ */
+export function getSitemapRoutes(routes: string[]) {
+  return routes.filter(route => !getPageMeta(route).noindex);
 }
 
 export { PRODUCTION_BASE_URL, thaiProvinces };

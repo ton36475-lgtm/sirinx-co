@@ -164,6 +164,24 @@ Status: LOCAL_ONLY · ตรวจโดยเลน jcode · ไม่มีก
 | branch ห่างจาก main | 18 ข้างหน้า · **0 ข้างหลัง** (merge เป็น fast-forward ได้) |
 | secret ในไฟล์ที่ commit | ไม่มี · ที่เจอคำว่า secret/token เป็นชื่อตัวแปร (`maxTokens`, `canReadSecrets: false`) |
 
+**พิสูจน์จาก clean worktree จริง** (ไม่ใช่การอนุมานจาก import graph)
+สร้าง `git worktree` ที่ `HEAD` ใหม่ → `git status` = 0 ไฟล์ → สร้างและรันเทสต์:
+
+| ผลจาก clean worktree | |
+| --- | --- |
+| `vite build` | สำเร็จ |
+| `staticSeoBuild.ts` | **107 routes · 77 จังหวัด** |
+| `vitest run` | **40 ไฟล์ / 317 เคสผ่าน** |
+| หน้าที่มี `<h1>` 1 อัน | **77 / 77** |
+| หน้าที่มี JSON-LD · Article · HowTo | **77 / 77 ทั้งสามอย่าง** |
+| sitemap | 105 `<loc>` |
+| `404.html` + `_redirects` | มีทั้งคู่ |
+
+**ข้อจำกัดที่ยังไม่ได้พิสูจน์:** การทดสอบนี้ใช้ `node_modules` จากต้นฉบับ (symlink) เพราะ `pnpm install`
+จากศูนย์ใน worktree ล้มด้วย `ERR_PNPM_IGNORED_BUILDS` (esbuild) เพราะ `pnpm-workspace.yaml`
+ไม่มีคีย์ `onlyBuiltDependencies` — นั่นเป็นคนละเรื่องกับการ track โค้ด แต่เป็นอีกจุดที่
+คนที่ clone ใหม่แล้วสั่ง `pnpm install` จะเจอ ควรตัดสินใจว่าจะอนุมัติ build script ของ esbuild หรือไม่
+
 **เพิ่มเทสต์คุมไว้แล้ว** — `shared/buildReproducibility.test.ts` เดิน import graph จาก entry point
 ของ build แล้ว fail ถ้าพบโมดูลที่ไม่ถูก commit หรือถ้า `404.html` / `_redirects` หายไปจาก git
 เทสต์นี้จับปัญหานี้ได้ แต่ก่อนหน้านี้ไม่มีอะไรจับได้ เพราะทุกชุดเทสต์รันกับ working tree เสมอ

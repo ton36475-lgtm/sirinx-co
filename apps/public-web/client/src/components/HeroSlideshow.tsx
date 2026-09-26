@@ -41,10 +41,20 @@ const ALL_SLIDES: HeroSlide[] = [
   {
     id: "carport-aerial",
     category: "solar-carport",
-    image: "/assets/projects/ruenphae/20260924/1000076004.jpg",
+    image: "/assets/optimized/hero-carport-aerial-1280.jpg",
     alt: "ภาพมุมสูงของ Solar Carport และพื้นที่จอดรถ โรงแรมเรือนแพ รอยัลปาร์ค",
-    width: 721,
-    height: 1280,
+    width: 1280,
+    height: 720,
+    imageSet: {
+      avifSrcSet:
+        "/assets/optimized/hero-carport-aerial-640.avif 640w, /assets/optimized/hero-carport-aerial-960.avif 960w, /assets/optimized/hero-carport-aerial-1280.avif 1280w",
+      fallback: "/assets/optimized/hero-carport-aerial-1280.jpg",
+      height: 720,
+      jpgSrcSet:
+        "/assets/optimized/hero-carport-aerial-640.jpg 640w, /assets/optimized/hero-carport-aerial-960.jpg 960w, /assets/optimized/hero-carport-aerial-1280.jpg 1280w",
+      sizes: "100vw",
+      width: 1280,
+    },
     badge: "ผลงานติดตั้งจริง",
     headline: "Solar Carport",
     highlightLine: "โรงแรมเรือนแพ รอยัลปาร์ค",
@@ -55,10 +65,20 @@ const ALL_SLIDES: HeroSlide[] = [
   {
     id: "rooftop-factory",
     category: "rooftop-solar",
-    image: "/assets/projects/ruenphae/20260924/1000076003.jpg",
+    image: "/assets/optimized/hero-rooftop-factory-1280.jpg",
     alt: "ภาพรวมแผงโซลาร์รอบสระว่ายน้ำ โรงแรมเรือนแพ รอยัลปาร์ค",
     width: 1280,
-    height: 721,
+    height: 720,
+    imageSet: {
+      avifSrcSet:
+        "/assets/optimized/hero-rooftop-factory-640.avif 640w, /assets/optimized/hero-rooftop-factory-960.avif 960w, /assets/optimized/hero-rooftop-factory-1280.avif 1280w",
+      fallback: "/assets/optimized/hero-rooftop-factory-1280.jpg",
+      height: 720,
+      jpgSrcSet:
+        "/assets/optimized/hero-rooftop-factory-640.jpg 640w, /assets/optimized/hero-rooftop-factory-960.jpg 960w, /assets/optimized/hero-rooftop-factory-1280.jpg 1280w",
+      sizes: "100vw",
+      width: 1280,
+    },
     badge: "ผลงานติดตั้งจริง",
     headline: "Rooftop Solar",
     highlightLine: "ระบบพลังงานบนอาคารจริง",
@@ -69,10 +89,20 @@ const ALL_SLIDES: HeroSlide[] = [
   {
     id: "hotel-resort",
     category: "hospitality",
-    image: "/assets/projects/holatel/20260924/1000075878.jpg",
+    image: "/assets/optimized/hero-hotel-resort-1280.jpg",
     alt: "ภาพแผงโซลาร์บนหลังคาโรงแรมโฮลาเทล",
     width: 1280,
-    height: 721,
+    height: 720,
+    imageSet: {
+      avifSrcSet:
+        "/assets/optimized/hero-hotel-resort-640.avif 640w, /assets/optimized/hero-hotel-resort-960.avif 960w, /assets/optimized/hero-hotel-resort-1280.avif 1280w",
+      fallback: "/assets/optimized/hero-hotel-resort-1280.jpg",
+      height: 720,
+      jpgSrcSet:
+        "/assets/optimized/hero-hotel-resort-640.jpg 640w, /assets/optimized/hero-hotel-resort-960.jpg 960w, /assets/optimized/hero-hotel-resort-1280.jpg 1280w",
+      sizes: "100vw",
+      width: 1280,
+    },
     badge: "ผลงานติดตั้งจริง",
     headline: "Solar Rooftop",
     highlightLine: "โรงแรมโฮลาเทล",
@@ -83,10 +113,20 @@ const ALL_SLIDES: HeroSlide[] = [
   {
     id: "carport-realistic",
     category: "solar-carport",
-    image: "/assets/projects/ruenphae/20260924/1000075999.jpg",
+    image: "/assets/optimized/hero-carport-realistic-1280.jpg",
     alt: "Solar Carport บริเวณทางเข้าโรงแรมเรือนแพ รอยัลปาร์ค",
-    width: 721,
-    height: 1280,
+    width: 1280,
+    height: 720,
+    imageSet: {
+      avifSrcSet:
+        "/assets/optimized/hero-carport-realistic-640.avif 640w, /assets/optimized/hero-carport-realistic-960.avif 960w, /assets/optimized/hero-carport-realistic-1280.avif 1280w",
+      fallback: "/assets/optimized/hero-carport-realistic-1280.jpg",
+      height: 720,
+      jpgSrcSet:
+        "/assets/optimized/hero-carport-realistic-640.jpg 640w, /assets/optimized/hero-carport-realistic-960.jpg 960w, /assets/optimized/hero-carport-realistic-1280.jpg 1280w",
+      sizes: "100vw",
+      width: 1280,
+    },
     badge: "ผลงานติดตั้งจริง",
     headline: "Solar Carport",
     highlightLine: "ทางเข้าและพื้นที่จอดรถจริง",
@@ -97,10 +137,20 @@ const ALL_SLIDES: HeroSlide[] = [
   {
     id: "bess-realistic",
     category: "bess",
-    image: "/assets/projects/holatel/20260924/1000075879.jpg",
+    image: "/assets/optimized/hero-bess-realistic-1280.jpg",
     alt: "ภาพระยะใกล้ของแผงโซลาร์บนหลังคาโรงแรมโฮลาเทล",
     width: 1280,
-    height: 721,
+    height: 720,
+    imageSet: {
+      avifSrcSet:
+        "/assets/optimized/hero-bess-realistic-640.avif 640w, /assets/optimized/hero-bess-realistic-960.avif 960w, /assets/optimized/hero-bess-realistic-1280.avif 1280w",
+      fallback: "/assets/optimized/hero-bess-realistic-1280.jpg",
+      height: 720,
+      jpgSrcSet:
+        "/assets/optimized/hero-bess-realistic-640.jpg 640w, /assets/optimized/hero-bess-realistic-960.jpg 960w, /assets/optimized/hero-bess-realistic-1280.jpg 1280w",
+      sizes: "100vw",
+      width: 1280,
+    },
     badge: "ภาพระบบจริง",
     headline: "ระบบพลังงาน",
     highlightLine: "รายละเอียดงานติดตั้ง",

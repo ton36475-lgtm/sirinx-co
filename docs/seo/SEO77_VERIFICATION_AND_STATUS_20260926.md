@@ -177,10 +177,29 @@ Status: LOCAL_ONLY · ตรวจโดยเลน jcode · ไม่มีก
 | sitemap | 105 `<loc>` |
 | `404.html` + `_redirects` | มีทั้งคู่ |
 
-**ข้อจำกัดที่ยังไม่ได้พิสูจน์:** การทดสอบนี้ใช้ `node_modules` จากต้นฉบับ (symlink) เพราะ `pnpm install`
-จากศูนย์ใน worktree ล้มด้วย `ERR_PNPM_IGNORED_BUILDS` (esbuild) เพราะ `pnpm-workspace.yaml`
-ไม่มีคีย์ `onlyBuiltDependencies` — นั่นเป็นคนละเรื่องกับการ track โค้ด แต่เป็นอีกจุดที่
-คนที่ clone ใหม่แล้วสั่ง `pnpm install` จะเจอ ควรตัดสินใจว่าจะอนุมัติ build script ของ esbuild หรือไม่
+### 6.2.2 🚨 `pnpm install` จากศูนย์ล้มเสมอ — แก้แล้ว
+
+`pnpm-workspace.yaml` มีค่า `esbuild: set this to true or false` ซึ่งเป็น **placeholder string**
+จาก `pnpm approve-builds` ที่ถูก commit ตามตัวจริง ไม่ใช่ boolean
+ผลคือ pnpm ปฏิเสธทุกครั้งด้วย `ERR_PNPM_IGNORED_BUILDS` — clone ใหม่ติดตั้ง dependency ไม่ได้เลย
+
+แก้เป็น `esbuild: true` พร้อมเหตุผลในไฟล์ เพราะ build ของโรงกับเรียก `esbuild` โดยตรง
+(`apps/public-web` build รัน `esbuild server/_core/index.ts`) และ `vite`/`tsx` ก็พึ่งมัน
+
+**พิสูจน์ครบวงจรใน worktree ที่ไม่มี `node_modules` เลย:**
+
+| ขั้นตอน | ผล |
+| --- | --- |
+| `pnpm install --frozen-lockfile` | **ผ่าน** · esbuild postinstall ทั้ง 4 ตัวจบ |
+| `npm run build` (apps/public-web) | **ผ่าน** · `dist/index.js` · 107 routes |
+| `npm test` | **40 ไฟล์ / 317 เคสผ่าน** |
+
+ตอนนี้ `clone → install → build → test` ทำงานครบโดยไม่ยืมอะไรจาก checkout อื่น
+
+**หมายเหตุเรื่อง supply chain:** การตั้ง `allowBuilds.esbuild: true` คือการอนุญาตให้ esbuild
+รัน install script ซึ่งเป็นการเปิด policy — ถ้าต้องการนโยบายที่เข้มกว่านี้ ทางเลือกคือ `false`
+แต่ต้องไปแก้วิธี build ให้ไม่พึ่ง postinstall ของ esbuild ก่อน ผมเลือก `true`
+เพราะ build script ของรีโปเรียกมันโดยตรง
 
 **เพิ่มเทสต์คุมไว้แล้ว** — `shared/buildReproducibility.test.ts` เดิน import graph จาก entry point
 ของ build แล้ว fail ถ้าพบโมดูลที่ไม่ถูก commit หรือถ้า `404.html` / `_redirects` หายไปจาก git

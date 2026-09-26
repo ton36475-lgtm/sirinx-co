@@ -4,4 +4,9 @@ packages:
   - "packages/*"
   - "mcp/*"
 allowBuilds:
-  esbuild: set this to true or false
+  # esbuild is required by this repo's own build: `apps/public-web` build runs
+  # `esbuild server/_core/index.ts` directly, and vite/tsx depend on it. The
+  # previous value was pnpm's placeholder string "set this to true or false",
+  # which is not a boolean — pnpm rejected every fresh `pnpm install` with
+  # ERR_PNPM_IGNORED_BUILDS, so a clean clone could not install or build.
+  esbuild: true

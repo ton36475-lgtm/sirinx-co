@@ -23,5 +23,11 @@ test-results/
 quarantine/raw/
 legacy-cache/
 exports/adaptive-sync-plan-latest.json
+
+# Tool caches — local state, not project source. These were showing as
+# permanently untracked and hiding real work in `git status`.
+.serena/
+.media-staging/
+.manus-logs/
 exports/telegram-preview-latest.json
 exports/pipeline-audit-latest.json

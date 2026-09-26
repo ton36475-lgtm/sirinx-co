@@ -99,6 +99,52 @@ const AI_BOTS = [
   "Bytespider",
 ];
 
+/**
+ * RSS 2.0 feed — a syndication channel for the pages that matter, built
+ * from the same metadata registry as the titles and descriptions so the feed
+ * cannot claim anything the pages do not.
+ */
+function buildFeed(routes: string[]) {
+  const esc = (value: string) =>
+    String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+
+  const items = routes
+    .map(route => {
+      const meta = getPageMeta(route);
+      if (!meta?.title) return null;
+      const url = `${PRODUCTION_BASE_URL}${route === "/" ? "/" : `${route}/`}`;
+      return [
+        "    <item>",
+        `      <title>${esc(meta.title)}</title>`,
+        `      <link>${esc(url)}</link>`,
+        `      <guid isPermaLink="true">${esc(url)}</guid>`,
+        `      <description>${esc(meta.description ?? "")}</description>`,
+        "    </item>",
+      ].join("\n");
+    })
+    .filter((item): item is string => Boolean(item))
+    .join("\n");
+
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<rss version="2.0">',
+    "  <channel>",
+    "    <title>SIRINX — Solar Carport, BESS, EV Charger (Thailand)</title>",
+    `    <link>${esc(PRODUCTION_BASE_URL)}/</link>`,
+    "    <description>ออกแบบและติดตั้ง Solar Carport, BESS และ EV Charger สำหรับองค์กรในประเทศไทย พร้อมข้อมูลรายจังหวัดจากข้อมูลหน้างานจริง</description>",
+    "    <language>th</language>",
+    `    <lastBuildDate>${now}</lastBuildDate>`,
+    items,
+    "  </channel>",
+    "</rss>",
+    "",
+  ].join("\n");
+}
+
 function buildRobots() {
   const lines = ["User-agent: *", "Allow: /", "Disallow: /admin", ""];
   for (const bot of AI_BOTS) {
@@ -490,6 +536,7 @@ for (const route of routes) {
 );
 writeFile(path.join(distPublic, "robots.txt"), buildRobots());
 writeFile(path.join(distPublic, "llms.txt"), buildLlmsTxt());
+writeFile(path.join(distPublic, "feed.xml"), buildFeed(routes));
 
 console.log(
   JSON.stringify(

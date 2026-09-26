@@ -147,7 +147,7 @@ function getProvinceSeoMeta(path: string): SeoMeta | null {
   return {
     path,
     title: `ติดตั้ง Solar Carport ${province.nameTh} | โซลาร์ที่จอดรถ EV Charger BESS | SIRINX`,
-    description: `SIRINX รับออกแบบและติดตั้ง Solar Carport ${province.nameTh} สำหรับโรงงาน โรงแรม อาคาร และลานจอดรถองค์กร พร้อม EV Charger, BESS, AI Energy และ O&M โดยเริ่มจากการสำรวจพื้นที่และข้อมูลการใช้ไฟจริงก่อนออกแบบ`,
+    description: `SIRINX ออกแบบและติดตั้ง Solar Carport ${province.nameTh} สำหรับโรงงานและลานจอดรถ พร้อม EV Charger และ BESS โดยสำรวจพื้นที่และข้อมูลการใช้ไฟจริงก่อนออกแบบ`,
   };
 }
 

@@ -105,7 +105,12 @@ ${figure}
 ${sections}
         <div class="mt-12 rounded-2xl border border-border bg-card p-6 lg:p-8">
           <p class="leading-relaxed">${escapeHtml(entry.cta)}</p>
-          <p class="mt-4"><a href="/contact" class="font-medium">นัดสำรวจหน้างาน →</a></p>
+          <div class="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            <a href="/contact" class="font-medium">นัดสำรวจหน้างาน →</a>
+            <a href="/assessment/" class="underline-offset-4 hover:underline">ประเมินความคุ้มค่า</a>
+            <a href="/pricing/" class="underline-offset-4 hover:underline">ดูแพ็กเกจและขอบเขตงาน</a>
+            <a href="/projects/" class="underline-offset-4 hover:underline">ดูผลงานติดตั้งจริง</a>
+          </div>
         </div>${related}
         </article>
       </section>

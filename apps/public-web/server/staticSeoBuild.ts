@@ -216,6 +216,17 @@ function injectRouteModulePreloads(html: string, route: string) {
 }
 
 function buildStaticHomeShell() {
+  // Province pages were reachable only through /provinces/, putting them two
+  // clicks from the homepage. Competitors with location pages sit one click
+  // away, so list them here as well.
+  const provinceLinks = thaiProvinces
+    .map(province => {
+      const slug = escapeHtml(province.slug);
+      const nameTh = escapeHtml(province.nameTh);
+      return `            <li><a href="/solar-carport/${slug}/" class="underline-offset-4 hover:underline">${nameTh}</a></li>`;
+    })
+    .join("\n");
+
   return `<main data-sirinx-static-shell="home">
       <nav aria-label="เมนูหลัก" class="border-b border-border bg-background/90 px-4 py-3 sm:px-6">
         <ul class="container mx-auto flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
@@ -242,6 +253,19 @@ function buildStaticHomeShell() {
               <a href="/projects/ruenphae-royal-park" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 font-display font-semibold btn-accent rounded-lg">ดูผลงานติดตั้งจริง</a>
               <a href="/contact?interest=solar-carport" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 font-display font-semibold btn-accent-outline rounded-lg">ประเมินโครงการของคุณ</a>
             </div>
+          </div>
+        </div>
+      </section>
+      <section class="bg-background px-4 py-16 text-foreground sm:px-6 lg:py-24">
+        <div class="container mx-auto max-w-5xl">
+          <h2 class="font-display text-2xl font-bold leading-tight sm:text-3xl">บริการ Solar Carport ครบ 77 จังหวัด</h2>
+          <p class="mt-4 max-w-3xl text-base leading-relaxed text-text-secondary">เลือกจังหวัดเพื่อดูแนวทางออกแบบและข้อมูลพลังงานแสงอาทิตย์ของพื้นที่นั้น แต่ละจังหวัดคำนวณจากข้อมูลหน้างานจริง ไม่ใช่ค่ากลาง</p>
+          <ul class="mt-8 grid grid-cols-2 gap-x-4 gap-y-2 text-sm sm:grid-cols-3 lg:grid-cols-4">
+${provinceLinks}
+          </ul>
+          <div class="mt-10 flex flex-wrap gap-4">
+            <a href="/provinces/" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline">ดูทั้ง 77 จังหวัด</a>
+            <a href="/contact?interest=solar-carport" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent">ส่งข้อมูลโครงการ</a>
           </div>
         </div>
       </section>
@@ -326,6 +350,9 @@ function buildStaticProvinceCanaryShell(route: string) {
           <div class="mt-10 flex flex-wrap gap-4">
             <a href="${contactHref}" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent">ขอคำปรึกษาเบื้องต้น</a>
             <a href="/solar-carport" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline">ดู Solar Carport</a>
+            <a href="/assessment/" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline">ประเมินความคุ้มค่า</a>
+            <a href="/pricing/" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline">ดูแพ็กเกจและขอบเขตงาน</a>
+            <a href="/projects/" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline">ดูผลงานติดตั้งจริง</a>
           </div>
           <p class="mt-8 text-xs text-text-secondary">Canonical route: ${canonicalPath}</p>
         </div>
@@ -358,6 +385,16 @@ function buildStaticProvincesShell() {
           <ul class="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
 ${links}
           </ul>
+          <div class="mt-14 grid gap-6 sm:grid-cols-2">
+            <section>
+              <h2 class="font-display text-xl font-bold">สิ่งที่ได้ในการประเมินแต่ละจังหวัด</h2>
+              <p class="mt-3 text-sm leading-6 text-text-secondary">ตัวเลขพลังงานแสงอาทิตย์จริงจาก PVGIS (ค่าปกติสภาพภูมิอากาศ ไม่ใช่คำสัญญาประหยัด) แนวทางการเชื่อมต่อเข้ากับ MEA หรือ PEA ตามพื้นที่ และประเด็นที่ต้องเตรียมก่อนนัดสำรวจหน้างาน เช่น พื้นที่ใช้งาน โครงสร้างเดิม และความต้องการชาร์จ EV</p>
+            </section>
+            <section>
+              <h2 class="font-display text-xl font-bold">ขั้นตอนเริ่มต้น</h2>
+              <p class="mt-3 text-sm leading-6 text-text-secondary">เลือกจังหวัดที่ติดตั้งหรือกำลังหาที่ จากนั้นประเมินความคุ้มค่าเบื้องต้น แล้วส่งข้อมูลเพื่อนัดสำรวจหน้างานโดยทีมวิศวกรรม ผลการออกแบบและราคาอ้างอิงจากข้อมูลจริงของโครงการ ไม่ใช่ค่ากลางของจังหวัด</p>
+            </section>
+          </div>
           <div class="mt-10 flex flex-wrap gap-4">
             <a href="/contact?interest=solar-carport" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent">ส่งข้อมูลโครงการ</a>
             <a href="/solar-carport" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline">กลับไปหน้า Solar Carport</a>

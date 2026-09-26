@@ -142,29 +142,43 @@ Status: LOCAL_ONLY · ตรวจโดยเลน jcode · ไม่มีก
 /solar/ayutthaya  /solar-carport/phra-nakhon-si-ayutthaya  301
 ```
 
-### 6.2 🚨 build นี้กู้จาก git ไม่ได้ — แก้บางส่วนแล้ว
-เดิม: 127 ไฟล์ค้าง (52 modified, 75 untracked) · commit ล่าสุด `17382ad` ลงวันที่ 2026-07-25 · `dist/` ถูก gitignore
+### 6.2 🚨 โค้ดทั้งแอปไม่ได้ถูก commit — แก้แล้ว
 
-**สิ่งที่ตรวจแล้ว:**
-- branch นี้ห่างจาก `main` 18 commit และ **ไม่มี commit ที่ main มีแต่ branch นี้ไม่มี (0)** → merge เป็น fast-forward ได้ ไม่มีความเสี่ยง conflict จากการแยก branch
-- สแกน secret ทั้งรายการค้าง: **ไม่พบ credential จริง** · ไฟล์ `.env` / `.pem` / `.key` = 0 · จุดที่เจอคำว่า secret/token เป็นชื่อตัวแปร (`maxTokens: 500`, `canReadSecrets: false`) ไม่ใช่ค่า literal
+**นี่คือข้อค้นพบที่ร้ายแรงที่สุดของรอบนี้** ไม่ใช่แค่ “ไฟล์ค้าง” แต่คือ
+`server/staticSeoBuild.ts` (ถูก track) `import` `../shared/siteContentRegistry` ซึ่ง **ไม่ถูก track**
+รวมถึง `provinceEnergyData` `provinceSolarMonthly` `publicProjectContent` `publicProjectMedia`
+`holatelProjectMedia` `ruenphaeProjectMedia` `sunMath` `provinceEnergyStats` `homeSolutionFaq`
+`provinceLongformFigure` และ `client/src` เกือบทั้งหมด รวมถึง `client/public/404.html`
+(ไฟล์ที่ทั้งระบบ soft-404 ขึ้นอยู่)
 
-**สิ่งที่พบและแก้:** commit 3 รอบก่อน ๆ ส่งตัว generator แต่ **ไฟล์ที่มันอ่าน (`docs/seo/province-unique-angles.json`) ยังไม่ถูก track**
-แปลว่า clone ใหม่แล้วสั่ง `node docs/seo/generate-province-longform.mjs` จะพังด้วย ENOENT
-แก้แล้วใน commit `6af3282` พร้อมพิสูจน์ว่า **idempotent** — รันซ้ำได้ผลลัพธ์ byte เดิม (`905bbf7e…`) และ working tree ไม่เปลี่ยน
+**ผลคือ clone ใหม่แล้วสั่ง `pnpm build` ไม่ผ่านเลย** และ commit 4 รอบก่อนหน้านี้
+ส่งเว็บที่ไม่มีใครสร้างซ้ำได้ — ไม่ใช่แค่เนื้อหาที่ตรวจสอบไม่ได้
 
-**สิ่งที่ยังค้าง ต้องให้เจ้าของแต่ละส่วนตัดสินใจ:**
+**แก้แล้วใน commit `1198785`** และพิสูจน์แล้วว่าไม่มีช่องโหว่เหลือ:
 
-| กลุ่ม | จำนวน | หมายเหตุ |
-| --- | --- | --- |
-| `docs/seo/province-content-briefs/` | 78 ไฟล์ (1.5M) | เอกสาร brief ของอีกเลนหนึ่ง |
-| `docs/seo/province-image-render/` | 3 ไฟล์ (1.3M) | harness Three.js |
-| `.claude/skills/` + `.agents/` + `skills-lock.json` | 5 community skills | ติดตั้งมาแต่ยังไม่ vet ในรีโป |
-| `services/dev-control-api/` | 4 ไฟล์ | subsystem คนละส่วน |
-| `sites/ghostclaw-hermes-v3-command-center/` | 5 ไฟล์ | subsystem คนละส่วน |
-| `crates/sirinx-core/tests/`, `apps/thaimart-seller-guard/`, `docs/` อื่น | ~20 ไฟล์ | งานเลนอื่น |
+| ตรวจ | ผลหลังแก้ |
+| --- | --- |
+| โมดูลที่ build entry point เข้าถึง | 64 |
+| โมดูลที่ import แต่ไม่ถูก commit | **0** |
+| เทสต์ | 40 ไฟล์ / 317 เคส ผ่าน |
+| branch ห่างจาก main | 18 ข้างหน้า · **0 ข้างหลัง** (merge เป็น fast-forward ได้) |
+| secret ในไฟล์ที่ commit | ไม่มี · ที่เจอคำว่า secret/token เป็นชื่อตัวแปร (`maxTokens`, `canReadSecrets: false`) |
 
-**ข้อสังเกต:** สัดส่วนที่เหลือไม่มีของที่ผมสร้าง ผมจึงไม่ commit ให้ — การ commit งานของอีกเลนโดยไม่มีเจ้าของยืนยันคือการรับความเสี่ยงแทนเขา
+**เพิ่มเทสต์คุมไว้แล้ว** — `shared/buildReproducibility.test.ts` เดิน import graph จาก entry point
+ของ build แล้ว fail ถ้าพบโมดูลที่ไม่ถูก commit หรือถ้า `404.html` / `_redirects` หายไปจาก git
+เทสต์นี้จับปัญหานี้ได้ แต่ก่อนหน้านี้ไม่มีอะไรจับได้ เพราะทุกชุดเทสต์รันกับ working tree เสมอ
+
+**ยังค้าง 38 ไฟล์ ซึ่งเป็นงานของเลนอื่นที่ไม่ใช่ application source:**
+
+| กลุ่ม | หมายเหตุ |
+| --- | --- |
+| `docs/seo/province-content-briefs/` (78 ไฟล์) · `docs/seo/province-image-render/` | เอกสารทำงาน ไม่กระทบการ build |
+| `.claude/skills/` · `.agents/` · `skills-lock.json` | community skills ที่ติดตั้งมา ยังไม่ vet ในรีโป |
+| `services/dev-control-api/` · `sites/ghostclaw-hermes-v3-command-center/` | subsystem คนละส่วน ไม่เกี่ยวกับเว็บ |
+| `crates/` · `apps/thaimart-seller-guard/` · `docs/` อื่น | งานเลนอื่น |
+
+**ข้อสังเกต:** ก่อนหน้านี้ผมจัดหมวด 120 ไฟล์นี้ว่า “เป็น WIP ของเลนอื่น อย่าแตะ” ซึ่ง**ผิด**
+86 ไฟล์ในนั้นคือตัวแอปเอง การไม่ commit คือทำให้เว็บ deploy ไม่ได้ ไม่ใช่เรื่องความสุภาพของ lane
 
 ### 6.3 เทสต์ที่เคย fail — แก้แล้ว
 เคย fail 2 สูตร (`server/runtimeScripts.test.ts`, `server/_core/agentContracts.test.ts`)
@@ -190,6 +204,8 @@ Status: LOCAL_ONLY · ตรวจโดยเลน jcode · ไม่มีก
 | **reachability จากหน้าแรก (อ่านไฟล์ build จริง)** | **ทุกหน้า ≤ 3 คลิก** | `crawlReachability.test.ts` |
 | ลิงก์ออกต่อหน้าจังหวัด | > 1 | `crawlReachability.test.ts` |
 | ไม่มี soft-404 catch-all | 0 | `staticDeploySurface.test.ts` |
+| **โมดูลที่ build ใช้ต้องถูก commit ครบ** | **0 ขาด** | `buildReproducibility.test.ts` |
+| `404.html` + `_redirects` ต้องอยู่ใน git | ครบ | `buildReproducibility.test.ts` |
 
 ---
 

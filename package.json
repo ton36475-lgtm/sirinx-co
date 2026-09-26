@@ -4,7 +4,7 @@
   "private": true,
   "description": "Canonical SIRINX OS monorepo governance scaffold with AdaptiveSync, PC node, Telegram dry-run control, and public-web source recovery.",
   "scripts": {
-    "check": "node --check scripts/verify-pr-mono-001.mjs && node --check scripts/adaptive-sync-plan.mjs && node --check scripts/telegram-notify-preview.mjs && node --check scripts/telegram-operator-preflight.mjs && node --check scripts/telegram-stack-manager.mjs && node --check scripts/windows-drive-d-handoff.mjs && node --check scripts/verify-next-phase.mjs && node --check services/telegram-command-bot/src/control-auth.mjs && node --check services/telegram-command-bot/src/control-gate.mjs && node --check services/telegram-command-bot/src/config.mjs && node --check services/telegram-command-bot/src/sender.mjs && node --check services/telegram-command-bot/src/index.mjs && node --check services/dev-control-api/src/a2a-sync.mjs && node --check services/dev-control-api/src/a2a-omniroute.mjs && node --check services/dev-control-api/src/centerbrain-hub.mjs && node --check services/dev-control-api/server.mjs && node scripts/verify-pr-mono-001.mjs && node scripts/verify-next-phase.mjs",
+    "check": "node --check scripts/verify-pr-mono-001.mjs && node --check scripts/adaptive-sync-plan.mjs && node --check scripts/telegram-notify-preview.mjs && node --check scripts/telegram-operator-preflight.mjs && node --check scripts/telegram-stack-manager.mjs && node --check scripts/windows-drive-d-handoff.mjs && node --check scripts/verify-next-phase.mjs && node --check services/telegram-command-bot/src/control-auth.mjs && node --check services/telegram-command-bot/src/control-gate.mjs && node --check services/telegram-command-bot/src/config.mjs && node --check services/telegram-command-bot/src/sender.mjs && node --check services/telegram-command-bot/src/index.mjs && node --check services/dev-control-api/src/a2a-sync.mjs && node --check services/dev-control-api/src/a2a-omniroute.mjs && node --check services/dev-control-api/src/centerbrain-hub.mjs && node --check services/dev-control-api/server.mjs && node scripts/verify-pr-mono-001.mjs && node scripts/verify-next-phase.mjs && npm run command-center:check",
     "verify:mono-001": "node scripts/verify-pr-mono-001.mjs",
     "verify:next-phase": "node scripts/verify-next-phase.mjs",
     "external-intake:validate": "node scripts/validate-external-component-intake.mjs",
@@ -30,7 +30,12 @@
     "control:test": "vitest run services/dev-control-api/src --exclude services/dev-control-api/src/hermes-spec-first-swarm.test.mjs",
     "rust:build": "cargo build --workspace",
     "rust:test": "cargo test --workspace",
-    "rust:serve": "cargo run -p sirinx-web"
+    "rust:serve": "cargo run -p sirinx-web",
+    "command-center:build": "npm --prefix sites/ghostclaw-hermes-v3-command-center run build",
+    "command-center:test": "npm --prefix sites/ghostclaw-hermes-v3-command-center run test",
+    "command-center:typecheck": "npm --prefix sites/ghostclaw-hermes-v3-command-center run typecheck",
+    "command-center:lint": "npm --prefix sites/ghostclaw-hermes-v3-command-center run lint",
+    "command-center:check": "npm run command-center:build && npm run command-center:test && npm run command-center:typecheck && npm run command-center:lint"
   },
   "keywords": [
     "sirinx",

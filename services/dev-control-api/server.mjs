@@ -40,6 +40,11 @@ import { getVibeCommandCenter } from "./src/vibe-workflows.mjs";
 import { createGatewayAgentDryRunPlan, getGatewayAgentStatus } from "./src/gateway-agent.mjs";
 import { createAiTeamPairingDryRun, getAiTeamPairingStatus } from "./src/ai-team-pairing.mjs";
 import { createConnectorRegistryDryRun, getConnectorRegistryStatus } from "./src/connector-registry.mjs";
+import {
+  advanceThaiMartWorkflowDryRun,
+  createThaiMartWorkflowDryRun,
+  getThaiMartWorkflowStatus
+} from "./src/thaimart-k-workflow-engine.mjs";
 import { createLocalRagQueryDryRun, createLocalRagScanDryRun, getLocalRagStatus } from "./src/local-rag.mjs";
 import { createAgentLaunchGateDryRun, getAgentLaunchGateStatus } from "./src/agent-launch-gate.mjs";
 import { createAgentDriverSmokeDryRun, getAgentDriverStatus } from "./src/agent-driver.mjs";
@@ -1038,6 +1043,11 @@ export async function handleRequest(request, response) {
     return;
   }
 
+  if (request.method === "GET" && url.pathname === "/api/thaimart/workflow/status") {
+    sendJson(request, response, 200, getThaiMartWorkflowStatus());
+    return;
+  }
+
   if (request.method === "GET" && url.pathname === "/api/agent-launch-gate") {
     sendJson(request, response, 200, getAgentLaunchGateStatus());
     return;
@@ -1210,6 +1220,48 @@ export async function handleRequest(request, response) {
         canExecuteExternally: false,
         canRunMcp: false,
         canReadSecrets: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/thaimart/workflow/dry-run") {
+    try {
+      const body = await readJson(request, { maxBytes: A2A_PLAN_BODY_LIMIT_BYTES });
+      sendJson(request, response, 200, createThaiMartWorkflowDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_thaimart_workflow_dry_run_request",
+        error: "thaimart_workflow_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canReadThaiMart: false,
+        canWriteThaiMart: false,
+        canExecuteExternally: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/thaimart/workflow/advance/dry-run") {
+    try {
+      const body = await readJson(request, { maxBytes: A2A_PLAN_BODY_LIMIT_BYTES });
+      sendJson(request, response, 200, advanceThaiMartWorkflowDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_thaimart_workflow_transition_request",
+        error: "thaimart_workflow_transition_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canReadThaiMart: false,
+        canWriteThaiMart: false,
+        canExecuteExternally: false,
         requiresHumanApproval: true
       });
     }

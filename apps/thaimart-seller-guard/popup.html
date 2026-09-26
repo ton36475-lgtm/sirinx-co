@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SIRINX ThaiMart Guard</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="masthead">
+        <div class="mark" aria-hidden="true"><span>S</span><i></i></div>
+        <div>
+          <p class="eyebrow">SIRINX / SELLER SAFETY</p>
+          <h1>ThaiMart Guard</h1>
+        </div>
+        <span class="mode-pill">READ ONLY</span>
+      </header>
+
+      <section class="signal-card" aria-labelledby="connection-heading">
+        <div class="signal-line">
+          <span class="signal-dot" aria-hidden="true"></span>
+          <p id="connection-heading">Seller Center inspector</p>
+        </div>
+        <strong id="page-status">กำลังรอสถานะจากหน้า Seller Center</strong>
+        <p id="page-detail">เปิดหน้า `seller.thaimart.com` แล้วกด Refresh เพื่ออ่าน metadata ของหน้าปัจจุบัน</p>
+      </section>
+
+      <section class="snapshot-grid" aria-label="Read-only snapshot">
+        <article>
+          <span>PAGE</span>
+          <strong id="snapshot-page">—</strong>
+        </article>
+        <article>
+          <span>OBSERVED ROWS</span>
+          <strong id="snapshot-rows">—</strong>
+        </article>
+        <article>
+          <span>PRODUCT CONTROLS</span>
+          <strong id="snapshot-writes">—</strong>
+        </article>
+      </section>
+
+      <button class="secondary-button" id="refresh-snapshot" type="button">
+        <span aria-hidden="true">↻</span> Refresh page inspection
+      </button>
+
+      <section class="handoff-card" aria-labelledby="handoff-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">K01 → K15</p>
+            <h2 id="handoff-heading">Create a local workflow</h2>
+          </div>
+          <span>NO SELLER WRITE</span>
+        </div>
+        <label for="workflow-id">Task reference</label>
+        <input id="workflow-id" maxlength="81" autocomplete="off" value="SRX-TM-001" />
+        <label for="workflow-type">Work type</label>
+        <select id="workflow-type">
+          <option value="catalog">Catalog preparation</option>
+          <option value="content">Content draft</option>
+          <option value="insight">Read-only insight</option>
+          <option value="report">Internal report</option>
+          <option value="schedule">Schedule proposal</option>
+        </select>
+        <button class="primary-button" id="start-workflow" type="button">Start local dry-run</button>
+        <p class="handoff-note">เมื่อกด Start จะอ่านแท็บ Seller Center ปัจจุบันและส่ง task ID ประเภทงาน ประเภทหน้า จำนวนแถว การพบตารางและปุ่มสินค้า พร้อมเวลาอ่านไปยัง `127.0.0.1:8790` เก็บ path ไว้เฉพาะใน extension session ไม่มีสินค้า ราคา สต็อก cookie หรือค่าฟอร์มถูกส่งออก</p>
+      </section>
+
+      <output class="result-panel" id="workflow-result" aria-live="polite">Local Control API ยังไม่ได้เรียก</output>
+
+      <footer>
+        <span>CATALOG · PRICE · STOCK · ORDER · CHAT</span>
+        <strong>BLOCKED</strong>
+      </footer>
+    </main>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "SIRINX ThaiMart Guard",
+  "version": "0.1.0",
+  "description": "Read-only ThaiMart Seller Center inspection with SIRINX local workflow handoff.",
+  "action": {
+    "default_title": "SIRINX ThaiMart Guard",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  },
+  "permissions": ["activeTab", "storage", "tabs"],
+  "host_permissions": [
+    "https://seller.thaimart.com/*",
+    "http://127.0.0.1:8790/*",
+    "http://localhost:8790/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://seller.thaimart.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src http://127.0.0.1:8790 http://localhost:8790"
+  }
+}

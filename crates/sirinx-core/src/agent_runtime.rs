@@ -850,12 +850,13 @@ impl StageLease {
         {
             return Err(AgentRuntimeError::InvalidLeaseTiming);
         }
-        self.heartbeat_due_at_unix_ms = heartbeat_due_at_unix_ms;
-        self.expires_at_unix_ms = expires_at_unix_ms;
-        self.version = self
+        let next_version = self
             .version
             .checked_add(1)
             .ok_or(AgentRuntimeError::VersionOverflow)?;
+        self.heartbeat_due_at_unix_ms = heartbeat_due_at_unix_ms;
+        self.expires_at_unix_ms = expires_at_unix_ms;
+        self.version = next_version;
         Ok(())
     }
 
@@ -866,11 +867,12 @@ impl StageLease {
         now_unix_ms: UnixMillis,
     ) -> Result<(), AgentRuntimeError> {
         self.require_mutable(expected_version, now_unix_ms)?;
-        self.state = LeaseState::Released;
-        self.version = self
+        let next_version = self
             .version
             .checked_add(1)
             .ok_or(AgentRuntimeError::VersionOverflow)?;
+        self.state = LeaseState::Released;
+        self.version = next_version;
         Ok(())
     }
 
@@ -1025,10 +1027,11 @@ fn apply_state_transition(
             to: transition.next_state,
         });
     }
-    *state = transition.next_state;
-    *version = version
+    let next_version = version
         .checked_add(1)
         .ok_or(AgentRuntimeError::VersionOverflow)?;
+    *state = transition.next_state;
+    *version = next_version;
     *updated_at_unix_ms = transition.at_unix_ms;
     Ok(())
 }

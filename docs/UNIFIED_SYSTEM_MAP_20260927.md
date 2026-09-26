@@ -48,21 +48,25 @@
 
 ---
 
-## 3. ข้อขัดแย้ง 11 จุดระหว่างเอกสารกับโค้ด
+## 3. ข้อขัดแย้งระหว่างเอกสารกับโค้ด — ตรวจซ้ำแล้ว (แก้ 2026-09-27)
 
-| # | เอกสารอ้าง | โค้ดจริง | ไฟล์:บรรทัด |
+รอบแรกผมนับได้ 11 ข้อ แต่เมื่อไล่ตรวจทีละข้อ **5 ข้อปิดไปเพราะเอกสารซื่อสัตย์อยู่แล้ว หรือเพราะผมเองเปรียบเทียบผิดตัว** เหลือที่เป็นข้อผิดจริง 3 ข้อ (แก้แล้ว 2 · ค้าง 1)
+
+| # | เอกสารอ้าง | สถานะจริงหลังตรวจซ้ำ | ไฟล์:บรรทัด |
 | --- | --- | --- | --- |
-| 1 | แกนหลัง "already live" | ไม่มี `DATABASE_URL` | `INTEGRATION_MAP.md:7,11` |
-| 2 | `POST /api/pending-work` | มีแค่ `GET` — POST อยู่ฝั่ง Rust | `dev-control-api/server.mjs:893` |
-| 3 | Control API ป้องกันด้วย Bearer | **Bearer ตรวจแค่ 1 จาก 93 routes** | `server.mjs:1374-1392` |
-| 4 | Device topology เป็นระบบจริง | ตัวเอกสารเขียน `Status: planned` เอง | `ALL_DEVICE_TOPOLOGY.md:3` |
-| 5 | `hermes-api` เป็น command gateway | ไม่มี server entry | `services/hermes-api/src/` |
-| 6 | Skills 50 ตัว | ในรีโบ 55 | `SKILLS_REGISTRY.md:4` |
-| 7 | Telegram live | dry-run เป็นค่าเริ่มต้น | `telegram-command-bot/src/sender.mjs:57` |
-| 8 | `docs/TELEGRAM_CONTROL_PLAN.md` | ไม่มีไฟล์นี้ (มี `TELEGRAM_CONTROL_PLANE.md`) | — |
-| 9 | 77 หน้า province เป็น canonical | sirinx-os ยังชี้ `/solar/*` | `seo77` §6.1 |
-| 10 | เนื้อหา 77 หน้าไม่ซ้ำ | ซ้ำ 82.3% ที่ระดับ H2 (แก้แล้วเหลือ 0/927) | `SEO77_VERIFICATION` §2 |
-| 11 | Deploy พร้อม | gate = hold, เปิดเป็น human decision | `DEPLOY_RUST.md:3` |
+| 1 | แกนหลัง "already live" | **ผิดบางส่วน — แก้แล้ว** ไม่มี `.env` เลย = ยังไม่ได้ provision แต่ D1 ผูกจริงใน 2 ไฟล์ wrangler และตาราง `web_pending_work` มีจริง จึงเปลี่ยนคำว่า live เป็น "declared, not connected" | `INTEGRATION_MAP.md:7` |
+| 2 | `POST /api/pending-work` | **ผิดของผมเอง — ยกเลิก** เอกสารนี้อ้าง Rust control plane (`crates/sirinx-control:477` มี `.post(add_pending)`) ผมไปเปรียบเทียบกับ Node ซึ่งเป็นคนละ service | `WORK_INTAKE_REPORT.md:26` |
+| 3 | Control API ป้องกันด้วย Bearer | **แก้แล้วทั้งสองฝั่ง** เดิมตรวจแค่ 1 จาก 93 routes; Rust fail open เมื่อไม่ตั้ง token — ดู §7 และ §8 | `server.mjs:1374` |
+| 4 | Device topology เป็นระบบจริง | **ไม่ใช่ข้อผิด — ยกเลิก** ตัวเอกสารเขียน `Status: planned` เองอยู่แล้ว ปัญหาอยู่ที่เอกสารอื่นอ้างมันเป็นระบบจริง | `ALL_DEVICE_TOPOLOGY.md:3` |
+| 5 | `hermes-api` เป็น command gateway | **ผิดบางส่วน** README เขียนตรงไปตรงมาว่า "proposed" + "Phase 1 implements only a dry-run normalizer" แต่ `NETWORK_PORT_MAP.md:32` กับ `CLOUDFLARE_EDGE_PLAN.md:60` ประกาศ hostname → `127.0.0.1:8642` และพอร์ตนั้นจริง ๆ เป็น **Hermes agent gateway** (process `hermes gateway run`) ไม่ใช่ `hermes-api` ที่ไม่มี server entry | `services/hermes-api/src/` |
+| 6 | Skills 50 ตัว | **ผิดจริง — แก้แล้ว** นับได้ 55 | `SKILLS_REGISTRY.md:4` |
+| 7 | Telegram live | **ไม่ใช่ข้อผิด — ยกเลิก** `PRODUCTION.md` เขียนตรงไปตรงมาว่า "live send held" / `HELD` อยู่แล้ว ส่วน `sender.mjs:57` เป็น default ที่ถูกต้อง | `PRODUCTION.md:186,254` |
+| 8 | `docs/TELEGRAM_CONTROL_PLAN.md` | **ผิดของผมเอง — ยกเลิก** ลิงก์ที่พังมีแค่ในเอกสารรวมที่ผมเขียนเอง ไม่มีเอกสารอื่นอ้าง | `docs/UNIFIED_SYSTEM_MAP_20260927.md` |
+| 9 | 77 หน้า province เป็น canonical | **ยังค้าง** ใส่ 301 + slug bridge แล้ว แต่ generator ของ sirinx-os ยัง hardcode URL เก่าใน canonical/OG/JSON-LD/sitemap | `seo77` §6.1 |
+| 10 | เนื้อหา 77 หน้าไม่ซ้ำ | **แก้แล้ว** เหลือ 0/927 คู่ที่ซ้ำเกินเกณฑ์ | `SEO77_VERIFICATION` §2 |
+| 11 | Deploy พร้อม | **ไม่ใช่ข้อผิด — ยกเลิก** `DEPLOY_RUST.md:3` เขียนตรงไปตรงมาว่า gate = hold | `DEPLOY_RUST.md:3` |
+
+**บทเรียน:** การนับ "เอกสารขัดกับโค้ด" ด้วยการอ่านโค้ดอย่างเดียวทำให้เกิด false positive 5 ข้อจาก 11 — เอกสารหลายฉบับซื่อสัตย์ตั้งแต่ต้น และสองข้อเป็นความผิดพลาดของผมเอง ต้องเทียบกับ service ที่ถูกต้องก่อนเสมอ
 
 ---
 

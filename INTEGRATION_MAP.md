@@ -4,14 +4,19 @@ Built from an L1 Perception scan of actual files on disk/GitHub
 (2026-07-18). Each row is a real system with its verified location and
 its connection point into the mesh.
 
-## Connection backbone (already live)
+## Connection backbone (declared and configured, not yet connected)
 
-| Layer | Mechanism |
-| --- | --- |
-| Work queue | Supabase `web_pending_work` + pg_notify → `sirinx-control /api/a2a/sync` |
-| Capability routing | OmniRoute (`/api/a2a/route`) — capabilities auto-loaded from 50 skills |
-| Knowledge | D1 `sirinx-unified-db` (APAC/SIN) → `brain-sync-worker` (`/api/brain/sync|search|notes`) |
-| API contract | Postman collection **"SIRINX Platform API"** (workspace `549f0d6b…`, collection `e6b5fcae…`) |
+Every mechanism below exists as code or config in this repo. None of them is
+provisioned: as of 2026-09-27 this machine has no `.env` and no credentials, so
+nothing here is reachable end to end. Treat this table as the intended topology,
+not as an inventory of running systems.
+
+| Layer | Mechanism | What actually exists on disk |
+| --- | --- | --- |
+| Work queue | Supabase `web_pending_work` + pg_notify → `sirinx-control /api/a2a/sync` | Table referenced in `crates/sirinx-store` and its tests; no database provisioned |
+| Capability routing | OmniRoute (`/api/a2a/route`) — capabilities auto-loaded from 55 skills | Route exists in `crates/sirinx-control`; skill count from `.claude/skills/` |
+| Knowledge | D1 `sirinx-unified-db` (APAC/SIN) → `brain-sync-worker` (`/api/brain/sync|search|notes`) | `database_name` bound in `infra/cloudflare/brain-sync-worker/wrangler.toml` and `infra/cloudflare/main-router/wrangler.jsonc`; binding declared, not provisioned |
+| API contract | Postman collection **"SIRINX Platform API"** (workspace `549f0d6b…`, collection `e6b5fcae…`) | External; not verifiable from this repo |
 
 ## System inventory → connection points
 

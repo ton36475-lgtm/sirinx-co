@@ -1,9 +1,10 @@
 # Skills Registry — Monorepo Consolidation
 
 All Claude Code skills from the github.com/ton36475-lgtm system now live
-in this repo under `.claude/skills/` (50 total — the 49 imported below
-plus `sirinx-master-plan`, added later in commit `7304799`), so every session and
-sub-agent on the monorepo sees one skill set.
+in this repo under `.claude/skills/` (55 total as of 2026-09-27 — the 49
+imported below plus `sirinx-master-plan` from commit `7304799` and five
+added since), so every session and sub-agent on the monorepo sees one skill
+set. Count with `ls .claude/skills | wc -l`.
 
 | Source repo | Skills | Notes |
 | --- | --- | --- |

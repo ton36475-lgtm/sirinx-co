@@ -387,6 +387,27 @@ describe("startTelegramStack", () => {
     ))).toBe(true);
   });
 
+  it("forwards CONTROL_API_TOKEN to every spawned control-plane child", async () => {
+    // Both control planes now fail closed: an unset token makes every /api/*
+    // route return 503. If this forwarding regresses, the deploy-gate
+    // authority and the Node control API would come up but be unreachable by
+    // their own clients, so the token must reach every child.
+    const fixture = await runtimeFixture();
+    const harness = createInjectedPrimitives();
+
+    await startTelegramStack({
+      ...harness.options,
+      runtimeDir: fixture.runtimeDir,
+    });
+
+    expect(harness.spawned.length).toBeGreaterThan(0);
+    for (const { id, childEnv } of harness.spawned) {
+      expect(childEnv.CONTROL_API_TOKEN, `${id} must inherit CONTROL_API_TOKEN`).toBe(
+        FULL_ENV.CONTROL_API_TOKEN
+      );
+    }
+  });
+
   it("cleans up only its direct child when a later spawn fails", async () => {
     const fixture = await runtimeFixture();
     const harness = createInjectedPrimitives();

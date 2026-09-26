@@ -199,3 +199,36 @@ if let (true, Some(expected)) = (needs_auth, state.api_token.as_deref()) {
 ### ข้อสังเกต
 
 ตอนนี้ทั้งสอง control plane ใช้กฎเดียวกัน: **ทุก `/api/*` ต้องมี Bearer และไม่มี token = 503 ไม่ใช่เปิด** ตรงกับที่ `NETWORK_PORT_MAP.md` เขียนไว้อยู่แล้วว่า 8711 และ 8790 "token required" — ก่อนหน้านี้เอกสารอ้างความปลอดภัยที่ยังไม่มีจริง
+
+---
+
+## 9. ตรวจเส้นทางรันจริง — ไม่ใช่แค่ unit test
+
+การเปลี่ยนเป็น fail closed มีความเสี่ยงที่ unit test ไม่จับ: **ถ้าเส้นทาง start จริงไม่ส่ง token ลงไป ทั้งสอง control plane จะขึ้นมาแต่ตอบ 503 ทุก route** คือใช้งานไม่ได้ทั้งระบบ จึงต้องตรวจเส้นทางจริง
+
+### สิ่งที่พบ
+
+- `startTelegramStack` ส่ง env เป็น `{ ...env, ...service.env }` โดย `env = options.env || process.env` — `stackEnvironment()` ถูกใช้แค่ตรวจ preflight ไม่ได้กรอง env ตอน spawn ดังนั้น `CONTROL_API_TOKEN` เดินถึงทั้ง 3 child จริง
+- **Node dev-control-api ไม่ใช่ authority ของ telegram gate** — `/api/gates` ของมันมีแค่ 4 gates (`dry-run-lock`, `approval-required`, `secret-scan`, `public-exposure`) **ไม่มี `telegram_send`** และไม่มี block `persistence` ส่วน authority จริงคือ Rust `sirinx-control` บน 8711 ซึ่งมีครบ — ผมตรวจจุดนี้ผิดตอนแรกเพราะชี้ไปที่ 8790
+
+### ผลที่วัดได้บนเส้นทางจริง (Rust 8711)
+
+ใช้ของจริงทั้งหมด: service entry ของ stack manager · health matcher ของมันเอง · `readTelegramSendGate` ของบอทเอง
+
+| กรณี | ผลที่สังเกต |
+| --- | --- |
+| มี token · health probe ของ stack manager | **ผ่าน** (matcher ของจริง) |
+| มี token · บอทอ่าน gate | **authoritative=true**, gate=telegram_send, backend=memory |
+| มี token · anonymous GET /api/gates | **401** |
+| ไม่มี token · health probe | **ยังผ่าน** (200) |
+| ไม่มี token · anonymous GET /api/gates | **503** (fail closed) |
+
+สรุป: การเปลี่ยนนี้ **ไม่ทำให้ลูกค้าจริงใช้งานไม่ได้** และยังปิดช่องได้จริง
+
+### กันไว้ไม่ให้พังซ้ำ
+
+เพิ่ม `forwards CONTROL_API_TOKEN to every spawned control-plane child` ใน `stack-manager.test.mjs` ซึ่งจะพังทันทีถ้ามีคนเปลี่ยนการประกอบ env ตอน spawn — นั่นคือจุดเดียวที่พังแล้วทำให้ทั้งระบบใช้งานไม่ได้โดยไม่มีอะไรฟอง
+
+### ข้อจำกัดที่ต้องบอกตรง ๆ
+
+ยังไม่ได้ทดสอบ **การส่ง Telegram จริง** และ **การเปิด gate จริง** เพราะทั้งคู่ต้องใช้ credential ของผู้ใช้และอยู่หลัง gate — ยืนยันได้แค่ว่าถึงจุดที่ client อ่าน gate ได้ถูกต้อง

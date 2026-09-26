@@ -1,13 +1,17 @@
 /**
- * Quality gate for shared/provinceLongformFigure.ts — the province-specific
- * SVG figure shared by the prerender HTML and the hydrated long-form component.
+ * Quality gate for shared/provinceLongformFigure.ts — the province hero image
+ * figure (AVIF/WebP) shared by the prerender HTML and the hydrated long-form
+ * component — and for the image assets the pipeline produced.
  *
- * Red proof (verification discipline): the 12-month bar-count assertion goes
- * red when the builder is mutated to drop a month (mutation run recorded in the
- * report), and the "อันดับ 15 จาก 77" assertion is a tripwire shared with the
- * hand-written Bangkok content — if the PVGIS dataset is regenerated and the
- * rank moves, both the test and the published claim must be revisited together.
+ * Red proof (verification discipline):
+ *  - renaming any province asset makes the asset-coverage gate red (mutation
+ *    run recorded in the report)
+ *  - the "อันดับ 15 จาก 77" assertion is a tripwire shared with the hand-written
+ *    Bangkok content: if the PVGIS dataset is regenerated and the rank moves,
+ *    both the test and the published claim must be revisited together.
  */
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   buildProvinceMonthlyFigure,
@@ -15,29 +19,38 @@ import {
   provinceYieldRank,
 } from "./provinceLongformFigure";
 import { buildProvinceLongformHtml } from "./provinceLongformHtml";
+import { provinceEnergyData } from "./provinceEnergyData";
+
+const ASSET_DIR = new URL("../client/public/provinces/", import.meta.url)
+  .pathname;
 
 describe("provinceLongformFigure", () => {
-  it("renders the bangkok figure with sourced figures and rank", () => {
+  it("renders the bangkok figure as lazy AVIF/WebP with sourced alt text", () => {
     const figure = buildProvinceMonthlyFigure("bangkok");
     expect(figure).toBeTruthy();
+    expect(figure!).toContain('data-sirinx-figure="province-monthly"');
+    expect(figure!).toContain('<source type="image/avif" srcset="/provinces/bangkok.avif"');
+    expect(figure!).toContain('<source type="image/webp" srcset="/provinces/bangkok.webp"');
+    expect(figure!).toContain('src="/provinces/bangkok.webp"');
+    expect(figure!).toContain('loading="lazy"');
+    expect(figure!).toContain('decoding="async"');
+    expect(figure!).toContain('width="1200"');
+    expect(figure!).toContain('height="675"');
+    // Numbers must be readable without decoding pixels.
     expect(figure!).toContain("กรุงเทพ");
     expect(figure!).toContain("1,401.4");
     expect(figure!).toContain("อันดับ 15 จาก 77 จังหวัด");
     expect(figure!).toContain("PVGIS");
     expect(figure!).toContain("ไม่ใช่การรับประกันผลผลิตของระบบจริง");
-    expect(figure!).toContain('role="img"');
-    expect(figure!).toContain("aria-label=");
+    expect(figure!).toContain("<figcaption");
   });
 
-  it("draws exactly 12 monthly bars with Thai month labels and a national-mean line", () => {
-    for (const slug of ["bangkok", "phuket", "amnat-charoen"]) {
-      const figure = buildProvinceMonthlyFigure(slug)!;
-      const bars = figure.match(/data-month=/g) ?? [];
-      expect(bars, `${slug} bar count`).toHaveLength(12);
-      expect(figure).toContain(">ม.ค.<");
-      expect(figure).toContain(">ธ.ค.<");
-      expect(figure).toContain("ค่าเฉลี่ยประเทศ");
-      expect(figure).toContain("เดือนที่ผลิตได้สูงสุด");
+  it("has a WebP and an AVIF asset for every province with a PVGIS record", () => {
+    const slugs = Object.keys(provinceEnergyData);
+    expect(slugs.length).toBe(77);
+    for (const slug of slugs) {
+      expect(existsSync(join(ASSET_DIR, `${slug}.webp`)), `${slug}.webp`).toBe(true);
+      expect(existsSync(join(ASSET_DIR, `${slug}.avif`)), `${slug}.avif`).toBe(true);
     }
   });
 
@@ -45,7 +58,7 @@ describe("provinceLongformFigure", () => {
     expect(buildProvinceMonthlyFigure("nonexistent-province")).toBeNull();
   });
 
-  it("escapes text before embedding it in SVG/HTML", () => {
+  it("escapes text before embedding it in attributes", () => {
     expect(escapeFigureText('<script>alert("x")</script>')).toBe(
       "&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt;",
     );
@@ -62,7 +75,8 @@ describe("provinceLongformFigure", () => {
     const html = buildProvinceLongformHtml("phuket");
     expect(html).toBeTruthy();
     expect(html!).toContain('data-sirinx-figure="province-monthly"');
-    expect(html!).toContain("<figcaption");
+    expect(html!).toContain("/provinces/phuket.avif");
+    expect(html!).toContain('loading="lazy"');
     // Figure sits after the intro paragraphs and before the first section.
     const figureAt = html!.indexOf('data-sirinx-figure="province-monthly"');
     const sectionAt = html!.indexOf("<h2");

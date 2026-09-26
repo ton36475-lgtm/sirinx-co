@@ -16,7 +16,7 @@ import { writeFileSync, existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
-const BASE = "https://www.sirinx.co";
+const BASE = process.env.SIRINX_AUDIT_BASE || "https://www.sirinx.co";
 const BASELINE_PATH = join(
   dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -24,6 +24,10 @@ const BASELINE_PATH = join(
   "seo-live-baseline.json"
 );
 const args = new Set(process.argv.slice(2));
+// Comparing only makes sense against a recorded baseline; writing one is an
+// explicit act so a stray run cannot silently overwrite the record.
+const writeBaseline = args.has("--baseline");
+const compare = args.has("--compare");
 
 const get = (path) => fetch(`${BASE}${path}`, { signal: AbortSignal.timeout(20000) }).then((r) => r.text());
 const count = (html, re) => (html.match(re) || []).length;
@@ -32,7 +36,16 @@ console.log(`กำลังตรวจ ${BASE}\n`);
 
 const sitemap = await get("/sitemap.xml");
 const allUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-const provinceUrls = allUrls.filter((u) => /\/solar-carport\/[a-z]/.test(u) && !/\/solar-carport\/$/.test(u));
+// Sitemap <loc> values are absolute production URLs. Rewrite them onto the
+// host actually being measured, otherwise pointing this at a local build
+// would silently sample production instead.
+const toBase = (absolute) => {
+  const path = new URL(absolute).pathname;
+  return `${BASE}${path}`;
+};
+const provinceUrls = allUrls
+  .filter((u) => /\/solar-carport\/[a-z]/.test(u) && !/\/solar-carport\/$/.test(u))
+  .map(toBase);
 
 // Commercial routes must be readable without JavaScript.
 const COMMERCIAL = ["/pricing/", "/projects/", "/assessment/", "/solar-carport/"];
@@ -96,12 +109,12 @@ for (const [route, c] of Object.entries(commercial)) {
   console.log(`  ${route} H1=${c.h1} visibleText=${c.visibleText}`);
 }
 
-if (args.has("--baseline")) {
+if (writeBaseline) {
   writeFileSync(BASELINE_PATH, `${JSON.stringify(metrics, null, 2)}\n`, "utf8");
   console.log(`\nเขียน baseline ที่ ${BASELINE_PATH}`);
 }
 
-if (args.has("--compare")) {
+if (compare) {
   if (!existsSync(BASELINE_PATH)) {
     console.log("\nยังไม่มี baseline — รันด้วย --baseline ก่อน");
     process.exit(1);

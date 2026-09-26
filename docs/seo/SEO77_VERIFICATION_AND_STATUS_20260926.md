@@ -142,9 +142,29 @@ Status: LOCAL_ONLY · ตรวจโดยเลน jcode · ไม่มีก
 /solar/ayutthaya  /solar-carport/phra-nakhon-si-ayutthaya  301
 ```
 
-### 6.2 🚨 build นี้กู้จาก git ไม่ได้
-127 ไฟล์ค้าง (52 modified, 75 untracked) · commit ล่าสุด `17382ad` ลงวันที่ 2026-07-25
-และ `dist/` ถูก gitignore ผลคือ **ไม่มี source of truth ที่ commit ไว้**
+### 6.2 🚨 build นี้กู้จาก git ไม่ได้ — แก้บางส่วนแล้ว
+เดิม: 127 ไฟล์ค้าง (52 modified, 75 untracked) · commit ล่าสุด `17382ad` ลงวันที่ 2026-07-25 · `dist/` ถูก gitignore
+
+**สิ่งที่ตรวจแล้ว:**
+- branch นี้ห่างจาก `main` 18 commit และ **ไม่มี commit ที่ main มีแต่ branch นี้ไม่มี (0)** → merge เป็น fast-forward ได้ ไม่มีความเสี่ยง conflict จากการแยก branch
+- สแกน secret ทั้งรายการค้าง: **ไม่พบ credential จริง** · ไฟล์ `.env` / `.pem` / `.key` = 0 · จุดที่เจอคำว่า secret/token เป็นชื่อตัวแปร (`maxTokens: 500`, `canReadSecrets: false`) ไม่ใช่ค่า literal
+
+**สิ่งที่พบและแก้:** commit 3 รอบก่อน ๆ ส่งตัว generator แต่ **ไฟล์ที่มันอ่าน (`docs/seo/province-unique-angles.json`) ยังไม่ถูก track**
+แปลว่า clone ใหม่แล้วสั่ง `node docs/seo/generate-province-longform.mjs` จะพังด้วย ENOENT
+แก้แล้วใน commit `6af3282` พร้อมพิสูจน์ว่า **idempotent** — รันซ้ำได้ผลลัพธ์ byte เดิม (`905bbf7e…`) และ working tree ไม่เปลี่ยน
+
+**สิ่งที่ยังค้าง ต้องให้เจ้าของแต่ละส่วนตัดสินใจ:**
+
+| กลุ่ม | จำนวน | หมายเหตุ |
+| --- | --- | --- |
+| `docs/seo/province-content-briefs/` | 78 ไฟล์ (1.5M) | เอกสาร brief ของอีกเลนหนึ่ง |
+| `docs/seo/province-image-render/` | 3 ไฟล์ (1.3M) | harness Three.js |
+| `.claude/skills/` + `.agents/` + `skills-lock.json` | 5 community skills | ติดตั้งมาแต่ยังไม่ vet ในรีโป |
+| `services/dev-control-api/` | 4 ไฟล์ | subsystem คนละส่วน |
+| `sites/ghostclaw-hermes-v3-command-center/` | 5 ไฟล์ | subsystem คนละส่วน |
+| `crates/sirinx-core/tests/`, `apps/thaimart-seller-guard/`, `docs/` อื่น | ~20 ไฟล์ | งานเลนอื่น |
+
+**ข้อสังเกต:** สัดส่วนที่เหลือไม่มีของที่ผมสร้าง ผมจึงไม่ commit ให้ — การ commit งานของอีกเลนโดยไม่มีเจ้าของยืนยันคือการรับความเสี่ยงแทนเขา
 
 ### 6.3 เทสต์ที่เคย fail — แก้แล้ว
 เคย fail 2 สูตร (`server/runtimeScripts.test.ts`, `server/_core/agentContracts.test.ts`)

@@ -156,3 +156,42 @@
 - **Chrome extension `thaimart-seller-guard` จะได้ 401** — มันเรียก `/api/thaimart/workflow/dry-run` โดยไม่มี token ทางเลือกคือ (ก) ให้ extension ถือ token ซึ่งเป็นความเสี่ยงเพราะ extension เป็นโค้ดที่รันในเบราว์เซอร์ หรือ (ข) เว้น route นี้ออกจาก gate ซึ่งจะเปิดช่องเดิมกลับมา — **ผมยังไม่ตัดสินใจแทน เพราะเป็นการเลือกระหว่างความปลอดภัยกับความสะดวก**
   - ที่ดีคือ extension **ไม่ลดการ์ดเงียบ ๆ**: `service-worker.js` บรรทัด 141 ตรวจ `!response.ok` แล้ว throw ดังนั้นผู้ใช้จะเห็น error ชัดเจน ไม่ใช่ผลลัพธ์ปลอมที่ดูเหมือนผ่าน
 - **ยังไม่ได้ deploy หรือ push** — เป็นการแก้ใน branch `agent/b1-b2-command-center` เท่านั้น
+
+---
+
+## 8. ช่องโหว่เดียวกันอีกจุด — Rust `sirinx-control` (พบตอนตรวจต่อ)
+
+### ก่อนแก้
+
+`sirinx-control` มี middleware บังคับ Bearer อยู่แล้ว และครอบทุก path ที่ขึ้นต้นด้วย `/api/` เหมือนที่แก้ฝั่ง Node — **แต่ fail open**
+
+```rust
+if let (true, Some(expected)) = (needs_auth, state.api_token.as_deref()) {
+```
+
+เมื่อ `api_token` เป็น `None` เงื่อนไขไม่ match → ข้ามการตรวจทั้งหมด → เปิดทุก `/api/*` ให้ทุกคน ซึ่งแย่กว่าฝั่ง Node เพราะตัวนี้ถือ **durable gate decisions** ใน Postgres คือเปิด gate `deploy` ได้จริง
+
+หลักฐานว่าเป็นช่องโหว่จริงเหมือนกัน: พอแก้แล้ว **เทสต์พังไป 18 ตัว** เพราะเคยผ่านได้เฉพาะตอนที่ยังเปิดอยู่
+
+### หลักแก้
+
+- ไม่มี token (หรือ token ว่าง) → **503 Service Unavailable** ไม่ใช่เปิดให้อ่าน
+- `/health`, `/ready`, `/metrics` ยังเปิดตามเดิม
+- เพิ่ม `api_routes_fail_closed_when_no_token_is_configured` ที่พิสูจน์ 3 กรณี: ไม่มี token → 503 · เดาสุ่ม token → 503 · `/health` → ยัง 200
+
+### หลักฐาน
+
+ยิง process จริงด้วย `CONTROL_API_TOKEN=rust-smoke` บนพอร์ต 18778:
+
+| คำขอ | ผลลัพธ์ |
+| --- | --- |
+| `GET /health` ไม่มี token | **200** |
+| `GET /api/gates` ไม่มี token | **401** |
+| `GET /api/gates` token ผิด | **401** |
+| `GET /api/gates` token ถูก | **200** |
+
+`cargo test --workspace` **225 เทสต์ ผ่านหมด** (22 test binary) · `cargo fmt --check -p sirinx-control` ผ่าน
+
+### ข้อสังเกต
+
+ตอนนี้ทั้งสอง control plane ใช้กฎเดียวกัน: **ทุก `/api/*` ต้องมี Bearer และไม่มี token = 503 ไม่ใช่เปิด** ตรงกับที่ `NETWORK_PORT_MAP.md` เขียนไว้อยู่แล้วว่า 8711 และ 8790 "token required" — ก่อนหน้านี้เอกสารอ้างความปลอดภัยที่ยังไม่มีจริง

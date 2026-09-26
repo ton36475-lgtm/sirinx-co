@@ -168,6 +168,16 @@ impl ControlState {
         Self::new(Arc::new(MemoryStore::default()), None, default_self_card())
     }
 
+    /// Default gates plus a token, for callers that must authenticate to
+    /// reach any `/api/` route.
+    pub fn with_default_gates_and_token(token: &str) -> Self {
+        Self::new(
+            Arc::new(MemoryStore::default()),
+            Some(token.to_string()),
+            default_self_card(),
+        )
+    }
+
     pub fn new(store: Arc<dyn Store>, api_token: Option<String>, self_card: AgentCard) -> Self {
         Self::new_with_persistence(store, api_token, self_card, GatePersistence::Memory)
     }
@@ -453,16 +463,30 @@ async fn require_bearer(
     request: Request,
     next: Next,
 ) -> Result<Response, StatusCode> {
-    let needs_auth = request.uri().path().starts_with("/api/");
-    if let (true, Some(expected)) = (needs_auth, state.api_token.as_deref()) {
-        let provided = request
-            .headers()
-            .get(axum::http::header::AUTHORIZATION)
-            .and_then(|v| v.to_str().ok())
-            .and_then(|v| v.strip_prefix("Bearer "));
-        if provided != Some(expected) {
-            return Err(StatusCode::UNAUTHORIZED);
-        }
+    if !request.uri().path().starts_with("/api/") {
+        return Ok(next.run(request).await);
+    }
+
+    // This plane holds the durable gate decisions, so a missing token must not
+    // fall through to an unauthenticated open. Before this change an unset
+    // `api_token` skipped the check entirely and served every /api/ route to
+    // anyone who could reach the port.
+    let Some(expected) = state
+        .api_token
+        .as_deref()
+        .map(str::trim)
+        .filter(|token| !token.is_empty())
+    else {
+        return Err(StatusCode::SERVICE_UNAVAILABLE);
+    };
+
+    let provided = request
+        .headers()
+        .get(axum::http::header::AUTHORIZATION)
+        .and_then(|v| v.to_str().ok())
+        .and_then(|v| v.strip_prefix("Bearer "));
+    if provided != Some(expected) {
+        return Err(StatusCode::UNAUTHORIZED);
     }
     Ok(next.run(request).await)
 }
@@ -1036,11 +1060,24 @@ mod tests {
         }
     }
 
+    const TEST_API_TOKEN: &str = "test-control-token";
+
+    /// Authenticated GET. Every `/api/` route requires a Bearer token, so the
+    /// tests must send one the way a real client does. They used to pass only
+    /// while the plane served those routes to anyone who asked.
+    fn api_get(uri: &str) -> Request<Body> {
+        Request::get(uri)
+            .header(header::AUTHORIZATION, format!("Bearer {TEST_API_TOKEN}"))
+            .body(Body::empty())
+            .unwrap()
+    }
+
     fn json_request(method: &str, uri: &str, body: serde_json::Value) -> Request<Body> {
         Request::builder()
             .method(method)
             .uri(uri)
             .header(header::CONTENT_TYPE, "application/json")
+            .header(header::AUTHORIZATION, format!("Bearer {TEST_API_TOKEN}"))
             .body(Body::from(body.to_string()))
             .unwrap()
     }
@@ -1061,11 +1098,8 @@ mod tests {
 
     #[tokio::test]
     async fn all_gates_start_on_hold() {
-        let app = router(ControlState::with_default_gates());
-        let res = app
-            .oneshot(Request::get("/api/gates").body(Body::empty()).unwrap())
-            .await
-            .unwrap();
+        let app = router(ControlState::with_default_gates_and_token(TEST_API_TOKEN));
+        let res = app.oneshot(api_get("/api/gates")).await.unwrap();
         let body = body_json(res).await;
         let gates = body["gates"].as_array().unwrap();
         assert_eq!(gates.len(), DEFAULT_GATES.len());
@@ -1088,17 +1122,14 @@ mod tests {
             .unwrap();
         let state = ControlState::load_with_persistence(
             store,
-            None,
+            Some(TEST_API_TOKEN.to_string()),
             default_self_card(),
             GatePersistence::Postgres,
         )
         .await
         .unwrap();
 
-        let response = router(state)
-            .oneshot(Request::get("/api/gates").body(Body::empty()).unwrap())
-            .await
-            .unwrap();
+        let response = router(state).oneshot(api_get("/api/gates")).await.unwrap();
         let body = body_json(response).await;
         let telegram = body["gates"]
             .as_array()
@@ -1115,7 +1146,7 @@ mod tests {
 
     #[tokio::test]
     async fn health_stays_live_when_operational_readiness_is_unavailable() {
-        let app = router(ControlState::with_default_gates());
+        let app = router(ControlState::with_default_gates_and_token(TEST_API_TOKEN));
         let health = app
             .clone()
             .oneshot(Request::get("/health").body(Body::empty()).unwrap())
@@ -1211,7 +1242,7 @@ mod tests {
 
     #[tokio::test]
     async fn telegram_send_rejects_a_non_ops_ticket_without_changing_state() {
-        let app = router(ControlState::with_default_gates());
+        let app = router(ControlState::with_default_gates_and_token(TEST_API_TOKEN));
         let response = app
             .clone()
             .oneshot(json_request(
@@ -1223,10 +1254,7 @@ mod tests {
             .unwrap();
         let status = response.status();
         let body = body_json(response).await;
-        let listed = app
-            .oneshot(Request::get("/api/gates").body(Body::empty()).unwrap())
-            .await
-            .unwrap();
+        let listed = app.oneshot(api_get("/api/gates")).await.unwrap();
         let listed = body_json(listed).await;
         let telegram = listed["gates"]
             .as_array()
@@ -1245,7 +1273,7 @@ mod tests {
 
     #[tokio::test]
     async fn telegram_send_accepts_an_ops_ticket() {
-        let app = router(ControlState::with_default_gates());
+        let app = router(ControlState::with_default_gates_and_token(TEST_API_TOKEN));
         let response = app
             .oneshot(json_request(
                 "POST",
@@ -1271,9 +1299,10 @@ mod tests {
             .await
             .unwrap();
 
-        let state = ControlState::load(store, None, default_self_card())
-            .await
-            .unwrap();
+        let state =
+            ControlState::load(store, Some(TEST_API_TOKEN.to_string()), default_self_card())
+                .await
+                .unwrap();
 
         assert_eq!(state.gate_state(TELEGRAM_SEND_GATE), Some(GateState::Hold));
     }
@@ -1281,9 +1310,13 @@ mod tests {
     #[tokio::test]
     async fn authoritative_action_denies_a_telegram_row_with_a_non_ops_ticket() {
         let store = Arc::new(MemoryStore::default());
-        let state = ControlState::load(store.clone(), None, default_self_card())
-            .await
-            .unwrap();
+        let state = ControlState::load(
+            store.clone(),
+            Some(TEST_API_TOKEN.to_string()),
+            default_self_card(),
+        )
+        .await
+        .unwrap();
         store
             .upsert_gate(&Gate {
                 name: TELEGRAM_SEND_GATE.into(),
@@ -1307,7 +1340,7 @@ mod tests {
 
     #[tokio::test]
     async fn held_gate_forces_dry_run() {
-        let app = router(ControlState::with_default_gates());
+        let app = router(ControlState::with_default_gates_and_token(TEST_API_TOKEN));
         let res = app
             .oneshot(json_request(
                 "POST",
@@ -1323,7 +1356,7 @@ mod tests {
 
     #[tokio::test]
     async fn opening_a_gate_requires_a_ticket() {
-        let app = router(ControlState::with_default_gates());
+        let app = router(ControlState::with_default_gates_and_token(TEST_API_TOKEN));
         let denied = app
             .clone()
             .oneshot(json_request(
@@ -1361,9 +1394,13 @@ mod tests {
     #[tokio::test]
     async fn persisted_gate_survives_control_state_reload() {
         let store = Arc::new(MemoryStore::default());
-        let first = ControlState::load(store.clone(), None, default_self_card())
-            .await
-            .unwrap();
+        let first = ControlState::load(
+            store.clone(),
+            Some(TEST_API_TOKEN.to_string()),
+            default_self_card(),
+        )
+        .await
+        .unwrap();
         let app = router(first);
 
         let opened = app
@@ -1376,13 +1413,14 @@ mod tests {
             .unwrap();
         assert_eq!(opened.status(), StatusCode::OK);
 
-        let reloaded = ControlState::load(store, None, default_self_card())
-            .await
-            .unwrap();
+        let reloaded =
+            ControlState::load(store, Some(TEST_API_TOKEN.to_string()), default_self_card())
+                .await
+                .unwrap();
         assert_eq!(reloaded.gate_state("deploy"), Some(GateState::Open));
 
         let listed = router(reloaded)
-            .oneshot(Request::get("/api/gates").body(Body::empty()).unwrap())
+            .oneshot(api_get("/api/gates"))
             .await
             .unwrap();
         let body = body_json(listed).await;
@@ -1416,9 +1454,10 @@ mod tests {
             .await
             .unwrap();
 
-        let state = ControlState::load(store, None, default_self_card())
-            .await
-            .unwrap();
+        let state =
+            ControlState::load(store, Some(TEST_API_TOKEN.to_string()), default_self_card())
+                .await
+                .unwrap();
         assert_eq!(state.gate_state("future_gate"), None);
         assert_eq!(state.gate_state("deploy"), Some(GateState::Hold));
     }
@@ -1426,12 +1465,17 @@ mod tests {
     #[tokio::test]
     async fn actions_refresh_gate_decisions_shared_across_control_nodes() {
         let store = Arc::new(MemoryStore::default());
-        let node_a = ControlState::load(store.clone(), None, default_self_card())
-            .await
-            .unwrap();
-        let node_b = ControlState::load(store, None, default_self_card())
-            .await
-            .unwrap();
+        let node_a = ControlState::load(
+            store.clone(),
+            Some(TEST_API_TOKEN.to_string()),
+            default_self_card(),
+        )
+        .await
+        .unwrap();
+        let node_b =
+            ControlState::load(store, Some(TEST_API_TOKEN.to_string()), default_self_card())
+                .await
+                .unwrap();
         let app_a = router(node_a);
         let app_b = router(node_b.clone());
 
@@ -1488,12 +1532,17 @@ mod tests {
     #[tokio::test]
     async fn gate_observability_refreshes_across_control_nodes() {
         let store = Arc::new(MemoryStore::default());
-        let node_a = ControlState::load(store.clone(), None, default_self_card())
-            .await
-            .unwrap();
-        let node_b = ControlState::load(store, None, default_self_card())
-            .await
-            .unwrap();
+        let node_a = ControlState::load(
+            store.clone(),
+            Some(TEST_API_TOKEN.to_string()),
+            default_self_card(),
+        )
+        .await
+        .unwrap();
+        let node_b =
+            ControlState::load(store, Some(TEST_API_TOKEN.to_string()), default_self_card())
+                .await
+                .unwrap();
         let app_a = router(node_a);
         let app_b = router(node_b.clone());
 
@@ -1506,11 +1555,7 @@ mod tests {
             ))
             .await
             .unwrap();
-        let open_snapshot = app_b
-            .clone()
-            .oneshot(Request::get("/api/gates").body(Body::empty()).unwrap())
-            .await
-            .unwrap();
+        let open_snapshot = app_b.clone().oneshot(api_get("/api/gates")).await.unwrap();
         let open_body = body_json(open_snapshot).await;
         assert_eq!(
             open_body["gates"]
@@ -1532,11 +1577,7 @@ mod tests {
             .unwrap();
         assert_eq!(node_b.gate_state("deploy"), Some(GateState::Open));
 
-        let held_snapshot = app_b
-            .clone()
-            .oneshot(Request::get("/api/gates").body(Body::empty()).unwrap())
-            .await
-            .unwrap();
+        let held_snapshot = app_b.clone().oneshot(api_get("/api/gates")).await.unwrap();
         let held_body = body_json(held_snapshot).await;
         assert_eq!(
             held_body["gates"]
@@ -1562,9 +1603,13 @@ mod tests {
     #[tokio::test]
     async fn slow_metrics_queue_count_does_not_block_emergency_hold() {
         let store = Arc::new(BlockingPendingCountStore::default());
-        let state = ControlState::load(store.clone(), None, default_self_card())
-            .await
-            .unwrap();
+        let state = ControlState::load(
+            store.clone(),
+            Some(TEST_API_TOKEN.to_string()),
+            default_self_card(),
+        )
+        .await
+        .unwrap();
         let app = router(state);
 
         let opened = app
@@ -1607,9 +1652,13 @@ mod tests {
     #[tokio::test]
     async fn failed_emergency_hold_stays_local_and_fail_closed() {
         let store = Arc::new(FailingGateStore::default());
-        let state = ControlState::load(store.clone(), None, default_self_card())
-            .await
-            .unwrap();
+        let state = ControlState::load(
+            store.clone(),
+            Some(TEST_API_TOKEN.to_string()),
+            default_self_card(),
+        )
+        .await
+        .unwrap();
         let app = router(state.clone());
 
         let opened = app
@@ -1681,7 +1730,7 @@ mod tests {
 
     #[tokio::test]
     async fn pending_work_intake_roundtrip() {
-        let app = router(ControlState::with_default_gates());
+        let app = router(ControlState::with_default_gates_and_token(TEST_API_TOKEN));
         let created = app
             .clone()
             .oneshot(json_request(
@@ -1697,21 +1746,14 @@ mod tests {
             .unwrap();
         assert_eq!(created.status(), StatusCode::CREATED);
 
-        let listed = app
-            .oneshot(
-                Request::get("/api/pending-work")
-                    .body(Body::empty())
-                    .unwrap(),
-            )
-            .await
-            .unwrap();
+        let listed = app.oneshot(api_get("/api/pending-work")).await.unwrap();
         let body = body_json(listed).await;
         assert_eq!(body["pendingWork"].as_array().unwrap().len(), 1);
     }
 
     #[tokio::test]
     async fn unknown_gate_is_not_found() {
-        let app = router(ControlState::with_default_gates());
+        let app = router(ControlState::with_default_gates_and_token(TEST_API_TOKEN));
         let res = app
             .oneshot(json_request(
                 "POST",
@@ -1777,12 +1819,44 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn a2a_card_endpoint_serves_self_identity() {
+    async fn api_routes_fail_closed_when_no_token_is_configured() {
+        // A missing token used to skip the check entirely and serve every
+        // /api/ route to anyone who could reach the port. This plane holds the
+        // durable gate decisions, so it must refuse instead.
         let app = router(ControlState::with_default_gates());
-        let res = app
-            .oneshot(Request::get("/api/a2a/card").body(Body::empty()).unwrap())
+
+        let unconfigured = app
+            .clone()
+            .oneshot(Request::get("/api/gates").body(Body::empty()).unwrap())
             .await
             .unwrap();
+        assert_eq!(unconfigured.status(), StatusCode::SERVICE_UNAVAILABLE);
+
+        // A token cannot help when none is configured.
+        let guessed = app
+            .clone()
+            .oneshot(
+                Request::get("/api/gates")
+                    .header(header::AUTHORIZATION, "Bearer anything")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(guessed.status(), StatusCode::SERVICE_UNAVAILABLE);
+
+        // /health stays open so the stack manager can still probe it.
+        let health = app
+            .oneshot(Request::get("/health").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(health.status(), StatusCode::OK);
+    }
+
+    #[tokio::test]
+    async fn a2a_card_endpoint_serves_self_identity() {
+        let app = router(ControlState::with_default_gates_and_token(TEST_API_TOKEN));
+        let res = app.oneshot(api_get("/api/a2a/card")).await.unwrap();
         assert_eq!(res.status(), StatusCode::OK);
         let card = body_json(res).await;
         assert_eq!(card["id"], "sirinx-control-local");
@@ -1791,7 +1865,7 @@ mod tests {
 
     #[tokio::test]
     async fn a2a_sync_registers_peer_and_returns_missing_work() {
-        let app = router(ControlState::with_default_gates());
+        let app = router(ControlState::with_default_gates_and_token(TEST_API_TOKEN));
 
         // Local node has one work item the peer doesn't know about.
         let created = app
@@ -1845,7 +1919,7 @@ mod tests {
 
     #[tokio::test]
     async fn a2a_route_404_when_no_agent_capable() {
-        let app = router(ControlState::with_default_gates());
+        let app = router(ControlState::with_default_gates_and_token(TEST_API_TOKEN));
         let res = app
             .oneshot(json_request(
                 "POST",
@@ -1859,7 +1933,7 @@ mod tests {
 
     #[tokio::test]
     async fn metrics_exposes_gates_and_queue_depth() {
-        let app = router(ControlState::with_default_gates());
+        let app = router(ControlState::with_default_gates_and_token(TEST_API_TOKEN));
         app.clone()
             .oneshot(json_request(
                 "POST",

@@ -1912,6 +1912,68 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn an_authenticated_request_reaches_the_gate_handler_not_just_a_dead_route() {
+        // Guards against the auth test above passing vacuously. If the
+        // decision route never ran, every unauthenticated POST would look the
+        // same as a correct 401 while nothing actually enforced anything.
+        //
+        // Uses telegram_send, which does enforce a ticket format, and sends a
+        // deliberately invalid one. That cannot open anything: it must be
+        // refused by the business rule, and the gate must stay on hold.
+        let app = router(ControlState::new(
+            Arc::new(MemoryStore::default()),
+            Some("secret-token".into()),
+            default_self_card(),
+        ));
+        let invalid = serde_json::json!({ "state": "open", "ticket": "not-an-ops-tg-ticket" });
+
+        let authenticated = app
+            .clone()
+            .oneshot(
+                Request::post("/api/gates/telegram_send/decision")
+                    .header(header::AUTHORIZATION, "Bearer secret-token")
+                    .header(header::CONTENT_TYPE, "application/json")
+                    .body(Body::from(invalid.to_string()))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        // 422 proves the token passed the middleware and the handler ran.
+        assert_eq!(authenticated.status(), StatusCode::UNPROCESSABLE_ENTITY);
+
+        let anonymous = app
+            .clone()
+            .oneshot(
+                Request::post("/api/gates/telegram_send/decision")
+                    .header(header::CONTENT_TYPE, "application/json")
+                    .body(Body::from(invalid.to_string()))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        // 401 proves the same request without a token never reached it.
+        assert_eq!(anonymous.status(), StatusCode::UNAUTHORIZED);
+
+        let after = app
+            .oneshot(
+                Request::get("/api/gates")
+                    .header(header::AUTHORIZATION, "Bearer secret-token")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        let body = body_json(after).await;
+        let telegram = body["gates"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|gate| gate["name"] == TELEGRAM_SEND_GATE)
+            .unwrap();
+        assert_eq!(telegram["state"], "hold");
+    }
+
+    #[tokio::test]
     async fn a2a_card_endpoint_serves_self_identity() {
         let app = router(ControlState::with_default_gates_and_token(TEST_API_TOKEN));
         let res = app.oneshot(api_get("/api/a2a/card")).await.unwrap();

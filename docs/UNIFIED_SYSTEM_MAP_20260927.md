@@ -225,7 +225,7 @@ if let (true, Some(expected)) = (needs_auth, state.api_token.as_deref()) {
 
 สรุป: การเปลี่ยนนี้ **ไม่ทำให้ลูกค้าจริงใช้งานไม่ได้** และยังปิดช่องได้จริง
 
-### เปิด gate โดยไม่มี auth เป็นไปไม่ได้
+### เปิด gate โดยไม่มี auth เป็นไปไม่ได้ — แต่พบช่องโหว่อีกข้อ
 
 ยิง `POST /api/gates/deploy/decision` บน process จริง (พอร์ต 18783) เพื่อพยายามเปิด deploy gate:
 
@@ -236,6 +236,28 @@ if let (true, Some(expected)) = (needs_auth, state.api_token.as_deref()) {
 | สถานะ deploy หลังยิง | **hold — ไม่เปลี่ยน** |
 
 หมายเหตุ: route ตัดสิน gate มีแค่ฝั่ง Rust — Node dev-control-api ไม่มี `/api/gates/:name/decision` เลย มีแค่อ่านอย่างเดียว
+
+#### ช่องโหว่ที่พบตอนตรวจซ้ำ (ยังไม่แก้ — เป็นการตัดสินใจของคน)
+
+ตอนพยายามยืนยันว่า 401 มาจาก auth จริง ไม่ใช่จาก route ที่ตาย ผมยิง authenticated + ticket ที่ตั้งใจให้ผิด (`NOT-A-VALID-TICKET`) แล้วพบว่า **deploy gate เปิดจริง** ตรวจ `invalid_open_ticket_message` พบว่า:
+
+```rust
+if ticket.is_none_or(|ticket| ticket.trim().is_empty()) {
+    return Some("opening a gate requires a ticket");
+}
+if gate_name == TELEGRAM_SEND_GATE && !open_ticket_is_valid(gate_name, ticket) {
+    return Some("opening telegram_send requires an OPS-TG- ticket");
+}
+None
+```
+
+**มีแค่ `telegram_send` ที่บังคับรูปแบบ ticket — `deploy` ไม่มีกติกาเลย ใช้ string อะไรก็เปิดได้** ตราบใดที่ไม่ว่าง และไม่มีการตรวจว่า ticket นั้นมีอยู่จริง
+
+ผลกระทบจริง: gate เปิดได้ก็ต่อเมื่อมี Bearer token ซึ่งเป็นผลจากงานของรอบนี้ (ก่อนหน้านี้ไม่ต้องมี token ด้วยซ้ำ) — ดังนั้นความเสี่ยงลดลง แต่ **ยังไม่มีหลักประกันว่า ticket เป็นของจริง**
+
+สิ่งที่ผมทำ: บันทึกไว้ ไม่แก้เอง และเพิ่ม `an_authenticated_request_reaches_the_gate_handler_not_just_a_dead_route` เพื่อกันไม่ให้เทสต์ auth ผ่านแบบลวง
+
+**ผลกระทบจากการตรวจของผม:** deploy gate ที่ถูกเปิดอยู่บน instance ชั่วคราวพอร์ต 18784 ซึ่งใช้ `MemoryStore` และถูก kill ทันที — **ไม่มีผลกับระบบจริง** ยืนยันแล้วว่าไม่มี process ฟังที่ 8711 และ state เป็น in-memory จึงหายไปพร้อม process
 
 ### กันไว้ไม่ให้พังซ้ำ
 

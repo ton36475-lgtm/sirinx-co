@@ -1854,6 +1854,64 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn gate_decisions_cannot_be_made_without_a_bearer_token() {
+        // The deploy gate is the highest-consequence route on this plane, so
+        // pin it directly rather than relying on the middleware test alone.
+        // Verified against a running process: an anonymous POST to open it
+        // returned 401 and left the gate on hold.
+        let state = ControlState::new(
+            Arc::new(MemoryStore::default()),
+            Some("secret-token".into()),
+            default_self_card(),
+        );
+        let app = router(state);
+        let open = serde_json::json!({ "state": "open", "ticket": "OPS-1" });
+
+        let anonymous = app
+            .clone()
+            .oneshot(
+                Request::post("/api/gates/deploy/decision")
+                    .body(Body::from(open.to_string()))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(anonymous.status(), StatusCode::UNAUTHORIZED);
+
+        let guessed = app
+            .clone()
+            .oneshot(
+                Request::post("/api/gates/deploy/decision")
+                    .header(header::AUTHORIZATION, "Bearer guessed")
+                    .body(Body::from(open.to_string()))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(guessed.status(), StatusCode::UNAUTHORIZED);
+
+        // The refusals must not have moved the gate.
+        let after = app
+            .oneshot(
+                Request::get("/api/gates")
+                    .header(header::AUTHORIZATION, "Bearer secret-token")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(after.status(), StatusCode::OK);
+        let body = body_json(after).await;
+        let deploy = body["gates"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|gate| gate["name"] == "deploy")
+            .unwrap();
+        assert_eq!(deploy["state"], "hold");
+    }
+
+    #[tokio::test]
     async fn a2a_card_endpoint_serves_self_identity() {
         let app = router(ControlState::with_default_gates_and_token(TEST_API_TOKEN));
         let res = app.oneshot(api_get("/api/a2a/card")).await.unwrap();

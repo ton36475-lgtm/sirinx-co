@@ -225,9 +225,21 @@ if let (true, Some(expected)) = (needs_auth, state.api_token.as_deref()) {
 
 สรุป: การเปลี่ยนนี้ **ไม่ทำให้ลูกค้าจริงใช้งานไม่ได้** และยังปิดช่องได้จริง
 
+### เปิด gate โดยไม่มี auth เป็นไปไม่ได้
+
+ยิง `POST /api/gates/deploy/decision` บน process จริง (พอร์ต 18783) เพื่อพยายามเปิด deploy gate:
+
+| คำขอ | ผล |
+| --- | --- |
+| anonymous | **401** |
+| token ผิด | **401** |
+| สถานะ deploy หลังยิง | **hold — ไม่เปลี่ยน** |
+
+หมายเหตุ: route ตัดสิน gate มีแค่ฝั่ง Rust — Node dev-control-api ไม่มี `/api/gates/:name/decision` เลย มีแค่อ่านอย่างเดียว
+
 ### กันไว้ไม่ให้พังซ้ำ
 
-เพิ่ม `forwards CONTROL_API_TOKEN to every spawned control-plane child` ใน `stack-manager.test.mjs` ซึ่งจะพังทันทีถ้ามีคนเปลี่ยนการประกอบ env ตอน spawn — นั่นคือจุดเดียวที่พังแล้วทำให้ทั้งระบบใช้งานไม่ได้โดยไม่มีอะไรฟอง
+เพิ่ม `forwards CONTROL_API_TOKEN to every spawned control-plane child` ใน `stack-manager.test.mjs` ซึ่งจะพังทันทีถ้ามีคนเปลี่ยนการประกอบ env ตอน spawn — นั่นคือจุดเดียวที่พังแล้วทำให้ทั้งระบบใช้งานไม่ได้โดยไม่มีอะไรฟอง · และเพิ่ม `gate_decisions_cannot_be_made_without_a_bearer_token` ใน Rust เพื่อล็อก route ที่มีผลกระทบสูงสุดโดยเฉพาะ
 
 ### ข้อจำกัดที่ต้องบอกตรง ๆ
 

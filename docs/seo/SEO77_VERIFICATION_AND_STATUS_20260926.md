@@ -186,14 +186,50 @@ Status: LOCAL_ONLY · ตรวจโดยเลน jcode · ไม่มีก
 ของ build แล้ว fail ถ้าพบโมดูลที่ไม่ถูก commit หรือถ้า `404.html` / `_redirects` หายไปจาก git
 เทสต์นี้จับปัญหานี้ได้ แต่ก่อนหน้านี้ไม่มีอะไรจับได้ เพราะทุกชุดเทสต์รันกับ working tree เสมอ
 
-**ยังค้าง 38 ไฟล์ ซึ่งเป็นงานของเลนอื่นที่ไม่ใช่ application source:**
+### 6.2.1 🚨 เทสต์ 26 ไฟล์ไม่เคยรันผ่านคำสั่ง test ของรีโป — แก้แล้ว
+
+`vite.config.ts:204` ตั้ง `root` ไว้ที่ `client` และสคริปต์ `test` เดิมเป็น `vitest run` เฉย ๆ
+ผลคือ `pnpm test` เก็บเฉพาะไฟล์ใต้ `client/src` — **14 ไฟล์ / 82 เคส**
+ทุกชุดที่อยู่ใต้ `server/` และ `shared/` รวมถึงเทสต์คุมคุณภาพ SEO ที่เพิ่งเขียน **ไม่เคยรัน**
+
+| | เดิม | หลังแก้ |
+| --- | --- | --- |
+| `npm run web:test` | 14 ไฟล์ / 82 เคส | **40 ไฟล์ / 317 เคส** |
+| `buildReproducibility.test.ts` | ไม่เคยรัน | รันใน gate ปกติ |
+| `crawlReachability.test.ts` | ไม่เคยรัน | รันใน gate ปกติ |
+
+แก้โดยเปลี่ยนสคริปต์เป็น `vitest run --root . client server shared` — ไม่แตะ `vite.config.ts`
+เพราะไฟล์นั้นคุม `vite build` และการแตะเสี่ยงทำให้ build เสีย
+
+**หมายเหตุเรื่องความน่าเชื่อถือ:** ตัวเลข “40 ไฟล์ / 317 เคส” ที่รายงานไปก่อนหน้านี้
+เป็นผลของคำสั่งที่ผมเลือกเอง (`vitest run --root . shared client server`) ไม่ใช่ผลของ `pnpm test`
+ตอนนี้ทั้งสองทางตรงกันแล้ว แต่ตอนที่รายงานก่อน ผมควรระบุว่าใช้คำสั่งไหน
+
+**ยังค้าง หลัง commit ส่วน application ของทุก subsystem แล้ว:**
 
 | กลุ่ม | หมายเหตุ |
 | --- | --- |
 | `docs/seo/province-content-briefs/` (78 ไฟล์) · `docs/seo/province-image-render/` | เอกสารทำงาน ไม่กระทบการ build |
-| `.claude/skills/` · `.agents/` · `skills-lock.json` | community skills ที่ติดตั้งมา ยังไม่ vet ในรีโป |
-| `services/dev-control-api/` · `sites/ghostclaw-hermes-v3-command-center/` | subsystem คนละส่วน ไม่เกี่ยวกับเว็บ |
-| `crates/` · `apps/thaimart-seller-guard/` · `docs/` อื่น | งานเลนอื่น |
+| `docs/` อื่น 5 ฉบับ · `reports/runtime/` | รายงาน audit เดือน 8–9 · เอกสาร ไม่มีโค้ด |
+| `.claude/skills/` · `.agents/` · `.hermes/skills/` · `skills-lock.json` | community skills 5 ตัวที่ติดตั้งมา ยังไม่ vet ในรีโป |
+| `.serena/` · `.media-staging/` | tool cache · ไม่ควรอยู่ในรีโป |
+
+**สถานะที่ตรวจแล้วในทุก subsystem** (ก่อนตัดสินใจ commit ส่วนที่เหลือ):
+
+| subsystem | ผล |
+| --- | --- |
+| `npm run check` | **PASS** (syntax gates + verify scripts + command-center build/test/typecheck/lint) |
+| `npm run web:test` | 40 ไฟล์ / **317 เคสผ่าน** |
+| `npm run control:test` | 47 ไฟล์ / **486 เคสผ่าน** |
+| `npm run rust:test` | **176 เคสผ่าน · 0 fail** (8 crates) |
+| `npm run web:build` | 107 routes |
+| `sites/ghostclaw-hermes-v3-command-center` | test 7/7 · typecheck ผ่าน · lint ผ่าน · build ผ่าน |
+| `apps/dev-dashboard` · `packages/policy-core` | verify ผ่าน · 7/7 |
+| `services/telegram-command-bot` | 89/89 ผ่าน |
+
+`apps/thaimart-seller-guard` ตอนนี้ track แล้ว (เดิม 0/7) พร้อม engine ที่มันคุยด้วย
+คำเตือนที่ควรจำ: `services/dev-control-api/server.mjs` import `thaimart-k-workflow-engine.mjs`
+**ต้อง commit ทั้งคู่ใน commit เดียวกัน** ไม่งั้นจะเกิดช่องโหว่แบบเดียวกับ public-web
 
 **ข้อสังเกต:** ก่อนหน้านี้ผมจัดหมวด 120 ไฟล์นี้ว่า “เป็น WIP ของเลนอื่น อย่าแตะ” ซึ่ง**ผิด**
 86 ไฟล์ในนั้นคือตัวแอปเอง การไม่ commit คือทำให้เว็บ deploy ไม่ได้ ไม่ใช่เรื่องความสุภาพของ lane

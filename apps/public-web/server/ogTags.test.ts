@@ -193,15 +193,26 @@ describe("injectOgTags", () => {
     );
   });
 
-  it("injects og:image with CDN URL", () => {
+  it("injects og:image from the site, not the dead CloudFront origin", () => {
+    // This used to assert the d2xsxph8kpxj0f.cloudfront.net URL. That origin
+    // started answering 403 AccessDenied to every crawler, so the assertion kept
+    // passing while every link preview on the site rendered blank. The test now
+    // pins the property to a path the site actually serves.
     const result = injectOgTags(
       sampleHtml,
       "/",
       "https://sirinxsolar-dfabnh7l.manus.space"
     );
-    expect(result).toContain(
-      'og:image" content="https://d2xsxph8kpxj0f.cloudfront.net'
-    );
+    expect(result).toMatch(/og:image" content="https:\/\/www\.sirinx\.co\/provinces\/[a-z-]+-og\.jpg"/);
+    expect(result).not.toContain("d2xsxph8kpxj0f.cloudfront.net");
+  });
+
+  it("gives each province its own social card", () => {
+    const home = injectOgTags(sampleHtml, "/solar-carport/bangkok/", "https://www.sirinx.co");
+    const phuket = injectOgTags(sampleHtml, "/solar-carport/phuket/", "https://www.sirinx.co");
+    expect(home).toContain("/provinces/bangkok-og.jpg");
+    expect(phuket).toContain("/provinces/phuket-og.jpg");
+    expect(home).not.toEqual(phuket);
   });
 
   it("injects twitter:title for /solutions", () => {

@@ -72,6 +72,27 @@ const hubH2 = count(hub, /<h2[\s>]/gi);
 
 const feedStatus = (await fetch(`${BASE}/feed.xml`, { signal: AbortSignal.timeout(15000) })).status;
 
+// og:image is the only element a link preview actually needs, and it is the one
+// element nothing else here checks. The CloudFront origin for it returned 403 to
+// every crawler while the site itself scored perfectly on every other metric, so
+// this fetches each image and records how many are actually retrievable.
+const ogImageUrls = new Set();
+for (const route of [...COMMERCIAL, "/solar-carport/bangkok/", "/"]) {
+  const html = await get(route);
+  for (const m of html.matchAll(/property="og:image"\s+content="([^"]+)"/gi)) ogImageUrls.add(m[1]);
+}
+let ogImageOk = 0;
+const ogImageFailures = [];
+for (const url of ogImageUrls) {
+  try {
+    const res = await fetch(url, { method: "HEAD", signal: AbortSignal.timeout(15000) });
+    if (res.status === 200) ogImageOk += 1;
+    else ogImageFailures.push(`${res.status} ${url}`);
+  } catch (err) {
+    ogImageFailures.push(`ERR ${url}`);
+  }
+}
+
 // Sample province pages for funnel links and description length.
 const sample = provinceUrls.filter((_, i) => i % 8 === 0).slice(0, 10);
 let funnelOk = 0;
@@ -98,6 +119,9 @@ const metrics = {
   sampledDescriptionOver160: descOver,
   longestDescription: descMax,
   feedStatus,
+  ogImageCount: ogImageUrls.size,
+  ogImageOk,
+  ogImageBroken: ogImageFailures.length,
 };
 
 console.log("=== ผลวัด ===");
@@ -107,6 +131,10 @@ for (const [key, value] of Object.entries(metrics)) {
 console.log("\n=== รายละเอียดหน้าเชิงพาณิชย์ ===");
 for (const [route, c] of Object.entries(commercial)) {
   console.log(`  ${route} H1=${c.h1} visibleText=${c.visibleText}`);
+}
+if (ogImageFailures.length) {
+  console.log("\n=== og:image ที่ดึงไม่ได้ ===");
+  for (const line of ogImageFailures) console.log(`  ${line}`);
 }
 
 if (writeBaseline) {
@@ -127,6 +155,7 @@ if (compare) {
     "commercialRoutesWithH1",
     "commercialRoutesWithText",
     "sampledWithFunnelLinks",
+    "ogImageOk",
   ]);
   const regressions = [];
   for (const [key, value] of Object.entries(metrics)) {

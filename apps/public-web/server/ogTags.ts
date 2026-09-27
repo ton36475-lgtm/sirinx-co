@@ -25,11 +25,14 @@ import { longformWordCount } from "../shared/provinceLongform";
 import { provinceInstallSteps } from "../shared/provinceHowTo";
 import { homeSolutionFaq } from "../shared/homeSolutionFaq";
 
-const OG_IMAGE =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/sirinx-og-image-hbNko5JADXArPGo26hmGrN.png";
-
+// The CloudFront origin for this file stopped serving it: every request returns
+// 403 AccessDenied from S3, including the facebookexternalhit user agent. That
+// left every province page with an og:image that renders as a blank preview in
+// Facebook, LINE and Slack. Served from the site instead, where the same build
+// that emits the meta tag also emits the file.
 const SITE_NAME = "SIRINX";
 const PRODUCTION_BASE_URL = "https://www.sirinx.co";
+const OG_IMAGE = `${PRODUCTION_BASE_URL}/provinces/amnat-charoen-og.jpg`;
 const MOBILE_FIRST_HERO_IMAGE_SIZES = "(max-width: 767px) 80vw, 100vw";
 const DEFAULT_TITLE =
   "SIRINX | Solar Carport วางแผนลดค่าไฟองค์กร พร้อม EV Charger, BESS & AI Energy";
@@ -51,7 +54,10 @@ export function getProvinceRoute(province: ThaiProvince): string {
 function getProvinceMeta(province: ThaiProvince): PageMeta {
   return {
     title: `ติดตั้ง Solar Carport ${province.nameTh} | โซลาร์ที่จอดรถ EV Charger BESS | SIRINX`,
-    description: `SIRINX ออกแบบและติดตั้ง Solar Carport ${province.nameTh} สำหรับโรงงานและลานจอดรถ พร้อม EV Charger และ BESS โดยสำรวจพื้นที่และข้อมูลการใช้ไฟจริงก่อนออกแบบ`,
+    description: `SIRINX ออกแบบและติดตั้ง Solar Carport ${province.nameTh} สำหรับโงานแลงและลานจอดรถ พร้อม EV Charger และ BESS โดยสำรวจพื้นที่และข้อมูลการใช้ไฟจริงก่อนออกแบบ`,
+    // One social card per province, served by the same build that writes this
+    // meta tag. Verified: every slug in thaiProvinces has a matching -og.jpg.
+    image: `${PRODUCTION_BASE_URL}/provinces/${province.slug}-og.jpg`,
   };
 }
 

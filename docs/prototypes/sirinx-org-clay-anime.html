@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SIRINX.org — Claystyle Solar Intelligence</title>
+<style>
+:root{--bg:#080b11;--panel:#111722;--text:#f8fafc;--muted:#94a3b8;--cyan:#00f0ff;--gold:#ffb800;--line:#ffffff18}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 75% 20%,#12303a55,transparent 35%),var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}main{max-width:1280px;margin:auto;padding:28px}.nav{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border:1px solid var(--line);background:#0b1019cc;backdrop-filter:blur(18px);border-radius:20px}.brand{font-weight:900;letter-spacing:.04em}.brand b{color:var(--cyan)}button{border:0;border-radius:14px;padding:12px 18px;font-weight:800;background:linear-gradient(90deg,var(--cyan),#8beaff);color:#061017;cursor:pointer}.hero{display:grid;grid-template-columns:1fr 1.15fr;gap:24px;align-items:center;padding:72px 0}.eyebrow{color:var(--cyan);font-size:12px;letter-spacing:.16em;text-transform:uppercase}.title{font-size:clamp(42px,6vw,82px);line-height:.95;margin:14px 0}.title span{color:var(--gold)}.copy{color:var(--muted);font-size:18px;line-height:1.65}.glass{border:1px solid var(--line);background:#111722aa;backdrop-filter:blur(18px);border-radius:28px;padding:22px}.scene{min-height:510px;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 35%,#0e4b5755,transparent 38%),linear-gradient(145deg,#111923,#07090d);display:flex;align-items:center;justify-content:center}.sun{width:105px;height:105px;border-radius:50%;background:radial-gradient(circle,#fff2a3,#ffb800 55%,#c76b00);box-shadow:0 0 70px #ffb80066;position:absolute;right:13%;top:12%}.roof{width:70%;height:230px;transform:skewY(-10deg) rotate(-3deg);border-radius:30px;background:linear-gradient(145deg,#3b4655,#202938);box-shadow:20px 35px 55px #0008}.panels{position:absolute;display:grid;grid-template-columns:repeat(5,1fr);gap:9px;width:56%;transform:skewY(-10deg) rotate(-3deg);}.panel{height:55px;border-radius:8px;background:linear-gradient(145deg,#1d3b48,#07151c);border:1px solid #00f0ff55;box-shadow:inset 0 1px #ffffff22}.hud{position:absolute;left:18px;bottom:18px;right:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{padding:12px;border:1px solid var(--line);background:#080d15dd;border-radius:16px}.metric small{color:var(--muted)}.metric strong{display:block;font-size:24px;margin-top:4px;color:var(--cyan)}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:28px 0}.card{min-height:150px}.status{display:inline-flex;padding:5px 9px;border-radius:999px;background:#00f0ff12;color:var(--cyan);font-size:11px}.section{padding:60px 0}.section h2{font-size:40px;margin:0 0 10px}.muted{color:var(--muted)}@media(max-width:850px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.scene{min-height:420px}}@media(max-width:560px){main{padding:16px}.grid{grid-template-columns:1fr}.hero{padding:40px 0}.hud{grid-template-columns:1fr}.title{font-size:48px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main id="sirinx-demo">
+<nav class="nav"><div class="brand">SIRINX.<b>ORG</b></div><button id="launch">Launch 3D Assessment</button></nav>
+<section class="hero">
+<div class="hero-copy">
+<div class="eyebrow">Next-Gen Solar Intelligence</div>
+<h1 class="title">Energy decisions,<br><span>made tangible.</span></h1>
+<p class="copy">Knowledge → Evidence → Simulation → Engineering. SIRINX.org extends the SIRINX.co SolarTech platform into an interactive policy and 3D decision layer.</p>
+<div style="display:flex;gap:10px;flex-wrap:wrap"><span class="status">EVIDENCE-FIRST</span><span class="status">3D ENERGY LAB</span><span class="status">77 PROVINCES</span></div>
+</div>
+<div class="scene glass" id="scene"><div class="sun" id="sun"></div><div class="roof"></div><div class="panels" id="panels"><div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div></div><div class="hud"><div class="metric"><small>SIMULATED ARRAY</small><strong id="kwp">6.75 kWp</strong></div><div class="metric"><small>POLICY</small><strong style="color:var(--gold)">ACTIVE</strong></div><div class="metric"><small>MODE</small><strong>SIMULATION</strong></div></div></div>
+</section>
+<section class="section"><div class="eyebrow">Evidence Control</div><h2>Policy becomes a decision instrument.</h2><p class="muted">Every policy surface carries a status instead of presenting announcements as active eligibility.</p><div class="grid">
+<div class="card glass"><span class="status">ACTIVE</span><h3>Solar Rooftop</h3><p class="muted">Current operational rules are separated from future policy.</p></div>
+<div class="card glass"><span class="status">OFFICIAL_POLICY</span><h3>10,000 MW</h3><p class="muted">Policy framework is not automatically treated as open registration.</p></div>
+<div class="card glass"><span class="status">IMPLEMENTATION_PENDING</span><h3>20 years</h3><p class="muted">Implementation status remains visible until verified.</p></div>
+<div class="card glass"><span class="status">SOURCE</span><h3>Claim Registry</h3><p class="muted">Source → Claim → Status → Action → Verify → Receipt.</p></div>
+</div></section>
+<section class="section"><div class="eyebrow">Energy Lab</div><h2>Rooftop → Carport → BESS → EV → AI EMS</h2><div class="grid">
+<div class="card glass"><h3>Clay Rooftop</h3><p class="muted">Interactive placement and sun-path simulation.</p></div>
+<div class="card glass"><h3>Solar Carport</h3><p class="muted">Parking, shade and EV charging as one system.</p></div>
+<div class="card glass"><h3>BESS</h3><p class="muted">Scenario analysis around self-consumption and peak load.</p></div>
+<div class="card glass"><h3>AI Energy</h3><p class="muted">AI assists evidence and analysis; it does not become the policy authority.</p></div>
+</div></section>
+<script type="module">
+import { animate, stagger, createTimeline } from 'https://cdn.jsdelivr.net/npm/animejs/+esm';
+const root=document.querySelector('#sirinx-demo');
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(!reduce){
+ const tl=createTimeline({defaults:{ease:'out(4)'}});
+ tl.add('.nav',{opacity:[0,1],y:['-18px',0],duration:550})
+   .add('.hero-copy > *',{opacity:[0,1],y:[24,0],delay:stagger(90),duration:700},'-=300')
+   .add('.scene',{opacity:[0,1],scale:[.96,1],duration:800},'-=600');
+ animate('.panel',{opacity:[.35,1],scale:[.96,1],delay:stagger(45,{from:'center'}),duration:700,ease:'out(3)'});
+ animate('#sun',{translateY:[-8,8],scale:[1,.96],duration:2600,alternate:true,loop:true,ease:'inOutSine'});
+ animate('.card',{opacity:[0,1],translateY:[18,0],delay:stagger(80),duration:650,ease:'outExpo'});
+}
+document.querySelector('#launch').addEventListener('click',()=>document.querySelector('.scene').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}));
+</script>
+</main>
+</body>
+</html>

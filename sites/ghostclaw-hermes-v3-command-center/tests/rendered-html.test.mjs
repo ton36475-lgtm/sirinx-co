@@ -67,7 +67,7 @@ test("rendered HTML exposes no operational, network, or sensitive surface", asyn
     /\bURLSearchParams\b/,
     /[?&]api=/i,
     /\bfetch\s*\(/i,
-    /<(?:a|button|form|input|textarea|select)\b/i,
+    /<(?:a|button|form|input|textarea|select)(?=[\s/>])/i,
     /\b(?:api[_ -]?key|access[_ -]?token|password|private key)\b/i,
     /\b(?:OpenRouter|Qwen|Ollama|Telegram|Supabase|Postgres|NATS|Cloudflare)\b/i,
     /\b(?:D1|R2)\b/,

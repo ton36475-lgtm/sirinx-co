@@ -1,9 +1,25 @@
+# CI for the SIRINX monorepo.
+#
+# P0 (2026-10-10): give apps/public-web its own CI job (it previously had none,
+# so the Three.js frontend was never built or tested by CI) and unblock the two
+# failing jobs on 6002430:
+#   - node-governance: root `npm run check` chains into command-center:check,
+#     which requires CC devDependencies; install them first. verify-next-phase
+#     now allowlists the committed defensive secret-scan.yml.
+#   - command-center-site: rendered-HTML guard regex no longer matches minified
+#     runtime script bodies (vinext beta streams inline scripts like b<a.length).
+# Actions are pinned by full SHA (mutable-tag supply-chain hardening).
+# Root is a pnpm workspace; pnpm version comes from root packageManager pin.
+
 name: CI
 
 on:
   push:
     branches: [main]
   pull_request:
+
+permissions:
+  contents: read
 
 env:
   CARGO_TERM_COLOR: always
@@ -13,11 +29,11 @@ jobs:
     name: Rust workspace
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable
         with:
           components: rustfmt, clippy
-      - uses: Swatinem/rust-cache@v2
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
       - name: Format
         run: cargo fmt --all --check
       - name: Clippy
@@ -29,12 +45,15 @@ jobs:
     name: Node governance checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 20
+          node-version: 22
       - name: Install root dev dependencies
         run: npm ci
+      - name: Install Command Center dependencies (needed by root check chain)
+        working-directory: sites/ghostclaw-hermes-v3-command-center
+        run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Repo governance scripts
         run: npm run check
       - name: Hermes control API tests
@@ -49,8 +68,8 @@ jobs:
       run:
         working-directory: sites/ghostclaw-hermes-v3-command-center
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22.13.0
           cache: npm
@@ -63,3 +82,32 @@ jobs:
         run: npm test
       - name: Lint and typecheck
         run: npm run lint && npm run typecheck
+
+  public-web:
+    name: Public web (Vite + React + Three.js)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        # pnpm version is read from the root packageManager field (10.4.1)
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Install workspace dependencies (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+        env:
+          verify-deps-before-run: 'false'
+      - name: Typecheck
+        run: pnpm --config.verify-deps-before-run=false --dir apps/public-web check
+      - name: Unit tests
+        run: pnpm --config.verify-deps-before-run=false --dir apps/public-web test
+      - name: Build
+        run: pnpm --config.verify-deps-before-run=false --dir apps/public-web build
+      - name: Upload build output for inspection
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: public-web-dist
+          path: apps/public-web/dist/
+          retention-days: 7

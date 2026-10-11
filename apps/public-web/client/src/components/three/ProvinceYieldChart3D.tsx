@@ -13,7 +13,7 @@
  * Same WebGL budget as ProvinceSolarScene: dynamic three.js import, DPR cap,
  * offscreen pause, reduced-motion static frame, context-loss handling, dispose.
  */
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Material } from "three";
 import { provinceEnergyData } from "@shared/provinceEnergyData";
 import {
@@ -27,10 +27,15 @@ export type ProvinceYieldChart3DProps = {
   nameTh: string;
 };
 
-const SOURCE_LINE = "PVGIS v5.3 (PVGIS-ERA5, 2005–2023), EC Joint Research Centre";
+const SOURCE_LINE =
+  "PVGIS v5.3 (PVGIS-ERA5, 2005–2023), EC Joint Research Centre";
 
-export default function ProvinceYieldChart3D({ slug, nameTh }: ProvinceYieldChart3DProps) {
+export default function ProvinceYieldChart3D({
+  slug,
+  nameTh,
+}: ProvinceYieldChart3DProps) {
   const hostRef = useRef<HTMLDivElement | null>(null);
+  const [graphicsError, setGraphicsError] = useState(false);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -40,26 +45,35 @@ export default function ProvinceYieldChart3D({ slug, nameTh }: ProvinceYieldChar
 
     void import("three").then(async (THREE) => {
       if (disposed || !hostRef.current) return;
-      const { OrbitControls } = await import("three/examples/jsm/controls/OrbitControls.js");
+      const { OrbitControls } =
+        await import("three/examples/jsm/controls/OrbitControls.js");
       if (disposed) return;
 
       const summary = provinceYieldSummary(slug);
       const stats = nationalYieldStats();
       const width = host.clientWidth || 640;
       const height = host.clientHeight || 380;
-      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
 
-      const renderer = new THREE.WebGLRenderer({
-        antialias: window.devicePixelRatio < 1.5,
-        alpha: true,
-        powerPreference: "low-power",
-      });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(width, height);
-      renderer.outputColorSpace = THREE.SRGBColorSpace;
-      renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.domElement.setAttribute("aria-hidden", "true");
-      host.appendChild(renderer.domElement);
+      let renderer: InstanceType<typeof THREE.WebGLRenderer>;
+      try {
+        renderer = new THREE.WebGLRenderer({
+          antialias: window.devicePixelRatio < 1.5,
+          alpha: true,
+          powerPreference: "low-power",
+        });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(width, height);
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.domElement.setAttribute("aria-hidden", "true");
+        host.appendChild(renderer.domElement);
+      } catch {
+        setGraphicsError(true);
+        return;
+      }
 
       const scene = new THREE.Scene();
       scene.fog = new THREE.Fog(0x0c0a09, 34, 90);
@@ -100,7 +114,10 @@ export default function ProvinceYieldChart3D({ slug, nameTh }: ProvinceYieldChar
       const min = Math.min(...values);
       const max = Math.max(...values);
       const heightOf = (y: number) => 0.9 + ((y - min) / (max - min)) * 5.2;
-      const colorOf = (y: number, out: { setHSL: (h: number, s: number, l: number) => void }) => {
+      const colorOf = (
+        y: number,
+        out: { setHSL: (h: number, s: number, l: number) => void },
+      ) => {
         const t = (y - min) / (max - min);
         // cyan (low) → orange (high), the site's accent gradient
         out.setHSL(0.52 - t * 0.47, 0.78, 0.5 + t * 0.12);
@@ -111,7 +128,11 @@ export default function ProvinceYieldChart3D({ slug, nameTh }: ProvinceYieldChar
         roughness: 0.42,
         metalness: 0.18,
       });
-      const columns = new THREE.InstancedMesh(columnGeo, columnMat, entries.length);
+      const columns = new THREE.InstancedMesh(
+        columnGeo,
+        columnMat,
+        entries.length,
+      );
       const matrix = new THREE.Matrix4();
       const quat = new THREE.Quaternion();
       const scale = new THREE.Vector3();
@@ -139,36 +160,95 @@ export default function ProvinceYieldChart3D({ slug, nameTh }: ProvinceYieldChar
       const meanHeight = heightOf(stats.mean);
       const ring = new THREE.Mesh(
         new THREE.TorusGeometry(13.5, 0.045, 8, 72),
-        new THREE.MeshBasicMaterial({ color: 0x57534e, transparent: true, opacity: 0.55 }),
+        new THREE.MeshBasicMaterial({
+          color: 0x57534e,
+          transparent: true,
+          opacity: 0.55,
+        }),
       );
       ring.rotation.x = -Math.PI / 2;
       ring.position.y = meanHeight;
       scene.add(ring);
 
-      // ── Render loop (paused offscreen / static under reduced motion) ──────
+      // ── Render loop (stops RAF entirely offscreen / hidden tab / reduced motion) ──
       let visible = true;
+      let documentHidden = document.hidden;
       const observer = new IntersectionObserver((entries_) => {
-        visible = entries_[0]?.isIntersecting ?? true;
+        const nowVisible = entries_[0]?.isIntersecting ?? true;
+        if (nowVisible && !visible && !reduceMotion && !contextLost && !documentHidden) {
+          // Resume the loop only when it is actually stopped (offscreen → onscreen).
+          visible = true;
+          cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(tick);
+        }
+        visible = nowVisible;
       });
       observer.observe(host);
+      // P1 (2026-10-10): a hidden tab must stop the RAF loop, not just skip renders.
+      const onVisibilityChange = () => {
+        documentHidden = document.hidden;
+        if (documentHidden) {
+          cancelAnimationFrame(raf);
+        } else if (visible && !reduceMotion && !contextLost) {
+          raf = requestAnimationFrame(tick);
+        }
+      };
+      document.addEventListener("visibilitychange", onVisibilityChange);
 
-      const onContextLost = (e: Event) => e.preventDefault();
+      let contextLost = false;
+      let resourcesDisposed = false;
+      const onContextLost = (e: Event) => {
+        e.preventDefault();
+        contextLost = true;
+        setGraphicsError(true);
+        cancelAnimationFrame(raf);
+        resourcesDisposed = true;
+        columnGeo.dispose();
+        columnMat.dispose();
+        plate.geometry.dispose();
+        (plate.material as Material).dispose();
+        ring.geometry.dispose();
+        (ring.material as Material).dispose();
+      };
+      const onContextRestored = () => {
+        if (disposed) return;
+        contextLost = false;
+        resourcesDisposed = false;
+        setGraphicsError(false);
+        controls.update();
+        renderer.render(scene, camera);
+        if (!reduceMotion) raf = requestAnimationFrame(tick);
+      };
       renderer.domElement.addEventListener("webglcontextlost", onContextLost);
+      renderer.domElement.addEventListener(
+        "webglcontextrestored",
+        onContextRestored,
+      );
 
       let raf = 0;
       const tick = () => {
-        raf = requestAnimationFrame(tick);
+        if (!reduceMotion && !contextLost && visible && !documentHidden)
+          raf = requestAnimationFrame(tick);
+        if (contextLost) return;
         if (!visible && !reduceMotion) return;
         controls.update();
         renderer.render(scene, camera);
       };
-      tick();
+      if (reduceMotion) {
+        controls.update();
+        renderer.render(scene, camera);
+      } else tick();
 
       const onResize = () => {
         const w = host.clientWidth || 640;
         const h = host.clientHeight || 380;
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
+        // Re-cap DPR on every resize, not just at construction. Dragging the window
+        // to a different-DPI display, or changing browser zoom, changes
+        // window.devicePixelRatio; without this the framebuffer keeps the ratio it
+        // was born with. Matches CarportExplodedDiagram3D.
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(w, h);
       };
       window.addEventListener("resize", onResize);
@@ -176,19 +256,29 @@ export default function ProvinceYieldChart3D({ slug, nameTh }: ProvinceYieldChar
       cleanup = () => {
         cancelAnimationFrame(raf);
         observer.disconnect();
+        document.removeEventListener("visibilitychange", onVisibilityChange);
         window.removeEventListener("resize", onResize);
-        renderer.domElement.removeEventListener("webglcontextlost", onContextLost);
+        renderer.domElement.removeEventListener(
+          "webglcontextlost",
+          onContextLost,
+        );
+        renderer.domElement.removeEventListener(
+          "webglcontextrestored",
+          onContextRestored,
+        );
         controls.dispose();
-        columnGeo.dispose();
-        columnMat.dispose();
-        plate.geometry.dispose();
-        (plate.material as Material).dispose();
-        ring.geometry.dispose();
-        (ring.material as Material).dispose();
+        if (!resourcesDisposed) {
+          columnGeo.dispose();
+          columnMat.dispose();
+          plate.geometry.dispose();
+          (plate.material as Material).dispose();
+          ring.geometry.dispose();
+          (ring.material as Material).dispose();
+        }
         renderer.dispose();
         renderer.domElement.remove();
       };
-    });
+    }).catch(() => setGraphicsError(true));
 
     return () => {
       disposed = true;
@@ -202,7 +292,23 @@ export default function ProvinceYieldChart3D({ slug, nameTh }: ProvinceYieldChar
 
   return (
     <figure className="relative overflow-hidden rounded-2xl border border-border-subtle bg-surface-elevated">
-      <div ref={hostRef} className="h-[380px] w-full" />
+      <div
+        ref={hostRef}
+        className="h-[380px] w-full"
+        aria-describedby={`yield-description-${slug}`}
+      />
+      <p id={`yield-description-${slug}`} className="sr-only">
+        แผนภูมิแท่งสามมิติเปรียบเทียบผลผลิตไฟฟ้าจากแสงอาทิตย์ 77 จังหวัด จังหวัด
+        {nameTh} ได้ {summary?.specificYield.toLocaleString() ?? "ไม่มีข้อมูล"}{" "}
+        kWh/kWp/ปี อยู่อันดับ {summary?.rank ?? "ไม่มีข้อมูล"} จาก{" "}
+        {summary?.count ?? "ไม่มีข้อมูล"} จังหวัด
+        ค่าผลผลิตเป็นค่าปกติสภาพอากาศจาก PVGIS ไม่ใช่คำรับประกัน
+      </p>
+      {graphicsError && (
+        <p role="status" className="p-4 text-foreground">
+          ไม่สามารถแสดงกราฟสามมิติได้ในอุปกรณ์นี้
+        </p>
+      )}
       <figcaption className="absolute bottom-0 left-0 right-0 bg-background/88 p-4 text-sm backdrop-blur">
         <p className="font-semibold text-foreground">
           ผลผลิตไฟฟ้าเทียบทั้ง 77 จังหวัด — จังหวัด{nameTh}{" "}
@@ -212,14 +318,21 @@ export default function ProvinceYieldChart3D({ slug, nameTh }: ProvinceYieldChar
           <p className="text-text-secondary">
             {summary.specificYield.toLocaleString()} kWh/kWp/ปี (
             {summary.vsMeanPct >= 0 ? "+" : ""}
-            {summary.vsMeanPct}% เทียบค่าเฉลี่ยประเทศ {stats.mean.toLocaleString()}) ·
-            รังสีเฉลี่ย {summary.irradiationDaily} kWh/m²/วัน
+            {summary.vsMeanPct}% เทียบค่าเฉลี่ยประเทศ{" "}
+            {stats.mean.toLocaleString()}) · รังสีเฉลี่ย{" "}
+            {summary.irradiationDaily} kWh/m²/วัน
           </p>
         )}
         <p className="text-text-muted text-xs">
-          สูงสุด: {extremes.top.map((t) => `${t.slug} ${t.specificYield.toLocaleString()}`).join(" · ")} —
-          ต่ำสุด: {extremes.bottom.map((b) => `${b.slug} ${b.specificYield.toLocaleString()}`).join(" · ")}
-          {" "}· ค่าปกติสภาพอากาศ ไม่ใช่คำสัญญาประหยัด · แหล่งข้อมูล: {SOURCE_LINE}
+          สูงสุด:{" "}
+          {extremes.top
+            .map((t) => `${t.slug} ${t.specificYield.toLocaleString()}`)
+            .join(" · ")}{" "}
+          — ต่ำสุด:{" "}
+          {extremes.bottom
+            .map((b) => `${b.slug} ${b.specificYield.toLocaleString()}`)
+            .join(" · ")}{" "}
+          · ค่าปกติสภาพอากาศ ไม่ใช่คำสัญญาประหยัด · แหล่งข้อมูล: {SOURCE_LINE}
         </p>
       </figcaption>
     </figure>

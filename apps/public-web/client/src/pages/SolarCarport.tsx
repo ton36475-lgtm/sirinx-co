@@ -13,6 +13,7 @@ import { cfImage, cfImageSrcSet } from "@/lib/cfImage";
 import { getProvinceBySlug } from "@shared/thaiProvinces";
 import { getProvinceEnergyFact } from "@shared/provinceEnergyData";
 import ProvinceSolarChart from "@/components/ProvinceSolarChart";
+import LazyViewport3D from "@/components/three/LazyViewport3D";
 import { nationalMonthlyMean } from "@shared/provinceSolarMonthly";
 
 // Three.js must never enter the province page bundle. The viewer is a separate
@@ -21,11 +22,20 @@ const SolarCarportViewer = lazy(
   () => import("@/components/SolarCarportViewer")
 );
 // 3D data infographics — separate chunks, mounted below the fold only.
+// LazyViewport3D (P1, 2026-10-10) defers the mount itself until the block is
+// near the viewport: React lazy() splits the chunk but does NOT wait for
+// scroll, so without the gate the three.js import fired on every route entry.
 const ProvinceYieldChart3D = lazy(
   () => import("@/components/three/ProvinceYieldChart3D")
 );
 const ProvinceSolarScene = lazy(
   () => import("@/components/three/ProvinceSolarScene")
+);
+// 3D exploded technical diagram (R30-P3, Concept C). Its own lazy chunk, so
+// the diagram never adds weight to a first paint and never loads on the
+// province pages.
+const CarportExplodedDiagram3D = lazy(
+  () => import("@/components/three/CarportExplodedDiagram3D")
 );
 // Deep-dive province article (12,000-word standard) — text-only lazy chunk.
 const ProvinceLongform = lazy(
@@ -378,30 +388,33 @@ export default function SolarCarport() {
                   ariaLabel={t("sc.solar.chartTitle")}
                 />
                 {/* 3D infographics over the same sourced PVGIS record.
-                    Lazy chunks; each canvas pauses itself offscreen. */}
+                    LazyViewport3D gates the mount until near-viewport (P1);
+                    each canvas also stops its RAF loop offscreen/hidden. */}
                 <Suspense fallback={null}>
-                  <div className="mt-6">
-                    <ProvinceYieldChart3D
-                      slug={province.slug}
-                      nameTh={province.nameTh}
-                    />
-                  </div>
-                  <div className="mt-6">
-                    <ProvinceSolarScene
-                      nameTh={province.nameTh}
-                      latitude={energyFact.lat}
-                      longitude={energyFact.lon}
-                      irradiationDaily={energyFact.irradiationDaily}
-                      specificYield={energyFact.specificYield}
-                      source={
-                        energyFact.source.name +
-                        " · " +
-                        energyFact.source.database +
-                        ", " +
-                        energyFact.source.yearRange
-                      }
-                    />
-                  </div>
+                  <LazyViewport3D minHeight={340}>
+                    <div className="mt-6">
+                      <ProvinceYieldChart3D
+                        slug={province.slug}
+                        nameTh={province.nameTh}
+                      />
+                    </div>
+                    <div className="mt-6">
+                      <ProvinceSolarScene
+                        nameTh={province.nameTh}
+                        latitude={energyFact.lat}
+                        longitude={energyFact.lon}
+                        irradiationDaily={energyFact.irradiationDaily}
+                        specificYield={energyFact.specificYield}
+                        source={
+                          energyFact.source.name +
+                          " · " +
+                          energyFact.source.database +
+                          ", " +
+                          energyFact.source.yearRange
+                        }
+                      />
+                    </div>
+                  </LazyViewport3D>
                 </Suspense>
               </div>
             ) : null}
@@ -971,6 +984,39 @@ export default function SolarCarport() {
                   </span>
                 </button>
               )}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {/* Exploded technical diagram of the carport structure. Product page
+          only: the province pages carry the data charts, and the diagram is a
+          different reading of the same structure than the viewer above. It
+          pauses itself offscreen, so its cost is bounded by what is on screen. */}
+      {!province ? (
+        <section className="py-16 lg:py-24 bg-background" data-sirinx-diagram-section>
+          <div className="container">
+            <span className="text-xs font-medium uppercase tracking-widest text-accent-secondary mb-3 block">
+              {t("sc.diagram.badge")}
+            </span>
+            <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground">
+              {t("sc.diagram.title")}
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-relaxed text-text-secondary">
+              {fill(t("sc.diagram.intro"), {
+                province: "ประเทศไทย (พิกัดสำนักงานใหญ่ พิษณุโลก)",
+              })}
+            </p>
+            <div className="mt-8">
+              <Suspense
+                fallback={
+                  <p className="text-sm text-text-muted">{t("sc.viewer.loading")}</p>
+                }
+              >
+                <LazyViewport3D minHeight={320}>
+                  <CarportExplodedDiagram3D slug="phitsanulok" />
+                </LazyViewport3D>
+              </Suspense>
             </div>
           </div>
         </section>

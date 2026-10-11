@@ -18,8 +18,9 @@
  * Honesty: the scene is a visualization of astronomy + sourced PVGIS normals.
  * It is NOT a site design or a savings promise.
  */
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Material } from "three";
+import { solarPosition } from "@shared/sunMath";
 
 export type ProvinceSolarSceneProps = {
   nameTh: string;
@@ -38,6 +39,12 @@ const PANEL_COLS = 8;
 
 export default function ProvinceSolarScene(props: ProvinceSolarSceneProps) {
   const hostRef = useRef<HTMLDivElement | null>(null);
+  const [graphicsError, setGraphicsError] = useState(false);
+  const sunAtNoon = solarPosition(
+    props.latitude,
+    props.longitude,
+    new Date(Date.UTC(2026, 5, 21, 5, 24)),
+  );
 
   useEffect(() => {
     const host = hostRef.current;
@@ -48,25 +55,34 @@ export default function ProvinceSolarScene(props: ProvinceSolarSceneProps) {
     // Dynamic import: three.js stays out of the entry chunk.
     void import("three").then(async (THREE) => {
       if (disposed || !hostRef.current) return;
-      const { OrbitControls } = await import("three/examples/jsm/controls/OrbitControls.js");
+      const { OrbitControls } =
+        await import("three/examples/jsm/controls/OrbitControls.js");
       if (disposed) return;
 
       const width = host.clientWidth || 640;
       const height = host.clientHeight || 360;
-      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
 
-      const renderer = new THREE.WebGLRenderer({
-        antialias: window.devicePixelRatio < 1.5,
-        alpha: true,
-        powerPreference: "low-power",
-      });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(width, height);
-      renderer.outputColorSpace = THREE.SRGBColorSpace;
-      renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.05;
-      renderer.domElement.setAttribute("aria-hidden", "true");
-      host.appendChild(renderer.domElement);
+      let renderer: InstanceType<typeof THREE.WebGLRenderer>;
+      try {
+        renderer = new THREE.WebGLRenderer({
+          antialias: window.devicePixelRatio < 1.5,
+          alpha: true,
+          powerPreference: "low-power",
+        });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(width, height);
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.05;
+        renderer.domElement.setAttribute("aria-hidden", "true");
+        host.appendChild(renderer.domElement);
+      } catch {
+        setGraphicsError(true);
+        return;
+      }
 
       const scene = new THREE.Scene();
       scene.fog = new THREE.Fog(0x0c0a09, 30, 90);
@@ -99,20 +115,35 @@ export default function ProvinceSolarScene(props: ProvinceSolarSceneProps) {
       // ── Ground ────────────────────────────────────────────────────────────
       const ground = new THREE.Mesh(
         new THREE.CircleGeometry(60, 48),
-        new THREE.MeshStandardMaterial({ color: 0x1c1917, roughness: 0.95, metalness: 0 }),
+        new THREE.MeshStandardMaterial({
+          color: 0x1c1917,
+          roughness: 0.95,
+          metalness: 0,
+        }),
       );
       ground.rotation.x = -Math.PI / 2;
       ground.receiveShadow = true;
       scene.add(ground);
 
       // ── Procedural carport: pillars + instanced panel rows ────────────────
-      const steel = new THREE.MeshStandardMaterial({ color: 0x78716c, roughness: 0.5, metalness: 0.7 });
+      const steel = new THREE.MeshStandardMaterial({
+        color: 0x78716c,
+        roughness: 0.5,
+        metalness: 0.7,
+      });
       const pillarGeo = new THREE.CylinderGeometry(0.12, 0.14, 3.2, 12);
       const pillarPositions: [number, number][] = [];
       for (let r = 0; r < PANEL_ROWS; r++) {
-        pillarPositions.push([-6.5, (r - (PANEL_ROWS - 1) / 2) * 2.4], [6.5, (r - (PANEL_ROWS - 1) / 2) * 2.4]);
+        pillarPositions.push(
+          [-6.5, (r - (PANEL_ROWS - 1) / 2) * 2.4],
+          [6.5, (r - (PANEL_ROWS - 1) / 2) * 2.4],
+        );
       }
-      const pillars = new THREE.InstancedMesh(pillarGeo, steel, pillarPositions.length);
+      const pillars = new THREE.InstancedMesh(
+        pillarGeo,
+        steel,
+        pillarPositions.length,
+      );
       {
         const m = new THREE.Matrix4();
         pillarPositions.forEach(([x, z], i) => {
@@ -131,7 +162,11 @@ export default function ProvinceSolarScene(props: ProvinceSolarSceneProps) {
         emissive: 0x0c4a6e,
         emissiveIntensity: 0.35,
       });
-      const panels = new THREE.InstancedMesh(panelGeo, panelMat, PANEL_ROWS * PANEL_COLS);
+      const panels = new THREE.InstancedMesh(
+        panelGeo,
+        panelMat,
+        PANEL_ROWS * PANEL_COLS,
+      );
       {
         const m = new THREE.Matrix4();
         const q = new THREE.Quaternion();
@@ -143,7 +178,11 @@ export default function ProvinceSolarScene(props: ProvinceSolarSceneProps) {
           for (let c = 0; c < PANEL_COLS; c++) {
             const x = (c - (PANEL_COLS - 1) / 2) * 1.8;
             const z = (r - (PANEL_ROWS - 1) / 2) * 2.4;
-            m.compose(new THREE.Vector3(x, 3.35 + Math.abs(x) * 0.045, z), q, s);
+            m.compose(
+              new THREE.Vector3(x, 3.35 + Math.abs(x) * 0.045, z),
+              q,
+              s,
+            );
             panels.setMatrixAt(i++, m);
           }
         }
@@ -163,7 +202,9 @@ export default function ProvinceSolarScene(props: ProvinceSolarSceneProps) {
 
       const placeSun = (hoursLocal: number) => {
         const utc = new Date(Date.UTC(2026, 5, 21, 0, 0, 0));
-        utc.setUTCMinutes(utc.getUTCMinutes() + Math.round(hoursLocal * 60) - 420);
+        utc.setUTCMinutes(
+          utc.getUTCMinutes() + Math.round(hoursLocal * 60) - 420,
+        );
         const p = solarPosition(props.latitude, props.longitude, utc);
         const elev = (p.elevationDeg * Math.PI) / 180;
         const az = (p.azimuthDeg * Math.PI) / 180;
@@ -179,20 +220,69 @@ export default function ProvinceSolarScene(props: ProvinceSolarSceneProps) {
         ambient.intensity = 0.5 + dayness * 0.9;
       };
 
-      // ── Render loop (paused offscreen / static under reduced motion) ──────
+      // ── Render loop (stops RAF entirely offscreen / hidden tab / reduced motion) ──
       let visible = true;
       let frame = 0;
       let raf = 0;
+      let documentHidden = document.hidden;
       const observer = new IntersectionObserver((entries) => {
-        visible = entries[0]?.isIntersecting ?? true;
+        const nowVisible = entries[0]?.isIntersecting ?? true;
+        if (nowVisible && !visible && !reduceMotion && !contextLost && !documentHidden) {
+          // Resume the loop only when it is actually stopped (offscreen → onscreen).
+          visible = true;
+          cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(tick);
+        }
+        visible = nowVisible;
       });
       observer.observe(host);
+      // P1 (2026-10-10): a hidden tab must stop the RAF loop, not just skip renders.
+      const onVisibilityChange = () => {
+        documentHidden = document.hidden;
+        if (documentHidden) {
+          cancelAnimationFrame(raf);
+        } else if (visible && !reduceMotion && !contextLost) {
+          raf = requestAnimationFrame(tick);
+        }
+      };
+      document.addEventListener("visibilitychange", onVisibilityChange);
 
-      const onContextLost = (e: Event) => e.preventDefault();
+      let contextLost = false;
+      let resourcesDisposed = false;
+      const onContextLost = (e: Event) => {
+        e.preventDefault();
+        contextLost = true;
+        setGraphicsError(true);
+        resourcesDisposed = true;
+        cancelAnimationFrame(raf);
+        panelGeo.dispose();
+        pillarGeo.dispose();
+        ground.geometry.dispose();
+        (ground.material as Material).dispose();
+        steel.dispose();
+        panelMat.dispose();
+        sunDisc.geometry.dispose();
+        (sunDisc.material as Material).dispose();
+      };
+      const onContextRestored = () => {
+        if (disposed) return;
+        contextLost = false;
+        resourcesDisposed = false;
+        setGraphicsError(false);
+        controls.update();
+        renderer.render(scene, camera);
+        if (!reduceMotion) raf = requestAnimationFrame(tick);
+      };
       renderer.domElement.addEventListener("webglcontextlost", onContextLost);
+      renderer.domElement.addEventListener(
+        "webglcontextrestored",
+        onContextRestored,
+      );
 
       const tick = () => {
-        raf = requestAnimationFrame(tick);
+        if (!reduceMotion && !contextLost && visible && !documentHidden)
+          raf = requestAnimationFrame(tick);
+        if (contextLost) return;
         if (!visible && !reduceMotion) return;
         if (!reduceMotion) {
           frame = (frame + 1) % 1024;
@@ -203,13 +293,22 @@ export default function ProvinceSolarScene(props: ProvinceSolarSceneProps) {
         controls.update();
         renderer.render(scene, camera);
       };
-      tick();
+      if (reduceMotion) {
+        placeSun(12.4);
+        controls.update();
+        renderer.render(scene, camera);
+      } else tick();
 
       const onResize = () => {
         const w = host.clientWidth || 640;
         const h = host.clientHeight || 360;
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
+        // Re-cap DPR on every resize, not just at construction. Dragging the window
+        // to a different-DPI display, or changing browser zoom, changes
+        // window.devicePixelRatio; without this the framebuffer keeps the ratio it
+        // was born with. Matches CarportExplodedDiagram3D.
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(w, h);
       };
       window.addEventListener("resize", onResize);
@@ -217,21 +316,31 @@ export default function ProvinceSolarScene(props: ProvinceSolarSceneProps) {
       cleanup = () => {
         cancelAnimationFrame(raf);
         observer.disconnect();
+        document.removeEventListener("visibilitychange", onVisibilityChange);
         window.removeEventListener("resize", onResize);
-        renderer.domElement.removeEventListener("webglcontextlost", onContextLost);
+        renderer.domElement.removeEventListener(
+          "webglcontextlost",
+          onContextLost,
+        );
+        renderer.domElement.removeEventListener(
+          "webglcontextrestored",
+          onContextRestored,
+        );
         controls.dispose();
-        panelGeo.dispose();
-        pillarGeo.dispose();
-        ground.geometry.dispose();
-        (ground.material as Material).dispose();
-        steel.dispose();
-        panelMat.dispose();
-        sunDisc.geometry.dispose();
-        (sunDisc.material as Material).dispose();
+        if (!resourcesDisposed) {
+          panelGeo.dispose();
+          pillarGeo.dispose();
+          ground.geometry.dispose();
+          (ground.material as Material).dispose();
+          steel.dispose();
+          panelMat.dispose();
+          sunDisc.geometry.dispose();
+          (sunDisc.material as Material).dispose();
+        }
         renderer.dispose();
         renderer.domElement.remove();
       };
-    });
+    }).catch(() => setGraphicsError(true));
 
     return () => {
       disposed = true;
@@ -241,14 +350,32 @@ export default function ProvinceSolarScene(props: ProvinceSolarSceneProps) {
 
   return (
     <figure className="relative overflow-hidden rounded-2xl border border-border-subtle bg-surface-elevated">
-      <div ref={hostRef} className="h-[360px] w-full" />
+      <div
+        ref={hostRef}
+        className="h-[360px] w-full"
+        aria-describedby={`solar-description-${props.latitude}-${props.longitude}`}
+      />
+      <p
+        id={`solar-description-${props.latitude}-${props.longitude}`}
+        className="sr-only"
+      >
+        Sun position on June 21 at the fixed scene's local noon: elevation{" "}
+        {sunAtNoon.elevationDeg} degrees and azimuth {sunAtNoon.azimuthDeg}{" "}
+        degrees, calculated by shared/sunMath.
+      </p>
+      {graphicsError && (
+        <p role="status" className="p-4 text-foreground">
+          ไม่สามารถแสดงภาพสามมิติได้ในอุปกรณ์นี้
+        </p>
+      )}
       <figcaption className="absolute bottom-0 left-0 right-0 bg-background/85 p-4 text-sm backdrop-blur">
         <p className="font-semibold text-foreground">
           เส้นทางดวงอาทิตย์จริงของจังหวัด{props.nameTh} · Solar Carport
         </p>
         <p className="text-text-secondary">
-          รังสีเฉลี่ย {props.irradiationDaily} kWh/m²/วัน · ผลผลิตเฉพาะ {props.specificYield} kWh/kWp/ปี
-          {" "}— ค่าปกติสภาพอากาศ ไม่ใช่คำสัญญาประหยัด
+          รังสีเฉลี่ย {props.irradiationDaily} kWh/m²/วัน · ผลผลิตเฉพาะ{" "}
+          {props.specificYield} kWh/kWp/ปี — ค่าปกติสภาพอากาศ
+          ไม่ใช่คำสัญญาประหยัด
         </p>
         <p className="text-text-muted text-xs">แหล่งข้อมูล: {props.source}</p>
       </figcaption>

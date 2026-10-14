@@ -33,6 +33,7 @@ const Pricing = lazy(() => import("./pages/Pricing"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Cookies = lazy(() => import("./pages/Cookies"));
+const MotionStyleguide = lazy(() => import("./pages/MotionStyleguide"));
 const DashboardLayout = lazy(() => import("./components/DashboardLayout"));
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const AdminLeads = lazy(() => import("./pages/admin/Leads"));
@@ -171,6 +172,7 @@ function PublicRouter() {
         <Route path="/privacy" component={Privacy} />
         <Route path="/terms" component={Terms} />
         <Route path="/cookies" component={Cookies} />
+      <Route path="/styleguide/motion" component={MotionStyleguide} />
         <Route path="/404" component={NotFound} />
         <Route component={NotFound} />
       </Switch>

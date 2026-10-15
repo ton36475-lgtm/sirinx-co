@@ -46,6 +46,11 @@ const dict: TranslationDict = {
     en: "Pending evidence before any claim",
     cn: "待确认证据",
   },
+  "sg.sourcesTitle": {
+    th: "แหล่งอ้างอิงและสถานะ",
+    en: "Sources and status",
+    cn: "来源与状态",
+  },
   "sg.reviewedAt": {
     th: "วันตรวจ",
     en: "Reviewed",

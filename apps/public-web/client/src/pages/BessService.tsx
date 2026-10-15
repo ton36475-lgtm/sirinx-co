@@ -89,6 +89,21 @@ export default function BessService() {
         ))}
       </ul>
 
+      <h2 className="mb-4 text-2xl font-semibold">{t("sg.sourcesTitle")}</h2>
+      <ul className="mb-10 grid gap-2 text-sm">
+        {bessMaster.sources.map((s) => (
+          <li key={s.id} className="rounded-lg border border-border-subtle bg-surface-elevated p-3">
+            <span className="font-medium">{s.publisher}</span>{" "}
+            <span className="text-text-secondary">— {s.status}</span>{" "}
+            {s.url && (
+              <a href={s.url} className="text-primary-600 underline dark:text-primary-400" rel="nofollow noopener">
+                {s.id}
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+
       <p className="text-xs text-text-secondary">
         {t("sg.reviewedAt")}: {bessMaster.reviewedAt} · {bessMaster.reviewBoundary}
       </p>

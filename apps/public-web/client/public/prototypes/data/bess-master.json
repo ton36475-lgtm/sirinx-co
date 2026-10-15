@@ -1,0 +1,179 @@
+{
+  "schemaVersion": "1.0.0",
+  "recordSet": "SIRINX BESS product and knowledge master",
+  "reviewedAt": "2026-10-15",
+  "reviewBoundary": "Public sources only. Manufacturer specifications are reported claims, not independent verification or engineering approval.",
+  "sources": [
+    {
+      "id": "SRC-DOE-STORAGE",
+      "publisher": "U.S. Department of Energy",
+      "title": "Solar Integration: Solar Energy and Storage Basics",
+      "url": "https://www.energy.gov/cmei/systems/solar-integration-solar-energy-and-storage-basics",
+      "reviewedAt": "2026-10-15",
+      "status": "source_checked",
+      "scope": "General explanation of storage, energy capacity, power capacity, and solar integration; not Thailand-specific engineering or policy advice."
+    },
+    {
+      "id": "SRC-DOE-101",
+      "publisher": "U.S. Department of Energy",
+      "title": "Solar-Plus-Storage 101",
+      "url": "https://www.energy.gov/cmei/systems/articles/solar-plus-storage-101",
+      "reviewedAt": "2026-10-15",
+      "status": "source_checked",
+      "scope": "General educational explainer; some historical U.S. statistics and cost statements on the page are not used here."
+    },
+    {
+      "id": "SRC-GSL-GBP2",
+      "publisher": "GSL ENERGY (manufacturer page)",
+      "title": "14.34kWh / 16.07kWh | 280Ah / 314Ah | 51.2V Residential ESS",
+      "url": "https://www.gsl-energy.com/gsl-energy-solar-lifepo4-battery-home-power-storage-wall-10kwh-51-2v-lithium-ion-batteries-for-house.html",
+      "reviewedAt": "2026-10-15",
+      "status": "manufacturer_claim_with_internal_conflict",
+      "scope": "Manufacturer-listed product page; the same page contains conflicting 314Ah nominal-energy figures. Confirm a current SKU-specific datasheet and nameplate before quoting or engineering."
+    },
+    {
+      "id": "SRC-GSL-WALL",
+      "publisher": "GSL ENERGY (manufacturer page)",
+      "title": "Home Wall Battery",
+      "url": "https://www.gsl-energy.com/home-wall-battery.html",
+      "reviewedAt": "2026-10-15",
+      "status": "manufacturer_page_checked_details_pending",
+      "scope": "General manufacturer marketing page. It does not expose a model-specific IP rating for GSL 5000U / 10000U in the text reviewed."
+    },
+    {
+      "id": "SRC-SIRINX-CO",
+      "publisher": "SIRINX public website",
+      "title": "SIRINX services homepage",
+      "url": "https://www.sirinx.co/",
+      "reviewedAt": "2026-10-15",
+      "status": "website_claim",
+      "scope": "Live page structure and published service copy; not independent project or performance evidence."
+    },
+    {
+      "id": "SRC-SIRINX-ASSESSMENT",
+      "publisher": "SIRINX public website",
+      "title": "Solar PV and battery assessment page",
+      "url": "https://www.sirinx.co/assessment/",
+      "reviewedAt": "2026-10-15",
+      "status": "website_claim",
+      "scope": "Live assessment-page copy and disclaimers; calculation-source versions were not audited in this task."
+    },
+    {
+      "id": "SRC-SIRINX-ORG",
+      "publisher": "SIRINX public website",
+      "title": "SIRINX Knowledge directory",
+      "url": "https://sirinx.org/",
+      "reviewedAt": "2026-10-15",
+      "status": "website_claim",
+      "scope": "Live knowledge-page structure and province links; no claim is made that this repo is the deployed source."
+    }
+  ],
+  "knowledgeRecords": [
+    {
+      "id": "BESS-KNOW-01",
+      "topic": "bess-basics",
+      "title": "What battery energy storage does",
+      "state": "source_checked_general_education",
+      "summary": "Energy storage can capture electricity, store it in another form, and release it later. A battery may support different goals, but site suitability depends on the load, system configuration and verified inputs.",
+      "sources": [
+        {
+          "url": "https://www.energy.gov/cmei/systems/solar-integration-solar-energy-and-storage-basics",
+          "publisher": "U.S. Department of Energy",
+          "reviewedAt": "2026-10-15",
+          "state": "source_checked"
+        }
+      ]
+    },
+    {
+      "id": "BESS-KNOW-02",
+      "topic": "kw-vs-kwh",
+      "title": "Power (kW) is different from energy (kWh)",
+      "state": "source_checked_general_education",
+      "summary": "Energy capacity describes the total amount stored, commonly in kWh; power capacity describes how much can be released at a given time, commonly in kW. These measures are related but not interchangeable.",
+      "sources": [
+        {
+          "url": "https://www.energy.gov/cmei/systems/solar-integration-solar-energy-and-storage-basics",
+          "publisher": "U.S. Department of Energy",
+          "reviewedAt": "2026-10-15",
+          "state": "source_checked"
+        }
+      ]
+    },
+    {
+      "id": "BESS-KNOW-03",
+      "topic": "bess-assessment",
+      "title": "What to check before a site-specific BESS assessment",
+      "state": "engineering_review_required",
+      "summary": "A project assessment needs verified load and tariff inputs, operating objective, existing-system details, electrical and protection review, equipment documentation and site conditions. This prototype does not size equipment or estimate savings.",
+      "sources": [
+        {
+          "url": "https://www.sirinx.co/assessment/",
+          "publisher": "SIRINX public website",
+          "reviewedAt": "2026-10-15",
+          "state": "website_claim"
+        }
+      ]
+    }
+  ],
+  "products": [
+    {
+      "id": "BESS-PRODUCT-01",
+      "manufacturer": "GSL ENERGY",
+      "model": "GSL051314A-B-GBP2",
+      "recordState": "manufacturer_reported_conflict_pending_datasheet_confirmation",
+      "recordStateLabel": "ข้อมูลที่ผู้ผลิตเผยแพร่ · มีค่าขัดกันในหน้าเดียวกัน",
+      "sourceId": "SRC-GSL-GBP2",
+      "specifications": [
+        {"label": "แรงดัน nominal", "value": "51.2 V", "status": "manufacturer_reported"},
+        {"label": "ความจุ", "value": "314 Ah", "status": "manufacturer_reported"},
+        {"label": "พลังงาน nominal", "value": "16.07 kWh (ตารางสเปก)", "status": "manufacturer_reported_conflicted"},
+        {"label": "พลังงานแนะนำให้จ่ายที่ 90% DoD", "value": "14.47 kWh", "status": "manufacturer_reported"},
+        {"label": "กระแสชาร์จ/จ่ายที่แนะนำ", "value": "150 A", "status": "manufacturer_reported"},
+        {"label": "กระแสชาร์จ/จ่ายสูงสุด", "value": "200 A", "status": "manufacturer_reported"},
+        {"label": "กระแส peak", "value": "300 A · 2 นาที · 25°C", "status": "manufacturer_reported"},
+        {"label": "การต่อขนาน", "value": "สูงสุด 16 หน่วย (ตามหน้า listing)", "status": "manufacturer_reported"},
+        {"label": "ระดับการป้องกัน enclosure", "value": "IP65 (ตามหน้า listing)", "status": "manufacturer_reported"}
+      ],
+      "conflicts": [
+        {
+          "field": "nominalEnergyKWh",
+          "details": "ตารางรุ่น 314Ah ระบุ 16.07 kWh แต่ข้อความ Key Features ในหน้าเดียวกันระบุ 16.38 kWh. Prototype แสดงค่าตามตารางพร้อมป้าย conflict; ห้ามใช้เป็นสเปกเสนอขาย/ออกแบบจนกว่าจะได้ datasheet รุ่นและ revision ที่เจ้าของผลิตภัณฑ์ยืนยัน.",
+          "values": ["16.07 kWh", "16.38 kWh"]
+        }
+      ],
+      "engineeringCaveat": "ข้อมูลผู้ผลิตไม่ใช่การตรวจรับอิสระ. ยังไม่ยืนยัน inverter compatibility, grid/permit requirements, usable energy ณ operating conditions, warranty for local project, installation/fire-safety design, pricing or ROI."
+    }
+  ],
+  "pendingEvidence": [
+    {
+      "id": "BESS-PENDING-01",
+      "subject": "GSL 5000U / 10000U model-specific ingress protection",
+      "status": "pending_sku_document",
+      "details": "Brief เดิมอ้าง IP50 ขณะที่หน้า manufacturer ระดับ product-family ระบุ IP65; หน้า GSL Home Wall Battery ที่ตรวจครั้งนี้ไม่แสดงค่า IP แบบแยก SKU ในข้อความที่ดึงได้. ต้องยืนยัน datasheet ปัจจุบันของแต่ละ SKU ก่อนเผยแพร่.",
+      "sourceIds": ["SRC-GSL-WALL"]
+    },
+    {
+      "id": "BESS-PENDING-02",
+      "subject": "Inverter compatibility / PEA listing",
+      "status": "pending_authoritative_model_match",
+      "details": "ยังไม่มีรุ่น inverter, firmware, voltage window, communication protocol และเอกสาร/รายการอนุมัติที่ตรวจยืนยันในแพ็กเกจนี้. ห้ามกล่าวว่า compatible หรือ approved.",
+      "sourceIds": []
+    },
+    {
+      "id": "BESS-PENDING-03",
+      "subject": "SIRINX project evidence for BESS performance",
+      "status": "pending_project_documents",
+      "details": "หน้า live มีข้อความโครงการ แต่ไม่มี commissioning record, signed scope, test data, meter baseline, measured savings or customer permissions ในชุดไฟล์ที่ตรวจ. ห้ามใช้เป็น case study เชิงผลลัพธ์.",
+      "sourceIds": ["SRC-SIRINX-CO"]
+    }
+  ],
+  "prohibitedOutputs": [
+    "final battery sizing",
+    "inverter compatibility determination",
+    "engineering recommendation",
+    "ROI / IRR / LCOE / savings forecast",
+    "price or commercial quote",
+    "lead creation or real contact capture",
+    "live telemetry or device control"
+  ]
+}

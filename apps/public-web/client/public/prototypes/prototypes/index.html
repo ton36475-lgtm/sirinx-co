@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="th" id="ecosystem-document">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10171c">
+  <meta name="description" content="ต้นแบบ proposal-only ของระบบนิเวศ SIRINX: ต่อจากเว็บไซต์จริง .org/.co พร้อมข้อเสนอ AI, Cloud, Branding, Back Office, API และ 2D/3D แบบไม่เชื่อม production">
+  <title>SIRINX Ecosystem — Static Proposal Prototype</title>
+  <link rel="stylesheet" href="/assets/site.css">
+  <link rel="stylesheet" href="/assets/ecosystem.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "/assets/vendor/three/three.module.js",
+        "animejs/animation": "/assets/vendor/animejs/modules/animation/index.js"
+      }
+    }
+  </script>
+</head>
+<body class="ecosystem-page">
+  <a class="skip-link" href="#main">ข้ามไปยังเนื้อหาหลัก</a>
+  <header class="eco-header">
+    <a class="eco-brand" href="/prototypes/" aria-label="SIRINX ecosystem prototype หน้าแรก">
+      <span class="eco-brand-mark" aria-hidden="true">S</span>
+      <span><strong>SIRINX</strong><small>ECOSYSTEM PROTOTYPE</small></span>
+    </a>
+    <nav class="eco-nav" aria-label="เมนูต้นแบบ">
+      <a href="#domain-roles">สองโดเมน</a>
+      <a href="#subdomains">AI / Cloud</a>
+      <a href="#branding">Branding</a>
+      <a href="#back-office">Back office</a>
+      <a href="#api-wiring">API</a>
+      <a href="#render-studio">2D / 3D</a>
+    </nav>
+    <div class="eco-top-actions">
+      <a class="eco-text-link" href="/">เปิด .org</a>
+      <a class="eco-button eco-button-small" href="/co.html">เปิด .co</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="eco-hero" aria-labelledby="hero-title">
+      <div class="eco-hero-copy">
+        <p class="eco-eyebrow"><span class="eco-dot" aria-hidden="true"></span>STATIC · PROPOSAL ONLY · 9 OCT 2026</p>
+        <h1 id="hero-title">สองเว็บไซต์ที่ต่อยอดจากงานจริง<br><em>บนชั้นหลักฐานเดียวกัน</em></h1>
+        <p class="eco-lede">คง .org เป็นคลังความรู้ / policy / evidence และ .co เป็นบริการ / assessment / engineering handoff / conversion แล้วเพิ่มพื้นที่ AI, Cloud, CEO &amp; Staff Branding และ shared back office ในฐานะข้อเสนอที่ยังไม่เชื่อมระบบจริง</p>
+        <div class="eco-state-row" aria-label="สถานะและข้อจำกัดต้นแบบ">
+          <span class="eco-pill pill-proposal">PROPOSAL · ไม่ใช่ production</span>
+          <span class="eco-pill pill-offline">LIVE API · OFFLINE</span>
+          <span class="eco-pill pill-scenario">ค่าพลังงาน / ROI · ไม่คำนวณ</span>
+        </div>
+        <div class="eco-hero-actions">
+          <a class="eco-button" href="#route-map">สำรวจทุกพื้นที่</a>
+          <a class="eco-button eco-button-ghost" href="#source-map">ดู source / migration map</a>
+        </div>
+        <p class="eco-small-note">หน้าเว็บและ source สาธารณะตรวจแบบ read-only · ไม่แก้เว็บไซต์, repository, DNS, Cloudflare, database หรือระบบ production</p>
+      </div>
+      <figure class="eco-hero-art">
+        <svg viewBox="0 0 640 390" role="img" aria-labelledby="hero-svg-title hero-svg-desc">
+          <title id="hero-svg-title">ภาพแนวคิด Solar Carport สไตล์ clay 2 มิติ</title>
+          <desc id="hero-svg-desc">หลังคาแผงพลังงานแบบต้นแบบบนเสาสี่ต้น มีรถยนต์ทรงเรียบและแถบแสดงการไหลของข้อมูลเชิงแนวคิด ไม่มีมาตราส่วนหรือค่าการผลิตจริง</desc>
+          <defs>
+            <linearGradient id="eco-roof" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#69d5c5"/><stop offset="1" stop-color="#247a7a"/></linearGradient>
+            <linearGradient id="eco-ground" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#44565a"/><stop offset="1" stop-color="#263237"/></linearGradient>
+          </defs>
+          <ellipse cx="326" cy="335" rx="260" ry="31" fill="#0b0f12" opacity=".35"/>
+          <path d="M76 302 312 225l261 62-238 83z" fill="url(#eco-ground)" stroke="#708285" stroke-width="2"/>
+          <path d="M115 114 374 40l172 42-260 78z" fill="#b86e4e" opacity=".55"/>
+          <path d="M95 101 353 28l180 43-260 78z" fill="url(#eco-roof)" stroke="#e4cba7" stroke-width="5"/>
+          <g stroke="#d6ece3" stroke-width="2" opacity=".75"><path d="m146 87 183 46"/><path d="m203 71 182 46"/><path d="m260 55 184 46"/><path d="m153 133 29-60"/><path d="m218 151 29-61"/><path d="m283 133 29-61"/><path d="m348 116 28-60"/><path d="m413 98 29-60"/></g>
+          <g fill="#c6815d" stroke="#f0c6a4" stroke-width="3"><path d="m139 124 13 2v165l-13 5z"/><path d="m489 94 13 3v180l-13 5z"/><path d="m241 151 12 1v120l-12 4z"/><path d="m397 108 12 2v155l-12 4z"/></g>
+          <g transform="translate(216 236)"><path d="M0 47 23 23q11-11 30-11h96q18 0 31 14l21 22 23 9v32H3z" fill="#e9d8bd" stroke="#90715c" stroke-width="4"/><path d="m54 21 25-2h31l29 27H33z" fill="#6da7a7" stroke="#e9d8bd" stroke-width="3"/><circle cx="43" cy="88" r="19" fill="#252b2d" stroke="#d6c4aa" stroke-width="6"/><circle cx="179" cy="88" r="19" fill="#252b2d" stroke="#d6c4aa" stroke-width="6"/></g>
+          <g font-family="system-ui, sans-serif" font-size="13" font-weight="700"><rect x="55" y="28" width="128" height="31" rx="15" fill="#f2e8d7"/><text x="119" y="48" text-anchor="middle" fill="#1c3c37">2D · SCENARIO</text><rect x="444" y="313" width="141" height="31" rx="15" fill="#132326" stroke="#60d1bf"/><text x="514" y="333" text-anchor="middle" fill="#90e6d9">NO LIVE DATA</text></g>
+        </svg>
+        <figcaption>ภาพวาด SVG ต้นฉบับสำหรับแนวคิดเท่านั้น · ไม่มีมาตราส่วน วิศวกรรม หรือค่า telemetry</figcaption>
+      </figure>
+    </section>
+
+    <section id="domain-roles" class="eco-section" aria-labelledby="domains-heading">
+      <div class="eco-section-heading">
+        <div><p class="eco-kicker">PRESERVE THE REAL WORK</p><h2 id="domains-heading">ประสบการณ์หลักสองโดเมน</h2></div>
+        <p>ยังคงเส้นทางและหน้าที่เดิมจากเว็บไซต์จริง ไม่ย้ายระบบหรือเปลี่ยน production</p>
+      </div>
+      <div class="eco-domain-grid">
+        <article class="eco-domain-card eco-org-card">
+          <div class="eco-card-top"><span class="eco-domain-label">SIRINX.ORG · KNOWLEDGE</span><span class="eco-pill pill-source">LIVE STRUCTURE READ</span></div>
+          <h3>ความรู้ · Policy · Evidence</h3>
+          <p>คง directory 6 ภูมิภาค / 77 จังหวัด และทางเชื่อมจากความรู้ไปยังบริการ .co เพิ่ม provenance, policy-state และ evidence registry ในฐานะส่วนขยาย</p>
+          <ul class="eco-check-list"><li>77 ลิงก์จังหวัดเดิมยังอยู่ที่ <code>/</code></li><li>Policy แสดงเป็นสถานะสังเกตการณ์ ไม่ใช่คำวินิจฉัยกฎหมาย</li><li>แยก website claim, measured, forecast, scenario, stale และ offline</li></ul>
+          <div class="eco-card-actions"><a class="eco-button" href="/">เปิดหน้า .org ที่ต่อยอดแล้ว</a><a class="eco-text-link" href="/#evidence">ดู Evidence Registry</a></div>
+        </article>
+        <article class="eco-domain-card eco-co-card">
+          <div class="eco-card-top"><span class="eco-domain-label">SIRINX.CO · SERVICE</span><span class="eco-pill pill-source">LIVE STRUCTURE READ</span></div>
+          <h3>บริการ · Assessment · Engineering · Conversion</h3>
+          <p>คง hero, โซลูชัน, อุตสาหกรรม, โครงการ, O&amp;M, การลงทุน, FAQ และแบบประเมินจากหน้าเว็บ/source ที่เข้าถึงได้</p>
+          <ul class="eco-check-list"><li>Assessment ใช้สร้าง brief ในเครื่อง ไม่คำนวณผลตอบแทน</li><li>โครงการระบุว่าเป็นข้อความที่เว็บไซต์เผยแพร่ ไม่ใช่ผลวัดอิสระ</li><li>ข้อมูลไซต์และงานวิศวกรรมไม่ปะปนกับ public knowledge</li></ul>
+          <div class="eco-card-actions"><a class="eco-button eco-button-co" href="/co.html">เปิดหน้า .co ที่ต่อยอดแล้ว</a><a class="eco-text-link" href="/co.html#assessment">ไปที่ assessment preview</a></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="route-map" class="eco-section eco-section-light" aria-labelledby="route-heading">
+      <div class="eco-section-heading">
+        <div><p class="eco-kicker">ROUTE &amp; FUNCTION MAP</p><h2 id="route-heading">พื้นที่ที่เสนอทั้งหมด</h2></div>
+        <p>ค้นหา route หรือฟังก์ชัน · ทุกช่องทางที่ยังไม่มีเนื้อหาต้นทางจะติดป้าย proposed / pending</p>
+      </div>
+      <div class="eco-route-filter"><label for="route-filter">กรองพื้นที่ต้นแบบ</label><input id="route-filter" type="search" placeholder="เช่น projects, AI, cloud, CEO, Postman" autocomplete="off" aria-controls="route-grid"><span id="route-count" aria-live="polite">แสดงทุกพื้นที่</span></div>
+      <div id="route-grid" class="eco-route-grid">
+        <a class="eco-route-card" data-route-card href="/" data-route-search="org knowledge provinces 77 policy evidence directory"><span>.org</span><strong>Knowledge Directory</strong><small>77 จังหวัด · source-aligned</small><i>LIVE STRUCTURE</i></a>
+        <a class="eco-route-card" data-route-card href="/#policy" data-route-search="org policy governance legal status evidence"><span>.org / policy</span><strong>Policy &amp; Evidence</strong><small>provenance · dated status · review gate</small><i>PROTOTYPE EXTENSION</i></a>
+        <a class="eco-route-card" data-route-card href="/co.html" data-route-search="co home solar carport hero site"><span>.co</span><strong>Service Homepage</strong><small>hero · products · project claims</small><i>LIVE STRUCTURE</i></a>
+        <a class="eco-route-card" data-route-card href="/bess.html" data-route-search="bess battery storage product service assessment peak load"><span>.co / BESS</span><strong>BESS Hero Offer</strong><small>service intent · local-only assessment · no sizing</small><i>ADDITIVE PROTOTYPE</i></a>
+        <a class="eco-route-card" data-route-card href="/bess-knowledge.html" data-route-search="bess knowledge kw kwh energy evidence product specs"><span>.org / BESS</span><strong>BESS Knowledge</strong><small>kW / kWh · source-linked product evidence</small><i>ADDITIVE PROTOTYPE</i></a>
+        <a class="eco-route-card" data-route-card href="/co.html#solutions" data-route-search="solutions solar rooftop floating bess ev charging om"><span>.co / solutions</span><strong>Solutions</strong><small>Solar · BESS · EV · O&amp;M</small><i>LIVE CONTENT + STATUS LABELS</i></a>
+        <a class="eco-route-card" data-route-card href="/co.html#industries" data-route-search="industries factory hotel commercial education"><span>.co / industries</span><strong>Industries</strong><small>sector cards · fit questions</small><i>LIVE CONTENT</i></a>
+        <a class="eco-route-card" data-route-card href="/co.html#projects" data-route-search="projects case studies ruenphae holatel"><span>.co / projects</span><strong>Projects</strong><small>Ruenphae · Holatel · evidence gates</small><i>WEBSITE CLAIM</i></a>
+        <a class="eco-route-card" data-route-card href="#pricing-route" data-route-search="pricing investment package financing roi"><span>.co / pricing &amp; investment</span><strong>Pricing / Investment</strong><small>scenario intake · no invented prices</small><i>PENDING TERMS</i></a>
+        <a class="eco-route-card" data-route-card href="#route-functions" data-route-search="strategy blog about policy faq contact"><span>.co / strategy / blog / about</span><strong>Editorial &amp; Company</strong><small>content routes · approval workflow</small><i>ROUTE PROPOSAL</i></a>
+        <a class="eco-route-card" data-route-card href="#partners" data-route-search="partner marketplace vendors integrations"><span>.co / partner</span><strong>Partner Marketplace</strong><small>directory · intake · verification status</small><i>PROPOSAL ONLY</i></a>
+        <a class="eco-route-card" data-route-card href="#site-assessment" data-route-search="assessment solar calculator roi bess energy"><span>.co / assessment</span><strong>Assessment Brief</strong><small>inputs only · no ROI calculation</small><i>LOCAL DEMO</i></a>
+        <a class="eco-route-card" data-route-card href="#ai-co" data-route-search="ai sirinx co enterprise assistant workflow"><span>ai.sirinx.co</span><strong>Enterprise AI</strong><small>source-cited workflow proposal</small><i>PROPOSED HOST</i></a>
+        <a class="eco-route-card" data-route-card href="#ai-org" data-route-search="ai sirinx org knowledge policy research"><span>ai.sirinx.org</span><strong>AI Knowledge &amp; Policy</strong><small>public evidence and governance</small><i>PROPOSED HOST</i></a>
+        <a class="eco-route-card" data-route-card href="#cloud-co" data-route-search="cloud sirinx co inet gpu compute pricing"><span>cloud.sirinx.co</span><strong>Cloud Workloads</strong><small>capacity / pricing unknown</small><i>PROPOSED HOST</i></a>
+        <a class="eco-route-card" data-route-card href="#cloud-org" data-route-search="cloud sirinx org gpu knowledge policy"><span>cloud.sirinx.org</span><strong>Compute Knowledge</strong><small>neutral explainers and evidence</small><i>PROPOSED HOST</i></a>
+        <a class="eco-route-card" data-route-card href="#branding" data-route-search="CEO branding leadership thought leadership staff branding consent"><span>Branding</span><strong>CEO &amp; Staff Branding</strong><small>opt-in · permissioned · withdrawable</small><i>PROPOSAL ONLY</i></a>
+        <a class="eco-route-card" data-route-card href="#back-office" data-route-search="shared back office workflow roles leads evidence engineering"><span>Shared back office</span><strong>Governed Work Queue</strong><small>role separation · synthetic records</small><i>OFFLINE DEMO</i></a>
+        <a class="eco-route-card" data-route-card href="#api-wiring" data-route-search="backend api postman openapi integration mock"><span>API / Postman</span><strong>Contract Console</strong><small>OpenAPI · Postman · local mock</small><i>NO LIVE API</i></a>
+        <a class="eco-route-card" data-route-card href="#render-studio" data-route-search="render 2d claymation three.js anime.js webgl"><span>Render Studio</span><strong>2D → Optional 3D</strong><small>SVG fallback · on-demand WebGL</small><i>LOCAL VENDOR</i></a>
+        <a class="eco-route-card" data-route-card href="#source-map" data-route-search="github source code migrations tech stack prompt pack"><span>Source map</span><strong>Repos / Migrations / Prompt Pack</strong><small>24 public repos · file path index</small><i>READ-ONLY AUDIT</i></a>
+      </div>
+      <p id="route-empty" class="eco-empty" hidden>ไม่พบพื้นที่ที่ตรงกับคำค้น</p>
+    </section>
+
+    <section id="co-route-library" class="eco-section" aria-labelledby="co-route-heading">
+      <div class="eco-section-heading"><div><p class="eco-kicker">SIRINX.CO · PRESERVE EXISTING ROUTES</p><h2 id="co-route-heading">แผนที่ route เว็บไซต์บริการ</h2></div><p>ชื่อ route จากหน้าจริงและ sitemap; เนื้อหาใหม่ที่ยังไม่มีหลักฐานจะคงเป็น placeholder ที่ติดป้ายไว้</p></div>
+      <div class="eco-route-list" role="list">
+        <div role="listitem"><code>/</code><strong>Home / Solar Carport</strong><a href="/co.html">เปิด section ต้นแบบ</a></div>
+        <div role="listitem"><code>/solutions/</code><strong>Solutions · BESS · EV · O&amp;M</strong><a href="/co.html#solutions">เปิด section ต้นแบบ</a></div>
+        <div role="listitem"><code>/industries/</code><strong>Industries</strong><a href="/co.html#industries">เปิด section ต้นแบบ</a></div>
+        <div role="listitem"><code>/projects/</code><strong>Projects &amp; case studies</strong><a href="/co.html#projects">เปิด section ต้นแบบ</a></div>
+        <div role="listitem"><code>/pricing/ · /investment/</code><strong>Packages / investment</strong><a href="#pricing-route">เปิด scenario intake · ไม่มีราคา/ROI</a></div>
+        <div role="listitem"><code>/assessment/</code><strong>Solar + BESS assessment</strong><a href="#site-assessment">เปิด local-only form</a></div>
+        <div role="listitem"><code>/about/ · /strategy/ · /blog/</code><strong>Company &amp; editorial</strong><a href="#about-route">เปิด About / Strategy / Blog previews</a></div>
+        <div role="listitem"><code>/partner/ · /contact/ · /policy/</code><strong>Partner / contact / policy</strong><a href="#contact-route">เปิด Contact / Policy previews</a></div>
+        <div role="listitem"><code>/solar-carport-{province}/</code><strong>Provincial knowledge pages</strong><a href="/">ใช้ directory เดิมบน .org</a></div>
+      </div>
+    </section>
+
+    <section id="route-functions" class="eco-section" aria-labelledby="route-functions-heading">
+      <div class="eco-section-heading"><div><p class="eco-kicker">COMPLETE ROUTE PROPOSALS · NO NEW CLAIMS</p><h2 id="route-functions-heading">ฟังก์ชัน route ที่เหลือ</h2></div><p>ส่วนเหล่านี้เป็น workflow prototypes สำหรับ route ที่พบใน sitemap; ราคา, เนื้อหา, commercial terms และสถานะจริงยังต้องยืนยันจากเจ้าของข้อมูล</p></div>
+      <div class="eco-card-grid">
+        <article id="pricing-route" class="eco-simple-card">
+          <span class="eco-pill pill-pending">PRICE · UNKNOWN</span><h3>Pricing / investment intake</h3>
+          <p>จัดประเภทโครงการและรูปแบบการลงทุนเพื่อเตรียมข้อมูลขอใบเสนอราคาเท่านั้น ไม่มีตัวเลขราคา, ROI, IRR หรือข้อเสนอที่สร้างอัตโนมัติ</p>
+          <form id="pricing-demo-form" class="eco-form">
+            <label for="pricing-solution">ระบบที่ต้องการประเมิน</label>
+            <select id="pricing-solution" name="solutionPackage"><option value="solar_carport">Solar Carport</option><option value="rooftop">Rooftop Solar</option><option value="floating_solar">Floating Solar</option><option value="bess">BESS / ESS</option><option value="ev_charging">EV Charging</option><option value="ems">Energy Management / EMS</option></select>
+            <label for="pricing-structure">โครงสร้างที่ต้องการให้ผู้เชี่ยวชาญพิจารณา (ไม่ใช่ข้อเสนอ)</label>
+            <select id="pricing-structure" name="commercialStructure"><option value="purchase">ซื้ออุปกรณ์/ระบบ</option><option value="lease">เช่า/ผ่อน — เงื่อนไขยังไม่ยืนยัน</option><option value="third_party">ผู้ลงทุนภายนอก — ต้องยืนยันความพร้อม</option><option value="not_sure">ยังไม่แน่ใจ</option></select>
+            <button class="eco-button" type="submit">ดูรายการข้อมูลที่ยังขาด</button>
+            <output id="pricing-result" class="eco-output" aria-live="polite" aria-atomic="true"></output>
+          </form>
+        </article>
+        <article id="strategy-route" class="eco-simple-card">
+          <span class="eco-pill pill-proposal">STRATEGY · DRAFT</span><h3>Strategy brief</h3>
+          <p>กำหนดหัวข้อให้ทีมทบทวน โดยไม่สร้างเป้าหมาย, KPI หรือการคาดการณ์ธุรกิจที่ยังไม่มีผู้อนุมัติ</p>
+          <form id="strategy-brief-form" class="eco-form">
+            <label for="strategy-pillar">หัวข้อ</label><select id="strategy-pillar" name="pillar"><option value="evidence">Evidence-first knowledge</option><option value="engineering">Assessment → engineering handoff</option><option value="governance">AI / energy governance</option><option value="partner">Partner verification</option></select>
+            <label for="strategy-horizon">ช่วงทบทวน</label><select id="strategy-horizon" name="horizon"><option value="quarter">Quarterly review</option><option value="annual">Annual review</option><option value="not_set">ยังไม่กำหนด</option></select>
+            <button class="eco-button eco-button-copper" type="submit">สร้างรายการทบทวน</button>
+            <output id="strategy-result" class="eco-output" aria-live="polite" aria-atomic="true"></output>
+          </form>
+        </article>
+        <article id="about-route" class="eco-simple-card">
+          <span class="eco-pill pill-pending">ABOUT · OWNER REVIEW</span><h3>About / leadership content</h3>
+          <p>เลือกชนิดเนื้อหาที่ต้องเตรียม source, owner และสิทธิ์ก่อนเผยแพร่ ไม่มีการแต่งประวัติหรือ credential เพิ่ม</p>
+          <form id="about-content-form" class="eco-form">
+            <label for="about-content-type">ชนิดเนื้อหา</label><select id="about-content-type" name="route"><option value="about">Company overview</option><option value="leadership">Leadership profile</option><option value="services">Service-area statement</option></select>
+            <label for="about-format">รูปแบบ</label><select id="about-format" name="format"><option value="webpage">Web page</option><option value="media_kit">Media kit</option><option value="video">Video concept</option><option value="speaking">Speaking topic</option></select>
+            <button class="eco-button" type="submit">ดู owner-review checklist</button>
+            <output id="about-result" class="eco-output" aria-live="polite" aria-atomic="true"></output>
+          </form>
+        </article>
+        <article id="blog-route" class="eco-simple-card">
+          <span class="eco-pill pill-scenario">EDITORIAL · CONCEPT DRAFTS</span><h3>Blog / thought leadership</h3>
+          <p>ค้นหัวข้อเสนอของ CEO/staff; การ์ดทุกใบเป็นแนวคิด ไม่ใช่บทความตีพิมพ์หรือคำพูดจริง</p>
+          <label for="blog-filter">กรองหัวข้อ<select id="blog-filter"><option value="all">ทุกหัวข้อ</option><option value="knowledge">Knowledge</option><option value="leadership">Leadership</option><option value="video">Video / speaking</option></select></label>
+          <p id="blog-filter-status" class="eco-small-note" role="status" aria-live="polite"></p>
+          <div id="blog-draft-list" class="eco-draft-list">
+            <article data-blog-topic="knowledge"><strong>ตรวจที่มาก่อนอ่านตัวเลขพลังงาน</strong><span>DRAFT CONCEPT · source review required</span></article>
+            <article data-blog-topic="leadership"><strong>การตัดสินใจด้านพลังงานโดยยึดหลักฐาน</strong><span>DRAFT CONCEPT · owner review required</span></article>
+            <article data-blog-topic="video"><strong>Solar Carport / BESS / EV: คำถามก่อนเริ่มโครงการ</strong><span>VIDEO / SPEAKING CONCEPT · no recording</span></article>
+          </div>
+        </article>
+        <article id="contact-route" class="eco-simple-card">
+          <span class="eco-pill pill-offline">CONTACT · NOT SENT</span><h3>Contact routing preview</h3>
+          <p>route `/contact/` ถูกพบในโครงสร้างเว็บไซต์ แต่ฟอร์มนี้ไม่ใช่ช่องทางติดต่อจริงและไม่รับข้อมูลส่วนบุคคล</p>
+          <form id="contact-route-form" class="eco-form">
+            <label for="contact-intent">จุดประสงค์</label><select id="contact-intent" name="intent"><option value="assessment">ประเมินโครงการ</option><option value="partner">Partner / marketplace</option><option value="correction">แก้ไขข้อมูล / evidence</option><option value="media">สื่อ / บทความ / speaker</option></select>
+            <label for="contact-region">พื้นที่</label><select id="contact-region" name="region"><option value="not_provided">ยังไม่ระบุ</option><option value="Central">Central</option><option value="North">North</option><option value="East">East</option><option value="Other">Other</option></select>
+            <button class="eco-button eco-button-co" type="submit">ดูเส้นทางที่เสนอ</button>
+            <output id="contact-route-result" class="eco-output" aria-live="polite" aria-atomic="true"></output>
+          </form>
+        </article>
+        <article id="policy-taxonomy" class="eco-simple-card">
+          <span class="eco-pill pill-source">.ORG · POLICY STATE MODEL</span><h3>Policy status taxonomy</h3>
+          <p>นี่คือชนิดสถานะของ workflow ไม่ใช่การยืนยันว่ามีกฎหมายหรือสิทธิประโยชน์ใดใช้กับโครงการ</p>
+          <div class="eco-policy-states"><div><strong>ENACTED RULE</strong><span>ต้องมีข้อกฎหมาย/แหล่งทางการ + วันที่มีผล</span></div><div><strong>APPROVED FRAMEWORK</strong><span>ต้องมีผู้อนุมัติและ version</span></div><div><strong>OPEN INTAKE</strong><span>รับฟัง/เปิดรับข้อมูล; ยังไม่ใช่ข้อกำหนด</span></div><div><strong>PENDING IMPLEMENTATION</strong><span>ประกาศแล้วแต่ขั้นตอนยังไม่ครบ</span></div><div><strong>UNKNOWN</strong><span>ยังไม่มีหลักฐานเพียงพอในต้นแบบ</span></div></div>
+          <dl class="eco-policy-metadata"><div><dt>Jurisdiction / scope</dt><dd>not imported</dd></div><div><dt>Source URL + publisher</dt><dd>not imported</dd></div><div><dt>Publication / effective date</dt><dd>not imported</dd></div><div><dt>Last reviewed / reviewer</dt><dd>not imported</dd></div><div><dt>Record owner / version</dt><dd>not assigned</dd></div></dl>
+          <p class="eco-small-note">ไม่มี policy record จาก Drive ถูกนำเข้า · แสดงเฉพาะ schema ของสถานะ</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="subdomains" class="eco-section eco-section-light" aria-labelledby="subdomain-heading">
+      <div class="eco-section-heading"><div><p class="eco-kicker">PROPOSED HOSTS · DNS NOT VERIFIED</p><h2 id="subdomain-heading">AI และ Cloud: สี่ประสบการณ์ที่แยกบทบาท</h2></div><p>ตรวจแล้วไม่พบการ resolve ของสี่ host ณ รอบตรวจ · หน้าเหล่านี้อยู่ใน preview เท่านั้น</p></div>
+      <div class="eco-subdomain-grid">
+        <article id="ai-co" class="eco-subdomain-card accent-cyan">
+          <div class="eco-card-top"><span class="eco-domain-label">ai.sirinx.co</span><span class="eco-pill pill-proposal">PROPOSED</span></div>
+          <h3>Enterprise AI workbench</h3>
+          <p>เส้นทางเสนอสำหรับองค์กร: เริ่มจากโจทย์ → ระบุแหล่งความรู้ที่ได้รับอนุญาต → สร้างคำตอบพร้อม citation → ส่งผู้เชี่ยวชาญทบทวนก่อนใช้</p>
+          <ul class="eco-check-list"><li>Knowledge Q&amp;A แบบอ้างแหล่งที่มา</li><li>เอกสารและ workflow review ที่กำหนดเจ้าของ</li><li>Energy AI แสดงเฉพาะ advisory / simulation / shadow</li><li>ห้ามสร้างหรือส่ง raw device command</li></ul>
+          <form id="ai-demo-form" class="eco-form">
+            <label for="ai-topic">หัวข้อทดสอบจาก fixture</label>
+            <select id="ai-topic" name="topic"><option value="solar-carport">Solar Carport</option><option value="bess">BESS / ESS</option><option value="evidence">Evidence governance</option></select>
+            <label for="ai-question">คำถามตัวอย่าง (ไม่ส่งไปยัง LLM)</label>
+            <textarea id="ai-question" name="question" rows="2" maxlength="200">มีหลักฐานสาธารณะใดที่ควรตรวจต่อก่อนประเมินไซต์?</textarea>
+            <button class="eco-button eco-button-co" type="submit">จำลองคำตอบที่มีแหล่งอ้างอิง</button>
+            <output id="ai-result" class="eco-output" aria-live="polite" aria-atomic="true"></output>
+          </form>
+          <p class="eco-small-note">DEMO ONLY · ไม่มี model call, account, log หรือการจัดเก็บ</p>
+        </article>
+        <article id="ai-org" class="eco-subdomain-card accent-green">
+          <div class="eco-card-top"><span class="eco-domain-label">ai.sirinx.org</span><span class="eco-pill pill-proposal">PROPOSED</span></div>
+          <h3>AI Knowledge, policy &amp; evidence library</h3>
+          <p>สื่อสาธารณะเพื่ออธิบายการใช้ AI/พลังงานอย่างมีที่มา พร้อมรายการ policy snapshot และหลักฐานที่ตรวจสอบย้อนกลับได้</p>
+          <div class="eco-mini-grid"><div><strong>01 · Knowledge</strong><span>หัวข้อ, ผู้เผยแพร่, วันที่ทบทวน</span></div><div><strong>02 · Policy state</strong><span>enacted / approved / intake / pending / unknown</span></div><div><strong>03 · Evidence</strong><span>source URL · status · reviewer</span></div><div><strong>04 · Corrections</strong><span>ช่องทางขอแก้ไขและปรับปรุง</span></div></div>
+          <div class="eco-callout"><strong>ข้อจำกัด:</strong> ไม่มีการสรุปกฎหมายเป็นคำแนะนำ และไม่มี policy record จาก Drive ที่ยังไม่ได้อนุญาตให้อ่าน</div>
+        </article>
+        <article id="cloud-co" class="eco-subdomain-card accent-copper">
+          <div class="eco-card-top"><span class="eco-domain-label">cloud.sirinx.co</span><span class="eco-pill pill-proposal">PROPOSED</span></div>
+          <h3>Cloud workload &amp; GPU service proposal</h3>
+          <p>พื้นที่เสนอสำหรับ workload intake, architecture discussion, cost-estimation request และ partner handoff โดยไม่กล่าวอ้าง availability หรือ capacity</p>
+          <div class="eco-caveat"><strong>INET Cloud GPU:</strong> ความสัมพันธ์เชิงพาณิชย์, รายการบริการ, region, capacity, ราคา, SLA และสิทธิ์การจำหน่ายยังไม่ยืนยันจากหลักฐานที่เข้าถึงได้</div>
+          <form id="cloud-demo-form" class="eco-form">
+            <label for="cloud-workload">ประเภทงาน (ตัวอย่าง)</label>
+            <select id="cloud-workload" name="workload"><option value="inference">Inference</option><option value="training">Training</option><option value="storage">Storage / backup</option><option value="not_sure">ยังไม่แน่ใจ</option></select>
+            <label for="cloud-data-class">ระดับข้อมูล</label>
+            <select id="cloud-data-class" name="dataClass"><option value="public">ข้อมูลสาธารณะเท่านั้น</option><option value="internal">ข้อมูลภายใน (ยังไม่ส่ง)</option><option value="unknown">ยังไม่ทราบ</option></select>
+            <button class="eco-button eco-button-copper" type="submit">สร้าง workload brief ในเครื่อง</button>
+            <output id="cloud-result" class="eco-output" aria-live="polite" aria-atomic="true"></output>
+          </form>
+          <p class="eco-small-note">ผลลัพธ์จะระบุ availability/pricing = UNKNOWN · ไม่มีการจองทรัพยากรหรือส่งคำขอ</p>
+        </article>
+        <article id="cloud-org" class="eco-subdomain-card accent-green">
+          <div class="eco-card-top"><span class="eco-domain-label">cloud.sirinx.org</span><span class="eco-pill pill-proposal">PROPOSED</span></div>
+          <h3>Cloud &amp; compute knowledge</h3>
+          <p>คู่มือกลางที่แยกแนวคิด GPU/cloud, data residency, security, energy context และคำศัพท์ให้ผู้อ่านตรวจแหล่งที่มาได้</p>
+          <div class="eco-mini-grid"><div><strong>Compute basics</strong><span>CPU / GPU / memory — glossary</span></div><div><strong>Evidence</strong><span>ข้อมูลผู้ให้บริการและวันทบทวน</span></div><div><strong>Privacy</strong><span>data class / retention / location</span></div><div><strong>Energy</strong><span>ไม่แสดงค่าการใช้ไฟที่ยังไม่มีการวัด</span></div></div>
+          <p class="eco-small-note">ไม่ใช่ independent benchmark, provider ranking หรือการรับรองความพร้อมใช้งาน</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="site-assessment" class="eco-section" aria-labelledby="assessment-heading">
+      <div class="eco-section-heading"><div><p class="eco-kicker">SIRINX.CO · LOCAL-ONLY</p><h2 id="assessment-heading">Assessment &amp; engineering handoff</h2></div><p>รักษาลำดับ input จาก assessment เดิม แต่ไม่คำนวณ ROI, IRR, LCOE, generation หรือ forecast</p></div>
+      <div class="eco-assessment-layout">
+        <div class="eco-panel">
+          <form id="site-assessment-form" class="eco-form eco-form-grid">
+            <label>ประเภทธุรกิจ<select name="businessType"><option>โรงแรม / รีสอร์ต</option><option>โรงงาน</option><option>อาคารพาณิชย์</option><option>สถานศึกษา</option><option>อื่น ๆ</option></select></label>
+            <label>จังหวัด<select name="province"><option>ยังไม่ระบุ</option><option>พิษณุโลก</option><option>น่าน</option><option>กรุงเทพมหานคร</option><option>อื่น ๆ</option></select></label>
+            <label>ค่าไฟเฉลี่ยต่อเดือน<select name="monthlyBillRange"><option>ยังไม่ระบุ</option><option>ต่ำกว่า 50,000 บาท</option><option>50,000–250,000 บาท</option><option>มากกว่า 250,000 บาท</option></select></label>
+            <label>พื้นที่ลานจอด / หลังคา<select name="siteAreaRange"><option>ยังไม่ระบุ</option><option>ต่ำกว่า 500 m²</option><option>500–2,000 m²</option><option>มากกว่า 2,000 m²</option></select></label>
+            <label class="form-span">ระบบที่สนใจ<select name="solution"><option>Solar Carport</option><option>Rooftop Solar</option><option>Floating Solar</option><option>BESS / ESS</option><option>EV Charging</option><option>Energy Management / EMS</option><option>ยังไม่แน่ใจ</option></select></label>
+            <div class="form-span form-actions"><button class="eco-button eco-button-co" type="submit">สร้าง engineering brief ตัวอย่าง</button><button class="eco-button eco-button-ghost" type="reset">ล้างข้อมูล</button></div>
+          </form>
+          <output id="assessment-result" class="eco-output" aria-live="polite" aria-atomic="true"></output>
+        </div>
+        <aside class="eco-panel eco-panel-muted"><span class="eco-pill pill-scenario">SCENARIO INPUT · NOT A QUOTE</span><h3>ข้อมูลที่ต้องตรวจโดยผู้เชี่ยวชาญ</h3><ul class="eco-check-list"><li>load profile / tariff / meter interval ที่ได้รับอนุญาต</li><li>ผังพื้นที่และข้อจำกัดโครงสร้าง/ไฟฟ้า</li><li>เจ้าของข้อมูล, วันที่, version และหน่วย</li><li>สมมติฐานและความไม่แน่นอนของแบบจำลอง</li><li>owner/reviewer ก่อนออกผลที่มีผลต่อการตัดสินใจ</li></ul><p class="eco-small-note">แบบฟอร์มไม่ถามชื่อ/เบอร์โทร/อีเมล และไม่มีการเก็บหรือส่งข้อมูล</p></aside>
+      </div>
+    </section>
+
+    <section id="partners" class="eco-section eco-section-light" aria-labelledby="partners-heading">
+      <div class="eco-section-heading"><div><p class="eco-kicker">PARTNER &amp; MARKETPLACE</p><h2 id="partners-heading">เครือข่ายผู้ให้บริการแบบตรวจสอบได้</h2></div><p>ไม่แสดงโลโก้, ราคา, ส่วนลด, SLA หรือสถานะพันธมิตรที่ยังยืนยันไม่ได้</p></div>
+      <div class="eco-card-grid">
+        <article class="eco-simple-card"><span class="eco-pill pill-pending">PARTNER STATUS · PENDING</span><h3>Solar / BESS / EV</h3><p>รูปแบบโปรไฟล์: ขอบเขตบริการ, ใบรับรอง, จังหวัด, version, วันที่ตรวจ และช่องทางร้องเรียน</p></article>
+        <article class="eco-simple-card"><span class="eco-pill pill-pending">RELATIONSHIP · UNVERIFIED</span><h3>Cloud / Compute providers</h3><p>ระบุความสัมพันธ์ทางการค้าและสิทธิ์การใช้แบรนด์ก่อนเผยแพร่; capacity และราคาต้องมาจากเอกสารปัจจุบัน</p></article>
+        <article class="eco-simple-card"><span class="eco-pill pill-scenario">LOCAL DEMO</span><h3>Marketplace handoff</h3><p>คัดกรองประเภทความสนใจและพื้นที่โดยไม่สร้าง lead จริงหรือส่งข้อมูลออก</p></article>
+      </div>
+      <form id="partner-demo-form" class="eco-form eco-inline-form">
+        <label for="partner-type">ประเภทพันธมิตร<select id="partner-type" name="partnerType"><option>Engineering</option><option>Installation</option><option>Cloud / compute</option><option>Research / policy</option></select></label>
+        <label for="partner-region">พื้นที่สนใจ<select id="partner-region" name="region"><option>ยังไม่ระบุ</option><option>Central</option><option>North</option><option>East</option><option>Other</option></select></label>
+        <button class="eco-button" type="submit">ดูตัวอย่าง partner intake</button>
+        <output id="partner-result" class="eco-output" aria-live="polite" aria-atomic="true"></output>
+      </form>
+    </section>
+
+    <section id="branding" class="eco-section" aria-labelledby="branding-heading">
+      <div class="eco-section-heading"><div><p class="eco-kicker">CONSENT-FIRST COMMUNICATION</p><h2 id="branding-heading">CEO Branding &amp; Staff Branding</h2></div><p>ความยินยอมต้องเจาะจงตาม asset, channel, purpose และช่วงเวลา พร้อมแก้ไข/ถอนความยินยอมได้</p></div>
+      <div class="eco-branding-grid">
+        <article class="eco-panel">
+          <div class="eco-card-top"><span class="eco-domain-label">LEADERSHIP / CEO</span><span class="eco-pill pill-source">EXISTING SITE CLAIM</span></div>
+          <h3>Leadership narrative</h3>
+          <p>หน้าแรก .co ปัจจุบันระบุชื่อ <strong>Pitoon Yingyosruangrong</strong> ในฐานะ CEO &amp; Founder และเผยแพร่ quote; ควรยืนยันตำแหน่ง, ข้อความ, rights และ consent ก่อนนำไปทำ campaign ใหม่</p>
+          <p class="eco-small-note">ไม่เติมประวัติ, รางวัล, ตัวเลขความสำเร็จ, ลูกค้า หรือคำรับรองที่ยังไม่มี source อนุมัติ</p>
+          <div class="eco-mini-grid"><div><strong>Thought leadership</strong><span>responsible energy · evidence · leadership</span></div><div><strong>Editorial calendar</strong><span>draft → owner review → approve → publish</span></div><div><strong>Speaking topics</strong><span>หัวข้อเสนอ · ไม่มี booking claim</span></div><div><strong>Video concepts</strong><span>Solar / BESS / EV · ยังไม่มีการอัดหรือเผยแพร่</span></div><div><strong>Media kit</strong><span>bio/photo/voice/video/quote แยก consent ต่อ channel</span></div></div>
+        </article>
+        <article class="eco-panel">
+          <div class="eco-card-top"><span class="eco-domain-label">PEOPLE / STAFF</span><span class="eco-pill pill-proposal">OPT-IN ONLY</span></div>
+          <h3>Staff profiles &amp; bylines</h3>
+          <p>เสนอโปรไฟล์ตามบทบาทและ credential ที่ตรวจสอบได้ โดยเจ้าของโปรไฟล์เลือกว่าต้องการเผยแพร่ส่วนใด ห้ามบังคับโพสต์หรือใช้บัญชีโซเชียลส่วนตัว</p>
+          <ul class="eco-check-list"><li>ตรวจบทบาท/ใบรับรองจากแหล่งที่อนุญาต</li><li>เลือกชื่อ, ภาพ, เสียง, quote, byline แยกกัน</li><li>ระบุ website / blog / press / social / event</li><li>ระบุผู้ทบทวนและวันหมดอายุ</li><li>มีช่องทางถอน/แก้ไข และหยุดเผยแพร่ใหม่</li></ul>
+        </article>
+      </div>
+      <form id="consent-demo-form" class="eco-panel eco-form">
+        <span class="eco-pill pill-scenario">NON-PERSISTENT CONSENT CHECKLIST</span>
+        <h3>สร้าง checklist ตัวอย่าง (ไม่บันทึกความยินยอม)</h3>
+        <label for="consent-role">บทบาท<select id="consent-role" name="role"><option value="CEO">CEO / leadership</option><option value="staff">Staff</option><option value="other">อื่น ๆ</option></select></label>
+        <fieldset><legend>Asset ที่ต้องขออนุญาตแยกกัน</legend><div class="eco-check-options"><label><input type="checkbox" name="assets" value="name"> ชื่อ</label><label><input type="checkbox" name="assets" value="photo"> ภาพ</label><label><input type="checkbox" name="assets" value="voice"> เสียง</label><label><input type="checkbox" name="assets" value="video"> วิดีโอ</label><label><input type="checkbox" name="assets" value="quote"> คำพูด</label><label><input type="checkbox" name="assets" value="byline"> Byline</label><label><input type="checkbox" name="assets" value="credentials"> Credential</label></div></fieldset>
+        <fieldset><legend>ช่องทางที่อนุญาต</legend><div class="eco-check-options"><label><input type="checkbox" name="channels" value="website"> Website</label><label><input type="checkbox" name="channels" value="blog"> Blog</label><label><input type="checkbox" name="channels" value="press"> Press</label><label><input type="checkbox" name="channels" value="social"> Social</label><label><input type="checkbox" name="channels" value="event"> Event</label><label><input type="checkbox" name="channels" value="youtube"> YouTube</label></div></fieldset>
+        <label for="consent-duration">อายุความยินยอม<select id="consent-duration" name="duration"><option value="single_use">ใช้ครั้งเดียว</option><option value="six_months">6 เดือน (ทบทวนก่อนหมดอายุ)</option><option value="review_required">กำหนดภายหลัง / ต้องทบทวน</option></select></label>
+        <button class="eco-button" type="submit">สร้าง checklist ในเครื่อง</button>
+        <output id="consent-result" class="eco-output" aria-live="polite" aria-atomic="true"></output>
+        <p class="eco-small-note">ไม่มีชื่อบุคคล, ภาพ, เสียง, วิดีโอ หรือข้อความจริงถูกกรอกหรือจัดเก็บในต้นแบบนี้</p>
+      </form>
+      <div id="rights-register" class="eco-panel eco-rights-register" aria-labelledby="rights-heading">
+        <div class="eco-section-heading"><div><p class="eco-kicker">IMAGE / PERSONAL-DATA RIGHTS REGISTER</p><h3 id="rights-heading">สิทธิ์การใช้และการถอน/อัปเดต</h3></div><p>ตัวอย่างโครงสร้างเท่านั้น · ไม่มีภาพ เสียง ชื่อจริง credential หรือ consent record ถูกนำเข้ามา</p></div>
+        <label class="eco-rights-filter" for="rights-state-filter">กรองสถานะตัวอย่าง<select id="rights-state-filter"><option value="all">ทุกสถานะ</option><option value="needs-owner">รอ owner review</option><option value="not-granted">ยังไม่มีสิทธิ์ใช้งาน</option></select></label>
+        <div class="eco-table-wrap" tabindex="0" aria-label="ตารางตัวอย่างสิทธิ์การใช้ asset เลื่อนได้ในแนวนอน">
+          <table class="eco-rights-table"><thead><tr><th>Record</th><th>Owner role</th><th>Asset scope</th><th>Consent / rights</th><th>Last review / expiry</th><th>Update / withdrawal</th></tr></thead>
+            <tbody>
+              <tr data-rights-state="needs-owner"><td>DEMO-RIGHTS-01</td><td>CEO / leadership</td><td>ภาพ / voice / video / quote</td><td>ยังไม่ได้ให้สิทธิ์</td><td>ยังไม่ตรวจ / ยังไม่กำหนด</td><td>ต้องติดต่อ owner และหยุดใช้ก่อน</td></tr>
+              <tr data-rights-state="not-granted"><td>DEMO-RIGHTS-02</td><td>Staff (opt-in)</td><td>ชื่อ / byline / credential</td><td>ไม่มี opt-in record</td><td>ยังไม่ตรวจ / ยังไม่กำหนด</td><td>ถอน/แก้ไขได้ก่อนเผยแพร่ใหม่</td></tr>
+              <tr data-rights-state="needs-owner"><td>DEMO-RIGHTS-03</td><td>Content owner</td><td>ภาพประกอบ / music / quote</td><td>ต้องตรวจ source และ license</td><td>ยังไม่ตรวจ / ยังไม่กำหนด</td><td>ลบหรือแทนที่เมื่อสิทธิ์ไม่ชัดเจน</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <ol class="eco-rights-flow"><li>ขอใช้งานระบุวัตถุประสงค์</li><li>ตรวจ source / license / consent</li><li>owner อนุมัติ scope + channel + เวลา</li><li>เผยแพร่เฉพาะขอบเขตที่อนุมัติ</li><li>หมดอายุหรือรับคำขอถอน → หยุดใช้</li><li>อัปเดต asset และ audit record</li></ol>
+        <button id="preview-rights-flow" class="eco-button eco-button-ghost" type="button">ดูตัวอย่างการถอน/อัปเดต</button>
+        <output id="rights-flow-result" class="eco-output" aria-live="polite" aria-atomic="true"></output>
+      </div>
+    </section>
+
+    <section id="back-office" class="eco-section eco-section-light" aria-labelledby="backoffice-heading">
+      <div class="eco-section-heading"><div><p class="eco-kicker">SHARED BACK OFFICE · PROPOSED</p><h2 id="backoffice-heading">หลังบ้านร่วม แต่ไม่รวมข้อมูลทุกบทบาท</h2></div><p>สถานะ OFFLINE · ตัวอย่างคิวเป็น synthetic; ไม่มี CRM, CMS, meter, inverter, BESS หรือบัญชีผู้ใช้เชื่อมอยู่</p></div>
+      <div class="eco-flow" aria-label="แนวทางการส่งต่อข้อมูล">
+        <div><span>01</span><strong>.org public layer</strong><small>knowledge · policy · evidence record</small></div><b aria-hidden="true">→</b>
+        <div><span>02</span><strong>review gate</strong><small>source · owner · permission · version</small></div><b aria-hidden="true">→</b>
+        <div><span>03</span><strong>.co workflow</strong><small>assessment · engineering handoff</small></div><b aria-hidden="true">→</b>
+        <div><span>04</span><strong>owner-approved output</strong><small>public projection or private handoff</small></div>
+      </div>
+      <div class="eco-backoffice-tools"><label for="queue-filter">กรองคิวตัวอย่าง<select id="queue-filter"><option value="all">ทั้งหมด</option><option value="pending">Pending</option><option value="review">Review</option><option value="offline">Offline</option></select></label><p class="eco-small-note">ตัวอย่างไม่มีข้อมูลติดต่อหรือข้อมูลลูกค้า</p></div>
+      <div class="eco-queue-grid" id="queue-grid">
+        <article class="eco-queue-card" data-queue-state="review"><span class="eco-pill pill-pending">REVIEW</span><strong>ORG-EVIDENCE-01</strong><p>ทบทวน source URL และวันที่ของ claim</p><small>Role: editor · PII: none · Sample</small></article>
+        <article class="eco-queue-card" data-queue-state="pending"><span class="eco-pill pill-proposal">PENDING</span><strong>CO-ASSESSMENT-00</strong><p>ตรวจข้อมูลไซต์ก่อน engineering review</p><small>Role: engineer · PII: none · Sample</small></article>
+        <article class="eco-queue-card" data-queue-state="offline"><span class="eco-pill pill-offline">OFFLINE</span><strong>BRAND-CONSENT-00</strong><p>ต้องมี consent owner และการถอน/หมดอายุ</p><small>Role: consent steward · no record saved</small></article>
+        <article class="eco-queue-card" data-queue-state="pending"><span class="eco-pill pill-pending">PENDING</span><strong>CLOUD-OFFER-00</strong><p>ยืนยัน provider relationship, capacity และราคา</p><small>Role: partner owner · no claim published</small></article>
+      </div>
+      <div class="eco-role-grid"><div><strong>Public editor</strong><span>.org content projection only</span></div><div><strong>Engineering reviewer</strong><span>site evidence / assumptions</span></div><div><strong>Consent steward</strong><span>people assets and withdrawal</span></div><div><strong>Platform admin</strong><span>access audit; no implicit content approval</span></div></div>
+    </section>
+
+    <section id="api-wiring" class="eco-section" aria-labelledby="api-heading">
+      <div class="eco-section-heading"><div><p class="eco-kicker">BACKEND → OPENAPI → POSTMAN → UI</p><h2 id="api-heading">API wiring console</h2></div><p>บน preview hosted ใช้ fixture ใน browser; เมื่อเปิดจาก localhost:8766 จะเรียกเฉพาะ mock server same-origin ที่ไม่มี persistence</p></div>
+      <div class="eco-api-layout">
+        <div class="eco-panel">
+          <label for="api-endpoint">เลือก endpoint ตัวอย่าง</label>
+          <select id="api-endpoint">
+            <option value="status">GET /v1/status</option><option value="knowledge">GET /v1/knowledge</option><option value="evidence">GET /v1/evidence</option><option value="projects">GET /v1/projects</option><option value="assessment">POST /v1/assessments</option><option value="ai">POST /v1/ai/knowledge-query</option><option value="cloud">POST /v1/cloud/workload-intakes</option><option value="consent">POST /v1/brand-consents</option><option value="partner">POST /v1/partner-inquiries</option><option value="pricing">POST /v1/pricing/scenarios</option><option value="editorial">POST /v1/editorial/review-briefs</option><option value="contact">POST /v1/contact/routing</option>
+          </select>
+          <p class="eco-small-note">เลือก endpoint แล้วดู request ตัวอย่าง; hosted preview ไม่ส่ง network request และ local mode เรียก loopback mock เท่านั้น</p>
+          <pre id="api-request-preview" class="eco-code" tabindex="0" aria-label="ตัวอย่าง request body"></pre>
+          <button id="run-api-mock" class="eco-button eco-button-co" type="button">เรียก mock API / fixture</button>
+          <pre id="api-response" class="eco-code eco-code-response" tabindex="0" aria-live="polite" aria-label="Mock API response">เลือก endpoint แล้วกดปุ่มเพื่อแสดงผลจำลอง</pre>
+        </div>
+        <aside class="eco-panel eco-panel-muted">
+          <span class="eco-pill pill-offline">NO LIVE API</span><h3>สัญญา API ที่ส่งมอบ</h3>
+          <p>OpenAPI 3.1 และ Postman collection ใช้ตัวอย่างข้อมูลสังเคราะห์; local server bind เฉพาะ 127.0.0.1 และไม่บันทึก body</p>
+          <div class="eco-downloads"><a href="/prototype-api/openapi.yaml" download>ดาวน์โหลด OpenAPI YAML</a><a href="/prototype-api/SIRINX-Proposal-Mock.postman_collection.json" download>ดาวน์โหลด Postman collection</a><a href="/downloads/API_CONTRACTS.md" download>อ่าน API boundaries</a></div>
+          <div class="eco-callout"><strong>ตัดออก:</strong> payment · account provisioning · live CRM · energy device controls · raw commands · telemetry polling · real LLM call · GPU booking</div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="render-studio" class="eco-section eco-section-light" aria-labelledby="render-heading">
+      <div class="eco-section-heading"><div><p class="eco-kicker">PROGRESSIVE RENDER · ACCESSIBLE BY DEFAULT</p><h2 id="render-heading">2D clay scene → optional Three.js</h2></div><p>เริ่มด้วย SVG แบบอ่านได้ · โหลด WebGL/Anime.js เฉพาะเมื่อผู้ใช้เลือก · ไม่มี model จากภาพอ้างอิง</p></div>
+      <div class="eco-render-layout">
+        <figure id="scene-2d" class="eco-scene-2d">
+          <svg viewBox="0 0 800 430" role="img" aria-labelledby="scene-title scene-desc">
+            <title id="scene-title">Solar Carport clay concept — 2D fallback</title>
+            <desc id="scene-desc">แผงโซลาร์บนโครงหลังคา เสารองรับสี่ต้น รถยนต์หนึ่งคันและอุปกรณ์ชาร์จ แผนภาพแนวคิดเท่านั้น ไม่ใช่แบบก่อสร้างหรือข้อมูลวัดจริง</desc>
+            <ellipse cx="400" cy="365" rx="335" ry="34" fill="#bdb3a4" opacity=".55"/>
+            <path d="M77 310 392 213l326 90-320 106z" fill="#c4b59d" stroke="#877b6c" stroke-width="5"/>
+            <path d="M110 116 439 25l263 69-328 95z" fill="#b46b4f" opacity=".7"/>
+            <path d="m83 102 329-92 274 72-329 94z" fill="#397f82" stroke="#e5caa9" stroke-width="9"/>
+            <g fill="none" stroke="#a9d7cf" stroke-width="3"><path d="m149 84 278 74"/><path d="m216 65 276 74"/><path d="m282 47 277 74"/><path d="m167 154 33-79"/><path d="m250 177 33-80"/><path d="m333 153 33-80"/><path d="m416 130 33-80"/><path d="m499 107 33-80"/></g>
+            <g fill="#c97c5a" stroke="#704c3e" stroke-width="4"><path d="m153 139 18 2v167l-18 6z"/><path d="m617 86 18 4v198l-18 7z"/><path d="m293 168 15 1v122l-15 5z"/><path d="m476 119 15 2v164l-15 5z"/></g>
+            <g transform="translate(230 240)"><path d="M0 53 35 23q17-13 44-13h135q22 0 40 19l25 26 24 8v39H0z" fill="#f2dfc4" stroke="#856d5b" stroke-width="5"/><path d="m74 16 47-2h58l41 41H37z" fill="#6fa9a6" stroke="#f2dfc4" stroke-width="4"/><circle cx="66" cy="104" r="22" fill="#282c2d" stroke="#d4c0a4" stroke-width="7"/><circle cx="239" cy="104" r="22" fill="#282c2d" stroke="#d4c0a4" stroke-width="7"/></g>
+            <g transform="translate(665 235)"><rect x="0" y="0" width="20" height="91" rx="5" fill="#40595b"/><rect x="4" y="8" width="12" height="20" rx="3" fill="#7cdbca"/><path d="M10 89c-24 12-18 40-1 44" fill="none" stroke="#bb7654" stroke-width="5"/></g>
+            <g font-family="system-ui,sans-serif" font-size="16" font-weight="700"><rect x="26" y="22" width="152" height="36" rx="18" fill="#f4ead9"/><text x="102" y="46" text-anchor="middle" fill="#203e3a">2D · FALLBACK</text><rect x="589" y="365" width="183" height="36" rx="18" fill="#f4ead9"/><text x="680" y="389" text-anchor="middle" fill="#704c3e">CONCEPT · NO SCALE</text></g>
+          </svg>
+          <figcaption>คำอธิบาย: โครงสร้างเชิงแนวคิด ไม่มีสัดส่วนรับแรง สเปกอุปกรณ์ หรือการคำนวณผลผลิต</figcaption>
+        </figure>
+        <div class="eco-render-controls">
+          <div id="scene3d-root" class="eco-scene-3d" hidden aria-hidden="true"></div>
+          <div class="eco-render-buttons"><button id="load-3d" class="eco-button eco-button-co" type="button">โหลด 3D แบบเลือกเอง</button><button id="show-2d" class="eco-button eco-button-ghost" type="button">กลับไป 2D</button></div>
+          <label for="scene-angle">หมุนฉาก (ใช้คีย์บอร์ดได้) <input id="scene-angle" type="range" min="0" max="360" step="5" value="28"></label>
+          <div class="eco-render-buttons"><button id="start-motion" class="eco-button" type="button" disabled>เริ่ม clay motion</button><button id="pause-motion" class="eco-button eco-button-ghost" type="button" disabled>หยุด motion</button></div>
+          <p id="render-status" class="eco-output" aria-live="polite" aria-atomic="true">SVG 2D พร้อมใช้งานโดยไม่ต้องโหลด WebGL</p>
+          <p class="eco-small-note">Three.js 0.186.1 + Anime.js 4.5.0 · local vendor · โหลดหลังคลิก · จำกัด pixel ratio · ไม่ส่งข้อมูลออก</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="source-map" class="eco-section" aria-labelledby="source-heading">
+      <div class="eco-section-heading"><div><p class="eco-kicker">PUBLIC SOURCE AUDIT · READ ONLY</p><h2 id="source-heading">Source, tech stack, migrations &amp; prompts</h2></div><p>ใช้ข้อมูล public tree และ manifest จริงเท่าที่เปิดได้; ไม่อ้างว่าอ่าน source ทุกบรรทัดหรือเข้าถึง private/Drive แล้ว</p></div>
+      <div class="eco-source-summary">
+        <div><strong>24</strong><span>public repositories</span></div><div><strong>64,683</strong><span>tree path entries</span></div><div><strong>125</strong><span>manifest/config records fetched</span></div><div><strong>1</strong><span>truncated vendored tree</span></div>
+      </div>
+      <div class="eco-caveat"><strong>ขอบเขต:</strong> private repositories ไม่ปรากฏใน public listing; `ghost-claw-os` tree ถูก truncate และมี third-party dependencies จำนวนมาก; Google Drive ยังไม่อ่านเพราะรอเลือก/อนุญาตบัญชี; path index ไม่ใช่การอ่านโค้ดครบทุกไฟล์</div>
+      <div class="eco-downloads eco-download-grid">
+        <a href="/downloads/GITHUB_PUBLIC_INVENTORY.md" download><strong>GitHub path inventory</strong><span>24 repos · default branches · candidate source paths</span></a>
+        <a href="/downloads/github-public-repo-file-inventory.json" download><strong>Full public path JSON</strong><span>Full returned file-path list; one repo tree truncated</span></a>
+        <a href="/downloads/TECH_STACK.md" download><strong>Technology stack report</strong><span>Manifest-derived, not runtime verification</span></a>
+        <a href="/downloads/tech-stack-manifests.json" download><strong>Manifest index JSON</strong><span>Package/build file and dependency signal index</span></a>
+        <a href="/downloads/SOURCE_AUDIT.md" download><strong>Live-site/source audit</strong><span>Routes, claims, conflicts and provenance</span></a>
+        <a href="/downloads/BESS_IMPLEMENTATION.md" download><strong>BESS implementation plan</strong><span>Evidence pipeline, CRM boundary, 90-day roadmap, KPIs and launch gates</span></a>
+        <a href="/downloads/MIGRATION_CATALOG.md" download><strong>Migration catalog</strong><span>Candidate file paths and no-execution gates</span></a>
+        <a href="/downloads/PROMPT_PACK.md" download><strong>Coding prompt pack</strong><span>Curated safe prompts; not every repo prompt body</span></a>
+        <a href="/downloads/INTEGRATION_MAP.md" download><strong>Integration map</strong><span>Static UI → local mock API → Postman/OpenAPI → 2D/3D flow</span></a>
+        <a href="/downloads/SIRINX_PROTOTYPE_SCOPE.md" download><strong>Prototype scope</strong><span>Existing routes, proposals, source/access limits</span></a>
+        <a href="/prototype-api/openapi.yaml" download><strong>OpenAPI 3.1</strong><span>Proposal API contract, local mock only</span></a>
+        <a href="/prototype-api/SIRINX-Proposal-Mock.postman_collection.json" download><strong>Postman collection</strong><span>Loopback-only tests with synthetic fixtures</span></a>
+      </div>
+      <details class="eco-details"><summary>แผน migration ที่ไม่ดำเนินการในงานนี้</summary><p>แยก owner และ runtime ให้ชัด → ตรวจ schema/live migration history → สำรองและทดสอบ restore ใน staging → ออกแบบ additive migration + RLS/rollback → reviewer อนุมัติ → ค่อยวางแผนงาน production แยกต่างหาก. ไม่มี database connection หรือคำสั่ง migration ใน prototype</p></details>
+      <details class="eco-details"><summary>แหล่งหลักที่ใช้ต่อยอด</summary><p><a href="https://www.sirinx.org/" rel="noopener noreferrer">sirinx.org live</a> · <a href="https://www.sirinx.co/" rel="noopener noreferrer">sirinx.co live</a> · <a href="https://github.com/ton36475-lgtm/sirinx-co/tree/main" rel="noopener noreferrer">sirinx-co / main</a> · <a href="https://github.com/ton36475-lgtm/sirinx/tree/main" rel="noopener noreferrer">sirinx / main</a> · <a href="https://github.com/ton36475-lgtm/sirinx-sovereign-swarm/tree/main" rel="noopener noreferrer">sirinx-sovereign-swarm / main</a></p></details>
+    </section>
+
+    <section class="eco-final-note" aria-label="ขอบเขตความปลอดภัย">
+      <p class="eco-kicker">SAFE BOUNDARY</p>
+      <h2>Prototype only · No production authority</h2>
+      <p>อ่านอย่างเดียว / simulation / shadow / advisory เท่านั้น · ไม่มีการเชื่อมข้อมูลลูกค้า, CRM, meter, inverter, BESS, GPU, billing หรือ live LLM · ไม่มี migration, DNS change, deployment ไปยังเว็บไซต์จริง หรือคำสั่งอุปกรณ์</p>
+    </section>
+  </main>
+  <footer class="eco-footer">
+    <p><strong>SIRINX Ecosystem Prototype</strong> · source-aligned static proposal</p>
+    <p><a href="/">.org</a> · <a href="/co.html">.co</a> · <a href="#main">กลับด้านบน ↑</a></p>
+    <small>Preview date: 9 October 2026 · รายละเอียดโครงการ/ราคา/สิทธิ์/พาร์ตเนอร์ต้องตรวจหลักฐานและขออนุมัติก่อนเผยแพร่</small>
+  </footer>
+  <script type="module" src="/assets/prototype-hub.js"></script>
+</body>
+</html>

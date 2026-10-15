@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /prototypes/
 
 Sitemap: https://www.sirinx.co/sitemap.xml

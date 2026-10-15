@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#0c1118">
+  <meta name="description" content="ต้นแบบหน้า BESS สำหรับธุรกิจของ SIRINX — อธิบายโจทย์ ระบบกักเก็บพลังงาน และแบบประเมินเบื้องต้นที่ไม่คำนวณหรือส่งข้อมูล">
+  <title>BESS สำหรับธุรกิจ | SIRINX · Prototype</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/assets/site.css">
+  <link rel="stylesheet" href="/assets/bess.css">
+</head>
+<body class="bess-page">
+  <a class="bess-skip" href="#main">ข้ามไปยังเนื้อหาหลัก</a>
+  <header class="bess-header">
+    <div class="bess-shell bess-header-inner">
+      <a class="bess-brand" href="/co.html" aria-label="SIRINX กลับสู่หน้า service prototype"><span class="bess-brand-mark" aria-hidden="true">S</span><span>SIRINX <small>BESS · SERVICE PROTOTYPE</small></span></a>
+      <nav class="bess-nav" aria-label="เมนู BESS">
+        <a href="#why-bess">BESS ทำอะไร</a><a href="#product-evidence">ข้อมูลสินค้า</a><a href="#assessment-preview">เริ่มประเมิน</a>
+        <a href="/bess-knowledge.html">ความรู้ .org</a><a href="/prototypes/">แผนผังระบบ</a>
+      </nav>
+    </div>
+  </header>
+  <div class="bess-demo-strip">DEMO — NOT CONNECTED · ข้อมูลในแบบฟอร์มไม่บันทึกและไม่ส่งออก · ไม่มี CRM หรือระบบอุปกรณ์เชื่อมอยู่</div>
+
+  <main id="main" class="bess-shell">
+    <section class="bess-hero" aria-labelledby="bess-title">
+      <div>
+        <p class="bess-eyebrow">BATTERY ENERGY STORAGE · SERVICE / ASSESSMENT</p>
+        <h1 id="bess-title">BESS ที่เริ่มจาก<br><em>โหลดและเป้าหมายจริง</em></h1>
+        <p class="bess-lede">ระบบกักเก็บพลังงานอาจทำงานร่วมกับ Solar, โหลดอาคาร หรือการสำรองไฟได้ แต่การเลือกกำลังและความจุต้องอิงข้อมูลไซต์ การออกแบบระบบ และเอกสารรุ่นอุปกรณ์ที่ตรวจสอบแล้ว</p>
+        <div class="bess-action-row"><a class="bess-button" href="#assessment-preview">เริ่มแบบประเมินตัวอย่าง</a><a class="bess-button bess-button-ghost" href="/bess-knowledge.html">อ่านหลักการ BESS</a></div>
+        <p class="bess-inline-note">หน้านี้เป็นส่วนเสริมใน prototype เท่านั้น ไม่ใช่ใบเสนอราคา ไม่ยืนยันความเข้ากันได้ และไม่ให้ผลตอบแทน</p>
+      </div>
+      <figure class="bess-visual">
+        <svg viewBox="0 0 560 330" role="img" aria-labelledby="bess-diagram-title bess-diagram-desc">
+          <title id="bess-diagram-title">แผนภาพแนวคิด Solar, BESS และโหลดอาคาร</title>
+          <desc id="bess-diagram-desc">ภาพแนวคิดแสดงพลังงานจากระบบ Solar เชื่อมผ่านระบบแปลงไฟกับแบตเตอรี่และโหลดอาคาร ไม่มีค่ากำลังหรือข้อมูล telemetry จริง</desc>
+          <defs><linearGradient id="bess-roof" x1="0" x2="1"><stop stop-color="#d4b478"/><stop offset="1" stop-color="#6a9e98"/></linearGradient></defs>
+          <path d="M30 275H530" stroke="#586a6c" stroke-width="2"/>
+          <g transform="translate(35 78)">
+            <path d="M0 55 116 15l90 30-116 42z" fill="#243a43" stroke="#88b5ad" stroke-width="2"/>
+            <path d="m24 50 86-29m-62 50 87-29m-62 50 88-29M52 45l26 58m36-70 26 58m35-46 20 44" stroke="#d9bd83" stroke-width="2"/>
+            <text x="105" y="145" fill="#f3e5c7" font-size="17" font-family="system-ui" text-anchor="middle" font-weight="700">SOLAR</text>
+            <text x="105" y="168" fill="#aebfba" font-size="12" font-family="system-ui" text-anchor="middle">แหล่งผลิต</text>
+          </g>
+          <path d="M243 150h43" stroke="url(#bess-roof)" stroke-width="4" stroke-linecap="round"/><path d="m280 143 10 7-10 7" fill="none" stroke="#d4b478" stroke-width="3"/>
+          <g transform="translate(294 80)">
+            <rect x="0" y="0" width="105" height="145" rx="10" fill="#28363b" stroke="#d3b274" stroke-width="2"/>
+            <rect x="12" y="14" width="81" height="40" rx="5" fill="#1b262c" stroke="#657875"/>
+            <circle cx="25" cy="34" r="4" fill="#c87959"/><path d="M35 34h43" stroke="#83928e" stroke-width="3"/>
+            <g fill="#33464a" stroke="#82908a"><rect x="14" y="68" width="77" height="18" rx="3"/><rect x="14" y="93" width="77" height="18" rx="3"/><rect x="14" y="118" width="77" height="18" rx="3"/></g>
+            <text x="52" y="178" fill="#f3e5c7" font-size="17" font-family="system-ui" text-anchor="middle" font-weight="700">BESS</text>
+          </g>
+          <path d="M413 150h43" stroke="url(#bess-roof)" stroke-width="4" stroke-linecap="round"/><path d="m450 143 10 7-10 7" fill="none" stroke="#d4b478" stroke-width="3"/>
+          <g transform="translate(465 94)" fill="none" stroke="#d6c08f" stroke-width="3" stroke-linejoin="round">
+            <path d="M0 64 42 33l42 31v65H0z" fill="#29383b"/><path d="M27 129V84h30v45"/><path d="M13 76h14v17H13zm42 0h14v17H55z"/>
+            <text x="42" y="165" fill="#f3e5c7" font-size="15" font-family="system-ui" text-anchor="middle" stroke="none" font-weight="700">LOAD</text>
+          </g>
+          <rect x="35" y="20" width="156" height="25" rx="12" fill="#172522" stroke="#d1ad70"/><text x="113" y="37" fill="#e6cb91" font-size="11" font-family="system-ui" text-anchor="middle" font-weight="700">CONCEPT · NO LIVE DATA</text>
+        </svg>
+        <figcaption>ภาพแนวคิด 2D ต้นฉบับ · ไม่ใช่ single-line diagram, แบบวิศวกรรม หรือข้อมูลระบบจริง</figcaption>
+      </figure>
+    </section>
+
+    <section id="why-bess" class="bess-section" aria-labelledby="why-title">
+      <div class="bess-section-head"><div><p class="bess-kicker">FIRST: DEFINE THE JOB</p><h2 id="why-title">เริ่มจาก “ต้องการให้แบตเตอรี่ทำอะไร”</h2></div><p>การใช้งานที่เป็นไปได้ไม่ใช่คำรับประกันผล และแต่ละเป้าหมายอาจต้องใช้ข้อกำหนดด้านกำลัง ความจุ และการควบคุมต่างกัน</p></div>
+      <div class="bess-grid">
+        <article class="bess-card"><span class="bess-card-index">01</span><h3>ใช้พลังงานต่างช่วงเวลา</h3><p>เก็บพลังงานจากระบบที่เชื่อมต่อไว้ใช้ภายหลังได้ โดยต้องประเมินรูปแบบโหลด ประสิทธิภาพ และข้อจำกัดของระบบจริง</p></article>
+        <article class="bess-card"><span class="bess-card-index">02</span><h3>จัดการช่วงโหลดสูง</h3><p>ตรวจ load profile และโครงสร้างค่าไฟก่อนพิจารณาแนวทาง peak management; prototype นี้ไม่คำนวณ demand charge หรือผลประหยัด</p></article>
+        <article class="bess-card"><span class="bess-card-index">03</span><h3>เตรียมความยืดหยุ่นของไซต์</h3><p>กำหนดโหลดสำคัญ ระยะเวลาที่ต้องการ และระบบไฟฟ้าที่เกี่ยวข้องก่อนพูดถึง backup หรือ resilience; ไม่ใช่คำรับรองการจ่ายไฟ</p></article>
+      </div>
+      <p class="bess-caution"><strong>ขอบเขต:</strong> ระบุวัตถุประสงค์ก่อนเลือก kW/kWh; การติดตั้งต้องผ่านการสำรวจและตรวจแบบโดยผู้เชี่ยวชาญ รวมถึงเงื่อนไขความปลอดภัยและอุปกรณ์ที่เกี่ยวข้อง</p>
+    </section>
+
+    <section class="bess-section" aria-labelledby="units-title">
+      <div class="bess-section-head"><div><p class="bess-kicker">POWER ≠ ENERGY</p><h2 id="units-title">kW บอก “จ่ายได้แค่ไหน” · kWh บอก “มีพลังงานเท่าไร”</h2></div><p>กระทรวงพลังงานสหรัฐอธิบายว่าความจุพลังงานและกำลังจ่ายเป็นคนละมิติ และต้องพิจารณาร่วมกัน</p></div>
+      <div class="bess-equation" aria-label="ตัวอย่างเชิงหน่วย ไม่ใช่การเลือกขนาดระบบ"><div><strong>5 kW × 4 ชั่วโมง</strong><span>ตัวอย่างกำลัง × เวลา</span></div><b class="bess-times" aria-hidden="true">=</b><div><strong>20 kWh</strong><span>พลังงานโหลดเชิงคณิตศาสตร์ ก่อนคิด losses, reserve, usable DoD, surge และเงื่อนไขระบบ</span></div></div>
+      <p class="bess-caution">ตัวอย่างหน่วยนี้ไม่ใช่ผลประเมินไซต์หรือคำแนะนำขนาดแบตเตอรี่; ประสิทธิภาพการชาร์จ/จ่ายมีการสูญเสีย และความจุที่ใช้ได้จริงอาจต่างจาก nominal capacity</p>
+    </section>
+
+    <section id="product-evidence" class="bess-section" aria-labelledby="product-title">
+      <div class="bess-section-head"><div><p class="bess-kicker">PRODUCT EVIDENCE · SINGLE MASTER</p><h2 id="product-title">ข้อมูลรุ่นที่มีแหล่งอ้างอิง—พร้อมสถานะที่ยังต้องยืนยัน</h2></div><p>ค่าด้านล่างดึงจาก master ระเบียนเดียวและเป็นข้อความที่ผู้ผลิตเผยแพร่ ไม่ใช่การรับรองอิสระหรือคำแนะนำเลือกสินค้า</p></div>
+      <div id="bess-product-records" aria-live="polite"><p class="bess-loading">กำลังอ่านระเบียนข้อมูลสินค้า…</p></div>
+      <noscript><p class="bess-caution">ต้องเปิด JavaScript เพื่อแสดงรายการจาก master ของ prototype; ไม่ส่งข้อมูลออกจากหน้านี้</p></noscript>
+    </section>
+
+    <section id="assessment-preview" class="bess-section" aria-labelledby="assessment-title">
+      <div class="bess-section-head"><div><p class="bess-kicker">LOCAL-ONLY · NON-CALCULATING</p><h2 id="assessment-title">แบบประเมินเบื้องต้นเพื่อจัด brief</h2></div><p>เลือกข้อมูลทั่วไปที่ไม่ใช่ข้อมูลติดต่อ; ไม่ต้องใส่ชื่อ โทรศัพท์ อีเมล ที่อยู่ หรือเลขบัญชีไฟฟ้า</p></div>
+      <div class="bess-assessment">
+        <form id="bess-assessment-form" class="bess-form">
+          <label>ประเภทธุรกิจ<select name="businessType"><option value="not_provided">ยังไม่ระบุ</option><option value="factory">โรงงาน</option><option value="hotel">โรงแรม / รีสอร์ท</option><option value="commercial">อาคารพาณิชย์</option><option value="education">สถานศึกษา</option><option value="other">อื่น ๆ</option></select></label>
+          <label>จังหวัด (ไม่ใส่ที่อยู่)<input name="province" type="text" maxlength="80" autocomplete="off" placeholder="เช่น ชลบุรี"></label>
+          <label>เป้าหมายหลัก<select name="bessGoal"><option value="not_sure">ยังไม่แน่ใจ</option><option value="solar_shift">ใช้พลังงาน Solar ต่างช่วงเวลา</option><option value="peak_management">จัดการช่วงโหลดสูง</option><option value="backup_resilience">สำรองโหลดสำคัญ / resilience</option><option value="ev_charging">รองรับ EV charging</option></select></label>
+          <label>รูปแบบโหลด<select name="loadProfile"><option value="unknown">ยังไม่ทราบ</option><option value="daytime">ส่วนใหญ่กลางวัน</option><option value="evening">มีโหลดช่วงเย็น/กลางคืน</option><option value="continuous">เดินระบบต่อเนื่อง</option><option value="variable">แปรผันตามช่วงเวลา</option></select></label>
+          <label>มี Solar อยู่หรือไม่<select name="existingSolar"><option value="unknown">ยังไม่ทราบ</option><option value="yes">มีอยู่แล้ว</option><option value="planned">อยู่ระหว่างพิจารณา</option><option value="no">ยังไม่มี</option></select></label>
+          <label>มีเอกสารข้อมูลโหลด/ค่าไฟหรือไม่<select name="siteDataStatus"><option value="not_provided">ยังไม่ทราบ</option><option value="bill_only">มีบิลค่าไฟ</option><option value="load_profile">มี load profile</option><option value="both">มีทั้งสองอย่าง</option><option value="neither">ยังไม่มี</option></select></label>
+          <div class="bess-field-wide"><button class="bess-button" type="submit">สร้าง brief ตัวอย่าง</button> <button class="bess-button bess-button-ghost" type="reset">ล้างข้อมูล</button></div>
+        </form>
+        <div id="bess-assessment-output" class="bess-output" aria-live="polite" aria-atomic="true"><h3>ขอบเขตของแบบประเมิน</h3><p>สร้างเฉพาะ brief สำหรับทบทวน ไม่คำนวณขนาดแบตเตอรี่ กำลัง PV ผลตอบแทน ค่าไฟหรือผลประหยัด และไม่สร้าง lead</p><p><strong>สถานะ:</strong> DEMO · ไม่มีการบันทึก · ไม่มีการส่งข้อมูล</p></div>
+      </div>
+    </section>
+
+    <section class="bess-section" aria-labelledby="faq-title">
+      <div class="bess-section-head"><div><p class="bess-kicker">AEO · QUICK ANSWERS</p><h2 id="faq-title">คำถามที่พบบ่อยเกี่ยวกับ BESS</h2></div><p>คำตอบเป็นความรู้ทั่วไปที่มีแหล่งที่มา ไม่แทนการออกแบบระบบหรือข้อกำหนดในประเทศไทย</p></div>
+      <div class="bess-faq">
+        <details><summary>BESS คืออะไร?</summary><p>Battery Energy Storage System คือระบบกักเก็บพลังงานด้วยแบตเตอรี่และอุปกรณ์ประกอบ เพื่อรับพลังงาน เก็บไว้ และจ่ายภายหลังตามการออกแบบและการควบคุมของระบบ อ่านหลักการทั่วไปได้จาก <a href="https://www.energy.gov/cmei/systems/solar-integration-solar-energy-and-storage-basics">U.S. Department of Energy</a>.</p></details>
+        <details><summary>ทำไม kW กับ kWh ต้องดูแยกกัน?</summary><p>kW ใช้บอกกำลัง ส่วน kWh ใช้บอกปริมาณพลังงาน; ระบบต้องตอบทั้งว่าจ่ายกำลังได้พอหรือไม่และเก็บพลังงานได้เท่าไร รวมถึงความสูญเสียและข้อจำกัดอุปกรณ์.</p></details>
+        <details><summary>เลือก BESS จากค่าไฟต่อเดือนอย่างเดียวได้ไหม?</summary><p>ไม่พอสำหรับการ sizing หรือการรับรองความคุ้มค่า ต้องตรวจ load profile, tariff, เวลาการใช้งาน, ข้อจำกัดไฟฟ้า, เป้าหมายไซต์, อุปกรณ์ และเงื่อนไขโครงการ โดยวิศวกรและผู้เกี่ยวข้อง.</p></details>
+        <details><summary>prototype นี้คำนวณ ROI หรือแนะนำรุ่นแบตเตอรี่หรือไม่?</summary><p>ไม่คำนวณ ROI/IRR/LCOE, ไม่เลือกขนาดและรุ่นให้ไซต์, ไม่ยืนยัน inverter compatibility, ไม่ออกใบเสนอราคา และไม่เชื่อม CRM หรืออุปกรณ์จริง.</p></details>
+      </div>
+    </section>
+
+    <section class="bess-section" aria-labelledby="sources-title">
+      <div class="bess-section-head"><div><p class="bess-kicker">SOURCES &amp; REVIEW DATE</p><h2 id="sources-title">แหล่งข้อมูลและวันที่ตรวจ</h2></div><p>แยกแหล่งความรู้ทั่วไปออกจากหน้าผู้ผลิตและข้อความของ SIRINX</p></div>
+      <ul id="bess-source-list" class="bess-source-list"><li><a href="https://www.energy.gov/cmei/systems/solar-integration-solar-energy-and-storage-basics">U.S. DOE · Solar Integration<small>ความรู้ทั่วไป · ตรวจ 15 ต.ค. 2026</small></a></li><li><a href="https://www.gsl-energy.com/gsl-energy-solar-lifepo4-battery-home-power-storage-wall-10kwh-51-2v-lithium-ion-batteries-for-house.html">GSL ENERGY · product listing<small>ผู้ผลิตรายงาน · มีค่าขัดกัน ต้องยืนยัน datasheet · ตรวจ 15 ต.ค. 2026</small></a></li></ul>
+    </section>
+  </main>
+  <footer class="bess-footer"><div class="bess-shell bess-footer-inner"><span>STATIC PROTOTYPE · NOINDEX · ไม่ใช่ production</span><span><a href="/co.html">บริการ SIRINX</a> · <a href="/bess-knowledge.html">ความรู้ BESS</a> · <a href="/">SIRINX Knowledge</a></span></div></footer>
+  <script src="/assets/bess-page.js" defer></script>
+</body>
+</html>

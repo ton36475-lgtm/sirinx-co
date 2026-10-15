@@ -1,0 +1,365 @@
+{
+  "info": {
+    "_postman_id": "d4bcf2f1-2dd3-4d26-9a7b-5ccf145e7712",
+    "name": "SIRINX Proposal Prototype — Local Mock Only",
+    "description": "Postman collection for the loopback-only mock server. No production URL, auth, real data, LLM, device command, lead creation, persistence or external integration is included. Includes a BESS-only assessment preview using non-identifying fields; no real lead, size or ROI is produced.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8766/api",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Status / boundary",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/v1/status"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('mock boundary is explicit', function () {",
+              "  const j = pm.response.json();",
+              "  pm.expect(j.demoOnly).to.eql(true);",
+              "  pm.expect(j.liveIntegrations).to.eql(false);",
+              "  pm.expect(j.persisted).to.eql(false);",
+              "  pm.expect(j.deviceCommands).to.eql(false);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Knowledge / public claims",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/v1/knowledge?topic=solar-carport"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('knowledge fixture is mock only', function () { pm.expect(pm.response.json().demoOnly).to.eql(true); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Evidence / provenance",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/v1/evidence"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('evidence records expose claim states', function () { pm.expect(pm.response.json().demoOnly).to.eql(true); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Projects / site-reported",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/v1/projects"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('project fixture does not assert independent measurement', function () { pm.expect(pm.response.json().demoOnly).to.eql(true); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Assessment / no calculation or storage",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"businessType\": \"hotel\",\n  \"province\": \"Phitsanulok\",\n  \"monthlyBillRange\": \"not-provided\",\n  \"siteAreaRange\": \"not-provided\",\n  \"solution\": \"Solar Carport\"\n}"
+        },
+        "url": "{{baseUrl}}/v1/assessments"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('assessment is not calculated or persisted', function () {",
+              "  const j = pm.response.json();",
+              "  pm.expect(j.demoOnly).to.eql(true);",
+              "  pm.expect(j.persisted).to.eql(false);",
+              "  pm.expect(j.calculationPerformed).to.eql(false);",
+              "  pm.expect(j.leadCreated).to.eql(false);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "AI knowledge / no model call",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"topic\": \"solar-carport\",\n  \"question\": \"What public evidence is available?\"\n}"
+        },
+        "url": "{{baseUrl}}/v1/ai/knowledge-query"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('no LLM called', function () { pm.expect(pm.response.json().llmCalled).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cloud workload / capacity unknown",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"workloadType\": \"inference\",\n  \"region\": \"Thailand\",\n  \"dataClass\": \"public\"\n}"
+        },
+        "url": "{{baseUrl}}/v1/cloud/workload-intakes"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('no capacity reservation', function () { pm.expect(pm.response.json().requestCreated).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pricing scenario / no quote or ROI",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"solutionPackage\": \"solar_carport\",\n  \"commercialStructure\": \"not_sure\",\n  \"region\": \"not_provided\"\n}"
+        },
+        "url": "{{baseUrl}}/v1/pricing/scenarios"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('price and ROI are not generated', function () { const j = pm.response.json(); pm.expect(j.priceAvailable).to.eql(false); pm.expect(j.quoteCreated).to.eql(false); pm.expect(j.roiCalculated).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Editorial review / no content published",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"route\": \"blog\",\n  \"format\": \"video\",\n  \"topic\": \"Evidence-first solar assessment\"\n}"
+        },
+        "url": "{{baseUrl}}/v1/editorial/review-briefs"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('draft is not generated or published', function () { const j = pm.response.json(); pm.expect(j.ownerReviewRequired).to.eql(true); pm.expect(j.draftCreated).to.eql(false); pm.expect(j.published).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Contact routing / no details captured",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"intent\": \"assessment\",\n  \"region\": \"Central\"\n}"
+        },
+        "url": "{{baseUrl}}/v1/contact/routing"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('contact is not captured or sent', function () { const j = pm.response.json(); pm.expect(j.contactCaptured).to.eql(false); pm.expect(j.inquirySent).to.eql(false); });",
+              "pm.test('assessment intent points to the preserved .co anchor', function () { pm.expect(pm.response.json().suggestedPrototypeRoute).to.eql('/co.html#assessment'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Brand consent / checklist only",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"role\": \"staff\",\n  \"assets\": [\"byline\", \"video\"],\n  \"channels\": [\"website\", \"blog\", \"youtube\"],\n  \"duration\": \"review_required\"\n}"
+        },
+        "url": "{{baseUrl}}/v1/brand-consents"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('consent was not recorded', function () { pm.expect(pm.response.json().consentRecorded).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Partner inquiry / no persistence",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"partnerType\": \"engineering\",\n  \"region\": \"Central\",\n  \"interest\": \"Solar Carport evidence workflow\"\n}"
+        },
+        "url": "{{baseUrl}}/v1/partner-inquiries"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('partner request is not saved', function () { pm.expect(pm.response.json().persisted).to.eql(false); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "BESS assessment / no lead or sizing",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"businessType\": \"hotel\",\n  \"province\": \"Phitsanulok\",\n  \"solution\": \"BESS / ESS\",\n  \"bessGoal\": \"backup_resilience\",\n  \"loadProfile\": \"evening\",\n  \"existingSolar\": \"planned\",\n  \"siteDataStatus\": \"bill_only\"\n}"
+        },
+        "url": "{{baseUrl}}/v1/assessments"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('BESS brief is demo-only and non-persistent', function () {",
+              "  const j = pm.response.json();",
+              "  pm.expect(j.demoOnly).to.eql(true);",
+              "  pm.expect(j.persisted).to.eql(false);",
+              "  pm.expect(j.leadCreated).to.eql(false);",
+              "  pm.expect(j.calculationPerformed).to.eql(false);",
+              "  pm.expect(j.brief.bessGoal).to.eql('backup_resilience');",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

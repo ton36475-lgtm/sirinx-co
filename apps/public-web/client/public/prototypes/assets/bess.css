@@ -1,0 +1,132 @@
+/* Additive BESS prototype styles. No third-party fonts or external assets. */
+.bess-link-panel {
+  margin: 1.75rem auto;
+  max-width: 1120px;
+  padding: clamp(1.1rem, 3vw, 1.8rem);
+  border: 1px solid rgba(202, 159, 91, .42);
+  border-left: 4px solid #c89d5d;
+  border-radius: 16px;
+  background: linear-gradient(110deg, rgba(16, 29, 43, .97), rgba(31, 39, 46, .94));
+  color: #f4efe6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.bess-link-panel .bess-link-copy { max-width: 740px; }
+.bess-link-panel .bess-link-kicker { margin: 0 0 .4rem; color: #d7b477; font-size: .72rem; font-weight: 800; letter-spacing: .12em; }
+.bess-link-panel h2, .bess-link-panel h3 { margin: 0 0 .4rem; color: inherit; }
+.bess-link-panel p { margin: 0; color: #c8c7c0; line-height: 1.6; }
+.bess-link-panel a { flex: 0 0 auto; display: inline-flex; align-items: center; gap: .55rem; min-height: 44px; padding: .7rem 1rem; border: 1px solid #d1ae70; border-radius: 999px; color: #171b20; background: #d5b675; font-weight: 800; text-decoration: none; }
+.bess-link-panel a:hover { background: #e7cb91; }
+.org-page .bess-link-panel { margin: 1.3rem 0 1.8rem; background: #f2eee5; color: #202d2a; border-color: #c9a365; }
+.org-page .bess-link-panel p { color: #4c5751; }
+.org-page .bess-link-panel a { color: #172522; }
+
+.bess-page {
+  --bess-ink: #0c1118;
+  --bess-panel: #141d26;
+  --bess-panel-soft: #19242d;
+  --bess-text: #f2eee6;
+  --bess-muted: #c0c4c3;
+  --bess-line: rgba(234, 223, 203, .16);
+  --bess-gold: #d1ad70;
+  --bess-rust: #c97959;
+  background: var(--bess-ink);
+  color: var(--bess-text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.65;
+}
+.bess-page *, .bess-page *::before, .bess-page *::after { box-sizing: border-box; }
+.bess-page a { color: #f0cb82; text-underline-offset: .2em; }
+.bess-page a:hover { color: #ffe1a4; }
+.bess-page :focus-visible { outline: 3px solid #f1c873; outline-offset: 3px; border-radius: 4px; }
+.bess-page .bess-skip { position: absolute; left: -9999px; top: .5rem; z-index: 10; background: white; color: black; padding: .7rem 1rem; }
+.bess-page .bess-skip:focus { left: .5rem; }
+.bess-shell { width: min(1120px, calc(100% - 2.5rem)); margin-inline: auto; }
+.bess-header { border-bottom: 1px solid var(--bess-line); background: #101820; }
+.bess-header-inner { min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; }
+.bess-brand { display: inline-flex; align-items: center; gap: .75rem; text-decoration: none; color: var(--bess-text) !important; font-weight: 850; letter-spacing: .08em; }
+.bess-brand-mark { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid #d4b06c; border-radius: 10px 10px 10px 3px; color: #e5c487; font-family: Georgia, serif; font-size: 1.15rem; }
+.bess-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.bess-nav a { color: #d8d6cf; text-decoration: none; font-size: .88rem; }
+.bess-demo-strip { padding: .55rem 1rem; background: #3a2925; color: #f7d6c7; text-align: center; font-size: .78rem; font-weight: 800; letter-spacing: .055em; }
+.bess-hero { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: clamp(2rem, 6vw, 5rem); padding-block: clamp(3.5rem, 8vw, 6.5rem); }
+.bess-eyebrow, .bess-kicker { margin: 0 0 .8rem; color: var(--bess-gold); font-size: .76rem; font-weight: 850; letter-spacing: .14em; text-transform: uppercase; }
+.bess-hero h1 { max-width: 730px; margin: 0; color: #fbf6ec; font-size: clamp(2.4rem, 5.8vw, 4.7rem); line-height: 1.06; letter-spacing: -.04em; }
+.bess-hero h1 em { color: #d6b273; font-style: normal; }
+.bess-lede { max-width: 660px; margin: 1.3rem 0; color: #d0d0ca; font-size: clamp(1.05rem, 1.8vw, 1.22rem); }
+.bess-action-row { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.4rem; }
+.bess-button { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: .7rem 1.1rem; border: 1px solid #d7b477; border-radius: 7px; background: #d7b477; color: #1c2023 !important; font-weight: 850; text-decoration: none; }
+.bess-button:hover { background: #edcf94; }
+.bess-button-ghost { background: transparent; color: #f2e8d8 !important; border-color: rgba(242, 232, 216, .5); }
+.bess-inline-note { color: #aaaead; font-size: .85rem; }
+.bess-visual { padding: clamp(1.2rem, 3vw, 2rem); border: 1px solid var(--bess-line); border-radius: 20px; background: radial-gradient(ellipse at 30% 10%, #263b45, #131c24 68%); box-shadow: 0 24px 80px rgba(0,0,0,.22); }
+.bess-visual svg { display: block; width: 100%; height: auto; }
+.bess-visual figcaption { margin-top: .8rem; color: #b8c2c0; font-size: .8rem; }
+.bess-section { padding-block: clamp(2.8rem, 6vw, 4.8rem); border-top: 1px solid var(--bess-line); }
+.bess-section-head { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-bottom: 1.7rem; }
+.bess-section-head h2 { max-width: 700px; margin: 0; color: #fbf6ec; font-size: clamp(1.8rem, 3.5vw, 2.7rem); line-height: 1.14; letter-spacing: -.025em; }
+.bess-section-head p { max-width: 490px; margin: 0; color: var(--bess-muted); }
+.bess-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.bess-card { padding: 1.25rem; border: 1px solid var(--bess-line); border-radius: 13px; background: var(--bess-panel); }
+.bess-card h3 { margin: .1rem 0 .5rem; color: #f6ead2; font-size: 1.1rem; }
+.bess-card p { margin: .4rem 0 0; color: #c3c8c5; }
+.bess-card-index { display: inline-block; margin-bottom: .8rem; color: var(--bess-rust); font-family: Georgia, serif; font-size: 1.4rem; }
+.bess-equation { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1.1rem; max-width: 850px; margin-top: 1.4rem; padding: 1.3rem; border-left: 3px solid var(--bess-gold); background: #17222a; }
+.bess-equation strong { display: block; color: #f5e6c9; font-size: 1.15rem; }
+.bess-equation span { color: #bbc4c0; font-size: .91rem; }
+.bess-times { color: #d2a76a; font-size: 1.5rem; }
+.bess-caution { margin-top: 1rem; padding: .95rem 1rem; border: 1px solid rgba(201,121,89,.48); border-radius: 8px; background: rgba(94,48,38,.25); color: #f1d4c7; }
+.bess-product-card { padding: clamp(1.25rem, 4vw, 2rem); border: 1px solid rgba(209,173,112,.48); border-radius: 17px; background: linear-gradient(135deg, #18242c, #20221f); }
+.bess-product-top { display: flex; align-items: start; justify-content: space-between; gap: 1rem; }
+.bess-product-top h3 { margin: 0; color: #f5e7cc; font-size: clamp(1.2rem, 2vw, 1.6rem); }
+.bess-status-pill { display: inline-block; max-width: 340px; padding: .3rem .55rem; border: 1px solid rgba(216,174,105,.6); border-radius: 999px; color: #f0d497; font-size: .73rem; font-weight: 800; }
+.bess-spec-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .65rem; margin: 1.2rem 0; }
+.bess-spec { padding: .75rem; border: 1px solid rgba(255,255,255,.1); border-radius: 8px; background: rgba(4,9,12,.22); }
+.bess-spec dt { color: #aeb8b5; font-size: .76rem; }
+.bess-spec dd { margin: .2rem 0 0; color: #f2eadb; font-weight: 780; }
+.bess-conflict { margin-top: .9rem; padding: 1rem; border-radius: 8px; border: 1px solid rgba(201,121,89,.56); background: rgba(99,48,35,.24); color: #f4d3c4; }
+.bess-conflict strong { display: block; margin-bottom: .35rem; color: #ffd6bf; }
+.bess-pending-list { margin: .8rem 0 0; padding-left: 1.3rem; color: #c8cbc6; }
+.bess-assessment { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(270px, .9fr); gap: 1.5rem; align-items: start; }
+.bess-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem; padding: 1.25rem; border: 1px solid var(--bess-line); border-radius: 14px; background: var(--bess-panel); }
+.bess-form label { display: grid; gap: .35rem; color: #e5e0d6; font-size: .9rem; font-weight: 700; }
+.bess-form select, .bess-form input { width: 100%; min-height: 44px; padding: .6rem .7rem; border: 1px solid #58656b; border-radius: 6px; background: #0d141a; color: #fff; font: inherit; }
+.bess-field-wide { grid-column: 1 / -1; }
+.bess-output { min-height: 150px; padding: 1.2rem; border: 1px solid var(--bess-line); border-radius: 14px; background: #131c23; overflow-wrap: anywhere; }
+.bess-output h3 { margin-top: 0; color: #efd69e; }
+.bess-output p, .bess-output li { color: #cbd0cd; }
+.bess-source-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+.bess-source-list a { display: block; padding: .8rem; border: 1px solid var(--bess-line); border-radius: 8px; background: #141d24; }
+.bess-source-list small { display: block; color: #aeb7b4; }
+.bess-faq details { padding: 1rem 0; border-bottom: 1px solid var(--bess-line); }
+.bess-faq summary { color: #f2e3c3; font-weight: 780; cursor: pointer; }
+.bess-faq p { color: #c2c8c5; }
+.bess-footer { padding-block: 1.8rem; border-top: 1px solid var(--bess-line); color: #aeb8b5; font-size: .85rem; }
+.bess-footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .8rem; }
+.bess-loading { color: #d7b477; }
+
+@media (max-width: 760px) {
+  .bess-header-inner { align-items: flex-start; flex-direction: column; padding-block: .85rem; }
+  .bess-nav { gap: .55rem .9rem; }
+  .bess-hero { grid-template-columns: 1fr; padding-block: 2.7rem; }
+  .bess-section-head { align-items: start; flex-direction: column; gap: .6rem; }
+  .bess-grid { grid-template-columns: 1fr; }
+  .bess-assessment { grid-template-columns: 1fr; }
+  .bess-spec-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .bess-link-panel { align-items: flex-start; flex-direction: column; }
+}
+@media (max-width: 480px) {
+  .bess-shell { width: min(100% - 1.35rem, 1120px); }
+  .bess-form { grid-template-columns: 1fr; padding: .9rem; }
+  .bess-field-wide { grid-column: auto; }
+  .bess-product-top { flex-direction: column; }
+  .bess-spec-grid, .bess-source-list { grid-template-columns: 1fr; }
+  .bess-equation { grid-template-columns: 1fr; gap: .45rem; }
+  .bess-times { display: none; }
+  .bess-demo-strip { font-size: .68rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bess-page *, .bess-page *::before, .bess-page *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}

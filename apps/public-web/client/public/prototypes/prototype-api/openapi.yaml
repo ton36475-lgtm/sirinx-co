@@ -1,0 +1,341 @@
+openapi: 3.1.0
+info:
+  title: SIRINX Proposal Prototype API
+  version: 0.1.0
+  description: >-
+    Local mock-only contract. No production services, LLMs, energy devices, customer
+    data, GPU capacity, billing, or third-party API is connected. Every POST is
+    synthetic, non-persistent and marked demoOnly.
+servers:
+  - url: http://127.0.0.1:8766/api
+    description: Optional loopback-only local mock server
+paths:
+  /v1/status:
+    get:
+      summary: Show mock boundary
+      responses:
+        '200':
+          description: Demo status only
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Status'}
+  /v1/knowledge:
+    get:
+      summary: Read static knowledge records
+      parameters:
+        - in: query
+          name: topic
+          schema: {type: string}
+        - in: query
+          name: province
+          schema: {type: string}
+      responses:
+        '200':
+          description: Source-linked public-claim fixtures
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/KnowledgeResponse'}
+  /v1/evidence:
+    get:
+      summary: Read evidence-state fixtures
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [website_claim, measured, forecast, scenario, stale, pending, offline]
+      responses:
+        '200':
+          description: Evidence placeholders, not independent verification
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/EvidenceResponse'}
+  /v1/projects:
+    get:
+      summary: Read source-linked project claims
+      responses:
+        '200':
+          description: Website claims with verification gates
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ProjectsResponse'}
+  /v1/assessments:
+    post:
+      summary: Create a non-calculating local Solar / BESS assessment brief
+      description: No ROI, IRR, LCOE, generation, forecast, contact capture, persistence or lead creation.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AssessmentInput'}
+      responses:
+        '200':
+          description: Local mock brief; never persisted
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AssessmentResponse'}
+  /v1/ai/knowledge-query:
+    post:
+      summary: Demonstrate a proposed AI route without calling a model
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AIQueryInput'}
+      responses:
+        '200':
+          description: Static mock response; no LLM call
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AIQueryResponse'}
+  /v1/cloud/workload-intakes:
+    post:
+      summary: Demonstrate a proposed cloud workload intake
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/CloudWorkloadInput'}
+      responses:
+        '200':
+          description: Proposal state only; no capacity or quote
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/CloudResponse'}
+  /v1/pricing/scenarios:
+    post:
+      summary: List required inputs for a quote without calculating price or ROI
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PricingScenarioInput'}
+      responses:
+        '200':
+          description: Input checklist only; no quote or financial result
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/PricingScenarioResponse'}
+  /v1/editorial/review-briefs:
+    post:
+      summary: Preview owner-review requirements for about, strategy or editorial content
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/EditorialBriefInput'}
+      responses:
+        '200':
+          description: Review checklist only; no draft generated or published
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/EditorialBriefResponse'}
+  /v1/contact/routing:
+    post:
+      summary: Preview an intent route without collecting contact details or sending an inquiry
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ContactRoutingInput'}
+      responses:
+        '200':
+          description: Suggested local route only; no contact record
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ContactRoutingResponse'}
+  /v1/brand-consents:
+    post:
+      summary: Build a consent checklist without recording consent
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/BrandConsentInput'}
+      responses:
+        '200':
+          description: Template-only checklist; no person record
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/BrandConsentResponse'}
+  /v1/partner-inquiries:
+    post:
+      summary: Preview a partner inquiry without storing it
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PartnerInput'}
+      responses:
+        '200':
+          description: Local mock only; no inquiry saved
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/MockResponse'}
+components:
+  schemas:
+    Status:
+      type: object
+      required: [demoOnly, liveIntegrations, persisted, deviceCommands]
+      properties:
+        demoOnly: {const: true}
+        liveIntegrations: {const: false}
+        persisted: {const: false}
+        deviceCommands: {const: false}
+        note: {type: string}
+    Source:
+      type: object
+      properties:
+        url: {type: string, format: uri}
+        publisher: {type: string}
+        reviewedAt: {type: string, format: date}
+        state: {type: string, enum: [website_claim, measured, forecast, scenario, stale, pending, offline]}
+    KnowledgeItem:
+      type: object
+      properties:
+        id: {type: string}
+        topic: {type: string}
+        title: {type: string}
+        state: {type: string}
+        summary: {type: string}
+        sources: {type: array, items: {$ref: '#/components/schemas/Source'}}
+    KnowledgeResponse:
+      type: object
+      properties:
+        demoOnly: {const: true}
+        records: {type: array, items: {$ref: '#/components/schemas/KnowledgeItem'}}
+    EvidenceResponse:
+      type: object
+      properties:
+        demoOnly: {const: true}
+        records: {type: array, items: {type: object, additionalProperties: true}}
+    ProjectsResponse:
+      type: object
+      properties:
+        demoOnly: {const: true}
+        records: {type: array, items: {type: object, additionalProperties: true}}
+    AssessmentInput:
+      type: object
+      additionalProperties: false
+      properties:
+        businessType: {type: string, maxLength: 80}
+        province: {type: string, maxLength: 80}
+        monthlyBillRange: {type: string, maxLength: 40}
+        siteAreaRange: {type: string, maxLength: 40}
+        solution: {type: string, maxLength: 80}
+        bessGoal: {type: string, maxLength: 40}
+        loadProfile: {type: string, maxLength: 40}
+        existingSolar: {type: string, maxLength: 40}
+        siteDataStatus: {type: string, maxLength: 40}
+    AssessmentResponse:
+      type: object
+      properties:
+        demoOnly: {const: true}
+        persisted: {const: false}
+        leadCreated: {const: false}
+        calculationPerformed: {const: false}
+        brief: {type: object, additionalProperties: true}
+    AIQueryInput:
+      type: object
+      additionalProperties: false
+      properties:
+        topic: {type: string, maxLength: 120}
+        question: {type: string, maxLength: 500}
+    AIQueryResponse:
+      type: object
+      properties:
+        demoOnly: {const: true}
+        llmCalled: {const: false}
+        persisted: {const: false}
+        response: {type: string}
+        sources: {type: array, items: {$ref: '#/components/schemas/Source'}}
+    CloudWorkloadInput:
+      type: object
+      additionalProperties: false
+      properties:
+        workloadType: {type: string, enum: [inference, training, storage, not_sure]}
+        region: {type: string, maxLength: 80}
+        dataClass: {type: string, enum: [public, internal, sensitive_unknown, unknown]}
+    CloudResponse:
+      type: object
+      properties:
+        demoOnly: {const: true}
+        persisted: {const: false}
+        availability: {const: unknown}
+        pricing: {const: unknown}
+        requestCreated: {const: false}
+    PricingScenarioInput:
+      type: object
+      additionalProperties: false
+      properties:
+        solutionPackage: {type: string, enum: [solar_carport, rooftop, floating_solar, bess, ev_charging, ems]}
+        commercialStructure: {type: string, enum: [purchase, lease, third_party, not_sure]}
+        region: {type: string, maxLength: 80}
+    PricingScenarioResponse:
+      type: object
+      properties:
+        demoOnly: {const: true}
+        persisted: {const: false}
+        priceAvailable: {const: false}
+        quoteCreated: {const: false}
+        roiCalculated: {const: false}
+        requiredInputs: {type: array, items: {type: string}}
+    EditorialBriefInput:
+      type: object
+      additionalProperties: false
+      properties:
+        route: {type: string, enum: [about, leadership, services, blog, strategy]}
+        format: {type: string, enum: [webpage, media_kit, video, speaking, article]}
+        topic: {type: string, maxLength: 160}
+    EditorialBriefResponse:
+      type: object
+      properties:
+        demoOnly: {const: true}
+        persisted: {const: false}
+        sourceVerified: {const: false}
+        ownerReviewRequired: {const: true}
+        draftCreated: {const: false}
+        published: {const: false}
+    ContactRoutingInput:
+      type: object
+      additionalProperties: false
+      properties:
+        intent: {type: string, enum: [assessment, partner, correction, media]}
+        region: {type: string, maxLength: 80}
+    ContactRoutingResponse:
+      type: object
+      properties:
+        demoOnly: {const: true}
+        persisted: {const: false}
+        contactCaptured: {const: false}
+        inquirySent: {const: false}
+        suggestedPrototypeRoute: {type: string}
+    BrandConsentInput:
+      type: object
+      additionalProperties: false
+      properties:
+        role: {type: string, enum: [CEO, staff, other]}
+        assets: {type: array, items: {type: string, enum: [name, photo, voice, video, quote, byline, credentials]}}
+        channels: {type: array, items: {type: string, enum: [website, blog, press, social, event, youtube]}}
+        duration: {type: string, enum: [single_use, six_months, review_required]}
+    BrandConsentResponse:
+      type: object
+      properties:
+        demoOnly: {const: true}
+        consentRecorded: {const: false}
+        persisted: {const: false}
+        checklist: {type: array, items: {type: string}}
+    PartnerInput:
+      type: object
+      additionalProperties: false
+      properties:
+        partnerType: {type: string, maxLength: 80}
+        region: {type: string, maxLength: 80}
+        interest: {type: string, maxLength: 160}
+    MockResponse:
+      type: object
+      properties:
+        demoOnly: {const: true}
+        persisted: {const: false}
+        status: {type: string}
+        note: {type: string}

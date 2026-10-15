@@ -8,7 +8,7 @@ const dict: Record<string, { th: string; en: string; cn: string }> = {
     en: "Complete Energy",
     cn: "全方位能源",
   },
-  "sol.hero.title2": { th: "ครบวงจร", en: "Solutions", cn: "解决方案" },
+  "sol.hero.title2": { th: "ผลิตไฟถึงชาร์จ EV", en: "Solutions", cn: "发电到充电" },
   "sol.hero.desc": {
     th: "ทุกโซลูชันออกแบบเพื่อผลลัพธ์ทางธุรกิจที่วัดได้ ตั้งแต่การผลิตไฟฟ้า กักเก็บพลังงาน ไปจนถึง AI Energy Management",
     en: "Every solution is designed for measurable business outcomes — from power generation and energy storage to AI Energy Management.",

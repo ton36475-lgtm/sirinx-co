@@ -47,7 +47,7 @@ const metaByPath: Record<string, SeoMeta> = {
   },
   "/solutions": {
     path: "/solutions",
-    title: "โซลูชันพลังงานครบวงจร | Solar, BESS, EV, AI Energy | SIRINX",
+    title: "โซลูชันพลังงาน: Solar, BESS, EV, AI Energy | SIRINX",
     description:
       "รวมโซลูชัน Solar Carport, Rooftop Solar, Floating Solar, BESS, EV Charging, AI Energy Management และ O&M สำหรับองค์กร",
   },
@@ -111,7 +111,7 @@ const metaByPath: Record<string, SeoMeta> = {
     path: "/about",
     title: "เกี่ยวกับ SIRINX | Solar Digital Agentic Company",
     description:
-      "รู้จัก SIRINX บริษัทออกแบบ ติดตั้ง และบริหารระบบพลังงานสะอาดครบวงจร พร้อม AI Energy Management",
+      "รู้จัก SIRINX บริษัทออกแบบ ติดตั้ง และบริหารระบบพลังงานสะอาด พร้อม AI Energy Management",
   },
   "/privacy": {
     path: "/privacy",

@@ -101,13 +101,13 @@ const routeMetaMap: Record<string, PageMeta> = {
     image: `${PRODUCTION_BASE_URL}/assets/home-solution/home-solution-drone-hero.jpg`,
   },
   "/about": {
-    title: "SIRINX คือใคร? บริษัทติดตั้งโซลาร์เซลล์ + AI Energy ครบวงจรของไทย",
+    title: "SIRINX คือใคร? บริษัทติดตั้งโซลาร์เซลล์ + AI Energy ของไทย",
     description:
       "SIRINX ออกแบบ ติดตั้ง และดูแลระบบพลังงานสะอาดตามขอบเขตโครงการ พร้อมใช้ข้อมูลหน้างานเพื่อช่วยธุรกิจวางแผนลดต้นทุนพลังงาน",
   },
   "/solutions": {
     title:
-      "โซลูชันโซลาร์เซลล์ครบวงจร | Rooftop Solar, Floating Solar, BESS, AI Energy",
+      "โซลูชันโซลาร์เซลล์ | Rooftop Solar, Floating Solar, BESS, AI Energy",
     description:
       "เลือกโซลูชันที่เหมาะกับธุรกิจคุณ — โซลาร์หลังคา, โซลาร์ลอยน้ำ, Solar Carport, แบตเตอรี่กักเก็บพลังงาน BESS และ AI วิเคราะห์การใช้ไฟฟ้าแบบ Real-time ลดค่าไฟทันที",
   },

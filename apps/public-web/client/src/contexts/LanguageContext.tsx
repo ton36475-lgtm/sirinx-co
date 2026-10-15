@@ -106,7 +106,7 @@ const translations: Record<string, Record<Language, string>> = {
 
   // Footer
   "footer.tagline": {
-    th: "Solar Digital Agentic Company — ออกแบบ ติดตั้ง และบริหารระบบพลังงานสะอาดครบวงจร",
+    th: "Solar Digital Agentic Company — ออกแบบ ติดตั้ง และบริหารระบบพลังงานสะอาด",
     en: "Solar Digital Agentic Company — Design, Install & Manage Complete Clean Energy Systems",
     cn: "太阳能数字智能公司 — 设计、安装和管理完整的清洁能源系统",
   },

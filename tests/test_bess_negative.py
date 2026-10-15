@@ -93,7 +93,7 @@ class BessMockApiNegativeTests(unittest.TestCase):
         status, response = request_json(
             "/api/v1/assessments",
             "POST",
-            {"businessType": "hotel", "goal": "cutCosts"},
+            {"businessType": "hotel", "province": "bangkok", "bessGoal": "cutCosts"},
         )
 
         self.assertEqual(status, 200)

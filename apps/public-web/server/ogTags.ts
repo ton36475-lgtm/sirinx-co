@@ -178,6 +178,12 @@ const routeMetaMap: Record<string, PageMeta> = {
   },
   // Internal motion-engineering page (registry consumer) — prerendered so the
   // no-catch-all _redirects policy serves it statically; excluded from search.
+  "/bess": {
+    title: "ระบบกักเก็บพลังงานแบตเตอรี่ (BESS) | SIRINX",
+    description:
+      "ข้อมูล BESS ที่ทุกตัวเลขมีแหล่งที่มาและสถานะชัดเจน ค่าที่ยังขัดแย้งแสดงเป็นข้อขัดแย้ง — ต้นแบบ ไม่เชื่อมระบบจริง",
+    noindex: true,
+  },
   "/styleguide/motion": {
     title: "Motion Styleguide | SIRINX",
     description:

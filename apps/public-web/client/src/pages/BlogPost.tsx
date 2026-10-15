@@ -364,6 +364,18 @@ export default function BlogPost() {
                 </div>
               )}
 
+              {slug === "bess-peak-shaving" && (
+                <div className="mb-10 rounded-xl border border-border-subtle bg-surface-elevated p-5">
+                  <p className="mb-2 text-sm font-semibold">อ่านต่อเรื่อง BESS</p>
+                  <p className="mb-3 text-sm text-text-secondary">
+                    ข้อมูลระบบ BESS ที่ทุกตัวเลขมีแหล่งที่มาและสถานะระบุชัด — ค่าที่ขัดแย้งแสดงเป็นข้อขัดแย้ง (ต้นแบบ ไม่เชื่อมระบบจริง)
+                  </p>
+                  <Link href="/bess" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-400">
+                    ดูหน้าระบบกักเก็บพลังงาน BESS →
+                  </Link>
+                </div>
+              )}
+
               {/* CTA in article */}
               <div className="mt-12 p-6 rounded-xl glass-card">
                 <h3 className="font-display font-semibold text-foreground mb-2">

@@ -10,3 +10,7 @@ allowBuilds:
   # which is not a boolean — pnpm rejected every fresh `pnpm install` with
   # ERR_PNPM_IGNORED_BUILDS, so a clean clone could not install or build.
   esbuild: true
+minimumReleaseAgeExclude:
+  - '@vitest/mocker@5.0.5'
+  - '@vitest/spy@5.0.5'
+  - vitest@5.0.5

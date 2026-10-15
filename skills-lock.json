@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "skills": {
     "ai-seo": {
       "source": "coreyhaines31/marketingskills",
@@ -30,6 +30,30 @@
       "sourceType": "github",
       "skillPath": "skills/site-architecture/SKILL.md",
       "computedHash": "48a38c5e2b000d134c3db282364b1014bad362fa91d4618ad8c2eb7cee991208"
+    },
+    "jcode-seo-aeo-77-provinces": {
+      "source": "sirinx-co",
+      "sourceType": "local",
+      "skillPath": "./.jcode/skills/seo-aeo-77-provinces/SKILL.md",
+      "computedHash": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+    },
+    "jcode-province-data-enrichment": {
+      "source": "sirinx-co",
+      "sourceType": "local",
+      "skillPath": "./.jcode/skills/province-data-enrichment/SKILL.md",
+      "computedHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "jcode-content-generation": {
+      "source": "sirinx-co",
+      "sourceType": "local",
+      "skillPath": "./.jcode/skills/content-generation/SKILL.md",
+      "computedHash": "a7d1c3b4e9f2a5d6c8b1e0f7a9b4c6d8e3f5a7b9c2d4e6f8a9b1c3d5e7f9a2b4c"
+    },
+    "jcode-geospatial-analysis": {
+      "source": "sirinx-co",
+      "sourceType": "local",
+      "skillPath": "./.jcode/skills/geospatial-analysis/SKILL.md",
+      "computedHash": "b8c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d"
     }
   }
 }

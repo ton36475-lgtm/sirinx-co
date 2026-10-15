@@ -176,6 +176,14 @@ const routeMetaMap: Record<string, PageMeta> = {
     description:
       "นโยบายคุกกี้ของเว็บไซต์ SIRINX สำหรับการวิเคราะห์การใช้งาน การปรับปรุงประสบการณ์ และการวัดผลบริการออนไลน์",
   },
+  // Internal motion-engineering page (registry consumer) — prerendered so the
+  // no-catch-all _redirects policy serves it statically; excluded from search.
+  "/styleguide/motion": {
+    title: "Motion Styleguide | SIRINX",
+    description:
+      "หน้าภายในสำหรับทีม: ทุกพฤติกรรม motion ที่ใช้จริงบนเว็บไซต์ ลงทะเบียนใน motionRegistry และบังคับด้วย tests",
+    noindex: true,
+  },
 };
 
 function getProvinceFromPath(cleanPath: string): ThaiProvince | undefined {

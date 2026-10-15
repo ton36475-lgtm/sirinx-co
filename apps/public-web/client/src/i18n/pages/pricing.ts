@@ -373,7 +373,7 @@ const dict: TranslationDict = {
     cn: "支持不断增长的电动车",
   },
   "adv.0.desc": {
-    th: "ยอดจดทะเบียนรถ EV ในไทยเพิ่มขึ้นต่อเนื่องจากมาตรการ EV 3.5 ของรัฐ Solar Carport พร้อม EV Charger ตอบโจทย์ทั้งวันนี้และอนาคต",
+    th: "ยอดจดทะเบียนรถ EV ในไทยเพิ่มขึ้นต่อเนื่องจากมาตรการ EV 3.5 ของรัฐ Solar Carport พร้อม EV Charger ใช้ได้ทั้งรถ EV ปัจจุบันและรุ่นถัดไป",
     en: "EV registrations in Thailand continue to grow due to the EV 3.5 policy. Solar Carport with EV Charger meets both current and future needs.",
     cn: "由于EV 3.5政策，泰国电动车注册量持续增长。配备电动车充电器的太阳能车棚满足当前和未来需求。",
   },
@@ -413,8 +413,8 @@ const dict: TranslationDict = {
     cn: "碳信用与ESG",
   },
   "adv.4.desc": {
-    th: "สร้างรายได้เพิ่มจาก Carbon Credit ตอบโจทย์ ESG สำหรับบริษัทจดทะเบียน และพันธมิตรทางธุรกิจที่ต้องการ supply chain สีเขียว",
-    en: "Generate additional revenue from Carbon Credits, meet ESG requirements for listed companies and partners seeking green supply chains.",
+    th: "สร้างรายได้เพิ่มจาก Carbon Credit ผ่านเกณฑ์ ESG สำหรับบริษัทจดทะเบียน และพันธมิตรทางธุรกิจที่ต้องการ supply chain สีเขียว",
+    en: "Generate additional revenue from Carbon Credits for listed companies and partners with green supply-chain requirements.",
     cn: "通过碳信用产生额外收入，满足上市公司和寻求绿色供应链合作伙伴的ESG要求。",
   },
   "adv.5.title": {
@@ -607,7 +607,7 @@ const dict: TranslationDict = {
     cn: "无顶棚 — 车辆暴露在日晒雨淋中",
   },
   "vs.row.1.carport": {
-    th: "หลังคาแผงโซลาร์ปกป้องครบวงจร",
+    th: "หลังคาแผงโซลาร์กันแดดกันฝน",
     en: "Solar panel roof provides full protection",
     cn: "太阳能板屋顶提供全面保护",
   },
@@ -663,7 +663,7 @@ const dict: TranslationDict = {
   },
   "vs.row.5.old": { th: "ไม่ได้", en: "Not applicable", cn: "不适用" },
   "vs.row.5.carport": {
-    th: "ได้ Carbon Credit + ตอบโจทย์ ESG",
+    th: "ได้ Carbon Credit + ผ่านเกณฑ์ ESG",
     en: "Earn Carbon Credits + meet ESG goals",
     cn: "获得碳信用 + 满足ESG目标",
   },
@@ -899,7 +899,7 @@ const dict: TranslationDict = {
     cn: "SIRINX介绍视频",
   },
   "brochure.video.desc": {
-    th: "วิดีโอ 20 วินาที แนะนำระบบโซลาร์เซลล์ครบวงจร พร้อมเสียงบรรยายภาษาไทย",
+    th: "วิดีโอ 20 วินาที แนะนำระบบโซลาร์เซลล์ทั้งหมด พร้อมเสียงบรรยายภาษาไทย",
     en: "20-second video introducing the complete solar system with Thai narration.",
     cn: "20秒视频介绍完整的太阳能系统，配有泰语旁白。",
   },

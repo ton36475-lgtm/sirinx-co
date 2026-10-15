@@ -50,9 +50,9 @@ const dict: TranslationDict = {
     cn: "旗舰产品",
   },
   "home.flagship.title": {
-    th: "ทำไม Solar Carport\nถึงเป็นทางเลือกที่ดีที่สุด?",
-    en: "Why Solar Carport\nis the Best Choice?",
-    cn: "为什么太阳能车棚\n是最佳选择？",
+    th: "Solar Carport\nทำอะไรได้จริงบ้าง?",
+    en: "What Solar Carport\nActually Does?",
+    cn: "太阳能车棚\n实际能做什么？",
   },
   "home.flagship.desc": {
     th: "ธุรกิจที่มีลานจอดรถสามารถเปลี่ยนพื้นที่ว่างให้เป็นแหล่งผลิตไฟฟ้า เพิ่มร่มเงา และเตรียมพร้อมสำหรับ EV โดยเริ่มจากการประเมินพื้นที่จริง",
@@ -75,7 +75,7 @@ const dict: TranslationDict = {
     cn: "支持电动车充电站 — 面向未来",
   },
   "home.flagship.benefit4": {
-    th: "เพิ่มมูลค่าอสังหาริมทรัพย์ — ตอบโจทย์ ESG & Green Building",
+    th: "เพิ่มมูลค่าอสังหาริมทรัพย์ — เข้าเกณฑ์ ESG & Green Building",
     en: "Increase property value — meet ESG & Green Building standards",
     cn: "提升房产价值 — 满足ESG和绿色建筑标准",
   },
@@ -97,9 +97,9 @@ const dict: TranslationDict = {
     cn: "集成系统",
   },
   "home.integration.title": {
-    th: "ระบบนิเวศพลังงานครบวงจร",
-    en: "Complete Energy Ecosystem",
-    cn: "完整能源生态系统",
+    th: "Solar Carport + BESS + AI + EV",
+    en: "Solar Carport + BESS + AI + EV",
+    cn: "太阳能车棚+BESS+AI+EV",
   },
   "home.integration.desc": {
     th: "Solar Carport ทำงานร่วมกับ BESS, AI Energy Management และ EV Charging เป็นระบบเดียว",
@@ -152,9 +152,9 @@ const dict: TranslationDict = {
   // All Solutions
   "home.solutions.tag": { th: "Solutions", en: "Solutions", cn: "解决方案" },
   "home.solutions.title": {
-    th: "โซลูชันพลังงานครบวงจร",
-    en: "Complete Energy Solutions",
-    cn: "完整能源解决方案",
+    th: "ระบบพลังงานทั้งหมดของเรา",
+    en: "All Energy Systems",
+    cn: "全部能源系统",
   },
   "home.solutions.desc": {
     th: "Solar Carport เป็นหัวใจของระบบ ทำงานร่วมกับ Rooftop Solar, Floating Solar, BESS และ AI Energy Management",
@@ -250,7 +250,7 @@ const dict: TranslationDict = {
   },
   "home.industries.desc": {
     th: "ทุกธุรกิจที่มีลานจอดรถ สามารถเปลี่ยนพื้นที่ว่างเปล่าเป็นแหล่งรายได้",
-    en: "Any business with parking lots can transform unused space into revenue",
+    en: "Any business with parking lots can earn revenue from unused space",
     cn: "任何有停车场的企业都可以将闲置空间转化为收入来源",
   },
   "home.ind.factory.title": { th: "โรงงาน", en: "Factory", cn: "工厂" },
@@ -337,9 +337,9 @@ const dict: TranslationDict = {
     cn: "彭世洛 — 太阳能+储能+AI能源管理",
   },
   "home.projects.node1.system": {
-    th: "ระบบครบวงจร",
-    en: "Complete System",
-    cn: "完整系统",
+    th: "ผลิตไฟ + BESS + AI",
+    en: "Solar + BESS + AI",
+    cn: "发电+储能+AI",
   },
   "home.projects.node1.reduceBill": {
     th: "ลดค่าไฟฟ้า",

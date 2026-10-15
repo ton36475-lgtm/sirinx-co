@@ -5,7 +5,7 @@ registerPageTranslations("industries", {
   "ind.hero.tag": { th: "Industries", en: "Industries", cn: "行业" },
   "ind.hero.title1": { th: "โซลูชันเฉพาะทาง", en: "Tailored Solutions", cn: "专业解决方案" },
   "ind.hero.title2": { th: "สำหรับทุกอุตสาหกรรม", en: "for Every Industry", cn: "适用于各行各业" },
-  "ind.hero.desc": { th: "เราเข้าใจความท้าทายเฉพาะของแต่ละอุตสาหกรรม และออกแบบระบบพลังงานที่ตอบโจทย์ธุรกิจจริง", en: "We understand the unique challenges of each industry and design energy systems that deliver real business results.", cn: "我们了解每个行业的独特挑战，设计真正满足业务需求的能源系统。" },
+  "ind.hero.desc": { th: "เราเข้าใจความท้าทายเฉพาะของแต่ละอุตสาหกรรม และออกแบบระบบพลังงานที่วัดผลเป็นตัวเลขค่าไฟได้จริง", en: "We understand the unique challenges of each industry and design energy systems that deliver real business results.", cn: "我们了解每个行业的独特挑战，设计真正满足业务需求的能源系统。" },
 
   // Labels
   "ind.label.challenge": { th: "ความท้าทาย", en: "Challenge", cn: "挑战" },
@@ -55,7 +55,7 @@ registerPageTranslations("industries", {
 
   // Commercial
   "ind.commercial.title": { th: "อาคารพาณิชย์", en: "Commercial Buildings", cn: "商业建筑" },
-  "ind.commercial.challenge": { th: "ค่าส่วนกลางสูง ต้องการเพิ่มมูลค่าอาคาร ตอบโจทย์ ESG และ Green Building Certification", en: "High common area fees. Need to increase building value. Meet ESG and Green Building Certification requirements.", cn: "公共区域费用高。需要提升建筑价值。满足ESG和绿色建筑认证要求。" },
+  "ind.commercial.challenge": { th: "ค่าส่วนกลางสูง ต้องการเพิ่มมูลค่าอาคาร เข้าเกณฑ์ ESG และ Green Building Certification", en: "High common area fees. Need to increase building value. Meet ESG and Green Building Certification requirements.", cn: "公共区域费用高。需要提升建筑价值。满足ESG和绿色建筑认证要求。" },
   "ind.commercial.uc1": { th: "Solar Carport + EV Charging สำหรับผู้เช่า/ลูกค้า", en: "Solar Carport + EV Charging for tenants/customers", cn: "太阳能车棚 + 电动车充电，服务租户/客户" },
   "ind.commercial.uc2": { th: "Rooftop Solar ลดค่าส่วนกลาง", en: "Rooftop Solar to reduce common area fees", cn: "屋顶太阳能降低公共区域费用" },
   "ind.commercial.uc3": { th: "AI Energy Management สำหรับ BMS", en: "AI Energy Management for BMS", cn: "AI能源管理用于BMS" },

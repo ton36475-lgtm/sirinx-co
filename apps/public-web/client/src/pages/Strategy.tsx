@@ -3,7 +3,7 @@
  * Design: Kinetic Infrastructure 2.0 — Dark-first, Diagonal energy flow
  * Features: Carousel for 7 prompt templates, Lightbox, SWOT visual, CTA
  */
-import { useState, useCallback } from "react";
+import { useState, useCallback, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import {
@@ -13,6 +13,10 @@ import {
   TrendingUp, Shield, AlertTriangle, ChevronDown, ChevronUp
 } from "lucide-react";
 import { cfImage, cfImageSrcSet } from "@/lib/cfImage";
+
+const AICommandCenterHologram3D = lazy(
+  () => import("@/components/three/AICommandCenterHologram3D"),
+);
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -257,6 +261,40 @@ export default function Strategy() {
               </a>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* ===== ENERGY INTELLIGENCE VISUAL ===== */}
+      <section className="py-16 lg:py-20 section-alt">
+        <div className="container">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            custom={0}
+            className="max-w-2xl mb-8"
+          >
+            <span className="text-xs font-medium text-accent-secondary tracking-widest uppercase mb-3 block">
+              Energy Intelligence
+            </span>
+            <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-3">
+              ศูนย์บัญชาการพลังงานด้วย AI
+            </h2>
+            <p className="text-text-secondary leading-relaxed">
+              ภาพจำลองแนวคิดโฮโลแกรมสามมิติ ไม่ใช่หน้าจอควบคุมจริงหรือข้อมูลเรียลไทม์
+            </p>
+          </motion.div>
+          <Suspense
+            fallback={
+              <div
+                className="h-[420px] rounded-2xl border border-border-subtle bg-surface-elevated animate-pulse"
+                aria-hidden="true"
+              />
+            }
+          >
+            <AICommandCenterHologram3D labelTh="ธุรกิจพลังงาน" />
+          </Suspense>
         </div>
       </section>
 

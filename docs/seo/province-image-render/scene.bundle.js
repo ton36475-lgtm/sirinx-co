@@ -3818,15 +3818,15 @@
      * @param {Object} values - A container with texture parameters.
      */
     setValues(values2) {
-      for (const key in values2) {
-        const newValue = values2[key];
+      for (const key2 in values2) {
+        const newValue = values2[key2];
         if (newValue === void 0) {
-          warn(`Texture.setValues(): parameter '${key}' has value of undefined.`);
+          warn(`Texture.setValues(): parameter '${key2}' has value of undefined.`);
           continue;
         }
-        const currentValue = this[key];
+        const currentValue = this[key2];
         if (currentValue === void 0) {
-          warn(`Texture.setValues(): property '${key}' does not exist.`);
+          warn(`Texture.setValues(): property '${key2}' does not exist.`);
           continue;
         }
         if (currentValue && newValue && (currentValue.isVector2 && newValue.isVector2)) {
@@ -3836,7 +3836,7 @@
         } else if (currentValue && newValue && (currentValue.isMatrix3 && newValue.isMatrix3)) {
           currentValue.copy(newValue);
         } else {
-          this[key] = newValue;
+          this[key2] = newValue;
         }
       }
     }
@@ -7421,8 +7421,8 @@
       return output;
       function extractFromCache(cache) {
         const values2 = [];
-        for (const key in cache) {
-          const data = cache[key];
+        for (const key2 in cache) {
+          const data = cache[key2];
           delete data.metadata;
           values2.push(data);
         }
@@ -8501,6 +8501,45 @@
   };
   var _color = /* @__PURE__ */ new Color();
   Color.NAMES = _colorKeywords;
+  var Fog = class _Fog {
+    /**
+     * Constructs a new fog.
+     *
+     * @param {number|Color} color - The fog's color.
+     * @param {number} [near=1] - The minimum distance to start applying fog.
+     * @param {number} [far=1000] - The maximum distance at which fog stops being calculated and applied.
+     */
+    constructor(color, near = 1, far = 1e3) {
+      this.isFog = true;
+      this.name = "";
+      this.color = new Color(color);
+      this.near = near;
+      this.far = far;
+    }
+    /**
+     * Returns a new fog with copied values from this instance.
+     *
+     * @return {Fog} A clone of this instance.
+     */
+    clone() {
+      return new _Fog(this.color, this.near, this.far);
+    }
+    /**
+     * Serializes the fog into JSON.
+     *
+     * @param {?(Object|string)} meta - An optional value holding meta information about the serialization.
+     * @return {Object} A JSON object representing the serialized fog
+     */
+    toJSON() {
+      return {
+        type: "Fog",
+        name: this.name,
+        color: this.color.getHex(),
+        near: this.near,
+        far: this.far
+      };
+    }
+  };
   var Scene = class extends Object3D {
     /**
      * Constructs a new scene.
@@ -10849,8 +10888,8 @@
       if (Object.keys(this.userData).length > 0) data.userData = this.userData;
       if (this.parameters !== void 0 && this._transformed !== true) {
         const parameters = this.parameters;
-        for (const key in parameters) {
-          if (parameters[key] !== void 0) data[key] = parameters[key];
+        for (const key2 in parameters) {
+          if (parameters[key2] !== void 0) data[key2] = parameters[key2];
         }
         return data;
       }
@@ -10863,21 +10902,21 @@
         };
       }
       const attributes = this.attributes;
-      for (const key in attributes) {
-        const attribute = attributes[key];
-        data.data.attributes[key] = attribute.toJSON(data.data);
+      for (const key2 in attributes) {
+        const attribute = attributes[key2];
+        data.data.attributes[key2] = attribute.toJSON(data.data);
       }
       const morphAttributes = {};
       let hasMorphAttributes = false;
-      for (const key in this.morphAttributes) {
-        const attributeArray = this.morphAttributes[key];
+      for (const key2 in this.morphAttributes) {
+        const attributeArray = this.morphAttributes[key2];
         const array = [];
         for (let i = 0, il = attributeArray.length; i < il; i++) {
           const attribute = attributeArray[i];
           array.push(attribute.toJSON(data.data));
         }
         if (array.length > 0) {
-          morphAttributes[key] = array;
+          morphAttributes[key2] = array;
           hasMorphAttributes = true;
         }
       }
@@ -11353,15 +11392,15 @@
      */
     setValues(values2) {
       if (values2 === void 0) return;
-      for (const key in values2) {
-        const newValue = values2[key];
+      for (const key2 in values2) {
+        const newValue = values2[key2];
         if (newValue === void 0) {
-          warn(`Material: parameter '${key}' has value of undefined.`);
+          warn(`Material: parameter '${key2}' has value of undefined.`);
           continue;
         }
-        const currentValue = this[key];
+        const currentValue = this[key2];
         if (currentValue === void 0) {
-          warn(`Material: '${key}' is not a property of THREE.${this.type}.`);
+          warn(`Material: '${key2}' is not a property of THREE.${this.type}.`);
           continue;
         }
         if (currentValue && currentValue.isColor) {
@@ -11369,7 +11408,7 @@
         } else if (currentValue && currentValue.isVector2 && (newValue && newValue.isVector2) || currentValue && currentValue.isEuler && (newValue && newValue.isEuler) || currentValue && currentValue.isVector3 && (newValue && newValue.isVector3)) {
           currentValue.copy(newValue);
         } else {
-          this[key] = newValue;
+          this[key2] = newValue;
         }
       }
     }
@@ -11554,8 +11593,8 @@
       if (Object.keys(this.userData).length > 0) data.userData = this.userData;
       function extractFromCache(cache) {
         const values2 = [];
-        for (const key in cache) {
-          const data2 = cache[key];
+        for (const key2 in cache) {
+          const data2 = cache[key2];
           delete data2.metadata;
           values2.push(data2);
         }
@@ -12788,6 +12827,157 @@
       return new this.constructor().copy(this);
     }
   };
+  var PointsMaterial = class extends Material {
+    /**
+     * Constructs a new points material.
+     *
+     * @param {Object} [parameters] - An object with one or more properties
+     * defining the material's appearance. Any property of the material
+     * (including any property from inherited materials) can be passed
+     * in here. Color values can be passed any type of value accepted
+     * by {@link Color#set}.
+     */
+    constructor(parameters) {
+      super();
+      this.isPointsMaterial = true;
+      this.type = "PointsMaterial";
+      this.color = new Color(16777215);
+      this.map = null;
+      this.alphaMap = null;
+      this.size = 1;
+      this.sizeAttenuation = true;
+      this.fog = true;
+      this.setValues(parameters);
+    }
+    copy(source) {
+      super.copy(source);
+      this.color.copy(source.color);
+      this.map = source.map;
+      this.alphaMap = source.alphaMap;
+      this.size = source.size;
+      this.sizeAttenuation = source.sizeAttenuation;
+      this.fog = source.fog;
+      return this;
+    }
+  };
+  var _inverseMatrix = /* @__PURE__ */ new Matrix4();
+  var _ray = /* @__PURE__ */ new Ray();
+  var _sphere = /* @__PURE__ */ new Sphere();
+  var _position$3 = /* @__PURE__ */ new Vector3();
+  var Points = class extends Object3D {
+    /**
+     * Constructs a new point cloud.
+     *
+     * @param {BufferGeometry} [geometry] - The points geometry.
+     * @param {Material|Array<Material>} [material] - The points material.
+     */
+    constructor(geometry = new BufferGeometry(), material = new PointsMaterial()) {
+      super();
+      this.isPoints = true;
+      this.type = "Points";
+      this.geometry = geometry;
+      this.material = material;
+      this.morphTargetDictionary = void 0;
+      this.morphTargetInfluences = void 0;
+      this.updateMorphTargets();
+    }
+    copy(source, recursive) {
+      super.copy(source, recursive);
+      this.material = Array.isArray(source.material) ? source.material.slice() : source.material;
+      this.geometry = source.geometry;
+      return this;
+    }
+    /**
+     * Returns `true` if this point cloud intersects the given frustum.
+     *
+     * @param {Frustum|FrustumArray} frustum - The frustum to test.
+     * @return {boolean} Whether this point cloud intersects the given frustum or not.
+     */
+    intersectsFrustum(frustum) {
+      return frustum.intersectsObject(this);
+    }
+    /**
+     * Computes intersection points between a casted ray and this point cloud.
+     *
+     * @param {Raycaster} raycaster - The raycaster.
+     * @param {Array<Object>} intersects - The target array that holds the intersection points.
+     */
+    raycast(raycaster, intersects) {
+      const geometry = this.geometry;
+      const matrixWorld = this.matrixWorld;
+      const threshold = raycaster.params.Points.threshold;
+      const drawRange = geometry.drawRange;
+      if (geometry.boundingSphere === null) geometry.computeBoundingSphere();
+      _sphere.copy(geometry.boundingSphere);
+      _sphere.applyMatrix4(matrixWorld);
+      _sphere.radius += threshold;
+      if (raycaster.ray.intersectsSphere(_sphere) === false) return;
+      _inverseMatrix.copy(matrixWorld).invert();
+      _ray.copy(raycaster.ray).applyMatrix4(_inverseMatrix);
+      const localThreshold = threshold / ((this.scale.x + this.scale.y + this.scale.z) / 3);
+      const localThresholdSq = localThreshold * localThreshold;
+      const index = geometry.index;
+      const attributes = geometry.attributes;
+      const positionAttribute = attributes.position;
+      if (index !== null) {
+        const start = Math.max(0, drawRange.start);
+        const end = Math.min(index.count, drawRange.start + drawRange.count);
+        for (let i = start, il = end; i < il; i++) {
+          const a = index.getX(i);
+          _position$3.fromBufferAttribute(positionAttribute, a);
+          testPoint(_position$3, a, localThresholdSq, matrixWorld, raycaster, intersects, this);
+        }
+      } else {
+        const start = Math.max(0, drawRange.start);
+        const end = Math.min(positionAttribute.count, drawRange.start + drawRange.count);
+        for (let i = start, l = end; i < l; i++) {
+          _position$3.fromBufferAttribute(positionAttribute, i);
+          testPoint(_position$3, i, localThresholdSq, matrixWorld, raycaster, intersects, this);
+        }
+      }
+    }
+    /**
+     * Sets the values of {@link Points#morphTargetDictionary} and {@link Points#morphTargetInfluences}
+     * to make sure existing morph targets can influence this 3D object.
+     */
+    updateMorphTargets() {
+      const geometry = this.geometry;
+      const morphAttributes = geometry.morphAttributes;
+      const keys = Object.keys(morphAttributes);
+      if (keys.length > 0) {
+        const morphAttribute = morphAttributes[keys[0]];
+        if (morphAttribute !== void 0) {
+          this.morphTargetInfluences = [];
+          this.morphTargetDictionary = {};
+          for (let m = 0, ml = morphAttribute.length; m < ml; m++) {
+            const name = morphAttribute[m].name || String(m);
+            this.morphTargetInfluences.push(0);
+            this.morphTargetDictionary[name] = m;
+          }
+        }
+      }
+    }
+  };
+  function testPoint(point, index, localThresholdSq, matrixWorld, raycaster, intersects, object) {
+    const rayPointDistanceSq = _ray.distanceSqToPoint(point);
+    if (rayPointDistanceSq < localThresholdSq) {
+      const intersectPoint = new Vector3();
+      _ray.closestPointToPoint(point, intersectPoint);
+      intersectPoint.applyMatrix4(matrixWorld);
+      const distance = raycaster.ray.origin.distanceTo(intersectPoint);
+      if (distance < raycaster.near || distance > raycaster.far) return;
+      intersects.push({
+        distance,
+        distanceToRay: Math.sqrt(rayPointDistanceSq),
+        point: intersectPoint,
+        index,
+        face: null,
+        faceIndex: null,
+        barycoord: null,
+        object
+      });
+    }
+  }
   var CubeTexture = class extends Texture {
     /**
      * Constructs a new cube texture.
@@ -13525,8 +13715,8 @@
       data.lights = this.lights;
       data.clipping = this.clipping;
       const extensions = {};
-      for (const key in this.extensions) {
-        if (this.extensions[key] === true) extensions[key] = true;
+      for (const key2 in this.extensions) {
+        if (this.extensions[key2] === true) extensions[key2] = true;
       }
       if (Object.keys(extensions).length > 0) data.extensions = extensions;
       return data;
@@ -13576,8 +13766,8 @@
       if (json.fragmentShader !== void 0) this.fragmentShader = json.fragmentShader;
       if (json.glslVersion !== void 0) this.glslVersion = json.glslVersion;
       if (json.extensions !== void 0) {
-        for (const key in json.extensions) {
-          this.extensions[key] = json.extensions[key];
+        for (const key2 in json.extensions) {
+          this.extensions[key2] = json.extensions[key2];
         }
       }
       if (json.lights !== void 0) this.lights = json.lights;
@@ -13683,6 +13873,226 @@
       this.wireframeLinejoin = source.wireframeLinejoin;
       this.flatShading = source.flatShading;
       this.fog = source.fog;
+      return this;
+    }
+  };
+  var MeshPhysicalMaterial = class extends MeshStandardMaterial {
+    /**
+     * Constructs a new mesh physical material.
+     *
+     * @param {Object} [parameters] - An object with one or more properties
+     * defining the material's appearance. Any property of the material
+     * (including any property from inherited materials) can be passed
+     * in here. Color values can be passed any type of value accepted
+     * by {@link Color#set}.
+     */
+    constructor(parameters) {
+      super();
+      this.isMeshPhysicalMaterial = true;
+      this.defines = {
+        "STANDARD": "",
+        "PHYSICAL": ""
+      };
+      this.type = "MeshPhysicalMaterial";
+      this.anisotropyRotation = 0;
+      this.anisotropyMap = null;
+      this.clearcoatMap = null;
+      this.clearcoatRoughness = 0;
+      this.clearcoatRoughnessMap = null;
+      this.clearcoatNormalScale = new Vector2(1, 1);
+      this.clearcoatNormalMap = null;
+      this.ior = 1.5;
+      Object.defineProperty(this, "reflectivity", {
+        get: function() {
+          return clamp(2.5 * (this.ior - 1) / (this.ior + 1), 0, 1);
+        },
+        set: function(reflectivity) {
+          this.ior = (1 + 0.4 * reflectivity) / (1 - 0.4 * reflectivity);
+        }
+      });
+      this.iridescenceMap = null;
+      this.iridescenceIOR = 1.3;
+      this.iridescenceThicknessRange = [100, 400];
+      this.iridescenceThicknessMap = null;
+      this.sheenColor = new Color(0);
+      this.sheenColorMap = null;
+      this.sheenRoughness = 1;
+      this.sheenRoughnessMap = null;
+      this.transmissionMap = null;
+      this.thickness = 0;
+      this.thicknessMap = null;
+      this.attenuationDistance = Infinity;
+      this.attenuationColor = new Color(1, 1, 1);
+      this.specularIntensity = 1;
+      this.specularIntensityMap = null;
+      this.specularColor = new Color(1, 1, 1);
+      this.specularColorMap = null;
+      this._anisotropy = 0;
+      this._clearcoat = 0;
+      this._dispersion = 0;
+      this._iridescence = 0;
+      this._retroreflectivity = 0;
+      this._sheen = 0;
+      this._transmission = 0;
+      this.setValues(parameters);
+    }
+    /**
+     * The anisotropy strength, from `0.0` to `1.0`.
+     *
+     * @type {number}
+     * @default 0
+     */
+    get anisotropy() {
+      return this._anisotropy;
+    }
+    set anisotropy(value) {
+      if (this._anisotropy > 0 !== value > 0) {
+        this.version++;
+      }
+      this._anisotropy = value;
+    }
+    /**
+     * Represents the intensity of the clear coat layer, from `0.0` to `1.0`. Use
+     * clear coat related properties to enable multilayer materials that have a
+     * thin translucent layer over the base layer.
+     *
+     * @type {number}
+     * @default 0
+     */
+    get clearcoat() {
+      return this._clearcoat;
+    }
+    set clearcoat(value) {
+      if (this._clearcoat > 0 !== value > 0) {
+        this.version++;
+      }
+      this._clearcoat = value;
+    }
+    /**
+     * The intensity of the iridescence layer, simulating RGB color shift based on the angle between
+     * the surface and the viewer, from `0.0` to `1.0`.
+     *
+     * @type {number}
+     * @default 0
+     */
+    get iridescence() {
+      return this._iridescence;
+    }
+    set iridescence(value) {
+      if (this._iridescence > 0 !== value > 0) {
+        this.version++;
+      }
+      this._iridescence = value;
+    }
+    /**
+     * Defines the strength of the angular separation of colors (chromatic aberration) transmitting
+     * through a relatively clear volume. Any value zero or larger is valid, the typical range of
+     * realistic values is `[0, 1]`. This property can be only be used with transmissive objects.
+     *
+     * @type {number}
+     * @default 0
+     */
+    get dispersion() {
+      return this._dispersion;
+    }
+    set dispersion(value) {
+      if (this._dispersion > 0 !== value > 0) {
+        this.version++;
+      }
+      this._dispersion = value;
+    }
+    /**
+     * The strength of retroreflection, from `0.0` to `1.0`. A value of `1.0`
+     * evaluates the material's microfacet reflection with the view direction
+     * reflected about the surface normal, redirecting the specular lobe back
+     * toward the light source.
+     *
+     * @type {number}
+     * @default 0
+     */
+    get retroreflectivity() {
+      return this._retroreflectivity;
+    }
+    set retroreflectivity(value) {
+      if (this._retroreflectivity > 0 !== value > 0) {
+        this.version++;
+      }
+      this._retroreflectivity = value;
+    }
+    /**
+     * The intensity of the sheen layer, from `0.0` to `1.0`.
+     *
+     * @type {number}
+     * @default 0
+     */
+    get sheen() {
+      return this._sheen;
+    }
+    set sheen(value) {
+      if (this._sheen > 0 !== value > 0) {
+        this.version++;
+      }
+      this._sheen = value;
+    }
+    /**
+     * Degree of transmission (or optical transparency), from `0.0` to `1.0`.
+     *
+     * Thin, transparent or semitransparent, plastic or glass materials remain
+     * largely reflective even if they are fully transmissive. The transmission
+     * property can be used to model these materials.
+     *
+     * When transmission is non-zero, `opacity` should be  set to `1`.
+     *
+     * @type {number}
+     * @default 0
+     */
+    get transmission() {
+      return this._transmission;
+    }
+    set transmission(value) {
+      if (this._transmission > 0 !== value > 0) {
+        this.version++;
+      }
+      this._transmission = value;
+    }
+    copy(source) {
+      super.copy(source);
+      this.defines = {
+        "STANDARD": "",
+        "PHYSICAL": ""
+      };
+      this.anisotropy = source.anisotropy;
+      this.anisotropyRotation = source.anisotropyRotation;
+      this.anisotropyMap = source.anisotropyMap;
+      this.clearcoat = source.clearcoat;
+      this.clearcoatMap = source.clearcoatMap;
+      this.clearcoatRoughness = source.clearcoatRoughness;
+      this.clearcoatRoughnessMap = source.clearcoatRoughnessMap;
+      this.clearcoatNormalMap = source.clearcoatNormalMap;
+      this.clearcoatNormalScale.copy(source.clearcoatNormalScale);
+      this.dispersion = source.dispersion;
+      this.ior = source.ior;
+      this.iridescence = source.iridescence;
+      this.iridescenceMap = source.iridescenceMap;
+      this.iridescenceIOR = source.iridescenceIOR;
+      this.iridescenceThicknessRange = [...source.iridescenceThicknessRange];
+      this.iridescenceThicknessMap = source.iridescenceThicknessMap;
+      this.retroreflectivity = source.retroreflectivity;
+      this.sheen = source.sheen;
+      this.sheenColor.copy(source.sheenColor);
+      this.sheenColorMap = source.sheenColorMap;
+      this.sheenRoughness = source.sheenRoughness;
+      this.sheenRoughnessMap = source.sheenRoughnessMap;
+      this.transmission = source.transmission;
+      this.transmissionMap = source.transmissionMap;
+      this.thickness = source.thickness;
+      this.thicknessMap = source.thicknessMap;
+      this.attenuationDistance = source.attenuationDistance;
+      this.attenuationColor.copy(source.attenuationColor);
+      this.specularIntensity = source.specularIntensity;
+      this.specularIntensityMap = source.specularIntensityMap;
+      this.specularColor.copy(source.specularColor);
+      this.specularColorMap = source.specularColorMap;
       return this;
     }
   };
@@ -15477,6 +15887,19 @@
       data.object.shadow = this.shadow.toJSON();
       data.object.target = this.target.uuid;
       return data;
+    }
+  };
+  var AmbientLight = class extends Light {
+    /**
+     * Constructs a new ambient light.
+     *
+     * @param {(number|Color|string)} [color=0xffffff] - The light's color.
+     * @param {number} [intensity=1] - The light's strength/intensity.
+     */
+    constructor(color, intensity) {
+      super(color, intensity);
+      this.isAmbientLight = true;
+      this.type = "AmbientLight";
     }
   };
   var fov = -90;
@@ -21214,8 +21637,8 @@
     function remove(object) {
       properties.delete(object);
     }
-    function update(object, key, value) {
-      properties.get(object)[key] = value;
+    function update(object, key2, value) {
+      properties.get(object)[key2] = value;
     }
     function dispose() {
       properties = /* @__PURE__ */ new WeakMap();
@@ -24592,8 +25015,8 @@ void main() {
         _currentDepthNear = null;
         _currentDepthFar = null;
         depthSensing.reset();
-        for (const key in cameraAccessTextures) {
-          delete cameraAccessTextures[key];
+        for (const key2 in cameraAccessTextures) {
+          delete cameraAccessTextures[key2];
         }
         renderer2.setRenderTarget(initialRenderTarget);
         glBaseLayer = null;
@@ -29032,12 +29455,18 @@ void main() {
   if (!province || !energy || !months) {
     throw new Error(`no PVGIS record for ${slug}`);
   }
+  var PALETTE = {
+    carbon: "#080c14",
+    cyan: "#00f2fe",
+    emerald: "#10b981",
+    amber: "#ff9f43"
+  };
   var MONTH_TH = ["\u0E21.\u0E04.", "\u0E01.\u0E1E.", "\u0E21\u0E35.\u0E04.", "\u0E40\u0E21.\u0E22.", "\u0E1E.\u0E04.", "\u0E21\u0E34.\u0E22.", "\u0E01.\u0E04.", "\u0E2A.\u0E04.", "\u0E01.\u0E22.", "\u0E15.\u0E04.", "\u0E1E.\u0E22.", "\u0E18.\u0E04."];
   var values = months.map((m) => m.irradiationDaily);
   var peakIndex = values.indexOf(Math.max(...values));
   var lowIndex = values.indexOf(Math.min(...values));
   var ranked = Object.entries(provinceEnergyData).sort((a, b) => b[1].specificYield - a[1].specificYield);
-  var rank = ranked.findIndex(([key]) => key === slug) + 1;
+  var rank = ranked.findIndex(([key2]) => key2 === slug) + 1;
   var bestMonth = months[peakIndex].month;
   var sun = solarPosition(
     energy.lat,
@@ -29072,6 +29501,8 @@ void main() {
   renderer.setSize(1200, 675);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = PCFSoftShadowMap;
+  renderer.toneMapping = ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.15;
   renderer.outputColorSpace = SRGBColorSpace;
   canvasHost.appendChild(renderer.domElement);
   var scene = new Scene();
@@ -29080,16 +29511,17 @@ void main() {
   skyCanvas.height = 512;
   var skyCtx = skyCanvas.getContext("2d");
   var gradient = skyCtx.createLinearGradient(0, 0, 0, 512);
-  gradient.addColorStop(0, "#12243f");
-  gradient.addColorStop(0.55, "#3e6ba8");
-  gradient.addColorStop(0.82, "#d99a55");
-  gradient.addColorStop(1, "#f0c283");
+  gradient.addColorStop(0, PALETTE.carbon);
+  gradient.addColorStop(0.6, "#0a1524");
+  gradient.addColorStop(0.88, "#0d2b38");
+  gradient.addColorStop(1, "#12414a");
   skyCtx.fillStyle = gradient;
   skyCtx.fillRect(0, 0, 2, 512);
   scene.background = new CanvasTexture(skyCanvas);
+  scene.fog = new Fog(new Color("#0a1524"), 26, 74);
   var camera = new PerspectiveCamera(40, 1200 / 675, 0.1, 300);
-  camera.position.set(11, 6.2, 15);
-  camera.lookAt(0, 1.8, 0);
+  camera.position.set(11, 5.4, 15);
+  camera.lookAt(0, 1.9, 0);
   var sunAz = MathUtils.degToRad(MathUtils.clamp(sun.azimuthDeg, 90, 270));
   var sunEl = MathUtils.degToRad(Math.max(sun.elevationDeg, 8));
   var sunDir = new Vector3(
@@ -29097,36 +29529,40 @@ void main() {
     Math.sin(sunEl),
     -Math.cos(sunAz - Math.PI) * Math.cos(sunEl)
   ).normalize();
-  var sunMesh = new Mesh(
-    new SphereGeometry(1.6, 32, 32),
-    new MeshBasicMaterial({ color: "#fff3c4" })
+  var halo = new Mesh(
+    new SphereGeometry(2.4, 32, 32),
+    new MeshBasicMaterial({ color: PALETTE.amber, transparent: true, opacity: 0.22 })
   );
-  sunMesh.position.copy(sunDir).multiplyScalar(70);
-  scene.add(sunMesh);
-  var glow = new Mesh(
-    new SphereGeometry(3.4, 32, 32),
-    new MeshBasicMaterial({ color: "#ffd98a", transparent: true, opacity: 0.35 })
+  halo.position.copy(sunDir).multiplyScalar(72);
+  scene.add(halo);
+  var haloWide = new Mesh(
+    new SphereGeometry(6.5, 32, 32),
+    new MeshBasicMaterial({ color: PALETTE.amber, transparent: true, opacity: 0.07 })
   );
-  glow.position.copy(sunMesh.position);
-  scene.add(glow);
-  var sunLight = new DirectionalLight("#ffe6bd", 2.6);
-  sunLight.position.copy(sunDir).multiplyScalar(30);
-  sunLight.castShadow = true;
-  sunLight.shadow.mapSize.set(2048, 2048);
-  sunLight.shadow.camera.left = -22;
-  sunLight.shadow.camera.right = 22;
-  sunLight.shadow.camera.top = 22;
-  sunLight.shadow.camera.bottom = -22;
-  scene.add(sunLight);
-  scene.add(new HemisphereLight("#9dc4ff", "#2b2f3a", 0.85));
+  haloWide.position.copy(halo.position);
+  scene.add(haloWide);
+  var rim = new DirectionalLight(PALETTE.cyan, 1.5);
+  rim.position.set(-14, 7, -10);
+  scene.add(rim);
+  var key = new DirectionalLight("#dff4ff", 1.9);
+  key.position.copy(sunDir).multiplyScalar(30);
+  key.castShadow = true;
+  key.shadow.mapSize.set(2048, 2048);
+  key.shadow.camera.left = -22;
+  key.shadow.camera.right = 22;
+  key.shadow.camera.top = 22;
+  key.shadow.camera.bottom = -22;
+  scene.add(key);
+  scene.add(new HemisphereLight(PALETTE.cyan, PALETTE.carbon, 0.55));
+  scene.add(new AmbientLight("#1d2b3a", 0.9));
   var ground = new Mesh(
     new PlaneGeometry(160, 160),
-    new MeshStandardMaterial({ color: "#22262e", roughness: 0.95 })
+    new MeshStandardMaterial({ color: "#0b0f16", roughness: 0.72, metalness: 0.18 })
   );
   ground.rotation.x = -Math.PI / 2;
   ground.receiveShadow = true;
   scene.add(ground);
-  var stallMat = new MeshStandardMaterial({ color: "#8f97a6", roughness: 0.8 });
+  var stallMat = new MeshBasicMaterial({ color: "#1d3b46" });
   for (let row = 0; row < 2; row++) {
     for (let i = -3; i <= 3; i++) {
       const stall = new Mesh(new BoxGeometry(0.12, 0.02, 5.2), stallMat);
@@ -29134,12 +29570,18 @@ void main() {
       scene.add(stall);
     }
   }
-  var panelMat = new MeshStandardMaterial({
-    color: "#16294a",
-    metalness: 0.55,
-    roughness: 0.3
+  var panelMat = new MeshPhysicalMaterial({
+    color: "#071018",
+    metalness: 0.72,
+    roughness: 0.12,
+    clearcoat: 1,
+    clearcoatRoughness: 0.08,
+    emissive: new Color(PALETTE.cyan),
+    emissiveIntensity: 0.1
   });
-  var frameMat = new MeshStandardMaterial({ color: "#dfe4ee", metalness: 0.2, roughness: 0.5 });
+  var cellMat = new MeshBasicMaterial({ color: PALETTE.cyan, transparent: true, opacity: 0.24 });
+  var frameMat = new MeshStandardMaterial({ color: "#26333f", metalness: 0.85, roughness: 0.35 });
+  var busbarMat = new MeshBasicMaterial({ color: PALETTE.cyan, transparent: true, opacity: 0.5 });
   function carportRow(z, tilt) {
     const group = new Group();
     for (const x of [-5.4, 0, 5.4]) {
@@ -29160,6 +29602,18 @@ void main() {
       panel.position.set(i * 1.72, 3.62, 0);
       panel.castShadow = true;
       array.add(panel);
+      for (let cx = 0; cx < 4; cx++) {
+        const cell = new Mesh(new PlaneGeometry(0.3, 0.34), cellMat);
+        cell.rotation.x = Math.PI / 2;
+        cell.position.set(i * 1.72 - 0.56 + cx * 0.38, 3.585, -1.4);
+        array.add(cell);
+      }
+      for (let rz = 0; rz < 8; rz++) {
+        const trace = new Mesh(new PlaneGeometry(1.5, 0.02), busbarMat);
+        trace.rotation.x = Math.PI / 2;
+        trace.position.set(i * 1.72, 3.581, -1.5 + rz * 0.44);
+        array.add(trace);
+      }
     }
     array.rotation.x = tilt;
     array.position.set(0, 0, z);
@@ -29170,24 +29624,122 @@ void main() {
   scene.add(carportRow(-2.6, -0.2));
   function car(x, z, color) {
     const group = new Group();
-    const body = new Mesh(new BoxGeometry(1.9, 0.62, 4.3), new MeshStandardMaterial({ color, metalness: 0.45, roughness: 0.42 }));
-    body.position.y = 0.62;
+    const paint = new MeshPhysicalMaterial({
+      color,
+      metalness: 0.7,
+      roughness: 0.22,
+      clearcoat: 1,
+      clearcoatRoughness: 0.1
+    });
+    const body = new Mesh(new BoxGeometry(1.92, 0.5, 4.3), paint);
+    body.position.y = 0.66;
     body.castShadow = true;
-    const cabin = new Mesh(new BoxGeometry(1.66, 0.56, 2.2), new MeshStandardMaterial({ color: "#223047", metalness: 0.2, roughness: 0.35 }));
-    cabin.position.y = 1.16;
+    const skirt = new Mesh(new BoxGeometry(1.98, 0.22, 4.1), paint);
+    skirt.position.y = 0.44;
+    skirt.castShadow = true;
+    const glass = new MeshPhysicalMaterial({
+      color: "#0a1a24",
+      metalness: 0.4,
+      roughness: 0.05,
+      transmission: 0,
+      clearcoat: 1
+    });
+    const cabin = new Mesh(new BoxGeometry(1.6, 0.54, 2.16), glass);
+    cabin.position.y = 1.17;
     cabin.castShadow = true;
-    group.add(body, cabin);
+    const roof = new Mesh(new BoxGeometry(1.42, 0.06, 1.7), paint);
+    roof.position.y = 1.46;
+    group.add(body, skirt, cabin, roof);
+    const head = new MeshBasicMaterial({ color: "#cfefff" });
+    const tail = new MeshBasicMaterial({ color: PALETTE.amber });
+    for (const wz of [2.16, -2.16]) {
+      const bar = new Mesh(new BoxGeometry(1.5, 0.08, 0.04), wz > 0 ? head : tail);
+      bar.position.set(0, 0.78, wz);
+      group.add(bar);
+    }
+    const tyre = new MeshStandardMaterial({ color: "#080a0e", roughness: 0.9 });
+    const rim2 = new MeshBasicMaterial({ color: "#38505f" });
     for (const [wx, wz] of [[-0.95, 1.4], [0.95, 1.4], [-0.95, -1.4], [0.95, -1.4]]) {
-      const wheel = new Mesh(new CylinderGeometry(0.36, 0.36, 0.24, 20), new MeshStandardMaterial({ color: "#111318", roughness: 0.85 }));
+      const wheel = new Mesh(new CylinderGeometry(0.37, 0.37, 0.26, 24), tyre);
       wheel.rotation.z = Math.PI / 2;
-      wheel.position.set(wx, 0.36, wz);
+      wheel.position.set(wx, 0.37, wz);
+      wheel.castShadow = true;
       group.add(wheel);
+      const hub = new Mesh(new CylinderGeometry(0.19, 0.19, 0.28, 20), rim2);
+      hub.rotation.z = Math.PI / 2;
+      hub.position.set(wx, 0.37, wz);
+      group.add(hub);
     }
     group.position.set(x, 0, z);
     return group;
   }
-  scene.add(car(-2.7, 2.6, "#2d3a55"));
-  scene.add(car(2.7, -2.6, "#5b2f2f"));
+  scene.add(car(-2.7, 2.6, "#16323f"));
+  scene.add(car(2.7, -2.6, "#123a30"));
+  var FLOW_COUNT = 900;
+  var flowPositions = new Float32Array(FLOW_COUNT * 3);
+  var flowSpeed = new Float32Array(FLOW_COUNT);
+  for (let i = 0; i < FLOW_COUNT; i++) {
+    flowPositions[i * 3] = (Math.random() - 0.5) * 13;
+    flowPositions[i * 3 + 1] = 3.2 + Math.random() * 4;
+    flowPositions[i * 3 + 2] = (Math.random() - 0.5) * 9;
+    flowSpeed[i] = 0.4 + Math.random() * 1.1;
+  }
+  var flowGeometry = new BufferGeometry();
+  flowGeometry.setAttribute("position", new BufferAttribute(flowPositions, 3));
+  var flow = new Points(
+    flowGeometry,
+    new PointsMaterial({
+      color: new Color(PALETTE.cyan),
+      size: 0.075,
+      transparent: true,
+      opacity: 0.85,
+      blending: AdditiveBlending,
+      depthWrite: false
+    })
+  );
+  scene.add(flow);
+  var flowEmerald = new Points(
+    flowGeometry.clone(),
+    new PointsMaterial({
+      color: new Color(PALETTE.emerald),
+      size: 0.055,
+      transparent: true,
+      opacity: 0.6,
+      blending: AdditiveBlending,
+      depthWrite: false
+    })
+  );
+  flowEmerald.position.x = 0.6;
+  scene.add(flowEmerald);
+  var pool = new Mesh(
+    new PlaneGeometry(15, 11),
+    new MeshBasicMaterial({
+      color: new Color(PALETTE.cyan),
+      transparent: true,
+      opacity: 0.06,
+      blending: AdditiveBlending,
+      depthWrite: false
+    })
+  );
+  pool.rotation.x = -Math.PI / 2;
+  pool.position.y = 0.02;
+  scene.add(pool);
+  var elapsed = 0;
+  var STEP = 1 / 30;
+  for (let frame = 0; frame < 30; frame++) {
+    elapsed += STEP;
+    for (const sys of [flow, flowEmerald]) {
+      const attr = sys.geometry.attributes.position;
+      const arr = attr.array;
+      for (let i = 0; i < FLOW_COUNT; i++) {
+        arr[i * 3 + 1] -= flowSpeed[i] * STEP;
+        if (arr[i * 3 + 1] < 0.05) arr[i * 3 + 1] = 3.2 + Math.random() * 4;
+      }
+      attr.needsUpdate = true;
+    }
+    flow.material.opacity = 0.7 + Math.sin(elapsed * 2.2) * 0.15;
+    flowEmerald.material.opacity = 0.45 + Math.sin(elapsed * 2.2 + 1.1) * 0.15;
+  }
   renderer.render(scene, camera);
   requestAnimationFrame(() => {
     document.body.dataset.renderCheck = `ok:${renderer.info.render.triangles}`;

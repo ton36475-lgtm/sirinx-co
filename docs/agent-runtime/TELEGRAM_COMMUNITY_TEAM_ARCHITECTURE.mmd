@@ -1,0 +1,16 @@
+flowchart LR
+    H["สมาชิกที่ได้รับอนุญาต"] --> TG["Telegram community · topic ที่อนุญาต"]
+    TG --> API["Telegram Bot API · webhook"]
+    API --> G["Ingress guard · secret / chat+topic / sender / size"]
+    G --> DB[("Postgres control plane · inbox + dedupe + task/event + lease + outbox")]
+    DB --> TRI["Triage · CHAT_ONLY / TASK_PROPOSAL / NEED_INPUT / QUARANTINED"]
+    TRI --> CO["Coordinator · plan / budget / cancel / audit"]
+    CO --> TEAM["Team router · 47 logical roles · bounded waves"]
+    TEAM --> HE["Hermes workers · exact identity + admitted route only"]
+    TEAM --> MK["L4 maker · one exact local-write lease"]
+    MK --> CK["Independent checker · distinct role + principal + lease"]
+    CK --> DB
+    DB --> OUT["Approved summary outbox · separately ticketed send"]
+    OUT --> RES["Telegram topic · result projection only"]
+    H -. "user-invoked advisory" .-> MCP["ChatGPT Web MCP · advisory only"]
+    MCP -. "user-reviewed notes; not an autonomous route" .-> CO

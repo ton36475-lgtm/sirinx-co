@@ -71,7 +71,7 @@ fi
 # Window 4: pipeline audit on a slow loop.
 "$MUX_BIN" new-window -t "$SESSION" -n audit -c "$REPO_ROOT"
 "$MUX_BIN" send-keys -t "$SESSION:audit" \
-    "while true; do npm run pipeline:audit || true; sleep 900; done" C-m
+    'while true; do if npm run pipeline:audit -- --scheduled; then :; else status=$?; echo "scheduled pipeline audit failed (exit $status)"; fi; sleep 900; done' C-m
 
 "$MUX_BIN" select-window -t "$SESSION:web"
 echo "session '$SESSION' started via $MUX_BIN — attach with: $0 attach"

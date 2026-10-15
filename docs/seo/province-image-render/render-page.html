@@ -21,7 +21,7 @@
         position: relative;
         width: 1200px;
         height: 675px;
-        background: #12243f;
+        background: #080c14;
       }
       #scene {
         position: absolute;
@@ -61,10 +61,10 @@
         right: 36px;
         padding: 7px 14px;
         border-radius: 999px;
-        border: 1px solid rgba(255, 255, 255, 0.35);
+        border: 1px solid rgba(0, 242, 254, 0.4);
         color: #fff;
         font-size: 12.5px;
-        background: rgba(10, 22, 42, 0.38);
+        background: rgba(8, 12, 20, 0.5);
       }
       .panel {
         position: absolute;
@@ -74,8 +74,8 @@
         padding: 24px 26px;
         border-radius: 22px;
         color: #fff;
-        background: rgba(9, 18, 35, 0.62);
-        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: rgba(8, 12, 20, 0.72);
+        border: 1px solid rgba(0, 242, 254, 0.22);
       }
       .panel .pv {
         font-size: 15px;
@@ -92,7 +92,7 @@
         margin-top: 18px;
         font-size: 52px;
         font-weight: 800;
-        color: #f6b24a;
+        color: #ff9f43;
         line-height: 1;
       }
       .panel .unit {
@@ -109,8 +109,8 @@
       .chip {
         padding: 6px 13px;
         border-radius: 999px;
-        background: rgba(246, 178, 74, 0.16);
-        border: 1px solid rgba(246, 178, 74, 0.55);
+        background: rgba(255, 159, 67, 0.14);
+        border: 1px solid rgba(255, 159, 67, 0.5);
         color: #ffd9a1;
         font-size: 12.5px;
       }
@@ -121,13 +121,14 @@
         width: 380px;
         padding: 16px 22px 12px;
         border-radius: 18px;
-        background: rgba(9, 18, 35, 0.55);
-        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(8, 12, 20, 0.66);
+        border: 1px solid rgba(0, 242, 254, 0.18);
       }
       .bars-title {
         color: #fff;
-        font-size: 12px;
-        opacity: 0.85;
+        font-size: 14px;
+        font-weight: 600;
+        opacity: 0.9;
         margin-bottom: 8px;
       }
       #bars {
@@ -146,18 +147,20 @@
       .bar {
         width: 14px;
         border-radius: 4px 4px 2px 2px;
-        background: #f6b24a;
+        background: #00f2fe;
       }
       .col.low .bar {
-        background: #9fb6d8;
+        background: #10b981;
       }
       .col.peak .bar {
-        background: #ffd27d;
+        background: #10f0c8;
       }
       .mlabel {
         color: #fff;
-        font-size: 8.5px;
-        opacity: 0.8;
+        /* 8.5px rendered at ~3px in a 400px feed preview — unreadable. */
+        font-size: 13px;
+        font-weight: 600;
+        opacity: 0.92;
       }
       .caption {
         position: absolute;
@@ -166,8 +169,8 @@
         max-width: 560px;
         text-align: right;
         color: #fff;
-        font-size: 12px;
-        line-height: 1.55;
+        font-size: 13.5px;
+        line-height: 1.5;
         opacity: 0.92;
       }
     </style>

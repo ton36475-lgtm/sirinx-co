@@ -1,0 +1,160 @@
+{
+  "generatedAt": "2026-09-28T14:17:56.712Z",
+  "generator": "docs/media/prompts/build-from-real-data.mjs",
+  "bindingMethod": {
+    "yieldData": "regex-parsed from apps/public-web/shared/provinceEnergyData.ts (verified 77/77 entries)",
+    "sunPosition": "live import of solarPosition() from apps/public-web/shared/sunMath.ts (NOAA)",
+    "referenceDate": "2026-06-21 June solstice, local Thailand time (UTC+7)"
+  },
+  "nationalStats": {
+    "count": 77,
+    "min": 1286.82,
+    "max": 1510.98,
+    "mean": 1373.51
+  },
+  "top5ByYield": [
+    {
+      "slug": "phuket",
+      "specificYield": 1510.98,
+      "irradiationDaily": 5.42
+    },
+    {
+      "slug": "prachuap-khiri-khan",
+      "specificYield": 1485.47,
+      "irradiationDaily": 5.34
+    },
+    {
+      "slug": "narathiwat",
+      "specificYield": 1454.53,
+      "irradiationDaily": 5.3
+    },
+    {
+      "slug": "songkhla",
+      "specificYield": 1433.8,
+      "irradiationDaily": 5.24
+    },
+    {
+      "slug": "phatthalung",
+      "specificYield": 1423.16,
+      "irradiationDaily": 5.18
+    }
+  ],
+  "bottom3ByYield": [
+    {
+      "slug": "tak",
+      "specificYield": 1296.14
+    },
+    {
+      "slug": "nan",
+      "specificYield": 1294.8
+    },
+    {
+      "slug": "trat",
+      "specificYield": 1286.82
+    }
+  ],
+  "sunPositions": {
+    "phuketGoldenHour1730": {
+      "elevationDeg": 16.45,
+      "azimuthDeg": 292.2
+    },
+    "phuketNoon1230": {
+      "elevationDeg": 74.44,
+      "azimuthDeg": 358.5
+    },
+    "bangkokGoldenHour1730": {
+      "elevationDeg": 16.67,
+      "azimuthDeg": 290.74
+    }
+  },
+  "dataSourceLine": "PVGIS v5.3, European Commission Joint Research Centre (PVGIS-ERA5, 2005–2023), retrieved 2026-09-26, via shared/provinceEnergyData.ts",
+  "gate": {
+    "executeMode": "BLOCKED — requires APPROVE_PAID_IMAGE_PROVIDER_CALL",
+    "dryRunDefault": "docs/media/generate-illustrations.mjs (unchanged, per LANE_ASSIGNMENT R29 §4 Lane A)"
+  },
+  "prompts": [
+    {
+      "id": "province-hero-phuket-golden-hour",
+      "basedOn": "Catalog Concept A (extended, sun-angle bound)",
+      "route": "/provinces/phuket (hero-adjacent editorial slot)",
+      "model": "gpt-image-2",
+      "dimensions": "1792x1024",
+      "dataBindings": {
+        "specificYield": 1510.98,
+        "irradiationDaily": 5.42,
+        "lat": 7.88,
+        "lon": 98.38,
+        "sunAt1730Local": {
+          "elevationDeg": 16.45,
+          "azimuthDeg": 292.2
+        },
+        "rank": "1 of 77 by specific yield"
+      },
+      "prompt": "An architectural masterpiece photograph of an ultra-modern commercial solar carport in Phuket, Thailand (7.88°N, 98.38°E). Sleek black bifacial photovoltaic panels on a minimalist dark galvanized steel frame. Late-afternoon tropical sun positioned low at 16.45° elevation / 292.2° azimuth (June solstice, true NOAA sun position for this latitude), casting long soft shadows toward the west-southwest across polished wet asphalt. Golden hour color temperature, lush tropical foliage contrasting with clean engineering lines, EV charging bays with subtle cyan LED status lights. Shot on medium-format camera, 35mm lens, f/8, photorealistic, editorial architecture magazine style. Palette: obsidian structure, solar amber highlights, restrained cyan accents. --no cartoon, text, watermark, oversaturated colors, fantasy elements.",
+      "disclaimer": "ภาพแนวคิดสถาปัตยกรรมเพื่อการสาธิตวิศวกรรม — ตัวเลขอ้างอิงค่าปกติสภาพอากาศ PVGIS v5.3 (PVGIS-ERA5, 2005–2023) ไม่ใช่คำสัญญาผลผลิตหรือการประหยัดงบจริงของไซต์ใดไซต์หนึ่ง / Architectural concept visualization; PVGIS climate normals are not a savings promise."
+    },
+    {
+      "id": "province-noon-phuket-high-sun",
+      "basedOn": "Catalog Concept A (extended, sun-angle bound)",
+      "route": "/provinces/phuket (secondary editorial slot)",
+      "model": "gemini-3.1-flash-image",
+      "dimensions": "1536x1024",
+      "dataBindings": {
+        "sunAt1230Local": {
+          "elevationDeg": 74.44,
+          "azimuthDeg": 358.5
+        },
+        "specificYield": 1510.98
+      },
+      "prompt": "A crisp midday architectural photograph of the same modern commercial solar carport in Phuket, Thailand. Sun nearly overhead at 74.44° elevation / 358.5° azimuth (June solstice, true NOAA sun position), producing short dense shadows directly beneath the panel array and bright specular highlights on the anti-reflective glass. Cool neutral daylight, high engineering clarity, bifacial panels with visible rear-side light. Photorealistic, clean industrial composition, palette: deep graphite steel, amber solar reflections, minimal cyan. --no cartoon, text, watermark, fisheye distortion.",
+      "disclaimer": "ภาพแนวคิดสถาปัตยกรรมเพื่อการสาธิตวิศวกรรม — ตัวเลขอ้างอิงค่าปกติสภาพอากาศ PVGIS v5.3 (PVGIS-ERA5, 2005–2023) ไม่ใช่คำสัญญาผลผลิตหรือการประหยัดงบจริงของไซต์ใดไซต์หนึ่ง / Architectural concept visualization; PVGIS climate normals are not a savings promise."
+    },
+    {
+      "id": "national-yield-telemetry-hologram",
+      "basedOn": "Catalog Concept B (extended, dataset bound)",
+      "route": "/strategy (AI/technology hub slot)",
+      "model": "gemini-3.1-flash-image",
+      "dimensions": "1536x1024",
+      "dataBindings": {
+        "provinceCount": 77,
+        "minYield": {
+          "slug": "trat",
+          "value": 1286.82
+        },
+        "maxYield": {
+          "slug": "phuket",
+          "value": 1510.98
+        },
+        "nationalMean": 1373.51
+      },
+      "prompt": "A clean-tech holographic data visualization: a 3D map of Thailand built from 77 glowing vertical columns, one per province, placed at each province's real latitude and longitude. Column height and color encode specific solar yield in kWh/kWp/year: the tallest column glows solar amber at Phuket in the south (1510.98 kWh/kWp/yr), the shortest glows dimmer cyan-blue at Trat near the eastern border (1286.82 kWh/kWp/yr), with a national mean of 1373.51. Matte black environment, thin grid floor, subtle data callouts in Thai typography, cinematic volumetric lighting, depth of field on the tallest column. Matches the visual language of an existing WebGL yield infographic. --no fantasy weapons, clutter, unreadable numbers, watermark.",
+      "disclaimer": "ภาพแนวคิดสถาปัตยกรรมเพื่อการสาธิตวิศวกรรม — ตัวเลขอ้างอิงค่าปกติสภาพอากาศ PVGIS v5.3 (PVGIS-ERA5, 2005–2023) ไม่ใช่คำสัญญาผลผลิตหรือการประหยัดงบจริงของไซต์ใดไซต์หนึ่ง / Architectural concept visualization; PVGIS climate normals are not a savings promise. ค่าคอลัมน์อ้างอิงชุดข้อมูลจริง: PVGIS v5.3, European Commission Joint Research Centre (PVGIS-ERA5, 2005–2023), retrieved 2026-09-26, via shared/provinceEnergyData.ts"
+    },
+    {
+      "id": "engineering-exploded-structure",
+      "basedOn": "Catalog Concept C (extended, structural binding from ProvinceSolarScene.tsx)",
+      "route": "/solar-carport (technical detail slot)",
+      "model": "gpt-image-2",
+      "dimensions": "1024x1024",
+      "dataBindings": {
+        "structuralLayerSource": "apps/public-web/client/src/components/three/ProvinceSolarScene.tsx (pillars, panel tilt, instanced rows)",
+        "numericClaims": "none — deliberately number-free"
+      },
+      "prompt": "Isometric 3D exploded engineering render of a heavy-duty commercial solar carport system. Floating layers from bottom to top: concrete foundation piles, galvanized C-channel steel columns in warm stone gray, waterproof gutter channel, tilted monocrystalline panel array on a shallow rake with micro-inverters and cable trays. Clean studio lighting on a neutral dark slate background, CAD precision, subtle metallic reflections, Dieter Rams inspired industrial design restraint. Palette: obsidian, stone gray steel, one amber accent line. --no cartoon, text, watermark, clutter.",
+      "disclaimer": "Technical diagram representing structural engineering layers; no performance figures are depicted."
+    },
+    {
+      "id": "bess-industrial-storage",
+      "basedOn": "Catalog Concept D (extended, palette binding)",
+      "route": "/solutions (BESS & microgrid slot)",
+      "model": "gemini-3.1-flash-image",
+      "dimensions": "1792x1024",
+      "dataBindings": {
+        "numericClaims": "none — deliberately number-free",
+        "paletteBinding": "client/src/index.css dark theme (navy surface, cyan primary, amber accent)"
+      },
+      "prompt": "State-of-the-art commercial Battery Energy Storage System (BESS) container enclosure beside an industrial solar carport facility. Matte dark titanium casing with active cooling ventilation grilles, vertical amber and cyan LED status indicators, clean underground cable trenches, crisp morning light with sharp architectural shadows. Hyper-realistic industrial product photography. Palette: obsidian navy surfaces, restrained cyan status lighting, amber highlights only at charge indicators. --no cartoon, text, watermark, oversaturated glow.",
+      "disclaimer": "Industrial storage layout demonstration; no performance or capacity figures are depicted."
+    }
+  ]
+}

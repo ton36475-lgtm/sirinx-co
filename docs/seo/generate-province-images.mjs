@@ -67,7 +67,11 @@ const summary = { generated: 0, skipped: 0, slugs: [] };
 for (const province of provinces) {
   const webpPath = path.join(outDir, `${province.slug}.webp`);
   const avifPath = path.join(outDir, `${province.slug}.avif`);
-  if (!FORCE && fs.existsSync(webpPath) && fs.existsSync(avifPath)) {
+  // og:image needs a JPEG: Facebook, LINE and Slack will not render WebP or
+  // AVIF previews. This file had no generator, so 77 of them sat in the tree
+  // with nothing able to reproduce or update them.
+  const ogPath = path.join(outDir, `${province.slug}-og.jpg`);
+  if (!FORCE && fs.existsSync(webpPath) && fs.existsSync(avifPath) && fs.existsSync(ogPath)) {
     summary.skipped += 1;
     continue;
   }
@@ -100,11 +104,16 @@ for (const province of provinces) {
     "-c:v", "libsvtav1", "-crf", "36", "-preset", "5",
     "-pix_fmt", "yuv420p", "-f", "avif", avifPath,
   ]);
+  run("ffmpeg", [
+    "-y", "-loglevel", "error", "-i", pngPath,
+    "-vf", "scale=1200:630",
+    "-q:v", "4", "-pix_fmt", "yuvj420p", "-f", "mjpeg", ogPath,
+  ]);
 
   summary.generated += 1;
   summary.slugs.push(province.slug);
   process.stdout.write(
-    `ok ${province.slug} (png ${(pngSize / 1024) | 0}KB → webp ${(fs.statSync(webpPath).size / 1024) | 0}KB, avif ${(fs.statSync(avifPath).size / 1024) | 0}KB)\n`,
+    `ok ${province.slug} (png ${(pngSize / 1024) | 0}KB → webp ${(fs.statSync(webpPath).size / 1024) | 0}KB, avif ${(fs.statSync(avifPath).size / 1024) | 0}KB, og ${(fs.statSync(ogPath).size / 1024) | 0}KB)\n`,
   );
 }
 

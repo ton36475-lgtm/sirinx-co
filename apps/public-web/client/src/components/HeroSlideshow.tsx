@@ -1,9 +1,12 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from "react";
 import { Link } from "wouter";
 import { AnimatePresence, motion } from "@/lib/static-motion";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { usePageTranslation } from "@/i18n";
 import "@/i18n/pages/heroSlideshow";
+
+// 3D Art Engineering & WebGL Hero layer (dynamically loaded to preserve zero LCP regression)
+const SolarHeroScene = lazy(() => import("@/components/three/SolarHeroScene"));
 
 // ─── Solution categories & slide data ───────────────────────────────
 export type SolutionCategory =
@@ -334,6 +337,11 @@ export default function HeroSlideshow() {
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
         </motion.div>
       </AnimatePresence>
+
+      {/* 3D WebGL Motion & Art Engineering Energy Core (Lazy below overlay) */}
+      <Suspense fallback={null}>
+        <SolarHeroScene />
+      </Suspense>
 
       {/* Content */}
       <div className="container relative z-10 pt-20">

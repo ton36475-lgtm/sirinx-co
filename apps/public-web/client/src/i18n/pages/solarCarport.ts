@@ -609,6 +609,24 @@ const dict: TranslationDict = {
     cn: "正在准备三维视图",
   },
 
+  // 3D exploded technical diagram (R30-P3, Concept C). Lazy chunk, mounted on
+  // the product page only.
+  "sc.diagram.title": {
+    th: "ผังโครงสร้าง Solar Carport แบบแยกชั้น",
+    en: "Solar Carport structure, layer by layer",
+    cn: "太阳能车棚分层结构图",
+  },
+  "sc.diagram.intro": {
+    th: "โครงสร้างแยกเป็นชั้นตามลำดับการติดตั้งจริง ตั้งแต่ฐานราก คานหลัก ไปจนถึงชุดแผง ความเอียงแผงและช่วงแสงอาทิตย์คำนวณจากพิกัดจริงของจังหวัด{province} ตัวเลขทั้งหมดมาจากแหล่งข้อมูลเดียวกับตารางด้านบน",
+    en: "The structure separates into the real installation order, from the foundation and main beams up to the module array. The panel tilt and daylight window are calculated from {province}'s own coordinates, and every figure comes from the same source as the tables above.",
+    cn: "结构按真实安装顺序分层展示，从基础、主梁到组件阵列。倾角与日照时段由{province}的实际坐标计算，所有数值与上表同源。",
+  },
+  "sc.diagram.badge": {
+    th: "โครงสร้างแบบแยกชั้น",
+    en: "Exploded structure",
+    cn: "分层结构",
+  },
+
   // Province index cross-links
   "sc.provinces.link": {
     th: "ดู Solar Carport ทุกจังหวัด",

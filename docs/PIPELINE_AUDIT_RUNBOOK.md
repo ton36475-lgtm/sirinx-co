@@ -6,11 +6,21 @@ Status: active local audit.
 
 Run one repeatable no-skip pipeline audit before advancing SIRINX OS to the next phase.
 
-## Command
+## Commands
+
+Manual full audit (includes project verifier, configured local service probes, CLI readiness, and repo secret-pattern scan):
 
 ```bash
 npm run pipeline:audit
 ```
+
+The agents-mux scheduled loop uses the lightweight local audit every 15 minutes:
+
+```bash
+npm run pipeline:audit -- --scheduled
+```
+
+Scheduled mode checks only Git status/branch and internal disk capacity. It does not run builds, network checks, account CLIs, Telegram previews, or secret scans. It warns below the 15 GiB workload floor; command failures are reported as failures. Set `PIPELINE_AUDIT_OUTPUT` to a distinct path when running concurrently with another audit writer.
 
 ## What It Checks
 
@@ -52,5 +62,6 @@ That file is ignored by Git because it is generated state.
 - `pass`: safe and ready for the next local step.
 - `warn`: blocked by account/service setup or unavailable optional dependency.
 - `fail`: must fix before phase advancement.
+- Scheduled mode uses `warn` for disk below 15 GiB so routine monitoring does not claim capacity admission; a Git/df command failure remains `fail`.
 
 Production gates can still remain blocked even when local pipeline passes.

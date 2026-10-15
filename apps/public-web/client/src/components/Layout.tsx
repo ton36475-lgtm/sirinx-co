@@ -6,6 +6,7 @@
 import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { AnimatePresence, motion } from "@/lib/static-motion";
+import { MOTION_DURATIONS, MOTION_SPRINGS } from "@shared/motionTokens";
 import AILiveAvatarMark from "@/components/AILiveAvatarMark";
 import {
   Menu,
@@ -89,7 +90,10 @@ function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      // Durations come from shared/motionTokens, not from a Tailwind `duration-300`
+      // class. Tokenised 2026-09-28 (R30-P2); the value is unchanged.
+      style={{ transitionDuration: `${MOTION_DURATIONS.scrollProgress}s` }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all ${
         scrolled
           ? "bg-surface-overlay backdrop-blur-xl border-b border-border-subtle shadow-sm"
           : "bg-transparent"
@@ -277,7 +281,7 @@ function Navbar() {
             initial={{ opacity: 0, x: "100%" }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: "100%" }}
-            transition={{ type: "spring", damping: 28, stiffness: 300 }}
+            transition={{ type: "spring", ...MOTION_SPRINGS.overlay }}
             className="lg:hidden fixed inset-0 top-16 z-40 bg-background/98 backdrop-blur-2xl overflow-y-auto"
           >
             <div className="px-5 pt-4 pb-32">
@@ -337,7 +341,10 @@ function Navbar() {
                             {t(link.i18nKey)}
                           </span>
                           <ChevronDown
-                            className={`w-4 h-4 text-text-muted transition-transform duration-200 ${isMobileDropdownOpen ? "rotate-180" : ""}`}
+                            style={{
+                              transitionDuration: `${MOTION_DURATIONS.micro}s`,
+                            }}
+                            className={`w-4 h-4 text-text-muted transition-transform ${isMobileDropdownOpen ? "rotate-180" : ""}`}
                           />
                         </button>
                       ) : (
@@ -383,7 +390,7 @@ function Navbar() {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.2 }}
+                            transition={{ duration: MOTION_DURATIONS.micro }}
                             className="overflow-hidden"
                           >
                             <div className="ml-4 pl-4 border-l-2 border-accent-primary/20 py-1 space-y-0.5">

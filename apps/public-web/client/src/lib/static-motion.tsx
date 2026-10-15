@@ -4,6 +4,8 @@ import {
   type ImgHTMLAttributes,
   type ReactNode,
 } from "react";
+import { AnimatePresence as FramerAnimatePresence, motion as framerMotion } from "framer-motion";
+import { MOTION_HOME_ENABLED } from "@shared/motionFlags";
 
 type StaticMotionProps = {
   animate?: unknown;
@@ -44,11 +46,11 @@ const stripMotionProps = <T extends StaticMotionProps>(props: T) => {
   return domProps;
 };
 
-export function AnimatePresence({ children }: PresenceProps) {
+function StaticAnimatePresence({ children }: PresenceProps) {
   return <>{children}</>;
 }
 
-export const motion = {
+const staticMotion = {
   div: (props: HTMLAttributes<HTMLDivElement> & StaticMotionProps) => (
     <div {...stripMotionProps(props)} />
   ),
@@ -59,3 +61,8 @@ export const motion = {
     <button {...stripMotionProps(props)} />
   ),
 };
+
+export const AnimatePresence = MOTION_HOME_ENABLED
+  ? FramerAnimatePresence
+  : StaticAnimatePresence;
+export const motion = MOTION_HOME_ENABLED ? framerMotion : staticMotion;

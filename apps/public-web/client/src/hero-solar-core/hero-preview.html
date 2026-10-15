@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SIRINX — Solar Core Hero Preview</title>
+    <link rel="stylesheet" href="./solar-core.css" />
+    <!--
+      Import map resolves the bare "three" specifier to the installed package
+      in node_modules. Serve the repo root (e.g. `npx serve apps/public-web`)
+      and open /client/src/hero-solar-core/hero-preview.html — browsers block
+      file:// ES module loads.
+    -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "../../../../node_modules/three/build/three.module.js"
+        }
+      }
+    </script>
+  </head>
+  <body style="margin: 0">
+    <section class="hero-solar">
+      <div class="hero-solar__canvas" id="canvas-mount"></div>
+      <div class="hero-solar__content">
+        <p class="hero-solar__eyebrow">SIRINX Energy</p>
+        <h1 class="hero-solar__title">
+          Solar power,<br />orchestrated by <em>intelligence</em>.
+        </h1>
+        <p class="hero-solar__body">
+          A self-contained Three.js + GLSL hero module. High-detail icosahedral
+          core with a time-driven distortion wave, Fresnel rim glow, and a 1,200
+          particle flow — capped at 2x pixel ratio and paused when the tab is
+          hidden.
+        </p>
+        <div class="hero-solar__actions">
+          <a class="hero-solar__cta" href="#start">Start free</a>
+          <a class="hero-solar__cta hero-solar__cta--ghost" href="#docs">Read the docs</a>
+        </div>
+      </div>
+    </section>
+
+    <script type="module">
+      import * as THREE from 'three'
+
+      const mount = document.getElementById('canvas-mount')
+      const scene = new THREE.Scene()
+      const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100)
+      camera.position.z = 6
+
+      const renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: 'high-performance',
+      })
+      renderer.setClearColor(0x080c14, 1)
+      renderer.toneMapping = THREE.ACESFilmicToneMapping
+      renderer.toneMappingExposure = 1.1
+      renderer.outputColorSpace = THREE.SRGBColorSpace
+      mount.appendChild(renderer.domElement)
+
+      const core = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(2, 64),
+        new THREE.ShaderMaterial({
+          uniforms: {
+            uTime: { value: 0 },
+            uColorPrimary: { value: new THREE.Color(0x00f2fe) },
+            uColorSecondary: { value: new THREE.Color(0x10b981) },
+          },
+          vertexShader: `
+            uniform float uTime;
+            varying vec3 vPosition;
+            varying vec3 vViewNormal;
+            varying vec3 vViewDir;
+            void main() {
+              vPosition = position;
+              float wave =
+                sin(position.x * 2.0 + uTime * 1.20) *
+                cos(position.y * 2.0 + uTime * 0.90) *
+                cos(position.z * 2.0 - uTime * 1.10);
+              float secondary = sin(position.y * 3.7 - uTime * 1.65) * 0.35;
+              vec3 displaced = position + normal * (wave + secondary) * 0.18;
+              vec4 mvPosition = modelViewMatrix * vec4(displaced, 1.0);
+              vViewNormal = normalize(normalMatrix * normal);
+              vViewDir = normalize(-mvPosition.xyz);
+              gl_Position = projectionMatrix * mvPosition;
+            }
+          `,
+          fragmentShader: `
+            uniform float uTime;
+            uniform vec3 uColorPrimary;
+            uniform vec3 uColorSecondary;
+            varying vec3 vPosition;
+            varying vec3 vViewNormal;
+            varying vec3 vViewDir;
+            void main() {
+              float facing = clamp(dot(normalize(vViewNormal), normalize(vViewDir)), 0.0, 1.0);
+              float fresnel = pow(1.0 - facing, 2.2);
+              float band = smoothstep(-2.0, 2.0, vPosition.y + sin(uTime * 0.6) * 0.5);
+              vec3 base = mix(uColorPrimary, uColorSecondary, band);
+              vec3 color = base + uColorPrimary * fresnel * 1.6;
+              gl_FragColor = vec4(color, 0.28 + fresnel * 0.72);
+            }
+          `,
+          wireframe: true,
+          transparent: true,
+        }),
+      )
+      scene.add(core)
+
+      const COUNT = 1200
+      const WRAP_MIN = -7
+      const WRAP_MAX = 7
+      const positions = new Float32Array(COUNT * 3)
+      for (let i = 0; i < COUNT; i++) {
+        positions[i * 3 + 0] = (Math.random() - 0.5) * 14
+        positions[i * 3 + 1] = WRAP_MIN + Math.random() * (WRAP_MAX - WRAP_MIN)
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 10
+      }
+      const particleGeometry = new THREE.BufferGeometry()
+      particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+      scene.add(
+        new THREE.Points(
+          particleGeometry,
+          new THREE.PointsMaterial({
+            color: 0x00f2fe,
+            size: 0.035,
+            transparent: true,
+            opacity: 0.85,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+          }),
+        ),
+      )
+
+      const directional = new THREE.DirectionalLight(0x00f2fe, 1.6)
+      directional.position.set(4, 6, 5)
+      scene.add(directional)
+      scene.add(new THREE.AmbientLight(0x10b981, 0.35))
+      scene.add(new THREE.HemisphereLight(0x00f2fe, 0x080c14, 0.5))
+
+      function resize() {
+        const w = mount.clientWidth || 1
+        const h = mount.clientHeight || 1
+        camera.aspect = w / h
+        camera.updateProjectionMatrix()
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        renderer.setSize(w, h, false)
+      }
+
+      resize()
+      window.addEventListener('resize', resize)
+
+      const clock = new THREE.Clock()
+      let frame = 0
+      function tick() {
+        frame = requestAnimationFrame(tick)
+        const t = clock.getElapsedTime()
+        core.rotation.y = t * 0.15
+        core.rotation.x = t * 0.09
+        core.material.uniforms.uTime.value = t
+        for (let i = 1; i < positions.length; i += 3) {
+          let y = positions[i] - 0.0072
+          if (y < WRAP_MIN) y += WRAP_MAX - WRAP_MIN
+          positions[i] = y
+        }
+        particleGeometry.getAttribute('position').needsUpdate = true
+        renderer.render(scene, camera)
+      }
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          cancelAnimationFrame(frame)
+        } else {
+          clock.getDelta()
+          frame = requestAnimationFrame(tick)
+        }
+      })
+
+      tick()
+    </script>
+  </body>
+</html>

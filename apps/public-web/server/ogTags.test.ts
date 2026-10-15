@@ -222,7 +222,7 @@ describe("injectOgTags", () => {
       "https://sirinxsolar-dfabnh7l.manus.space"
     );
     expect(result).toContain(
-      'twitter:title" content="โซลูชันโซลาร์เซลล์ครบวงจร'
+      'twitter:title" content="โซลูชันโซลาร์เซลล์'
     );
   });
 

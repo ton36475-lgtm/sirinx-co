@@ -5,6 +5,7 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion } from "@/lib/static-motion";
+import { MOTION_DURATIONS, MOTION_EASINGS, MOTION_STAGGERS } from "@shared/motionTokens";
 import { Link } from "wouter";
 import {
   Car,
@@ -39,7 +40,11 @@ const fadeUp = {
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.08, duration: 0.5 },
+    transition: {
+      delay: i * MOTION_STAGGERS.standard,
+      duration: MOTION_DURATIONS.expressive,
+      ease: MOTION_EASINGS.easeOutCubic,
+    },
   }),
 };
 

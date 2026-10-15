@@ -18,6 +18,7 @@ import {
   HemisphereLight,
   Mesh,
   MeshBasicMaterial,
+  MeshPhysicalMaterial,
   MeshStandardMaterial,
   Object3D,
   PerspectiveCamera,
@@ -36,6 +37,30 @@ import {
   solarPosition,
 } from "@/lib/solarGeometry";
 import { getProvinceSolarMonthly } from "@shared/provinceSolarMonthly";
+
+/**
+ * Claymorphism surface: soft matte modelling clay rather than hard plastic or
+ * bare metal. High roughness with a whisper of sheen and clearcoat is what
+ * gives the edges that modelling-clay press-mark look, and it keeps the panels
+ * readable under the low sun angles the solar geometry module feeds us.
+ * ponytail: one factory for every surface; add a second clay preset only when a
+ * second surface family actually shows up.
+ */
+const clayMaterial = (color: string, options: { roughness?: number; metalness?: number; emissive?: string } = {}) =>
+  new MeshPhysicalMaterial({
+    color: new Color(color),
+    roughness: options.roughness ?? 0.75,
+    metalness: options.metalness ?? 0.05,
+    clearcoat: 0.2,
+    clearcoatRoughness: 0.3,
+    sheen: 0.5,
+    sheenRoughness: 0.5,
+    sheenColor: new Color("#ffffff"),
+    ...(options.emissive
+      ? { emissive: new Color(options.emissive), emissiveIntensity: 0.35 }
+      : {}),
+    side: DoubleSide,
+  });
 
 export type ViewerInput = {
   slug: string;
@@ -159,26 +184,15 @@ export default function SolarCarportViewer(props: ViewerInput) {
       const structure = new Group();
       scene.add(structure);
 
-      const steelMat = new MeshStandardMaterial({
-        color: "#8fa3b8",
-        roughness: 0.45,
-        metalness: 0.65,
+      const steelMat = clayMaterial("#8fa3b8", { roughness: 0.62, metalness: 0.12 });
+      const panelMat = clayMaterial("#123a63", {
+        roughness: 0.68,
+        metalness: 0.08,
+        emissive: "#0b2d4d",
       });
-      const panelMat = new MeshStandardMaterial({
-        color: "#123a63",
-        roughness: 0.28,
-        metalness: 0.35,
-        emissive: new Color("#0b2d4d"),
-        emissiveIntensity: 0.35,
-        side: DoubleSide,
-      });
-      const bayMat = new MeshStandardMaterial({ color: "#2c3a4b", roughness: 0.9 });
-      const carMat = new MeshStandardMaterial({ color: "#3b4a5c", roughness: 0.6, metalness: 0.2 });
-      const accentMat = new MeshStandardMaterial({
-        color: "#22d3ee",
-        roughness: 0.4,
-        metalness: 0.3,
-      });
+      const bayMat = clayMaterial("#2c3a4b", { roughness: 0.88 });
+      const carMat = clayMaterial("#3b4a5c", { roughness: 0.7, metalness: 0.08 });
+      const accentMat = clayMaterial("#22d3ee", { roughness: 0.55, metalness: 0.1 });
 
       // Columns and beams.
       const colGeo = new CylinderGeometry(0.16, 0.18, 4.6, 12);
@@ -266,6 +280,11 @@ export default function SolarCarportViewer(props: ViewerInput) {
         if (disposed || !renderer || !host) return;
         const width = Math.max(host.clientWidth, 320);
         const height = Math.max(Math.min(host.clientWidth * 0.58, 420), 240);
+        // Re-cap DPR on every resize, not just at construction, and before setSize —
+        // setSize multiplies by the current ratio. The 1.75 ceiling is this scene's own
+        // budget (it carries the BESS enclosure and shadow casting), not a copy of the
+        // province scenes' 2. Same defect class, fixed 2026-09-28.
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
         renderer.setSize(width, height, false);
         camera.aspect = width / height;
         camera.updateProjectionMatrix();

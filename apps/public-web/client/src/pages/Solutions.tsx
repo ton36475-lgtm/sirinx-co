@@ -2,7 +2,7 @@
  * SIRINX Solutions — Full i18n Integration
  * Solar Carport as first/featured solution, visual images, tighter layout
  */
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { trackSolutionVisit, type SolutionCategory } from "@/components/HeroSlideshow";
@@ -13,6 +13,10 @@ import {
   ArrowRight, Sun, Waves, Car, Battery, Brain, Wrench, Handshake,
   CheckCircle2, Zap
 } from "lucide-react";
+
+const BESSContainerProduct3D = lazy(
+  () => import("@/components/three/BESSContainerProduct3D"),
+);
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -197,7 +201,20 @@ export default function Solutions() {
               </motion.div>
 
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={1}>
-                {sol.image && (
+                {sol.id === "bess" ? (
+                  <Suspense
+                    fallback={
+                      <div
+                        className="mb-5 h-[420px] rounded-2xl border border-border-subtle bg-surface-elevated animate-pulse"
+                        aria-hidden="true"
+                      />
+                    }
+                  >
+                    <div className="mb-5">
+                      <BESSContainerProduct3D labelTh={t(sol.titleKey)} />
+                    </div>
+                  </Suspense>
+                ) : sol.image ? (
                   <img
                     src={cfImage(sol.image, 960)}
                     srcSet={cfImageSrcSet(sol.image, [480, 720, 960, 1280])}
@@ -207,7 +224,7 @@ export default function Solutions() {
                     loading="lazy"
                     decoding="async"
                   />
-                )}
+                ) : null}
                 <div className="p-5 rounded-xl border border-border-subtle bg-surface-elevated">
                   <h3 className="font-display font-semibold text-foreground text-sm mb-3">{t("sol.label.suitable")}</h3>
                   <ul className="space-y-2">

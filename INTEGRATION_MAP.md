@@ -14,7 +14,7 @@ not as an inventory of running systems.
 | Layer | Mechanism | What actually exists on disk |
 | --- | --- | --- |
 | Work queue | Supabase `web_pending_work` + pg_notify → `sirinx-control /api/a2a/sync` | Table referenced in `crates/sirinx-store` and its tests; no database provisioned |
-| Capability routing | OmniRoute (`/api/a2a/route`) — capabilities auto-loaded from 55 skills | Route exists in `crates/sirinx-control`; skill count from `.claude/skills/` |
+| Capability routing | OmniRoute (`/api/a2a/route`) — capabilities auto-loaded from 58 skills | Route exists in `crates/sirinx-control`; skill count from `.claude/skills/` |
 | Knowledge | D1 `sirinx-unified-db` (APAC/SIN) → `brain-sync-worker` (`/api/brain/sync|search|notes`) | `database_name` bound in `infra/cloudflare/brain-sync-worker/wrangler.toml` and `infra/cloudflare/main-router/wrangler.jsonc`; binding declared, not provisioned |
 | API contract | Postman collection **"SIRINX Platform API"** (workspace `549f0d6b…`, collection `e6b5fcae…`) | External; not verifiable from this repo |
 
@@ -60,14 +60,14 @@ bridge = its card registered into OmniRoute via `POST /api/a2a/sync`.
 Supabase SIRINX (six server-only tables, RLS) ↔ sirinx-web/control · Hermes
 dashboard 8710 → Node long-tail 8790 · Rust gate/A2A authority 8711 ·
 Telegram fixed-destination boundary 8791 · Hermes evidence API 9000 ·
-6 Ronin lead sub-agents + 47-role roster (`.claude/agents/`) · 50 skills (`.claude/skills/`)
+6 Ronin lead sub-agents + 47-role roster (`.claude/agents/`) · 58 skills (`.claude/skills/`)
 → OmniRoute capabilities · mux launcher (`scripts/agents-mux.sh`).
 
 The Node evidence plane separates `configured`, `observed`, and `activated`.
 Static cmux lanes, MCP definitions, or agent cards never count as a completed
 handshake. Telegram live readiness additionally requires fresh Postgres-backed
 `telegram_send` evidence from Rust; provider delivery requires its own receipt.
-The registry has 15 unique identities, including separate `claude-cowork` and
+The registry has 16 unique identities (A34 added `antigravity`), including separate `claude-cowork` and
 `kimi-code` entries. Kimi ACP capability is not called MCP without an adapter.
 The verified OpenCode bounded-write receipt is under
 `reports/runtime/opencode-handshake-20260720-001/`; it is one-job evidence,

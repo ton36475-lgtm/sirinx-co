@@ -208,8 +208,9 @@ remain outside this gateway.
 
 ## Agent handshake truth
 
-The A2A registry currently contains 15 unique identities and OmniRoute has 10
-configured lanes with 23 static routes. Claude Cowork and Kimi Code are
+The A2A registry currently contains 16 unique identities and OmniRoute has 16
+configured lanes with 35 static routes (A34 added `antigravity`; tests pin
+`syncAgents: 16` and `lanes: 16`). Claude Cowork and Kimi Code are
 separate identities. Installed/running app or CLI evidence is reported as
 `runtime-surface-observed-handshake-unverified`; it becomes identity evidence
 only when an explicit handshake receipt is supplied. Kimi Code advertises ACP

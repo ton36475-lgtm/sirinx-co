@@ -17,7 +17,14 @@
     }
   },
   "permission": {
-    "line_official_*": "deny"
+    "line_official_*": "deny",
+    "write": "deny",
+    "edit": "deny",
+    "bash": "deny",
+    "task": "deny",
+    "external_directory": "deny",
+    "webfetch": "deny",
+    "websearch": "deny"
   },
   "agent": {
     "projectread": {
@@ -37,6 +44,24 @@
         "line_official_*": "deny",
         "line_official_get_message_quota": "ask",
         "line_official_get_rich_menu_list": "ask"
+      }
+    },
+    "freebuff-lane": {
+      "description": "FreeBuff lane integration for SIRINX with OpenCode agent",
+      "mode": "bounded-write",
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "edit": "deny",
+        "bash": "deny",
+        "task": "deny",
+        "external_directory": "deny",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "line_official_*": "deny",
+        "opencode_write": "allow"
       }
     }
   }

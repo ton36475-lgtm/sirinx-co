@@ -69,9 +69,20 @@ handshake. Telegram live readiness additionally requires fresh Postgres-backed
 `telegram_send` evidence from Rust; provider delivery requires its own receipt.
 The registry has 16 unique identities (A34 added `antigravity`), including separate `claude-cowork` and
 `kimi-code` entries. Kimi ACP capability is not called MCP without an adapter.
-The verified OpenCode bounded-write receipt is under
-`reports/runtime/opencode-handshake-20260720-001/`; it is one-job evidence,
-not a persistent A2A route.
+The verified OpenCode bounded-write receipt for the freebuff lane (SIRINX Lane A) is under `reports/runtime/opencode-handshake-20260720-001/`; it is one-job evidence for the freebuff lane only, not a persistent A2A route.
+
+### Freebuff Lane (SIRINX Lane A) Integration
+
+| Component | Type | Scope | Connection via |
+| --- | --- | --- | --- |
+| OpenCode Agent (opencode) | Runtime principal | Bounded artifact job only | OmniRoute capabilities |
+| Freebuff Lane (Lane A) | SIRINX OS Lane | SIRINX Lane A for controlled artifact generation | Launch Gate registration |
+| OpenCode JSONC Config | Configuration | Freebuff lane permission set | Agent driver profile |
+| Opencode Handshake Report | Evidence | Bounded-write-handshake-passed | Evidence plane verification |
+
+OpenCode operates as a read-only-except-exact-artifact-job agent specifically configured for the SIRINX freebuff lane, generating controlled artifact work under strict governance boundaries.
+
+This integration enables OpenCode to serve as the primary agent for SIRINX Lane A freebuff operations, providing bounded artifact generation capabilities while maintaining system security and governance constraints.
 
 ## Gaps intentionally left gated
 

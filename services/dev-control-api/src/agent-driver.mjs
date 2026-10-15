@@ -62,7 +62,7 @@ const driverProfiles = {
     evidenceStatus: "bounded-write-handshake-passed",
     evidencePath: "reports/runtime/opencode-handshake-20260720-001/HANDSHAKE.json",
     order: 92,
-    notes: "OpenCode 1.18.3 completed one explicitly requested bounded write with the free DeepSeek V4 Flash model; this is not a persistent A2A connection."
+    notes: "OpenCode 1.18.3 completed one explicitly requested bounded write with the free DeepSeek V4 Flash model for freebuff lane (Lane A); this is not a persistent A2A connection."
   },
   "copilot-cli": {
     classification: "needs_install",

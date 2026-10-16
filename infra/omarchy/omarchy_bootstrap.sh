@@ -40,7 +40,7 @@ mkdir -p ~/.9router
 # Catalog snapshot พร้อมใช้จาก Mac (1405 models / 21 providers, synced 16 ต.ค.)
 if [ ! -f ~/.9router/model-catalog.json ]; then
   curl -fsSL --max-time 60 -o ~/.9router/model-catalog.json \
-    https://raw.githubusercontent.com/ton36475-lgtm/sirinx-os/main/9router/model-catalog.json 2>/dev/null \
+    https://raw.githubusercontent.com/ton36475-lgtm/sirinx-co/main/infra/9router/model-catalog.json 2>/dev/null \
     || log "(catalog ยังไม่อยู่บน GitHub — จะ sync ผ่าน tailscale ทีหลัง)"
 fi
 [ -f ~/.9router/model-catalog.json ] && log "catalog: $(jq '.models|length' ~/.9router/model-catalog.json 2>/dev/null || echo '?') models" || log "⚠ catalog missing — sync ทีหลัง"

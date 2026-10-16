@@ -101,10 +101,12 @@ jobs:
           verify-deps-before-run: 'false'
       - name: Typecheck
         run: pnpm --config.verify-deps-before-run=false --dir apps/public-web check
-      - name: Unit tests
-        run: pnpm --config.verify-deps-before-run=false --dir apps/public-web test
+      # Build must precede Unit tests: crawlReachability.test.ts reads the
+      # prerendered dist/public/ tree (77 province pages) as its fixture.
       - name: Build
         run: pnpm --config.verify-deps-before-run=false --dir apps/public-web build
+      - name: Unit tests
+        run: pnpm --config.verify-deps-before-run=false --dir apps/public-web test
       - name: Upload build output for inspection
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:

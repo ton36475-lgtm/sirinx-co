@@ -1,0 +1,37 @@
+{
+  "_comment": "Muse (Meta) model family — เตรียม config ให้ทุก pool, credits ต้องมีก่อนยิงได้",
+  "openrouter_ids": [
+    "meta/muse-spark-1.3",
+    "meta/muse-spark-1.2",
+    "meta/muse-spark-1.1",
+    "meta/muse-wonder",
+    "meta/muse-spark-open",
+    "meta/muse-glimmer-30b"
+  ],
+  "hf_router_ids": [
+    "meta-models/Muse-Spark-Open-816B-A42B",
+    "meta-models/Muse-Glimmer-30B"
+  ],
+  "status": "registered; pending credits (OpenRouter + HF หมดทั้งคู่ — ยืนยัน runtime 2026-10-16)",
+  "capabilities": {
+    "muse-spark-1.3": [
+      "vision",
+      "pdf",
+      "audio",
+      "video"
+    ],
+    "muse-wonder": [
+      "vision",
+      "pdf",
+      "audio",
+      "video"
+    ],
+    "muse-spark-open-816b": [
+      "vision",
+      "video"
+    ],
+    "muse-glimmer-30b": [
+      "vision"
+    ]
+  }
+}

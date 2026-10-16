@@ -1,0 +1,4618 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "small_model": "openrouter/moonshotai/kimi-k2.7-code",
+  "agent": {
+    "build": {
+      "options": {
+        "store": false
+      },
+      "model": "openrouter/moonshotai/kimi-k2.7-code"
+    },
+    "plan": {
+      "options": {
+        "store": false
+      },
+      "model": "openrouter/moonshotai/kimi-k2.7-code"
+    },
+    "glm-review": {
+      "description": "Read-only GLM-5.2 reviewer for sanitized diffs and evidence packs",
+      "mode": "subagent",
+      "model": "openrouter/moonshotai/kimi-k2.7-code",
+      "temperature": 0.1,
+      "options": {
+        "store": false
+      },
+      "permission": {
+        "read": "deny",
+        "edit": "deny",
+        "glob": "deny",
+        "grep": "deny",
+        "list": "deny",
+        "bash": "deny",
+        "task": "deny",
+        "external_directory": "deny",
+        "todowrite": "deny",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "lsp": "deny",
+        "skill": "deny",
+        "question": "deny",
+        "doom_loop": "deny"
+      }
+    }
+  },
+  "mcp": {
+    "codex-cli": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "codex-mcp-server"
+      ],
+      "enabled": false,
+      "environment": {
+        "STRUCTURED_CONTENT_ENABLED": "true"
+      }
+    },
+    "cloudflare-docs": {
+      "type": "remote",
+      "url": "https://docs.mcp.cloudflare.com/mcp",
+      "enabled": true,
+      "timeout": 15000
+    },
+    "cloudflare-bindings": {
+      "type": "remote",
+      "url": "https://bindings.mcp.cloudflare.com/mcp",
+      "enabled": false,
+      "oauth": {},
+      "timeout": 15000
+    },
+    "cloudflare-api": {
+      "type": "remote",
+      "url": "https://mcp.cloudflare.com/mcp",
+      "enabled": false,
+      "oauth": {},
+      "timeout": 15000
+    },
+    "notion": {
+      "type": "remote",
+      "url": "https://mcp.notion.com/mcp",
+      "enabled": false,
+      "oauth": {},
+      "timeout": 15000
+    },
+    "github": {
+      "type": "remote",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "enabled": false,
+      "oauth": false,
+      "headers": {
+        "Authorization": "Bearer {env:GITHUB_PERSONAL_ACCESS_TOKEN}"
+      },
+      "timeout": 15000
+    },
+    "line-bot": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@line/line-bot-mcp-server"
+      ],
+      "enabled": false,
+      "environment": {
+        "NPM_CONFIG_IGNORE_SCRIPTS": "true",
+        "CHANNEL_ACCESS_TOKEN": "${ENV_VAR}",
+        "DESTINATION_USER_ID": "{env:LINE_DESTINATION_USER_ID}"
+      }
+    },
+    "manus-mcp-bridge": {
+      "type": "remote",
+      "url": "http://127.0.0.1:8788/mcp",
+      "enabled": true,
+      "oauth": false,
+      "timeout": 5000
+    },
+    "sirinx-hyperresearch-readonly": {
+      "type": "local",
+      "command": [
+        "/Users/sirinx/.local/share/uv/tools/hyperresearch/bin/python",
+        "/Users/sirinx/.local/share/sirinx-tools/hyperresearch-safe-mcp/0.9.0/server.py"
+      ]
+    },
+    "aws-mcp": {
+      "type": "local",
+      "command": [
+        "uvx",
+        "mcp-proxy-for-aws@latest",
+        "https://aws-mcp.us-east-1.api.aws/mcp",
+        "--metadata",
+        "INSTALL_SOURCE=aws-cli"
+      ]
+    },
+    "rea": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "rea-agents@4.0.1",
+        "mcp"
+      ],
+      "enabled": true
+    }
+  },
+  "tools": {
+    "cloudflare-api_*": false,
+    "cloudflare-bindings_*": false,
+    "github_*": false,
+    "notion_*": false,
+    "line-bot_*": false,
+    "manus-mcp-bridge_*": false,
+    "manus-mcp-bridge_bridge_health": true,
+    "manus-mcp-bridge_bridge_status": true,
+    "line-bot.broadcast*": false,
+    "line-bot.push*": false
+  },
+  "permission": {
+    "cloudflare-docs_*": "allow",
+    "cloudflare-bindings_*": "ask",
+    "cloudflare-api_*": "ask",
+    "github_*": "ask",
+    "notion_*": "ask",
+    "line-bot_*": "deny",
+    "manus-mcp-bridge_*": "deny",
+    "manus-mcp-bridge_bridge_health": "allow",
+    "manus-mcp-bridge_bridge_status": "allow"
+  },
+  "provider": {
+    "glm": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "GLM Shared Key",
+      "options": {
+        "baseURL": "https://cointh.com/glm/anthropic/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "glm-5.2": {
+          "name": "GLM-5.2 (Shared Key)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "glm-5-turbo": {
+          "name": "GLM-5 Turbo (Shared Key)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        }
+      }
+    },
+    "opencode-go": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenCode Go API",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/v1",
+        "name": "opencode-go",
+        "timeout": 600000,
+        "chunkTimeout": 30000,
+        "setCacheKey": true,
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "deepseek-v4-pro": {
+          "name": "DeepSeek V4 Pro (OpenCode Go)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          }
+        },
+        "deepseek-v4-flash": {
+          "name": "DeepSeek V4 Flash (OpenCode Go)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          }
+        },
+        "union-alpha": {
+          "name": "Union Alpha (OpenCode Go)"
+        }
+      }
+    },
+    "maxplus": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Claude Max 20x Pure",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/claude-max-20x-pure",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5-5": {
+          "name": "Claude Opus 5.5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-maxpools": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Maxpools",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/maxpools/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-opus-4-7-medium": {
+          "name": "Claude Opus 4.7 Medium (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7-high": {
+          "name": "Claude Opus 4.7 High (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7-xhigh": {
+          "name": "Claude Opus 4.7 XHigh (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        }
+      }
+    },
+    "maxplus-subpools": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Subpools",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/subpools/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus Subpools)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4.6": {
+          "name": "Claude Opus 4.6 (MaxPlus Subpools)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4.5": {
+          "name": "Claude Opus 4.5 (MaxPlus Subpools)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4.6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus Subpools)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4.5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus Subpools)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4.5": {
+          "name": "Claude Haiku 4.5 (MaxPlus Subpools)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "gpt-5.2": {
+          "name": "GPT-5.2 (Anthropic protocol via Subpools)",
+          "limit": {
+            "context": 400000,
+            "output": 64000
+          }
+        },
+        "gpt-5-mini": {
+          "name": "GPT-5 Mini (Anthropic protocol via Subpools)",
+          "limit": {
+            "context": 400000,
+            "output": 64000
+          }
+        },
+        "gpt-5-nano": {
+          "name": "GPT-5 Nano (Anthropic protocol via Subpools)",
+          "limit": {
+            "context": 400000,
+            "output": 64000
+          }
+        },
+        "gemini-3.1-pro": {
+          "name": "Gemini 3.1 Pro (Anthropic protocol via Subpools)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3-flash": {
+          "name": "Gemini 3 Flash (Anthropic protocol via Subpools)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "kimi-k2.5": {
+          "name": "Kimi K2.5 (Anthropic protocol via Subpools)",
+          "limit": {
+            "context": 262144,
+            "output": 64000
+          }
+        },
+        "glm-5": {
+          "name": "GLM-5 (Anthropic protocol via Subpools)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "minimax-m2.5": {
+          "name": "MiniMax M2.5 (Anthropic protocol via Subpools)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        }
+      }
+    },
+    "maxplus-claude-aws": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Claude AWS",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/claude-aws/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "aws/claude-fable-5": {
+          "name": "Claude Fable 5 (AWS)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws/claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (AWS)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws/claude-opus-5": {
+          "name": "Claude Opus 5 (AWS)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws/claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (AWS)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws/claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (AWS)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws/claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (AWS)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws/claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (AWS)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "aws/claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (AWS)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-kiro-high-cache": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Kiro High Cache",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/kiro-high-cache/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "kiro-high-cache/claude-fable-5": {
+          "name": "claude-fable-5 (Kiro High Cache)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "kiro-high-cache/claude-opus-4-8": {
+          "name": "claude-opus-4-8 (Kiro High Cache)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "kiro-high-cache/claude-opus-5": {
+          "name": "claude-opus-5 (Kiro High Cache)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "kiro-high-cache/claude-opus-4-7": {
+          "name": "claude-opus-4-7 (Kiro High Cache)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "kiro-high-cache/claude-opus-4-6": {
+          "name": "claude-opus-4-6 (Kiro High Cache)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "kiro-high-cache/claude-sonnet-4-6": {
+          "name": "claude-sonnet-4-6 (Kiro High Cache)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "kiro-high-cache/claude-sonnet-4-5": {
+          "name": "claude-sonnet-4-5 (Kiro High Cache)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "kiro-high-cache/claude-haiku-4-5": {
+          "name": "claude-haiku-4-5 (Kiro High Cache)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-aws-v2": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus AWS V2",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/aws-v2/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "aws-v2/claude-fable-5": {
+          "name": "claude-fable-5 (AWS V2)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-v2/claude-fable-5-kiro": {
+          "name": "claude-fable-5-kiro (AWS V2)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-v2/claude-opus-4-8": {
+          "name": "claude-opus-4-8 (AWS V2)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-v2/claude-opus-5": {
+          "name": "claude-opus-5 (AWS V2)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-v2/claude-opus-4-7": {
+          "name": "claude-opus-4-7 (AWS V2)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-v2/claude-opus-4-6": {
+          "name": "claude-opus-4-6 (AWS V2)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-v2/claude-sonnet-4-6": {
+          "name": "claude-sonnet-4-6 (AWS V2)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-v2/claude-sonnet-4-5": {
+          "name": "claude-sonnet-4-5 (AWS V2)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "aws-v2/claude-haiku-4-5": {
+          "name": "claude-haiku-4-5 (AWS V2)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-aws-lite": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus AWS Lite",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/aws-lite/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "aws-lite/claude-fable-5": {
+          "name": "claude-fable-5 (AWS Lite)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-lite/claude-opus-4-8": {
+          "name": "claude-opus-4-8 (AWS Lite)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-lite/claude-opus-5": {
+          "name": "claude-opus-5 (AWS Lite)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-lite/claude-sonnet-4-6": {
+          "name": "claude-sonnet-4-6 (AWS Lite)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-lite/claude-haiku-4-5": {
+          "name": "claude-haiku-4-5 (AWS Lite)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-ccmax": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus CCMAX",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/ccmax/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "ccmax/claude-fable-5": {
+          "name": "claude-fable-5 (CCMAX + AWS)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "ccmax/claude-opus-4-8": {
+          "name": "claude-opus-4-8 (CCMAX + AWS)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "ccmax/claude-opus-5": {
+          "name": "claude-opus-5 (CCMAX + AWS)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "ccmax/claude-opus-4-7": {
+          "name": "claude-opus-4-7 (CCMAX + AWS)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "ccmax/claude-opus-4-6": {
+          "name": "claude-opus-4-6 (CCMAX + AWS)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "ccmax/claude-sonnet-4-6": {
+          "name": "claude-sonnet-4-6 (CCMAX + AWS)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        }
+      }
+    },
+    "maxplus-aws-lite-ultimate": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus AWS Lite Ultimate",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/aws-lite-ultimate/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "aws-lite-ultimate/claude-fable-5": {
+          "name": "claude-fable-5 (AWS Lite Ultimate)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-lite-ultimate/claude-opus-4-8": {
+          "name": "claude-opus-4-8 (AWS Lite Ultimate)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-lite-ultimate/claude-opus-5": {
+          "name": "claude-opus-5 (AWS Lite Ultimate)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-lite-ultimate/claude-opus-4-7": {
+          "name": "claude-opus-4-7 (AWS Lite Ultimate)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-lite-ultimate/claude-opus-4-6": {
+          "name": "claude-opus-4-6 (AWS Lite Ultimate)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-lite-ultimate/claude-sonnet-4-6": {
+          "name": "claude-sonnet-4-6 (AWS Lite Ultimate)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-lite-ultimate/claude-haiku-4-5": {
+          "name": "claude-haiku-4-5 (AWS Lite Ultimate)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-claudecode-lite": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus AWS Lite Ultimate (legacy ClaudeCode Lite)",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/claudecode-lite/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "aws-lite-ultimate/claude-fable-5": {
+          "name": "claude-fable-5 (AWS Lite Ultimate)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-lite-ultimate/claude-opus-4-8": {
+          "name": "claude-opus-4-8 (AWS Lite Ultimate)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-lite-ultimate/claude-opus-5": {
+          "name": "claude-opus-5 (AWS Lite Ultimate)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-lite-ultimate/claude-opus-4-7": {
+          "name": "claude-opus-4-7 (AWS Lite Ultimate)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-lite-ultimate/claude-opus-4-6": {
+          "name": "claude-opus-4-6 (AWS Lite Ultimate)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-lite-ultimate/claude-sonnet-4-6": {
+          "name": "claude-sonnet-4-6 (AWS Lite Ultimate)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "aws-lite-ultimate/claude-haiku-4-5": {
+          "name": "claude-haiku-4-5 (AWS Lite Ultimate)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-cmax-lite": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus CMAX Lite",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/cmax-lite/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-cmax-full": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus CMAX Full",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/cmax-full/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-cmax-specials": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus CMAX Specials",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/cmax-specials/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-claude-kiro-faster": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Claude Kiro Faster",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/claude-kiro-faster/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-claude-kiro-pure": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Claude Kiro Pure",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/claude-kiro-pure/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-claude-cursor": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Claude Cursor",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/claude-cursor/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-claude-antigravity": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Claude Antigravity",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/claude-antigravity/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-awsq": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus AWS Q Developer",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/awsq/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-cce": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus CCE",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/claude-cc/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-cowork": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Cowork",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/cowork/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-mirrorpools": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Mirrorpools",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/mirrorpools/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-openai": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus OpenAI",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/v1",
+        "name": "maxplus-openai",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "gpt-5.5-pro": {
+          "name": "GPT-5.5 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.5": {
+          "name": "GPT-5.5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-pro": {
+          "name": "GPT-5.4 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4": {
+          "name": "GPT-5.4 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-mini": {
+          "name": "GPT-5.4 Mini (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex": {
+          "name": "GPT-5.3 Codex (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex-spark": {
+          "name": "GPT-5.3 Codex Spark (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        }
+      }
+    },
+    "maxplus-maxpools-openai": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus Maxpools OpenAI",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/maxpools/v1",
+        "name": "maxplus-maxpools-openai",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "gpt-5.5-pro": {
+          "name": "GPT-5.5 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.5": {
+          "name": "GPT-5.5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-pro": {
+          "name": "GPT-5.4 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4": {
+          "name": "GPT-5.4 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-mini": {
+          "name": "GPT-5.4 Mini (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex": {
+          "name": "GPT-5.3 Codex (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex-spark": {
+          "name": "GPT-5.3 Codex Spark (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        }
+      }
+    },
+    "maxplus-mirrorpools-openai": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus Mirrorpools OpenAI",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/mirrorpools/v1",
+        "name": "maxplus-mirrorpools-openai",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "gpt-5.5-pro": {
+          "name": "GPT-5.5 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.5": {
+          "name": "GPT-5.5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-pro": {
+          "name": "GPT-5.4 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4": {
+          "name": "GPT-5.4 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-mini": {
+          "name": "GPT-5.4 Mini (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex": {
+          "name": "GPT-5.3 Codex (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex-spark": {
+          "name": "GPT-5.3 Codex Spark (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        }
+      }
+    },
+    "maxplus-gemini": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus Gemini",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/gemini/v1",
+        "name": "maxplus-gemini",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "gemini-3-flash": {
+          "name": "Gemini 3 Flash (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3-flash-preview": {
+          "name": "Gemini 3 Flash Preview (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3-flash-thinking-128": {
+          "name": "Gemini 3 Flash Thinking 128 (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.6-flash": {
+          "name": "Gemini 3.6 Flash (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.6-flash-high": {
+          "name": "Gemini 3.6 Flash High (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.6-flash-medium": {
+          "name": "Gemini 3.6 Flash Medium (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.6-flash-low": {
+          "name": "Gemini 3.6 Flash Low (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.5-flash": {
+          "name": "Gemini 3.5 Flash (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.5-flash-high": {
+          "name": "Gemini 3.5 Flash High (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.5-flash-low": {
+          "name": "Gemini 3.5 Flash Low (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.1-pro-low": {
+          "name": "Gemini 3.1 Pro Low (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.1-pro-preview": {
+          "name": "Gemini 3.1 Pro Preview (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.1-pro-preview-low": {
+          "name": "Gemini 3.1 Pro Preview Low (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.1-flash-lite": {
+          "name": "Gemini 3.1 Flash-Lite (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.1-flash-lite-preview": {
+          "name": "Gemini 3.1 Flash-Lite Preview (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3-pro-high": {
+          "name": "Gemini 3 Pro High (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3-pro-low": {
+          "name": "Gemini 3 Pro Low (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3-pro-preview": {
+          "name": "Gemini 3 Pro Preview (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-2.5-flash": {
+          "name": "Gemini 2.5 Flash (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-2.5-flash-lite": {
+          "name": "Gemini 2.5 Flash-Lite (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-2.5-flash-nothinking": {
+          "name": "Gemini 2.5 Flash No Thinking (MaxPlus)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        }
+      }
+    },
+    "maxplus-kimi": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus Kimi",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/kimi/v1",
+        "name": "maxplus-kimi",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "moonshotai/kimi-k2.6": {
+          "name": "Kimi K2.6 (MaxPlus)",
+          "limit": {
+            "context": 262144,
+            "output": 64000
+          }
+        }
+      }
+    },
+    "maxplus-minimax": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus MiniMax",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/minimax/v1",
+        "name": "maxplus-minimax",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "minimax/minimax-m2.5": {
+          "name": "MiniMax M2.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        }
+      }
+    },
+    "maxplus-gpt-pro": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus GPT Pro",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/gpt-pro/v1",
+        "name": "maxplus-gpt-pro",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "gpt-5.5-pro": {
+          "name": "GPT-5.5 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.5": {
+          "name": "GPT-5.5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-pro": {
+          "name": "GPT-5.4 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4": {
+          "name": "GPT-5.4 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-mini": {
+          "name": "GPT-5.4 Mini (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex": {
+          "name": "GPT-5.3 Codex (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex-spark": {
+          "name": "GPT-5.3 Codex Spark (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        }
+      }
+    },
+    "maxplus-gpt-plus-pro": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus GPT Plus Pro",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/gpt-plus-pro/v1",
+        "name": "maxplus-gpt-plus-pro",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "gpt-5.5-pro": {
+          "name": "GPT-5.5 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.5": {
+          "name": "GPT-5.5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-pro": {
+          "name": "GPT-5.4 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4": {
+          "name": "GPT-5.4 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-mini": {
+          "name": "GPT-5.4 Mini (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex": {
+          "name": "GPT-5.3 Codex (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex-spark": {
+          "name": "GPT-5.3 Codex Spark (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        }
+      }
+    },
+    "maxplus-gpt-pro-20x-ultimate": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus GPT Pro 20x Ultimate",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/gpt-pro-20x-ultimate/v1",
+        "name": "maxplus-gpt-pro-20x-ultimate",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "gpt-5.5-pro": {
+          "name": "GPT-5.5 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.5": {
+          "name": "GPT-5.5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-pro": {
+          "name": "GPT-5.4 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4": {
+          "name": "GPT-5.4 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-mini": {
+          "name": "GPT-5.4 Mini (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex": {
+          "name": "GPT-5.3 Codex (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex-spark": {
+          "name": "GPT-5.3 Codex Spark (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        }
+      }
+    },
+    "maxplus-gpt-pro-20x-stable": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus GPT Pro 20x Stable",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/gpt-pro-20x-stable/v1",
+        "name": "maxplus-gpt-pro-20x-stable",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "gpt-5.5-pro": {
+          "name": "GPT-5.5 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.5": {
+          "name": "GPT-5.5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-pro": {
+          "name": "GPT-5.4 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4": {
+          "name": "GPT-5.4 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-mini": {
+          "name": "GPT-5.4 Mini (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex": {
+          "name": "GPT-5.3 Codex (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex-spark": {
+          "name": "GPT-5.3 Codex Spark (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        }
+      }
+    },
+    "maxplus-gpt-max": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus GPT Max",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/gpt-max/v1",
+        "name": "maxplus-gpt-max",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "gpt-5.5-pro": {
+          "name": "GPT-5.5 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.5": {
+          "name": "GPT-5.5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-pro": {
+          "name": "GPT-5.4 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4": {
+          "name": "GPT-5.4 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-mini": {
+          "name": "GPT-5.4 Mini (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex": {
+          "name": "GPT-5.3 Codex (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex-spark": {
+          "name": "GPT-5.3 Codex Spark (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        }
+      }
+    },
+    "maxplus-gpt-lite": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus GPT Lite",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/gpt-lite/v1",
+        "name": "maxplus-gpt-lite",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "gpt-5.5-pro": {
+          "name": "GPT-5.5 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.5": {
+          "name": "GPT-5.5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-pro": {
+          "name": "GPT-5.4 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4": {
+          "name": "GPT-5.4 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-mini": {
+          "name": "GPT-5.4 Mini (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex": {
+          "name": "GPT-5.3 Codex (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex-spark": {
+          "name": "GPT-5.3 Codex Spark (MaxPlus)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        }
+      }
+    },
+    "maxplus-composer-fast": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus Composer Fast",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/composer-fast/v1",
+        "name": "maxplus-composer-fast",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "grok-composer-2.5-fast": {
+          "name": "Grok Composer 2.5 Fast (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        }
+      }
+    },
+    "maxplus-deepseek": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus Chinese Model",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/deepseek/v1",
+        "name": "maxplus-deepseek",
+        "apiKey": "${ENV_VAR}",
+        "timeout": 600000,
+        "chunkTimeout": 30000,
+        "setCacheKey": true
+      },
+      "models": {
+        "deepseek-v4-flash": {
+          "name": "DeepSeek V4 Flash (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "deepseek-v4-pro": {
+          "name": "DeepSeek V4 Pro (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "glm-5.2": {
+          "name": "GLM-5.2 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "minimax-m3": {
+          "name": "MiniMax M3 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        }
+      }
+    },
+    "maxplus-glm": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus GLM",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/glm/v1",
+        "name": "maxplus-glm",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "glm-5.2": {
+          "name": "GLM-5.2 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "longcat-2.0": {
+          "name": "LongCat 2.0 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "glm-5.1": {
+          "name": "GLM-5.1 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "glm-5": {
+          "name": "GLM-5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        }
+      }
+    },
+    "maxplus-glm-officials": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus GLM Officials",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/glm-officials/v1",
+        "name": "maxplus-glm-officials",
+        "apiKey": "${ENV_VAR}",
+        "timeout": 60000,
+        "chunkTimeout": 30000
+      },
+      "models": {
+        "glm-5.2": {
+          "name": "GLM-5.2 (GLM Officials)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "glm-5.3-flashx": {
+          "name": "GLM-5.3 FlashX (GLM Officials)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        }
+      }
+    },
+    "maxplus-glm-free": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus GLM Free",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/glm-free/v1",
+        "name": "maxplus-glm-free",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "glm-5.2": {
+          "name": "GLM-5.2 (MaxPlus Free)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "glm-5.1": {
+          "name": "GLM-5.1 (MaxPlus Free)",
+          "limit": {
+            "context": 200000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "glm-5": {
+          "name": "GLM-5 (MaxPlus Free)",
+          "limit": {
+            "context": 200000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        }
+      }
+    },
+    "maxplus-free": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus Free",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/free/v1",
+        "name": "maxplus-free",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "deepseek-v4-flash": {
+          "name": "DeepSeek V4 Flash (MaxPlus Free)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "deepseek-v4-pro": {
+          "name": "DeepSeek V4 Pro (MaxPlus Free)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "glm-5.2": {
+          "name": "GLM-5.2 (MaxPlus Free)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "glm-5.1": {
+          "name": "GLM-5.1 (MaxPlus Free)",
+          "limit": {
+            "context": 200000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "glm-5": {
+          "name": "GLM-5 (MaxPlus Free)",
+          "limit": {
+            "context": 200000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "kimi-k2.6": {
+          "name": "Kimi K2.6 (MaxPlus Free)",
+          "limit": {
+            "context": 262144,
+            "output": 64000
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "kimi-k2.7-code": {
+          "name": "Kimi K2.7 Code (MaxPlus Free)",
+          "limit": {
+            "context": 262144,
+            "output": 64000
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "minimax-m3": {
+          "name": "MiniMax M3 (MaxPlus Free)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        }
+      }
+    },
+    "maxplus-claude-github-copilot": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Claude Github Copilot",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/claude-github-copilot/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-glm-deepseek-cheaper": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus GLM&DeepSeek Cheaper",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/glm-deepseek-cheaper/v1",
+        "name": "maxplus-glm-deepseek-cheaper",
+        "apiKey": "${ENV_VAR}",
+        "timeout": 600000,
+        "chunkTimeout": 30000,
+        "setCacheKey": true
+      },
+      "models": {
+        "deepseek-v4-flash": {
+          "name": "DeepSeek V4 Flash (MaxPlus GLM&DeepSeek Cheaper)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "deepseek-v4-pro": {
+          "name": "DeepSeek V4 Pro (MaxPlus GLM&DeepSeek Cheaper)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "minimax-m2.7": {
+          "name": "MiniMax M2.7 (MaxPlus GLM&DeepSeek Cheaper)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "kimi-k2.6": {
+          "name": "Kimi K2.6 (MaxPlus GLM&DeepSeek Cheaper)",
+          "limit": {
+            "context": 262144,
+            "output": 64000
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "kimi-k3": {
+          "name": "Kimi K3 (MaxPlus GLM&DeepSeek Cheaper)",
+          "limit": {
+            "context": 1048576,
+            "output": 131072
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "max"
+          },
+          "variants": {
+            "max": {
+              "reasoningEffort": "max"
+            }
+          }
+        },
+        "nvidia/nemotron-3-ultra-550b-a55b": {
+          "name": "Nemotron 3 Ultra 550B A55B (MaxPlus GLM&DeepSeek Cheaper)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "glm-5.2": {
+          "name": "GLM-5.2 (MaxPlus GLM&DeepSeek Cheaper)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        }
+      }
+    },
+    "maxplus-grok-fast": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus Grok Fast",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/grok-fast/v1",
+        "name": "maxplus-grok-fast",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "grok-composer-2.5-fast": {
+          "name": "Grok Composer 2.5 Fast (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        }
+      }
+    },
+    "maxplus-grok-lite": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus Grok Lite",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/grok-lite/v1",
+        "name": "maxplus-grok-lite",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "grok-composer-2.5-fast": {
+          "name": "Grok Composer 2.5 Fast (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        }
+      }
+    },
+    "maxplus-kiro-coperate": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Kiro Coperate",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/kiro-coperate/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-kiro-95-cache": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Kiro 95 Cache",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/kiro-95-cache/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-kiro-99-cache": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Kiro 99 Cache",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/kiro-99-cache/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-kiro-90-cache": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Kiro 90 Cache",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/kiro-90-cache/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-kiro-70-cache": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Kiro 70 Cache",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/kiro-70-cache/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-awsb": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus AWSB",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/awsb/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-awsp": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus AWSP",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/awsp/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        }
+      }
+    },
+    "maxplus-claude-vertex": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "MaxPlus Claude Vertex Pools",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/claude-vertex/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (MaxPlus Claude Vertex)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (MaxPlus Claude Vertex)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-haiku-4-5-20251001": {
+          "name": "Claude Haiku 4.5 (2025-10-01, MaxPlus Claude Vertex)",
+          "limit": {
+            "context": 200000,
+            "output": 32000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (MaxPlus Claude Vertex)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (MaxPlus Claude Vertex)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (MaxPlus Claude Vertex)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus Claude Vertex)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (MaxPlus Claude Vertex)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-5": {
+          "name": "Claude Sonnet 5 (MaxPlus Claude Vertex)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        }
+      }
+    },
+    "maxplus-gemini-lite": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus Gemini Lite Pools",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/gemini-lite/v1",
+        "name": "maxplus-gemini-lite",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "gemini-3.6-flash": {
+          "name": "Gemini 3.6 Flash (MaxPlus Lite)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.6-flash-tiered": {
+          "name": "Gemini 3.6 Flash Tiered (MaxPlus Lite)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.5-flash": {
+          "name": "Gemini 3.5 Flash (MaxPlus Lite)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.1-pro-preview": {
+          "name": "Gemini 3.1 Pro Preview (MaxPlus Lite)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.1-flash-lite": {
+          "name": "Gemini 3.1 Flash-Lite (MaxPlus Lite)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.1-flash-lite-preview": {
+          "name": "Gemini 3.1 Flash-Lite Preview (MaxPlus Lite)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3-pro-preview": {
+          "name": "Gemini 3 Pro Preview (MaxPlus Lite)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3-flash": {
+          "name": "Gemini 3 Flash (MaxPlus Lite)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3-flash-preview": {
+          "name": "Gemini 3 Flash Preview (MaxPlus Lite)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-2.5-pro": {
+          "name": "Gemini 2.5 Pro (MaxPlus Lite)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-2.5-flash": {
+          "name": "Gemini 2.5 Flash (MaxPlus Lite)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-2.5-flash-lite": {
+          "name": "Gemini 2.5 Flash-Lite (MaxPlus Lite)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        }
+      }
+    },
+    "maxplus-super-grok": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus Super Grok Pools",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/super-grok/v1",
+        "name": "maxplus-super-grok",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "grok-3-mini": {
+          "name": "Grok 3 Mini (MaxPlus Super Grok)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "grok-3-mini-fast": {
+          "name": "Grok 3 Mini Fast (MaxPlus Super Grok)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "grok-4.20-0309-non-reasoning": {
+          "name": "Grok 4.20 0309 Non-Reasoning (MaxPlus Super Grok)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "grok-4.20-0309-reasoning": {
+          "name": "Grok 4.20 0309 Reasoning (MaxPlus Super Grok)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "grok-4.20-multi-agent-0309": {
+          "name": "Grok 4.20 Multi-Agent 0309 (MaxPlus Super Grok)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "grok-4.3": {
+          "name": "Grok 4.3 (MaxPlus Super Grok)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "grok-4.5": {
+          "name": "Grok 4.5 (MaxPlus Super Grok)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "grok-build-0.1": {
+          "name": "Grok Build 0.1 (MaxPlus Super Grok)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "grok-composer-2.5-fast": {
+          "name": "Grok Composer 2.5 Fast (MaxPlus Super Grok)",
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        }
+      }
+    },
+    "maxplus-chinese-model-specials": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus Chinese Model Specials",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/chinese-model-specials/v1",
+        "name": "maxplus-chinese-model-specials",
+        "apiKey": "${ENV_VAR}",
+        "timeout": 600000,
+        "chunkTimeout": 30000,
+        "setCacheKey": true
+      },
+      "models": {
+        "kimi-k3": {
+          "name": "Kimi K3 (MaxPlus Chinese Specials)",
+          "limit": {
+            "context": 1048576,
+            "output": 131072
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "max"
+          },
+          "variants": {
+            "max": {
+              "reasoningEffort": "max"
+            }
+          }
+        }
+      }
+    },
+    "maxplus-all-max-pools": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus All Max Pools",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/all-max-pools/v1",
+        "name": "maxplus-all-max-pools",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "gpt-5.5": {
+          "name": "GPT-5.5 (All Max)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.6-sol": {
+          "name": "GPT-5.6 Sol (All Max)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.6-terra": {
+          "name": "GPT-5.6 Terra (All Max)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.6-luna": {
+          "name": "GPT-5.6 Luna (All Max)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4": {
+          "name": "GPT-5.4 (All Max)",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-mini": {
+          "name": "GPT-5.4 Mini (All Max)",
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        },
+        "claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (All Max)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (All Max)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (All Max)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-sonnet-5": {
+          "name": "Claude Sonnet 5 (All Max)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "claude-fable-5": {
+          "name": "Claude Fable 5 (All Max)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "gemini-3.5-flash": {
+          "name": "Gemini 3.5 Flash (All Max)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.6-flash": {
+          "name": "Gemini 3.6 Flash (All Max)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "gemini-3.1-pro-preview": {
+          "name": "Gemini 3.1 Pro Preview (All Max)",
+          "limit": {
+            "context": 1048576,
+            "output": 64000
+          }
+        },
+        "grok-4.5": {
+          "name": "Grok 4.5 (All Max)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        }
+      }
+    },
+    "maxplus-vip-pools": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus VIP Pools",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/vip-pools/v1",
+        "name": "maxplus-vip-pools",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "claude-opus-5": {
+          "name": "Claude Opus 5 (MaxPlus VIP Pools)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "deepseek-v4-pro": {
+          "name": "DeepSeek V4 Pro (MaxPlus VIP Pools)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          }
+        },
+        "glm-5.2": {
+          "name": "GLM-5.2 (MaxPlus VIP Pools)",
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "kiro-auto": {
+          "name": "Kiro Auto (MaxPlus VIP Pools)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "qwen-3.8-max": {
+          "name": "Qwen 3.8 Max (MaxPlus VIP Pools)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "kimi-k3": {
+          "name": "Kimi K3 (MaxPlus VIP Pools)",
+          "limit": {
+            "context": 1000000,
+            "output": 131072
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "max"
+          },
+          "variants": {
+            "max": {
+              "reasoningEffort": "max"
+            }
+          }
+        }
+      }
+    },
+    "maxplus-grok": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus Grok",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/grok/v1",
+        "name": "maxplus-grok",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "grok-4.5": {
+          "name": "Grok 4.5 (MaxPlus Grok)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "grok-4.3": {
+          "name": "Grok 4.3 (MaxPlus Grok)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "grok-build-0.1": {
+          "name": "Grok Build 0.1 (MaxPlus Grok)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        }
+      }
+    },
+    "maxplus-chinese-model-request": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MaxPlus Chinese Model Request",
+      "options": {
+        "baseURL": "https://api.maxplus-ai.cc/chinese-model-request/v1",
+        "name": "maxplus-chinese-model-request",
+        "apiKey": "${ENV_VAR}",
+        "timeout": 600000,
+        "chunkTimeout": 30000,
+        "setCacheKey": true
+      },
+      "models": {
+        "deepseek-v4-flash": {
+          "name": "DeepSeek V4 Flash (MaxPlus Chinese Model Request)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        },
+        "kimi-k3": {
+          "name": "Kimi K3 (MaxPlus Chinese Model Request)",
+          "limit": {
+            "context": 1048576,
+            "output": 131072
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "max"
+          },
+          "variants": {
+            "max": {
+              "reasoningEffort": "max"
+            }
+          }
+        },
+        "glm-5.2": {
+          "name": "GLM-5.2 (MaxPlus Chinese Model Request)",
+          "limit": {
+            "context": 1000000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            }
+          }
+        }
+      }
+    },
+    "local-kimi": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Local Kimi A1 4B (heretic IQ4_NL)",
+      "options": {
+        "baseURL": "http://127.0.0.1:8082/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "Agents-A1-4B-kimi-Preview-heretic-IQ4_NL.gguf": {
+          "name": "Kimi A1 4B heretic IQ4_NL (local llama-server)",
+          "limit": {
+            "context": 32768,
+            "output": 128
+          }
+        }
+      }
+    },
+    "openrouter": {
+      "models": {
+        "stealth/union-alpha": {
+          "name": "Union Alpha",
+          "limit": {
+            "context": 262144,
+            "output": 64000
+          }
+        }
+      },
+      "apiKey": "${ENV_VAR}"
+    },
+    "opencode-zen": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenCode Zen",
+      "options": {
+        "baseURL": "https://opencode.ai/zen/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "union-alpha": {
+          "name": "Union Alpha (OpenCode Zen)"
+        }
+      }
+    },
+    "lightvela": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LightVela",
+      "options": {
+        "baseURL": "https://token.lightvela.ai/v1",
+        "apiKey": "${ENV_VAR}"
+      },
+      "models": {
+        "auto": {
+          "name": "auto (glm-5.3-flash)"
+        }
+      }
+    }
+  },
+  "model": "openrouter/moonshotai/kimi-k2.7-code",
+  "plugin": [
+    "/Users/sirinx/SIRINXDev/_external_repos/ponytail/.opencode/plugins/ponytail.mjs"
+  ]
+}

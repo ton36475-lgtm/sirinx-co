@@ -2,6 +2,7 @@
 node_modules/
 target/
 dist/
+dist-org/
 build/
 .next/
 coverage/

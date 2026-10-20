@@ -273,7 +273,7 @@ export default function AdminBlogCMS() {
               <Input
                 value={form.coverImage}
                 onChange={(e) => setForm((f) => ({ ...f, coverImage: e.target.value }))}
-                placeholder="https://cdn.example.com/image.jpg"
+                placeholder="/assets/blog/cover.webp หรือ https://www.sirinx.co/assets/…"
               />
             </div>
 

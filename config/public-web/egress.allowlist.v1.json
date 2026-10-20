@@ -1,0 +1,189 @@
+{
+  "schema": "public-web.egress.allowlist.v1",
+  "updated": "2026-10-21",
+  "notes": "Every literal https?:// host in the public-web source surface must appear here. A host fetched as an asset or font needs a waiver bound to an operator ticket; the two current waivers are the C8 decision in MASTER_PLAN. Placeholder hosts (example.com and friends) can never be allowlisted.",
+  "hosts": [
+    {
+      "host": "www.sirinx.co",
+      "class": "own-origin",
+      "reason": "Primary production origin: canonicals, OG tags, absolute asset URLs."
+    },
+    {
+      "host": "sirinx.co",
+      "class": "own-origin",
+      "reason": "Apex redirect and CSP script/connect origin."
+    },
+    {
+      "host": "sirinx-co.pages.dev",
+      "class": "own-infra",
+      "subdomains": true,
+      "reason": "Cloudflare Pages preview/production host used by the CSP script allowlist."
+    },
+    {
+      "host": "re.jrc.ec.europa.eu",
+      "class": "service-api",
+      "reason": "PVGIS solar yield API (European Commission JRC) — the product's own energy calculation source."
+    },
+    {
+      "host": "cloudflareinsights.com",
+      "class": "own-infra",
+      "subdomains": true,
+      "reason": "Cloudflare Web Analytics beacon, declared in client/public/_headers connect-src."
+    },
+    {
+      "host": "d2xsxph8kpxj0f.cloudfront.net",
+      "class": "third-party-asset",
+      "reason": "Legacy Manus-era Cloudflare distribution carrying logo and hero imagery.",
+      "waiver": {
+        "ticket": "C8",
+        "until": "2026-11-30",
+        "detail": "Operator must accept, rehost, or drop the imagery; until then this host is a known single point of failure outside our Cloudflare account."
+      }
+    },
+    {
+      "host": "images.unsplash.com",
+      "class": "third-party-asset",
+      "reason": "Unsplash stock photography used by marketing pages.",
+      "waiver": {
+        "ticket": "C8",
+        "until": "2026-11-30",
+        "detail": "Same C8 decision as the CloudFront origin: rehost or drop the third-party imagery."
+      }
+    },
+    {
+      "host": "github.com",
+      "class": "third-party-asset",
+      "reason": "shadcn demo avatar rendered inside the component showcase page.",
+      "waiver": {
+        "ticket": "C8",
+        "until": "2026-11-30",
+        "detail": "Replace with a local asset or drop the showcase route from the public build."
+      }
+    },
+    {
+      "host": "forge.butterfly-effect.dev",
+      "class": "third-party-asset",
+      "reason": "Map widget script origin used by client/src/components/Map.tsx.",
+      "waiver": {
+        "ticket": "C8",
+        "until": "2026-11-30",
+        "detail": "Map embed loads third-party JavaScript into the page; needs an explicit accept or a self-hosted replacement."
+      }
+    },
+    {
+      "host": "fonts.googleapis.com",
+      "class": "third-party-font",
+      "reason": "Google Fonts stylesheet for Space Grotesk and IBM Plex Sans Thai.",
+      "waiver": {
+        "ticket": "C8",
+        "until": "2026-11-30",
+        "detail": "PDPA-relevant third-party call made by every visitor; self-host the OFL fonts or declare the transfer in the privacy copy."
+      }
+    },
+    {
+      "host": "fonts.gstatic.com",
+      "class": "third-party-font",
+      "reason": "Google Fonts font-file origin referenced by the CSP font-src.",
+      "waiver": {
+        "ticket": "C8",
+        "until": "2026-11-30",
+        "detail": "Follows the stylesheet decision above."
+      }
+    },
+    {
+      "host": "forge.manus.im",
+      "class": "service-api",
+      "reason": "Hard-coded LLM gateway fallback in server/_core/llm.ts when FORGE_API_URL is unset."
+    },
+    {
+      "host": "schema.org",
+      "class": "vocabulary",
+      "reason": "JSON-LD @type/@context identifiers; never fetched."
+    },
+    {
+      "host": "www.sitemaps.org",
+      "class": "vocabulary",
+      "reason": "XML namespace in the generated sitemap; never fetched."
+    },
+    {
+      "host": "www.w3.org",
+      "class": "vocabulary",
+      "reason": "SVG/XML namespace identifiers; never fetched."
+    },
+    {
+      "host": "react.dev",
+      "class": "upstream-reference",
+      "reason": "React's own error-message link inside the vendored runtime; no fetch occurs."
+    },
+    {
+      "host": "jcgt.org",
+      "class": "upstream-reference",
+      "reason": "Journal citation inside a three.js source comment; no fetch occurs."
+    },
+    {
+      "host": "line.me",
+      "class": "navigation-link",
+      "reason": "LINE official account link opened only on click."
+    },
+    {
+      "host": "lin.ee",
+      "class": "navigation-link",
+      "reason": "Short LINE add-friend link opened only on click."
+    },
+    {
+      "host": "qr-official.line.me",
+      "class": "navigation-link",
+      "reason": "LINE QR/add-friend link opened only on click."
+    },
+    {
+      "host": "maps.google.com",
+      "class": "navigation-link",
+      "reason": "Contact-page map link opened only on click."
+    },
+    {
+      "host": "www.facebook.com",
+      "class": "navigation-link",
+      "reason": "Company page link in brand config social block."
+    },
+    {
+      "host": "www.youtube.com",
+      "class": "navigation-link",
+      "reason": "Company channel link in brand config social block."
+    },
+    {
+      "host": "www.tiktok.com",
+      "class": "navigation-link",
+      "reason": "Company account link in brand config social block."
+    },
+    {
+      "host": "www.linkedin.com",
+      "class": "navigation-link",
+      "reason": "Company page link in brand config social block."
+    },
+    {
+      "host": "www.dbd.go.th",
+      "class": "navigation-link",
+      "reason": "Department of Business Development registry link for the trust badge."
+    },
+    {
+      "host": "www.thailandtrustmark.com",
+      "class": "navigation-link",
+      "reason": "Thailand Trust Mark verification link for the trust badge."
+    },
+    {
+      "host": "localhost",
+      "class": "local-dev",
+      "reason": "Loopback defaults in server integration-health checks; never used in production config."
+    },
+    {
+      "host": "example.com",
+      "class": "documentation",
+      "reason": "Appears only in a JSDoc example inside server/_core/imageGeneration.ts; not an egress."
+    },
+    {
+      "host": "your-cdn.com",
+      "class": "template-scaffold",
+      "reason": "Placeholder asset URLs in brands/_template/config.ts; the scaffold brand is never imported by the active site."
+    }
+  ]
+}

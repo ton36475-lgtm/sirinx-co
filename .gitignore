@@ -31,3 +31,8 @@ exports/adaptive-sync-plan-latest.json
 .manus-logs/
 exports/telegram-preview-latest.json
 exports/pipeline-audit-latest.json
+
+# Regenerable handoff archives: keep the manifest and checksums in git, not the
+# 23 MB payload (scripts/omarchy-handoff-package.mjs rebuilds it byte-stably).
+exports/omarchy-handoff/*.tar.gz
+exports/omarchy-handoff/*.tar.gz.part*

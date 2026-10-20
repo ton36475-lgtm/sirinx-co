@@ -1,4 +1,11 @@
 # SIRINX dev.sirinx.co Tunnel Config
+#
+# NOT the tunnel that serves production today. Measured 2026-10-21: the live
+# ingress is tunnel `omni-route` (id b9ef168c-e8bc-4497-84e8-7ab81c556ca3,
+# launchd com.sirinx.cloudflared-tunnel, config ~/.cloudflared/omni-route.yml)
+# serving omni-route / hermes / a2a / gateway / mcp.sirinx.co. This file remains
+# the planned dev.sirinx.co layout for `sirinx-hybrid-tunnel` and is not loaded
+# by any running process. See reports/runtime/cf-tunnel-hermes-mcp-20261021.md.
 # Tunnel: sirinx-hybrid-tunnel (id: 98b951b0-2251-4737-abad-684808bf0b35)
 #
 # Deploy:   cloudflared tunnel run sirinx-hybrid-tunnel

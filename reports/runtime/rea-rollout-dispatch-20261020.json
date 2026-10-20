@@ -1,0 +1,196 @@
+{
+  "mode": "local-static-plan",
+  "shape_id": "implementation",
+  "archetype": "openmanus-planner-executor",
+  "coordinator": "task_106c7553dfda9c17",
+  "worker_count": 2,
+  "packets": [
+    {
+      "task_id": "task_106c7553dfda9c17",
+      "run_id": "run_43e29706aa3a1c3d",
+      "role_id": "L4-36",
+      "card_id": "L4-36",
+      "duty": "coordinator",
+      "shape_id": "implementation",
+      "archetype": "openmanus-planner-executor",
+      "lane": "manus",
+      "goal": "Roll out REA 6.7.0 MCP (installed globally, 207-tool handshake verified) to the four local agent configs and resync the repo template pin",
+      "non_goals": [
+        "no reference-repo clone or install",
+        "no provider call without PROVIDER_CALL ticket",
+        "no push, deploy, cloud mutation, or customer message"
+      ],
+      "allowed_inputs": [
+        "repository read-only",
+        "plan document",
+        "public documentation"
+      ],
+      "paths": [],
+      "action_class": "PROPOSAL_ONLY",
+      "model": {
+        "provider": "freebuff",
+        "model_id": "gpt-6.1-sol",
+        "display_name": "Freebuff GPT 6.1 Sol",
+        "catalog_source": "infra/9router/model-catalog.json",
+        "access_verified": false,
+        "live_calls_allowed": false
+      },
+      "budgets": {
+        "max_steps": 40,
+        "max_tokens": 60000,
+        "max_cost_micro_usd": 0,
+        "timeout_seconds": 900
+      },
+      "required_tickets": [
+        "PROVIDER_CALL"
+      ],
+      "prior_receipt_digests": [],
+      "required_outputs": [
+        "candidate result",
+        "evidence references",
+        "blocked-effect statement"
+      ],
+      "stop_conditions": [
+        "no clone, install, or package resolution against a reference repository",
+        "no provider or paid call without a PROVIDER_CALL ticket and open gate",
+        "one maker lease per path; checker never edits maker-owned files",
+        "cue stays human-operated until a public API and payment authority are admitted",
+        "packets never carry secret values, cookies, or ambient authority",
+        "no queue, A2A, Telegram, Cloudflare, or deploy effect from a spawn plan"
+      ],
+      "escalation_target": "L4-36",
+      "effects": {
+        "provider_call": false,
+        "queue_mutation": false,
+        "live_send": false,
+        "spawn": false
+      }
+    },
+    {
+      "task_id": "task_30c890fcee6f0b90",
+      "run_id": "run_159b134ab87a05e1",
+      "role_id": "L4-37",
+      "card_id": "L4-37",
+      "duty": "maker",
+      "shape_id": "implementation",
+      "archetype": "openmanus-planner-executor",
+      "lane": "cline",
+      "goal": "Roll out REA 6.7.0 MCP (installed globally, 207-tool handshake verified) to the four local agent configs and resync the repo template pin",
+      "non_goals": [
+        "no reference-repo clone or install",
+        "no provider call without PROVIDER_CALL ticket",
+        "no push, deploy, cloud mutation, or customer message"
+      ],
+      "allowed_inputs": [
+        "repository read-only",
+        "plan document",
+        "public documentation"
+      ],
+      "paths": [],
+      "action_class": "PROPOSAL_ONLY",
+      "model": {
+        "provider": "freebuff",
+        "model_id": "gpt-6.1-sol",
+        "display_name": "Freebuff GPT 6.1 Sol",
+        "catalog_source": "infra/9router/model-catalog.json",
+        "access_verified": false,
+        "live_calls_allowed": false
+      },
+      "budgets": {
+        "max_steps": 40,
+        "max_tokens": 60000,
+        "max_cost_micro_usd": 0,
+        "timeout_seconds": 900
+      },
+      "required_tickets": [
+        "PROVIDER_CALL"
+      ],
+      "prior_receipt_digests": [],
+      "required_outputs": [
+        "candidate result",
+        "evidence references",
+        "blocked-effect statement"
+      ],
+      "stop_conditions": [
+        "no clone, install, or package resolution against a reference repository",
+        "no provider or paid call without a PROVIDER_CALL ticket and open gate",
+        "one maker lease per path; checker never edits maker-owned files",
+        "cue stays human-operated until a public API and payment authority are admitted",
+        "packets never carry secret values, cookies, or ambient authority",
+        "no queue, A2A, Telegram, Cloudflare, or deploy effect from a spawn plan"
+      ],
+      "escalation_target": "L4-36",
+      "effects": {
+        "provider_call": false,
+        "queue_mutation": false,
+        "live_send": false,
+        "spawn": false
+      }
+    },
+    {
+      "task_id": "task_24dfbccabb35ce32",
+      "run_id": "run_c4e38a0467934f07",
+      "role_id": "L4-42",
+      "card_id": "L4-42",
+      "duty": "checker",
+      "shape_id": "implementation",
+      "archetype": "openmanus-planner-executor",
+      "lane": "manus",
+      "goal": "Roll out REA 6.7.0 MCP (installed globally, 207-tool handshake verified) to the four local agent configs and resync the repo template pin",
+      "non_goals": [
+        "no reference-repo clone or install",
+        "no provider call without PROVIDER_CALL ticket",
+        "no push, deploy, cloud mutation, or customer message"
+      ],
+      "allowed_inputs": [
+        "repository read-only",
+        "plan document",
+        "public documentation"
+      ],
+      "paths": [],
+      "action_class": "PROPOSAL_ONLY",
+      "model": {
+        "provider": "freebuff",
+        "model_id": "gpt-6.1-sol",
+        "display_name": "Freebuff GPT 6.1 Sol",
+        "catalog_source": "infra/9router/model-catalog.json",
+        "access_verified": false,
+        "live_calls_allowed": false
+      },
+      "budgets": {
+        "max_steps": 40,
+        "max_tokens": 60000,
+        "max_cost_micro_usd": 0,
+        "timeout_seconds": 900
+      },
+      "required_tickets": [
+        "PROVIDER_CALL"
+      ],
+      "prior_receipt_digests": [],
+      "required_outputs": [
+        "candidate result",
+        "evidence references",
+        "blocked-effect statement"
+      ],
+      "stop_conditions": [
+        "no clone, install, or package resolution against a reference repository",
+        "no provider or paid call without a PROVIDER_CALL ticket and open gate",
+        "one maker lease per path; checker never edits maker-owned files",
+        "cue stays human-operated until a public API and payment authority are admitted",
+        "packets never carry secret values, cookies, or ambient authority",
+        "no queue, A2A, Telegram, Cloudflare, or deploy effect from a spawn plan"
+      ],
+      "escalation_target": "L4-36",
+      "effects": {
+        "provider_call": false,
+        "queue_mutation": false,
+        "live_send": false,
+        "spawn": false
+      }
+    }
+  ],
+  "provider_called": false,
+  "runtime_spawned": false,
+  "queue_mutated": false,
+  "stop_point": "SPAWN PLAN BUILT - ZERO LANES ACTIVATED"
+}

@@ -1,0 +1,257 @@
+{
+  "mode": "local-static-plan",
+  "shape_id": "research",
+  "archetype": "openbot-coworker",
+  "coordinator": "task_954238af53098317",
+  "worker_count": 3,
+  "packets": [
+    {
+      "task_id": "task_954238af53098317",
+      "run_id": "run_394b7bf8359151d5",
+      "role_id": "L4-36",
+      "card_id": "L4-36",
+      "duty": "coordinator",
+      "shape_id": "research",
+      "archetype": "openbot-coworker",
+      "lane": "manus",
+      "goal": "Onboard the Omarchy host (Arch/WSL2 aiagent) into the tondhm tailnet as a non-routing member and prove tailnet reachability from macminisirinx",
+      "non_goals": [
+        "no reference-repo clone or install",
+        "no provider call without PROVIDER_CALL ticket",
+        "no push, deploy, cloud mutation, or customer message"
+      ],
+      "allowed_inputs": [
+        "repository read-only",
+        "plan document",
+        "public documentation"
+      ],
+      "paths": [],
+      "action_class": "PROPOSAL_ONLY",
+      "model": {
+        "provider": "freebuff",
+        "model_id": "gpt-6.1-sol",
+        "display_name": "Freebuff GPT 6.1 Sol",
+        "catalog_source": "infra/9router/model-catalog.json",
+        "access_verified": false,
+        "live_calls_allowed": false
+      },
+      "budgets": {
+        "max_steps": 40,
+        "max_tokens": 60000,
+        "max_cost_micro_usd": 0,
+        "timeout_seconds": 900
+      },
+      "required_tickets": [
+        "PROVIDER_CALL"
+      ],
+      "prior_receipt_digests": [],
+      "required_outputs": [
+        "candidate result",
+        "evidence references",
+        "blocked-effect statement"
+      ],
+      "stop_conditions": [
+        "no clone, install, or package resolution against a reference repository",
+        "no provider or paid call without a PROVIDER_CALL ticket and open gate",
+        "one maker lease per path; checker never edits maker-owned files",
+        "cue stays human-operated until a public API and payment authority are admitted",
+        "packets never carry secret values, cookies, or ambient authority",
+        "no queue, A2A, Telegram, Cloudflare, or deploy effect from a spawn plan"
+      ],
+      "escalation_target": "L4-36",
+      "effects": {
+        "provider_call": false,
+        "queue_mutation": false,
+        "live_send": false,
+        "spawn": false
+      }
+    },
+    {
+      "task_id": "task_a5ef21895cb64ddd",
+      "run_id": "run_f13d9e16d8adbbe2",
+      "role_id": "L1-08",
+      "card_id": "L1-08",
+      "duty": "repository-cartographer",
+      "shape_id": "research",
+      "archetype": "openbot-coworker",
+      "lane": "cline",
+      "goal": "Onboard the Omarchy host (Arch/WSL2 aiagent) into the tondhm tailnet as a non-routing member and prove tailnet reachability from macminisirinx",
+      "non_goals": [
+        "no reference-repo clone or install",
+        "no provider call without PROVIDER_CALL ticket",
+        "no push, deploy, cloud mutation, or customer message"
+      ],
+      "allowed_inputs": [
+        "repository read-only",
+        "plan document",
+        "public documentation"
+      ],
+      "paths": [],
+      "action_class": "PROPOSAL_ONLY",
+      "model": {
+        "provider": "freebuff",
+        "model_id": "gpt-6.1-sol",
+        "display_name": "Freebuff GPT 6.1 Sol",
+        "catalog_source": "infra/9router/model-catalog.json",
+        "access_verified": false,
+        "live_calls_allowed": false
+      },
+      "budgets": {
+        "max_steps": 40,
+        "max_tokens": 60000,
+        "max_cost_micro_usd": 0,
+        "timeout_seconds": 900
+      },
+      "required_tickets": [
+        "PROVIDER_CALL"
+      ],
+      "prior_receipt_digests": [],
+      "required_outputs": [
+        "candidate result",
+        "evidence references",
+        "blocked-effect statement"
+      ],
+      "stop_conditions": [
+        "no clone, install, or package resolution against a reference repository",
+        "no provider or paid call without a PROVIDER_CALL ticket and open gate",
+        "one maker lease per path; checker never edits maker-owned files",
+        "cue stays human-operated until a public API and payment authority are admitted",
+        "packets never carry secret values, cookies, or ambient authority",
+        "no queue, A2A, Telegram, Cloudflare, or deploy effect from a spawn plan"
+      ],
+      "escalation_target": "L4-36",
+      "effects": {
+        "provider_call": false,
+        "queue_mutation": false,
+        "live_send": false,
+        "spawn": false
+      }
+    },
+    {
+      "task_id": "task_7a793539073994fb",
+      "run_id": "run_11ab48ffd33c1264",
+      "role_id": "L2-17",
+      "card_id": "L2-17",
+      "duty": "source-analyst",
+      "shape_id": "research",
+      "archetype": "openbot-coworker",
+      "lane": "manus",
+      "goal": "Onboard the Omarchy host (Arch/WSL2 aiagent) into the tondhm tailnet as a non-routing member and prove tailnet reachability from macminisirinx",
+      "non_goals": [
+        "no reference-repo clone or install",
+        "no provider call without PROVIDER_CALL ticket",
+        "no push, deploy, cloud mutation, or customer message"
+      ],
+      "allowed_inputs": [
+        "repository read-only",
+        "plan document",
+        "public documentation"
+      ],
+      "paths": [],
+      "action_class": "PROPOSAL_ONLY",
+      "model": {
+        "provider": "freebuff",
+        "model_id": "gpt-6.1-sol",
+        "display_name": "Freebuff GPT 6.1 Sol",
+        "catalog_source": "infra/9router/model-catalog.json",
+        "access_verified": false,
+        "live_calls_allowed": false
+      },
+      "budgets": {
+        "max_steps": 40,
+        "max_tokens": 60000,
+        "max_cost_micro_usd": 0,
+        "timeout_seconds": 900
+      },
+      "required_tickets": [
+        "PROVIDER_CALL"
+      ],
+      "prior_receipt_digests": [],
+      "required_outputs": [
+        "candidate result",
+        "evidence references",
+        "blocked-effect statement"
+      ],
+      "stop_conditions": [
+        "no clone, install, or package resolution against a reference repository",
+        "no provider or paid call without a PROVIDER_CALL ticket and open gate",
+        "one maker lease per path; checker never edits maker-owned files",
+        "cue stays human-operated until a public API and payment authority are admitted",
+        "packets never carry secret values, cookies, or ambient authority",
+        "no queue, A2A, Telegram, Cloudflare, or deploy effect from a spawn plan"
+      ],
+      "escalation_target": "L4-36",
+      "effects": {
+        "provider_call": false,
+        "queue_mutation": false,
+        "live_send": false,
+        "spawn": false
+      }
+    },
+    {
+      "task_id": "task_b35ba09a3ae6b532",
+      "run_id": "run_a5f2d7c61a9b91fc",
+      "role_id": "L5-44",
+      "card_id": "L5-44",
+      "duty": "truth-auditor",
+      "shape_id": "research",
+      "archetype": "openbot-coworker",
+      "lane": "cline",
+      "goal": "Onboard the Omarchy host (Arch/WSL2 aiagent) into the tondhm tailnet as a non-routing member and prove tailnet reachability from macminisirinx",
+      "non_goals": [
+        "no reference-repo clone or install",
+        "no provider call without PROVIDER_CALL ticket",
+        "no push, deploy, cloud mutation, or customer message"
+      ],
+      "allowed_inputs": [
+        "repository read-only",
+        "plan document",
+        "public documentation"
+      ],
+      "paths": [],
+      "action_class": "PROPOSAL_ONLY",
+      "model": {
+        "provider": "freebuff",
+        "model_id": "gpt-6.1-sol",
+        "display_name": "Freebuff GPT 6.1 Sol",
+        "catalog_source": "infra/9router/model-catalog.json",
+        "access_verified": false,
+        "live_calls_allowed": false
+      },
+      "budgets": {
+        "max_steps": 40,
+        "max_tokens": 60000,
+        "max_cost_micro_usd": 0,
+        "timeout_seconds": 900
+      },
+      "required_tickets": [
+        "PROVIDER_CALL"
+      ],
+      "prior_receipt_digests": [],
+      "required_outputs": [
+        "candidate result",
+        "evidence references",
+        "blocked-effect statement"
+      ],
+      "stop_conditions": [
+        "no clone, install, or package resolution against a reference repository",
+        "no provider or paid call without a PROVIDER_CALL ticket and open gate",
+        "one maker lease per path; checker never edits maker-owned files",
+        "cue stays human-operated until a public API and payment authority are admitted",
+        "packets never carry secret values, cookies, or ambient authority",
+        "no queue, A2A, Telegram, Cloudflare, or deploy effect from a spawn plan"
+      ],
+      "escalation_target": "L4-36",
+      "effects": {
+        "provider_call": false,
+        "queue_mutation": false,
+        "live_send": false,
+        "spawn": false
+      }
+    }
+  ],
+  "provider_called": false,
+  "runtime_spawned": false,
+  "queue_mutated": false,
+  "stop_point": "SPAWN PLAN BUILT - ZERO LANES ACTIVATED"
+}

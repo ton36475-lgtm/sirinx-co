@@ -1,0 +1,56 @@
+{
+  "kind": "home-offload-sync",
+  "set": "repo-evidence",
+  "dryRun": false,
+  "started": "2026-10-20T21:54:52.137Z",
+  "finished": "2026-10-20T21:54:52.213Z",
+  "targets": [
+    {
+      "target": "icloud",
+      "volume": "/Users/sirinx/Library/Mobile Documents/com~apple~CloudDocs",
+      "responsive": true,
+      "freeGiB": 6.6,
+      "totalGiB": 228.3
+    }
+  ],
+  "missing": [],
+  "results": [
+    {
+      "target": "icloud",
+      "entry": "reports",
+      "dest": "/Users/sirinx/Library/Mobile Documents/com~apple~CloudDocs/SIRINX_COLD_ARCHIVE_20261021/repo-evidence/reports",
+      "ok": true,
+      "code": 0,
+      "timedOut": false,
+      "seconds": 0
+    },
+    {
+      "target": "icloud",
+      "entry": "receipts",
+      "dest": "/Users/sirinx/Library/Mobile Documents/com~apple~CloudDocs/SIRINX_COLD_ARCHIVE_20261021/repo-evidence/receipts",
+      "ok": true,
+      "code": 0,
+      "timedOut": false,
+      "seconds": 0
+    },
+    {
+      "target": "icloud",
+      "entry": "exports",
+      "dest": "/Users/sirinx/Library/Mobile Documents/com~apple~CloudDocs/SIRINX_COLD_ARCHIVE_20261021/repo-evidence/exports",
+      "ok": true,
+      "code": 0,
+      "timedOut": false,
+      "seconds": 0
+    },
+    {
+      "target": "icloud",
+      "entry": "docs",
+      "dest": "/Users/sirinx/Library/Mobile Documents/com~apple~CloudDocs/SIRINX_COLD_ARCHIVE_20261021/repo-evidence/docs",
+      "ok": true,
+      "code": 0,
+      "timedOut": false,
+      "seconds": 0
+    }
+  ],
+  "ok": true
+}

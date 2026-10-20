@@ -134,7 +134,7 @@
       "command": [
         "npx",
         "-y",
-        "rea-agents@4.0.1",
+        "rea-agents@6.7.0",
         "mcp"
       ],
       "enabled": true

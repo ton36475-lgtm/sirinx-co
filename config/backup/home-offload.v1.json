@@ -1,0 +1,122 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-21",
+  "status": "plan-only",
+  "home": "~",
+  "note": "Split home offload. Every set goes to BOTH targets except localOnly sets, which never leave the Mac mini. No source deletion is performed by this plan or by scripts/home-offload.mjs.",
+  "targets": {
+    "usb": {
+      "volume": "/Volumes/SIRINXSCR",
+      "root": "/Volumes/SIRINXSCR/OFFLOAD_20261021"
+    },
+    "icloud": {
+      "volume": "~/Library/Mobile Documents/com~apple~CloudDocs",
+      "root": "~/Library/Mobile Documents/com~apple~CloudDocs/SIRINX_COLD_ARCHIVE_20261021"
+    }
+  },
+  "excludes": [
+    "Library/Caches",
+    "Library/Group Containers",
+    "Library/Application Support/MobileSync",
+    "Library/Containers/com.docker.docker",
+    ".Trash",
+    "node_modules",
+    ".venv",
+    "venvs",
+    "vcpkg",
+    "target",
+    ".cargo",
+    ".rustup",
+    "__pycache__"
+  ],
+  "sets": [
+    {
+      "id": "hermes-agents",
+      "localOnly": true,
+      "note": "Hermes/agent runtime state stays on the Mac mini only: queues, outbox, profiles, config, logs, skills. Never copied to USB or iCloud.",
+      "entries": [
+        { "path": "hermes" },
+        { "path": "hermes-mcp" },
+        { "path": "hermes-one-fresh" },
+        { "path": "project-hermes" },
+        { "path": ".hermes" },
+        { "path": "skills" },
+        { "path": "plugins" },
+        { "path": "custom-learned-skills-dir" },
+        { "path": "Library/Application Support/hermes" },
+        { "path": "Library/Application Support/Hermes" }
+      ]
+    },
+    {
+      "id": "repo-evidence",
+      "repoRelative": true,
+      "note": "Repository evidence and docs: reports, receipts, exports, audit docs.",
+      "entries": [
+        { "path": "reports", "excludes": ["/backup"] },
+        { "path": "receipts" },
+        { "path": "exports" },
+        { "path": "docs" }
+      ]
+    },
+    {
+      "id": "documents",
+      "note": "Personal documents and downloads.",
+      "entries": [
+        { "path": "Documents" },
+        { "path": "Desktop" },
+        { "path": "Downloads" },
+        { "path": "Public" }
+      ]
+    },
+    {
+      "id": "media",
+      "note": "Photos, video, screen recordings, music.",
+      "entries": [
+        { "path": "Movies" },
+        { "path": "Pictures" },
+        { "path": "Music" }
+      ]
+    },
+    {
+      "id": "projects",
+      "note": "Source checkouts and prototypes outside the canonical repo.",
+      "entries": [
+        { "path": "SIRINXDev" },
+        { "path": "sirinx-co" },
+        { "path": "sirinx-os" },
+        { "path": "sirinox-os" },
+        { "path": "SIRINX_staging" },
+        { "path": "sirinx-apex-scratch" },
+        { "path": "sirinx-sirinsi" },
+        { "path": "OZ-CORP" },
+        { "path": "OZ-CORP-MONOREPO" },
+        { "path": "OZ-PRIVATE" },
+        { "path": "oz-runtime" },
+        { "path": "OpenManus" },
+        { "path": "workspace" },
+        { "path": "ZCodeProject" },
+        { "path": "ZCode-backup-2026-08-09" },
+        { "path": "ai-dev-macmini" },
+        { "path": "agm-sandbox" },
+        { "path": "TUI-PRESERVATION-20260814T133045+0700" }
+      ]
+    },
+    {
+      "id": "data-dumps",
+      "note": "Local data stores that are not rebuildable from source.",
+      "entries": [
+        { "path": "mongodb_data" },
+        { "path": "ghidra-projects" },
+        { "path": "secure-backups" },
+        { "path": "9router-backup" }
+      ]
+    },
+    {
+      "id": "home-loose",
+      "note": "Loose top-level files in the home directory (scripts, notes, JSON specs).",
+      "entries": [
+        { "glob": "*", "filesOnly": true, "skipExtensions": [".dmg", ".pkg", ".iso"] }
+      ]
+    }
+  ]
+}

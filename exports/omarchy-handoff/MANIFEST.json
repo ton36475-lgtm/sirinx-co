@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-10-20T05:08:13.983Z",
+  "host": "macminisirinx",
+  "target": "omarchy (aiagent 100.67.78.88, tailnet tondhm.z99@)",
+  "payload": {
+    "sources": [
+      "reports",
+      "receipts",
+      "exports"
+    ],
+    "files": 170,
+    "archiveBytes": 23599081,
+    "sha256": "0fb749d8f98eb65c6437523956b60124012285f26db1537946c3942b01b6fbe1",
+    "chunks": [
+      {
+        "name": "sirinx-ai-evidence-2026-10-20.tar.gz",
+        "bytes": 23599081,
+        "sha256": "0fb749d8f98eb65c6437523956b60124012285f26db1537946c3942b01b6fbe1"
+      }
+    ],
+    "chunked": false,
+    "maxChunkBytes": 47185920
+  },
+  "excluded": [
+    {
+      "path": "~/Downloads/cline-bot",
+      "reason": "368 MB of node_modules; rebuild on target instead of transferring"
+    },
+    {
+      "path": "node_modules",
+      "reason": "reinstallable"
+    }
+  ],
+  "reconstructOnTarget": [
+    "tar -xzf sirinx-ai-evidence-<date>.tar.gz -C ~/sirinx",
+    "npm install -g @cline/cli@3.0.73",
+    "npm install -g rea-agents@6.7.0",
+    "npm install -g chrome-devtools-mcp@1.11.0"
+  ],
+  "deliveryOptions": [
+    {
+      "channel": "taildrop",
+      "command": "tailscale file cp exports/omarchy-handoff/* omarchy-aiagent:",
+      "requires": "target online, tailscaled running in WSL2, Taildrop enabled",
+      "status": "PREFERRED"
+    },
+    {
+      "channel": "hermes-telegram-fusion",
+      "command": "community chat document upload (bot API, 50 MB ceiling)",
+      "requires": "GO_LIVE_GATE telegram_send open + ticket + bot token + chat id",
+      "status": "GATED / metadata-and-notice-only until ticket"
+    }
+  ],
+  "effects": {
+    "network": false,
+    "telegramSend": false,
+    "queueMutation": false,
+    "transfer": false
+  }
+}

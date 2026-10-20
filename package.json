@@ -30,6 +30,7 @@
     "web:check": "pnpm --config.verify-deps-before-run=false --dir apps/public-web check",
     "web:test": "pnpm --config.verify-deps-before-run=false --dir apps/public-web test",
     "web:build": "pnpm --config.verify-deps-before-run=false --dir apps/public-web build",
+    "web:build:dual": "pnpm --config.verify-deps-before-run=false --dir apps/public-web build && node scripts/gen-legacy-province-redirects.mjs --dist=apps/public-web/dist/public && node scripts/build-public-web-variant.mjs --origin=https://www.sirinx.org --out=apps/public-web/dist-org && node scripts/gen-legacy-province-redirects.mjs --dist=apps/public-web/dist-org",
     "control:test": "CONTROL_API_TOKEN=${CONTROL_API_TOKEN:-test-control-token} vitest run services/dev-control-api/src --exclude services/dev-control-api/src/hermes-spec-first-swarm.test.mjs",
     "rust:build": "cargo build --workspace",
     "rust:test": "cargo test --workspace",

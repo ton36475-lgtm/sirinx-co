@@ -57,6 +57,25 @@ appends one explicit `301` per generated province (77 rules) to the built
 
 The second deploy of each project carried only `_redirects`.
 
+Reproduce both bundles in one command (verified rc 0, asset-set hash unchanged
+across two runs — the build is deterministic):
+
+```text
+npm run web:build:dual
+# 1. pnpm --dir apps/public-web build
+# 2. node scripts/gen-legacy-province-redirects.mjs --dist=apps/public-web/dist/public
+# 3. node scripts/build-public-web-variant.mjs --origin=https://www.sirinx.org --out=apps/public-web/dist-org
+# 4. node scripts/gen-legacy-province-redirects.mjs --dist=apps/public-web/dist-org
+
+wrangler pages deploy apps/public-web/dist/public --project-name=sirinx-co --branch=main
+wrangler pages deploy apps/public-web/dist-org    --project-name=sirinx-co-preview --branch=main
+```
+
+The egress guard now scans both bundles (`DIST_SURFACES` includes
+`apps/public-web/dist-org`), and `sirinx.org` / `www.sirinx.org` are allowlisted
+as `own-origin`, so `node scripts/verify-public-web-egress.mjs --dist` covers the
+`.org` build too (PASS, 0 errors).
+
 ## 4. Live verification
 
 | Check | Result |

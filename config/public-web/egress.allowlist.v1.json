@@ -4,6 +4,16 @@
   "notes": "Every literal https?:// host in the public-web source surface must appear here. A host fetched as an asset or font needs a waiver bound to an operator ticket; the two current waivers are the C8 decision in MASTER_PLAN. Placeholder hosts (example.com and friends) can never be allowlisted.",
   "hosts": [
     {
+      "host": "www.sirinx.org",
+      "class": "own-origin",
+      "reason": "sirinx.org is served by our own Pages project sirinx-co-preview; the host variant rewrites canonicals to it."
+    },
+    {
+      "host": "sirinx.org",
+      "class": "own-origin",
+      "reason": "Apex of the same own-origin Pages project; appears in the variant CSP and redirects."
+    },
+    {
       "host": "www.sirinx.co",
       "class": "own-origin",
       "reason": "Primary production origin: canonicals, OG tags, absolute asset URLs."

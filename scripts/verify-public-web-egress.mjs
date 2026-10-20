@@ -29,7 +29,9 @@ export const SOURCE_SURFACES = [
   "apps/public-web/server",
 ];
 
-export const DIST_SURFACES = ["apps/public-web/dist/public"];
+// Both shipped bundles: the .co build and the sirinx.org host variant produced
+// by scripts/build-public-web-variant.mjs.
+export const DIST_SURFACES = ["apps/public-web/dist/public", "apps/public-web/dist-org"];
 
 const SKIP_DIRS = new Set([".git", "node_modules", "dist", "build", ".next"]);
 const EXTENSIONLESS = new Set(["_headers", "_redirects"]);

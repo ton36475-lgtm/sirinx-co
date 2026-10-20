@@ -49,7 +49,7 @@ run would not satisfy the requested split.
 
 | Set | Local only | Entries | Content |
 | --- | --- | --- | --- |
-| `hermes-agents` | **yes — Mac mini only** | 9 unique | `hermes/`, `hermes-mcp/`, `hermes-one-fresh/`, `project-hermes/`, `.hermes`, `skills/`, `plugins/`, `custom-learned-skills-dir/`, `Library/Application Support/hermes` |
+| `hermes-agents` | **yes — Mac mini only** | 10 | `hermes/`, `hermes-mcp/`, `hermes-one-fresh/`, `project-hermes/`, `.hermes`, `skills/`, `plugins/`, `custom-learned-skills-dir/`, `Library/Application Support/hermes`, `Library/Application Support/Hermes` (the last two resolve as distinct paths on this volume) |
 | `repo-evidence` | no | 4 | `reports/`, `receipts/`, `exports/`, `docs/` (offload receipts under `reports/backup/` are excluded to avoid self-drift) |
 | `documents` | no | 4 | `Documents/`, `Desktop/`, `Downloads/`, `Public/` |
 | `media` | no | 3 | `Movies/`, `Pictures/`, `Music/` |
@@ -82,7 +82,9 @@ Guards that matter here:
 
 - **copy-only**: `--delete` is never passed, no `--remove-source-files`, no
   `rm`. A "move" is copy → verify → operator decides about the source.
-- `localOnly` is enforced in code, not only in the JSON.
+- `localOnly` is enforced in code, not only in the JSON: `sync --set=hermes-agents --confirm`
+exits 2 with `refused: set "hermes-agents" is local-only and must stay on this Mac`, an
+unknown set exits 2, and a sync without `--confirm` exits 2.
 - The USB wedge cannot block the tool: the probe returned
   `usb: WEDGED (statfs_timeout)` in ~6 s and exited 1 instead of hanging.
 
@@ -91,7 +93,7 @@ Guards that matter here:
 | Step | Result |
 | --- | --- |
 | `node --check scripts/home-offload.mjs` | rc 0 |
-| `plan` | 7 sets, 141 existing entries, 0 missing |
+| `plan` | 7 sets, 151 existing entries, 0 missing |
 | `probe` | `usb: WEDGED (statfs_timeout)`, `icloud: RESPONSIVE free 6.6 GiB / 228.3 GiB` |
 | `sync --set=repo-evidence --target=icloud --confirm --dry-run` | `SYNC_OK`, **0 files copied** (verified with `find … -type f | wc -l` = 0) |
 | `sync --set=repo-evidence --target=icloud --confirm` | `SYNC_OK`, 51 MiB copied |

@@ -12,7 +12,7 @@
 // Exit codes: 0 ok, 1 failure, 2 refused (guard).
 
 import { execFileSync, spawn } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, realpathSync, statSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -60,9 +60,16 @@ function listEntries(set) {
   for (const entry of set.entries) {
     if (entry.path) {
       const full = resolve(base, expand(entry.path));
-      if (seen.has(full)) continue;
       if (existsSync(full)) {
-        seen.add(full);
+        // Case-insensitive APFS makes e.g. `hermes` and `Hermes` one directory.
+        let key = full;
+        try {
+          key = realpathSync(full);
+        } catch {
+          /* keep the resolved path as the key */
+        }
+        if (seen.has(key)) continue;
+        seen.add(key);
         found.push({ path: full, name: entry.path.split("/").pop(), excludes: entry.excludes || [] });
       } else missing.push(entry.path);
       continue;

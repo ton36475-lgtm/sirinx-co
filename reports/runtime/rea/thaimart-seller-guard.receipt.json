@@ -1,0 +1,75 @@
+{
+  "schema": "sirinx.rea.artifact-receipt/v1",
+  "generatedAt": "2026-10-20T05:41:50.904Z",
+  "rea": {
+    "bin": "rea",
+    "evidencePath": "/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/rea-audit/thaimart-seller-guard.evidence.json",
+    "evidenceBytes": 1887649
+  },
+  "label": "thaimart-seller-guard",
+  "target": {
+    "path": "apps/thaimart-seller-guard",
+    "absolutePath": "/Users/sirinx/SIRINXDev/sirinx-co/apps/thaimart-seller-guard"
+  },
+  "evidence": {
+    "evidenceId": "ev_5d049085f2329e15ec8bbf6a9e5b0055167f4419ef1ae3d051af1ab55fe0a17a",
+    "confidence": "derived",
+    "authority": "shipped-artifact",
+    "provider": {
+      "id": "rea-javascript-application",
+      "name": "REA JavaScript application analyzer",
+      "version": "1"
+    },
+    "subjectDigestSha256": "ce4b761ccb89a677fc83328980006a07e976afeabef08c34810f3c2bd045b316",
+    "rootArtifactSha256": "ce4b761ccb89a677fc83328980006a07e976afeabef08c34810f3c2bd045b316",
+    "inventoryManifestId": "agm_beaedccde1343449b8cc001dd7c65b6709d961d46997bf3bef76de712a9d9dcb",
+    "inventoryGraphSha256": "0bc00fa87e0ccd25d8ba5d73341ee9e6df8ebcda9acd287c864891c61c2ac3ce"
+  },
+  "observed": {
+    "statistics": {
+      "relevant_files": 5,
+      "nested_asar_containers": 0,
+      "text_bytes_read": 19307,
+      "invalid_utf8_files": 0,
+      "parsed_javascript_files": 3,
+      "skipped_javascript_files": 0,
+      "visited_ast_nodes": 1832,
+      "findings": 2,
+      "modules": 0,
+      "parse_failures": 0
+    },
+    "graph": {
+      "nodes": 11,
+      "edges": 12,
+      "coverageStatus": "partial"
+    },
+    "endpointNamespaces": {
+      "network": 1
+    },
+    "storageNamespaces": {},
+    "literalUrlCount": 0,
+    "literalUrlHosts": [],
+    "integrityContradictions": []
+  },
+  "limitations": {
+    "count": 6,
+    "resourceConstrainedFiles": [],
+    "items": [
+      "CommonJS and ESM binding relationships were recovered from inert syntax and resolved only within the inventoried artifact container.",
+      "Graph coverage is incomplete; unavailable facts remain explicit and must not be read as absence.",
+      "JavaScript and HTML were parsed as inert text; bundle bootstrap code was never executed.",
+      "Static imports, entrypoints, workers, endpoints, and storage relationships do not prove runtime execution.",
+      "Static paths and relationships may remain unresolved when expressions are dynamic or obfuscated.",
+      "Webpack/Rspack factories were recovered from AST literals; REA did not invoke push handlers or bundle bootstrap code."
+    ]
+  },
+  "checks": {
+    "parseFailures": 0,
+    "skippedJavascriptFiles": 0,
+    "incompleteCoverage": true,
+    "executesTarget": false,
+    "networkUsed": false
+  },
+  "truthRule": "Static observation of a shipped bundle only. Not runtime proof: no page was loaded, no request was sent, no provider was called.",
+  "receiptSha256": "9ec36e05ec7fd6a21c76d9d88e6f617576ad0b7959760b46a4b02187032f4b52"
+}

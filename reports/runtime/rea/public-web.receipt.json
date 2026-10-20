@@ -1,0 +1,81 @@
+{
+  "schema": "sirinx.rea.artifact-receipt/v1",
+  "generatedAt": "2026-10-20T05:36:22.820Z",
+  "rea": {
+    "bin": "rea",
+    "evidencePath": "/tmp/rea-audit/public-web.evidence.json",
+    "evidenceBytes": 228664902
+  },
+  "label": "public-web",
+  "target": {
+    "path": "apps/public-web/dist",
+    "absolutePath": "/Users/sirinx/SIRINXDev/sirinx-co/apps/public-web/dist"
+  },
+  "evidence": {
+    "evidenceId": "ev_eef7d6382a97fc7032abcff154be169c792dc45e73a7b50b9860e9108f10112b",
+    "confidence": "derived",
+    "authority": "shipped-artifact",
+    "provider": {
+      "id": "rea-javascript-application",
+      "name": "REA JavaScript application analyzer",
+      "version": "1"
+    },
+    "subjectDigestSha256": "4dae8451ff32102984dff68850c341ac58c798b618cd5507c60ff8ce881d5a4d",
+    "rootArtifactSha256": "4dae8451ff32102984dff68850c341ac58c798b618cd5507c60ff8ce881d5a4d",
+    "inventoryManifestId": "agm_7b5c99439240b29daae9cf8a7534ff92be01f68fd5bbf8030a60852b05818ab4",
+    "inventoryGraphSha256": "4cd1512c0c575a1541bec70a9cfaf3b56728e51303333b2b765ea2002128be00"
+  },
+  "observed": {
+    "statistics": {
+      "relevant_files": 207,
+      "nested_asar_containers": 0,
+      "text_bytes_read": 16859014,
+      "invalid_utf8_files": 0,
+      "parsed_javascript_files": 96,
+      "skipped_javascript_files": 1,
+      "visited_ast_nodes": 531428,
+      "findings": 2876,
+      "modules": 0,
+      "parse_failures": 0
+    },
+    "graph": {
+      "nodes": 1351,
+      "edges": 3289,
+      "coverageStatus": "partial"
+    },
+    "endpointNamespaces": {
+      "network": 49,
+      "route": 39
+    },
+    "storageNamespaces": {
+      "local-storage": 8
+    },
+    "literalUrlCount": 0,
+    "literalUrlHosts": [],
+    "integrityContradictions": []
+  },
+  "limitations": {
+    "count": 7,
+    "resourceConstrainedFiles": [
+      "public/assets/vendor-react-BfAccxxP.js"
+    ],
+    "items": [
+      "CommonJS and ESM binding relationships were recovered from inert syntax and resolved only within the inventoried artifact container.",
+      "Graph coverage is incomplete; unavailable facts remain explicit and must not be read as absence.",
+      "JavaScript and HTML were parsed as inert text; bundle bootstrap code was never executed.",
+      "Static imports, entrypoints, workers, endpoints, and storage relationships do not prove runtime execution.",
+      "Static paths and relationships may remain unresolved when expressions are dynamic or obfuscated.",
+      "Webpack/Rspack factories were recovered from AST literals; REA did not invoke push handlers or bundle bootstrap code.",
+      "public/assets/vendor-react-BfAccxxP.js: Resource constraint during analyze_javascript_application: Owned JavaScript worker exhausted its heap while analyzing public/assets/vendor-react-BfAccxxP.js during static"
+    ]
+  },
+  "checks": {
+    "parseFailures": 0,
+    "skippedJavascriptFiles": 1,
+    "incompleteCoverage": true,
+    "executesTarget": false,
+    "networkUsed": false
+  },
+  "truthRule": "Static observation of a shipped bundle only. Not runtime proof: no page was loaded, no request was sent, no provider was called.",
+  "receiptSha256": "0b8e13b975b64fb300ff2b7448bd17d88ad692e0df885ebe2bc247816008cb15"
+}

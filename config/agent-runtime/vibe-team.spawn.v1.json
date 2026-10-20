@@ -1,0 +1,170 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-10-19T16:57:49.000Z",
+  "status": "PLAN_ONLY / LIVE_ADAPTERS_NOT_ACTIVATED",
+  "authority": {
+    "cloneReferenceRepos": false,
+    "installReferenceRepos": false,
+    "providerCall": false,
+    "queueMutation": false,
+    "liveSend": false,
+    "runtimeSpawn": false
+  },
+  "modelRouting": {
+    "provider": "freebuff",
+    "modelId": "gpt-6.1-sol",
+    "displayName": "Freebuff GPT 6.1 Sol",
+    "catalogSource": "infra/9router/model-catalog.json",
+    "catalogVerified": true,
+    "accessVerified": false,
+    "liveCallsAllowed": false,
+    "appliesToLanes": ["cline", "manus"],
+    "notes": "Catalog key gpt-6.1-sol exists in the 1405-model snapshot (vision+pdf flags only). Presence is not access: no credential, price, context window, or live call was verified, so packets may name the model but no lane may invoke it."
+  },
+  "references": [
+    {
+      "referenceId": "openbot",
+      "publisher": "CopilotKit",
+      "sourceUrl": "https://github.com/CopilotKit/OpenBot",
+      "license": "MIT",
+      "status": "alpha",
+      "architecture": "AG-UI agent endpoint per coworker; every tool call passes one gateway that decides, records, then acts; each coworker owns a container with its own browser profile and files",
+      "adoptedPattern": "one decide-and-record gateway plus a per-worker computer boundary and human takeover",
+      "notAdopted": [
+        "cloning or installing the template",
+        "container supervisor",
+        "CopilotKit Intelligence dependency"
+      ],
+      "runtimeState": "DOCS_READ_ONLY_NOT_CLONED"
+    },
+    {
+      "referenceId": "openmanus",
+      "publisher": "FoundationAgents",
+      "sourceUrl": "https://github.com/FoundationAgents/OpenManus",
+      "license": "MIT",
+      "status": "general-availability",
+      "architecture": "planner/executor loop with modular tools over an LLM config; Browser Use starts as a default MCP server with browser_exec and browser_screenshot",
+      "adoptedPattern": "planner/executor split where only the executor holds the action lease",
+      "notAdopted": [
+        "cloning or installing the framework",
+        "Python runtime and provider keys in repo",
+        "Browser Use MCP activation"
+      ],
+      "runtimeState": "DOCS_READ_ONLY_NOT_CLONED"
+    },
+    {
+      "referenceId": "opendots",
+      "publisher": "CopilotKit",
+      "sourceUrl": "https://github.com/CopilotKit/OpenDots",
+      "license": "MIT",
+      "status": "alpha",
+      "architecture": "persistent specialist Dots with their own durable computer, per-Dot MCP tool permissions, and a human-in-the-loop approve card before any non-read-only tool runs",
+      "adoptedPattern": "per-role tool ceiling with an explicit approval card before any effect",
+      "notAdopted": [
+        "cloning or installing the template",
+        "Composio or connected-app credentials",
+        "host command execution"
+      ],
+      "runtimeState": "DOCS_READ_ONLY_NOT_CLONED"
+    }
+  ],
+  "lanes": [
+    {
+      "laneId": "cline",
+      "kind": "local-cli",
+      "entrypoint": "cline",
+      "baseUrl": null,
+      "endpoints": [],
+      "authHeader": null,
+      "agentProfiles": [],
+      "versionFloor": "2.0.0",
+      "headlessFlag": "--json",
+      "activation": "operator-authenticated-local",
+      "requiredTickets": ["PROVIDER_CALL"],
+      "liveCallsAllowed": false,
+      "notes": "Headless JSON run only; auto-approve is forced false and plan mode is the default."
+    },
+    {
+      "laneId": "manus",
+      "kind": "hosted-api",
+      "entrypoint": null,
+      "baseUrl": "https://api.manus.ai",
+      "endpoints": ["/v2/task.create"],
+      "authHeader": "x-manus-api-key",
+      "activation": "api-key-plus-provider-call-ticket",
+      "requiredTickets": ["PROVIDER_CALL"],
+      "liveCallsAllowed": false,
+      "agentProfiles": [
+        "standard",
+        "lite",
+        "max",
+        "max-medium",
+        "max-high",
+        "max-extra",
+        "max-ultra"
+      ],
+      "notes": "Manus API v2 task.create: asynchronous task, polled with task.listMessages, private share visibility only."
+    },
+    {
+      "laneId": "cue",
+      "kind": "app-only",
+      "entrypoint": null,
+      "baseUrl": null,
+      "endpoints": [],
+      "authHeader": null,
+      "activation": "human-operated-app",
+      "requiredTickets": ["PROVIDER_CALL", "LIVE_SEND"],
+      "liveCallsAllowed": false,
+      "agentProfiles": [],
+      "notes": "Cue is a Manus 2.0 app with per-agent email, phone, wallet, and computer; no public Cue API is documented, so it stays a human-run lane."
+    }
+  ],
+  "teamShapes": [
+    {
+      "shapeId": "research",
+      "archetype": "openbot-coworker",
+      "maxWorkers": 3,
+      "roles": [
+        { "roleId": "L4-36", "duty": "coordinator", "lane": "manus" },
+        { "roleId": "L1-08", "duty": "repository-cartographer", "lane": "cline" },
+        { "roleId": "L2-17", "duty": "source-analyst", "lane": "manus" },
+        { "roleId": "L5-44", "duty": "truth-auditor", "lane": "cline" }
+      ]
+    },
+    {
+      "shapeId": "implementation",
+      "archetype": "openmanus-planner-executor",
+      "maxWorkers": 3,
+      "roles": [
+        { "roleId": "L4-36", "duty": "coordinator", "lane": "manus" },
+        { "roleId": "L4-37", "duty": "maker", "lane": "cline" },
+        { "roleId": "L4-42", "duty": "checker", "lane": "manus" }
+      ]
+    },
+    {
+      "shapeId": "persistent-ops",
+      "archetype": "opendots-persistent-dot",
+      "maxWorkers": 2,
+      "roles": [
+        { "roleId": "L4-36", "duty": "coordinator", "lane": "manus" },
+        { "roleId": "L1-05", "duty": "surface-observer", "lane": "cline" }
+      ]
+    }
+  ],
+  "limits": {
+    "maxWorkers": 3,
+    "maxPacketsPerWave": 4,
+    "maxSteps": 40,
+    "maxTokens": 60000,
+    "maxCostMicroUsd": 0,
+    "timeoutSeconds": 900
+  },
+  "stopRules": [
+    "no clone, install, or package resolution against a reference repository",
+    "no provider or paid call without a PROVIDER_CALL ticket and open gate",
+    "one maker lease per path; checker never edits maker-owned files",
+    "cue stays human-operated until a public API and payment authority are admitted",
+    "packets never carry secret values, cookies, or ambient authority",
+    "no queue, A2A, Telegram, Cloudflare, or deploy effect from a spawn plan"
+  ]
+}

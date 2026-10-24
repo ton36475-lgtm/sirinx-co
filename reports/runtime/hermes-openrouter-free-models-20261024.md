@@ -90,6 +90,7 @@ per-session `/model` choice for the Telegram DM (see §5).
 | `gateway.log` | `Model context warmed: cohere/north-mini-code:free -> 256000 tokens (config)` |
 | `POST 127.0.0.1:8642/v1/chat/completions` (`model=hermes-agent`, bearer `API_SERVER_KEY`) | **200** — `LIVE-OK`, then **200** — `GW-FINAL` |
 | after the WhatsApp correction (§5): gateway pid **40399** | `Gateway running with 3 platform(s)`, `telegram`/`api_server`/`a2a` connected; live turn **200** — `FIXED-OK`; `Model context warmed: cohere/north-mini-code:free` |
+| **Telegram, real message** (§7): inbound `ดำเนินการต่อ` at 14:59:38 | `response ready: platform=telegram … time=139.8s api_calls=1 response=309 chars` at 15:01:58, then `[Telegram] Sending response (309 chars) to 5320654632` |
 
 An unauthenticated probe of the same endpoint is correctly rejected
 (`401 Invalid gateway API key`), so the API server is not open.
@@ -147,13 +148,64 @@ restarts by design; it is not a live failure.
 | # | Item |
 | --- | --- |
 | 1 | WhatsApp is now **off, not broken**: the stored session is logged out on the phone side and re-pairing needs a QR scan (`hermes whatsapp`). Until then `WHATSAPP_ENABLED=false` keeps the gateway quiet |
-| 2 | ~~dashboard `[solis]` pid 1593 runs pre-update code~~ — **relaunched**: pid 1593 replaced by **41157** (`PPID 1`, detached with `setsid`), same arguments (`-p default dashboard --port 9119 --host 127.0.0.1 --open-profile solis --no-open`), `HERMES_DASHBOARD_READY port=9119` and `GET http://127.0.0.1:9119/` → **200**. A first plain `nohup … &` attempt died with the agent shell's process group, which is why the surviving relaunch detaches a session first |
+| 2 | ~~dashboard `[solis]` pid 1593 runs pre-update code~~ — **now a launchd job** (§8): pid 1593 → manual 41157 → supervised **43546**, `GET http://127.0.0.1:9119/` **200**, and `kill -9` on 43444 was followed by a fresh pid and 200 within ~12 s. A first plain `nohup … &` attempt died with the agent shell's process group, so the manual stage detached with `setsid` before launchd took over |
 | 3 | ~~Two `providers:` entries carry literal API keys in `key_env`~~ — **retracted**: re-checked every provider block in `config.yaml` and `profiles/solis/config.yaml`, and all 27 `key_env`/`api_key_env` values are environment-variable **names** (`OPENROUTER_API_KEY`, `CUSTOM_PROVIDER_…__KEY`, `OMNIROUTE_API_KEY`, …). No literal key sits in either file |
 | 4 | Free-tier capacity is shared: a 429 is always possible. The chain now has two verified-tool-use fallbacks, and `usage` sits at 11/1000 daily requests |
 
-## 7. Rollback
+## 7. Telegram round trip on the free chain
+
+A real, human-typed message reached the bot after the swap and was answered
+from a free model — this is the production path, not a local probe:
+
+```
+14:59:38  inbound message: platform=telegram user=Anonymous chat=5320654632 msg='ดำเนินการต่อ'
+14:59:38  Rehydrated persisted /model override … model=nvidia/nemotron-3.5-lightning:free provider=openrouter
+15:01:58  response ready: platform=telegram … time=139.8s api_calls=1 response=309 chars
+15:01:58  [Telegram] Sending response (309 chars) to 5320654632
+```
+
+| Fact | Evidence |
+| --- | --- |
+| the turn actually ran on OpenRouter | `agent.log`: `conversation turn: … model=nvidia/nemotron-3.5-lightning:free provider=openrouter platform=telegram` + `OpenAI client created … base_url=https://openrouter.ai/api/v1` |
+| that model is on this pass' verified list | `nvidia/nemotron-3.5-lightning:free` — chat + tool call both 200 (§2) |
+| the reply was handed to Telegram | `gateway.platforms.base: [Telegram] Sending response (309 chars) to 5320654632` |
+| it was the *session's* model, not the profile default | the DM carries a persisted `/model` override, so it ran the override; the profile default (`cohere/north-mini-code:free`) is what the same gateway used for the API probes above |
+
+The earlier §4 API probes prove the **new primary** works through the same
+gateway; this turn proves the **Telegram transport + session + free model**
+path works end to end. Both were needed because the override would have hidden
+a broken default, and the API probe would have hidden a broken Telegram path.
+
+## 8. Process supervision (launchd, not manual relaunch)
+
+The dashboard was a `nohup` process (`PPID 1`, no job) and the WhatsApp bridge
+had no supervisor: neither would return after a reboot, and the bridge had been
+crash-looping under the gateway instead.
+
+| Label | Design | Verified |
+| --- | --- | --- |
+| `ai.hermes.dashboard` | `hermes -p default dashboard --port 9119 --host 127.0.0.1 --open-profile solis --no-open`, `RunAtLoad`, `KeepAlive.SuccessfulExit=false`, `ThrottleInterval 30`, logs `~/.hermes/logs/dashboard.log` | bootstrapped → 200; `kill -9 43444` → **43546** serving 200 ~12 s later |
+| `ai.hermes.whatsapp-bridge` | `bash ~/.hermes/bin/whatsapp-bridge-launchd.sh` — the wrapper reads `WHATSAPP_ENABLED` and `whatsapp/session/creds.json`, and **parks with exit 0** when either says "not ready" | bootstrapped → `launchctl list` shows `- 0 ai.hermes.whatsapp-bridge` and the log line `parked: WHATSAPP_ENABLED=false`; nothing listens on :3000 |
+
+`KeepAlive.SuccessfulExit=false` mirrors the gateway job: a clean exit parks,
+a crash relaunches. That is what keeps the wrapper from becoming the next
+300-second crash loop while the WhatsApp session is logged out. When the bridge
+does start, it uses the adapter's own argv (`node bridge.js --port 3000
+--session <dir> --mode self-chat`) so `_reuse_running_bridge` adopts it instead
+of spawning a second one.
+
+Copies of both plists and the wrapper live in `infra/macmini/launchd/` with the
+install and re-pair commands.
+
+## 9. Rollback
 
 ```sh
+# process supervision (this pass)
+launchctl bootout gui/$(id -u)/ai.hermes.dashboard         # dashboard back to manual
+launchctl bootout gui/$(id -u)/ai.hermes.whatsapp-bridge   # bridge back to gateway-spawned
+rm ~/Library/LaunchAgents/ai.hermes.{dashboard,whatsapp-bridge}.plist
+
+# model pins
 cd ~/.hermes
 cp config.yaml.bak-free-model-20261024-092823 config.yaml
 cp profiles/solis/config.yaml.bak-free-model-20261024-092823 profiles/solis/config.yaml

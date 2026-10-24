@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>ai.hermes.dashboard</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/sirinx/.hermes/hermes-agent/.hermes/bin/hermes</string>
+        <string>-p</string>
+        <string>default</string>
+        <string>dashboard</string>
+        <string>--port</string>
+        <string>9119</string>
+        <string>--host</string>
+        <string>127.0.0.1</string>
+        <string>--open-profile</string>
+        <string>solis</string>
+        <string>--no-open</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/sirinx/.hermes/hermes-agent</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HERMES_HOME</key>
+        <string>/Users/sirinx/.hermes</string>
+        <key>PATH</key>
+        <string>/Users/sirinx/.hermes/hermes-agent/node_modules/.bin:/Users/sirinx/.hermes/node/bin:/Users/sirinx/.hermes/tools/node-26.7.0-darwin-arm64/bin:/Users/sirinx/.hermes/tools/npm-12.0.2-darwin-arm64/bin:/Users/sirinx/.hermes/installs/7cc908599bf1352a/environments/5c9d0103bcda40c09bad725c230c7985/venv/bin:/Users/sirinx/.hermes/tools/python-3.14.7+20260901-darwin-arm64/bin:/Users/sirinx/.hermes/tools/tirith-0.4.2-darwin-arm64:/Users/sirinx/.hermes/tools/ripgrep-15.2.0-darwin-arm64:/Users/sirinx/.hermes/tools/ffmpeg-9.0.1-darwin-arm64:/Users/sirinx/.hermes/tools/agent-browser-0.26.0-darwin-arm64/bin:/Users/sirinx/.hermes/installs/7cc908599bf1352a/environments/d7d559a89b204840a1974341a389bb89/venv/bin:/Users/sirinx/.hermes/hermes-agent/venv/bin:/Users/sirinx/.hermes/node:/Users/sirinx/hermes/bin:/Users/sirinx/.local/bin:/Users/sirinx/.cargo/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+    <key>LimitLoadToSessionType</key>
+    <array>
+        <string>Aqua</string>
+        <string>Background</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- Same parking rule as ai.hermes.gateway: a clean exit (0) stays parked,
+         a crash or kill is relaunched after the throttle. -->
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+    </dict>
+    <key>ThrottleInterval</key>
+    <integer>30</integer>
+    <key>ExitTimeOut</key>
+    <integer>20</integer>
+
+    <key>StandardOutPath</key>
+    <string>/Users/sirinx/.hermes/logs/dashboard.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/sirinx/.hermes/logs/dashboard.error.log</string>
+</dict>
+</plist>

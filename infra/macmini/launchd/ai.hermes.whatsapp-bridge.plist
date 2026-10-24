@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>ai.hermes.whatsapp-bridge</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/sirinx/.hermes/bin/whatsapp-bridge-launchd.sh</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/sirinx/.hermes/hermes-agent/scripts/whatsapp-bridge</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HERMES_HOME</key>
+        <string>/Users/sirinx/.hermes</string>
+        <key>PATH</key>
+        <string>/Users/sirinx/.hermes/node/bin:/Users/sirinx/.hermes/tools/node-26.7.0-darwin-arm64/bin:/Users/sirinx/.hermes/hermes-agent/node_modules/.bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+    <key>LimitLoadToSessionType</key>
+    <array>
+        <string>Aqua</string>
+        <string>Background</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- The wrapper exits 0 when WhatsApp is disabled or unpaired, which parks
+         this job instead of crash-looping; a real bridge crash still relaunches. -->
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+    </dict>
+    <key>ThrottleInterval</key>
+    <integer>30</integer>
+
+    <key>StandardOutPath</key>
+    <string>/Users/sirinx/.hermes/logs/whatsapp-bridge-launchd.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/sirinx/.hermes/logs/whatsapp-bridge-launchd.error.log</string>
+</dict>
+</plist>

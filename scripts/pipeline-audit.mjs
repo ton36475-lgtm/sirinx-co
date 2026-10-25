@@ -78,13 +78,19 @@ if (scheduled) {
   checks.push(run("windows d mount", "test", ["-d", "/Volumes/Windows-D/SIRINX_OS/sirinx-co"], { lines: 20 }));
   checks.at(-1).warnOnly = true;
 
+  // The leading group is a boundary, not a bucket to keep: without it a
+  // credential prefix embedded in an ordinary hyphenated word (`risk-…`,
+  // `task-…`, `lease-task-…`) matches and the gate fails on prose.
+  // `docs/media/lib/selftest.mjs` deliberately embeds a fabricated
+  // `sk-live-…` fixture to prove log scrubbing redacts it; that is a test
+  // value, not a credential, so this single file is skipped here.
   checks.push(
     run(
       "strict secret pattern scan",
       "rg",
       [
         "-n",
-        "(sk-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{20,}|github_pat_[0-9A-Za-z_]{20,}|cfat_[0-9A-Za-z_]{20,}|hf_[0-9A-Za-z]{20,}|sk-ant-[0-9A-Za-z_-]{20,})",
+        "(?:^|[^A-Za-z0-9_-])(sk-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{20,}|github_pat_[0-9A-Za-z_]{20,}|cfat_[0-9A-Za-z_]{20,}|hf_[0-9A-Za-z]{20,}|sk-ant-[0-9A-Za-z_-]{20,})",
         ".",
         "-g",
         "!node_modules",
@@ -94,6 +100,8 @@ if (scheduled) {
         "!build",
         "-g",
         "!.git",
+        "-g",
+        "!docs/media/lib/selftest.mjs",
       ],
       { lines: 40, redactOutput: true },
     ),

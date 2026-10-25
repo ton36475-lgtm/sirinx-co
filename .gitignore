@@ -37,3 +37,4 @@ exports/pipeline-audit-latest.json
 # 23 MB payload (scripts/omarchy-handoff-package.mjs rebuilds it byte-stably).
 exports/omarchy-handoff/*.tar.gz
 exports/omarchy-handoff/*.tar.gz.part*
+.gstack/

@@ -1,0 +1,196 @@
+#!/usr/bin/env bash
+# SIRINX OS — worker-node helper for an Omarchy (Quattro / v4) machine.
+#
+# Scope: read-only by default. Every subcommand except `check` reports; none
+# of them write to the repo, the control plane, the tailnet, or the network
+# beyond one bounded probe of the control API.
+#
+# Secrets: `sirinx env` prints only whether a variable is set, never its value.
+#
+# Installed by infra/omarchy/vibe-coding/apply.sh -> ~/.local/bin/sirinx
+set -euo pipefail
+
+REPO="${SIRINX_REPO:-$HOME/SIRINXDev/sirinx-co}"
+SESSION="${SIRINX_TMUX_SESSION:-sirinx}"
+
+die() { printf 'sirinx: %s\n' "$*" >&2; exit 1; }
+have() { command -v "$1" >/dev/null 2>&1; }
+
+# Bounded probe: rustup resolves rust-toolchain.toml on first cargo/rustc call and
+# can block on a download, so nothing here may run unbounded.
+bounded() {
+  if have timeout; then timeout 5 "$@" 2>/dev/null; else "$@" 2>/dev/null; fi
+}
+
+require_repo() {
+  [ -d "$REPO/.git" ] || die "no git repo at $REPO — set SIRINX_REPO or clone sirinx-co there"
+}
+
+short() { cut -c1-7; }
+
+cmd_health() {
+  local now branch dirty head control
+  now="$(date -u '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || date)"
+  printf 'SIRINX worker health — %s\n' "$now"
+  printf '%-10s %s\n' host "$(hostname -s 2>/dev/null || hostname)"
+
+  if have omarchy; then
+    printf '%-10s %s\n' omarchy "$(omarchy --version 2>/dev/null | head -1 || printf 'cli present, version unknown')"
+  elif [ -f "$HOME/.config/hypr/hyprland.lua" ]; then
+    printf '%-10s %s\n' omarchy "quattro configs (hyprland.lua), cli missing"
+  else
+    printf '%-10s %s\n' omarchy "not detected"
+  fi
+
+  if [ -d "$REPO/.git" ]; then
+    branch="$(git -C "$REPO" rev-parse --abbrev-ref HEAD 2>/dev/null || printf '?')"
+    head="$(git -C "$REPO" rev-parse --short HEAD 2>/dev/null || printf '?')"
+    dirty="$(git -C "$REPO" status --porcelain 2>/dev/null | wc -l | tr -d ' ')"
+    printf '%-10s %s (%s %s, %s dirty path(s))\n' repo "$REPO" "$branch" "$head" "$dirty"
+  else
+    printf '%-10s %s (missing)\n' repo "$REPO"
+  fi
+
+  local node_v pnpm_v cargo_v rustc_v ts_state ts_ip
+  node_v="$(have node && bounded node -v | head -1 || printf 'none')"
+  pnpm_v="$(have pnpm && bounded pnpm -v | head -1 || printf 'none')"
+  cargo_v="$(have cargo && bounded cargo --version | cut -d' ' -f2 || printf 'none')"
+  rustc_v="$(have rustc && bounded rustc --version | cut -d' ' -f2 || printf 'none')"
+  printf '%-10s node %s | pnpm %s | cargo %s | rustc %s\n' runtime \
+    "${node_v:-none}" "${pnpm_v:-none}" "${cargo_v:-none}" "${rustc_v:-none}"
+
+  if have tailscale; then
+    ts_state="$(bounded tailscale status --json | sed -n 's/.*"BackendState": *"\([^"]*\)".*/\1/p' | head -1)"
+    ts_ip="$(bounded tailscale ip -4 | head -1)"
+    printf '%-10s %s | self %s\n' tailnet "${ts_state:-unknown}" "${ts_ip:-no ipv4}"
+  else
+    printf '%-10s %s\n' tailnet "tailscale not installed"
+  fi
+
+  if [ -n "${SIRINX_CONTROL_URL:-}" ]; then
+    if control="$(curl -fsS --connect-timeout 3 --max-time 5 "${SIRINX_CONTROL_URL%/}/health" 2>&1)"; then
+      printf '%-10s %s/health ok (%s bytes)\n' control "${SIRINX_CONTROL_URL%/}" "${#control}"
+    else
+      printf '%-10s %s/health FAILED (%s)\n' control "${SIRINX_CONTROL_URL%/}" "$(printf '%s' "$control" | head -1)"
+    fi
+  else
+    printf '%-10s %s\n' control "SIRINX_CONTROL_URL unset"
+  fi
+
+  printf '%-10s claude=%s codex=%s opencode=%s hermes=%s\n' agents \
+    "$(have claude && printf yes || printf no)" \
+    "$(have codex && printf yes || printf no)" \
+    "$(have opencode && printf yes || printf no)" \
+    "$(have hermes && printf yes || printf no)"
+
+  if have df; then
+    printf '%-10s %s\n' disk "$(bounded df -h "$HOME" | awk 'NR==2 {print $4 " free"}')"
+  fi
+}
+
+cmd_env() {
+  local name value
+  for name in \
+    SIRINX_ENV SIRINX_REPO SIRINX_CONTROL_URL A2A_NODE_ID A2A_ENDPOINT \
+    CONTROL_API_TOKEN NODE_HEARTBEAT_SHARED_SECRET DATABASE_URL REDIS_URL \
+    ANTHROPIC_API_KEY OPENAI_API_KEY TELEGRAM_BOT_TOKEN; do
+    if [ -n "${!name:-}" ]; then value="SET"; else value="unset"; fi
+    printf '%-32s %s\n' "$name" "$value"
+  done
+  printf '\nValues are never printed. Source them from ~/.config/sirinx/sirinx.env (mode 600).\n'
+}
+
+cmd_agents() {
+  printf 'Agent lane inventory — presence only, no auth, no network, no prompts read.\n\n'
+  printf '%-12s %-11s %s\n' launcher installed config-dir
+  report_agent() { # name configDirRelativeToHome
+    local name=$1 dir=${2:-} installed=no cfg=n/a
+    have "$name" && installed=yes
+    if [ -n "$dir" ]; then
+      if [ -d "$HOME/$dir" ]; then cfg=present; else cfg=absent; fi
+    fi
+    printf '%-12s %-11s %s\n' "$name" "$installed" "$cfg"
+  }
+  report_agent claude   .claude
+  report_agent codex    .codex
+  report_agent opencode .config/opencode
+  report_agent hermes   .hermes
+  report_agent agy      .gemini
+  report_agent copilot  ""
+  report_agent crush    ""
+  printf '\nOmarchy installs these lazily through mise on first launch; "installed=no" means\nnot fetched yet, not broken. Sign-in is yours: Omarchy never stores a login for you,\nand this bundle never creates, copies, or prints credentials.\n'
+}
+
+cmd_session() {
+  have tmux || die "tmux missing: omarchy-pkg-add tmux"
+  if tmux has-session -t "$SESSION" 2>/dev/null; then
+    exec tmux attach -t "$SESSION"
+  fi
+  require_repo
+  tmux new-session -d -s "$SESSION" -c "$REPO" -n repo
+  tmux split-window -h -t "$SESSION:repo" -c "$REPO"
+  tmux select-pane -t "$SESSION:repo.0"
+  tmux new-window -d -t "$SESSION" -c "$REPO" -n health "$(printf '%q ' "$0")health"
+  tmux new-window -d -t "$SESSION" -c "$REPO" -n git "$(printf '%q ' "$0")git"
+  tmux select-window -t "$SESSION:repo"
+  exec tmux attach -t "$SESSION"
+}
+
+cmd_git() {
+  require_repo
+  if have lazygit; then exec lazygit -p "$REPO"; fi
+  exec git -C "$REPO" status --short --branch
+}
+
+cmd_check() {
+  require_repo
+  have npm || die "npm missing: mise install node, or omarchy-pkg-add nodejs npm"
+  printf 'sirinx: running the repo check chain in %s\n' "$REPO"
+  printf 'sirinx: this builds the command center and runs validators; expect several minutes.\n'
+  cd "$REPO"
+  exec npm run check
+}
+
+cmd_ctl() {
+  [ -n "${SIRINX_CONTROL_URL:-}" ] || die "SIRINX_CONTROL_URL unset (see ~/.config/sirinx/sirinx.env.example)"
+  local url="${SIRINX_CONTROL_URL%/}"
+  printf 'GET %s/health\n' "$url"
+  curl -sS --connect-timeout 3 --max-time 8 -w '\nHTTP %{http_code} in %{time_total}s\n' "$url/health" || true
+}
+
+cmd_repo() {
+  require_repo
+  exec "${VISUAL:-${EDITOR:-nvim}}" "$REPO"
+}
+
+usage() {
+  cat <<'EOF'
+sirinx — SIRINX OS worker-node helper (Omarchy Quattro)
+
+  sirinx health    node, repo, toolchain, tailnet, control API, agents (read-only)
+  sirinx env       which required env vars are set (never prints values)
+  sirinx agents    agent launcher + config-dir inventory (presence only)
+  sirinx session   attach/create the tmux dev session (repo, health, git)
+  sirinx git       lazygit in the repo (falls back to git status)
+  sirinx check     run the repo check chain (cd $SIRINX_REPO && npm run check)
+  sirinx ctl       probe the control API /health with a bounded curl
+  sirinx repo      open the repo in $VISUAL/$EDITOR
+  sirinx help      this text
+
+Env: SIRINX_REPO (default ~/SIRINXDev/sirinx-co), SIRINX_CONTROL_URL,
+     SIRINX_TMUX_SESSION (default sirinx). Nothing here writes to the repo.
+EOF
+}
+
+case "${1:-help}" in
+  health)  shift; cmd_health "$@" ;;
+  env)     shift; cmd_env "$@" ;;
+  agents)  shift; cmd_agents "$@" ;;
+  session) shift; cmd_session "$@" ;;
+  git)     shift; cmd_git "$@" ;;
+  check)   shift; cmd_check "$@" ;;
+  ctl)     shift; cmd_ctl "$@" ;;
+  repo)    shift; cmd_repo "$@" ;;
+  help|-h|--help) usage ;;
+  *) usage >&2; exit 2 ;;
+esac

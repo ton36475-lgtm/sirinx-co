@@ -1,0 +1,47 @@
+{
+  // SIRINX OS rows for the Quickshell Omarchy menu (Super + Space).
+  // Installed to ~/.config/omarchy/extensions/omarchy-menu.jsonc only when that
+  // file is absent or already carries these sirinx rows; otherwise apply.sh
+  // reports NEEDS_MANUAL_MERGE and leaves your existing entries untouched.
+  "sirinx": { "icon": "", "label": "SIRINX" },
+  "sirinx.session": {
+    "icon": "",
+    "label": "Dev session",
+    "description": "tmux: repo, health, git",
+    "action": "omarchy-launch-terminal sirinx session"
+  },
+  "sirinx.health": {
+    "icon": "",
+    "label": "Node health",
+    "description": "repo, toolchain, tailnet, control API",
+    "action": "omarchy-launch-terminal sirinx health"
+  },
+  "sirinx.env": {
+    "icon": "",
+    "label": "Env var presence",
+    "description": "which required variables are set (values never printed)",
+    "action": "omarchy-launch-terminal sirinx env"
+  },
+  "sirinx.agents": {
+    "icon": "",
+    "label": "Agent lanes",
+    "description": "installed launchers and config dirs (no auth, no secrets)",
+    "action": "omarchy-launch-terminal sirinx agents"
+  },
+  "sirinx.git": {
+    "icon": "",
+    "label": "Lazygit",
+    "action": "omarchy-launch-terminal sirinx git"
+  },
+  "sirinx.check": {
+    "icon": "",
+    "label": "Repo check chain",
+    "description": "npm run check in the monorepo",
+    "action": "omarchy-launch-terminal sirinx check"
+  },
+  "sirinx.ctl": {
+    "icon": "",
+    "label": "Control API probe",
+    "action": "omarchy-launch-terminal sirinx ctl"
+  }
+}

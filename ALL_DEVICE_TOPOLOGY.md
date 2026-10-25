@@ -1,6 +1,11 @@
 # All Device Topology
 
-Status: planned.
+Status: planned. One addition: an Omarchy (Arch/Hyprland v4) developer node has
+its settings bundle prepared under `infra/omarchy/vibe-coding/`, and as of
+2026-10-23 the tailnet peer `omarchy` (100.87.189.34, linux) is **online** with
+Tailscale SSH enabled. It has no authority until `MASTER_PLAN` C6 closes, and no
+worker can reach it yet — Tailscale's policy refuses every SSH user tried from
+the Mac mini (`tailnet policy does not permit you to SSH as user "sirinx"`).
 
 ## Topology
 
@@ -10,6 +15,7 @@ Mobile Command Node
   -> Mac mini M2 Control Plane
   -> Release gates and approval queue
   -> Windows Worker Node for heavy jobs
+  -> Omarchy Developer Node (local checks + agent lanes)
   -> Cloudflare Edge for public/private routing
 ```
 
@@ -17,6 +23,9 @@ Mobile Command Node
 
 - Mac mini M2: source of operations and local control plane.
 - Windows PC: worker node and replica/backup lane.
+- Omarchy workstation: developer node; local `cargo`/`npm` checks, agent CLI lanes,
+  read-only control-API probes. No production writes, no public ports, no
+  control-plane mutation.
 - Mobile: command and approval node.
 - Cloudflare: edge, zero trust, public website, protected private routes.
 - GitHub: source of truth and PR workflow.

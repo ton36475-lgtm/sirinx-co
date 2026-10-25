@@ -1,0 +1,15 @@
+# SIRINX OS toolchain pins (Omarchy Quattro / v4).
+# Installed as an owned file: ~/.config/mise/conf.d/sirinx.toml
+# mise loads conf.d fragments after ~/.config/mise/config.toml, so these win
+# for the versions it manages and never rewrite your own config.
+#
+# Rust is deliberately NOT pinned here: the repo ships rust-toolchain.toml
+# ("stable" + rustfmt + clippy) and only rustup honours that file, so the
+# toolchain path is `omarchy-pkg-add rustup` + `rustup default stable`.
+#
+# pnpm is pinned to package.json#packageManager (pnpm@10.4.1); a mismatch makes
+# `pnpm` refuse or rewrite the lockfile, and the repo check chain depends on it.
+
+[tools]
+node = "22"
+pnpm = "10.4.1"

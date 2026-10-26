@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>ai.sirinx.a2a-stubs</string>
+
+    <!-- Reconstructed 2026-10-26: the old program was
+         ~/project-hermes/a2a_server/agent_stubs.py, deleted with project-hermes/.
+         The replacement is a zero-dep Node stub in the canonical repo. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/opt/homebrew/bin/node</string>
+        <string>/Users/sirinx/SIRINXDev/sirinx-co/services/a2a-stubs/server.mjs</string>
+        <string>--all</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/sirinx/SIRINXDev/sirinx-co</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>A2A_STUB_PORTS</key>
+        <string>9001,9002,9003,9004</string>
+        <key>A2A_STUB_HOST</key>
+        <string>127.0.0.1</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+    <key>ProcessType</key>
+    <string>Background</string>
+
+    <key>StandardOutPath</key>
+    <string>/Users/sirinx/Library/Logs/sirinx/a2a-stubs.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/sirinx/Library/Logs/sirinx/a2a-stubs.err.log</string>
+</dict>
+</plist>

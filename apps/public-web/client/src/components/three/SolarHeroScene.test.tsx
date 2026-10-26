@@ -6,6 +6,9 @@ import { act } from "react";
 import fs from "node:fs";
 import SolarHeroScene from "./SolarHeroScene";
 
+// React 19 refuses act() unless the environment opts in; vitest 5 no longer sets it.
+(globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+
 const rendererState = vi.hoisted(() => ({ instances: [] as Array<any>, points: [] as Array<any> }));
 vi.mock("three", () => {
   class Scene { children: any[] = []; add(x: any) { this.children.push(x); } traverse(fn: (x: any) => void) { this.children.forEach(fn); } }

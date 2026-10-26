@@ -17,7 +17,7 @@ vi.mock("@/i18n", () => ({
   registerPageTranslations: translations.register,
   usePageTranslation: () => ({
     t: (key: string) => {
-      const dictionary = translations.register.mock.calls[0][1];
+      const dictionary = translations.register.mock.calls[0]?.[1] ?? {};
       return dictionary[key]?.[translations.language()] ?? key;
     },
   }),

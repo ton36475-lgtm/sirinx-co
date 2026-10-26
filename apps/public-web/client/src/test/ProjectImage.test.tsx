@@ -9,7 +9,7 @@ import ProjectImage from "../components/ProjectImage";
 const translations = vi.hoisted(() => ({ register: vi.fn(), language: vi.fn(() => "en") }));
 vi.mock("@/i18n", () => ({
   registerPageTranslations: translations.register,
-  usePageTranslation: () => ({ t: (key: string) => translations.register.mock.calls[0][1][key]?.[translations.language()] ?? key }),
+  usePageTranslation: () => ({ t: (key: string) => (translations.register.mock.calls[0]?.[1] ?? {})[key]?.[translations.language()] ?? key }),
 }));
 vi.mock("@/components/HeroSlideshow", () => ({ trackSolutionVisit: vi.fn() }));
 vi.mock("wouter", () => ({ Link: "a" }));
@@ -44,7 +44,7 @@ const imageError = async (image: HTMLImageElement) => { await act(async () => { 
 it.each([["en", "Project image unavailable", "Verified Live"], ["th", "ไม่สามารถแสดงภาพโครงการได้", "ผลงานติดตั้งจริง"]])("keeps %s Projects usable when featured/card assets fail", async (language, unavailable, completed) => {
   translations.language.mockReturnValue(language);
   await fixture.render(<Projects />);
-  const dictionary = translations.register.mock.calls[0][1];
+  const dictionary = translations.register.mock.calls[0]?.[1] ?? {};
   const featured = fixture.container.querySelector<HTMLImageElement>('img[src="/assets/projects/ruenphae/20260924/1000076001.jpg"]')!;
   const card = fixture.container.querySelector<HTMLImageElement>('img[src="/assets/projects/holatel/20260924/1000075878.jpg"]')!;
   expect(featured).not.toBeNull(); expect(card).not.toBeNull();

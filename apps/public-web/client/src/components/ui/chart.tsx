@@ -116,13 +116,24 @@ function ChartTooltipContent({
   color,
   nameKey,
   labelKey,
-}: React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
+}: Omit<React.ComponentProps<typeof RechartsPrimitive.Tooltip>, "payload" | "label"> &
   React.ComponentProps<"div"> & {
     hideLabel?: boolean;
     hideIndicator?: boolean;
     indicator?: "line" | "dot" | "dashed";
     nameKey?: string;
     labelKey?: string;
+    // recharts v3 dropped payload/label from the Tooltip props type; the
+    // wrapper still receives them at runtime from the Tooltip render prop.
+    payload?: ReadonlyArray<{
+      dataKey?: string | number;
+      name?: string;
+      value?: number | string;
+      type?: string;
+      color?: string;
+      payload?: Record<string, unknown>;
+    }>;
+    label?: React.ReactNode;
   }) {
   const { config } = useChart();
 
@@ -142,7 +153,7 @@ function ChartTooltipContent({
     if (labelFormatter) {
       return (
         <div className={cn("font-medium", labelClassName)}>
-          {labelFormatter(value, payload)}
+          {labelFormatter(value, payload as never)}
         </div>
       );
     }
@@ -182,7 +193,10 @@ function ChartTooltipContent({
           .map((item, index) => {
             const key = `${nameKey || item.name || item.dataKey || "value"}`;
             const itemConfig = getPayloadConfigFromPayload(config, item, key);
-            const indicatorColor = color || item.payload.fill || item.color;
+            const indicatorColor =
+              color ||
+              (item.payload as Record<string, unknown> | undefined)?.fill ||
+              item.color;
 
             return (
               <div
@@ -193,7 +207,13 @@ function ChartTooltipContent({
                 )}
               >
                 {formatter && item?.value !== undefined && item.name ? (
-                  formatter(item.value, item.name, item, index, item.payload)
+                  (formatter as unknown as (
+                    value: unknown,
+                    name: unknown,
+                    item: unknown,
+                    index: number,
+                    payload: unknown
+                  ) => React.ReactNode)(item.value, item.name, item, index, item.payload)
                 ) : (
                   <>
                     {itemConfig?.icon ? (
@@ -256,10 +276,18 @@ function ChartLegendContent({
   payload,
   verticalAlign = "bottom",
   nameKey,
-}: React.ComponentProps<"div"> &
-  Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
+}: React.ComponentProps<"div"> & {
     hideIcon?: boolean;
     nameKey?: string;
+    // recharts v3 no longer exposes these on LegendProps.
+    payload?: ReadonlyArray<{
+      value?: unknown;
+      dataKey?: string | number;
+      color?: string;
+      type?: string;
+      id?: string | number;
+    }>;
+    verticalAlign?: "top" | "bottom" | "middle";
   }) {
   const { config } = useChart();
 
@@ -283,7 +311,7 @@ function ChartLegendContent({
 
           return (
             <div
-              key={item.value}
+              key={String(item.value)}
               className={cn(
                 "[&>svg]:text-muted-foreground flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3"
               )}

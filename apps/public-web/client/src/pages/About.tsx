@@ -17,9 +17,8 @@ const fadeUp = {
   visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.5 } }),
 };
 
-const CDN = "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv";
-const LOGO_URL = `${CDN}/photo_2026-03-24_06-45-58_293d121c.jpg`;
-const HERO = `${CDN}/hero-about-3Trik9L6DrdCwCcjCt2KVz.webp`;
+const LOGO_URL = media("photo_2026-03-24_06-45-58_293d121c.jpg");
+const HERO = media("hero-about-3Trik9L6DrdCwCcjCt2KVz.webp");
 
 const values = [
   { icon: Cpu, title: "Engineering-First", desc: "ทุกโซลูชันเริ่มจากวิศวกรรมที่แม่นยำ ไม่ใช่การขาย" },
@@ -35,6 +34,7 @@ const milestones = [
   { year: "2025", event: "เปิดตัว Solar Carport เป็น Flagship Solution พร้อม AI Energy Management Platform" },
   { year: "2026", event: "ขยายสู่ Full Automation Corporation System ระดับ World-Wide Enterprise" },
 ];
+import { media } from "@/lib/media";
 
 export default function About() {
   useEffect(() => { trackSolutionVisit("solar-carport"); }, []);

@@ -18,6 +18,14 @@
     {
       "pattern": "sirinx.co/*",
       "zone_name": "sirinx.co"
+    },
+    {
+      "pattern": "www.sirinx.org/*",
+      "zone_name": "sirinx.org"
+    },
+    {
+      "pattern": "sirinx.org/*",
+      "zone_name": "sirinx.org"
     }
   ]
 }

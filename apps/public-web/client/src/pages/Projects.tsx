@@ -27,7 +27,6 @@ const fadeUp = {
   visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.5 } }),
 };
 
-const CDN = "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv";
 
 /* Curated gallery: only privacy-reviewed real installation photos. */
 const galleryPhotos = [
@@ -42,6 +41,7 @@ const filterOptions = [
   { value: "carport", label: "Solar Carport" },
   { value: "bess", label: "BESS / ESS" },
 ];
+import { media } from "@/lib/media";
 
 function ProjectEvidenceBadge({ projectId, projectStatus, t }: {
   projectId?: string;
@@ -96,7 +96,7 @@ export default function Projects() {
       title: t("proj2Title"), location: t("proj2Location"), type: "Floating Solar",
       capacity: "Proposed system", saving: t("proj2Saving"), year: t("conceptYear"),
       desc: t("proj2Desc"),
-      image: `${CDN}/floating-solar-reservoir-BHro9zmCAKLtycFVXgfe9G.webp`,
+      image: media("floating-solar-reservoir-BHro9zmCAKLtycFVXgfe9G.webp"),
       tag: "floating", projectStatus: "CONCEPT / SIMULATION" as const,
     },
     {
@@ -112,21 +112,21 @@ export default function Projects() {
       title: t("proj4Title"), location: t("proj4Location"), type: "Rooftop + BESS",
       capacity: "Proposed system", saving: t("proj4Saving"), year: t("conceptYear"),
       desc: t("proj4Desc"),
-      image: `${CDN}/resort-rooftop-solar-Q4vG7VqDnaYmRWdsyKtp7H.webp`,
+      image: media("resort-rooftop-solar-Q4vG7VqDnaYmRWdsyKtp7H.webp"),
       tag: "bess", projectStatus: "CONCEPT / SIMULATION" as const,
     },
     {
       title: t("proj5Title"), location: t("proj5Location"), type: "Rooftop Solar",
       capacity: "Proposed system", saving: t("proj5Saving"), year: t("conceptYear"),
       desc: t("proj5Desc"),
-      image: `${CDN}/warehouse-rooftop-solar-eGvaQedufCt28G4VBAahMs.webp`,
+      image: media("warehouse-rooftop-solar-eGvaQedufCt28G4VBAahMs.webp"),
       tag: "rooftop", projectStatus: "CONCEPT / SIMULATION" as const,
     },
     {
       title: t("proj6Title"), location: t("proj6Location"), type: "Solar + BESS",
       capacity: "Proposed system", saving: t("proj6Saving"), year: t("conceptYear"),
       desc: t("proj6Desc"),
-      image: `${CDN}/farm-solar-bess-VwUa48BekdDzTkGLwkeJJX.webp`,
+      image: media("farm-solar-bess-VwUa48BekdDzTkGLwkeJJX.webp"),
       tag: "bess", projectStatus: "CONCEPT / SIMULATION" as const,
     },
   ];

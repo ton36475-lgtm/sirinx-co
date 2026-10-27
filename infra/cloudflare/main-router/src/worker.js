@@ -3,6 +3,30 @@ const APEX_HOST = "sirinx.co";
 const PAGES_HOST = "sirinx-co.pages.dev";
 const LEAD_SUBMIT_PATH = "/api/trpc/lead.submit";
 
+// sirinx.org is a custom domain of the Pages project `sirinx-co-preview`. It
+// used to bypass this Worker entirely, which left its contact form posting to a
+// path nothing served (405). The router now covers both zones: each host gets
+// its own Pages origin and its own apex redirect, and the lead endpoint writes
+// through the same LEAD_DB binding.
+const ORG_PRIMARY_HOST = "www.sirinx.org";
+const ORG_APEX_HOST = "sirinx.org";
+const ORG_PAGES_HOST = "sirinx-co-preview.pages.dev";
+
+/**
+ * Pure host routing table. Kept exported so the routing contract is testable
+ * without a Worker runtime.
+ *
+ * @param {string} hostname
+ * @returns {{kind: "redirect", host: string} | {kind: "site", pagesHost: string} | {kind: "not-found"}}
+ */
+export function resolveHostRoute(hostname) {
+  if (hostname === APEX_HOST) return { kind: "redirect", host: PRIMARY_HOST };
+  if (hostname === ORG_APEX_HOST) return { kind: "redirect", host: ORG_PRIMARY_HOST };
+  if (hostname === PRIMARY_HOST) return { kind: "site", pagesHost: PAGES_HOST };
+  if (hostname === ORG_PRIMARY_HOST) return { kind: "site", pagesHost: ORG_PAGES_HOST };
+  return { kind: "not-found" };
+}
+
 const leadIntakeSchema = Object.freeze({
   version: "2026-05-19.lead-intake.v1",
   endpoint: LEAD_SUBMIT_PATH,
@@ -44,18 +68,18 @@ const jsonHeaders = {
   "x-sirinx-router": "main-www"
 };
 
-function redirectToPrimary(requestUrl) {
+function redirectToPrimary(requestUrl, host = PRIMARY_HOST) {
   const url = new URL(requestUrl);
   url.protocol = "https:";
-  url.hostname = PRIMARY_HOST;
+  url.hostname = host;
   return Response.redirect(url.toString(), 301);
 }
 
-async function proxyToPages(request) {
+async function proxyToPages(request, pagesHost = PAGES_HOST) {
   const incomingUrl = new URL(request.url);
   const upstreamUrl = new URL(request.url);
   upstreamUrl.protocol = "https:";
-  upstreamUrl.hostname = PAGES_HOST;
+  upstreamUrl.hostname = pagesHost;
 
   const upstreamRequest = new Request(upstreamUrl.toString(), request);
   upstreamRequest.headers.set("x-forwarded-host", incomingUrl.hostname);
@@ -255,16 +279,17 @@ async function handleLeadSubmit(request, env) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const route = resolveHostRoute(url.hostname);
 
-    if (url.hostname === APEX_HOST) {
-      return redirectToPrimary(request.url);
+    if (route.kind === "redirect") {
+      return redirectToPrimary(request.url, route.host);
     }
 
-    if (url.hostname === PRIMARY_HOST) {
+    if (route.kind === "site") {
       if (url.pathname === LEAD_SUBMIT_PATH) {
         return handleLeadSubmit(request, env);
       }
-      return proxyToPages(request);
+      return proxyToPages(request, route.pagesHost);
     }
 
     return new Response("Not found", {

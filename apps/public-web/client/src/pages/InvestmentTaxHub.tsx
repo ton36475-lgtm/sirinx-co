@@ -28,9 +28,7 @@ const fadeUp = {
   }),
 };
 
-const CDN =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv";
-const HERO = `${CDN}/hero-investment-fRtcNVseiLRqovGxudgo83.webp`;
+const HERO = media("hero-investment-fRtcNVseiLRqovGxudgo83.webp");
 
 const investmentModels = [
   {
@@ -105,6 +103,7 @@ const taxBenefits = [
     icon: TrendingUp,
   },
 ];
+import { media } from "@/lib/media";
 
 export default function InvestmentTaxHub() {
   useEffect(() => {

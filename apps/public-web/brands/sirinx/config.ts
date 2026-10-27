@@ -1,3 +1,4 @@
+import { mediaAbsolute } from "@/lib/media";
 /**
  * SIRINX Brand Configuration
  *
@@ -113,10 +114,10 @@ const sirinxConfig: BrandConfig = {
   description: "ออกแบบ ติดตั้ง และบริหารระบบพลังงานครบวงจร ตั้งแต่ Solar และ BESS ไปจนถึง AI Energy Management",
   foundedYear: 2024,
 
-  logo: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/photo_2026-03-24_06-45-58_293d121c.jpg",
+  logo: mediaAbsolute("photo_2026-03-24_06-45-58_293d121c.jpg"),
   favicon: "/favicon.ico",
-  heroImage: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-main-bCzCTCeaup46mVvtEbpjnr.webp",
-  ogImage: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-main-bCzCTCeaup46mVvtEbpjnr.webp",
+  heroImage: mediaAbsolute("hero-main-bCzCTCeaup46mVvtEbpjnr.webp"),
+  ogImage: mediaAbsolute("sirinx-og-image-hbNko5JADXArPGo26hmGrN.png"),
 
   contact: {
     phone: "082-7963-265",

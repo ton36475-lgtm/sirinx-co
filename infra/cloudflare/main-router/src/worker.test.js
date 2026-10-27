@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { extractLeadPayload, getLeadIntakeSchema, handleLeadSubmit } from "./worker.js";
+import worker, {
+  extractLeadPayload,
+  getLeadIntakeSchema,
+  handleLeadSubmit,
+  resolveHostRoute
+} from "./worker.js";
 
 function createMockD1() {
   const statements = [];
@@ -193,5 +198,72 @@ describe("main-router handleLeadSubmit", () => {
     );
 
     expect(response.status).toBe(503);
+  });
+});
+
+describe("main-router host routing (both zones)", () => {
+  it("serves each www host from its own Pages project", () => {
+    expect(resolveHostRoute("www.sirinx.co")).toEqual({
+      kind: "site",
+      pagesHost: "sirinx-co.pages.dev"
+    });
+    // sirinx.org is a custom domain of the sirinx-co-preview project; before
+    // this the .org host was never routed here, so /api/trpc/lead.submit
+    // answered 405 and the contact form could not submit.
+    expect(resolveHostRoute("www.sirinx.org")).toEqual({
+      kind: "site",
+      pagesHost: "sirinx-co-preview.pages.dev"
+    });
+  });
+
+  it("redirects both apexes to their own www host", () => {
+    expect(resolveHostRoute("sirinx.co")).toEqual({
+      kind: "redirect",
+      host: "www.sirinx.co"
+    });
+    expect(resolveHostRoute("sirinx.org")).toEqual({
+      kind: "redirect",
+      host: "www.sirinx.org"
+    });
+  });
+
+  it("refuses any other hostname", () => {
+    expect(resolveHostRoute("sirinx.example")).toEqual({ kind: "not-found" });
+    expect(resolveHostRoute("pages.dev")).toEqual({ kind: "not-found" });
+  });
+
+  it("answers the .org apex with a 301 to www.sirinx.org", async () => {
+    const response = await worker.fetch(new Request("https://sirinx.org/pricing/"), {});
+    expect(response.status).toBe(301);
+    expect(response.headers.get("location")).toBe("https://www.sirinx.org/pricing/");
+  });
+
+  it("keeps the .co apex redirect pointing at www.sirinx.co", async () => {
+    const response = await worker.fetch(new Request("https://sirinx.co/"), {});
+    expect(response.status).toBe(301);
+    expect(response.headers.get("location")).toBe("https://www.sirinx.co/");
+  });
+
+  it("hands the .org lead endpoint to the shared lead handler", async () => {
+    // No D1 binding in this environment: the point is that the request reaches
+    // handleLeadSubmit (503 "missing binding") instead of Pages' 405.
+    const response = await worker.fetch(
+      new Request("https://www.sirinx.org/api/trpc/lead.submit", {
+        method: "POST",
+        body: JSON.stringify({ json: { name: "Org Lead", phone: "0812345678" } })
+      }),
+      {}
+    );
+    expect(response.status).toBe(503);
+    const body = await readJson(response);
+    // tRPC internal-error envelope: proves the request reached the lead
+    // handler instead of Pages answering 405 and dropping the lead.
+    expect(body.error.code).toBe(-32603);
+    expect(body.error.message).toMatch(/lead/i);
+  });
+
+  it("returns a plain 404 for unknown hosts instead of proxying", async () => {
+    const response = await worker.fetch(new Request("https://evil.example/foo"), {});
+    expect(response.status).toBe(404);
   });
 });

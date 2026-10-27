@@ -89,25 +89,23 @@ const fadeUp = {
   }),
 };
 
-const CDN =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv";
-const HERO_CARPARK = `${CDN}/carport-wide-1_30e3af4c.jpeg`;
-const IMG_EV = `${CDN}/carport-structure-1_c0c17293.jpeg`;
-const IMG_AI = `${CDN}/bess-cabinet-2_54c824b8.jpeg`;
-const IMG_OM = `${CDN}/install-team-2_23aa9cdf.jpeg`;
+const HERO_CARPARK = media("carport-wide-1_30e3af4c.jpeg");
+const IMG_EV = media("carport-structure-1_c0c17293.jpeg");
+const IMG_AI = media("bess-cabinet-2_54c824b8.jpeg");
+const IMG_OM = media("install-team-2_23aa9cdf.jpeg");
 const IMG_CARPORT_GALLERY = [
-  `${CDN}/carport-wide-1_30e3af4c.jpeg`,
-  `${CDN}/carport-structure-1_c0c17293.jpeg`,
-  `${CDN}/carport-structure-2_f0ab2f56.jpeg`,
-  `${CDN}/carport-underside-1_51e3d09a.jpeg`,
-  `${CDN}/carport-underside-2_e70e97e1.jpeg`,
-  `${CDN}/install-team-1_91970553.jpeg`,
-  `${CDN}/bess-cabinet-1_f027743f.jpeg`,
-  `${CDN}/bess-cabinet-2_54c824b8.jpeg`,
-  `${CDN}/carport-pillar-1_b7680b5f.jpeg`,
-  `${CDN}/carport-detail-1_34c7c42f.jpeg`,
-  `${CDN}/cable-tray-detail_1ddf9610.jpeg`,
-  `${CDN}/carport-structure-4_cc6ef3f6.jpeg`,
+  media("carport-wide-1_30e3af4c.jpeg"),
+  media("carport-structure-1_c0c17293.jpeg"),
+  media("carport-structure-2_f0ab2f56.jpeg"),
+  media("carport-underside-1_51e3d09a.jpeg"),
+  media("carport-underside-2_e70e97e1.jpeg"),
+  media("install-team-1_91970553.jpeg"),
+  media("bess-cabinet-1_f027743f.jpeg"),
+  media("bess-cabinet-2_54c824b8.jpeg"),
+  media("carport-pillar-1_b7680b5f.jpeg"),
+  media("carport-detail-1_34c7c42f.jpeg"),
+  media("cable-tray-detail_1ddf9610.jpeg"),
+  media("carport-structure-4_cc6ef3f6.jpeg"),
 ];
 
 const benefitIcons = [Sun, Car, Plug, Battery, Brain, Leaf];
@@ -121,6 +119,7 @@ const specKeys = [
   { key: "sc.spec.height" },
   { key: "sc.spec.install" },
 ];
+import { media } from "@/lib/media";
 
 export default function SolarCarport() {
   const { t, lang } = usePageTranslation("solarCarport");

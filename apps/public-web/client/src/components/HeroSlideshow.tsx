@@ -235,6 +235,17 @@ function getPersonalizedSlides(): HeroSlide[] {
   return [...prioritized, ...remaining];
 }
 
+// Accent tint per solution category: solar slides read warm (sun), storage and
+// data slides read cool (cyan). Keeps the WebGL palette tied to the topic.
+const ACCENT_BY_CATEGORY: Record<SolutionCategory, "sun" | "cyan"> = {
+  "solar-carport": "sun",
+  "rooftop-solar": "sun",
+  "floating-solar": "cyan",
+  bess: "cyan",
+  hospitality: "sun",
+  "ai-energy": "cyan",
+};
+
 // ─── Slideshow interval (ms) ────────────────────────────────────────
 const INTERVAL = 6000;
 const FIRST_ROTATION_DELAY = 12000;
@@ -338,14 +349,20 @@ export default function HeroSlideshow() {
         </motion.div>
       </AnimatePresence>
 
-      {/* 3D WebGL Motion & Art Engineering Energy Core (Lazy below overlay) */}
+      {/* Slide-aware 3D product layer: shows the solution this slide is about,
+          anchored to the right half so it never sits under the hero copy. */}
       <Suspense fallback={null}>
-        <SolarHeroScene />
+        <SolarHeroScene
+          category={slide.category}
+          slideIndex={current}
+          accent={ACCENT_BY_CATEGORY[slide.category]}
+        />
       </Suspense>
 
       {/* Content */}
       <div className="container relative z-10 pt-20">
-        <div className="max-w-3xl">
+        {/* Copy keeps to the left of the 3D product layer at every breakpoint. */}
+        <div className="max-w-2xl md:max-w-[56%] lg:max-w-3xl">
           <AnimatePresence mode="wait">
             <motion.div
               key={slide.id + "-content"}

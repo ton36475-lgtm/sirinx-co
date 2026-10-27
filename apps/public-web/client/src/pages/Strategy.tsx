@@ -34,7 +34,7 @@ const toolkitItems = [
     desc: "สร้าง 5 ไอเดียผลิตภัณฑ์ดิจิทัลที่ทำกำไรสูงสุด จัดอันดับตามความง่ายในการสร้างและศักยภาพรายได้",
     icon: Lightbulb,
     color: "from-amber-500 to-orange-600",
-    image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/FB_IMG_1775885863875_30475f7b.jpg",
+    image: media("FB_IMG_1775885863875_30475f7b.jpg"),
   },
   {
     id: 2,
@@ -43,7 +43,7 @@ const toolkitItems = [
     desc: "สร้างโครงร่างผลิตภัณฑ์ดิจิทัลครบถ้วน ตั้งแต่ชื่อ สารบัญ ไปจนถึง Quick Win สำหรับผู้ซื้อ",
     icon: FileText,
     color: "from-cyan-500 to-teal-600",
-    image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/FB_IMG_1775885869355_b57fba4c.jpg",
+    image: media("FB_IMG_1775885869355_b57fba4c.jpg"),
   },
   {
     id: 3,
@@ -52,7 +52,7 @@ const toolkitItems = [
     desc: "เขียน Bio Instagram 5 แบบที่ขายได้โดยไม่ดูขายของ อบอุ่น จริงใจ ไม่เป็นทางการเกินไป",
     icon: Instagram,
     color: "from-pink-500 to-rose-600",
-    image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/FB_IMG_1775885874696_f25f52ab.jpg",
+    image: media("FB_IMG_1775885874696_f25f52ab.jpg"),
   },
   {
     id: 4,
@@ -61,7 +61,7 @@ const toolkitItems = [
     desc: "สร้าง Instagram Carousel 9 สไลด์ที่ขายได้โดยไม่รู้สึกเหมือนโฆษณา มี Hook, Value, Social Proof, CTA",
     icon: LayoutGrid,
     color: "from-violet-500 to-purple-600",
-    image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/FB_IMG_1775885880725_0a14128b.jpg",
+    image: media("FB_IMG_1775885880725_0a14128b.jpg"),
   },
   {
     id: 5,
@@ -70,7 +70,7 @@ const toolkitItems = [
     desc: "เขียน Caption Instagram ที่ขายได้โดยไม่ดูขายของ เริ่มจาก Hook, เรื่องราว, ประโยชน์, Social Proof, CTA",
     icon: PenTool,
     color: "from-emerald-500 to-green-600",
-    image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/FB_IMG_1775885884784_d66afe94.jpg",
+    image: media("FB_IMG_1775885884784_d66afe94.jpg"),
   },
   {
     id: 6,
@@ -79,7 +79,7 @@ const toolkitItems = [
     desc: "เขียนสคริปต์ Instagram Reel 60 วินาทีที่ขายผ่านการเล่าเรื่อง ไม่ Hard Sell ไม่ Fake Hype",
     icon: Video,
     color: "from-blue-500 to-indigo-600",
-    image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/FB_IMG_1775885889652_bae78f66.jpg",
+    image: media("FB_IMG_1775885889652_bae78f66.jpg"),
   },
   {
     id: 7,
@@ -88,7 +88,7 @@ const toolkitItems = [
     desc: "สร้างลำดับ DM 3 ข้อความ ส่ง Freebie, แชร์เรื่องราว, ชวนซื้อ อบอุ่นเหมือนเพื่อนที่อยากช่วย",
     icon: MessageCircle,
     color: "from-orange-500 to-red-600",
-    image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/FB_IMG_1775885893958_021d4da7.jpg",
+    image: media("FB_IMG_1775885893958_021d4da7.jpg"),
   },
 ];
 
@@ -118,6 +118,7 @@ const swotData = {
     "กฎระเบียบที่เปลี่ยนแปลง",
   ],
 };
+import { media } from "@/lib/media";
 
 function Lightbox({ images, currentIndex, onClose, onPrev, onNext }: {
   images: typeof toolkitItems;
@@ -227,8 +228,8 @@ export default function Strategy() {
       <section className="relative min-h-[70vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
 	          <img
-	            src={cfImage("https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/sirinx-smart-energy-JXCSVMQTKJHxRxSagYajgy.webp", 1280, { quality: 76 })}
-	            srcSet={cfImageSrcSet("https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/sirinx-smart-energy-JXCSVMQTKJHxRxSagYajgy.webp", [640, 960, 1280, 1600], { quality: 76 })}
+	            src={cfImage(media("sirinx-smart-energy-JXCSVMQTKJHxRxSagYajgy.webp"), 1280, { quality: 76 })}
+	            srcSet={cfImageSrcSet(media("sirinx-smart-energy-JXCSVMQTKJHxRxSagYajgy.webp"), [640, 960, 1280, 1600], { quality: 76 })}
 	            sizes="100vw"
 	            alt="Smart Energy Strategy"
 	            className="w-full h-full object-cover"

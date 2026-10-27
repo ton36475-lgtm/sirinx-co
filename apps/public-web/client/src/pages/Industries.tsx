@@ -19,8 +19,7 @@ const fadeUp = {
   visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.5 } }),
 };
 
-const CDN = "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv";
-const HERO = `${CDN}/sirinx-agrivoltaic-b6XSpaadLj5vpaTu52tenb.webp`;
+const HERO = media("sirinx-agrivoltaic-b6XSpaadLj5vpaTu52tenb.webp");
 
 type IndustryDef = {
   id: string;
@@ -76,6 +75,7 @@ const industries: IndustryDef[] = [
     carportKey: "ind.government.carport",
   },
 ];
+import { media } from "@/lib/media";
 
 export default function Industries() {
   const { t } = usePageTranslation("industries");

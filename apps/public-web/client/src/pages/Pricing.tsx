@@ -12,8 +12,7 @@ import {
   Car, Zap, Sun, TrendingUp, Clock,
   CheckCircle2, ArrowRight, Calculator,
   Leaf, BatteryCharging, BadgePercent,
-  ChevronDown, ChevronUp, Sparkles,
-  Download, Play, FileImage, Video
+  ChevronDown, ChevronUp, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -47,7 +46,7 @@ const packageConfigs = [
     accentColor: "text-emerald-500",
     bgAccent: "bg-emerald-500/10",
     popular: false,
-    image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/pricing-size-s-LaJSUDczcaLtK7isYYPrbR.webp",
+    image: media("pricing-size-s-LaJSUDczcaLtK7isYYPrbR.webp"),
   },
   {
     id: "pro",
@@ -58,7 +57,7 @@ const packageConfigs = [
     accentColor: "text-accent-primary",
     bgAccent: "bg-accent-primary/10",
     popular: true,
-    image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/pricing-size-m-96bdqV2qHeFRvREkQ3Suqg.webp",
+    image: media("pricing-size-m-96bdqV2qHeFRvREkQ3Suqg.webp"),
   },
   {
     id: "enterprise",
@@ -69,12 +68,13 @@ const packageConfigs = [
     accentColor: "text-amber-500",
     bgAccent: "bg-amber-500/10",
     popular: false,
-    image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/pricing-size-l-GYVfyzmEzDPhxpNp3PPD6K.webp",
+    image: media("pricing-size-l-GYVfyzmEzDPhxpNp3PPD6K.webp"),
   },
 ];
 
 const govPolicyIcons = [BadgePercent, Car, TrendingUp, Leaf];
 const advantageIcons = [Car, Sun, TrendingUp, BadgePercent, Leaf, BatteryCharging];
+import { media } from "@/lib/media";
 
 /* ─── Component ────────────────────────────────────────────────── */
 export default function Pricing() {
@@ -637,139 +637,9 @@ export default function Pricing() {
           </Accordion>
         </div>
       </section>
-
-      {/* ===== BROCHURE DOWNLOADS ===== */}
-      <section className="py-16 lg:py-24 section-alt relative">
-        <div className="divider-accent absolute top-0 left-0 right-0" />
-        <div className="container">
-          <motion.div
-            initial="hidden" whileInView="visible" viewport={{ once: true }}
-            variants={fadeUp} custom={0}
-            className="text-center max-w-2xl mx-auto mb-12"
-          >
-            <span className="text-xs font-medium text-accent-secondary tracking-widest uppercase mb-3 block">
-              {t("brochure.badge")}
-            </span>
-            <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-2">
-              {t("brochure.title")}{" "}
-              <span className="text-gradient-accent">{t("brochure.title.accent")}</span>
-            </h2>
-            <p className="text-text-secondary text-sm leading-relaxed">{t("brochure.desc")}</p>
-          </motion.div>
-
-          {/* Brochure Image Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
-            {[
-              {
-                title: t("brochure.start.title"),
-                subtitle: t("brochure.start.price"),
-                image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/brochure_start_package-3f4EjcQuJe7s8BYr5T3brk.webp",
-                color: "border-emerald-500/40",
-                original: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/brochure_start_package-evoXYNCfQwhWaSZyHPgDSb.png",
-              },
-              {
-                title: t("brochure.pro.title"),
-                subtitle: t("brochure.pro.price"),
-                image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/brochure_pro_package-Wy2JPi6yf6sqwADpAUtKzr.webp",
-                color: "border-accent-primary/40",
-                original: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/brochure_pro_package-VLKFGWCkZQEXt3fzvvi2PV.png",
-              },
-              {
-                title: t("brochure.bilingual.title"),
-                subtitle: "TH / EN",
-                image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/brochure_combined_bilingual-bu2rBkmpzHntAciawzpmZ3.webp",
-                color: "border-blue-500/40",
-                original: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/brochure_combined_bilingual-4mcPMzsmtPmDxwAtcJzqS6.png",
-              },
-              {
-                title: t("brochure.engineer.title"),
-                subtitle: "AI Avatar",
-                image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/brochure_engineer_thai-kKFdvftXshwp9QRRmQ9s4M.webp",
-                color: "border-amber-500/40",
-                original: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/brochure_engineer_thai-ZNfCkYGqHB7q3D8z6xwNtS.png",
-              },
-              {
-                title: t("brochure.english.title"),
-                subtitle: "International",
-                image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/brochure_english_version-iNBTHtSfLWnbLiftPVRDN7.webp",
-                color: "border-purple-500/40",
-                original: "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/brochure_english_version-3nsCg2Ym6nRdrHBkHKgAr3.png",
-              },
-            ].map((brochure, i) => (
-              <motion.div
-                key={brochure.title}
-                initial="hidden" whileInView="visible" viewport={{ once: true }}
-                variants={fadeUp} custom={i}
-                className={`group relative rounded-xl border ${brochure.color} bg-surface-elevated overflow-hidden hover:shadow-lg transition-all duration-300`}
-              >
-                <div className="aspect-[9/16] overflow-hidden">
-	                  <img
-	                    src={cfImage(brochure.image, 360)}
-	                    srcSet={cfImageSrcSet(brochure.image, [220, 300, 360, 480])}
-	                    sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw"
-	                    alt={brochure.title}
-	                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-	                    loading="lazy"
-	                    decoding="async"
-	                  />
-                </div>
-                <div className="p-3">
-	                  <div className="font-display font-semibold text-foreground text-xs mb-0.5">{brochure.title}</div>
-                  <p className="text-[10px] text-text-muted mb-2">{brochure.subtitle}</p>
-                  <a
-                    href={brochure.original}
-                    download
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[10px] font-medium text-accent-primary hover:underline"
-                  >
-                    <Download className="w-3 h-3" /> {t("brochure.download")}
-                  </a>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Video Section */}
-          <motion.div
-            initial="hidden" whileInView="visible" viewport={{ once: true }}
-            variants={fadeUp} custom={5}
-            className="max-w-3xl mx-auto"
-          >
-            <div className="rounded-xl border border-border-accent bg-surface-elevated overflow-hidden">
-              <div className="aspect-video relative">
-                <video
-                  controls
-                  preload="metadata"
-	                  poster={cfImage("https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/video_ref_house-WHrscP32nbpwfKEtkXxgSY.webp", 960)}
-                  className="w-full h-full object-cover"
-                >
-                  <source src="https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/sirinx_marketing_video_f99c477e.mp4" type="video/mp4" />
-                </video>
-              </div>
-              <div className="p-4 flex items-center justify-between">
-                <div>
-	                  <div className="font-display font-semibold text-foreground text-sm flex items-center gap-2">
-	                    <Video className="w-4 h-4 text-accent-primary" />
-	                    {t("brochure.video.title")}
-	                  </div>
-                  <p className="text-xs text-text-muted mt-0.5">{t("brochure.video.desc")}</p>
-                </div>
-                <a
-                  href="https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/sirinx_marketing_video_f99c477e.mp4"
-                  download
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button size="sm" variant="outline" className="border-border-accent text-xs gap-1">
-                    <Download className="w-3 h-3" /> {t("brochure.download")}
-                  </Button>
-                </a>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* Brochure/video downloads were withdrawn: the files lived on the retired
+          CloudFront origin (403) and have no local replacement — see
+          reports/runtime/public-web-sites-20261027.md §3. */}
 
       {/* ===== FINAL CTA ===== */}
       <section className="py-16 lg:py-20 bg-background">

@@ -23,12 +23,11 @@ const fadeUp = {
   visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.5 } }),
 };
 
-const CDN = "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv";
-const HERO = `${CDN}/hero-solutions-AG25WEja6TRJEEzvpx3wZU.webp`;
-const IMG_CARPARK = `${CDN}/solar-carpark-hero-HkuPbSXRuEJEzybRN8Xb7W.webp`;
-const IMG_EV = `${CDN}/solar-carpark-ev-charging-niYjh6gCmDqQNQiCE6oq8M.webp`;
-const IMG_AI = `${CDN}/solar-ai-dashboard-CDhHz7V3K98CLU6eGvW8PP.webp`;
-const IMG_OM = `${CDN}/solar-om-maintenance-7BKbWXXHKbZ3Adwwdk9XvZ.webp`;
+const HERO = media("hero-solutions-AG25WEja6TRJEEzvpx3wZU.webp");
+const IMG_CARPARK = media("solar-carpark-hero-HkuPbSXRuEJEzybRN8Xb7W.webp");
+const IMG_EV = media("solar-carpark-ev-charging-niYjh6gCmDqQNQiCE6oq8M.webp");
+const IMG_AI = media("solar-ai-dashboard-CDhHz7V3K98CLU6eGvW8PP.webp");
+const IMG_OM = media("solar-om-maintenance-7BKbWXXHKbZ3Adwwdk9XvZ.webp");
 
 type SolutionDef = {
   id: string;
@@ -96,6 +95,7 @@ const solutions: SolutionDef[] = [
     benefitKeys: ["sol.financing.benefit1", "sol.financing.benefit2", "sol.financing.benefit3", "sol.financing.benefit4"],
   },
 ];
+import { media } from "@/lib/media";
 
 export default function Solutions() {
   const { t } = usePageTranslation("solutions");

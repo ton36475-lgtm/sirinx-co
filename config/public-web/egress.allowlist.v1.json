@@ -42,16 +42,6 @@
       "reason": "Cloudflare Web Analytics beacon, declared in client/public/_headers connect-src."
     },
     {
-      "host": "d2xsxph8kpxj0f.cloudfront.net",
-      "class": "third-party-asset",
-      "reason": "Legacy Manus-era Cloudflare distribution carrying logo and hero imagery.",
-      "waiver": {
-        "ticket": "C8",
-        "until": "2026-11-30",
-        "detail": "Operator must accept, rehost, or drop the imagery; until then this host is a known single point of failure outside our Cloudflare account."
-      }
-    },
-    {
       "host": "images.unsplash.com",
       "class": "third-party-asset",
       "reason": "Unsplash stock photography used by marketing pages.",

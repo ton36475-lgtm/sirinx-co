@@ -530,12 +530,12 @@ export function calculateIRR(cashFlows: number[]): number {
 
 // ── Site Photos — real installation + realistic project images ──
 const SITE_PHOTOS = [
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/carport-wide-1_30e3af4c.jpeg",
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/carport-structure-1_c0c17293.jpeg",
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/floating-solar-reservoir-BHro9zmCAKLtycFVXgfe9G.webp",
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/resort-rooftop-solar-Q4vG7VqDnaYmRWdsyKtp7H.webp",
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/warehouse-rooftop-solar-eGvaQedufCt28G4VBAahMs.webp",
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/farm-solar-bess-VwUa48BekdDzTkGLwkeJJX.webp",
+  media("carport-wide-1_30e3af4c.jpeg"),
+  media("carport-structure-1_c0c17293.jpeg"),
+  media("floating-solar-reservoir-BHro9zmCAKLtycFVXgfe9G.webp"),
+  media("resort-rooftop-solar-Q4vG7VqDnaYmRWdsyKtp7H.webp"),
+  media("warehouse-rooftop-solar-eGvaQedufCt28G4VBAahMs.webp"),
+  media("farm-solar-bess-VwUa48BekdDzTkGLwkeJJX.webp"),
 ];
 
 // ── Steps ──
@@ -547,6 +547,7 @@ const STEPS = [
   { label: "แบตเตอรี่ (BESS)", icon: Battery },
   { label: "ผลวิเคราะห์", icon: BarChart3 },
 ];
+import { media } from "@/lib/media";
 
 // ── Helper Components ──
 function InputField({ label, unit, value, onChange, placeholder, helpText, type = "number", min, max, step }: {

@@ -17,7 +17,7 @@ export type SeoMeta = {
 const SITE_URL = "https://www.sirinx.co";
 const SITE_NAME = "SIRINX";
 const DEFAULT_IMAGE =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/sirinx-og-image-hbNko5JADXArPGo26hmGrN.png";
+  media("sirinx-og-image-hbNko5JADXArPGo26hmGrN.png");
 
 const metaByPath: Record<string, SeoMeta> = {
   "/": {
@@ -209,3 +209,4 @@ export const seoDefaults = {
   siteUrl: SITE_URL,
   image: DEFAULT_IMAGE,
 };
+import { media } from "@/lib/media";

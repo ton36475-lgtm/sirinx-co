@@ -15,6 +15,29 @@ import { describe, it, expect } from "vitest";
 
 const PUBLIC_DIR = fileURLToPath(new URL("../client/public/", import.meta.url));
 
+function readHeaders(): string {
+  return readFileSync(PUBLIC_DIR + "_headers", "utf8");
+}
+
+type HeaderBlock = { pattern: string; headers: string[] };
+
+/** Parse a Cloudflare Pages _headers file into ordered pattern blocks. */
+function headerBlocks(source: string): HeaderBlock[] {
+  const blocks: HeaderBlock[] = [];
+  let current: HeaderBlock | null = null;
+  for (const raw of source.split("\n")) {
+    const line = raw.trim();
+    if (!line || line.startsWith("#")) continue;
+    if (!/^\s/.test(raw)) {
+      current = { pattern: line, headers: [] };
+      blocks.push(current);
+    } else if (current) {
+      current.headers.push(line);
+    }
+  }
+  return blocks;
+}
+
 function readRedirects(): string {
   return readFileSync(PUBLIC_DIR + "_redirects", "utf8");
 }
@@ -71,5 +94,74 @@ describe("deploy surface — honest 404", () => {
     expect(html).toContain('lang="th"');
     expect(html).toContain("ไม่พบหน้าที่คุณต้องการ");
     expect(html).toContain('href="/"');
+  });
+});
+
+describe("deploy surface — no duplicate Cache-Control directives", () => {
+  // Cloudflare Pages concatenates every matching _headers rule into one
+  // header value. A specific rule that sets Cache-Control while `/*` also
+  // sets it produced `max-age=0, must-revalidate, max-age=31536000, immutable`,
+  // which RFC 9111 caches treat as stale. A specific rule must detach first.
+  const blocks = headerBlocks(readHeaders());
+  const globalSetsCache = blocks
+    .filter((block) => block.pattern === "/*")
+    .some((block) =>
+      block.headers.some((h) => /^cache-control:/i.test(h)),
+    );
+
+  it("detaches the inherited Cache-Control before overriding it", () => {
+    expect(globalSetsCache).toBe(true);
+    const overrides = blocks.filter(
+      (block) =>
+        block.pattern !== "/*" &&
+        block.headers.some((h) => /^cache-control:/i.test(h)),
+    );
+    expect(overrides.length).toBeGreaterThan(0);
+    for (const block of overrides) {
+      expect(
+        block.headers.some((h) => h === "! Cache-Control"),
+        `${block.pattern} must detach Cache-Control`,
+      ).toBe(true);
+    }
+  });
+
+  it("gives hashed assets a year and never combines max-age values", () => {
+    const assets = blocks.find((block) => block.pattern === "/assets/*");
+    expect(assets).toBeDefined();
+    const cache = assets!.headers.filter((h) =>
+      /^cache-control:/i.test(h),
+    );
+    expect(cache).toHaveLength(1);
+    expect(cache[0]).toContain("max-age=31536000");
+    expect(cache[0].match(/max-age=/g)).toHaveLength(1);
+  });
+});
+
+describe("deploy surface — fonts are self-hosted", () => {
+  it("does not reference a third-party font CDN anywhere in the shell", () => {
+    const shell = readFileSync(PUBLIC_DIR + "../index.html", "utf8");
+    expect(shell).not.toMatch(/fonts\.googleapis\.com|fonts\.gstatic\.com/);
+    expect(shell).toContain('href="/fonts/fonts.css"');
+  });
+
+  it("restricts CSP font-src and style-src to self", () => {
+    const csp = readHeaders()
+      .split("\n")
+      .find((line) => /^\s*Content-Security-Policy:/i.test(line));
+    expect(csp).toBeDefined();
+    expect(csp!).toContain("font-src 'self';");
+    expect(csp!).toContain("style-src 'self' 'unsafe-inline';");
+    expect(csp!).not.toMatch(/fonts\.googleapis\.com|fonts\.gstatic\.com/);
+  });
+
+  it("ships every font file that fonts.css declares", () => {
+    const css = readFileSync(PUBLIC_DIR + "fonts/fonts.css", "utf8");
+    const declared = [...css.matchAll(/url\('(\/fonts\/[^']+)'\)/g)].map(
+      (match) => match[1],
+    );
+    expect(declared.length).toBeGreaterThan(0);
+    for (const path of new Set(declared)) {
+      expect(existsSync(PUBLIC_DIR + path.replace(/^\//, ""))).toBe(true);
+    }
   });
 });

@@ -5,20 +5,35 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data: https:; media-src 'self' https: blob:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' https://www.sirinx.co/assets/ https://sirinx.co/assets/ https://*.sirinx-co.pages.dev/assets/ https://static.cloudflareinsights.com; connect-src 'self' https://www.sirinx.co https://sirinx.co https://cloudflareinsights.com https://*.cloudflareinsights.com; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data: https:; media-src 'self' https: blob:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://www.sirinx.co/assets/ https://sirinx.co/assets/ https://*.sirinx-co.pages.dev/assets/ https://static.cloudflareinsights.com; connect-src 'self' https://www.sirinx.co https://sirinx.co https://cloudflareinsights.com https://*.cloudflareinsights.com; upgrade-insecure-requests
   Cache-Control: public, max-age=0, must-revalidate
 
+# Cloudflare Pages concatenates every matching _headers rule into one header
+# value, so `/assets/*` used to ship `max-age=0, must-revalidate, max-age=
+# 31536000, immutable` — duplicate max-age directives make RFC 9111 caches
+# treat the asset as stale. Detach the inherited value before setting the
+# long-lived one. Guarded by shared/staticDeploySurface.test.ts.
 /assets/*
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
+
+# Font files keep stable names (not content-hashed), so they get a shorter TTL
+# than /assets/*; a font update must not be pinned for a year.
+/fonts/*
+  ! Cache-Control
+  Cache-Control: public, max-age=604800
 
 /sitemap.xml
   Content-Type: application/xml; charset=utf-8
+  ! Cache-Control
   Cache-Control: public, max-age=3600
 
 /robots.txt
   Content-Type: text/plain; charset=utf-8
+  ! Cache-Control
   Cache-Control: public, max-age=3600
 
 /manifest.json
   Content-Type: application/manifest+json; charset=utf-8
+  ! Cache-Control
   Cache-Control: public, max-age=3600

@@ -1,0 +1,44 @@
+Self-hosted webfonts in this directory
+=====================================
+
+Files
+-----
+space-grotesk-latin.woff2                 Space Grotesk, variable 600-700, latin
+ibm-plex-sans-thai-{400,600,700}-latin.woff2
+ibm-plex-sans-thai-{400,600,700}-thai.woff2
+
+Provenance
+----------
+Downloaded on 2026-10-27 from the woff2 file URLs returned by the Google Fonts
+CSS API, requesting:
+
+  family=Space+Grotesk:wght@600;700
+  family=IBM+Plex+Sans+Thai:wght@400;600;700
+  display=swap
+
+Only the `latin` and `thai` subsets are kept. fonts.css reproduces the
+`unicode-range` values from that stylesheet verbatim, so a browser still picks
+the right file per glyph. The Space Grotesk response returns the same woff2 for
+600 and 700, so it is declared once with `font-weight: 600 700`.
+
+License
+-------
+Space Grotesk — Copyright 2018 The Space Grotesk Project Authors
+(github.com/floriankarsten/space-grotesk), SIL Open Font License 1.1.
+
+IBM Plex Sans Thai — Copyright 2017 IBM Corp., SIL Open Font License 1.1
+(github.com/IBM/plex).
+
+Both are distributed under the SIL Open Font License, Version 1.1; the official
+text is published by the Open Font License project at
+openfontlicense.org/open-font-license-official-text
+
+The fonts may be bundled and self-hosted with this site; they may not be sold
+on their own.
+
+Runtime behaviour
+-----------------
+The site no longer requests fonts.googleapis.com or fonts.gstatic.com. The CSP
+in client/public/_headers therefore restricts font-src and style-src to 'self',
+and scripts/verify-public-web-egress.mjs fails the build if a Google Fonts URL
+is reintroduced.

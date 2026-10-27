@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0",
   "schema": "public-web.egress.allowlist.v1",
-  "updated": "2026-10-21",
-  "notes": "Every literal https?:// host in the public-web source surface must appear here. A host fetched as an asset or font needs a waiver bound to an operator ticket; the two current waivers are the C8 decision in MASTER_PLAN. Placeholder hosts (example.com and friends) can never be allowlisted.",
+  "updated": "2026-10-27",
+  "notes": "Every literal https?:// host in the public-web source surface must appear here. A host fetched as an asset needs a waiver bound to an operator ticket; the remaining asset waivers are the C8 decision in MASTER_PLAN. Fonts are self-hosted (client/public/fonts), so no font CDN host is allowlisted. Placeholder hosts (example.com and friends) can never be allowlisted.",
   "hosts": [
     {
       "host": "www.sirinx.org",
@@ -79,26 +79,6 @@
         "ticket": "C8",
         "until": "2026-11-30",
         "detail": "Map embed loads third-party JavaScript into the page; needs an explicit accept or a self-hosted replacement."
-      }
-    },
-    {
-      "host": "fonts.googleapis.com",
-      "class": "third-party-font",
-      "reason": "Google Fonts stylesheet for Space Grotesk and IBM Plex Sans Thai.",
-      "waiver": {
-        "ticket": "C8",
-        "until": "2026-11-30",
-        "detail": "PDPA-relevant third-party call made by every visitor; self-host the OFL fonts or declare the transfer in the privacy copy."
-      }
-    },
-    {
-      "host": "fonts.gstatic.com",
-      "class": "third-party-font",
-      "reason": "Google Fonts font-file origin referenced by the CSP font-src.",
-      "waiver": {
-        "ticket": "C8",
-        "until": "2026-11-30",
-        "detail": "Follows the stylesheet decision above."
       }
     },
     {

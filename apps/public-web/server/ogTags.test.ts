@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { describe, it, expect } from "vitest";
 import {
   getPageMeta,
@@ -6,6 +8,11 @@ import {
   injectOgTags,
   thaiProvinces,
 } from "./ogTags";
+import { getSeoMeta, seoDefaults } from "../client/src/lib/seo";
+import { bessFaq } from "../shared/bessFaq";
+
+const SITE_OG_CARD = "/assets/optimized/sirinx-og-card-1200x630.jpg";
+const PUBLIC_DIR = fileURLToPath(new URL("../client/public/", import.meta.url));
 
 describe("getPageMeta", () => {
   it("returns Solar Carport-focused meta for homepage", () => {
@@ -203,8 +210,20 @@ describe("injectOgTags", () => {
       "/",
       "https://sirinxsolar-dfabnh7l.manus.space"
     );
-    expect(result).toMatch(/og:image" content="https:\/\/www\.sirinx\.co\/provinces\/[a-z-]+-og\.jpg"/);
+    expect(result).toContain(`og:image" content="https://www.sirinx.co${SITE_OG_CARD}"`);
     expect(result).not.toContain("d2xsxph8kpxj0f.cloudfront.net");
+  });
+
+  it("serves the site-wide social card from the same build that writes the tag", () => {
+    expect(existsSync(`${PUBLIC_DIR}${SITE_OG_CARD.slice(1)}`)).toBe(true);
+  });
+
+  it("does not hand a province card to a non-province page", () => {
+    // The fallback used to be the Amnat Charoen card, so every pricing, contact
+    // or blog preview named one province instead of SIRINX.
+    const result = injectOgTags(sampleHtml, "/pricing", "https://www.sirinx.co");
+    expect(result).toContain(`og:image" content="https://www.sirinx.co${SITE_OG_CARD}"`);
+    expect(result).not.toMatch(/og:image" content="[^"]*\/provinces\//);
   });
 
   it("gives each province its own social card", () => {
@@ -309,6 +328,27 @@ describe("injectOgTags", () => {
     expect(encoded).toContain("พิษณุโลก");
   });
 
+  it("builds a BESS FAQ schema for /solutions from the strings the page renders", () => {
+    const data = getStructuredData("/solutions", "https://www.sirinx.co");
+    const encoded = JSON.stringify(data);
+    expect(encoded).toContain("FAQPage");
+    expect(encoded).toContain("/solutions#service");
+    expect(encoded).toContain("SIRINX Clean Energy Solutions");
+    for (const item of bessFaq) {
+      expect(encoded).toContain(item.question);
+      expect(encoded).toContain(item.answer);
+    }
+  });
+
+  it("keeps the BESS answers free of guarantee language and fixed figures", () => {
+    for (const item of bessFaq) {
+      const text = `${item.question} ${item.answer}`;
+      // "ไม่ใช่คำรับประกัน" is the honest disclaimer and may stay; an actual
+      // promise (รับประกันผล / รับประกันการ…) or a fixed figure may not.
+      expect(text).not.toMatch(/การันตี|รับประกันผล|รับประกันการ|30-100%|3-5 ปี|ฟรีตลอด/);
+    }
+  });
+
   it("builds static AEO service and FAQ schema for /home-solution", () => {
     const data = getStructuredData("/home-solution", "https://www.sirinx.co");
     const encoded = JSON.stringify(data);
@@ -330,6 +370,17 @@ describe("injectOgTags", () => {
     expect(result).toContain("ไม่ใช่คำรับประกันเหมารวม");
   });
 
+  it("keeps the prerendered province description free of corrupted Thai", () => {
+    // Regression guard: the server description once shipped "โงานแลง" while the
+    // client copy was correct, so all 77 province pages' crawler metadata read
+    // as a non-word to Thai readers.
+    for (const province of thaiProvinces) {
+      const meta = getPageMeta(`/solar-carport/${province.slug}`);
+      expect(meta.description).not.toMatch(/โงาน|แลงและ/);
+      expect(meta.title).not.toMatch(/โงาน|แลงและ/);
+    }
+  });
+
   it("does not inject unsupported guaranteed savings or fixed payback claims", () => {
     const publicRoutes = [
       "/",
@@ -349,5 +400,68 @@ describe("injectOgTags", () => {
         "BOI ลดหย่อนภาษี 200%"
       );
     }
+  });
+});
+
+describe("crawler/hydrated metadata parity", () => {
+  // The prerendered HTML is what a non-JS crawler (LINE, Facebook, Slack)
+  // reads; RouteSeo rewrites the same tags from client/src/lib/seo.ts after
+  // hydration. When the two copies drift, the same page advertises a different
+  // title, description or social card to each audience, so parity is a
+  // contract here instead of a coincidence.
+  const CORE_ROUTES = [
+    "/",
+    "/solar-carport",
+    "/provinces",
+    "/home-solution",
+    "/about",
+    "/solutions",
+    "/industries",
+    "/investment",
+    "/projects",
+    "/strategy",
+    "/blog",
+    "/contact",
+    "/line",
+    "/assessment",
+    "/pricing",
+    "/partner",
+    "/privacy",
+    "/terms",
+    "/cookies",
+  ];
+
+  it("server meta equals the client RouteSeo meta on every core route", () => {
+    for (const route of CORE_ROUTES) {
+      const server = getPageMeta(route);
+      const client = getSeoMeta(route);
+      expect({ route, title: server.title }).toEqual({ route, title: client.title });
+      expect({ route, description: server.description }).toEqual({
+        route,
+        description: client.description,
+      });
+      expect({ route, noindex: server.noindex ?? false }).toEqual({
+        route,
+        noindex: client.noindex ?? false,
+      });
+    }
+  });
+
+  it("server meta equals the client meta on all 77 province routes", () => {
+    for (const province of thaiProvinces) {
+      const route = `/solar-carport/${province.slug}`;
+      const server = getPageMeta(route);
+      const client = getSeoMeta(route);
+      expect({ route, title: server.title }).toEqual({ route, title: client.title });
+      expect({ route, description: server.description }).toEqual({
+        route,
+        description: client.description,
+      });
+      expect({ route, image: server.image }).toEqual({ route, image: client.image });
+    }
+  });
+
+  it("the client fallback image is the same site-owned card as the server default", () => {
+    expect(seoDefaults.image).toBe(`https://www.sirinx.co${SITE_OG_CARD}`);
   });
 });

@@ -48,7 +48,9 @@ describe("legacy media registry", () => {
 
   it("builds absolute URLs for social cards on the production origin", () => {
     const absolute = mediaAbsolute("sirinx-og-image-hbNko5JADXArPGo26hmGrN.png");
-    expect(absolute).toBe("https://www.sirinx.co/provinces/phitsanulok-og.jpg");
+    expect(absolute).toBe(
+      "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    );
     // The variant builder rewrites this origin for sirinx.org.
     expect(absolute.startsWith("https://www.sirinx.co/")).toBe(true);
   });

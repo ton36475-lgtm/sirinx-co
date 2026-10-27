@@ -13,6 +13,7 @@ import {
   type SeoLanguage,
 } from "@shared/solarCarportFaq";
 import { homeSolutionFaq } from "@shared/homeSolutionFaq";
+import { bessFaq } from "@shared/bessFaq";
 
 export const bcp47ByLanguage = {
   th: "th-TH",
@@ -52,6 +53,9 @@ export function buildRouteFaq(options: {
   }
   if (path === "/home-solution" && lang === "th") {
     return homeSolutionFaq.map(item => ({ ...item }));
+  }
+  if (path === "/solutions" && lang === "th") {
+    return bessFaq.map(item => ({ ...item }));
   }
   return undefined;
 }

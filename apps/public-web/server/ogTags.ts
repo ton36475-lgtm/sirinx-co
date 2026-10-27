@@ -24,15 +24,20 @@ import { getProvinceLongformEntry } from "../shared/provinceLongformResolver";
 import { longformWordCount } from "../shared/provinceLongform";
 import { provinceInstallSteps } from "../shared/provinceHowTo";
 import { homeSolutionFaq } from "../shared/homeSolutionFaq";
+import { bessFaq } from "../shared/bessFaq";
 
 // The CloudFront origin for this file stopped serving it: every request returns
 // 403 AccessDenied from S3, including the facebookexternalhit user agent. That
 // left every province page with an og:image that renders as a blank preview in
 // Facebook, LINE and Slack. Served from the site instead, where the same build
 // that emits the meta tag also emits the file.
+//
+// The site-wide fallback is a real installation photo cropped to the declared
+// 1200x630, not a province card: a province card names one province, so every
+// non-province page's preview read as that province instead of SIRINX.
 const SITE_NAME = "SIRINX";
 const PRODUCTION_BASE_URL = "https://www.sirinx.co";
-const OG_IMAGE = `${PRODUCTION_BASE_URL}/provinces/amnat-charoen-og.jpg`;
+const OG_IMAGE = `${PRODUCTION_BASE_URL}/assets/optimized/sirinx-og-card-1200x630.jpg`;
 const MOBILE_FIRST_HERO_IMAGE_SIZES = "(max-width: 767px) 80vw, 100vw";
 const DEFAULT_TITLE =
   "SIRINX | Solar Carport วางแผนลดค่าไฟองค์กร พร้อม EV Charger, BESS & AI Energy";
@@ -54,7 +59,7 @@ export function getProvinceRoute(province: ThaiProvince): string {
 function getProvinceMeta(province: ThaiProvince): PageMeta {
   return {
     title: `ติดตั้ง Solar Carport ${province.nameTh} | โซลาร์ที่จอดรถ EV Charger BESS | SIRINX`,
-    description: `SIRINX ออกแบบและติดตั้ง Solar Carport ${province.nameTh} สำหรับโงานแลงและลานจอดรถ พร้อม EV Charger และ BESS โดยสำรวจพื้นที่และข้อมูลการใช้ไฟจริงก่อนออกแบบ`,
+    description: `SIRINX ออกแบบและติดตั้ง Solar Carport ${province.nameTh} สำหรับโรงงานและลานจอดรถ พร้อม EV Charger และ BESS โดยสำรวจพื้นที่และข้อมูลการใช้ไฟจริงก่อนออกแบบ`,
     // One social card per province, served by the same build that writes this
     // meta tag. Verified: every slug in thaiProvinces has a matching -og.jpg.
     image: `${PRODUCTION_BASE_URL}/provinces/${province.slug}-og.jpg`,
@@ -282,6 +287,7 @@ export function getStructuredData(
   const meta = getPageMeta(cleanPath);
   const province = getProvinceFromPath(cleanPath);
   const isHomeSolution = cleanPath === "/home-solution";
+  const isSolutions = cleanPath === "/solutions";
   const isSolarCarport = cleanPath === "/solar-carport" || Boolean(province);
   const areaServed = province
     ? [{ name: province.nameTh }]
@@ -306,7 +312,9 @@ export function getStructuredData(
       }))
     : isSolarCarport
       ? [...buildSolarCarportFaq({ lang: "th", province }), ...longformFaq]
-      : undefined;
+      : isSolutions
+        ? bessFaq.map(item => ({ question: item.question, answer: item.answer }))
+        : undefined;
 
   return buildSeoGraph({
     baseUrl,
@@ -319,15 +327,21 @@ export function getStructuredData(
     service: {
       id: isHomeSolution
         ? `${baseUrl}/home-solution#service`
-        : `${baseUrl}/solar-carport#service`,
+        : isSolutions
+          ? `${baseUrl}/solutions#service`
+          : `${baseUrl}/solar-carport#service`,
       name: isHomeSolution
         ? "SIRINX Home Solar Solution"
-        : province
-          ? `Solar Carport ${province.nameTh}`
-          : "Solar Carport by SIRINX",
+        : isSolutions
+          ? "SIRINX Clean Energy Solutions"
+          : province
+            ? `Solar Carport ${province.nameTh}`
+            : "Solar Carport by SIRINX",
       serviceType: isHomeSolution
         ? "Solar rooftop, solar carport, BESS, EV Charger, and AI energy monitoring for large homes and home offices"
-        : "Solar Carport design, installation, EV Charger, BESS, AI Energy Management",
+        : isSolutions
+          ? "Solar carport, rooftop solar, floating solar, BESS / battery energy storage, EV charging, and AI energy management"
+          : "Solar Carport design, installation, EV Charger, BESS, AI Energy Management",
     },
     areaServed,
     breadcrumbs: getBreadcrumbTrail(cleanPath, baseUrl, meta.title, province),

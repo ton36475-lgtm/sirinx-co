@@ -110,6 +110,7 @@ ${sections}
             <a href="/assessment/" class="underline-offset-4 hover:underline">ประเมินความคุ้มค่า</a>
             <a href="/pricing/" class="underline-offset-4 hover:underline">ดูแพ็กเกจและขอบเขตงาน</a>
             <a href="/projects/" class="underline-offset-4 hover:underline">ดูผลงานติดตั้งจริง</a>
+            <a href="/solutions/" class="underline-offset-4 hover:underline">ดูโซลูชัน BESS และระบบกักเก็บพลังงาน</a>
           </div>
         </div>${related}
         </article>

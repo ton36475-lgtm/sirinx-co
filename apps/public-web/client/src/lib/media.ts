@@ -20,7 +20,7 @@ export const LEGACY_MEDIA: Readonly<Record<string, string>> = Object.freeze({
   // Brand, hero and social cards
   "hero-main-bCzCTCeaup46mVvtEbpjnr.webp": "/assets/optimized/solar-carport-hero-1280.jpg",
   "photo_2026-03-24_06-45-58_293d121c.jpg": "/assets/optimized/sirinx-logo.jpg",
-  "sirinx-og-image-hbNko5JADXArPGo26hmGrN.png": "/provinces/phitsanulok-og.jpg",
+  "sirinx-og-image-hbNko5JADXArPGo26hmGrN.png": "/assets/optimized/sirinx-og-card-1200x630.jpg",
 
   // Pricing package illustrations
   "pricing-size-s-LaJSUDczcaLtK7isYYPrbR.webp": "/assets/optimized/solar-carport-hero-640.jpg",

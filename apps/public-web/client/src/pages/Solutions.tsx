@@ -8,6 +8,7 @@ import { Link } from "wouter";
 import { trackSolutionVisit, type SolutionCategory } from "@/components/HeroSlideshow";
 import { usePageTranslation } from "@/i18n";
 import "@/i18n/pages/solutions";
+import { bessFaq } from "@shared/bessFaq";
 import { cfImage, cfImageSrcSet } from "@/lib/cfImage";
 import {
   ArrowRight, Sun, Waves, Car, Battery, Brain, Wrench, Handshake,
@@ -241,6 +242,41 @@ export default function Solutions() {
           </div>
         </section>
       ))}
+
+      {/* ===== BESS FAQ — the same strings feed the route FAQPage schema ===== */}
+      <section id="bess-faq" className="py-16 lg:py-20 bg-background">
+        <div className="container max-w-3xl">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            custom={0}
+          >
+            <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-2">
+              คำถามที่พบบ่อยเกี่ยวกับ BESS
+            </h2>
+            <p className="text-sm text-text-secondary mb-8">
+              คำตอบจากงานออกแบบระบบกักเก็บพลังงานจริง — ตัวเลขผลประหยัดต้องประเมินจากข้อมูลหน้างานของแต่ละโครงการ
+            </p>
+            <div className="space-y-3">
+              {bessFaq.map((item) => (
+                <details
+                  key={item.question}
+                  className="rounded-xl border border-border-subtle bg-surface-elevated p-5"
+                >
+                  <summary className="cursor-pointer list-none font-display text-sm font-semibold text-foreground">
+                    {item.question}
+                  </summary>
+                  <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+                    {item.answer}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
       {/* ===== BOTTOM CTA ===== */}
       <section className="py-16 lg:py-24 section-alt relative">

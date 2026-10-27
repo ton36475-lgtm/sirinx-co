@@ -3,6 +3,7 @@ import solarCarportDict from "../i18n/pages/solarCarport";
 import { buildRouteFaq, getRouteProvince, provincesIndexPath } from "../lib/routeSeoContent";
 import { thaiProvinces } from "@shared/thaiProvinces";
 import { solarCarportFaq, solarCarportProvinceFaq, provincePlaceholder } from "@shared/solarCarportFaq";
+import { bessFaq } from "@shared/bessFaq";
 
 /** Renders the FAQ exactly the way client/src/pages/SolarCarport.tsx does. */
 function renderVisibleFaq(lang: "th" | "en" | "cn", provinceName?: string) {
@@ -79,5 +80,19 @@ describe("province route SEO content", () => {
 
   it("keeps the province index link on one shared path", () => {
     expect(provincesIndexPath).toBe("/provinces");
+  });
+});
+
+describe("solutions BESS FAQ", () => {
+  it("marks up exactly the BESS questions the page renders", () => {
+    const marked = buildRouteFaq({ path: "/solutions", lang: "th" });
+    expect(marked).toEqual(
+      bessFaq.map(item => ({ question: item.question, answer: item.answer }))
+    );
+  });
+
+  it("keeps the Thai BESS answers off the en/cn pages", () => {
+    expect(buildRouteFaq({ path: "/solutions", lang: "en" })).toBeUndefined();
+    expect(buildRouteFaq({ path: "/solutions", lang: "cn" })).toBeUndefined();
   });
 });

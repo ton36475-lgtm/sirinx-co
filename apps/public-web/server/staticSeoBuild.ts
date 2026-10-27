@@ -172,6 +172,7 @@ function buildLlmsTxt() {
     `- [ราคาและแพ็กเกจ](${PRODUCTION_BASE_URL}/pricing/)`,
     `- [ประเมินความคุ้มค่า](${PRODUCTION_BASE_URL}/assessment/)`,
     `- [ผลงานติดตั้งจริง](${PRODUCTION_BASE_URL}/projects/)`,
+    `- [โซลูชันทั้งหมด: Solar Carport, Rooftop, Floating, BESS, EV, AI Energy](${PRODUCTION_BASE_URL}/solutions/): เลือกโซลูชันตามปัญหาของอาคาร พร้อม FAQ ระบบกักเก็บพลังงาน (BESS) แบบตอบสั้น`,
     `- [บทความ](${PRODUCTION_BASE_URL}/blog/)`,
     `- [ติดต่อ/นัดสำรวจหน้างาน](${PRODUCTION_BASE_URL}/contact/)`,
     "",
@@ -180,6 +181,7 @@ function buildLlmsTxt() {
     "- ข้อมูลพลังงานรายจังหวัดมาพร้อมแหล่งอ้างอิง (PVGIS-ERA5) และเป็น climate normals ไม่ใช่คำสัญญาประหยัด",
     "- ตัวเลขผลตอบแทน/คืนทุนต้องประเมินจากข้อมูลหน้างานรายโครงการ",
     "- ข้อมูลติดต่อที่ยืนยันแล้วอยู่ที่หน้า /contact/ เท่านั้น",
+    "- FAQ ระบบกักเก็บพลังงาน (BESS) อยู่ที่หน้า /solutions/ และประกาศเป็น schema FAQPage เดียวกับที่แสดงบนหน้า",
     "",
   ].join("\n");
 }

@@ -16,22 +16,23 @@ export type SeoMeta = {
 
 const SITE_URL = "https://www.sirinx.co";
 const SITE_NAME = "SIRINX";
-const DEFAULT_IMAGE =
-  media("sirinx-og-image-hbNko5JADXArPGo26hmGrN.png");
+// Absolute on purpose: og:image is read by crawlers that may not resolve
+// relative URLs, and this string is written straight into the tag by RouteSeo.
+const DEFAULT_IMAGE = mediaAbsolute("sirinx-og-image-hbNko5JADXArPGo26hmGrN.png");
 
 const metaByPath: Record<string, SeoMeta> = {
   "/": {
     path: "/",
     title:
-      "SIRINX | Solar Carport ลดค่าไฟองค์กร พร้อม EV Charger, BESS และ AI Energy",
+      "SIRINX | Solar Carport วางแผนลดค่าไฟองค์กร พร้อม EV Charger, BESS & AI Energy",
     description:
-      "SIRINX ออกแบบและติดตั้ง Solar Carport, Rooftop Solar, BESS, EV Charger และ AI Energy Management สำหรับโรงงาน อาคาร โรงแรม และธุรกิจไทย",
+      "SIRINX Solar Carport ผลิตไฟฟ้าจากที่จอดรถ รองรับ EV Charger + BESS + AI Energy พร้อมประเมินผลประหยัดและคืนทุนจากข้อมูลไซต์จริง",
   },
   "/solar-carport": {
     path: "/solar-carport",
-    title: "Solar Carport สำหรับธุรกิจ | เปลี่ยนที่จอดรถเป็นโรงไฟฟ้า | SIRINX",
+    title: "Solar Carport โดย SIRINX | เปลี่ยนที่จอดรถเป็นโรงไฟฟ้า ผลิตไฟฟ้า+ร่มเงา+EV Charger",
     description:
-      "Solar Carport ผลิตไฟฟ้าจากลานจอดรถ ให้ร่มเงา รองรับ EV Charger และ BESS พร้อมประเมิน ROI จากข้อมูลไซต์จริงโดย SIRINX",
+      "Solar Carport ผลิตไฟฟ้าจากที่จอดรถ ให้ร่มเงา รองรับ EV Charging + BESS + AI Energy และประเมินความคุ้มค่าตามข้อมูลไซต์จริง",
   },
   "/provinces": {
     path: "/provinces",
@@ -41,15 +42,17 @@ const metaByPath: Record<string, SeoMeta> = {
   },
   "/pricing": {
     path: "/pricing",
-    title: "แพ็คเกจราคา Solar Carport | Start, Pro, Enterprise | SIRINX",
+    title:
+      "แพ็คเกจราคา Solar Carport | Start / Pro / Enterprise พร้อม EV Charger | SIRINX",
     description:
-      "เปรียบเทียบแพ็คเกจ Solar Carport 10-500+ kWp พร้อม EV Charger, BESS, สิทธิประโยชน์ภาษี และ ROI สำหรับธุรกิจ",
+      "เปรียบเทียบกรอบบริการ Solar Carport ระดับ Start / Pro / Enterprise — ผลิตไฟฟ้า ให้ร่มเงา รองรับ EV Charger และประเมินความคุ้มค่าตามไซต์จริง",
   },
   "/solutions": {
     path: "/solutions",
-    title: "โซลูชันพลังงาน: Solar, BESS, EV, AI Energy | SIRINX",
+    title:
+      "โซลูชันโซลาร์เซลล์ | Rooftop Solar, Floating Solar, BESS, AI Energy",
     description:
-      "รวมโซลูชัน Solar Carport, Rooftop Solar, Floating Solar, BESS, EV Charging, AI Energy Management และ O&M สำหรับองค์กร",
+      "เลือกโซลูชันที่เหมาะกับธุรกิจคุณ — โซลาร์หลังคา, โซลาร์ลอยน้ำ, Solar Carport, แบตเตอรี่กักเก็บพลังงาน BESS และ AI วิเคราะห์การใช้ไฟฟ้าแบบ Real-time ลดค่าไฟทันที",
   },
   "/home-solution": {
     path: "/home-solution",
@@ -57,37 +60,40 @@ const metaByPath: Record<string, SeoMeta> = {
       "Home Solar Solution บ้านใหญ่และโฮมออฟฟิศ | Rooftop Solar, Carport, BESS, EV | SIRINX",
     description:
       "SIRINX Home Solar Solution สำหรับบ้านขนาดใหญ่ โฮมออฟฟิศ และโครงการหมู่บ้านพรีเมียมที่ใช้ไฟสูง พร้อม Rooftop Solar, Solar Carport, BESS, EV Charger, AI Energy Monitoring และหลักฐาน commissioning",
+    image: `${SITE_URL}/assets/home-solution/home-solution-drone-hero.jpg`,
   },
   "/industries": {
     path: "/industries",
-    title: "โซลูชันโซลาร์สำหรับอุตสาหกรรม โรงงาน โรงแรม และอาคาร | SIRINX",
+    title: "โซลาร์เซลล์สำหรับโรงงาน โรงแรม เกษตร ภาครัฐ | ลดค่าไฟเฉพาะทาง",
     description:
-      "ออกแบบระบบพลังงานสะอาดเฉพาะธุรกิจ โรงงาน เกษตรกรรม โรงแรม สถานศึกษา และอาคารพาณิชย์ พร้อมประเมินผลประหยัดจริง",
+      "โซลูชันโซลาร์เซลล์เฉพาะอุตสาหกรรม — โรงงาน โรงแรม เกษตร สถานศึกษา อาคารพาณิชย์ ภาครัฐ ออกแบบระบบตามรูปแบบการใช้ไฟจริง ลดค่าไฟทันที",
   },
   "/investment": {
     path: "/investment",
-    title: "การลงทุนพลังงานสะอาดและ ROI Solar Carport | SIRINX",
+    title:
+      "ลงทุนโซลาร์เซลล์ คุ้มค่าแค่ไหน? ROI, สิทธิ์ BOI, ค่าเสื่อมเร่ง | SIRINX",
     description:
-      "วิเคราะห์รูปแบบการลงทุน Solar Carport ซื้อขาด ผ่อนชำระ หรือร่วมลงทุน พร้อมผลตอบแทน ภาษี และมูลค่า ESG",
+      "วิเคราะห์ความคุ้มค่าลงทุนโซลาร์เซลล์ — ซื้อขาด PPA Leasing พร้อมตรวจสิทธิ BOI ภาษี ค่าเสื่อม และสมมติฐานคืนทุนตามเงื่อนไขล่าสุด",
   },
   "/projects": projectsPageMeta,
   "/strategy": {
     path: "/strategy",
-    title: "กลยุทธ์พลังงานดิจิทัลสำหรับธุรกิจ | SIRINX",
+    title: "วางแผนลดค่าไฟระยะยาว | กลยุทธ์ Solar + BESS + AI Energy | SIRINX",
     description:
-      "แผนกลยุทธ์ Solar Digital Energy สำหรับลดต้นทุนไฟฟ้า เพิ่มข้อมูลพลังงาน และวางระบบพลังงานสะอาดระยะยาว",
+      "วางกลยุทธ์พลังงานสะอาดสำหรับธุรกิจ — เริ่มจาก Solar Rooftop ต่อยอดด้วย BESS กักเก็บพลังงาน และ AI Energy Management ตามข้อมูลการใช้ไฟและข้อจำกัดของไซต์",
   },
   "/blog": {
     path: "/blog",
-    title: "บทความ Solar, BESS, EV Charger และ AI Energy | SIRINX",
+    title:
+      "บทความโซลาร์เซลล์ & พลังงานสะอาด | ความรู้ ROI, BESS, AI Energy | SIRINX",
     description:
-      "รวมบทความความรู้ด้าน Solar Carport, Rooftop Solar, BESS, EV Charging, AI Energy, ROI, ภาษี และ ESG สำหรับธุรกิจไทย",
+      "อัพเดตความรู้พลังงานสะอาดล่าสุด — วิเคราะห์ ROI โซลาร์เซลล์, เทคโนโลยี BESS แบตเตอรี่, AI Energy Management, แนวโน้มราคาแผงโซลาร์ และสิทธิประโยชน์ทางภาษี",
   },
   "/contact": {
     path: "/contact",
-    title: "ติดต่อ SIRINX | นัดสำรวจหน้างาน Solar Carport ฟรี",
+    title: "นัดสำรวจหน้างานฟรี | ขอใบเสนอราคาโซลาร์เซลล์ | SIRINX",
     description:
-      "ติดต่อทีม SIRINX เพื่อขอใบเสนอราคา นัดสำรวจหน้างาน หรือปรึกษา Solar Carport, BESS, EV Charger และระบบลดค่าไฟองค์กร",
+      "ปรึกษาฟรี! นัดทีมวิศวกร SIRINX สำรวจหน้างาน ประเมินค่าไฟ และออกแบบระบบโซลาร์เซลล์เฉพาะอาคารของคุณตามข้อมูลจริง พร้อมช่องทางขอใบเสนอราคา โทร, LINE หรือกรอกแบบฟอร์ม",
   },
   "/line": {
     path: "/line",
@@ -97,9 +103,10 @@ const metaByPath: Record<string, SeoMeta> = {
   },
   "/assessment": {
     path: "/assessment",
-    title: "ประเมิน Solar และคำนวณลดค่าไฟเบื้องต้น | SIRINX",
+    title:
+      "คำนวณค่าไฟที่ประหยัดได้ | ประเมินความคุ้มค่าโซลาร์เซลล์ฟรี | SIRINX",
     description:
-      "ประเมินขนาดระบบ Solar, Solar Carport, BESS และผลประหยัดค่าไฟเบื้องต้นจากข้อมูลธุรกิจของคุณ",
+      "กรอกข้อมูลค่าไฟรายเดือนเพื่อรับผลประเมินเบื้องต้น — คำนวณสมมติฐาน ROI ระยะเวลาคืนทุน และขนาดระบบ Solar ที่เหมาะกับธุรกิจคุณ",
   },
   "/partner": {
     path: "/partner",
@@ -109,9 +116,9 @@ const metaByPath: Record<string, SeoMeta> = {
   },
   "/about": {
     path: "/about",
-    title: "เกี่ยวกับ SIRINX | Solar Digital Agentic Company",
+    title: "SIRINX คือใคร? บริษัทติดตั้งโซลาร์เซลล์ + AI Energy ของไทย",
     description:
-      "รู้จัก SIRINX บริษัทออกแบบ ติดตั้ง และบริหารระบบพลังงานสะอาด พร้อม AI Energy Management",
+      "SIRINX ออกแบบ ติดตั้ง และดูแลระบบพลังงานสะอาดตามขอบเขตโครงการ พร้อมใช้ข้อมูลหน้างานเพื่อช่วยธุรกิจวางแผนลดต้นทุนพลังงาน",
   },
   "/privacy": {
     path: "/privacy",
@@ -148,6 +155,9 @@ function getProvinceSeoMeta(path: string): SeoMeta | null {
     path,
     title: `ติดตั้ง Solar Carport ${province.nameTh} | โซลาร์ที่จอดรถ EV Charger BESS | SIRINX`,
     description: `SIRINX ออกแบบและติดตั้ง Solar Carport ${province.nameTh} สำหรับโรงงานและลานจอดรถ พร้อม EV Charger และ BESS โดยสำรวจพื้นที่และข้อมูลการใช้ไฟจริงก่อนออกแบบ`,
+    // The same card the prerendered HTML carries, so the hydrated head cannot
+    // disagree with what a crawler already read.
+    image: `${SITE_URL}/provinces/${province.slug}-og.jpg`,
   };
 }
 
@@ -209,4 +219,4 @@ export const seoDefaults = {
   siteUrl: SITE_URL,
   image: DEFAULT_IMAGE,
 };
-import { media } from "@/lib/media";
+import { mediaAbsolute } from "@/lib/media";

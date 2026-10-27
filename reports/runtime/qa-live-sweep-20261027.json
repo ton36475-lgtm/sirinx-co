@@ -1,0 +1,1307 @@
+{
+  "hosts": [
+    "www.sirinx.co",
+    "www.sirinx.org"
+  ],
+  "generatedAt": "2026-10-27T17:12:28.385Z",
+  "checks": [
+    {
+      "host": "www.sirinx.co",
+      "url": "apex",
+      "check": "apex-redirect",
+      "detail": "301 -> https://www.sirinx.co/"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/robots.txt",
+      "check": "robots",
+      "detail": "ok"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/sitemap.xml",
+      "check": "sitemap",
+      "detail": "105 URLs"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/llms.txt",
+      "check": "surface",
+      "detail": "200"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/feed.xml",
+      "check": "surface",
+      "detail": "200"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/assets/optimized/sirinx-og-card-1200x630.jpg",
+      "check": "social-card",
+      "detail": "200"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/assets/home-solution/home-solution-drone-hero.jpg",
+      "check": "social-card",
+      "detail": "200"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/api/trpc/lead.submit OPTIONS",
+      "check": "form",
+      "detail": "204"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/api/trpc/lead.submit POST",
+      "check": "form",
+      "detail": "400"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "legacy",
+      "check": "legacy-redirect",
+      "detail": "/solar-carport/bangkok/"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "unknown-path",
+      "check": "404",
+      "detail": "404"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/",
+      "check": "page",
+      "detail": "title=SIRINX | Solar Carport วางแผนลดค่าไฟองค์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/contact/",
+      "check": "page",
+      "detail": "title=นัดสำรวจหน้างานฟรี | ขอใบเสนอราคาโซลาร์เ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solutions/",
+      "check": "page",
+      "detail": "title=โซลูชันโซลาร์เซลล์ | Rooftop Solar, Floa"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/",
+      "check": "page",
+      "detail": "title=Solar Carport โดย SIRINX | เปลี่ยนที่จอด"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/projects/",
+      "check": "page",
+      "detail": "title=ผลงานติดตั้งจริง Solar Carport และโซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/provinces/",
+      "check": "page",
+      "detail": "title=Solar Carport 77 จังหวัด | เลือกจังหวัดท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/assessment/",
+      "check": "page",
+      "detail": "title=คำนวณค่าไฟที่ประหยัดได้ | ประเมินความคุ้"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/home-solution/",
+      "check": "page",
+      "detail": "title=Home Solar Solution บ้านใหญ่และโฮมออฟฟิศ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/pricing/",
+      "check": "page",
+      "detail": "title=แพ็คเกจราคา Solar Carport | Start / Pro "
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/industries/",
+      "check": "page",
+      "detail": "title=โซลาร์เซลล์สำหรับโรงงาน โรงแรม เกษตร ภาค"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/blog/",
+      "check": "page",
+      "detail": "title=บทความโซลาร์เซลล์ &amp; พลังงานสะอาด | ค"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/line/",
+      "check": "page",
+      "detail": "title=ติดต่อ SIRINX ผ่าน LINE Official | Solar"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/about/",
+      "check": "page",
+      "detail": "title=SIRINX คือใคร? บริษัทติดตั้งโซลาร์เซลล์ "
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/investment/",
+      "check": "page",
+      "detail": "title=ลงทุนโซลาร์เซลล์ คุ้มค่าแค่ไหน? ROI, สิท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/strategy/",
+      "check": "page",
+      "detail": "title=วางแผนลดค่าไฟระยะยาว | กลยุทธ์ Solar + B"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/partner/",
+      "check": "page",
+      "detail": "title=ร่วมเป็นพันธมิตรพลังงานสะอาดกับ SIRINX"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/privacy/",
+      "check": "page",
+      "detail": "title=นโยบายความเป็นส่วนตัว | SIRINX"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/terms/",
+      "check": "page",
+      "detail": "title=เงื่อนไขการใช้งาน | SIRINX"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/cookies/",
+      "check": "page",
+      "detail": "title=Cookie Policy | SIRINX"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/ang-thong/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อ่างทอง | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/chai-nat/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ชัยนาท | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/chaiyaphum/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ชัยภูมิ | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/amnat-charoen/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อำนาจเจริญ | โซลาร"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/bueng-kan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport บึงกาฬ | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/chachoengsao/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ฉะเชิงเทรา | โซลาร"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/buriram/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport บุรีรัมย์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/bangkok/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กรุงเทพมหานคร | โซ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/chiang-mai/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เชียงใหม่ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/chanthaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport จันทบุรี | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/chumphon/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ชุมพร | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/chonburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ชลบุรี | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/chiang-rai/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เชียงราย | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/kalasin/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กาฬสินธุ์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/kamphaeng-phet/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กำแพงเพชร | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/kanchanaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กาญจนบุรี | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/khon-kaen/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ขอนแก่น | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/krabi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กระบี่ | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/loei/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เลย | โซลาร์ที่จอด"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/lamphun/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ลำพูน | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/lampang/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ลำปาง | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/lopburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ลพบุรี | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/mae-hong-son/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport แม่ฮ่องสอน | โซลาร"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/maha-sarakham/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport มหาสารคาม | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nakhon-nayok/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครนายก | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/mukdahan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport มุกดาหาร | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nakhon-pathom/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครปฐม | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nakhon-ratchasima/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครราชสีมา | โซลาร"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nakhon-phanom/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครพนม | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nakhon-si-thammarat/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครศรีธรรมราช | โซ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nakhon-sawan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครสวรรค์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport น่าน | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/narathiwat/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นราธิวาส | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nong-bua-lamphu/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport หนองบัวลำภู | โซลา"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nong-khai/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport หนองคาย | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nonthaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นนทบุรี | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phang-nga/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พังงา | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/pattani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ปัตตานี | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phayao/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พะเยา | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/pathum-thani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ปทุมธานี | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phatthalung/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พัทลุง | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phetchabun/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เพชรบูรณ์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phetchaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เพชรบุรี | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phichit/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พิจิตร | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phitsanulok/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พิษณุโลก | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phrae/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport แพร่ | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phra-nakhon-si-ayutthaya/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พระนครศรีอยุธยา | "
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/prachinburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ปราจีนบุรี | โซลาร"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/prachuap-khiri-khan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ประจวบคีรีขันธ์ | "
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phuket/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ภูเก็ต | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/ranong/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ระนอง | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/ratchaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ราชบุรี | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/rayong/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ระยอง | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/roi-et/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ร้อยเอ็ด | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/sa-kaeo/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สระแก้ว | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/sakon-nakhon/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สกลนคร | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/samut-prakan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สมุทรปราการ | โซลา"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/samut-songkhram/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สมุทรสงคราม | โซลา"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/saraburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สระบุรี | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/samut-sakhon/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สมุทรสาคร | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/satun/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สตูล | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/sing-buri/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สิงห์บุรี | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/sisaket/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ศรีสะเกษ | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/songkhla/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สงขลา | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/suphan-buri/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สุพรรณบุรี | โซลาร"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/sukhothai/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สุโขทัย | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/surat-thani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สุราษฎร์ธานี | โซล"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/trang/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ตรัง | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/surin/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สุรินทร์ | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/tak/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ตาก | โซลาร์ที่จอด"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/trat/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ตราด | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/ubon-ratchathani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อุบลราชธานี | โซลา"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/udon-thani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อุดรธานี | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/uthai-thani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อุทัยธานี | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/uttaradit/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อุตรดิตถ์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/yala/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ยะลา | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/yasothon/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ยโสธร | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "apex",
+      "check": "apex-redirect",
+      "detail": "301 -> https://www.sirinx.org/"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/robots.txt",
+      "check": "robots",
+      "detail": "ok"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/sitemap.xml",
+      "check": "sitemap",
+      "detail": "105 URLs"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/llms.txt",
+      "check": "surface",
+      "detail": "200"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/feed.xml",
+      "check": "surface",
+      "detail": "200"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/assets/optimized/sirinx-og-card-1200x630.jpg",
+      "check": "social-card",
+      "detail": "200"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/assets/home-solution/home-solution-drone-hero.jpg",
+      "check": "social-card",
+      "detail": "200"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/api/trpc/lead.submit OPTIONS",
+      "check": "form",
+      "detail": "204"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/api/trpc/lead.submit POST",
+      "check": "form",
+      "detail": "400"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "legacy",
+      "check": "legacy-redirect",
+      "detail": "/solar-carport/bangkok/"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "unknown-path",
+      "check": "404",
+      "detail": "404"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/",
+      "check": "page",
+      "detail": "title=SIRINX | Solar Carport วางแผนลดค่าไฟองค์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solutions/",
+      "check": "page",
+      "detail": "title=โซลูชันโซลาร์เซลล์ | Rooftop Solar, Floa"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/provinces/",
+      "check": "page",
+      "detail": "title=Solar Carport 77 จังหวัด | เลือกจังหวัดท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/contact/",
+      "check": "page",
+      "detail": "title=นัดสำรวจหน้างานฟรี | ขอใบเสนอราคาโซลาร์เ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/assessment/",
+      "check": "page",
+      "detail": "title=คำนวณค่าไฟที่ประหยัดได้ | ประเมินความคุ้"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/pricing/",
+      "check": "page",
+      "detail": "title=แพ็คเกจราคา Solar Carport | Start / Pro "
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/projects/",
+      "check": "page",
+      "detail": "title=ผลงานติดตั้งจริง Solar Carport และโซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/",
+      "check": "page",
+      "detail": "title=Solar Carport โดย SIRINX | เปลี่ยนที่จอด"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/industries/",
+      "check": "page",
+      "detail": "title=โซลาร์เซลล์สำหรับโรงงาน โรงแรม เกษตร ภาค"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/investment/",
+      "check": "page",
+      "detail": "title=ลงทุนโซลาร์เซลล์ คุ้มค่าแค่ไหน? ROI, สิท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/blog/",
+      "check": "page",
+      "detail": "title=บทความโซลาร์เซลล์ &amp; พลังงานสะอาด | ค"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/strategy/",
+      "check": "page",
+      "detail": "title=วางแผนลดค่าไฟระยะยาว | กลยุทธ์ Solar + B"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/about/",
+      "check": "page",
+      "detail": "title=SIRINX คือใคร? บริษัทติดตั้งโซลาร์เซลล์ "
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/line/",
+      "check": "page",
+      "detail": "title=ติดต่อ SIRINX ผ่าน LINE Official | Solar"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/home-solution/",
+      "check": "page",
+      "detail": "title=Home Solar Solution บ้านใหญ่และโฮมออฟฟิศ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/partner/",
+      "check": "page",
+      "detail": "title=ร่วมเป็นพันธมิตรพลังงานสะอาดกับ SIRINX"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/privacy/",
+      "check": "page",
+      "detail": "title=นโยบายความเป็นส่วนตัว | SIRINX"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/cookies/",
+      "check": "page",
+      "detail": "title=Cookie Policy | SIRINX"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/terms/",
+      "check": "page",
+      "detail": "title=เงื่อนไขการใช้งาน | SIRINX"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/bueng-kan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport บึงกาฬ | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/buriram/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport บุรีรัมย์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chachoengsao/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ฉะเชิงเทรา | โซลาร"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chai-nat/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ชัยนาท | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/ang-thong/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อ่างทอง | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chaiyaphum/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ชัยภูมิ | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/amnat-charoen/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อำนาจเจริญ | โซลาร"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/bangkok/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กรุงเทพมหานคร | โซ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chiang-mai/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เชียงใหม่ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chanthaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport จันทบุรี | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chonburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ชลบุรี | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chumphon/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ชุมพร | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/kalasin/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กาฬสินธุ์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/kamphaeng-phet/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กำแพงเพชร | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chiang-rai/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เชียงราย | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/kanchanaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กาญจนบุรี | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/khon-kaen/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ขอนแก่น | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/krabi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กระบี่ | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/lamphun/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ลำพูน | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/lampang/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ลำปาง | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/lopburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ลพบุรี | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/loei/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เลย | โซลาร์ที่จอด"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/mae-hong-son/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport แม่ฮ่องสอน | โซลาร"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/maha-sarakham/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport มหาสารคาม | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/mukdahan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport มุกดาหาร | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-nayok/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครนายก | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-phanom/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครพนม | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-ratchasima/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครราชสีมา | โซลาร"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-pathom/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครปฐม | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-sawan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครสวรรค์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-si-thammarat/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครศรีธรรมราช | โซ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport น่าน | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nong-bua-lamphu/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport หนองบัวลำภู | โซลา"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/narathiwat/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นราธิวาส | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nonthaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นนทบุรี | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nong-khai/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport หนองคาย | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/pathum-thani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ปทุมธานี | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/pattani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ปัตตานี | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phang-nga/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พังงา | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phatthalung/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พัทลุง | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phetchabun/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เพชรบูรณ์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phetchaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เพชรบุรี | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phayao/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พะเยา | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phichit/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พิจิตร | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phitsanulok/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พิษณุโลก | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phra-nakhon-si-ayutthaya/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พระนครศรีอยุธยา | "
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phrae/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport แพร่ | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/prachuap-khiri-khan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ประจวบคีรีขันธ์ | "
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/prachinburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ปราจีนบุรี | โซลาร"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/ranong/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ระนอง | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phuket/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ภูเก็ต | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/ratchaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ราชบุรี | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/rayong/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ระยอง | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sa-kaeo/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สระแก้ว | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/roi-et/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ร้อยเอ็ด | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sakon-nakhon/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สกลนคร | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/samut-sakhon/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สมุทรสาคร | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/samut-prakan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สมุทรปราการ | โซลา"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/satun/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สตูล | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/saraburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สระบุรี | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/samut-songkhram/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สมุทรสงคราม | โซลา"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sisaket/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ศรีสะเกษ | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sing-buri/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สิงห์บุรี | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/songkhla/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สงขลา | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sukhothai/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สุโขทัย | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/suphan-buri/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สุพรรณบุรี | โซลาร"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/surat-thani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สุราษฎร์ธานี | โซล"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/surin/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สุรินทร์ | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/tak/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ตาก | โซลาร์ที่จอด"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/trang/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ตรัง | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/udon-thani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อุดรธานี | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/trat/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ตราด | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/ubon-ratchathani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อุบลราชธานี | โซลา"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/uthai-thani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อุทัยธานี | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/uttaradit/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อุตรดิตถ์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/yala/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ยะลา | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/yasothon/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ยโสธร | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/manifest.json",
+      "check": "manifest",
+      "detail": "1 icons"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/manifest.json",
+      "check": "manifest",
+      "detail": "1 icons"
+    }
+  ],
+  "warnings": [],
+  "defects": []
+}

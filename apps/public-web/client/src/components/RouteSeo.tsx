@@ -35,6 +35,8 @@ export default function RouteSeo() {
   const meta = getSeoMeta(location);
   const url = absoluteUrl(meta.path);
   const image = meta.image ?? seoDefaults.image;
+  const imageWidth = meta.imageWidth ?? seoDefaults.imageWidth;
+  const imageHeight = meta.imageHeight ?? seoDefaults.imageHeight;
   const robots = meta.noindex ? "noindex, nofollow" : "index, follow";
   const documentLanguage = bcp47ByLanguage[lang];
 
@@ -49,12 +51,14 @@ export default function RouteSeo() {
     upsertMeta('meta[property="og:description"]', { property: "og:description", content: meta.description });
     upsertMeta('meta[property="og:url"]', { property: "og:url", content: url });
     upsertMeta('meta[property="og:image"]', { property: "og:image", content: image });
+    upsertMeta('meta[property="og:image:width"]', { property: "og:image:width", content: String(imageWidth) });
+    upsertMeta('meta[property="og:image:height"]', { property: "og:image:height", content: String(imageHeight) });
     upsertMeta('meta[property="og:locale"]', { property: "og:locale", content: "th_TH" });
     upsertMeta('meta[name="twitter:card"]', { name: "twitter:card", content: "summary_large_image" });
     upsertMeta('meta[name="twitter:title"]', { name: "twitter:title", content: meta.title });
     upsertMeta('meta[name="twitter:description"]', { name: "twitter:description", content: meta.description });
     upsertMeta('meta[name="twitter:image"]', { name: "twitter:image", content: image });
-  }, [image, meta.description, meta.title, robots, url]);
+  }, [image, imageHeight, imageWidth, meta.description, meta.title, robots, url]);
 
   return (
     <Helmet>
@@ -71,6 +75,8 @@ export default function RouteSeo() {
       <meta property="og:description" content={meta.description} />
       <meta property="og:url" content={url} />
       <meta property="og:image" content={image} />
+      <meta property="og:image:width" content={String(imageWidth)} />
+      <meta property="og:image:height" content={String(imageHeight)} />
       <meta property="og:locale" content="th_TH" />
 
       <meta name="twitter:card" content="summary_large_image" />

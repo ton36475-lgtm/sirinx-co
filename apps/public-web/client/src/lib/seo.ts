@@ -11,6 +11,8 @@ export type SeoMeta = {
   description: string;
   path: string;
   image?: string;
+  imageWidth?: number;
+  imageHeight?: number;
   noindex?: boolean;
 };
 
@@ -61,6 +63,8 @@ const metaByPath: Record<string, SeoMeta> = {
     description:
       "SIRINX Home Solar Solution สำหรับบ้านขนาดใหญ่ โฮมออฟฟิศ และโครงการหมู่บ้านพรีเมียมที่ใช้ไฟสูง พร้อม Rooftop Solar, Solar Carport, BESS, EV Charger, AI Energy Monitoring และหลักฐาน commissioning",
     image: `${SITE_URL}/assets/home-solution/home-solution-drone-hero.jpg`,
+    imageWidth: 1672,
+    imageHeight: 941,
   },
   "/industries": {
     path: "/industries",
@@ -194,6 +198,9 @@ export function getSeoMeta(pathname: string): SeoMeta {
         title: `${post.title} | SIRINX Blog`,
         description: post.excerpt,
         image: post.image,
+        // blogData images are served by Unsplash at w=600&h=400.
+        imageWidth: 600,
+        imageHeight: 400,
       };
     }
   }
@@ -218,5 +225,7 @@ export const seoDefaults = {
   siteName: SITE_NAME,
   siteUrl: SITE_URL,
   image: DEFAULT_IMAGE,
+  imageWidth: 1200,
+  imageHeight: 630,
 };
 import { mediaAbsolute } from "@/lib/media";

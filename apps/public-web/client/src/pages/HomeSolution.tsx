@@ -143,62 +143,9 @@ const faqs = [
   },
 ];
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Service",
-      "@id": "https://www.sirinx.co/home-solution#service",
-      name: "SIRINX Home Solar Solution",
-      serviceType:
-        "Solar rooftop, solar carport, BESS, EV Charger, and AI energy monitoring for large homes and home offices",
-      provider: {
-        "@type": "Organization",
-        name: "SIRINX",
-        url: "https://www.sirinx.co",
-      },
-      areaServed: {
-        "@type": "Country",
-        name: "Thailand",
-      },
-      audience: {
-        "@type": "Audience",
-        audienceType:
-          "Large private residences, home offices, executive homes, premium housing estates",
-      },
-      description:
-        "Home solar solution for large homes and home offices with high electricity demand, combining rooftop solar, solar carport, EV Charger, BESS, AI monitoring, and commissioning evidence.",
-    },
-    {
-      "@type": "FAQPage",
-      mainEntity: faqs.map(faq => ({
-        "@type": "Question",
-        name: faq.q,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: faq.a,
-        },
-      })),
-    },
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "หน้าแรก",
-          item: "https://www.sirinx.co",
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Home Solar Solution",
-          item: "https://www.sirinx.co/home-solution",
-        },
-      ],
-    },
-  ],
-};
+// Route JSON-LD (Service, FAQPage, BreadcrumbList) is emitted once by the
+// static build in server/ogTags.ts. Duplicating it here made the hydrated
+// document carry two FAQPage nodes, so this page renders only visible content.
 
 export default function HomeSolution() {
   return (
@@ -222,7 +169,6 @@ export default function HomeSolution() {
           property="og:image"
           content={`https://www.sirinx.co${HERO_IMAGE}`}
         />
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
       <section className="relative min-h-[92vh] overflow-hidden">

@@ -38,6 +38,11 @@ import { bessFaq } from "../shared/bessFaq";
 const SITE_NAME = "SIRINX";
 const PRODUCTION_BASE_URL = "https://www.sirinx.co";
 const OG_IMAGE = `${PRODUCTION_BASE_URL}/assets/optimized/sirinx-og-card-1200x630.jpg`;
+// Dimensions declared next to og:image. Every route card is 1200x630 except
+// the routes that name their own image below, and an og:image:width that
+// disagrees with the file is a preview-size hint crawlers can ignore.
+const OG_IMAGE_WIDTH = 1200;
+const OG_IMAGE_HEIGHT = 630;
 const MOBILE_FIRST_HERO_IMAGE_SIZES = "(max-width: 767px) 80vw, 100vw";
 const DEFAULT_TITLE =
   "SIRINX | Solar Carport วางแผนลดค่าไฟองค์กร พร้อม EV Charger, BESS & AI Energy";
@@ -49,6 +54,8 @@ interface PageMeta {
   title: string;
   description: string;
   image?: string;
+  imageWidth?: number;
+  imageHeight?: number;
   noindex?: boolean;
 }
 
@@ -104,6 +111,8 @@ const routeMetaMap: Record<string, PageMeta> = {
     description:
       "SIRINX Home Solar Solution สำหรับบ้านขนาดใหญ่ โฮมออฟฟิศ และโครงการหมู่บ้านพรีเมียมที่ใช้ไฟสูง พร้อม Rooftop Solar, Solar Carport, BESS, EV Charger, AI Energy Monitoring และหลักฐาน commissioning",
     image: `${PRODUCTION_BASE_URL}/assets/home-solution/home-solution-drone-hero.jpg`,
+    imageWidth: 1672,
+    imageHeight: 941,
   },
   "/about": {
     title: "SIRINX คือใคร? บริษัทติดตั้งโซลาร์เซลล์ + AI Energy ของไทย",
@@ -239,6 +248,9 @@ export function getPageMeta(urlPath: string): PageMeta {
         title: `${post.title} | SIRINX Blog`,
         description: post.excerpt,
         image: post.image,
+        // blogData images are served by Unsplash at w=600&h=400.
+        imageWidth: 600,
+        imageHeight: 400,
       };
     }
     return {
@@ -522,6 +534,8 @@ export function injectOgTags(
 ): string {
   const meta = getPageMeta(urlPath);
   const image = meta.image || OG_IMAGE;
+  const imageWidth = meta.imageWidth ?? OG_IMAGE_WIDTH;
+  const imageHeight = meta.imageHeight ?? OG_IMAGE_HEIGHT;
   const fullUrl = buildCanonicalUrl(baseUrl, urlPath);
   const title = escapeHtmlAttribute(meta.title);
   const description = escapeHtmlAttribute(meta.description);
@@ -543,6 +557,16 @@ export function injectOgTags(
   html = replaceMetaByProperty(html, "og:title", title);
   html = replaceMetaByProperty(html, "og:description", description);
   html = replaceMetaByProperty(html, "og:image", imageUrl);
+  html = replaceMetaByProperty(
+    html,
+    "og:image:width",
+    String(imageWidth)
+  );
+  html = replaceMetaByProperty(
+    html,
+    "og:image:height",
+    String(imageHeight)
+  );
 
   // Add og:url if not present, or replace
   if (html.includes('property="og:url"')) {

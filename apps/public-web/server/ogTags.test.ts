@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, it, expect } from "vitest";
 import {
@@ -40,6 +40,8 @@ describe("getPageMeta", () => {
     expect(meta.image).toContain(
       "/assets/home-solution/home-solution-drone-hero.jpg"
     );
+    expect(meta.imageWidth).toBe(1672);
+    expect(meta.imageHeight).toBe(941);
   });
 
   it("returns promotional meta for /contact", () => {
@@ -153,6 +155,8 @@ describe("injectOgTags", () => {
     <meta property="og:title" content="default title" />
     <meta property="og:description" content="default desc" />
     <meta property="og:image" content="default.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="default title" />
     <meta name="twitter:description" content="default desc" />
@@ -216,6 +220,37 @@ describe("injectOgTags", () => {
 
   it("serves the site-wide social card from the same build that writes the tag", () => {
     expect(existsSync(`${PUBLIC_DIR}${SITE_OG_CARD.slice(1)}`)).toBe(true);
+  });
+
+  it("declares the home solution card's real dimensions, once", () => {
+    const result = injectOgTags(
+      sampleHtml,
+      "/home-solution",
+      "https://www.sirinx.co"
+    );
+
+    expect(result).toContain('property="og:image:width" content="1672"');
+    expect(result).toContain('property="og:image:height" content="941"');
+    expect(result.match(/og:image:width/g)).toHaveLength(1);
+    expect(result.match(/og:image:height/g)).toHaveLength(1);
+  });
+
+  it("declares the site card dimensions on routes with no dedicated card", () => {
+    const result = injectOgTags(sampleHtml, "/pricing", "https://www.sirinx.co");
+
+    expect(result).toContain('property="og:image:width" content="1200"');
+    expect(result).toContain('property="og:image:height" content="630"');
+  });
+
+  it("declares the blog card's real dimensions", () => {
+    const result = injectOgTags(
+      sampleHtml,
+      "/blog/rooftop-solar-roi-2025",
+      "https://www.sirinx.co"
+    );
+
+    expect(result).toContain('property="og:image:width" content="600"');
+    expect(result).toContain('property="og:image:height" content="400"');
   });
 
   it("does not hand a province card to a non-province page", () => {
@@ -349,6 +384,31 @@ describe("injectOgTags", () => {
     }
   });
 
+  it("emits exactly one route graph and one FAQPage for /home-solution", () => {
+    const result = injectOgTags(
+      sampleHtml,
+      "/home-solution",
+      "https://www.sirinx.co"
+    );
+
+    expect(result.match(/data-sirinx-seo="route"/g)).toHaveLength(1);
+    expect(result.match(/"@type":"FAQPage"/g)).toHaveLength(1);
+  });
+
+  it("leaves route JSON-LD to the static build in HomeSolution", () => {
+    // The page used to ship its own Service/FAQPage/BreadcrumbList graph, so
+    // the hydrated document carried two FAQPage nodes. Route schema belongs
+    // to server/ogTags.ts; the page renders visible content only.
+    const source = readFileSync(
+      fileURLToPath(
+        new URL("../client/src/pages/HomeSolution.tsx", import.meta.url)
+      ),
+      "utf8"
+    );
+
+    expect(source).not.toContain("application/ld+json");
+  });
+
   it("builds static AEO service and FAQ schema for /home-solution", () => {
     const data = getStructuredData("/home-solution", "https://www.sirinx.co");
     const encoded = JSON.stringify(data);
@@ -444,6 +504,16 @@ describe("crawler/hydrated metadata parity", () => {
         route,
         noindex: client.noindex ?? false,
       });
+      expect({ route, image: server.image }).toEqual({ route, image: client.image });
+      expect({
+        route,
+        width: server.imageWidth ?? 1200,
+        height: server.imageHeight ?? 630,
+      }).toEqual({
+        route,
+        width: client.imageWidth ?? 1200,
+        height: client.imageHeight ?? 630,
+      });
     }
   });
 
@@ -458,7 +528,29 @@ describe("crawler/hydrated metadata parity", () => {
         description: client.description,
       });
       expect({ route, image: server.image }).toEqual({ route, image: client.image });
+      expect({
+        route,
+        width: server.imageWidth ?? 1200,
+        height: server.imageHeight ?? 630,
+      }).toEqual({
+        route,
+        width: client.imageWidth ?? 1200,
+        height: client.imageHeight ?? 630,
+      });
     }
+  });
+
+  it("server and client agree on the blog card's dimensions", () => {
+    const route = "/blog/rooftop-solar-roi-2025";
+    const server = getPageMeta(route);
+    const client = getSeoMeta(route);
+
+    expect(server.imageWidth).toBe(600);
+    expect(server.imageHeight).toBe(400);
+    expect({ width: server.imageWidth, height: server.imageHeight }).toEqual({
+      width: client.imageWidth,
+      height: client.imageHeight,
+    });
   });
 
   it("the client fallback image is the same site-owned card as the server default", () => {

@@ -1,0 +1,9 @@
+{
+  "kind": "public-web-redirect-variant",
+  "origin": "https://www.sirinx.org",
+  "target": "https://www.sirinx.co",
+  "rule": "/* https://www.sirinx.co/:splat 301",
+  "deployed": false,
+  "rollback": "apps/public-web/dist-org",
+  "generatedAt": "2026-10-31T11:56:26.077Z"
+}

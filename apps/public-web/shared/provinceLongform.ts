@@ -354,6 +354,33 @@ export function countWords(text: string): number {
   return count;
 }
 
+/**
+ * FAQ items the long-form still has to render.
+ *
+ * A hand-written province keeps its FAQ in `entry.faq`, while the generator
+ * also repeats each question as a section block. Marking up a question the
+ * document never shows breaks the structured-data rule that marked-up content
+ * must be visible, so the renderers add exactly the items missing from the
+ * sections — and nothing twice.
+ */
+export function getUnrenderedFaq(
+  entry: ProvinceLongform
+): Array<{ q: string; a: string }> {
+  const normalize = (value: string) => value.replace(/\s+/g, " ").trim();
+  const rendered = normalize(
+    [
+      ...entry.intro,
+      ...entry.sections.flatMap(section => [
+        section.h2,
+        ...section.blocks.flatMap(block =>
+          block.type === "list" ? block.items : [block.text]
+        ),
+      ]),
+    ].join(" ")
+  );
+  return entry.faq.filter(item => !rendered.includes(normalize(item.q)));
+}
+
 export function longformWordCount(entry: ProvinceLongform): number {
   const parts: string[] = [...entry.intro, entry.cta];
   for (const section of entry.sections) {

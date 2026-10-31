@@ -13,6 +13,7 @@
 import {
   type LongformSection,
   type ProvinceLongform,
+  getUnrenderedFaq,
 } from "./provinceLongform";
 import { getProvinceLongformEntry, getProvinceSiblings } from "./provinceLongformResolver";
 import { buildProvinceMonthlyFigure } from "./provinceLongformFigure";
@@ -62,6 +63,20 @@ function renderEntry(entry: ProvinceLongform): string {
   // static document and the hydrated page render the identical figure.
   const figure = buildProvinceMonthlyFigure(entry.slug) ?? "";
   const sections = entry.sections.map(renderSection).join("\n");
+  // Questions the sections do not already show are rendered here so the
+  // FAQPage node never marks up an answer the page hides.
+  const remainingFaq = getUnrenderedFaq(entry);
+  const faq = remainingFaq.length
+    ? `        <div class="mt-12">
+          <h2 class="font-display text-xl font-bold">คำถามที่พบบ่อยใน${escapeHtml(entry.nameTh)}</h2>
+${remainingFaq
+  .map(
+    (item) =>
+      `          <div class="mt-5">\n            <h3 class="font-display text-lg font-semibold">${escapeHtml(item.q)}</h3>\n            <p class="mt-2 text-sm leading-6 text-text-secondary">${escapeHtml(item.a)}</p>\n          </div>`
+  )
+  .join("\n")}
+        </div>`
+    : "";
   // A province page used to ship with a single <a> and no breadcrumb, so the
   // 77 pages were link islands reachable only from the sitemap. These links
   // give a non-JS crawler the same hierarchy the client-side nav provides.
@@ -103,6 +118,7 @@ ${intro}
         </div>
 ${figure}
 ${sections}
+${faq}
         <div class="mt-12 rounded-2xl border border-border bg-card p-6 lg:p-8">
           <p class="leading-relaxed">${escapeHtml(entry.cta)}</p>
           <div class="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm">

@@ -253,6 +253,276 @@ const dict: Record<string, { th: string; en: string; cn: string }> = {
     cn: "提高系统稳定性",
   },
 
+  "sol.bess.factory.title": {
+    th: "โรงงานอุตสาหกรรม",
+    en: "Industrial Factories",
+    cn: "工业工厂",
+  },
+  "sol.bess.factory.problem": {
+    th: "ค่า demand charge สูงจากอุตสาหกรรมกระบวนการผลิตสูง",
+    en: "High demand charges from energy-intensive industrial processes",
+    cn: "高耗能工业生产过程的高峰电费",
+  },
+  "sol.bess.factory.solution": {
+    th: "BESS ขนาดกลางถึงใหญ่ช่วยลด peak และ smooth load สำหรับโรงงานที่ใช้ไฟมากกว่า 1 MW",
+    en: "Mid-to-large BESS reduces peak and smooths load for factories consuming over 1 MW",
+    cn: "中大容量BESS对消耗超过1兆瓦的工业进行峰值削平",
+  },
+  "sol.bess.factory.suitable1": {
+    th: "โรงงานอุตสาหกรรม",
+    en: "Industrial factories",
+    cn: "工业工厂",
+  },
+  "sol.bess.factory.suitable2": {
+    th: "อุตสาหกรรมอาหารและเครื่องจักร",
+    en: "Food and machinery industries",
+    cn: "食品和机械工业",
+  },
+  "sol.bess.factory.suitable3": {
+    th: "อุตสาหกรรมเคมีและโลหะ",
+    en: "Chemical and metal industries",
+    cn: "化学和冶金工业",
+  },
+  "sol.bess.factory.benefit1": {
+    th: "ลด demand charge ได้ 10-20%",
+    en: "Reduce demand charges by 10-20%",
+    cn: "降低10-20%的峰值电费",
+  },
+  "sol.bess.factory.benefit2": {
+    th: "สำรองไฟสำคัญระหว่างไฟดับ",
+    en: "Critical power backup during outages",
+    cn: "停电期间关键电源备份",
+  },
+  "sol.bess.factory.benefit3": {
+    th: "ปรับใช้พลังงานตามช่วงเวลาค่าไฟ",
+    en: "Shift energy use according to tariff periods",
+    cn: "根据电价时段调整能源使用",
+  },
+  "sol.bess.factory.benefit4": {
+    th: "เพิ่มความน่าเชื่อถือของการผลิต",
+    en: "Increase production reliability",
+    cn: "提高生产可靠性",
+  },
+  "sol.bess.factory.benefit5": {
+    th: " ROI ภายใน 3-5 ปี",
+    en: "ROI within 3-5 years",
+    cn: "3-5年内回本",
+  },
+  "sol.bess.factory.benefit6": {
+    th: "ลดคาร์บอนฟุตพรINT",
+    en: "Reduce carbon footprint",
+    cn: "降低碳足迹",
+  },
+
+  "sol.bess.hotel.title": {
+    th: "โรงแรมและรีสอร์ท",
+    en: "Hotels and Resorts",
+    cn: "酒店和度假村",
+  },
+  "sol.bess.hotel.problem": {
+    th: "ค่าไฟฟ้าช่วงเย็นสูงเนื่องจากแอร์ทำงานหนัก และผู้ใช้ไฟรายย่อยหลากหลาย",
+    en: "High evening electricity costs from heavy AC use and diverse guest loads",
+    cn: "由于空调使用量大和多样化的guest负载，晚上电费高",
+  },
+  "sol.bess.hotel.solution": {
+    th: "BESS ขนาดเล็กถึงกลางเก็บพลังงานโซลาร์กลางวันเพื่อใช้ตอนเย็น ลดค่า AC peak และให้ไฟสำรองห้องพัก",
+    en: "Mid-sized BESS stores daytime solar for evening AC use, reduces peak and provides guest room backup power",
+    cn: "中小容量BESS储存白天太阳能供傍晚使用空调，降低峰值并为客房提供备用电源",
+  },
+  "sol.bess.hotel.suitable1": {
+    th: "โรงแรมขนาดกลางใหญ่",
+    en: "Mid-to-large hotels",
+    cn: "中大型酒店",
+  },
+  "sol.bess.hotel.suitable2": {
+    th: "รีสอร์ทริมชายหรือกลางธรรมชาติ",
+    en: "Resorts by the beach or in nature",
+    cn: "海滨或度假村",
+  },
+  "sol.bess.hotel.suitable3": {
+    th: "โรงแรมที่มี EV Charger สำหรับผู้เข้าพัก",
+    en: "Hotels with EV Chargers for guests",
+    cn: "配有客车充电桩的酒店",
+  },
+  "sol.bess.hotel.benefit1": {
+    th: "ลดค่า AC peak ได้ 15-25%",
+    en: "Reduce AC peak by 15-25%",
+    cn: "降低15-25%的峰值空调电费",
+  },
+  "sol.bess.hotel.benefit2": {
+    th: "ให้ไฟสำรองห้องพัก",
+    en: "Guest room backup power",
+    cn: "客房备用电源",
+  },
+  "sol.bess.hotel.benefit3": {
+    th: "ใช้พลังงานโซลาร์ได้รอบคืน",
+    en: "Use solar energy through the night",
+    cn: "整夜使用太阳能",
+  },
+  "sol.bess.hotel.benefit4": {
+    th: "เพิ่มความพึงพอใจของผู้เข้าพัก",
+    en: "Increase guest satisfaction",
+    cn: "提高客户满意度",
+  },
+  "sol.bess.hotel.benefit5": {
+    th: " ROI ภายใน 4-6 ปี",
+    en: "ROI within 4-6 years",
+    cn: "4-6年内回本",
+  },
+
+  "sol.bess.peak-shaving.title": {
+    th: "การตัด Peak Shaving",
+    en: "Peak Shaving",
+    cn: "削峰",
+  },
+  "sol.bess.peak-shaving.problem": {
+    th: "ค่าใช้จ่ายค่า demand charge สูงในช่วงเวลากำหนดทุกวัน",
+    en: "Daily high demand charges during peak hours",
+    cn: "每天在峰值时段的高峰电费",
+  },
+  "sol.bess.peak-shaving.solution": {
+    th: "BESS ตอบสนองเร็วช่วยลด peak demand โดยชาร์จเมื่อค่าไฟต่ำและจ่ายเมื่อค่าไฟสูง",
+    en: "BESS rapidly responds to shave peak demand by charging when rates are low and discharging when rates are high",
+    cn: "当电价低时充电、电价高时放电，BESS快速响应削峰",
+  },
+  "sol.bess.peak-shaving.suitable1": {
+    th: "ธุรกิจที่มี峰ช่วงเวลาชัดเจน",
+    en: "Businesses with clear peak periods",
+    cn: "明确峰值时段的企业",
+  },
+  "sol.bess.peak-shaving.suitable2": {
+    th: "โรงงานอุตสาหกรรม",
+    en: "Factories",
+    cn: "工厂",
+  },
+  "sol.bess.peak-shaving.suitable3": {
+    th: "อาคารพาณิชย์ขนาดใหญ่",
+    en: "Large commercial buildings",
+    cn: "大型商业大楼",
+  },
+  "sol.bess.peak-shaving.benefit1": {
+    th: "ลด demand charge ได้ 30-40%",
+    en: "Reduce demand charges by 30-40%",
+    cn: "降低30-40%的峰值电费",
+  },
+  "sol.bess.peak-shaving.benefit2": {
+    th: "ควบคุมการใช้งานอัตโนมัติตามตาราง",
+    en: "Automated control according to schedule",
+    cn: "根据时间表自动控制",
+  },
+  "sol.bess.peak-shaving.benefit3": {
+    th: "คำนวณ ROI ได้ชัดเจน",
+    en: "Clear ROI calculation",
+    cn: "清晰的ROI计算",
+  },
+  "sol.bess.peak-shaving.benefit4": {
+    th: "ปรับใช้พลังงานได้ตามฤดูกาล",
+    en: "Seasonal energy shifting",
+    cn: "季节性能源调整",
+  },
+
+  "sol.bess.sizing.title": {
+    th: "การคำนวณขนาด BESS",
+    en: "BESS Sizing",
+    cn: "储能系统尺寸",
+  },
+  "sol.bess.sizing.problem": {
+    th: "การเลือกขนาด BESS ที่ไม่ถูกต้องทำให้จ่ายเกินหรือจ่ายไม่เพียงพอ",
+    en: "Wrong BESS size leads to over-sizing or under-delivery",
+    cn: "错误的BESS尺寸导致过度规模或不足",
+  },
+  "sol.bess.sizing.solution": {
+    th: "วิเคราะห์ load profile 24 ชม. เพื่อคำนวณขนาด kWh/kW ที่เหมาะสมกับงบประมาณและข้อจำกัดหน้างาน",
+    en: "Analyze 24-hour load profile to calculate optimal kWh/kW size matching budget and site constraints",
+    cn: "分析24小时负载曲线以计算匹配预算和现场限制的最优kWh/kW尺寸",
+  },
+  "sol.bess.sizing.suitable1": {
+    th: "ผู้ที่ต้องการออกแบบระบบให้ถูกต้องครั้งแรก",
+    en: "Those who want correct first-time system design",
+    cn: "想一次性设计正确的系统",
+  },
+  "sol.bess.sizing.suitable2": {
+    th: "ผู้รับเห้าต้องการประเมินขนาด",
+    en: "Contractors needing size assessment",
+    cn: "需要尺寸评估的承包商",
+  },
+  "sol.bess.sizing.suitable3": {
+    th: "ผู้บริหารที่ต้องการงบประมาณที่ชัดเจน",
+    en: "Executives needing clear budget scoping",
+    cn: "需要明确预算规划的高管",
+  },
+  "sol.bess.sizing.benefit1": {
+    th: "หลีกเลี่ยงการจ่ายเงินเกินจริง",
+    en: "Avoid over-paying for unneeded capacity",
+    cn: "避免为不需要的容量付费",
+  },
+  "sol.bess.sizing.benefit2": {
+    th: "มั่นใจได้ว่าระบบครอบคลุมโหลดสำคัญ",
+    en: "Ensure critical loads are covered",
+    cn: "确保关键负载得到覆盖",
+  },
+  "sol.bess.sizing.benefit3": {
+    th: "สร้างแบบเสนอราคาเร็วขึ้น",
+    en: "Faster proposal generation",
+    cn: "更快的报价生成",
+  },
+  "sol.bess.sizing.benefit4": {
+    th: "ปฏิบัติตามข้อกำหนด安全",
+    en: "Comply with safety regulations",
+    cn: "符合安全规定",
+  },
+
+  "sol.bess.safety-cost.title": {
+    th: "ความปลอดภัยและค่าใช้จ่าย",
+    en: "Safety and Cost",
+    cn: "安全和成本",
+  },
+  "sol.bess.safety-cost.problem": {
+    th: "BESS ต้องการการออกแบบตามมาตรฐานความปลอดภัยและการจัดการความเสี่ยง",
+    en: "BESS requires safety-standard design and risk management",
+    cn: "BESS需要符合安全标准的设计และ风险管理",
+  },
+  "sol.bess.safety-cost.solution": {
+    th: "เลือกเซลล์ LFP ผ่านมาตร IEC 62619 ติดตั้งครบตามมาตร BS EN 62933 และมี BMS จัดการระบบโดยอัตโนมัติ",
+    en: "Choose LFP cells passing IEC 62619, install to BS EN 62933 with automatic BMS",
+    cn: "选择通过IEC 62619的LFP电池，按照BS EN 62933安装并自动管理BMS",
+  },
+  "sol.bess.safety-cost.suitable1": {
+    th: "ผู้ที่ให้ความสำคัญกับความปลอดภัยเป็นอันดับแรก",
+    en: "Those prioritizing safety above all",
+    cn: "首要考虑安全的用户",
+  },
+  "sol.bess.safety-cost.suitable2": {
+    th: "บริษัทที่ต้องการตรวจสอบมาตรฐานการติดตั้ง",
+    en: "Companies verifying installation standards",
+    cn: "需要验证安装标准的公司",
+  },
+  "sol.bess.safety-cost.benefit1": {
+    th: "มั่นใจในความปลอดภัยตามสากล",
+    en: "Confidence in international safety standards",
+    cn: "符合国际安全标准的信心",
+  },
+  "sol.bess.safety-cost.benefit2": {
+    th: "ลดความเสี่ยงจากการติดตั้งที่ไม่ถูกต้อง",
+    en: "Reduce risk from improper installation",
+    cn: "降低安装不当的风险",
+  },
+  "sol.bess.safety-cost.benefit3": {
+    th: "ระบบ BMS ติดตามสภาพแบตเตอรี่ตลอดเวลา",
+    en: "24/7 BMS battery monitoring",
+    cn: "24/7 BMS 电池监控",
+  },
+  "sol.bess.safety-cost.benefit4": {
+    th: "คำนวณ TCO อย่างครบถ้วน",
+    en: "Full TCO calculation",
+    cn: "完整的总拥有成本计算",
+  },
+  "sol.bess.safety-cost.benefit5": {
+    th: "ป้องกันการ Overcharge/Over-discharge",
+    en: "Prevent overcharge/over-discharge",
+    cn: "防止过充/过放",
+  },
+
   // Solution: AI Energy Management
   "sol.ai.title": {
     th: "AI Energy Management",

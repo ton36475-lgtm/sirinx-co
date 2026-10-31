@@ -28,6 +28,12 @@ const SolarAssessment = lazy(() => import("./pages/SolarAssessment"));
 const Partner = lazy(() => import("./pages/Partner"));
 const Strategy = lazy(() => import("./pages/Strategy"));
 const SolarCarport = lazy(() => import("./pages/SolarCarport"));
+const BESS = lazy(() => import("./pages/BESS"));
+const BESSFactory = lazy(() => import("./pages/BESSFactory"));
+const BESSHotel = lazy(() => import("./pages/BESSHotel"));
+const BESSPeakShaving = lazy(() => import("./pages/BESSPeakShaving"));
+const BESSSizing = lazy(() => import("./pages/BESSSizing"));
+const BESSSafetyCost = lazy(() => import("./pages/BESSSafetyCost"));
 const Provinces = lazy(() => import("./pages/Provinces"));
 const Pricing = lazy(() => import("./pages/Pricing"));
 const Privacy = lazy(() => import("./pages/Privacy"));
@@ -157,6 +163,12 @@ function PublicRouter() {
         <Route path="/provinces" component={Provinces} />
         <Route path="/pricing" component={Pricing} />
         <Route path="/solutions" component={Solutions} />
+        <Route path="/bess/factory" component={BESSFactory} />
+        <Route path="/bess/hotel" component={BESSHotel} />
+        <Route path="/bess/peak-shaving" component={BESSPeakShaving} />
+        <Route path="/bess/sizing" component={BESSSizing} />
+        <Route path="/bess/safety-cost" component={BESSSafetyCost} />
+        <Route path="/bess" component={BESS} />
         <Route path="/home-solution" component={HomeSolution} />
         <Route path="/industries" component={Industries} />
         <Route path="/investment" component={InvestmentTaxHub} />

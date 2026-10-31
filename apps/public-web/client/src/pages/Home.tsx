@@ -93,7 +93,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           2. SOCIAL PROOF STRIP — Above the fold metrics
       ══════════════════════════════════════════════ */}
-      <section className="py-10 lg:py-12 section-alt relative">
+      <section className="section-y-sm section-alt relative">
         <div className="divider-accent absolute top-0 left-0 right-0" />
         <div className="container">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
@@ -142,7 +142,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           3. SOLAR CARPORT SPOTLIGHT — Why it's the flagship
       ══════════════════════════════════════════════ */}
-      <section className="py-16 lg:py-24 bg-background">
+      <section className="section-y bg-background">
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             <motion.div
@@ -152,7 +152,7 @@ export default function Home() {
               variants={fadeUp}
               custom={0}
             >
-              <span className="text-xs font-medium text-accent-secondary tracking-widest uppercase mb-3 block">
+              <span className="eyebrow">
                 {t("home.flagship.tag")}
               </span>
               <h2 className="font-display text-2xl lg:text-4xl font-bold text-foreground mb-4 whitespace-pre-line">
@@ -219,7 +219,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           4. INTEGRATION ECOSYSTEM — Carport + BESS + AI + EV
       ══════════════════════════════════════════════ */}
-      <section className="py-16 lg:py-24 section-alt">
+      <section className="section-y section-alt">
         <div className="container">
           <motion.div
             initial="hidden"
@@ -229,7 +229,7 @@ export default function Home() {
             custom={0}
             className="text-center max-w-2xl mx-auto mb-12"
           >
-            <span className="text-xs font-medium text-accent-secondary tracking-widest uppercase mb-3 block">
+            <span className="eyebrow">
               {t("home.integration.tag")}
             </span>
             <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-3">
@@ -291,7 +291,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           5. MID-PAGE CTA — Solar Carport specific
       ══════════════════════════════════════════════ */}
-      <section className="py-12 lg:py-16 bg-background">
+      <section className="section-y-sm bg-background">
         <div className="container">
           <motion.div
             initial="hidden"
@@ -330,7 +330,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           6. ALL SOLUTIONS — Solar Carport first
       ══════════════════════════════════════════════ */}
-      <section className="py-16 lg:py-24 section-alt">
+      <section className="section-y section-alt">
         <div className="container">
           <motion.div
             initial="hidden"
@@ -340,7 +340,7 @@ export default function Home() {
             custom={0}
             className="max-w-2xl mb-12"
           >
-            <span className="text-xs font-medium text-accent-secondary tracking-widest uppercase mb-3 block">
+            <span className="eyebrow">
               {t("home.solutions.tag")}
             </span>
             <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-3">
@@ -443,7 +443,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           7. PROCESS — How we work
       ══════════════════════════════════════════════ */}
-      <section className="py-16 lg:py-24 bg-background">
+      <section className="section-y bg-background">
         <div className="container">
           <motion.div
             initial="hidden"
@@ -453,7 +453,7 @@ export default function Home() {
             custom={0}
             className="text-center max-w-2xl mx-auto mb-12"
           >
-            <span className="text-xs font-medium text-accent-secondary tracking-widest uppercase mb-3 block">
+            <span className="eyebrow">
               {t("home.process.tag")}
             </span>
             <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-3">
@@ -512,7 +512,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           8. INDUSTRIES — Who benefits from Solar Carport
       ══════════════════════════════════════════════ */}
-      <section className="py-16 lg:py-24 section-alt">
+      <section className="section-y section-alt">
         <div className="container">
           <motion.div
             initial="hidden"
@@ -522,7 +522,7 @@ export default function Home() {
             custom={0}
             className="max-w-2xl mb-12"
           >
-            <span className="text-xs font-medium text-accent-secondary tracking-widest uppercase mb-3 block">
+            <span className="eyebrow">
               {t("home.industries.tag")}
             </span>
             <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-3">
@@ -565,7 +565,7 @@ export default function Home() {
               >
                 <Link
                   href="/industries"
-                  className="group block p-5 rounded-xl border border-border-subtle hover:border-border-accent hover:bg-accent-glow/50 transition-all h-full"
+                  className="group surface-card block h-full p-5"
                 >
                   <ind.icon className="w-7 h-7 text-accent-secondary mb-3" />
                   <h3 className="font-display font-semibold text-foreground mb-1 text-sm group-hover:text-accent-primary transition-colors">
@@ -592,7 +592,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           9. REAL PROJECTS — Proof of execution
       ══════════════════════════════════════════════ */}
-      <section className="py-16 lg:py-24 bg-background">
+      <section className="section-y bg-background">
         <div className="container">
           <motion.div
             initial="hidden"
@@ -602,7 +602,7 @@ export default function Home() {
             custom={0}
             className="text-center mb-10"
           >
-            <span className="text-xs font-medium text-accent-secondary tracking-widest uppercase mb-3 block">
+            <span className="eyebrow">
               {t("home.projects.tag")}
             </span>
             <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground">
@@ -620,7 +620,7 @@ export default function Home() {
               viewport={{ once: true }}
               variants={fadeUp}
               custom={0}
-              className="group rounded-2xl overflow-hidden border border-border-subtle hover:border-border-accent transition-all"
+              className="group surface-card overflow-hidden"
             >
               <div className="relative aspect-[16/10] overflow-hidden">
                 <img
@@ -684,7 +684,7 @@ export default function Home() {
               viewport={{ once: true }}
               variants={fadeUp}
               custom={1}
-              className="group rounded-2xl overflow-hidden border border-border-subtle hover:border-border-accent transition-all"
+              className="group surface-card overflow-hidden"
             >
               <div className="relative aspect-[16/10] overflow-hidden">
                 <img
@@ -756,7 +756,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           10. O&M + AI MONITORING — Visual proof
       ══════════════════════════════════════════════ */}
-      <section className="py-16 lg:py-24 section-alt">
+      <section className="section-y section-alt">
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             <motion.div
@@ -783,7 +783,7 @@ export default function Home() {
               custom={1}
               className="order-1 lg:order-2"
             >
-              <span className="text-xs font-medium text-accent-secondary tracking-widest uppercase mb-3 block">
+              <span className="eyebrow">
                 {t("home.om.tag")}
               </span>
               <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4 whitespace-pre-line">
@@ -829,7 +829,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           11. INVESTMENT TEASER — Financing options
       ══════════════════════════════════════════════ */}
-      <section className="py-16 lg:py-24 bg-background">
+      <section className="section-y bg-background">
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             <motion.div
@@ -839,7 +839,7 @@ export default function Home() {
               variants={fadeUp}
               custom={0}
             >
-              <span className="text-xs font-medium text-accent-secondary tracking-widest uppercase mb-3 block">
+              <span className="eyebrow">
                 {t("home.invest.tag")}
               </span>
               <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4 whitespace-pre-line">
@@ -895,7 +895,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           12. CEO TESTIMONIAL — Trust
       ══════════════════════════════════════════════ */}
-      <section className="py-12 lg:py-16 section-alt relative">
+      <section className="section-y-sm section-alt relative">
         <div className="divider-accent absolute top-0 left-0 right-0" />
         <div className="container">
           <motion.div
@@ -935,7 +935,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           13. FAQ / AEO — Solar Carport specific
       ══════════════════════════════════════════════ */}
-      <section className="py-16 lg:py-24 bg-background">
+      <section className="section-y bg-background">
         <div className="container max-w-3xl">
           <motion.div
             initial="hidden"
@@ -945,7 +945,7 @@ export default function Home() {
             custom={0}
             className="text-center mb-10"
           >
-            <span className="text-xs font-medium text-accent-secondary tracking-widest uppercase mb-3 block">
+            <span className="eyebrow">
               {t("home.faq.tag")}
             </span>
             <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground">
@@ -992,7 +992,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           14. FINAL CTA — Solar Carport specific
       ══════════════════════════════════════════════ */}
-      <section className="py-16 lg:py-24 section-alt relative overflow-hidden">
+      <section className="section-y section-alt relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-accent-glow to-transparent" />
         <div className="divider-accent absolute top-0 left-0 right-0" />
         <div className="container relative z-10 text-center">

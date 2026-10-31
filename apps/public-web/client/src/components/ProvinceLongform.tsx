@@ -6,7 +6,7 @@
  * long-form payload stays out of the province page bundle. Renders nothing
  * when the province has no long-form entry yet.
  */
-import { type LongformSection } from "@shared/provinceLongform";
+import { type LongformSection, getUnrenderedFaq } from "@shared/provinceLongform";
 import { Link } from "wouter";
 import {
   getProvinceLongformEntry,
@@ -103,6 +103,23 @@ export default function ProvinceLongform({ slug }: { slug: string }) {
         {entry.sections.map((section) => (
           <Section key={section.h2} section={section} />
         ))}
+        {getUnrenderedFaq(entry).length > 0 ? (
+          <div className="mt-12">
+            <h2 className="font-display text-xl font-bold text-foreground">
+              คำถามที่พบบ่อยใน{entry.nameTh}
+            </h2>
+            {getUnrenderedFaq(entry).map((item) => (
+              <div key={item.q} className="mt-5">
+                <h3 className="font-display text-lg font-semibold text-foreground">
+                  {item.q}
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-text-secondary">
+                  {item.a}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : null}
         <div className="mt-12 rounded-2xl border border-border-subtle bg-surface-elevated p-6 lg:p-8">
           <p className="text-sm lg:text-base leading-relaxed text-foreground">
             {entry.cta}

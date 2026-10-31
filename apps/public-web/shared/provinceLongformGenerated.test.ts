@@ -236,8 +236,8 @@ describe("province long-form prerender (generated path)", () => {
   });
 });
 
-describe("province FAQPage schema merge (one FAQPage per document)", () => {
-  it("appends long-form questions to the single FAQPage node for province routes", () => {
+describe("province FAQPage schema (one node, visible questions only)", () => {
+  it("marks up exactly the long-form questions the page renders", () => {
     const data = getStructuredData(
       "/solar-carport/amnat-charoen",
       "https://www.sirinx.co",
@@ -250,8 +250,15 @@ describe("province FAQPage schema merge (one FAQPage per document)", () => {
     }>;
     const names = mainEntity.map((q) => q.name);
     expect(names).toContain("ติดตั้งโซลาร์เซลล์จังหวัดอำนาจเจริญคุ้มไหม");
-    expect(names.length).toBeGreaterThanOrEqual(10);
-    const merged = names.find((n) => n.includes("อำนาจเจริญคุ้มไหม"));
-    expect(merged).toBeTruthy();
+    // The shared solar-carport FAQ is not rendered on province routes, so it
+    // must not be marked up there: schema may only claim visible answers.
+    expect(names).not.toContain("Solar Carport ต่างจาก Rooftop Solar อย่างไร?");
+    const entry = getProvinceLongformEntry("amnat-charoen");
+    expect(entry).toBeTruthy();
+    expect(names).toEqual(entry!.faq.map((item) => item.q));
+    const html = buildProvinceLongformHtml("amnat-charoen");
+    for (const question of names) {
+      expect(html).toContain(question);
+    }
   });
 });

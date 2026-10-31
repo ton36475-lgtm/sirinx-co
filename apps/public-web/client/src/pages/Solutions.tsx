@@ -12,7 +12,7 @@ import { bessFaq } from "@shared/bessFaq";
 import { cfImage, cfImageSrcSet } from "@/lib/cfImage";
 import {
   ArrowRight, Sun, Waves, Car, Battery, Brain, Wrench, Handshake,
-  CheckCircle2, Zap
+  CheckCircle2, Zap, Factory, Hotel, Ruler, Shield
 } from "lucide-react";
 
 const BESSContainerProduct3D = lazy(
@@ -73,6 +73,47 @@ const solutions: SolutionDef[] = [
     problemKey: "sol.bess.problem", solutionKey: "sol.bess.solution",
     suitableKeys: ["sol.bess.suitable1", "sol.bess.suitable2", "sol.bess.suitable3", "sol.bess.suitable4"],
     benefitKeys: ["sol.bess.benefit1", "sol.bess.benefit2", "sol.bess.benefit3", "sol.bess.benefit4"],
+    link: "/bess",
+  },
+  {
+    id: "bess-factory", icon: Factory, titleKey: "sol.bess.factory.title",
+    image: null,
+    problemKey: "sol.bess.factory.problem", solutionKey: "sol.bess.factory.solution",
+    suitableKeys: ["sol.bess.factory.suitable1", "sol.bess.factory.suitable2", "sol.bess.factory.suitable3"],
+    benefitKeys: ["sol.bess.factory.benefit1", "sol.bess.factory.benefit2", "sol.bess.factory.benefit3", "sol.bess.factory.benefit4", "sol.bess.factory.benefit5", "sol.bess.factory.benefit6"],
+    link: "/bess/factory",
+  },
+  {
+    id: "bess-hotel", icon: Hotel, titleKey: "sol.bess.hotel.title",
+    image: null,
+    problemKey: "sol.bess.hotel.problem", solutionKey: "sol.bess.hotel.solution",
+    suitableKeys: ["sol.bess.hotel.suitable1", "sol.bess.hotel.suitable2", "sol.bess.hotel.suitable3"],
+    benefitKeys: ["sol.bess.hotel.benefit1", "sol.bess.hotel.benefit2", "sol.bess.hotel.benefit3", "sol.bess.hotel.benefit4", "sol.bess.hotel.benefit5"],
+    link: "/bess/hotel",
+  },
+  {
+    id: "bess-peak-shaving", icon: Zap, titleKey: "sol.bess.peak-shaving.title",
+    image: null,
+    problemKey: "sol.bess.peak-shaving.problem", solutionKey: "sol.bess.peak-shaving.solution",
+    suitableKeys: ["sol.bess.peak-shaving.suitable1", "sol.bess.peak-shaving.suitable2", "sol.bess.peak-shaving.suitable3"],
+    benefitKeys: ["sol.bess.peak-shaving.benefit1", "sol.bess.peak-shaving.benefit2", "sol.bess.peak-shaving.benefit3", "sol.bess.peak-shaving.benefit4"],
+    link: "/bess/peak-shaving",
+  },
+  {
+    id: "bess-sizing", icon: Ruler, titleKey: "sol.bess.sizing.title",
+    image: null,
+    problemKey: "sol.bess.sizing.problem", solutionKey: "sol.bess.sizing.solution",
+    suitableKeys: ["sol.bess.sizing.suitable1", "sol.bess.sizing.suitable2", "sol.bess.sizing.suitable3"],
+    benefitKeys: ["sol.bess.sizing.benefit1", "sol.bess.sizing.benefit2", "sol.bess.sizing.benefit3", "sol.bess.sizing.benefit4"],
+    link: "/bess/sizing",
+  },
+  {
+    id: "bess-safety-cost", icon: Shield, titleKey: "sol.bess.safety-cost.title",
+    image: null,
+    problemKey: "sol.bess.safety-cost.problem", solutionKey: "sol.bess.safety-cost.solution",
+    suitableKeys: ["sol.bess.safety-cost.suitable1", "sol.bess.safety-cost.suitable2"],
+    benefitKeys: ["sol.bess.safety-cost.benefit1", "sol.bess.safety-cost.benefit2", "sol.bess.safety-cost.benefit3", "sol.bess.safety-cost.benefit4", "sol.bess.safety-cost.benefit5"],
+    link: "/bess/safety-cost",
   },
   {
     id: "ai-energy", icon: Brain, titleKey: "sol.ai.title",
@@ -104,12 +145,14 @@ export default function Solutions() {
   useEffect(() => {
     trackSolutionVisit("solar-carport");
     const hash = window.location.hash.replace("#", "");
-    const categoryMap: Record<string, SolutionCategory> = {
+    const categoryMap: Record<string, string> = {
       carport: "solar-carport", rooftop: "rooftop-solar", floating: "floating-solar",
-      bess: "bess", "ai-energy": "ai-energy",
+      bess: "bess", "bess-factory": "bess/factory", "bess-hotel": "bess/hotel",
+      "bess-peak-shaving": "bess/peak-shaving", "bess-sizing": "bess/sizing",
+      "bess-safety-cost": "bess/safety-cost", "ai-energy": "ai-energy",
     };
     if (hash && categoryMap[hash]) {
-      trackSolutionVisit(categoryMap[hash]);
+      trackSolutionVisit(categoryMap[hash] as SolutionCategory);
     }
   }, []);
 
@@ -215,6 +258,24 @@ export default function Solutions() {
                       <BESSContainerProduct3D labelTh={t(sol.titleKey)} />
                     </div>
                   </Suspense>
+                ) : sol.id.startsWith("bess-") ? (
+                  <div className="p-5 rounded-xl border border-border-subtle bg-surface-elevated">
+                    <h3 className="font-display font-semibold text-foreground text-sm mb-3">{t(sol.titleKey)}</h3>
+                    <p className="text-sm text-text-secondary leading-relaxed">{t(sol.problemKey)}</p>
+                    <ul className="space-y-2">
+                      {sol.suitableKeys.map((sk) => (
+                        <li key={sk} className="flex items-start gap-2 text-xs text-text-secondary">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-accent-secondary shrink-0 mt-0.5" />
+                          {t(sk)}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="mt-4">
+                      <Link href={sol.link ?? "/bess"} className="inline-flex items-center gap-2 px-4 py-2 font-display font-medium btn-accent rounded-lg text-sm">
+                        {t("sol.cta.details")} <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    </div>
+                  </div>
                 ) : sol.image ? (
                   <img
                     src={cfImage(sol.image, 960)}

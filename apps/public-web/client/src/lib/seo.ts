@@ -86,6 +86,42 @@ const metaByPath: Record<string, SeoMeta> = {
     description:
       "วางกลยุทธ์พลังงานสะอาดสำหรับธุรกิจ — เริ่มจาก Solar Rooftop ต่อยอดด้วย BESS กักเก็บพลังงาน และ AI Energy Management ตามข้อมูลการใช้ไฟและข้อจำกัดของไซต์",
   },
+  "/bess": {
+    path: "/bess",
+    title: "BESS / Battery Energy Storage System | SIRINX",
+    description:
+      "ระบบกักเก็บพลังงานแบตเตอรี่สำหรับองค์กรและธุรกิจ — ลดค่า demand charge สำรองไฟสำรอง และใช้พลังงานโซลาร์ได้รอบคืน ด้วยการออกแบบจากข้อมูลหน้างานจริง",
+  },
+  "/bess/factory": {
+    path: "/bess/factory",
+    title: "BESS สำหรับโรงงานอุตสาหกรรม | ลด demand charge สูงสุด 20%",
+    description:
+      "BESS ขนาดกลางถึงใหญ่สำหรับโรงงานที่ใช้ไฟมากกว่า 1 MW ช่วยลด peak และ smooth load ตามรูปแบบการใช้ไฟจริง พร้อมตัวเลขผลประหยัดจากข้อมูลจริง",
+  },
+  "/bess/hotel": {
+    path: "/bess/hotel",
+    title: "BESS สำหรับโรงแรมและรีสอร์ท | ลด AC peak ได้ 15-25%",
+    description:
+      "BESS ขนาดเล็กถึงกลางสำหรับโรงแรม ช่วยลดค่า AC peak และให้ไฟฟ้าสำรองห้องพักในช่วงเย็น ด้วยการออกแบบจากข้อมูลหน้างานจริง",
+  },
+  "/bess/peak-shaving": {
+    path: "/bess/peak-shaving",
+    title: "BESS Peak Shaving | ลด demand charge ได้ 30-40%",
+    description:
+      "BESS ตอบสนองเร็วช่วยลด peak demand โดยชาร์จเมื่อค่าไฟต่ำและจ่ายเมื่อค่าไฟสูง ลดได้ 30-40% ของค่าใช้จ่ายด้านพลังงาน",
+  },
+  "/bess/sizing": {
+    path: "/bess/sizing",
+    title: "BESS Sizing และการคำนวณขนาด | SIRINX",
+    description:
+      "การเลือกขนาด BESS ที่ถูกต้องครั้งแรก — วิเคราะห์ load profile 24 ชม. เพื่อคำนวณ kWh/kW ที่เหมาะสมกับงบประมาณและข้อจำกัดหน้างาน รับประกันผลประหยัดและคืนทุนที่ชัดเจน",
+  },
+  "/bess/safety-cost": {
+    path: "/bess/safety-cost",
+    title: "BESS ความปลอดภัยและค่าใช้จ่าย | SIRINX",
+    description:
+      "มาตรการความปลอดภัยครบถ้วน — เลือกเซลล์ LFP ผ่านมาตร IEC 62619 ติดตั้งครบตาม BS EN 62933 และมี BMS จัดการระบบโดยอัตโนมัติ 24/7",
+  },
   "/blog": {
     path: "/blog",
     title:

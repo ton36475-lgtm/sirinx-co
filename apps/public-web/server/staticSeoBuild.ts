@@ -15,6 +15,10 @@ import {
 } from "../shared/siteContentRegistry";
 import { buildProvinceLongformHtml } from "../shared/provinceLongformHtml";
 import { buildStaticRouteShell } from "../shared/staticRouteShell";
+import { homeSolutionFaq } from "../shared/homeSolutionFaq";
+import { buildSolarCarportFaq } from "../shared/solarCarportFaq";
+import { bessFaq } from "../shared/bessFaq";
+import { bessLongformByRoute } from "../shared/bessLongform";
 
 const distPublic = path.resolve(import.meta.dirname, "..", "dist", "public");
 const distAssets = path.join(distPublic, "assets");
@@ -321,6 +325,17 @@ ${provinceLinks}
 }
 
 function buildStaticHomeSolutionShell() {
+  // The server marks these questions up as FAQPage; without them in the HTML
+  // the markup would claim answers a non-JS crawler cannot see.
+  const faqItems = homeSolutionFaq
+    .map(
+      item => `            <div class="mt-6">
+              <h3 class="font-display text-lg font-semibold">${escapeHtml(item.question)}</h3>
+              <p class="mt-2 text-sm leading-6 text-text-secondary">${escapeHtml(item.answer)}</p>
+            </div>`
+    )
+    .join("\n");
+
   return `<main data-sirinx-static-shell="home-solution">
       <section class="relative min-h-[92vh] overflow-hidden bg-background text-foreground">
         <picture class="absolute inset-0 block h-full w-full">
@@ -339,6 +354,86 @@ function buildStaticHomeSolutionShell() {
               <a href="/assessment" class="inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline">ประเมินค่าไฟเบื้องต้น</a>
             </div>
           </div>
+        </div>
+      </section>
+      <section class="bg-background px-4 py-16 text-foreground sm:px-6 lg:py-24">
+        <div class="container mx-auto max-w-5xl">
+          <h2 class="font-display text-2xl font-bold leading-tight sm:text-3xl">คำถามที่พบบ่อยเกี่ยวกับ Home Solution</h2>
+${faqItems}
+          <div class="mt-10 flex flex-wrap gap-4">
+            <a href="/solutions/" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline">ดูโซลูชันทั้งหมด</a>
+            <a href="/pricing/" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline">ดูแพ็กเกจและขอบเขตงาน</a>
+            <a href="/projects/" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline">ดูผลงานติดตั้งจริง</a>
+            <a href="/provinces/" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline">บริการ 77 จังหวัด</a>
+          </div>
+        </div>
+      </section>
+    </main>`;
+}
+
+function buildStaticSolutionsShell() {
+  const faqItems = bessFaq
+    .map(
+      item => `            <div class="mt-6">
+              <h3 class="font-display text-lg font-semibold">${escapeHtml(item.question)}</h3>
+              <p class="mt-2 text-sm leading-6 text-text-secondary">${escapeHtml(item.answer)}</p>
+            </div>`
+    )
+    .join("\n");
+
+  return `<main data-sirinx-static-shell="solutions">
+      <section class="bg-background px-4 py-16 text-foreground sm:px-6 lg:py-24">
+        <div class="container mx-auto max-w-5xl">
+          <nav aria-label="Breadcrumb" class="mb-6 text-sm text-text-secondary">
+            <a href="/" class="underline-offset-4 hover:underline">หน้าแรก</a>
+            <span aria-hidden="true"> / </span>
+            <span>โซลูชัน</span>
+          </nav>
+          <h1 class="font-display text-3xl font-bold leading-tight sm:text-4xl">โซลูชันพลังงานสำหรับธุรกิจ: Solar Carport, Rooftop, Floating, BESS, EV Charger และ AI Energy</h1>
+          <p class="mt-5 max-w-3xl text-base leading-relaxed text-text-secondary">เลือกโซลูชันตามข้อจำกัดของอาคารและรูปแบบการใช้ไฟ ตั้งแต่ลานจอดรถ หลังคา พื้นที่ผิวน้ำ ไปจนถึงระบบกักเก็บพลังงานและจุดชาร์จ EV โดย SIRINX ประเมินจากข้อมูลหน้างานจริงก่อนออกแบบ</p>
+          <div class="mt-10 flex flex-wrap gap-4">
+            <a href="/contact" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent">ปรึกษาทีมวิศวกรรม</a>
+            <a href="/solar-carport/" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline">Solar Carport</a>
+            <a href="/pricing/" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline">แพ็กเกจและขอบเขตงาน</a>
+          </div>
+          <h2 class="mt-14 font-display text-2xl font-bold leading-tight sm:text-3xl">คำถามที่พบบ่อยเกี่ยวกับ BESS</h2>
+${faqItems}
+        </div>
+      </section>
+    </main>`;
+}
+
+function buildStaticSolarCarportShell() {
+  // The service hub marks these six questions up as FAQPage and the hydrated
+  // page renders them; the static document has to show the same answers.
+  const faqItems = buildSolarCarportFaq({ lang: "th" })
+    .map(
+      item => `            <div class="mt-6">
+              <h3 class="font-display text-lg font-semibold">${escapeHtml(item.question)}</h3>
+              <p class="mt-2 text-sm leading-6 text-text-secondary">${escapeHtml(item.answer)}</p>
+            </div>`
+    )
+    .join("\n");
+
+  return `<main data-sirinx-static-shell="solar-carport">
+      <section class="bg-background px-4 py-16 text-foreground sm:px-6 lg:py-24">
+        <div class="container mx-auto max-w-5xl">
+          <nav aria-label="Breadcrumb" class="mb-6 text-sm text-text-secondary">
+            <a href="/" class="underline-offset-4 hover:underline">หน้าแรก</a>
+            <span aria-hidden="true"> / </span>
+            <span>Solar Carport</span>
+          </nav>
+          <h1 class="font-display text-3xl font-bold leading-tight sm:text-4xl">Solar Carport สำหรับโรงงานและลานจอดรถในประเทศไทย</h1>
+          <p class="mt-5 max-w-3xl text-base leading-relaxed text-text-secondary">SIRINX ออกแบบและติดตั้ง Solar Carport พร้อม EV Charger, BESS และระบบติดตามพลังงาน โดยเริ่มจากข้อมูลหน้างานจริง ทั้งขนาดลานจอดรถ โครงสร้างเดิม พฤติกรรมการใช้ไฟ และข้อจำกัดของการเชื่อมต่อระบบไฟฟ้า</p>
+          <div class="mt-10 flex flex-wrap gap-4">
+            <a href="/contact?interest=solar-carport" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent">ส่งข้อมูลโครงการ</a>
+            <a href="/assessment/" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline">ประเมินความคุ้มค่า</a>
+            <a href="/projects/" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline">ดูผลงานติดตั้งจริง</a>
+            <a href="/provinces/" class="inline-flex items-center justify-center rounded-lg px-6 py-3.5 font-display font-semibold btn-accent-outline">บริการ 77 จังหวัด</a>
+          </div>
+          <h2 class="mt-14 font-display text-2xl font-bold leading-tight sm:text-3xl">คำถามที่พบบ่อยเกี่ยวกับ Solar Carport</h2>
+${faqItems}
+          <p class="mt-10 text-sm leading-6 text-text-secondary">ดูรายละเอียดบริการรายจังหวัดได้ที่ <a href="/provinces/" class="underline underline-offset-4">หน้าบริการ 77 จังหวัด</a> หรือดู <a href="/pricing/" class="underline underline-offset-4">แพ็กเกจและขอบเขตงาน</a></p>
         </div>
       </section>
     </main>`;
@@ -452,6 +547,39 @@ ${links}
     </main>`;
 }
 
+function buildStaticBessShell(route: string): string | null {
+  const blocks = bessLongformByRoute[route];
+  if (!blocks || blocks.length === 0) return null;
+
+  const sections = blocks
+    .map(
+      block => `<section class="mb-8">
+        <h2 class="font-display text-2xl font-bold mb-3">${escapeHtml(block.heading)}</h2>
+        ${block.paragraphs
+          .map(p => `<p class="mb-4 leading-relaxed text-text-secondary">${escapeHtml(p)}</p>`)
+          .join("\n        ")}
+      </section>`
+    )
+    .join("\n");
+
+  const meta = getPageMeta(route);
+  const title = escapeHtml(meta?.title ?? route);
+  return `<main data-sirinx-static-shell="bess">
+      <article class="container mx-auto max-w-4xl px-4 py-12">
+        <h1 class="font-display text-3xl font-bold mb-6">${title}</h1>
+        ${sections}
+        <nav class="mt-8 flex flex-wrap gap-3 text-sm">
+          <a href="/bess/factory" class="underline">BESS โรงงาน</a>
+          <a href="/bess/hotel" class="underline">BESS โรงแรม</a>
+          <a href="/bess/peak-shaving" class="underline">BESS Peak Shaving</a>
+          <a href="/bess/sizing" class="underline">BESS Sizing</a>
+          <a href="/bess/safety-cost" class="underline">BESS ความปลอดภัย</a>
+          <a href="/contact?interest=bess" class="underline">ติดต่อ SIRINX</a>
+        </nav>
+      </article>
+    </main>`;
+}
+
 function injectStaticShell(html: string, route: string) {
   if (
     !html.includes('<div id="root"></div>') ||
@@ -474,6 +602,20 @@ function injectStaticShell(html: string, route: string) {
     );
   }
 
+  if (route === "/solutions") {
+    return html.replace(
+      '<div id="root"></div>',
+      `<div id="root">\n    ${buildStaticSolutionsShell()}\n    </div>`
+    );
+  }
+
+  if (route === "/solar-carport") {
+    return html.replace(
+      '<div id="root"></div>',
+      `<div id="root">\n    ${buildStaticSolarCarportShell()}\n    </div>`
+    );
+  }
+
   if (route === "/provinces") {
     return html.replace(
       '<div id="root"></div>',
@@ -488,6 +630,14 @@ function injectStaticShell(html: string, route: string) {
     return html.replace(
       '<div id="root"></div>',
       `<div id="root">\n    ${provinceLongformShell}\n    </div>`
+    );
+  }
+
+  const bessShell = buildStaticBessShell(route);
+  if (bessShell) {
+    return html.replace(
+      '<div id="root"></div>',
+      `<div id="root">\n    ${bessShell}\n    </div>`
     );
   }
 

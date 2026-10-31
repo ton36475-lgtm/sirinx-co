@@ -1,0 +1,764 @@
+{
+  "summary": {
+    "generatedAt": "2026-10-30T00:01:00.855Z",
+    "dist": "apps/public-web/dist-org",
+    "origin": "https://www.sirinx.org",
+    "routes": 108,
+    "sitemapUrls": 105,
+    "defects": 0,
+    "warnings": 121,
+    "passes": 0,
+    "keywordMap": {
+      "path": "docs/seo/keyword-map-77-provinces.csv",
+      "rows": 1712,
+      "scopes": {
+        "national": 18,
+        "province": 1694
+      },
+      "provincePages": 79,
+      "mapRoutesWithoutBuild": 462,
+      "missingRouteFamilies": [
+        [
+          "/solar-carport/bangkok/ev",
+          2
+        ],
+        [
+          "/solar-carport/amnat-charoen/ev",
+          2
+        ],
+        [
+          "/solar-carport/ang-thong/ev",
+          2
+        ],
+        [
+          "/solar-carport/bueng-kan/ev",
+          2
+        ],
+        [
+          "/solar-carport/buriram/ev",
+          2
+        ],
+        [
+          "/solar-carport/chachoengsao/ev",
+          2
+        ],
+        [
+          "/solar-carport/chai-nat/ev",
+          2
+        ],
+        [
+          "/solar-carport/chaiyaphum/ev",
+          2
+        ]
+      ],
+      "medianCoverage": 0.7857142857142857
+    },
+    "hreflangPages": 0,
+    "thinPages": [
+      {
+        "route": "/styleguide/motion",
+        "chars": 207
+      },
+      {
+        "route": "/partner",
+        "chars": 218
+      },
+      {
+        "route": "/blog/net-metering-thailand-guide",
+        "chars": 263
+      },
+      {
+        "route": "/projects/ruenphae-royal-park",
+        "chars": 277
+      },
+      {
+        "route": "/about",
+        "chars": 284
+      },
+      {
+        "route": "/blog/solar-tax-benefits-thailand",
+        "chars": 295
+      },
+      {
+        "route": "/blog/solar-panel-comparison-2025",
+        "chars": 299
+      },
+      {
+        "route": "/projects",
+        "chars": 300
+      },
+      {
+        "route": "/blog/floating-solar-thailand",
+        "chars": 301
+      },
+      {
+        "route": "/industries",
+        "chars": 301
+      },
+      {
+        "route": "/projects/holatel-rim-nan",
+        "chars": 304
+      },
+      {
+        "route": "/assessment",
+        "chars": 306
+      },
+      {
+        "route": "/blog/esg-solar-reporting",
+        "chars": 306
+      },
+      {
+        "route": "/blog/solar-carport-ev-charging",
+        "chars": 307
+      },
+      {
+        "route": "/blog/bess-peak-shaving",
+        "chars": 311
+      },
+      {
+        "route": "/contact",
+        "chars": 317
+      },
+      {
+        "route": "/investment",
+        "chars": 318
+      },
+      {
+        "route": "/strategy",
+        "chars": 328
+      },
+      {
+        "route": "/blog/ai-energy-management-guide",
+        "chars": 334
+      },
+      {
+        "route": "/pricing",
+        "chars": 344
+      },
+      {
+        "route": "/blog",
+        "chars": 346
+      },
+      {
+        "route": "/blog/rooftop-solar-roi-2025",
+        "chars": 346
+      },
+      {
+        "route": "/line",
+        "chars": 352
+      },
+      {
+        "route": "/",
+        "chars": 1123
+      }
+    ]
+  },
+  "defects": [],
+  "warnings": [
+    {
+      "route": "/about",
+      "check": "crawlable-text-thin",
+      "detail": "284 chars"
+    },
+    {
+      "route": "/assessment",
+      "check": "title-length",
+      "detail": "67 chars"
+    },
+    {
+      "route": "/assessment",
+      "check": "crawlable-text-thin",
+      "detail": "306 chars"
+    },
+    {
+      "route": "/blog/ai-energy-management-guide",
+      "check": "title-length",
+      "detail": "67 chars"
+    },
+    {
+      "route": "/blog/ai-energy-management-guide",
+      "check": "crawlable-text-thin",
+      "detail": "334 chars"
+    },
+    {
+      "route": "/blog/bess-peak-shaving",
+      "check": "crawlable-text-thin",
+      "detail": "311 chars"
+    },
+    {
+      "route": "/blog/esg-solar-reporting",
+      "check": "title-length",
+      "detail": "66 chars"
+    },
+    {
+      "route": "/blog/esg-solar-reporting",
+      "check": "crawlable-text-thin",
+      "detail": "306 chars"
+    },
+    {
+      "route": "/blog/floating-solar-thailand",
+      "check": "crawlable-text-thin",
+      "detail": "301 chars"
+    },
+    {
+      "route": "/blog",
+      "check": "title-length",
+      "detail": "72 chars"
+    },
+    {
+      "route": "/blog",
+      "check": "crawlable-text-thin",
+      "detail": "346 chars"
+    },
+    {
+      "route": "/blog/net-metering-thailand-guide",
+      "check": "crawlable-text-thin",
+      "detail": "263 chars"
+    },
+    {
+      "route": "/blog/rooftop-solar-roi-2025",
+      "check": "title-length",
+      "detail": "70 chars"
+    },
+    {
+      "route": "/blog/rooftop-solar-roi-2025",
+      "check": "crawlable-text-thin",
+      "detail": "346 chars"
+    },
+    {
+      "route": "/blog/solar-carport-ev-charging",
+      "check": "crawlable-text-thin",
+      "detail": "307 chars"
+    },
+    {
+      "route": "/blog/solar-panel-comparison-2025",
+      "check": "title-length",
+      "detail": "67 chars"
+    },
+    {
+      "route": "/blog/solar-panel-comparison-2025",
+      "check": "crawlable-text-thin",
+      "detail": "299 chars"
+    },
+    {
+      "route": "/blog/solar-tax-benefits-thailand",
+      "check": "crawlable-text-thin",
+      "detail": "295 chars"
+    },
+    {
+      "route": "/contact",
+      "check": "crawlable-text-thin",
+      "detail": "317 chars"
+    },
+    {
+      "route": "/cookies",
+      "check": "crawlable-text-thin",
+      "detail": "198 chars"
+    },
+    {
+      "route": "/home-solution",
+      "check": "title-length",
+      "detail": "84 chars"
+    },
+    {
+      "route": "/home-solution",
+      "check": "description-length",
+      "detail": "193 chars"
+    },
+    {
+      "route": "/home-solution",
+      "check": "h1-count",
+      "detail": "2 h1 elements"
+    },
+    {
+      "route": "/",
+      "check": "title-length",
+      "detail": "77 chars"
+    },
+    {
+      "route": "/",
+      "check": "crawlable-text",
+      "detail": "1123 chars"
+    },
+    {
+      "route": "/industries",
+      "check": "crawlable-text-thin",
+      "detail": "301 chars"
+    },
+    {
+      "route": "/investment",
+      "check": "title-length",
+      "detail": "71 chars"
+    },
+    {
+      "route": "/investment",
+      "check": "crawlable-text-thin",
+      "detail": "318 chars"
+    },
+    {
+      "route": "/line",
+      "check": "title-length",
+      "detail": "81 chars"
+    },
+    {
+      "route": "/line",
+      "check": "crawlable-text-thin",
+      "detail": "352 chars"
+    },
+    {
+      "route": "/partner",
+      "check": "crawlable-text-thin",
+      "detail": "218 chars"
+    },
+    {
+      "route": "/pricing",
+      "check": "title-length",
+      "detail": "78 chars"
+    },
+    {
+      "route": "/pricing",
+      "check": "crawlable-text-thin",
+      "detail": "344 chars"
+    },
+    {
+      "route": "/privacy",
+      "check": "crawlable-text-thin",
+      "detail": "212 chars"
+    },
+    {
+      "route": "/projects/holatel-rim-nan",
+      "check": "crawlable-text-thin",
+      "detail": "304 chars"
+    },
+    {
+      "route": "/projects",
+      "check": "crawlable-text-thin",
+      "detail": "300 chars"
+    },
+    {
+      "route": "/projects/ruenphae-royal-park",
+      "check": "crawlable-text-thin",
+      "detail": "277 chars"
+    },
+    {
+      "route": "/solar-carport/amnat-charoen",
+      "check": "title-length",
+      "detail": "74 chars"
+    },
+    {
+      "route": "/solar-carport/ang-thong",
+      "check": "title-length",
+      "detail": "71 chars"
+    },
+    {
+      "route": "/solar-carport/bangkok",
+      "check": "title-length",
+      "detail": "77 chars"
+    },
+    {
+      "route": "/solar-carport/bueng-kan",
+      "check": "title-length",
+      "detail": "70 chars"
+    },
+    {
+      "route": "/solar-carport/buriram",
+      "check": "title-length",
+      "detail": "73 chars"
+    },
+    {
+      "route": "/solar-carport/chachoengsao",
+      "check": "title-length",
+      "detail": "74 chars"
+    },
+    {
+      "route": "/solar-carport/chai-nat",
+      "check": "title-length",
+      "detail": "70 chars"
+    },
+    {
+      "route": "/solar-carport/chaiyaphum",
+      "check": "title-length",
+      "detail": "71 chars"
+    },
+    {
+      "route": "/solar-carport/chanthaburi",
+      "check": "title-length",
+      "detail": "72 chars"
+    },
+    {
+      "route": "/solar-carport/chiang-mai",
+      "check": "title-length",
+      "detail": "73 chars"
+    },
+    {
+      "route": "/solar-carport/chiang-rai",
+      "check": "title-length",
+      "detail": "72 chars"
+    },
+    {
+      "route": "/solar-carport/chonburi",
+      "check": "title-length",
+      "detail": "70 chars"
+    },
+    {
+      "route": "/solar-carport/chumphon",
+      "check": "title-length",
+      "detail": "69 chars"
+    },
+    {
+      "route": "/solar-carport",
+      "check": "title-length",
+      "detail": "82 chars"
+    },
+    {
+      "route": "/solar-carport/kalasin",
+      "check": "title-length",
+      "detail": "73 chars"
+    },
+    {
+      "route": "/solar-carport/kamphaeng-phet",
+      "check": "title-length",
+      "detail": "73 chars"
+    },
+    {
+      "route": "/solar-carport/kanchanaburi",
+      "check": "title-length",
+      "detail": "73 chars"
+    },
+    {
+      "route": "/solar-carport/khon-kaen",
+      "check": "title-length",
+      "detail": "71 chars"
+    },
+    {
+      "route": "/solar-carport/krabi",
+      "check": "title-length",
+      "detail": "70 chars"
+    },
+    {
+      "route": "/solar-carport/lampang",
+      "check": "title-length",
+      "detail": "69 chars"
+    },
+    {
+      "route": "/solar-carport/lamphun",
+      "check": "title-length",
+      "detail": "69 chars"
+    },
+    {
+      "route": "/solar-carport/loei",
+      "check": "title-length",
+      "detail": "67 chars"
+    },
+    {
+      "route": "/solar-carport/lopburi",
+      "check": "title-length",
+      "detail": "70 chars"
+    },
+    {
+      "route": "/solar-carport/mae-hong-son",
+      "check": "title-length",
+      "detail": "74 chars"
+    },
+    {
+      "route": "/solar-carport/maha-sarakham",
+      "check": "title-length",
+      "detail": "73 chars"
+    },
+    {
+      "route": "/solar-carport/mukdahan",
+      "check": "title-length",
+      "detail": "72 chars"
+    },
+    {
+      "route": "/solar-carport/nakhon-nayok",
+      "check": "title-length",
+      "detail": "71 chars"
+    },
+    {
+      "route": "/solar-carport/nakhon-pathom",
+      "check": "title-length",
+      "detail": "70 chars"
+    },
+    {
+      "route": "/solar-carport/nakhon-phanom",
+      "check": "title-length",
+      "detail": "70 chars"
+    },
+    {
+      "route": "/solar-carport/nakhon-ratchasima",
+      "check": "title-length",
+      "detail": "74 chars"
+    },
+    {
+      "route": "/solar-carport/nakhon-sawan",
+      "check": "title-length",
+      "detail": "73 chars"
+    },
+    {
+      "route": "/solar-carport/nakhon-si-thammarat",
+      "check": "title-length",
+      "detail": "77 chars"
+    },
+    {
+      "route": "/solar-carport/nan",
+      "check": "title-length",
+      "detail": "68 chars"
+    },
+    {
+      "route": "/solar-carport/narathiwat",
+      "check": "title-length",
+      "detail": "72 chars"
+    },
+    {
+      "route": "/solar-carport/nong-bua-lamphu",
+      "check": "title-length",
+      "detail": "75 chars"
+    },
+    {
+      "route": "/solar-carport/nong-khai",
+      "check": "title-length",
+      "detail": "71 chars"
+    },
+    {
+      "route": "/solar-carport/nonthaburi",
+      "check": "title-length",
+      "detail": "71 chars"
+    },
+    {
+      "route": "/solar-carport/pathum-thani",
+      "check": "title-length",
+      "detail": "72 chars"
+    },
+    {
+      "route": "/solar-carport/pattani",
+      "check": "title-length",
+      "detail": "71 chars"
+    },
+    {
+      "route": "/solar-carport/phang-nga",
+      "check": "title-length",
+      "detail": "69 chars"
+    },
+    {
+      "route": "/solar-carport/phatthalung",
+      "check": "title-length",
+      "detail": "70 chars"
+    },
+    {
+      "route": "/solar-carport/phayao",
+      "check": "title-length",
+      "detail": "69 chars"
+    },
+    {
+      "route": "/solar-carport/phetchabun",
+      "check": "title-length",
+      "detail": "73 chars"
+    },
+    {
+      "route": "/solar-carport/phetchaburi",
+      "check": "title-length",
+      "detail": "72 chars"
+    },
+    {
+      "route": "/solar-carport/phichit",
+      "check": "title-length",
+      "detail": "70 chars"
+    },
+    {
+      "route": "/solar-carport/phitsanulok",
+      "check": "title-length",
+      "detail": "72 chars"
+    },
+    {
+      "route": "/solar-carport/phra-nakhon-si-ayutthaya",
+      "check": "title-length",
+      "detail": "79 chars"
+    },
+    {
+      "route": "/solar-carport/phrae",
+      "check": "title-length",
+      "detail": "68 chars"
+    },
+    {
+      "route": "/solar-carport/phuket",
+      "check": "title-length",
+      "detail": "70 chars"
+    },
+    {
+      "route": "/solar-carport/prachinburi",
+      "check": "title-length",
+      "detail": "74 chars"
+    },
+    {
+      "route": "/solar-carport/prachuap-khiri-khan",
+      "check": "title-length",
+      "detail": "79 chars"
+    },
+    {
+      "route": "/solar-carport/ranong",
+      "check": "title-length",
+      "detail": "69 chars"
+    },
+    {
+      "route": "/solar-carport/ratchaburi",
+      "check": "title-length",
+      "detail": "71 chars"
+    },
+    {
+      "route": "/solar-carport/rayong",
+      "check": "title-length",
+      "detail": "69 chars"
+    },
+    {
+      "route": "/solar-carport/roi-et",
+      "check": "title-length",
+      "detail": "72 chars"
+    },
+    {
+      "route": "/solar-carport/sa-kaeo",
+      "check": "title-length",
+      "detail": "71 chars"
+    },
+    {
+      "route": "/solar-carport/sakon-nakhon",
+      "check": "title-length",
+      "detail": "70 chars"
+    },
+    {
+      "route": "/solar-carport/samut-prakan",
+      "check": "title-length",
+      "detail": "75 chars"
+    },
+    {
+      "route": "/solar-carport/samut-sakhon",
+      "check": "title-length",
+      "detail": "73 chars"
+    },
+    {
+      "route": "/solar-carport/samut-songkhram",
+      "check": "title-length",
+      "detail": "75 chars"
+    },
+    {
+      "route": "/solar-carport/saraburi",
+      "check": "title-length",
+      "detail": "71 chars"
+    },
+    {
+      "route": "/solar-carport/satun",
+      "check": "title-length",
+      "detail": "68 chars"
+    },
+    {
+      "route": "/solar-carport/sing-buri",
+      "check": "title-length",
+      "detail": "73 chars"
+    },
+    {
+      "route": "/solar-carport/sisaket",
+      "check": "title-length",
+      "detail": "72 chars"
+    },
+    {
+      "route": "/solar-carport/songkhla",
+      "check": "title-length",
+      "detail": "69 chars"
+    },
+    {
+      "route": "/solar-carport/sukhothai",
+      "check": "title-length",
+      "detail": "71 chars"
+    },
+    {
+      "route": "/solar-carport/suphan-buri",
+      "check": "title-length",
+      "detail": "74 chars"
+    },
+    {
+      "route": "/solar-carport/surat-thani",
+      "check": "title-length",
+      "detail": "76 chars"
+    },
+    {
+      "route": "/solar-carport/surin",
+      "check": "title-length",
+      "detail": "72 chars"
+    },
+    {
+      "route": "/solar-carport/tak",
+      "check": "title-length",
+      "detail": "67 chars"
+    },
+    {
+      "route": "/solar-carport/trang",
+      "check": "title-length",
+      "detail": "68 chars"
+    },
+    {
+      "route": "/solar-carport/trat",
+      "check": "title-length",
+      "detail": "68 chars"
+    },
+    {
+      "route": "/solar-carport/ubon-ratchathani",
+      "check": "title-length",
+      "detail": "75 chars"
+    },
+    {
+      "route": "/solar-carport/udon-thani",
+      "check": "title-length",
+      "detail": "72 chars"
+    },
+    {
+      "route": "/solar-carport/uthai-thani",
+      "check": "title-length",
+      "detail": "73 chars"
+    },
+    {
+      "route": "/solar-carport/uttaradit",
+      "check": "title-length",
+      "detail": "73 chars"
+    },
+    {
+      "route": "/solar-carport/yala",
+      "check": "title-length",
+      "detail": "68 chars"
+    },
+    {
+      "route": "/solar-carport/yasothon",
+      "check": "title-length",
+      "detail": "69 chars"
+    },
+    {
+      "route": "/solutions",
+      "check": "title-length",
+      "detail": "67 chars"
+    },
+    {
+      "route": "/strategy",
+      "check": "crawlable-text-thin",
+      "detail": "328 chars"
+    },
+    {
+      "route": "/styleguide/motion",
+      "check": "crawlable-text-thin",
+      "detail": "207 chars"
+    },
+    {
+      "route": "/terms",
+      "check": "crawlable-text-thin",
+      "detail": "197 chars"
+    },
+    {
+      "route": "/contact",
+      "check": "keyword-coverage",
+      "detail": "0/77 map keywords present (0%)"
+    },
+    {
+      "route": "/projects",
+      "check": "keyword-coverage",
+      "detail": "0/77 map keywords present (0%)"
+    }
+  ]
+}

@@ -4,7 +4,7 @@ Status: PR-MONO-001 planning baseline.
 
 SIRINX OS uses a guarded multi-node topology. This file is architecture authority for PR-MONO-001. It does not activate tunnels, services, deploys, or sync jobs.
 
-The Omarchy row is a settings entry (`infra/omarchy/vibe-coding/`), and the join half is now measured rather than planned: tailnet peer **`omarchy`** (100.87.189.34, linux) is **online** as of 2026-10-23 and advertises three Tailscale SSH host keys, while the older `aiagent` peer (100.67.78.88) now reports OS `windows` and was last seen 6 days ago. The node still holds no authority until `MASTER_PLAN` C6 closes, and no worker can reach it yet: every login is refused with `tailnet policy does not permit you to SSH as user "sirinx"`, so its Hyprland/Omarchy version stays **UNVERIFIED** until the ACL grants a user.
+The Omarchy row is a settings entry (`infra/omarchy/vibe-coding/`), and the join half is now measured rather than planned: tailnet peer **`omarchy`** (100.87.189.34, linux) is **online** as of 2026-10-23 and advertises three Tailscale SSH host keys. The previous `aiagent` peer (100.67.78.88, formerly a Windows worker node) has been **wiped and reprovisioned as an Omarchy (Arch/Hyprland) node** — it no longer runs Windows and must not be treated as a Windows Worker Node; its old IP/role is retired. The node still holds no authority until `MASTER_PLAN` C6 closes, and no worker can reach it yet: every login is refused with `tailnet policy does not permit you to SSH as user "sirinx"`, so its Hyprland/Omarchy version stays **UNVERIFIED** until the ACL grants a user.
 
 ## Nodes
 

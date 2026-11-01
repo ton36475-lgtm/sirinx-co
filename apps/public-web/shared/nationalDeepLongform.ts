@@ -57,6 +57,46 @@ export const nationalDeepLongformByRoute: Record<string, NationalDeepBlock[]> = 
         "Case Study 3: โรงงานยานยนต์, Solar Carport 1 MW + EV Charging สำหรับ fleet 50 คัน",
       ],
     },
+    {
+      heading: "ROI และ Payback สำหรับโรงงาน",
+      paragraphs: [
+        "Payback period 5-7 ปี สำหรับโรงงานที่มี peak demand สูง",
+        "ตัวอย่าง: โรงงาน peak 500 kW, Solar Carport 200 kWp ผลิต ~300,000 kWh/ปี",
+        "ประหยัดค่าไฟ ~1.2-1.5 ล้านบาท/ปี, payback ~4-5 ปี",
+        "BESS เพิ่ม self-consumption จาก ~60% เป็น ~85%, เพิ่ม ROI",
+        "EV Charging เพิ่มรายได้ ~100,000-300,000 บาท/ปี",
+      ],
+    },
+    {
+      heading: "ความปลอดภัยและมาตรฐาน",
+      paragraphs: [
+        "Solar Carport ใช้แผงโซลาร์ชนิด monocrystalline ประสิทธิภาพ 20-22%",
+        "โครงสร้าง: เหล็ก galvanized หรือ aluminum ตามมาตรฐาน IEC 61215",
+        "Inverter: string inverter หรือ central inverter ตามขนาดระบบ",
+        "BESS: LFP chemistry, 10-15 ปี อายุการใช้งาน",
+        "EV Charger: AC Type 2 (22 kW) หรือ DC Fast (50-150 kW)",
+        "มาตรฐาน: IEC 62619, IEC 62443, NFPA 855",
+      ],
+    },
+    {
+      heading: "การ integrate กับระบบเดิม",
+      paragraphs: [
+        "Solar Carport สามารถ integrate กับระบบโซลาร์ที่มีอยู่ (rooftop solar)",
+        "BESS สามารถเชื่อมกับ grid เพื่อ peak shaving และ backup power",
+        "EV Charger สามารถชาร์จจาก Solar Carport หรือ grid",
+        "AI Energy Management ควบคุมการใช้พลังงานทั้งหมดแบบ real-time",
+      ],
+    },
+    {
+      heading: "ขั้นตอนการดำเนินงาน",
+      paragraphs: [
+        "Site Survey — ทีมวิศวกรสำรวจหน้างาน ประเมินพื้นที่ โครงสร้าง และการใช้ไฟ",
+        "Load Profile Analysis — บันทึกการใช้ไฟ 1-3 เดือน เพื่อวิเคราะห์ peak และ valley",
+        "System Design — ออกแบบ Solar Carport, BESS, EV Charger ตามข้อมูลจริง",
+        "Procurement & Installation — จัดหาอุปกรณ์และติดตั้งโดยทีมที่ผ่านการฝึกอบรม",
+        "Commissioning & Monitoring — ทดสอบระบบและติดตั้งระบบ monitoring แบบ real-time",
+      ],
+    },
   ],
   "/solar-carport/hotel": [
     {

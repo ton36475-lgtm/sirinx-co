@@ -132,7 +132,8 @@ describe("getPageMeta", () => {
   it("returns province-specific Solar Carport meta for 77 province routes", () => {
     expect(thaiProvinces).toHaveLength(77);
     const routes = getStaticSeoRoutes().filter(route =>
-      route.startsWith("/solar-carport/")
+      route.startsWith("/solar-carport/") &&
+      thaiProvinces.some(p => route === `/solar-carport/${p.slug}`)
     );
     expect(routes).toHaveLength(77);
 

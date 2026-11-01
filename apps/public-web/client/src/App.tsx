@@ -28,6 +28,9 @@ const SolarAssessment = lazy(() => import("./pages/SolarAssessment"));
 const Partner = lazy(() => import("./pages/Partner"));
 const Strategy = lazy(() => import("./pages/Strategy"));
 const SolarCarport = lazy(() => import("./pages/SolarCarport"));
+const SolarCarportFactory = lazy(() => import("./pages/SolarCarportFactory"));
+const SolarCarportHotel = lazy(() => import("./pages/SolarCarportHotel"));
+const EVCharging = lazy(() => import("./pages/EVCharging"));
 const BESS = lazy(() => import("./pages/BESS"));
 const BESSFactory = lazy(() => import("./pages/BESSFactory"));
 const BESSHotel = lazy(() => import("./pages/BESSHotel"));
@@ -158,8 +161,11 @@ function PublicRouter() {
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/about" component={About} />
+        <Route path="/solar-carport/factory" component={SolarCarportFactory} />
+        <Route path="/solar-carport/hotel" component={SolarCarportHotel} />
         <Route path="/solar-carport/:province" component={SolarCarport} />
         <Route path="/solar-carport" component={SolarCarport} />
+        <Route path="/ev-charging" component={EVCharging} />
         <Route path="/provinces" component={Provinces} />
         <Route path="/pricing" component={Pricing} />
         <Route path="/solutions" component={Solutions} />

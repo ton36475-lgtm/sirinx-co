@@ -36,6 +36,24 @@ const metaByPath: Record<string, SeoMeta> = {
     description:
       "Solar Carport ผลิตไฟฟ้าจากที่จอดรถ ให้ร่มเงา รองรับ EV Charging + BESS + AI Energy และประเมินความคุ้มค่าตามข้อมูลไซต์จริง",
   },
+  "/solar-carport/factory": {
+    path: "/solar-carport/factory",
+    title: "Solar Carport สำหรับโรงงานอุตสาหกรรม | ลดค่าไฟและ demand charge | SIRINX",
+    description:
+      "Solar Carport สำหรับโรงงานอุตสาหกรรม เปลี่ยนที่จอดรถให้เป็นโรงไฟฟ้า ลดค่าไฟและ demand charge รองรับ EV Charger + BESS + AI Energy Management",
+  },
+  "/solar-carport/hotel": {
+    path: "/solar-carport/hotel",
+    title: "Solar Carport สำหรับโรงแรมและรีสอร์ท | ลดค่า AC peak | SIRINX",
+    description:
+      "Solar Carport สำหรับโรงแรมและรีสอร์ท เปลี่ยนที่จอดรถให้เป็นโรงไฟฟ้า ลดค่า AC peak รองรับ EV Charger + BESS เพิ่ม guest experience",
+  },
+  "/ev-charging": {
+    path: "/ev-charging",
+    title: "EV Charging สำหรับธุรกิจ | ระบบชาร์จรถ EV | SIRINX",
+    description:
+      "ระบบชาร์จรถ EV สำหรับธุรกิจ รองรับ AC/DC fast charging integrate กับ Solar Carport และ BESS เพื่อลดต้นทุนไฟฟ้า",
+  },
   "/provinces": {
     path: "/provinces",
     title: "Solar Carport 77 จังหวัด | เลือกจังหวัดที่ต้องการประเมิน | SIRINX",

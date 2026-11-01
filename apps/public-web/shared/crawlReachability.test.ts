@@ -10,6 +10,7 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, it, expect } from "vitest";
+import { thaiProvinces } from "@shared/thaiProvinces";
 
 const DIST_PUBLIC = new URL("../dist/public/", import.meta.url).pathname;
 const MAX_CLICKS = 3;
@@ -60,10 +61,11 @@ describe("crawl reachability from the homepage", () => {
       }
     }
 
+    const provinceSlugSet = new Set(thaiProvinces.map((p) => p.slug));
     const provinceSlugs = readdirSync(join(DIST_PUBLIC, "solar-carport"), {
       withFileTypes: true,
     })
-      .filter((entry) => entry.isDirectory())
+      .filter((entry) => entry.isDirectory() && provinceSlugSet.has(entry.name))
       .map((entry) => `/solar-carport/${entry.name}`);
 
     expect(provinceSlugs.length).toBe(77);

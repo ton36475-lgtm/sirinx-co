@@ -114,6 +114,21 @@ const routeMetaMap: Record<string, PageMeta> = {
     imageWidth: 1672,
     imageHeight: 941,
   },
+  "/solar-carport/factory": {
+    title: "Solar Carport สำหรับโรงงานอุตสาหกรรม | ลดค่าไฟและ demand charge | SIRINX",
+    description:
+      "Solar Carport สำหรับโรงงานอุตสาหกรรม เปลี่ยนที่จอดรถให้เป็นโรงไฟฟ้า ลดค่าไฟและ demand charge รองรับ EV Charger + BESS + AI Energy Management",
+  },
+  "/solar-carport/hotel": {
+    title: "Solar Carport สำหรับโรงแรมและรีสอร์ท | ลดค่า AC peak | SIRINX",
+    description:
+      "Solar Carport สำหรับโรงแรมและรีสอร์ท เปลี่ยนที่จอดรถให้เป็นโรงไฟฟ้า ลดค่า AC peak รองรับ EV Charger + BESS เพิ่ม guest experience",
+  },
+  "/ev-charging": {
+    title: "EV Charging สำหรับธุรกิจ | ระบบชาร์จรถ EV | SIRINX",
+    description:
+      "ระบบชาร์จรถ EV สำหรับธุรกิจ รองรับ AC/DC fast charging integrate กับ Solar Carport และ BESS เพื่อลดต้นทุนไฟฟ้า",
+  },
   "/about": {
     title: "SIRINX คือใคร? บริษัทติดตั้งโซลาร์เซลล์ + AI Energy ของไทย",
     description:

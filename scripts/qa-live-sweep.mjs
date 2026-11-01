@@ -27,6 +27,16 @@ const CONCURRENCY = 8;
 const TIMEOUT = 20000;
 const SITE_OG_CARD = "/assets/optimized/sirinx-og-card-1200x630.jpg";
 
+// www.sirinx.org is a permanent redirect to the canonical www.sirinx.co host by
+// decision (reports/runtime/public-web-design-and-domain-20261030.md). It is no
+// longer a standalone site, so the standalone robots/sitemap/canonical/og:image
+// checks below do not apply to it. What must hold for a redirect host is the
+// 301 itself, on the root and on a sampled deep path.
+const REDIRECT_HOSTS = Object.freeze({
+  "www.sirinx.org": "https://www.sirinx.co",
+});
+
+
 const defects = [];
 const warnings = [];
 const checks = [];
@@ -208,6 +218,29 @@ async function checkPage(host, path, { expectCanonical, requireSchema = false } 
 async function checkHost(host) {
   console.log(`\n=== ${host} ===`);
 
+  // A redirect-only host is measured by its 301, not by standalone SEO surfaces.
+  if (REDIRECT_HOSTS[host]) {
+    const target = REDIRECT_HOSTS[host];
+    for (const sample of ["/", "/solar-carport/", "/bess/"]) {
+      try {
+        const res = await fetch(`https://${host}${sample}`, {
+          redirect: "manual",
+          signal: AbortSignal.timeout(TIMEOUT),
+        });
+        const location = res.headers.get("location") ?? "";
+        const ok = [301, 308].includes(res.status) && location.includes(new URL(target).host);
+        if (!ok) {
+          fail(host, sample, "redirect-host", `${res.status} -> ${location} (want 301 -> ${target})`);
+        } else {
+          pass(host, sample, "redirect-host", `${res.status} -> ${location}`);
+        }
+      } catch (err) {
+        fail(host, sample, "redirect-host", String(err?.message ?? err));
+      }
+    }
+    return;
+  }
+
   // 1. Apex redirect must land on this host's www.
   try {
     const res = await fetch(`https://${host.replace(/^www\./, "")}/`, {
@@ -242,7 +275,10 @@ async function checkHost(host) {
   } else {
     const foreign = sitemapUrls.filter((u) => !u.startsWith(`https://${host}/`));
     if (foreign.length) fail(host, "/sitemap.xml", "sitemap-host", `${foreign.length} foreign URLs`);
-    const provinceUrls = sitemapUrls.filter((u) => /\/solar-carport\/[a-z-]+\/$/.test(u));
+    const provinceUrls = sitemapUrls.filter((u) => {
+      const m = u.match(/\/solar-carport\/([a-z-]+)\/$/);
+      return m ? PROVINCE_SLUGS.includes(m[1]) : false;
+    });
     if (provinceUrls.length !== PROVINCE_SLUGS.length) {
       fail(host, "/sitemap.xml", "sitemap-provinces", `${provinceUrls.length} province URLs, want ${PROVINCE_SLUGS.length}`);
     }

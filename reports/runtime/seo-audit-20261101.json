@@ -1,12 +1,12 @@
 {
   "summary": {
-    "generatedAt": "2026-11-01T06:09:33.524Z",
+    "generatedAt": "2026-11-01T09:42:27.622Z",
     "dist": "apps/public-web/dist/public",
     "origin": "https://www.sirinx.co",
-    "routes": 117,
-    "sitemapUrls": 114,
+    "routes": 121,
+    "sitemapUrls": 118,
     "defects": 0,
-    "warnings": 126,
+    "warnings": 129,
     "passes": 0,
     "keywordMap": {
       "path": "docs/seo/keyword-map-77-provinces.csv",
@@ -60,12 +60,20 @@
         "chars": 207
       },
       {
+        "route": "/compare",
+        "chars": 216
+      },
+      {
         "route": "/partner",
         "chars": 218
       },
       {
-        "route": "/ev-charging",
-        "chars": 259
+        "route": "/compare/spreadsheets",
+        "chars": 232
+      },
+      {
+        "route": "/free-tools",
+        "chars": 241
       },
       {
         "route": "/blog/net-metering-thailand-guide",
@@ -80,6 +88,10 @@
         "chars": 284
       },
       {
+        "route": "/compare/solset",
+        "chars": 288
+      },
+      {
         "route": "/blog/solar-tax-benefits-thailand",
         "chars": 295
       },
@@ -89,10 +101,6 @@
       },
       {
         "route": "/projects",
-        "chars": 300
-      },
-      {
-        "route": "/solar-carport/hotel",
         "chars": 300
       },
       {
@@ -136,10 +144,6 @@
         "chars": 328
       },
       {
-        "route": "/solar-carport/factory",
-        "chars": 333
-      },
-      {
         "route": "/blog/ai-energy-management-guide",
         "chars": 334
       },
@@ -160,8 +164,16 @@
         "chars": 352
       },
       {
+        "route": "/solar-carport/hotel",
+        "chars": 861
+      },
+      {
         "route": "/bess/hotel",
         "chars": 891
+      },
+      {
+        "route": "/ev-charging",
+        "chars": 931
       },
       {
         "route": "/",
@@ -267,6 +279,21 @@
       "detail": "295 chars"
     },
     {
+      "route": "/compare",
+      "check": "crawlable-text-thin",
+      "detail": "216 chars"
+    },
+    {
+      "route": "/compare/solset",
+      "check": "crawlable-text-thin",
+      "detail": "288 chars"
+    },
+    {
+      "route": "/compare/spreadsheets",
+      "check": "crawlable-text-thin",
+      "detail": "232 chars"
+    },
+    {
       "route": "/contact",
       "check": "crawlable-text-thin",
       "detail": "317 chars"
@@ -278,8 +305,13 @@
     },
     {
       "route": "/ev-charging",
+      "check": "crawlable-text",
+      "detail": "931 chars"
+    },
+    {
+      "route": "/free-tools",
       "check": "crawlable-text-thin",
-      "detail": "259 chars"
+      "detail": "241 chars"
     },
     {
       "route": "/home-solution",
@@ -437,14 +469,9 @@
       "detail": "72 chars"
     },
     {
-      "route": "/solar-carport/factory",
-      "check": "crawlable-text-thin",
-      "detail": "333 chars"
-    },
-    {
       "route": "/solar-carport/hotel",
-      "check": "crawlable-text-thin",
-      "detail": "300 chars"
+      "check": "crawlable-text",
+      "detail": "861 chars"
     },
     {
       "route": "/solar-carport",

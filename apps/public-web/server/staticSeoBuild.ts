@@ -19,6 +19,7 @@ import { homeSolutionFaq } from "../shared/homeSolutionFaq";
 import { buildSolarCarportFaq } from "../shared/solarCarportFaq";
 import { bessFaq } from "../shared/bessFaq";
 import { bessLongformByRoute } from "../shared/bessLongform";
+import { nationalDeepLongformByRoute } from "../shared/nationalDeepLongform";
 
 const distPublic = path.resolve(import.meta.dirname, "..", "dist", "public");
 const distAssets = path.join(distPublic, "assets");
@@ -580,6 +581,36 @@ function buildStaticBessShell(route: string): string | null {
     </main>`;
 }
 
+function buildStaticNationalDeepShell(route: string): string | null {
+  const blocks = nationalDeepLongformByRoute[route];
+  if (!blocks || blocks.length === 0) return null;
+  const sections = blocks
+    .map(
+      (block) => `<section class="mb-8">
+        <h2 class="font-display text-2xl font-bold mb-3">${escapeHtml(block.heading)}</h2>
+        ${block.paragraphs
+          .map((p) => `<p class="mb-4 leading-relaxed text-text-secondary">${escapeHtml(p)}</p>`)
+          .join("\n        ")}
+      </section>`
+    )
+    .join("\n");
+  const meta = getPageMeta(route);
+  const title = escapeHtml(meta?.title ?? route);
+  return `<main data-sirinx-static-shell="national-deep">
+      <article class="container mx-auto max-w-4xl px-4 py-12">
+        <h1 class="font-display text-3xl font-bold mb-6">${title}</h1>
+        ${sections}
+        <nav class="mt-8 flex flex-wrap gap-3 text-sm">
+          <a href="/solar-carport/factory" class="underline">Solar Carport โรงงาน</a>
+          <a href="/solar-carport/hotel" class="underline">Solar Carport โรงแรม</a>
+          <a href="/ev-charging" class="underline">EV Charging</a>
+          <a href="/bess" class="underline">BESS</a>
+          <a href="/contact?interest=solar-carport" class="underline">ติดต่อ SIRINX</a>
+        </nav>
+      </article>
+    </main>`;
+}
+
 function injectStaticShell(html: string, route: string) {
   if (
     !html.includes('<div id="root"></div>') ||
@@ -638,6 +669,14 @@ function injectStaticShell(html: string, route: string) {
     return html.replace(
       '<div id="root"></div>',
       `<div id="root">\n    ${bessShell}\n    </div>`
+    );
+  }
+
+  const nationalDeepShell = buildStaticNationalDeepShell(route);
+  if (nationalDeepShell) {
+    return html.replace(
+      '<div id="root"></div>',
+      `<div id="root">\n    ${nationalDeepShell}\n    </div>`
     );
   }
 

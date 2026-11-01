@@ -1,12 +1,12 @@
 {
   "summary": {
-    "generatedAt": "2026-11-01T00:01:15.329Z",
-    "dist": "apps/public-web/dist-org",
-    "origin": "https://www.sirinx.org",
-    "routes": 108,
-    "sitemapUrls": 105,
+    "generatedAt": "2026-11-01T06:09:33.524Z",
+    "dist": "apps/public-web/dist/public",
+    "origin": "https://www.sirinx.co",
+    "routes": 117,
+    "sitemapUrls": 114,
     "defects": 0,
-    "warnings": 121,
+    "warnings": 126,
     "passes": 0,
     "keywordMap": {
       "path": "docs/seo/keyword-map-77-provinces.csv",
@@ -64,6 +64,10 @@
         "chars": 218
       },
       {
+        "route": "/ev-charging",
+        "chars": 259
+      },
+      {
         "route": "/blog/net-metering-thailand-guide",
         "chars": 263
       },
@@ -85,6 +89,10 @@
       },
       {
         "route": "/projects",
+        "chars": 300
+      },
+      {
+        "route": "/solar-carport/hotel",
         "chars": 300
       },
       {
@@ -128,6 +136,10 @@
         "chars": 328
       },
       {
+        "route": "/solar-carport/factory",
+        "chars": 333
+      },
+      {
         "route": "/blog/ai-energy-management-guide",
         "chars": 334
       },
@@ -146,6 +158,10 @@
       {
         "route": "/line",
         "chars": 352
+      },
+      {
+        "route": "/bess/hotel",
+        "chars": 891
       },
       {
         "route": "/",
@@ -169,6 +185,11 @@
       "route": "/assessment",
       "check": "crawlable-text-thin",
       "detail": "306 chars"
+    },
+    {
+      "route": "/bess/hotel",
+      "check": "crawlable-text",
+      "detail": "891 chars"
     },
     {
       "route": "/blog/ai-energy-management-guide",
@@ -254,6 +275,11 @@
       "route": "/cookies",
       "check": "crawlable-text-thin",
       "detail": "198 chars"
+    },
+    {
+      "route": "/ev-charging",
+      "check": "crawlable-text-thin",
+      "detail": "259 chars"
     },
     {
       "route": "/home-solution",
@@ -404,6 +430,21 @@
       "route": "/solar-carport/chumphon",
       "check": "title-length",
       "detail": "69 chars"
+    },
+    {
+      "route": "/solar-carport/factory",
+      "check": "title-length",
+      "detail": "72 chars"
+    },
+    {
+      "route": "/solar-carport/factory",
+      "check": "crawlable-text-thin",
+      "detail": "333 chars"
+    },
+    {
+      "route": "/solar-carport/hotel",
+      "check": "crawlable-text-thin",
+      "detail": "300 chars"
     },
     {
       "route": "/solar-carport",

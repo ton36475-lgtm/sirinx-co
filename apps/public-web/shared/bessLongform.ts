@@ -19,4 +19,117 @@ export const bessLongformByRoute: Record<string, BessLongformBlock[]> = {
       ],
     },
   ],
+  "/bess/factory": [
+    {
+      heading: "BESS สำหรับโรงงานอุตสาหกรรม",
+      paragraphs: [
+        "โรงงานอุตสาหกรรมเป็นกลุ่มผู้ใช้ไฟฟ้ารายใหญ่ที่สุดในประเทศไทย และมักมีรูปแบบการใช้ไฟที่มี peak สูงในช่วงเวลาทำงาน ค่า demand charge มักเป็น 30-50% ของค่าไฟรวม BESS สำหรับโรงงานจึงเป็นการลงทุนที่คุ้มค่ามาก โดยเฉพาะโรงงานที่ใช้ไฟมากกว่า 1 MW ขึ้นไป",
+        "BESS สำหรับโรงงานมักมีขนาด 1-10 MWh ขึ้นอยู่กับ load profile และเป้าหมายการลด peak การออกแบบต้องพิจารณา: รูปแบบการใช้ไฟ (continuous vs. batch), ความสำคัญของโหลด, ข้อจำกัดพื้นที่, และการ integrate กับระบบโซลาร์ที่มีอยู่",
+        "โรงงานที่มีระบบโซลาร์อยู่แล้วจะได้ประโยชน์มากขึ้น เพราะ BESS ช่วยเพิ่ม self-consumption จาก ~60-70% เป็น ~80-90% ทำให้ ROI ของระบบโซลาร์ดีขึ้น",
+      ],
+    },
+    {
+      heading: "กลยุทธ์ Peak Shaving สำหรับโรงงาน",
+      paragraphs: [
+        "โรงงานมักมี peak ชัดเจนในช่วง 9:00-16:00 BESS จะชาร์จในช่วงกลางคืน (ค่าไฟต่ำ) และจ่ายในช่วง peak ทำให้ peak demand ลดลง 20-40%",
+        "นอกจาก peak shaving, BESS ยังช่วย smooth load (ลดความผันผวน) ซึ่งสำคัญสำหรับโรงงานที่มีเครื่องจักรขนาดใหญ่",
+        "การคำนวณขนาด BESS สำหรับโรงงานต้องใช้ load profile อย่างน้อย 1-3 เดือน พร้อมข้อมูล sub-meter ของโหลดสำคัญ",
+      ],
+    },
+    {
+      heading: "ROI และ Payback สำหรับโรงงาน",
+      paragraphs: [
+        "ROI ของ BESS สำหรับโรงงานมักอยู่ที่ 5-7 ปี ขึ้นอยู่กับค่า demand charge ที่ลดลง, ค่าไฟที่ประหยัด, และอายุการใช้งาน",
+        "BESS ยังช่วยลดความเสี่ยงจากไฟดับ (downtime cost) ซึ่งสำหรับโรงงานอาจมีมูลค่าสูง",
+      ],
+    },
+  ],
+  "/bess/hotel": [
+    {
+      heading: "BESS สำหรับโรงแรมและรีสอร์ท",
+      paragraphs: [
+        "โรงแรมและรีสอร์ทมีรูปแบบการใช้ไฟที่เป็นเอกลักษณ์: peak ในช่วงเย็น (18:00-22:00) เมื่อ AC ทำงานหนัก และ valley ในช่วงกลางคืน BESS สำหรับโรงแรมจึงเน้นการลด AC peak และให้ไฟฟ้าสำรองห้องพัก",
+        "ขนาด BESS สำหรับโรงแรมมักอยู่ที่ 100-500 kWh ขึ้นอยู่กับจำนวนห้องและสิ่งอำนวยความสะดวก",
+        "ประโยชน์หลัก: ลดค่า AC peak (15-25%), ให้ไฟฟ้าสำรองห้องพักในช่วงไฟดับ, และเพิ่ม renewable self-consumption",
+      ],
+    },
+    {
+      heading: "กลยุทธ์การใช้ BESS ในโรงแรม",
+      paragraphs: [
+        "กลยุทธ์ที่ 1: Peak Shaving — ชาร์จในช่วงกลางคืน จ่ายในช่วง peak เย็น",
+        "กลยุทธ์ที่ 2: Load Shifting — ย้ายโหลดที่ไม่เร่งด่วนไปช่วงที่ค่าไฟต่ำ",
+        "กลยุทธ์ที่ 3: Backup Power — ให้ไฟฟ้าสำรองห้องพัก, ลิฟต์, ระบบ IT ในช่วงไฟดับ",
+        "กลยุทธ์ที่ 4: Renewable Integration — ถ้ามีโซลาร์, BESS ช่วยเพิ่ม self-consumption จาก ~50% เป็น ~80%",
+      ],
+    },
+  ],
+  "/bess/peak-shaving": [
+    {
+      heading: "BESS Peak Shaving คืออะไร",
+      paragraphs: [
+        "Peak shaving คือการลด peak demand โดยการใช้ BESS จ่ายไฟในช่วงที่การใช้ไฟพุ่งสูง แทนที่จะซื้อจากโครงข่าย ในประเทศไทย ค่า demand charge มักเป็น 200-400 บาท/kW ต่อเดือน ดังนั้นการลด peak 100 kW = ประหยัด 20,000-40,000 บาท/เดือน",
+        "BESS สำหรับ peak shaving ต้องมี power (kW) สูงพอที่จะจ่าย peak และ energy (kWh) พอที่จะครอบคลุมช่วง peak (มัก 2-4 ชั่วโมง)",
+      ],
+    },
+    {
+      heading: "กลยุทธ์ Peak Shaving ที่มีประสิทธิภาพ",
+      paragraphs: [
+        "กลยุทธ์ที่ 1: Threshold-based — ตั้ง threshold ที่ peak demand",
+        "กลยุทธ์ที่ 2: Predictive — ใช้ ML/AI ทำนาย peak และชาร์จ/จ่ายล่วงหน้า",
+        "กลยุทธ์ที่ 3: Time-of-Use — ชาร์จในช่วง off-peak จ่ายในช่วง on-peak",
+        "ผลลัพธ์ที่คาดหวัง: ลด peak demand 30-40%, ประหยัดค่า demand charge 20,000-80,000 บาท/เดือน",
+      ],
+    },
+  ],
+  "/bess/sizing": [
+    {
+      heading: "การคำนวณขนาด BESS ที่ถูกต้อง",
+      paragraphs: [
+        "การเลือกขนาด BESS ที่ถูกต้อง (right-sizing) เป็นหัวใจสำคัญของ ROI หากเล็กเกินไปจะไม่สามารถลด peak ได้ตามเป้า; หากใหญ่เกินไปจะไม่คุ้มค่า",
+        "ข้อมูลที่ต้องใช้: load profile 24 ชั่วโมง (อย่างน้อย 1-3 เดือน), peak demand, valley demand, รูปแบบการใช้ไฟ, เป้าหมายการลด peak, และข้อจำกัด",
+      ],
+    },
+    {
+      heading: "สูตรการคำนวณขนาด BESS",
+      paragraphs: [
+        "Power (kW): ต้อง ≥ peak demand reduction target",
+        "Energy (kWh): ต้อง ≥ peak duration × power บวก margin 20-30%",
+        "ตัวอย่าง: โรงงาน peak 500 kW, ต้องการลด 100 kW, peak duration 3 ชั่วโมง → BESS = 100 kW / 360 kWh",
+        "C-rate: ต้องไม่เกิน spec (มัก 0.5C-1C)",
+      ],
+    },
+    {
+      heading: "ข้อผิดพลาดที่พบบ่อยในการ Sizing",
+      paragraphs: [
+        "ข้อผิดพลาดที่ 1: ใช้ average load แทน peak load",
+        "ข้อผิดพลาดที่ 2: ไม่พิจารณา degradation",
+        "ข้อผิดพลาดที่ 3: ไม่พิจารณา future growth",
+        "ข้อผิดพลาดที่ 4: เลือกขนาดจาก spec sheet ไม่ใช่ข้อมูลจริง",
+      ],
+    },
+  ],
+  "/bess/safety-cost": [
+    {
+      heading: "ความปลอดภัยของ BESS",
+      paragraphs: [
+        "ความปลอดภัยเป็นสิ่งสำคัญที่สุด มาตรฐาน IEC 62619 และ IEC 62443 เป็นพื้นฐาน ระบบต้องมี BMS, thermal management, fire suppression, และ ventilation",
+        "การเลือก chemistry LFP ช่วยลดความเสี่ยง thermal runaway ได้มาก แต่ไม่ได้หมายความว่าปลอดภัย 100%",
+      ],
+    },
+    {
+      heading: "TCO (Total Cost of Ownership) ของ BESS",
+      paragraphs: [
+        "TCO ประกอบด้วย: CAPEX (แบตเตอรี่ 60-70%, inverter/PCS 15-20%, BMS 5-10%, installation 10-15%, soft costs 5-10%), OPEX (maintenance 1-2%/ปี), และ replacement (หลัง 10-15 ปี)",
+        "ต้นทุนต่อ kWh ลดลงอย่างต่อเนื่อง (จาก ~$1,000/kWh ใน 2010 เป็น ~$150-300/kWh ใน 2024 สำหรับ LFP)",
+      ],
+    },
+    {
+      heading: "Warranty และ Lifecycle Management",
+      paragraphs: [
+        "Warranty มักเป็น 10 ปี (battery) และ 5 ปี (inverter/PCS) แต่ต้องอ่านเงื่อนไข: throughput, cycles, และ degradation",
+        "Lifecycle management: monitoring, predictive maintenance, และ end-of-life planning",
+        "SIRINX ให้บริการ lifecycle management ครบวงจร",
+      ],
+    },
+  ],
 };

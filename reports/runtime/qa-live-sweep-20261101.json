@@ -1,0 +1,2466 @@
+{
+  "hosts": [
+    "www.sirinx.co",
+    "www.sirinx.org"
+  ],
+  "generatedAt": "2026-11-01T00:01:13.991Z",
+  "checks": [
+    {
+      "host": "www.sirinx.co",
+      "url": "apex",
+      "check": "apex-redirect",
+      "detail": "301 -> https://www.sirinx.co/"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/robots.txt",
+      "check": "robots",
+      "detail": "ok"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/sitemap.xml",
+      "check": "sitemap",
+      "detail": "111 URLs"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/llms.txt",
+      "check": "surface",
+      "detail": "200"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/feed.xml",
+      "check": "surface",
+      "detail": "200"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/assets/optimized/sirinx-og-card-1200x630.jpg",
+      "check": "social-card",
+      "detail": "200"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/assets/home-solution/home-solution-drone-hero.jpg",
+      "check": "social-card",
+      "detail": "200"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/api/trpc/lead.submit OPTIONS",
+      "check": "form",
+      "detail": "204"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/api/trpc/lead.submit POST",
+      "check": "form",
+      "detail": "400"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "unknown-path",
+      "check": "404",
+      "detail": "404"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/projects/",
+      "check": "page",
+      "detail": "title=ผลงานติดตั้งจริง Solar Carport และโซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/contact/",
+      "check": "page",
+      "detail": "title=นัดสำรวจหน้างานฟรี | ขอใบเสนอราคาโซลาร์เ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/",
+      "check": "page",
+      "detail": "title=SIRINX | Solar Carport วางแผนลดค่าไฟองค์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/provinces/",
+      "check": "page",
+      "detail": "title=Solar Carport 77 จังหวัด | เลือกจังหวัดท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/",
+      "check": "page",
+      "detail": "title=Solar Carport โดย SIRINX | เปลี่ยนที่จอด"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/pricing/",
+      "check": "page",
+      "detail": "title=แพ็คเกจราคา Solar Carport | Start / Pro "
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/assessment/",
+      "check": "page",
+      "detail": "title=คำนวณค่าไฟที่ประหยัดได้ | ประเมินความคุ้"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/home-solution/",
+      "check": "page",
+      "detail": "title=Home Solar Solution บ้านใหญ่และโฮมออฟฟิศ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/industries/",
+      "check": "page",
+      "detail": "title=โซลาร์เซลล์สำหรับโรงงาน โรงแรม เกษตร ภาค"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solutions/",
+      "check": "page",
+      "detail": "title=โซลูชันโซลาร์เซลล์ | Rooftop Solar, Floa"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/strategy/",
+      "check": "page",
+      "detail": "title=วางแผนลดค่าไฟระยะยาว | กลยุทธ์ Solar + B"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/investment/",
+      "check": "page",
+      "detail": "title=ลงทุนโซลาร์เซลล์ คุ้มค่าแค่ไหน? ROI, สิท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/line/",
+      "check": "page",
+      "detail": "title=ติดต่อ SIRINX ผ่าน LINE Official | Solar"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/about/",
+      "check": "page",
+      "detail": "title=SIRINX คือใคร? บริษัทติดตั้งโซลาร์เซลล์ "
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/partner/",
+      "check": "page",
+      "detail": "title=ร่วมเป็นพันธมิตรพลังงานสะอาดกับ SIRINX"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/privacy/",
+      "check": "page",
+      "detail": "title=นโยบายความเป็นส่วนตัว | SIRINX"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/terms/",
+      "check": "page",
+      "detail": "title=เงื่อนไขการใช้งาน | SIRINX"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/blog/",
+      "check": "page",
+      "detail": "title=บทความโซลาร์เซลล์ &amp; พลังงานสะอาด | ค"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/cookies/",
+      "check": "page",
+      "detail": "title=Cookie Policy | SIRINX"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/bueng-kan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport บึงกาฬ | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/chachoengsao/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ฉะเชิงเทรา | โซลาร"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/buriram/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport บุรีรัมย์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/amnat-charoen/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อำนาจเจริญ | โซลาร"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/chai-nat/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ชัยนาท | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/bangkok/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กรุงเทพมหานคร | โซ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/ang-thong/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อ่างทอง | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/chaiyaphum/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ชัยภูมิ | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/chanthaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport จันทบุรี | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/chiang-mai/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เชียงใหม่ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/kanchanaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กาญจนบุรี | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/chiang-rai/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เชียงราย | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/chonburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ชลบุรี | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/kalasin/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กาฬสินธุ์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/kamphaeng-phet/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กำแพงเพชร | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/chumphon/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ชุมพร | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/khon-kaen/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ขอนแก่น | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/lampang/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ลำปาง | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/loei/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เลย | โซลาร์ที่จอด"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/krabi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กระบี่ | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/lamphun/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ลำพูน | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/mae-hong-son/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport แม่ฮ่องสอน | โซลาร"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/lopburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ลพบุรี | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/maha-sarakham/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport มหาสารคาม | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/mukdahan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport มุกดาหาร | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nakhon-nayok/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครนายก | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nakhon-pathom/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครปฐม | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nakhon-ratchasima/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครราชสีมา | โซลาร"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nakhon-phanom/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครพนม | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nakhon-sawan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครสวรรค์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport น่าน | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nakhon-si-thammarat/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครศรีธรรมราช | โซ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/narathiwat/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นราธิวาส | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nong-bua-lamphu/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport หนองบัวลำภู | โซลา"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nong-khai/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport หนองคาย | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/nonthaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นนทบุรี | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/pathum-thani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ปทุมธานี | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/pattani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ปัตตานี | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phang-nga/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พังงา | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phatthalung/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พัทลุง | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phayao/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พะเยา | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phetchaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เพชรบุรี | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phetchabun/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เพชรบูรณ์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phichit/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พิจิตร | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phitsanulok/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พิษณุโลก | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phuket/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ภูเก็ต | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phra-nakhon-si-ayutthaya/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พระนครศรีอยุธยา | "
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/phrae/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport แพร่ | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/prachinburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ปราจีนบุรี | โซลาร"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/ranong/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ระนอง | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/ratchaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ราชบุรี | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/prachuap-khiri-khan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ประจวบคีรีขันธ์ | "
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/rayong/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ระยอง | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/roi-et/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ร้อยเอ็ด | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/sa-kaeo/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สระแก้ว | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/sakon-nakhon/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สกลนคร | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/samut-prakan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สมุทรปราการ | โซลา"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/samut-sakhon/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สมุทรสาคร | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/samut-songkhram/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สมุทรสงคราม | โซลา"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/satun/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สตูล | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/sisaket/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ศรีสะเกษ | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/songkhla/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สงขลา | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/sing-buri/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สิงห์บุรี | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/saraburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สระบุรี | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/suphan-buri/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สุพรรณบุรี | โซลาร"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/sukhothai/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สุโขทัย | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/surin/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สุรินทร์ | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/surat-thani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สุราษฎร์ธานี | โซล"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/trang/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ตรัง | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/tak/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ตาก | โซลาร์ที่จอด"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/trat/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ตราด | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/ubon-ratchathani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อุบลราชธานี | โซลา"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/uthai-thani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อุทัยธานี | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/yala/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ยะลา | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/uttaradit/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อุตรดิตถ์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/udon-thani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อุดรธานี | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "https://www.sirinx.co/solar-carport/yasothon/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ยโสธร | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "apex",
+      "check": "apex-redirect",
+      "detail": "301 -> https://www.sirinx.org/"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/sitemap.xml",
+      "check": "sitemap",
+      "detail": "111 URLs"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/llms.txt",
+      "check": "surface",
+      "detail": "200"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/feed.xml",
+      "check": "surface",
+      "detail": "200"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/assets/optimized/sirinx-og-card-1200x630.jpg",
+      "check": "social-card",
+      "detail": "200"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/assets/home-solution/home-solution-drone-hero.jpg",
+      "check": "social-card",
+      "detail": "200"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/api/trpc/lead.submit OPTIONS",
+      "check": "form",
+      "detail": "204"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/api/trpc/lead.submit POST",
+      "check": "form",
+      "detail": "400"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "unknown-path",
+      "check": "404",
+      "detail": "404"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/",
+      "check": "page",
+      "detail": "title=SIRINX | Solar Carport วางแผนลดค่าไฟองค์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/",
+      "check": "page",
+      "detail": "title=Solar Carport โดย SIRINX | เปลี่ยนที่จอด"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/contact/",
+      "check": "page",
+      "detail": "title=นัดสำรวจหน้างานฟรี | ขอใบเสนอราคาโซลาร์เ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/provinces/",
+      "check": "page",
+      "detail": "title=Solar Carport 77 จังหวัด | เลือกจังหวัดท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/assessment/",
+      "check": "page",
+      "detail": "title=คำนวณค่าไฟที่ประหยัดได้ | ประเมินความคุ้"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/pricing/",
+      "check": "page",
+      "detail": "title=แพ็คเกจราคา Solar Carport | Start / Pro "
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/projects/",
+      "check": "page",
+      "detail": "title=ผลงานติดตั้งจริง Solar Carport และโซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/home-solution/",
+      "check": "page",
+      "detail": "title=Home Solar Solution บ้านใหญ่และโฮมออฟฟิศ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/industries/",
+      "check": "page",
+      "detail": "title=โซลาร์เซลล์สำหรับโรงงาน โรงแรม เกษตร ภาค"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/investment/",
+      "check": "page",
+      "detail": "title=ลงทุนโซลาร์เซลล์ คุ้มค่าแค่ไหน? ROI, สิท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solutions/",
+      "check": "page",
+      "detail": "title=โซลูชันโซลาร์เซลล์ | Rooftop Solar, Floa"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/strategy/",
+      "check": "page",
+      "detail": "title=วางแผนลดค่าไฟระยะยาว | กลยุทธ์ Solar + B"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/about/",
+      "check": "page",
+      "detail": "title=SIRINX คือใคร? บริษัทติดตั้งโซลาร์เซลล์ "
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/blog/",
+      "check": "page",
+      "detail": "title=บทความโซลาร์เซลล์ &amp; พลังงานสะอาด | ค"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/line/",
+      "check": "page",
+      "detail": "title=ติดต่อ SIRINX ผ่าน LINE Official | Solar"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/partner/",
+      "check": "page",
+      "detail": "title=ร่วมเป็นพันธมิตรพลังงานสะอาดกับ SIRINX"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/privacy/",
+      "check": "page",
+      "detail": "title=นโยบายความเป็นส่วนตัว | SIRINX"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/terms/",
+      "check": "page",
+      "detail": "title=เงื่อนไขการใช้งาน | SIRINX"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/cookies/",
+      "check": "page",
+      "detail": "title=Cookie Policy | SIRINX"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/bangkok/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กรุงเทพมหานคร | โซ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/amnat-charoen/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อำนาจเจริญ | โซลาร"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/ang-thong/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อ่างทอง | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/bueng-kan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport บึงกาฬ | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chachoengsao/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ฉะเชิงเทรา | โซลาร"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chai-nat/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ชัยนาท | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chaiyaphum/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ชัยภูมิ | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/buriram/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport บุรีรัมย์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chanthaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport จันทบุรี | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chiang-mai/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เชียงใหม่ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chumphon/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ชุมพร | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chonburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ชลบุรี | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/kalasin/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กาฬสินธุ์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chiang-rai/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เชียงราย | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/kamphaeng-phet/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กำแพงเพชร | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/kanchanaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กาญจนบุรี | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/khon-kaen/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ขอนแก่น | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/krabi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport กระบี่ | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/lampang/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ลำปาง | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/lamphun/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ลำพูน | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/loei/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เลย | โซลาร์ที่จอด"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/lopburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ลพบุรี | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/mae-hong-son/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport แม่ฮ่องสอน | โซลาร"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/maha-sarakham/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport มหาสารคาม | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/mukdahan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport มุกดาหาร | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-nayok/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครนายก | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-pathom/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครปฐม | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-phanom/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครพนม | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-ratchasima/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครราชสีมา | โซลาร"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-sawan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครสวรรค์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-si-thammarat/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นครศรีธรรมราช | โซ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport น่าน | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/narathiwat/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นราธิวาส | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nong-bua-lamphu/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport หนองบัวลำภู | โซลา"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nong-khai/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport หนองคาย | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nonthaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport นนทบุรี | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/pattani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ปัตตานี | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/pathum-thani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ปทุมธานี | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phang-nga/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พังงา | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phatthalung/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พัทลุง | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phayao/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พะเยา | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phetchabun/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เพชรบูรณ์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phetchaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport เพชรบุรี | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phichit/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พิจิตร | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phitsanulok/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พิษณุโลก | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phra-nakhon-si-ayutthaya/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport พระนครศรีอยุธยา | "
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phrae/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport แพร่ | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phuket/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ภูเก็ต | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/prachinburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ปราจีนบุรี | โซลาร"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/prachuap-khiri-khan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ประจวบคีรีขันธ์ | "
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/ranong/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ระนอง | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/ratchaburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ราชบุรี | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/rayong/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ระยอง | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/roi-et/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ร้อยเอ็ด | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sa-kaeo/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สระแก้ว | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sakon-nakhon/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สกลนคร | โซลาร์ที่"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/samut-sakhon/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สมุทรสาคร | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/samut-prakan/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สมุทรปราการ | โซลา"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/samut-songkhram/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สมุทรสงคราม | โซลา"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/saraburi/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สระบุรี | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/satun/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สตูล | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sing-buri/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สิงห์บุรี | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/songkhla/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สงขลา | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sisaket/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ศรีสะเกษ | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sukhothai/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สุโขทัย | โซลาร์ที"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/suphan-buri/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สุพรรณบุรี | โซลาร"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/surat-thani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สุราษฎร์ธานี | โซล"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/surin/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport สุรินทร์ | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/tak/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ตาก | โซลาร์ที่จอด"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/trat/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ตราด | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/ubon-ratchathani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อุบลราชธานี | โซลา"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/trang/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ตรัง | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/udon-thani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อุดรธานี | โซลาร์ท"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/uthai-thani/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อุทัยธานี | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/yala/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ยะลา | โซลาร์ที่จอ"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/uttaradit/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport อุตรดิตถ์ | โซลาร์"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/yasothon/",
+      "check": "page",
+      "detail": "title=ติดตั้ง Solar Carport ยโสธร | โซลาร์ที่จ"
+    },
+    {
+      "host": "www.sirinx.co",
+      "url": "/manifest.json",
+      "check": "manifest",
+      "detail": "1 icons"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/manifest.json",
+      "check": "manifest",
+      "detail": "1 icons"
+    }
+  ],
+  "warnings": [],
+  "defects": [
+    {
+      "host": "www.sirinx.co",
+      "url": "/solar-carport-bangkok/",
+      "check": "legacy-redirect",
+      "detail": "404 -> "
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/robots.txt",
+      "check": "robots",
+      "detail": "200; sitemap line wrong host"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/sitemap.xml",
+      "check": "sitemap-host",
+      "detail": "111 foreign URLs"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "/solar-carport-bangkok/",
+      "check": "legacy-redirect",
+      "detail": "301 -> https://www.sirinx.co/solar-carport-bangkok/"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/ (want https://www.sirinx.org/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/ (want https://www.sirinx.org/solar-carport/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/contact/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/contact/ (want https://www.sirinx.org/contact/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/contact/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/provinces/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/provinces/ (want https://www.sirinx.org/provinces/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/provinces/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/assessment/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/assessment/ (want https://www.sirinx.org/assessment/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/assessment/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/pricing/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/pricing/ (want https://www.sirinx.org/pricing/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/pricing/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/projects/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/projects/ (want https://www.sirinx.org/projects/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/projects/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/home-solution/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/home-solution/ (want https://www.sirinx.org/home-solution/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/home-solution/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/home-solution/home-solution-drone-hero.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/industries/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/industries/ (want https://www.sirinx.org/industries/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/industries/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/investment/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/investment/ (want https://www.sirinx.org/investment/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/investment/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solutions/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solutions/ (want https://www.sirinx.org/solutions/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solutions/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/strategy/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/strategy/ (want https://www.sirinx.org/strategy/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/strategy/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/about/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/about/ (want https://www.sirinx.org/about/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/about/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/blog/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/blog/ (want https://www.sirinx.org/blog/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/blog/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/line/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/line/ (want https://www.sirinx.org/line/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/line/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/partner/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/partner/ (want https://www.sirinx.org/partner/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/partner/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/privacy/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/privacy/ (want https://www.sirinx.org/privacy/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/privacy/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/terms/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/terms/ (want https://www.sirinx.org/terms/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/terms/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/cookies/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/cookies/ (want https://www.sirinx.org/cookies/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/cookies/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/assets/optimized/sirinx-og-card-1200x630.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/bangkok/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/bangkok/ (want https://www.sirinx.org/solar-carport/bangkok/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/bangkok/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/bangkok-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/amnat-charoen/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/amnat-charoen/ (want https://www.sirinx.org/solar-carport/amnat-charoen/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/amnat-charoen/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/amnat-charoen-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/ang-thong/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/ang-thong/ (want https://www.sirinx.org/solar-carport/ang-thong/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/ang-thong/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/ang-thong-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/bueng-kan/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/bueng-kan/ (want https://www.sirinx.org/solar-carport/bueng-kan/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/bueng-kan/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/bueng-kan-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chachoengsao/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/chachoengsao/ (want https://www.sirinx.org/solar-carport/chachoengsao/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chachoengsao/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/chachoengsao-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chai-nat/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/chai-nat/ (want https://www.sirinx.org/solar-carport/chai-nat/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chai-nat/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/chai-nat-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chaiyaphum/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/chaiyaphum/ (want https://www.sirinx.org/solar-carport/chaiyaphum/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chaiyaphum/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/chaiyaphum-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/buriram/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/buriram/ (want https://www.sirinx.org/solar-carport/buriram/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/buriram/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/buriram-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chanthaburi/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/chanthaburi/ (want https://www.sirinx.org/solar-carport/chanthaburi/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chanthaburi/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/chanthaburi-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chiang-mai/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/chiang-mai/ (want https://www.sirinx.org/solar-carport/chiang-mai/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chiang-mai/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/chiang-mai-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chumphon/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/chumphon/ (want https://www.sirinx.org/solar-carport/chumphon/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chumphon/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/chumphon-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chonburi/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/chonburi/ (want https://www.sirinx.org/solar-carport/chonburi/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chonburi/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/chonburi-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/kalasin/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/kalasin/ (want https://www.sirinx.org/solar-carport/kalasin/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/kalasin/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/kalasin-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chiang-rai/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/chiang-rai/ (want https://www.sirinx.org/solar-carport/chiang-rai/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/chiang-rai/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/chiang-rai-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/kamphaeng-phet/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/kamphaeng-phet/ (want https://www.sirinx.org/solar-carport/kamphaeng-phet/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/kamphaeng-phet/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/kamphaeng-phet-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/kanchanaburi/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/kanchanaburi/ (want https://www.sirinx.org/solar-carport/kanchanaburi/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/kanchanaburi/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/kanchanaburi-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/khon-kaen/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/khon-kaen/ (want https://www.sirinx.org/solar-carport/khon-kaen/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/khon-kaen/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/khon-kaen-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/krabi/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/krabi/ (want https://www.sirinx.org/solar-carport/krabi/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/krabi/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/krabi-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/lampang/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/lampang/ (want https://www.sirinx.org/solar-carport/lampang/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/lampang/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/lampang-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/lamphun/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/lamphun/ (want https://www.sirinx.org/solar-carport/lamphun/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/lamphun/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/lamphun-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/loei/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/loei/ (want https://www.sirinx.org/solar-carport/loei/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/loei/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/loei-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/lopburi/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/lopburi/ (want https://www.sirinx.org/solar-carport/lopburi/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/lopburi/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/lopburi-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/mae-hong-son/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/mae-hong-son/ (want https://www.sirinx.org/solar-carport/mae-hong-son/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/mae-hong-son/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/mae-hong-son-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/maha-sarakham/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/maha-sarakham/ (want https://www.sirinx.org/solar-carport/maha-sarakham/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/maha-sarakham/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/maha-sarakham-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/mukdahan/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/mukdahan/ (want https://www.sirinx.org/solar-carport/mukdahan/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/mukdahan/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/mukdahan-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-nayok/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/nakhon-nayok/ (want https://www.sirinx.org/solar-carport/nakhon-nayok/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-nayok/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/nakhon-nayok-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-pathom/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/nakhon-pathom/ (want https://www.sirinx.org/solar-carport/nakhon-pathom/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-pathom/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/nakhon-pathom-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-phanom/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/nakhon-phanom/ (want https://www.sirinx.org/solar-carport/nakhon-phanom/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-phanom/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/nakhon-phanom-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-ratchasima/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/nakhon-ratchasima/ (want https://www.sirinx.org/solar-carport/nakhon-ratchasima/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-ratchasima/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/nakhon-ratchasima-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-sawan/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/nakhon-sawan/ (want https://www.sirinx.org/solar-carport/nakhon-sawan/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-sawan/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/nakhon-sawan-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-si-thammarat/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/nakhon-si-thammarat/ (want https://www.sirinx.org/solar-carport/nakhon-si-thammarat/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nakhon-si-thammarat/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/nakhon-si-thammarat-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nan/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/nan/ (want https://www.sirinx.org/solar-carport/nan/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nan/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/nan-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/narathiwat/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/narathiwat/ (want https://www.sirinx.org/solar-carport/narathiwat/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/narathiwat/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/narathiwat-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nong-bua-lamphu/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/nong-bua-lamphu/ (want https://www.sirinx.org/solar-carport/nong-bua-lamphu/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nong-bua-lamphu/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/nong-bua-lamphu-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nong-khai/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/nong-khai/ (want https://www.sirinx.org/solar-carport/nong-khai/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nong-khai/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/nong-khai-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nonthaburi/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/nonthaburi/ (want https://www.sirinx.org/solar-carport/nonthaburi/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/nonthaburi/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/nonthaburi-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/pattani/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/pattani/ (want https://www.sirinx.org/solar-carport/pattani/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/pattani/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/pattani-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/pathum-thani/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/pathum-thani/ (want https://www.sirinx.org/solar-carport/pathum-thani/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/pathum-thani/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/pathum-thani-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phang-nga/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/phang-nga/ (want https://www.sirinx.org/solar-carport/phang-nga/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phang-nga/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/phang-nga-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phatthalung/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/phatthalung/ (want https://www.sirinx.org/solar-carport/phatthalung/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phatthalung/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/phatthalung-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phayao/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/phayao/ (want https://www.sirinx.org/solar-carport/phayao/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phayao/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/phayao-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phetchabun/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/phetchabun/ (want https://www.sirinx.org/solar-carport/phetchabun/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phetchabun/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/phetchabun-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phetchaburi/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/phetchaburi/ (want https://www.sirinx.org/solar-carport/phetchaburi/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phetchaburi/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/phetchaburi-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phichit/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/phichit/ (want https://www.sirinx.org/solar-carport/phichit/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phichit/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/phichit-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phitsanulok/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/phitsanulok/ (want https://www.sirinx.org/solar-carport/phitsanulok/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phitsanulok/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/phitsanulok-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phra-nakhon-si-ayutthaya/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/phra-nakhon-si-ayutthaya/ (want https://www.sirinx.org/solar-carport/phra-nakhon-si-ayutthaya/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phra-nakhon-si-ayutthaya/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/phra-nakhon-si-ayutthaya-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phrae/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/phrae/ (want https://www.sirinx.org/solar-carport/phrae/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phrae/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/phrae-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phuket/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/phuket/ (want https://www.sirinx.org/solar-carport/phuket/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/phuket/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/phuket-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/prachinburi/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/prachinburi/ (want https://www.sirinx.org/solar-carport/prachinburi/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/prachinburi/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/prachinburi-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/prachuap-khiri-khan/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/prachuap-khiri-khan/ (want https://www.sirinx.org/solar-carport/prachuap-khiri-khan/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/prachuap-khiri-khan/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/prachuap-khiri-khan-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/ranong/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/ranong/ (want https://www.sirinx.org/solar-carport/ranong/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/ranong/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/ranong-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/ratchaburi/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/ratchaburi/ (want https://www.sirinx.org/solar-carport/ratchaburi/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/ratchaburi/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/ratchaburi-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/rayong/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/rayong/ (want https://www.sirinx.org/solar-carport/rayong/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/rayong/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/rayong-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/roi-et/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/roi-et/ (want https://www.sirinx.org/solar-carport/roi-et/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/roi-et/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/roi-et-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sa-kaeo/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/sa-kaeo/ (want https://www.sirinx.org/solar-carport/sa-kaeo/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sa-kaeo/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/sa-kaeo-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sakon-nakhon/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/sakon-nakhon/ (want https://www.sirinx.org/solar-carport/sakon-nakhon/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sakon-nakhon/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/sakon-nakhon-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/samut-sakhon/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/samut-sakhon/ (want https://www.sirinx.org/solar-carport/samut-sakhon/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/samut-sakhon/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/samut-sakhon-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/samut-prakan/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/samut-prakan/ (want https://www.sirinx.org/solar-carport/samut-prakan/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/samut-prakan/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/samut-prakan-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/samut-songkhram/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/samut-songkhram/ (want https://www.sirinx.org/solar-carport/samut-songkhram/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/samut-songkhram/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/samut-songkhram-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/saraburi/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/saraburi/ (want https://www.sirinx.org/solar-carport/saraburi/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/saraburi/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/saraburi-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/satun/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/satun/ (want https://www.sirinx.org/solar-carport/satun/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/satun/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/satun-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sing-buri/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/sing-buri/ (want https://www.sirinx.org/solar-carport/sing-buri/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sing-buri/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/sing-buri-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/songkhla/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/songkhla/ (want https://www.sirinx.org/solar-carport/songkhla/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/songkhla/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/songkhla-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sisaket/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/sisaket/ (want https://www.sirinx.org/solar-carport/sisaket/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sisaket/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/sisaket-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sukhothai/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/sukhothai/ (want https://www.sirinx.org/solar-carport/sukhothai/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/sukhothai/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/sukhothai-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/suphan-buri/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/suphan-buri/ (want https://www.sirinx.org/solar-carport/suphan-buri/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/suphan-buri/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/suphan-buri-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/surat-thani/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/surat-thani/ (want https://www.sirinx.org/solar-carport/surat-thani/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/surat-thani/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/surat-thani-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/surin/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/surin/ (want https://www.sirinx.org/solar-carport/surin/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/surin/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/surin-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/tak/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/tak/ (want https://www.sirinx.org/solar-carport/tak/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/tak/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/tak-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/trat/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/trat/ (want https://www.sirinx.org/solar-carport/trat/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/trat/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/trat-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/ubon-ratchathani/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/ubon-ratchathani/ (want https://www.sirinx.org/solar-carport/ubon-ratchathani/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/ubon-ratchathani/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/ubon-ratchathani-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/trang/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/trang/ (want https://www.sirinx.org/solar-carport/trang/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/trang/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/trang-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/udon-thani/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/udon-thani/ (want https://www.sirinx.org/solar-carport/udon-thani/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/udon-thani/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/udon-thani-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/uthai-thani/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/uthai-thani/ (want https://www.sirinx.org/solar-carport/uthai-thani/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/uthai-thani/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/uthai-thani-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/yala/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/yala/ (want https://www.sirinx.org/solar-carport/yala/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/yala/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/yala-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/uttaradit/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/uttaradit/ (want https://www.sirinx.org/solar-carport/uttaradit/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/uttaradit/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/uttaradit-og.jpg"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/yasothon/",
+      "check": "canonical",
+      "detail": "https://www.sirinx.co/solar-carport/yasothon/ (want https://www.sirinx.org/solar-carport/yasothon/)"
+    },
+    {
+      "host": "www.sirinx.org",
+      "url": "https://www.sirinx.org/solar-carport/yasothon/",
+      "check": "og:image-host",
+      "detail": "https://www.sirinx.co/provinces/yasothon-og.jpg"
+    }
+  ]
+}

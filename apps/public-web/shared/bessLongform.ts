@@ -18,6 +18,24 @@ export const bessLongformByRoute: Record<string, BessLongformBlock[]> = {
         "สำหรับธุรกิจที่มีเป้าหมายด้าน ESG หรือ Net Zero, BESS ช่วยลดการปล่อยคาร์บอน (Scope 2) โดยการใช้พลังงานหมุนเวียนที่กักเก็บไว้แทนการซื้อไฟจากโครงข่าย ซึ่งมักมี carbon intensity สูงกว่า",
       ],
     },
+    {
+      heading: "การเลือก BESS สำหรับธุรกิจไทย",
+      paragraphs: [
+        "สำหรับธุรกิจไทย, ปัจจัยสำคัญ: ค่าไฟ (TOU tariff), demand charge, และ incentives (BOI, tax)",
+        "TOU tariff: ชาร์จใน off-peak จ่ายใน on-peak ช่วยประหยัดได้มาก",
+        "Demand charge: ลด peak demand ช่วยประหยัดค่า demand charge ซึ่งเป็นส่วนสำคัญของค่าไฟ",
+        "Incentives: BOI อาจให้สิทธิประโยชน์สำหรับ BESS ในบางกรณี",
+      ],
+    },
+    {
+      heading: "ขั้นตอนต่อไป",
+      paragraphs: [
+        "ติดต่อทีม SIRINX เพื่อนัด site survey ฟรี",
+        "ทีมวิศวกรจะวิเคราะห์ load profile และ navrh BESS ที่เหมาะสม",
+        "รับรายงาน economic model (ROI, payback, NPV) ที่โปร่งใส",
+        "ตัดสินใจลงทุนด้วยข้อมูลจริง ไม่ใช่แค่ spec sheet",
+      ],
+    },
   ],
   "/bess/factory": [
     {
@@ -94,6 +112,24 @@ export const bessLongformByRoute: Record<string, BessLongformBlock[]> = {
         "ผลลัพธ์ที่คาดหวัง: ลด peak demand 30-40%, ประหยัดค่า demand charge 20,000-80,000 บาท/เดือน",
       ],
     },
+    {
+      heading: "ข้อควรระวังในการทำ Peak Shaving",
+      paragraphs: [
+        "ข้อควรระวังที่ 1: BESS ต้องมี SOC (State of Charge) เพียงพอในช่วง peak",
+        "ข้อควรระวังที่ 2: Degradation — การทำ peak shaving บ่อยอาจทำให้แบตเตอรี่เสื่อมเร็วขึ้น",
+        "ข้อควรระวังที่ 3: Grid code — ต้องปฏิบัติตามข้อกำหนดของ กฟผ./กฟน./กฟภ.",
+        "ข้อควรระวังที่ 4: BESS ต้องมี power (kW) สูงพอ ไม่ใช่แค่ energy (kWh) มากพอ",
+      ],
+    },
+    {
+      heading: "ตัวอย่างการคำนวณ Peak Shaving",
+      paragraphs: [
+        "ตัวอย่าง: โรงงาน peak 500 kW, demand charge 300 บาท/kW → 150,000 บาท/เดือน",
+        "หากใช้ BESS 100 kW / 200 kWh ลด peak 100 kW → ประหยัด 30,000 บาท/เดือน = 360,000 บาท/ปี",
+        "CAPEX: 100 kW / 200 kWh BESS ~2-3 ล้านบาท → payback ~6-8 ปี",
+        "หากใช้ predictive peak shaving อาจลด peak ได้มากขึ้น 10-15% → payback สั้นลง",
+      ],
+    },
   ],
   "/bess/sizing": [
     {
@@ -121,6 +157,24 @@ export const bessLongformByRoute: Record<string, BessLongformBlock[]> = {
         "ข้อผิดพลาดที่ 4: เลือกขนาดจาก spec sheet ไม่ใช่ข้อมูลจริง",
       ],
     },
+    {
+      heading: "เครื่องมือและวิธีการของ SIRINX",
+      paragraphs: [
+        "SIRINX ใช้: (1) Power meter ติดตั้ง 1-3 เดือน, (2) Software modeling เพื่อจำลอง peak shaving, (3) Economic model (ROI, payback, NPV)",
+        "ผลลัพธ์: รายงาน sizing ที่โปร่งใส พร้อม sensitivity analysis",
+        "การพิจารณา future expansion: ออกแบบให้รองรับการเพิ่ม capacity ในอนาคต (modular design)",
+        "การเลือก inverter/PCS: ต้องสอดคล้องกับ power rating ของ BESS",
+      ],
+    },
+    {
+      heading: "Case Study: การ Sizing สำหรับโรงงาน 500 kW",
+      paragraphs: [
+        "โรงงาน peak 500 kW, ต้องการลด peak 150 kW (30%)",
+        "Load profile: peak 3 ชั่วโมง (10:00-13:00), valley 8 ชั่วโมง (22:00-06:00)",
+        "BESS sizing: 150 kW / 450 kWh (3 ชั่วโมง) + 20% margin = 150 kW / 540 kWh",
+        "CAPEX: ~4-5 ล้านบาท, payback ~5-6 ปี",
+      ],
+    },
   ],
   "/bess/safety-cost": [
     {
@@ -143,6 +197,35 @@ export const bessLongformByRoute: Record<string, BessLongformBlock[]> = {
         "Warranty มักเป็น 10 ปี (battery) และ 5 ปี (inverter/PCS) แต่ต้องอ่านเงื่อนไข: throughput, cycles, และ degradation",
         "Lifecycle management: monitoring, predictive maintenance, และ end-of-life planning",
         "SIRINX ให้บริการ lifecycle management ครบวงจร",
+      ],
+    },
+    {
+      heading: "มาตรฐานความปลอดภัยที่ต้องปฏิบัติตาม",
+      paragraphs: [
+        "IEC 62619: safety requirements for secondary lithium cells and batteries",
+        "IEC 62443: industrial communication networks security",
+        "NFPA 855: standard for the installation of stationary energy storage systems",
+        "UL 9540: standard for energy storage systems and equipment",
+        "กรมโรงงานอุตสาหกรรม: ข้อกำหนดสำหรับโรงงานที่ใช้ไฟ > 1 MW",
+      ],
+    },
+    {
+      heading: "Fire Safety และ Emergency Response",
+      paragraphs: [
+        "Fire suppression: gas-based (Novec 1230, FM-200) หรือ water mist",
+        "Thermal runaway detection: smoke, heat, gas sensors",
+        "Emergency shutdown: manual และ automatic",
+        "Evacuation plan และ training สำหรับพนักงาน",
+        "Insurance: ต้องมีประกันภัยสำหรับ BESS (fire, liability)",
+      ],
+    },
+    {
+      heading: "End-of-Life และ Recycling",
+      paragraphs: [
+        "อายุการใช้งาน: 10-15 ปี (LFP), หลังจากนั้น capacity ลดลง ~20%",
+        "Second-life: แบตเตอรี่ที่เสื่อมแล้วสามารถใช้สำหรับ stationary storage (lower power applications)",
+        "Recycling: LFP มี lithium, iron, phosphate ที่ recycle ได้ แต่ต้นทุนสูง",
+        "SIRINX วางแผน end-of-life ตั้งแต่แรก: monitoring, maintenance, และ disposal",
       ],
     },
   ],

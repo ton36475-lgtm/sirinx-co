@@ -36,6 +36,32 @@ export const bessLongformByRoute: Record<string, BessLongformBlock[]> = {
         "ตัดสินใจลงทุนด้วยข้อมูลจริง ไม่ใช่แค่ spec sheet",
       ],
     },
+    {
+      heading: "เทคโนโลยี BESS ล่าสุด",
+      paragraphs: [
+        "LFP (Lithium Iron Phosphate) เป็น chemistry หลักสำหรับ BESS เชิงพาณิชย์ ด้วยความปลอดภัยสูง อายุการใช้งานยาว (3,000-6,000 รอบ) และต้นทุนต่ำ",
+        "Solid-state battery กำลังพัฒนา อาจกลายเป็นเทคโนโลยีหลักในอนาคต แต่ยังอยู่ในช่วง R&D",
+        "Flow battery (Vanadium Redox) เหมาะสำหรับการกักเก็บระยะยาว (4-12 ชั่วโมง) แต่ต้นทุนสูง",
+        "AI-based BMS: ใช้ machine learning ทำนาย degradation และ optimize charge/discharge",
+      ],
+    },
+    {
+      heading: "BESS และ Grid Services",
+      paragraphs: [
+        "Frequency regulation: BESS ตอบสนองเร็ว (millisecond) ช่วยรักษาความถี่ของโครงข่าย",
+        "Demand response: เข้าร่วมโปรแกรมลด peak กับ กฟผ./กฟน./กฟภ. เพื่อรับค่าตอบแทน",
+        "Voltage support: BESS ช่วยรักษาแรงดันในโครงข่าย",
+        "Black start: BESS สามารถช่วย restart โครงข่ายหลังไฟดับ",
+      ],
+    },
+    {
+      heading: "Case Studies",
+      paragraphs: [
+        "Case Study 1: โรงงาน 2 MW peak, BESS 500 kWh → ลด peak 100 kW, ประหยัด 30,000 บาท/เดือน, payback 5 ปี",
+        "Case Study 2: โรงแรม 500 ห้อง, BESS 300 kWh → ลด AC peak 20%, ให้ backup 4 ชั่วโมง, payback 6 ปี",
+        "Case Study 3: ศูนย์การค้า, BESS 1 MWh → peak shaving + demand response, ประหยัด 100,000 บาท/เดือน",
+      ],
+    },
   ],
   "/bess/factory": [
     {

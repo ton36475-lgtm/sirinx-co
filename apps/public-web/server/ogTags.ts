@@ -134,6 +134,18 @@ const routeMetaMap: Record<string, PageMeta> = {
     description:
       "เครื่องมือฟรีสำหรับประเมินความคุ้มค่าของระบบโซลาร์ — คำนวณค่าไฟที่ประหยัดได้, ขนาด BESS, Peak Shaving, ROI",
   },
+  "/compare": {
+    title: "เปรียบเทียบโซลูชันโซลาร์ | SIRINX",
+    description: "เปรียบเทียบ SIRINX กับทางเลือกอื่น — Solar CRM, spreadsheet, DIY — เพื่อเลือกโซลูชันที่เหมาะกับธุรกิจ",
+  },
+  "/compare/solset": {
+    title: "SIRINX vs Solset | เปรียบเทียบ Solar EPC กับ Solar CRM | SIRINX",
+    description: "เปรียบเทียบ SIRINX (Solar EPC + AI Energy) กับ Solset (Solar CRM + 3D Design) — BESS, EV, 3D design, CRM, pricing",
+  },
+  "/compare/spreadsheets": {
+    title: "SIRINX vs Spreadsheets | จัดการโครงการโซลาร์ | SIRINX",
+    description: "เปรียบเทียบการจัดการโครงการโซลาร์ด้วย spreadsheet กับระบบ integrated (SIRINX)",
+  },
   "/about": {
     title: "SIRINX คือใคร? บริษัทติดตั้งโซลาร์เซลล์ + AI Energy ของไทย",
     description:

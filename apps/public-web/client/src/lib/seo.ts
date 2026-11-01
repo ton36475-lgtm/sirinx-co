@@ -67,6 +67,12 @@ const metaByPath: Record<string, SeoMeta> = {
     description:
       "เปรียบเทียบกรอบบริการ Solar Carport ระดับ Start / Pro / Enterprise — ผลิตไฟฟ้า ให้ร่มเงา รองรับ EV Charger และประเมินความคุ้มค่าตามไซต์จริง",
   },
+  "/free-tools": {
+    path: "/free-tools",
+    title: "เครื่องมือและเครื่องคำนวณโซลาร์ฟรี | SIRINX",
+    description:
+      "เครื่องมือฟรีสำหรับประเมินความคุ้มค่าของระบบโซลาร์ — คำนวณค่าไฟที่ประหยัดได้, ขนาด BESS, Peak Shaving, ROI",
+  },
   "/solutions": {
     path: "/solutions",
     title:

@@ -129,6 +129,11 @@ const routeMetaMap: Record<string, PageMeta> = {
     description:
       "ระบบชาร์จรถ EV สำหรับธุรกิจ รองรับ AC/DC fast charging integrate กับ Solar Carport และ BESS เพื่อลดต้นทุนไฟฟ้า",
   },
+  "/free-tools": {
+    title: "เครื่องมือและเครื่องคำนวณโซลาร์ฟรี | SIRINX",
+    description:
+      "เครื่องมือฟรีสำหรับประเมินความคุ้มค่าของระบบโซลาร์ — คำนวณค่าไฟที่ประหยัดได้, ขนาด BESS, Peak Shaving, ROI",
+  },
   "/about": {
     title: "SIRINX คือใคร? บริษัทติดตั้งโซลาร์เซลล์ + AI Energy ของไทย",
     description:

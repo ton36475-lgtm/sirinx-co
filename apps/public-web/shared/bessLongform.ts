@@ -62,6 +62,52 @@ export const bessLongformByRoute: Record<string, BessLongformBlock[]> = {
         "Case Study 3: ศูนย์การค้า, BESS 1 MWh → peak shaving + demand response, ประหยัด 100,000 บาท/เดือน",
       ],
     },
+    {
+      heading: "BESS และ ESG / Net Zero",
+      paragraphs: [
+        "สำหรับองค์กรที่มีเป้าหมาย ESG หรือ Net Zero, BESS ช่วยลด Scope 2 emissions โดยการเพิ่ม renewable self-consumption",
+        "BESS ยังช่วยในการ report ตามมาตรฐาน GRI, TCFD, และ CDP ด้วยข้อมูลการใช้พลังงานที่แม่นยำ",
+        "การคำนวณ carbon reduction: 1 kWh จาก BESS (ที่ชาร์จจากโซลาร์) = 0.5 kg CO2 ที่ไม่ถูกปล่อย",
+        "ตัวอย่าง: โรงงานใช้ BESS 500 kWh/วัน จากโซลาร์ = ลด CO2 91 ตัน/ปี",
+      ],
+    },
+    {
+      heading: "BESS และ Grid Services",
+      paragraphs: [
+        "Frequency regulation: BESS ตอบสนองเร็ว (millisecond) ช่วยรักษาความถี่ของโครงข่าย",
+        "Demand response: เข้าร่วมโปรแกรมลด peak กับ กฟผ./กฟน./กฟภ. เพื่อรับค่าตอบแทน",
+        "Voltage support: BESS ช่วยรักษาแรงดันในโครงข่าย",
+        "Black start: BESS สามารถช่วย restart โครงข่ายหลังไฟดับ",
+      ],
+    },
+    {
+      heading: "เทคโนโลยี BESS ล่าสุด",
+      paragraphs: [
+        "LFP (Lithium Iron Phosphate) เป็น chemistry หลักสำหรับ BESS เชิงพาณิชย์",
+        "Solid-state battery กำลังพัฒนา อาจกลายเป็นเทคโนโลยีหลักในอนาคต",
+        "Flow battery (Vanadium Redox) เหมาะสำหรับการกักเก็บระยะยาว (4-12 ชั่วโมง)",
+        "AI-based BMS: ใช้ machine learning ทำนาย degradation และ optimize charge/discharge",
+        "Second-life battery: ใช้แบตเตอรี่จาก EV ที่เสื่อมแล้วสำหรับ stationary storage",
+      ],
+    },
+    {
+      heading: "Case Studies",
+      paragraphs: [
+        "Case Study 1: โรงงาน 2 MW peak, BESS 500 kWh → ลด peak 100 kW, ประหยัด 3 ล้านบาท/ปี, payback 5 ปี",
+        "Case Study 2: โรงแรม 500 ห้อง, BESS 300 kWh → ลด AC peak 20%, ให้ backup 4 ชั่วโมง, payback 6 ปี",
+        "Case Study 3: ศูนย์การค้า, BESS 1 MWh → peak shaving + demand response, ประหยัด 100,000 บาท/เดือน",
+      ],
+    },
+    {
+      heading: "ทำไมต้องเลือก SIRINX",
+      paragraphs: [
+        "SIRINX ไม่ใช่แค่ผู้ขายอุปกรณ์ แต่เป็นพันธมิตรด้านวิศวกรรมพลังงาน",
+        "เราให้บริการครบวงจร: site survey, sizing, design, procurement, installation, commissioning, monitoring",
+        "เราให้ความสำคัญกับ evidence-based design: ทุกการตัดสินใจอ้างอิงจากข้อมูลจริง",
+        "เราให้ economic model ที่โปร่งใส และไม่สัญญา ROI ที่ไม่สมจริง",
+        "ติดต่อทีม SIRINX เพื่อนัด site survey ฟรี และรับการประเมินเบื้องต้นที่ตรงกับธุรกิจของคุณ",
+      ],
+    },
   ],
   "/bess/factory": [
     {

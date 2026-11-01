@@ -29,6 +29,34 @@ export const nationalDeepLongformByRoute: Record<string, NationalDeepBlock[]> = 
         "BESS เพิ่ม self-consumption จาก ~60% เป็น ~85%, เพิ่ม ROI",
       ],
     },
+    {
+      heading: "ขั้นตอนการดำเนินงาน",
+      paragraphs: [
+        "Site Survey — ทีมวิศวกรสำรวจหน้างาน ประเมินพื้นที่ โครงสร้าง และการใช้ไฟ",
+        "Load Profile Analysis — บันทึกการใช้ไฟ 1-3 เดือน เพื่อวิเคราะห์ peak และ valley",
+        "System Design — ออกแบบ Solar Carport, BESS, EV Charger ตามข้อมูลจริง",
+        "Procurement & Installation — จัดหาอุปกรณ์และติดตั้งโดยทีมที่ผ่านการฝึกอบรม",
+        "Commissioning & Monitoring — ทดสอบระบบและติดตั้งระบบ monitoring แบบ real-time",
+      ],
+    },
+    {
+      heading: "เทคโนโลยีและมาตรฐาน",
+      paragraphs: [
+        "Solar Carport ใช้แผงโซลาร์ชนิด monocrystalline ประสิทธิภาพ 20-22%",
+        "โครงสร้าง: เหล็ก galvanized หรือ aluminum ตามมาตรฐาน IEC 61215",
+        "Inverter: string inverter หรือ central inverter ตามขนาดระบบ",
+        "BESS: LFP chemistry, 10-15 ปี อายุการใช้งาน",
+        "EV Charger: AC Type 2 (22 kW) หรือ DC Fast (50-150 kW)",
+      ],
+    },
+    {
+      heading: "Case Studies",
+      paragraphs: [
+        "Case Study 1: โรงงานอุตสาหกรรม 2 MW peak, Solar Carport 500 kWp + BESS 200 kWh → ลด peak 100 kW, ประหยัด 3 ล้านบาท/ปี",
+        "Case Study 2: โรงงานอาหาร 800 kW peak, Solar Carport 300 kWp → ลดค่าไฟ 40%, payback 5 ปี",
+        "Case Study 3: โรงงานยานยนต์, Solar Carport 1 MW + EV Charging สำหรับ fleet 50 คัน",
+      ],
+    },
   ],
   "/solar-carport/hotel": [
     {
